@@ -134,7 +134,7 @@ function parseArgs (args = {}) {
         errs2 = errs2.concat(res.errs)
         argv2.push([arg, res.argv, option.types, opts])
 
-        at += types.length + 1
+        at += (types === null ? 0 : types.length) + 1
       } else {
         const arr = argv.slice(at, at + 1)
         if (arr.length > 0) argv2.push(arr)
