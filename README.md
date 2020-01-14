@@ -38,19 +38,19 @@ Please read the [contributing guide][contribute].
 `pxi-args` is [MIT licensed][license].
 
 [actions]: https://github.com/Yord/pxi-args/actions
-[code]: https://github.com/Yord/pxi/blob/master/CODE_OF_CONDUCT.md
-[contribute]: https://github.com/Yord/pxi/blob/master/CONTRIBUTING.md
+[code]: https://github.com/Yord/pxi-args/blob/master/CODE_OF_CONDUCT.md
+[contribute]: https://github.com/Yord/pxi-args/blob/master/CONTRIBUTING.md
 [issues]: https://github.com/Yord/pxi-args/issues
-[license]: https://github.com/Yord/pxi/blob/master/LICENSE
+[license]: https://github.com/Yord/pxi-args/blob/master/LICENSE
 [node]: https://nodejs.org/
 [npm-install]: https://docs.npmjs.com/downloading-and-installing-packages-globally
-[npm-package]: https://www.npmjs.com/package/pxi
+[npm-package]: https://www.npmjs.com/package/pxi-args
 [pxi]: https://github.com/Yord/pxi
-[shield-license]: https://img.shields.io/npm/l/pxi?color=yellow&labelColor=313A42
-[shield-node]: https://img.shields.io/node/v/pxi?color=red&labelColor=313A42
-[shield-npm]: https://img.shields.io/npm/v/pxi.svg?color=orange&labelColor=313A42
+[shield-license]: https://img.shields.io/npm/l/pxi-args?color=yellow&labelColor=313A42
+[shield-node]: https://img.shields.io/node/v/pxi-args?color=red&labelColor=313A42
+[shield-npm]: https://img.shields.io/npm/v/pxi-args.svg?color=orange&labelColor=313A42
 [shield-prs]: https://img.shields.io/badge/PRs-welcome-green.svg?labelColor=313A42
-[shield-unit-tests-linux]: https://github.com/Yord/pxi/workflows/linux/badge.svg?branch=master
-[shield-unit-tests-macos]: https://github.com/Yord/pxi/workflows/macos/badge.svg?branch=master
-[shield-unit-tests-windows]: https://github.com/Yord/pxi/workflows/windows/badge.svg?branch=master
+[shield-unit-tests-linux]: https://github.com/Yord/pxi-args/workflows/linux/badge.svg?branch=master
+[shield-unit-tests-macos]: https://github.com/Yord/pxi-args/workflows/macos/badge.svg?branch=master
+[shield-unit-tests-windows]: https://github.com/Yord/pxi-args/workflows/windows/badge.svg?branch=master
 [teaser]: https://github.com/Yord/pxi/blob/master/teaser.gif?raw=true
