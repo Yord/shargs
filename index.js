@@ -14,7 +14,7 @@ const commandOpts = option('foo', number(['--foo']))
 
 const numStr  = array(['number', 'string'])
 
-const chunker = option('chunker', number( ['--chunker', '-c']                     ))
+const chunker = option('chunker', number( ['--chunker', '-c'], {only: [42]}       ))
 const applier = option('applier', string( ['--applier', '-a']                     ))
 const str_int = option('numStr',  numStr( ['--num-str', '-n']                     ))
 const verbose = option('verbose', flag(   ['--verbose', '-v']                     ))
