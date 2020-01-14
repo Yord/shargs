@@ -1,4 +1,4 @@
-const array   = types => (args, {only = [], opts = null, desc = ''} = {}) => ({types, args, only, opts, desc})
+const array   = types => (args, {only = null, opts = null, desc = ''} = {}) => ({types, args, only, opts, desc})
 
 const number  = array(['number'])
 const string  = array(['string'])
@@ -8,13 +8,19 @@ const command = array(null)
 
 
 
-const commandOpts = option('foo', number(['--foo']))
+const initOpts = option('sub', string(['--sub']))
+
+const commandOpts = combine([
+  option('foo', number(['--foo'])),
+  option('v', flag(['-v'])),
+  option('init', command(['init'], {opts: initOpts}))
+])
 
 
 
 const numStr  = array(['number', 'string'])
 
-const chunker = option('chunker', number( ['--chunker', '-c']                     ))
+const chunker = option('chunker', number( ['--chunker', '-c'], {only: [42]}       ))
 const applier = option('applier', string( ['--applier', '-a']                     ))
 const str_int = option('numStr',  numStr( ['--num-str', '-n']                     ))
 const verbose = option('verbose', flag(   ['--verbose', '-v']                     ))
@@ -26,7 +32,7 @@ const noMinus = option('noMinus', string( ['noMinus'        ]                   
 
 
 const aflag   = {
-  //errs: [],
+  errs: [],
   args: {
     '--a-flag': {arg: 'aflag', types: []},
     '-f':       {arg: 'aflag', types: []}
@@ -47,26 +53,32 @@ function parser (args) {
   return pipe(
     splitShortOptions,
     parseArgs(args),
-    mergeArgs
+    mergeArgs(parser)
   )
 }
+
+const parse = parser(args)
 console.log('parse', JSON.stringify(
-  parser(args)(sliceArgv({errs, argv})),
+  pipe(sliceArgv, parse)({errs, argv}),
   null,
   2
 ))
 
 
 
-// TODO: Error Messages
 function sliceArgv ({errs = [], argv = []} = {}) {
   const errs2 = []
   let argv2   = []
 
-  if (argv.length < 2) {
-    const msg = 'FOOOO!'
-    const err = {msg}
-    errs2.push(err)
+  const minLength = 2
+
+  if (argv.length < minLength) {
+    const tooFewArguments = err(
+      'Too few arguments',
+      `The passed command line arguments must have at least ${minLength} items`,
+      {argv}
+    )
+    errs2.push(tooFewArguments)
   } else {
     argv2 = argv.slice(2)
   }
@@ -74,7 +86,6 @@ function sliceArgv ({errs = [], argv = []} = {}) {
   return {errs: errs.concat(errs2), argv: argv2}
 }
 
-// TODO: Error Handling
 function splitShortOptions ({errs = [], argv = []} = {}) {
   const errs2 = []
   const argv2 = []
@@ -94,7 +105,6 @@ function splitShortOptions ({errs = [], argv = []} = {}) {
   return {errs: errs.concat(errs2), argv: argv2}
 }
 
-// TODO: Error Handling
 function parseArgs (args = {}) {
   return ({errs = [], argv = []} = {}) => {
     let errs2   = []
@@ -111,11 +121,10 @@ function parseArgs (args = {}) {
 
         let arr = []
         if (typeof types === 'undefined' || types === null) {
-          types = []
-
           let i = at + 1
-          let arg2 = argv[i]
+          let arg2 = argv[i] || '--'
           while (arg2 !== '--') {
+            if (types === null) types = []
             types.push('string')
             arr.push(arg2)
             i++
@@ -133,7 +142,7 @@ function parseArgs (args = {}) {
         errs2 = errs2.concat(res.errs)
         argv2.push([arg, res.argv, option.types, opts])
 
-        at += types.length + 1
+        at += (types === null ? 0 : types.length) + 1
       } else {
         const arr = argv.slice(at, at + 1)
         if (arr.length > 0) argv2.push(arr)
@@ -147,94 +156,148 @@ function parseArgs (args = {}) {
   }
 }
 
-// TODO: Error Handling
 function cast (types) {
   return ({errs = [], argv = []} = {}) => {
     const errs2 = []
     const argv2 = []
-    
-    if (types.length === 0) {
-      argv2.push(true)
-    } else {
-      for (let i = 0; i < types.length; i++) {
-        const type = types[i]
-        switch (type) {
-          case 'count':   argv2.push(1);                   break
-          case 'string':  argv2.push(argv[i]);             break
-          case 'number':  argv2.push(parseFloat(argv[i])); break // THIS MAY FAIL!
-          case 'bool':
-            if (argv[i] === 'true')       argv2.push(true)
-            else if (argv[i] === 'false') argv2.push(false)
-            else throw new Error('FAIL');                  break // THIS MAY FAIL!
-          default:                                         break
+
+    if (types !== null) {
+      if (types.length === 0) {
+        argv2.push(true)
+      } else {
+        for (let i = 0; i < types.length; i++) {
+  
+          const type = types[i]
+          const arg  = argv[i]
+          switch (type) {
+            case 'count':
+              argv2.push(1)
+              break
+            case 'string':
+              argv2.push(arg)
+              break
+            case 'number':
+              const float = parseFloat(arg)
+              if (Number.isNaN(float)) {
+                const argumentIsNotANumber = err(
+                  'Argument is not a number',
+                  `The passed command line argument must be a number`,
+                  {arg}
+                )
+                errs2.push(argumentIsNotANumber)
+              } else {
+                argv2.push(float)
+              }
+              break
+            case 'bool':
+              if (arg === 'true')       argv2.push(true)
+              else if (arg === 'false') argv2.push(false)
+              else {
+                const argumentIsNotABool = err(
+                  'Argument is not a boolean',
+                  "The passed command line argument must either be 'true' or 'false'",
+                  {arg}
+                )
+                errs2.push(argumentIsNotABool)
+              }
+              break
+            default:
+              break
+          }
         }
       }
     }
-  
+
     return {errs: errs.concat(errs2), argv: argv2}
   }
 }
 
-// TODO: Implementation
-function validate (only) {
-  return ({errs = [], argv = []} = {}) => ({errs, argv})
-}
+function validate (only = null) {
+  return ({errs = [], argv = []} = {}) => {
+    const errs2 = []
+    let argv2   = []
 
-// TODO: Error Handling
-function mergeArgs ({errs = [], argv = []} = {}) {
-  let errs2   = []
-  const argv2 = {_: []}
-
-  for (let i = 0; i < argv.length; i++) {
-    const [arg, params, types, opts] = argv[i]
-
-    if (typeof types === 'undefined') {
-      if (arg !== '--') {
-        argv2['_'].push(arg)
-      }
-    } else if (types === null) {
-      const {errs: errs3 = [], args = {}} = opts || {}
-
-      errs2 = errs2.concat(errs3)
-
-      const parse = parser(args)
-      const {errs: errs4, argv} = parse({errs: [], argv: params})
-
-      errs2 = errs2.concat(errs4)
-
-      argv2[arg] = Object.assign({}, argv2[arg], argv)
-    } else if (types.length === 0) {
-      argv2[arg] = typeof argv2[arg] === 'undefined' ? true : argv2[arg] < 2 ? 2 : argv2[arg] + 1
+    if (typeof only === 'undefined' || only === null) {
+      argv2 = argv
     } else {
-      argv2[arg] = types.length === 1 ? params[0] : params
+      for (let i = 0; i < argv.length; i++) {
+        const arg = argv[i]
+        if (only.indexOf(arg) > -1) {
+          argv2.push(arg)
+        } else {
+          const e = err(
+            'Argument value restrictions violated',
+            'The argument is not in the allowed set of values',
+            {arg, only}
+          )
+          errs2.push(e)
+        }
+      }
     }
-  }
 
-  return {errs: errs.concat(errs2), argv: argv2}
+    return {errs: errs.concat(errs2), argv: argv2}
+  }
+}
+
+function mergeArgs (parser) {
+  return ({errs = [], argv = []} = {}) => {
+    let errs2   = []
+    const argv2 = {_: []}
+
+    for (let i = 0; i < argv.length; i++) {
+      const [arg, params, types, opts] = argv[i]
+
+      if (typeof types === 'undefined') {
+        if (arg !== '--') argv2['_'].push(arg)
+      } else if (types === null) {
+        const {errs: errs3 = [], args = {}} = opts || {}
+
+        errs2 = errs2.concat(errs3)
+
+        const parse = parser(args)
+        const {errs: errs4, argv} = parse({errs: [], argv: params})
+
+        errs2 = errs2.concat(errs4)
+
+        argv2[arg] = Object.assign({}, argv2[arg], argv)
+      } else if (types.length === 0) {
+        argv2[arg] = typeof argv2[arg] === 'undefined' ? true : argv2[arg] < 2 ? 2 : argv2[arg] + 1
+      } else {
+        argv2[arg] = types.length === 1 ? params[0] : params
+      }
+    }
+
+    return {errs: errs.concat(errs2), argv: argv2}
+  }
 }
 
 
 
 
 
-// TODO: Error Messages
-function option (arg, {args = [], types = null, only = [], opts = null, desc = ''} = {}) {
+function option (arg, options = {}) {
+  const {args = [], types = null, only = null, opts = null, desc = ''} = options
+
   const errs  = []
   const args2 = {}
 
-  if (args.length > 0) {
+  if (args !== null && args.length > 0) {
     for (let i = 0; i < args.length; i++) {
       const key  = args[i]
       args2[key] = {arg, types, only, opts, desc}
     }
   } else {
-    errs.push({msg: 'BAD OPTION!'})
+    const noArgumentProvidedInOption = err(
+      'No arguments provided in option',
+      "Please provide at least one argument (e.g. {args: ['--foo']})",
+      {arg, options}
+    )
+    errs.push(noArgumentProvidedInOption)
   }
 
   return {errs, args: args2}
 }
 
-// TODO: Error Handling
 function combine (options) {
   let errs2   = []
   const args2 = {}
@@ -269,4 +332,8 @@ function pipe (f1, ...fs) {
 
     return res
   }
+}
+
+function err (code, msg, info) {
+  return {code, msg, info}
 }
