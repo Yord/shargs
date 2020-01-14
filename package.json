@@ -1,6 +1,6 @@
 {
   "name": "pxi-args",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A command-line arguments parser for pxi (pixie), the small, fast, and magical command-line data processor",
   "keywords": [
     "pxi",
@@ -26,9 +26,6 @@
     "Philipp Wille <philipp.y.wille@gmail.com> (https://github.com/Yord)"
   ],
   "main": "./index.js",
-  "bin": {
-    "pxi": "./index.js"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Yord/pxi-args.git"
