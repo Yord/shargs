@@ -78,7 +78,6 @@ function sliceArgv ({errs = [], argv = []} = {}) {
   return {errs: errs.concat(errs2), argv: argv2}
 }
 
-// TODO: Error Handling
 function splitShortOptions ({errs = [], argv = []} = {}) {
   const errs2 = []
   const argv2 = []
@@ -98,7 +97,6 @@ function splitShortOptions ({errs = [], argv = []} = {}) {
   return {errs: errs.concat(errs2), argv: argv2}
 }
 
-// TODO: Error Handling
 function parseArgs (args = {}) {
   return ({errs = [], argv = []} = {}) => {
     let errs2   = []
