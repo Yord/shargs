@@ -240,18 +240,24 @@ function mergeArgs ({errs = [], argv = []} = {}) {
 
 
 
-// TODO: Error Messages
-function option (arg, {args = [], types = null, only = [], opts = null, desc = ''} = {}) {
+function option (arg, options = {}) {
+  const {args = [], types = null, only = null, opts = null, desc = ''} = options
+
   const errs  = []
   const args2 = {}
 
-  if (args.length > 0) {
+  if (args !== null && args.length > 0) {
     for (let i = 0; i < args.length; i++) {
       const key  = args[i]
       args2[key] = {arg, types, only, opts, desc}
     }
   } else {
-    errs.push({msg: 'BAD OPTION!'})
+    const noArgumentProvidedInOption = err(
+      'No arguments provided in option',
+      "Please provide at least one argument (e.g. {args: ['--foo']})",
+      {arg, options}
+    )
+    errs.push(noArgumentProvidedInOption)
   }
 
   return {errs, args: args2}
