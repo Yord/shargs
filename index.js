@@ -8,7 +8,13 @@ const command = array(null)
 
 
 
-const commandOpts = option('foo', number(['--foo']))
+const initOpts = option('sub', string(['--sub']))
+
+const commandOpts = combine([
+  option('foo', number(['--foo'])),
+  option('v', flag(['-v'])),
+  option('init', command(['init'], {opts: initOpts}))
+])
 
 
 
