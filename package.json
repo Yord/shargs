@@ -1,0 +1,48 @@
+{
+  "name": "pxi-args",
+  "version": "0.1.0",
+  "description": "A command-line arguments parser for pxi (pixie), the small, fast, and magical command-line data processor",
+  "keywords": [
+    "pxi",
+    "pixie",
+    "json",
+    "csv",
+    "ssv",
+    "tsv",
+    "dsv",
+    "data-processing",
+    "deserializer",
+    "parser",
+    "serializer",
+    "marshaller"
+  ],
+  "homepage": "https://github.com/Yord/pxi-args",
+  "bugs": {
+    "url": "https://github.com/Yord/pxi-args/issues"
+  },
+  "license": "MIT",
+  "author": "Philipp Wille <philipp.y.wille@gmail.com> (https://github.com/Yord)",
+  "contributors": [
+    "Philipp Wille <philipp.y.wille@gmail.com> (https://github.com/Yord)"
+  ],
+  "main": "./index.js",
+  "bin": {
+    "pxi": "./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Yord/pxi-args.git"
+  },
+  "scripts": {
+    "start": "./index.js",
+    "test": "jest --ci --coverage --logHeapUsage --passWithNoTests"
+  },
+  "engines": {
+    "node": ">=8.3.0"
+  },
+  "private": false,
+  "devDependencies": {
+    "fast-check": "1.21.0",
+    "jest": "24.9.0"
+  }
+}
