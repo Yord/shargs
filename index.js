@@ -32,7 +32,7 @@ const noMinus = option('noMinus', string( ['noMinus'        ]                   
 
 
 const aflag   = {
-  //errs: [],
+  errs: [],
   args: {
     '--a-flag': {arg: 'aflag', types: []},
     '-f':       {arg: 'aflag', types: []}
