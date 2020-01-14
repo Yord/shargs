@@ -299,3 +299,7 @@ function pipe (f1, ...fs) {
     return res
   }
 }
+
+function err (code, msg, info) {
+  return {code, msg, info}
+}
