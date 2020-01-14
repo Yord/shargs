@@ -113,11 +113,10 @@ function parseArgs (args = {}) {
 
         let arr = []
         if (typeof types === 'undefined' || types === null) {
-          types = []
-
           let i = at + 1
-          let arg2 = argv[i]
+          let arg2 = argv[i] || '--'
           while (arg2 !== '--') {
+            if (types === null) types = []
             types.push('string')
             arr.push(arg2)
             i++
