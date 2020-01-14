@@ -264,7 +264,6 @@ function option (arg, options = {}) {
   return {errs, args: args2}
 }
 
-// TODO: Error Handling
 function combine (options) {
   let errs2   = []
   const args2 = {}
