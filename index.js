@@ -1,4 +1,4 @@
-const array   = types => (args, {only = [], opts = null, desc = ''} = {}) => ({types, args, only, opts, desc})
+const array   = types => (args, {only = null, opts = null, desc = ''} = {}) => ({types, args, only, opts, desc})
 
 const number  = array(['number'])
 const string  = array(['string'])
