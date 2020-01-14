@@ -26,9 +26,6 @@
     "Philipp Wille <philipp.y.wille@gmail.com> (https://github.com/Yord)"
   ],
   "main": "./index.js",
-  "bin": {
-    "pxi": "./index.js"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Yord/pxi-args.git"
