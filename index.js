@@ -58,15 +58,19 @@ console.log('parse', JSON.stringify(
 
 
 
-// TODO: Error Messages
 function sliceArgv ({errs = [], argv = []} = {}) {
   const errs2 = []
   let argv2   = []
 
-  if (argv.length < 2) {
-    const msg = 'FOOOO!'
-    const err = {msg}
-    errs2.push(err)
+  const minLength = 2
+
+  if (argv.length < minLength) {
+    const tooFewArguments = err(
+      'Too few arguments',
+      `The passed command line arguments must have at least ${minLength} items`,
+      {argv}
+    )
+    errs2.push(tooFewArguments)
   } else {
     argv2 = argv.slice(2)
   }
