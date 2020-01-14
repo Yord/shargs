@@ -47,11 +47,13 @@ function parser (args) {
   return pipe(
     splitShortOptions,
     parseArgs(args),
-    mergeArgs
+    mergeArgs(parser)
   )
 }
+
+const parse = parser(args)
 console.log('parse', JSON.stringify(
-  parser(args)(sliceArgv({errs, argv})),
+  pipe(sliceArgv, parse)({errs, argv}),
   null,
   2
 ))
@@ -203,37 +205,36 @@ function validate (only = null) {
   }
 }
 
-// TODO: Error Handling
-function mergeArgs ({errs = [], argv = []} = {}) {
-  let errs2   = []
-  const argv2 = {_: []}
+function mergeArgs (parser) {
+  return ({errs = [], argv = []} = {}) => {
+    let errs2   = []
+    const argv2 = {_: []}
 
-  for (let i = 0; i < argv.length; i++) {
-    const [arg, params, types, opts] = argv[i]
+    for (let i = 0; i < argv.length; i++) {
+      const [arg, params, types, opts] = argv[i]
 
-    if (typeof types === 'undefined') {
-      if (arg !== '--') {
-        argv2['_'].push(arg)
+      if (typeof types === 'undefined') {
+        if (arg !== '--') argv2['_'].push(arg)
+      } else if (types === null) {
+        const {errs: errs3 = [], args = {}} = opts || {}
+
+        errs2 = errs2.concat(errs3)
+
+        const parse = parser(args)
+        const {errs: errs4, argv} = parse({errs: [], argv: params})
+
+        errs2 = errs2.concat(errs4)
+
+        argv2[arg] = Object.assign({}, argv2[arg], argv)
+      } else if (types.length === 0) {
+        argv2[arg] = typeof argv2[arg] === 'undefined' ? true : argv2[arg] < 2 ? 2 : argv2[arg] + 1
+      } else {
+        argv2[arg] = types.length === 1 ? params[0] : params
       }
-    } else if (types === null) {
-      const {errs: errs3 = [], args = {}} = opts || {}
-
-      errs2 = errs2.concat(errs3)
-
-      const parse = parser(args)
-      const {errs: errs4, argv} = parse({errs: [], argv: params})
-
-      errs2 = errs2.concat(errs4)
-
-      argv2[arg] = Object.assign({}, argv2[arg], argv)
-    } else if (types.length === 0) {
-      argv2[arg] = typeof argv2[arg] === 'undefined' ? true : argv2[arg] < 2 ? 2 : argv2[arg] + 1
-    } else {
-      argv2[arg] = types.length === 1 ? params[0] : params
     }
-  }
 
-  return {errs: errs.concat(errs2), argv: argv2}
+    return {errs: errs.concat(errs2), argv: argv2}
+  }
 }
 
 
