@@ -176,9 +176,31 @@ function cast (types) {
   }
 }
 
-// TODO: Implementation
-function validate (only) {
-  return ({errs = [], argv = []} = {}) => ({errs, argv})
+function validate (only = null) {
+  return ({errs = [], argv = []} = {}) => {
+    const errs2 = []
+    let argv2   = []
+
+    if (typeof only === 'undefined' || only === null) {
+      argv2 = argv
+    } else {
+      for (let i = 0; i < argv.length; i++) {
+        const arg = argv[i]
+        if (only.indexOf(arg) > -1) {
+          argv2.push(arg)
+        } else {
+          const e = err(
+            'Argument value restrictions violated',
+            'The argument is not in the allowed set of values',
+            {arg, only}
+          )
+          errs2.push(e)
+        }
+      }
+    }
+
+    return {errs: errs.concat(errs2), argv: argv2}
+  }
 }
 
 // TODO: Error Handling
