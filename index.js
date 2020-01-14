@@ -150,30 +150,57 @@ function parseArgs (args = {}) {
   }
 }
 
-// TODO: Error Handling
 function cast (types) {
   return ({errs = [], argv = []} = {}) => {
     const errs2 = []
     const argv2 = []
-    
-    if (types.length === 0) {
+
+    if (types === null) {
+    } else if (types.length === 0) {
       argv2.push(true)
     } else {
       for (let i = 0; i < types.length; i++) {
+
         const type = types[i]
+        const arg  = argv[i]
         switch (type) {
-          case 'count':   argv2.push(1);                   break
-          case 'string':  argv2.push(argv[i]);             break
-          case 'number':  argv2.push(parseFloat(argv[i])); break // THIS MAY FAIL!
+          case 'count':
+            argv2.push(1)
+            break
+          case 'string':
+            argv2.push(arg)
+            break
+          case 'number':
+            const float = parseFloat(arg)
+            if (Number.isNaN(float)) {
+              const argumentIsNotANumber = err(
+                'Argument is not a number',
+                `The passed command line argument must be a number`,
+                {arg}
+              )
+              errs2.push(argumentIsNotANumber)
+            } else {
+              argv2.push(float)
+            }
+            break
           case 'bool':
-            if (argv[i] === 'true')       argv2.push(true)
-            else if (argv[i] === 'false') argv2.push(false)
-            else throw new Error('FAIL');                  break // THIS MAY FAIL!
-          default:                                         break
+            if (arg === 'true')       argv2.push(true)
+            else if (arg === 'false') argv2.push(false)
+            else {
+              const argumentIsNotABool = err(
+                'Argument is not a boolean',
+                "The passed command line argument must either be 'true' or 'false'",
+                {arg}
+              )
+              errs2.push(argumentIsNotABool)
+            }
+            break
+          default:
+            break
         }
       }
     }
-  
+
     return {errs: errs.concat(errs2), argv: argv2}
   }
 }
