@@ -1,5 +1,5 @@
-module.exports = (arg, options = {}) => {
-  const {args = [], types = null, only = null, opts = null, desc = ''} = options
+module.exports = (options = {}) => {
+  const {arg = null, args = [], types = null, only = null, opts = null, desc = ''} = options
 
   const errs  = []
   const args2 = {}

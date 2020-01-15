@@ -4,23 +4,26 @@ const {array, number, string, bool, flag, command} = require('./src/dsl/fp/types
 
 const numStr  = array(['number', 'string'])
 
-const opts = combine([
-  option('foo', number(['--foo'])),
-  option('v', flag(['-v'])),
-  option('init', command(['init'], {opts: option('sub', string(['--sub']))}))
-])
+const opts = [
+  number('foo', ['--foo']),
+  flag('v', ['-v']),
+  command('init', ['init'], {opts: option(string('sub', ['--sub']))})
+]
+//console.log('opts', opts)
 
-const {errs, args} = combine([
-  option('chunker', number( ['--chunker', '-c'], {only: [42]})),
-  option('applier', string( ['--applier', '-a']              )),
-  option('numStr',  numStr( ['--num-str', '-n']              )),
-  option('verbose', flag(   ['--verbose', '-v']              )),
-  option('truFal',  bool(   ['--tru-fal', '-t']              )),
-  option('strlist', command(['--strlist', '-s']              )),
-  option('command', command(['command',       ], {opts}      )),
-  option('noMinus', string( ['noMinus'        ]              )),
-  {errs: [], args: {'--a-flag': {arg: 'aflag', types: []}, '-f': {arg: 'aflag', types: []}}},
-])
+const options = [
+  number('chunker', ['--chunker', '-c'], {only: [42]}),
+  string('applier', ['--applier', '-a']),
+  numStr('numStr', ['--num-str', '-n']),
+  flag('verbose', ['--verbose', '-v']),
+  bool('truFal', ['--tru-fal', '-t']),
+  command('strlist', ['--strlist', '-s']),
+  command('command', ['command'], {opts: combine(opts.map(option))}),
+  string('noMinus', ['noMinus'])
+]
+console.log('options', options)
+
+const {errs, args} = combine(options.map(option))
 //console.log('args', args)
 
 const pipe              = require('./src/dsl/fp/pipe')
