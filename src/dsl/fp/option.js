@@ -1,5 +1,5 @@
 module.exports = (options = {}) => {
-  const {arg = null, args = [], types = null, only = null, opts = null, desc = ''} = options
+  const {arg = null, args = [], types = null, only = null, desc = '', opts = null} = options
 
   const errs  = []
   const args2 = {}
@@ -7,7 +7,7 @@ module.exports = (options = {}) => {
   if (args !== null && args.length > 0) {
     for (let i = 0; i < args.length; i++) {
       const key  = args[i]
-      args2[key] = {arg, types, only, opts, desc}
+      args2[key] = {arg, types, only, desc, opts}
     }
   } else {
     const noArgumentProvidedInOption = {
