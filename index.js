@@ -23,7 +23,7 @@ const options = [
 ]
 console.log('options', JSON.stringify(options, null, 2))
 
-const {errs, args} = combine(options.map(option))
+const os = combine(options.map(option))
 //console.log('args', args)
 
 const pipe              = require('./src/dsl/fp/pipe')
@@ -34,17 +34,17 @@ const splitShortOptions = require('./src/parser/splitShortOptions')
 
 const argv = process.argv
 
-function parser (args) {
-  return pipe(
+function parser ({errs = [], args = {}} = {}) {
+  return ({errs: errs2 = [], argv = []} = {}) => pipe(
     splitShortOptions,
     parseArgs(args),
     mergeArgs(parser)
-  )
+  )({errs: errs.concat(errs2), argv})
 }
 
-const parse = parser(args)
+const parse = parser(os)
 console.log('parse', JSON.stringify(
-  pipe(sliceArgv, parse)({errs, argv}),
+  pipe(sliceArgv, parse)({errs: [], argv}),
   null,
   2
 ))
