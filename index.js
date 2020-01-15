@@ -21,7 +21,7 @@ const options = [
   command('command', ['command'], {opts: combine(opts.map(option))}),
   string('noMinus', ['noMinus'])
 ]
-console.log('options', options)
+console.log('options', JSON.stringify(options, null, 2))
 
 const {errs, args} = combine(options.map(option))
 //console.log('args', args)
