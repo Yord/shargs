@@ -15,3 +15,19 @@ test('pipe composes functions, but backwards', () => {
     })
   )
 })
+
+test('pipe is associative', () => {
+  const f = func(anything())
+  const g = func(anything())
+  const h = func(anything())
+  const a = anything()
+  assert(
+    property(f, g, h, a, (f, g, h, a) => {
+      expect(
+        pipe(f, pipe(g, h))(a)
+      ).toStrictEqual(
+        pipe(pipe(f, g), h)(a)
+      )
+    })
+  )
+})
