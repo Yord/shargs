@@ -47,3 +47,19 @@ test('piping f with id is f', () => {
     })
   )
 })
+
+test('piping id with f is f', () => {
+  const id = a => a
+
+  const f  = func(anything())
+  const a  = anything()
+  assert(
+    property(f, a, (f, a) => {
+      expect(
+        pipe(id, f)(a)
+      ).toStrictEqual(
+        f(a)
+      )
+    })
+  )
+})
