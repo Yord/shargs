@@ -1,11 +1,12 @@
 const combine = require('./src/dsl/fp/combine')
 const option  = require('./src/dsl/fp/option')
+const parser  = require('./src/dsl/fp/parser')
 const {array, number, string, bool, flag, command} = require('./src/dsl/fp/types')
 
 const numStr  = array(['number', 'string'])
 
 const opts = [
-  number('foo', ['--foo']),
+  {arg: 'foo', args: ['--foo'], types: ['number']}, //number('foo', ['--foo']),
   flag('v', ['-v']),
   command('init', ['init'], {opts: option(string('sub', ['--sub']))})
 ]
@@ -18,33 +19,53 @@ const options = [
   flag('verbose', ['--verbose', '-v']),
   bool('truFal', ['--tru-fal', '-t']),
   command('strlist', ['--strlist', '-s']),
-  command('command', ['command'], {opts: combine(opts.map(option))}),
+  command('command', ['command'], {opts: combine(...opts.map(option))}),
   string('noMinus', ['noMinus'])
 ]
 console.log('options', JSON.stringify(options, null, 2))
 
-const os = combine(options.map(option))
+const os = combine(...options.map(option))
 //console.log('args', args)
 
-const pipe              = require('./src/dsl/fp/pipe')
 const mergeArgs         = require('./src/parser/mergeArgs')
 const parseArgs         = require('./src/parser/parseArgs')
 const sliceArgv         = require('./src/parser/sliceArgv')
 const splitShortOptions = require('./src/parser/splitShortOptions')
 
-const argv = process.argv
+const {argv} = process
 
-function parser ({errs = [], args = {}} = {}) {
-  return ({errs: errs2 = [], argv = []} = {}) => pipe(
+function fooParser (opts) {
+  return parser(
     splitShortOptions,
-    parseArgs(args),
-    mergeArgs(parser)
-  )({errs: errs.concat(errs2), argv})
+    parseArgs(opts),
+    mergeArgs(fooParser)
+  )(opts)
 }
 
-const parse = parser(os)
+const parse = fooParser(os)
 console.log('parse', JSON.stringify(
-  pipe(sliceArgv, parse)({errs: [], argv}),
+  parse(sliceArgv({argv})),
+  null,
+  2
+))
+
+const questionCmd = string('question', ['--question'])
+const answerCmd   = number('answer', ['--answer', '-a'], {only: [42]})
+
+const questionOpt = option(questionCmd)
+const answerOpt   = option(answerCmd)
+const combinedOpt = combine(questionOpt, answerOpt)
+
+const deepThought = opts => parser(
+  splitShortOptions,
+  parseArgs(opts),
+  mergeArgs()
+)(opts)
+
+const parse2 = deepThought(combinedOpt)
+
+console.log('parse2', JSON.stringify(
+  parse2(sliceArgv({argv: process.argv})),
   null,
   2
 ))
