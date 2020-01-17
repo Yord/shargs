@@ -19,15 +19,14 @@ const options = [
   flag('verbose', ['--verbose', '-v']),
   bool('truFal', ['--tru-fal', '-t']),
   command('strlist', ['--strlist', '-s']),
-  command('command', ['command'], {opts: combine(opts.map(option))}),
+  command('command', ['command'], {opts: combine(...opts.map(option))}),
   string('noMinus', ['noMinus'])
 ]
 console.log('options', JSON.stringify(options, null, 2))
 
-const os = combine(options.map(option))
+const os = combine(...options.map(option))
 //console.log('args', args)
 
-const pipe              = require('./src/dsl/fp/pipe')
 const mergeArgs         = require('./src/parser/mergeArgs')
 const parseArgs         = require('./src/parser/parseArgs')
 const sliceArgv         = require('./src/parser/sliceArgv')
