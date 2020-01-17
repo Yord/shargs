@@ -1,4 +1,4 @@
-module.exports = (options = []) => {
+module.exports = (...options) => {
   let errs2   = []
   const args2 = {}
 
