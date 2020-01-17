@@ -44,7 +44,28 @@ function fooParser (opts) {
 
 const parse = fooParser(os)
 console.log('parse', JSON.stringify(
-  pipe(sliceArgv, parse)({errs: [], argv}),
+  parse(sliceArgv({argv})),
+  null,
+  2
+))
+
+const questionCmd = string('question', ['--question'])
+const answerCmd   = number('answer', ['--answer', '-a'], {only: [42]})
+
+const questionOpt = option(questionCmd)
+const answerOpt   = option(answerCmd)
+const combinedOpt = combine(questionOpt, answerOpt)
+
+const deepThought = opts => parser(
+  splitShortOptions,
+  parseArgs(opts),
+  mergeArgs()
+)(opts)
+
+const parse2 = deepThought(combinedOpt)
+
+console.log('parse2', JSON.stringify(
+  parse2(sliceArgv({argv: process.argv})),
   null,
   2
 ))
