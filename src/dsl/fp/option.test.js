@@ -120,3 +120,33 @@ test('option fails if no args are given', () => {
     })
   )
 })
+
+test('option fails if passed undefined', () => {
+  const _arguments = {
+    errs: [
+      {
+        code: 'No argument provided in option',
+        msg:  "Please provide an arg key (e.g. {arg: 'foo'})",
+        info: {options: {}}
+      },
+      {
+        code: 'No arguments provided in option',
+        msg:  "Please provide at least one argument (e.g. {args: ['--foo']})",
+        info: {options: {}}
+      }
+    ],
+    args: {}
+  }
+
+  expect(
+    option()
+  ).toStrictEqual(
+    _arguments
+  )
+
+  expect(
+    option(undefined)
+  ).toStrictEqual(
+    _arguments
+  )
+})
