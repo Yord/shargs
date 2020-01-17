@@ -1,11 +1,12 @@
 const combine = require('./src/dsl/fp/combine')
 const option  = require('./src/dsl/fp/option')
+const parser  = require('./src/dsl/fp/parser')
 const {array, number, string, bool, flag, command} = require('./src/dsl/fp/types')
 
 const numStr  = array(['number', 'string'])
 
 const opts = [
-  number('foo', ['--foo']),
+  {arg: 'foo', args: ['--foo'], types: ['number']}, //number('foo', ['--foo']),
   flag('v', ['-v']),
   command('init', ['init'], {opts: option(string('sub', ['--sub']))})
 ]
@@ -32,17 +33,17 @@ const parseArgs         = require('./src/parser/parseArgs')
 const sliceArgv         = require('./src/parser/sliceArgv')
 const splitShortOptions = require('./src/parser/splitShortOptions')
 
-const argv = process.argv
+const {argv} = process
 
-function parser ({errs = [], args = {}} = {}) {
-  return ({errs: errs2 = [], argv = []} = {}) => pipe(
+function fooParser (opts) {
+  return parser(
     splitShortOptions,
-    parseArgs(args),
-    mergeArgs(parser)
-  )({errs: errs.concat(errs2), argv})
+    parseArgs(opts),
+    mergeArgs(fooParser)
+  )(opts)
 }
 
-const parse = parser(os)
+const parse = fooParser(os)
 console.log('parse', JSON.stringify(
   pipe(sliceArgv, parse)({errs: [], argv}),
   null,
