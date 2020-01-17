@@ -1,7 +1,7 @@
 const cast     = require('./cast')
 const validate = require('./validate')
 
-module.exports = (args = {}) => ({errs = [], argv = []} = {}) => {
+module.exports = ({args = {}} = {}) => ({errs = [], argv = []} = {}) => {
   let errs2   = []
   const argv2 = []
 
