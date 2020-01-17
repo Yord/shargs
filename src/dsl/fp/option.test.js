@@ -79,3 +79,44 @@ test('option fails if no arg is given', () => {
     })
   )
 })
+
+test('option fails if no args are given', () => {
+  const optionsArguments = base64().chain(arg =>
+    anything().chain(types =>
+      anything().chain(only =>
+        anything().chain(desc =>
+          anything().map(opts => {
+            const options = {
+              arg,
+              types: typeof types !== 'undefined' ? types : null,
+              only:  typeof only  !== 'undefined' ? only  : null,
+              desc:  typeof desc  !== 'undefined' ? desc  : '',
+              opts:  typeof opts  !== 'undefined' ? opts  : null
+            }
+            return {
+              options,
+              _arguments: {
+                errs: [{
+                  code: 'No arguments provided in option',
+                  msg:  "Please provide at least one argument (e.g. {args: ['--foo']})",
+                  info: {options}
+                }],
+                args: {}
+              }
+            }
+          })
+        )
+      )
+    )
+  )
+
+  assert(
+    property(optionsArguments, ({options, _arguments}) => {
+      expect(
+        option(options)
+      ).toStrictEqual(
+        _arguments
+      )
+    })
+  )
+})
