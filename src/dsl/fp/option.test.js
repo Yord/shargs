@@ -2,14 +2,14 @@ const {anything, array, assert, base64, property} = require('fast-check')
 const option = require('./option')
 
 test('option transforms options DSL into arguments DSL', () => {
-  const optionsArguments = base64().chain(arg =>
+  const optionsArguments = base64().chain(key =>
     array(base64(), 1, 20).chain(args =>
       anything().chain(types =>
         anything().chain(only =>
           anything().chain(desc =>
             anything().map(opts => {
               const options = {
-                arg,
+                key,
                 types: typeof types !== 'undefined' ? types : null,
                 only:  typeof only  !== 'undefined' ? only  : null,
                 desc:  typeof desc  !== 'undefined' ? desc  : '',
@@ -19,7 +19,13 @@ test('option transforms options DSL into arguments DSL', () => {
                 options: {...options, args},
                 _arguments: {
                   errs: [],
-                  args: args.reduce((obj, key) => ({...obj, [key]: options}), {})
+                  args: args.reduce(
+                    (obj, arg) => ({
+                      ...obj,
+                      [arg]: obj[arg] ? obj[arg].concat([options]) : [options]
+                    }),
+                    {}
+                  )
                 }
               }
             })
@@ -40,7 +46,7 @@ test('option transforms options DSL into arguments DSL', () => {
   )
 })
 
-test('option fails if no arg is given', () => {
+test('option fails if no key is given', () => {
   const optionsArguments = array(base64(), 1, 20).chain(args =>
     anything().chain(types =>
       anything().chain(only =>
@@ -57,7 +63,7 @@ test('option fails if no arg is given', () => {
               _arguments: {
                 errs: [{
                   code: 'No argument provided in option',
-                  msg:  "Please provide an arg key (e.g. {arg: 'foo'})",
+                  msg:  "Please provide a key (e.g. [{key: 'foo', ...}])",
                   info: {options: {...options, args}}
                 }],
                 args: {}
@@ -81,13 +87,13 @@ test('option fails if no arg is given', () => {
 })
 
 test('option fails if no args are given', () => {
-  const optionsArguments = base64().chain(arg =>
+  const optionsArguments = base64().chain(key =>
     anything().chain(types =>
       anything().chain(only =>
         anything().chain(desc =>
           anything().map(opts => {
             const options = {
-              arg,
+              key,
               types: typeof types !== 'undefined' ? types : null,
               only:  typeof only  !== 'undefined' ? only  : null,
               desc:  typeof desc  !== 'undefined' ? desc  : '',
@@ -98,7 +104,7 @@ test('option fails if no args are given', () => {
               _arguments: {
                 errs: [{
                   code: 'No arguments provided in option',
-                  msg:  "Please provide at least one argument (e.g. {args: ['--foo']})",
+                  msg:  "Please provide at least one argument (e.g. [{args: ['--foo'], ...}])",
                   info: {options}
                 }],
                 args: {}
@@ -126,12 +132,12 @@ test('option fails if passed undefined', () => {
     errs: [
       {
         code: 'No argument provided in option',
-        msg:  "Please provide an arg key (e.g. {arg: 'foo'})",
+        msg:  "Please provide a key (e.g. [{key: 'foo', ...}])",
         info: {options: {}}
       },
       {
         code: 'No arguments provided in option',
-        msg:  "Please provide at least one argument (e.g. {args: ['--foo']})",
+        msg:  "Please provide at least one argument (e.g. [{args: ['--foo'], ...}])",
         info: {options: {}}
       }
     ],

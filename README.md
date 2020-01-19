@@ -32,7 +32,7 @@ Use it at your own risk!
 The following definitions of `answerCmd` are identical:
 
 ```js
-const answerCmd = {arg: 'answer', args: ['--answer', '-a'], types: ['number'], only: [42]}
+const answerCmd = {key: 'answer', args: ['--answer', '-a'], types: ['number'], only: [42]}
 const answerCmd = number('answer', ['--answer', '-a'], {only: [42]})
 
 const questionCmd = string('question', ['--question'])
@@ -47,8 +47,8 @@ The definition of `answerCmd` reads as follows:
 > and is set using either `--answer` or `-a`.
 > It must be followed by exactly one number that can only be `42`.
 
-The object syntax takes `arg`, `args`, and `types` as keys,
-while the type function syntax takes `arg` and `args` as the first two arguments
+The object syntax takes `key`, `args`, and `types` as keys,
+while the type function syntax takes `key` and `args` as the first two arguments
 and sets `types` depending on the type function.
 Additional fields are passed as additional keys in the object syntax
 or in an object as the third parameter in the type function syntax.
@@ -59,7 +59,7 @@ The following command-line argument fields are available:
 
 | Field   | Value                                                        | Default | Description                                                                                                                                    |
 |---------|--------------------------------------------------------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------|
-| `arg`   | string                                                       | `null`  | The command-line argument's value is assigned to a key of this name.                                                                           |
+| `key`   | string                                                       | `null`  | The command-line argument's value is assigned to a key of this name.                                                                           |
 | `args`  | array of strings                                             | `[]`    | A list of options that may be used to set the command-line option.                                                                             |
 | `desc`  | string                                                       | `''`    | Description of the command-line argument for use in the usage text.                                                                            |
 | `only`  | array of values                                              | `null`  | The command-line argument's value can only be one of the values in this list. If `only` is `null`, the value may be set freely.                |
@@ -77,12 +77,12 @@ The following type functions are available to generate command-line arguments:
 
 | Function                          | Description                                                |
 |-----------------------------------|------------------------------------------------------------|
-| `array(types)(arg, args, fields)` | Assigns `types`, `arg`, and `args` to `fields`.            |
-| `bool(arg, args, fields)`         | Assigns `types: ['bool']`, `arg` and `args` to `fields`.   |
-| `command(arg, args, fields)`      | Assigns `types: null`, `arg` and `args` to `fields`.       |
-| `flag(arg, args, fields)`         | Assigns `types: []`, `arg` and `args` to `fields`.         |
-| `number(arg, args, fields)`       | Assigns `types: ['number']`, `arg` and `args` to `fields`. |
-| `string(arg, args, fields)`       | Assigns `types: ['string']`, `arg` and `args` to `fields`. |
+| `array(types)(key, args, fields)` | Assigns `types`, `key`, and `args` to `fields`.            |
+| `bool(key, args, fields)`         | Assigns `types: ['bool']`, `key` and `args` to `fields`.   |
+| `command(key, args, fields)`      | Assigns `types: null`, `key` and `args` to `fields`.       |
+| `flag(key, args, fields)`         | Assigns `types: []`, `key` and `args` to `fields`.         |
+| `number(key, args, fields)`       | Assigns `types: ['number']`, `key` and `args` to `fields`. |
+| `string(key, args, fields)`       | Assigns `types: ['string']`, `key` and `args` to `fields`. |
 
 ### Defining Command-Line Options
 
@@ -96,8 +96,8 @@ The following definitions of `answerOpt` are identical:
 const answerOpt = {
   errs: [],
   args: {
-    '--answer': {arg: 'answer', types: ['number'], only: [42]},
-    '-a':       {arg: 'answer', types: ['number'], only: [42]}
+    '--answer': [{key: 'answer', types: ['number'], only: [42]}],
+    '-a':       [{key: 'answer', types: ['number'], only: [42]}]
   }
 }
 const answerOpt = option(answerCmd)
@@ -105,6 +105,17 @@ const answerOpt = option(answerCmd)
 
 You may either describe command-line options using a plain object
 or the `option` function that takes a [command-line argument](#defining-command-line-arguments).
+
+The definition of `answerOpt` reads as follows:
+
+> `answerOpt` is a command-line option that has no errors and the following arguments:
+> `--answer` is an argument that is read to the `answer` key and
+> must be followed by exactly one number that can only be `42`.
+> `-a` is an argument that is read to the `answer` key and
+> must be followed by exactly one number that can only be `42`.
+
+The reason why options are defined redundant is because that makes it easier for parsers to look them up.
+Command-line arguments exist, because their syntax is easier to parse for usage generators.
 
 Several Command-line options may be combined:
 
@@ -115,9 +126,9 @@ const combinedOpt = combine(questionOpt, answerOpt)
 const combinedOpt = {
   errs: [],
   args: {
-    '--question': {arg: 'question', types: ['string']            },
-    '--answer':   {arg: 'answer',   types: ['number'], only: [42]},
-    '-a':         {arg: 'answer',   types: ['number'], only: [42]}
+    '--question': [{key: 'question', types: ['string']            }],
+    '--answer':   [{key: 'answer',   types: ['number'], only: [42]}],
+    '-a':         [{key: 'answer',   types: ['number'], only: [42]}]
   }
 }
 ```
@@ -125,7 +136,35 @@ const combinedOpt = {
 The `combinedOpt` includes `questionOpt` as well as `answerOpt`.
 If either one has errors, they are gathered in the `errs` array.
 Setting errors explicitly does not make much sense.
-However, `option` uses `errs` if e.g. a command-line argument does not set an `arg` or empty `args`.
+However, `option` uses `errs` if e.g. a command-line argument does not set an `arg` or has an empty `args`.
+
+In some cases (most cases actually), an answer is not a number but a string.
+
+```js
+const answerStrCmd = string('answerStr', ['-a']})
+const answerStrOpt = option(answerStrCmd)
+
+const combinedOpt  = combine(answerCmd, answerStrCmd)
+const combinedOpt  = {
+  errs: [],
+  args: {
+    '--answer': [
+      {key: 'answer',    types: ['number'], only: [42]}
+    ],
+    '-a':       [
+      {key: 'answer',    types: ['number'], only: [42]}
+      {key: 'answerStr', types: ['string']}
+    ]
+  }
+}
+```
+
+Here, a new command-line argument `answerStr` is defined that has the same argument `-a` as `answer`.
+If options of both command-line arguments are combined, the `-a` argument is interpreted twice:
+By `answer` as a number that can only be `42`, as well as by `answerStr` as a string without restrictions.
+An option can only be written two several keys, if the number of its arguments match.
+If `combine` tries to adds another interpretation to an argument that does not have the same number of keys,
+an error is recorded instead.
 
 ### Defining Command-Line Parsers
 
@@ -158,8 +197,8 @@ const result = {
   errs: [],
   argv: {
     "_": [],
-    "question": "What is the answer to the Ultimate Question of Life, the Universe, and Everything?",
-    "answer": 42
+    question: "What is the answer to everything?",
+    answer: 42
   }
 }
 ```

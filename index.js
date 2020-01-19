@@ -6,26 +6,26 @@ const {array, number, string, bool, flag, command} = require('./src/dsl/fp/types
 const numStr  = array(['number', 'string'])
 
 const opts = [
-  {arg: 'foo', args: ['--foo'], types: ['number']}, //number('foo', ['--foo']),
+  {key: 'foo', args: ['--foo'], types: ['number']}, //number('foo', ['--foo']),
   flag('v', ['-v']),
   command('init', ['init'], {opts: option(string('sub', ['--sub']))})
 ]
-//console.log('opts', opts)
+//console.log('opts.map(option)', JSON.stringify(opts.map(option), null, 2))
 
 const options = [
-  number('chunker', ['--chunker', '-c'], {only: [42]}),
+  number('chunker', ['--chunker', '-c', '-a'], {only: [42]}),
   string('applier', ['--applier', '-a']),
   numStr('numStr', ['--num-str', '-n']),
-  flag('verbose', ['--verbose', '-v']),
+  flag('verbose', ['--verbose', '-v', '-a']),
   bool('truFal', ['--tru-fal', '-t']),
   command('strlist', ['--strlist', '-s']),
   command('command', ['command'], {opts: combine(...opts.map(option))}),
   string('noMinus', ['noMinus'])
 ]
-console.log('options', JSON.stringify(options, null, 2))
+//console.log('options', JSON.stringify(options, null, 2))
 
 const os = combine(...options.map(option))
-//console.log('args', args)
+//console.log('os', JSON.stringify(os, null, 2))
 
 const mergeArgs         = require('./src/parser/mergeArgs')
 const parseArgs         = require('./src/parser/parseArgs')
