@@ -7,7 +7,7 @@ module.exports = (options = {}) => {
   if (key === null) {
     const noArgumentProvidedInOption = {
       code: 'No argument provided in option',
-      msg:  "Please provide an arg key (e.g. {arg: 'foo'})",
+      msg:  "Please provide a key (e.g. [{key: 'foo', ...}])",
       info: {options}
     }
     errs.push(noArgumentProvidedInOption)
@@ -16,7 +16,7 @@ module.exports = (options = {}) => {
   if (args === null || args.length === 0) {
     const noArgumentsProvidedInOption = {
       code: 'No arguments provided in option',
-      msg:  "Please provide at least one argument (e.g. {args: ['--foo']})",
+      msg:  "Please provide at least one argument (e.g. [{args: ['--foo'], ...}])",
       info: {options}
     }
     errs.push(noArgumentsProvidedInOption)
