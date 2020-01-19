@@ -162,6 +162,9 @@ const combinedOpt  = {
 Here, a new command-line argument `answerStr` is defined that has the same argument `-a` as `answer`.
 If options of both command-line arguments are combined, the `-a` argument is interpreted twice:
 By `answer` as a number that can only be `42`, as well as by `answerStr` as a string without restrictions.
+An option can only be written two several keys, if the number of its arguments match.
+If `combine` tries to adds another interpretation to an argument that does not have the same number of keys,
+an error is recorded instead.
 
 ### Defining Command-Line Parsers
 
