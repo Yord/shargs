@@ -106,6 +106,17 @@ const answerOpt = option(answerCmd)
 You may either describe command-line options using a plain object
 or the `option` function that takes a [command-line argument](#defining-command-line-arguments).
 
+The definition of `answerOpt` reads as follows:
+
+> `answerOpt` is a command-line option that has no errors and the following arguments:
+> `--answer` is an argument that is read to the `answer` key and
+> must be followed by exactly one number that can only be `42`.
+> `-a` is an argument that is read to the `answer` key and
+> must be followed by exactly one number that can only be `42`.
+
+The reason why options are defined redundant is because that makes it easier for parsers to look them up.
+Command-line arguments exist, because their syntax is easier to parse for usage generators.
+
 Several Command-line options may be combined:
 
 ```js
