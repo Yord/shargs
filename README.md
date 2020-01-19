@@ -158,8 +158,8 @@ const result = {
   errs: [],
   argv: {
     "_": [],
-    "question": "What is the answer to the Ultimate Question of Life, the Universe, and Everything?",
-    "answer": 42
+    question: "What is the answer to everything?",
+    answer: 42
   }
 }
 ```
