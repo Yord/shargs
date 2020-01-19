@@ -136,7 +136,32 @@ const combinedOpt = {
 The `combinedOpt` includes `questionOpt` as well as `answerOpt`.
 If either one has errors, they are gathered in the `errs` array.
 Setting errors explicitly does not make much sense.
-However, `option` uses `errs` if e.g. a command-line argument does not set an `arg` or empty `args`.
+However, `option` uses `errs` if e.g. a command-line argument does not set an `arg` or has an empty `args`.
+
+In some cases (most cases actually), an answer is not a number but a string.
+
+```js
+const answerStrCmd = string('answerStr', ['-a']})
+const answerStrOpt = option(answerStrCmd)
+
+const combinedOpt  = combine(answerCmd, answerStrCmd)
+const combinedOpt  = {
+  errs: [],
+  args: {
+    '--answer': [
+      {key: 'answer',    types: ['number'], only: [42]}
+    ],
+    '-a':       [
+      {key: 'answer',    types: ['number'], only: [42]}
+      {key: 'answerStr', types: ['string']}
+    ]
+  }
+}
+```
+
+Here, a new command-line argument `answerStr` is defined that has the same argument `-a` as `answer`.
+If options of both command-line arguments are combined, the `-a` argument is interpreted twice:
+By `answer` as a number that can only be `42`, as well as by `answerStr` as a string without restrictions.
 
 ### Defining Command-Line Parsers
 
