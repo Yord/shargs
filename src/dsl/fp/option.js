@@ -1,10 +1,10 @@
 module.exports = (options = {}) => {
-  const {arg = null, args = [], types = null, only = null, desc = '', opts = null} = options
+  const {key = null, args = [], types = null, only = null, desc = '', opts = null} = options
 
   const errs  = []
   const args2 = {}
 
-  if (arg === null) {
+  if (key === null) {
     const noArgumentProvidedInOption = {
       code: 'No argument provided in option',
       msg:  "Please provide an arg key (e.g. {arg: 'foo'})",
@@ -22,10 +22,11 @@ module.exports = (options = {}) => {
     errs.push(noArgumentsProvidedInOption)
   }
   
-  if (arg !== null && args !== null && args.length > 0) {
+  if (key !== null && args !== null && args.length > 0) {
     for (let i = 0; i < args.length; i++) {
-      const key  = args[i]
-      args2[key] = {arg, types, only, desc, opts}
+      const arg  = args[i]
+      if (typeof args2[arg] === 'undefined') args2[arg] = []
+      args2[arg].push({key, types, only, desc, opts})
     }
   }
 
