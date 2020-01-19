@@ -96,8 +96,8 @@ The following definitions of `answerOpt` are identical:
 const answerOpt = {
   errs: [],
   args: {
-    '--answer': {arg: 'answer', types: ['number'], only: [42]},
-    '-a':       {arg: 'answer', types: ['number'], only: [42]}
+    '--answer': [{key: 'answer', types: ['number'], only: [42]}],
+    '-a':       [{key: 'answer', types: ['number'], only: [42]}]
   }
 }
 const answerOpt = option(answerCmd)
@@ -115,9 +115,9 @@ const combinedOpt = combine(questionOpt, answerOpt)
 const combinedOpt = {
   errs: [],
   args: {
-    '--question': {arg: 'question', types: ['string']            },
-    '--answer':   {arg: 'answer',   types: ['number'], only: [42]},
-    '-a':         {arg: 'answer',   types: ['number'], only: [42]}
+    '--question': [{key: 'question', types: ['string']            }],
+    '--answer':   [{key: 'answer',   types: ['number'], only: [42]}],
+    '-a':         [{key: 'answer',   types: ['number'], only: [42]}]
   }
 }
 ```
