@@ -40,7 +40,7 @@ const validate          = require('./src/parser/validate')
 
 const {argv} = process
 
-const preprocess = pipe(cast, validate)
+const preprocess = option => pipe(cast(option), validate(option))
 
 function fooParser (opts) {
   return parser(
