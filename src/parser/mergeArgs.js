@@ -19,7 +19,7 @@ module.exports = parser => ({errs = [], argv = []} = {}) => {
 
       const combined = combine(...options)
       const parse    = parser(combined || {})
-      const {errs: errs3, argv} = parse({errs, argv: params})
+      const {errs: errs3, argv} = parse({errs: [], argv: params})
 
       errs2      = errs3
       argv2[arg] = Object.assign({}, argv2[arg], argv)
@@ -30,5 +30,5 @@ module.exports = parser => ({errs = [], argv = []} = {}) => {
     }
   }
 
-  return {errs: errs2, argv: argv2}
+  return {errs: errs.concat(errs2), argv: argv2}
 }

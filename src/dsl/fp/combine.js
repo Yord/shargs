@@ -18,21 +18,31 @@ module.exports = (...options) => {
             args2[key] = list
           } else {
             args2[key] = []
-            // ADD ERROR!
-            errs2.push({msg: 'FOOOOO #1', info: {list}})
+            errs2.push({
+              code: 'Invalid options list in combine',
+              msg:  'Options list in combine was undefined, null or empty',
+              info: {list}
+            })
           }
         } else {
-          const types = args2[key][0].types || []
+          const ref   = args2[key][0]
+          const types = ref.types || []
           for (let k = 0; k < list.length; k++) {
-            const elem = list[k]
-            if (typeof elem.types === 'undefined') {
-              // ADD ERROR!
-              errs2.push({msg: 'FOOOOO #2', info: {elem}})
-            } else if (elem.types === types || elem.types.length === types.length) {
-              args2[key].push(elem)
+            const argument = list[k]
+            if (argument.types !== null && !Array.isArray(argument.types)) {
+              errs2.push({
+                code: 'Invalid types in argument',
+                msg:  'Each argument must have a types key that must be null or an array',
+                info: {argument}
+              })
+            } else if (argument.types === types || argument.types.length === types.length) {
+              args2[key].push(argument)
             } else {
-              // ADD ERROR!
-              errs2.push({msg: 'FOOOOO #3', info: {elem}})
+              errs2.push({
+                code: 'Non-matching argument types',
+                msg:  'If arguments have the same key, their types must either be equal or have the same length',
+                info: {key, ref, argument}
+              })
             }
           }
         }
