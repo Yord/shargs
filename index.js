@@ -38,21 +38,21 @@ const splitShortOptions = require('./src/parser/splitShortOptions')
 const cast              = require('./src/parser/cast')
 const validate          = require('./src/parser/validate')
 
-const {argv} = process
+const argv = process.argv.slice(2)
 
 const preprocess = option => pipe(cast(option), validate(option))
 
-function fooParser (opts) {
+function fooParser (options) {
   return parser(
     splitShortOptions,
-    parseArgs(preprocess)(opts),
+    parseArgs(preprocess)(options),
     mergeArgs(fooParser)
-  )(opts)
+  )(options)
 }
 
 const parse = fooParser(options)
 console.log('parse', JSON.stringify(
-  parse(sliceArgv({argv})),
+  parse({argv}),
   null,
   2
 ))
@@ -66,16 +66,16 @@ const answerOpt    = option(answerCmd)
 const answerStrOpt = option(answerStrCmd)
 const combinedOpt  = combine(questionOpt, answerOpt, answerStrOpt)
 
-const deepThought  = opts => parser(
+const deepThought  = options => parser(
   splitShortOptions,
-  parseArgs(preprocess)(opts),
+  parseArgs(preprocess)(options),
   mergeArgs()
-)(opts)
+)(options)
 
 const parse2 = deepThought(combinedOpt)
 
 console.log('parse2', JSON.stringify(
-  parse2(sliceArgv({argv: process.argv})),
+  parse2({argv}),
   null,
   2
 ))
