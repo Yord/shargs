@@ -1,6 +1,7 @@
 const combine = require('./src/dsl/fp/combine')
 const option  = require('./src/dsl/fp/option')
 const parser  = require('./src/dsl/fp/parser')
+const pipe    = require('./src/dsl/fp/pipe')
 const {array, number, string, bool, flag, command} = require('./src/dsl/fp/types')
 
 const numStr  = array(['number', 'string'])
@@ -34,13 +35,17 @@ const mergeArgs         = require('./src/parser/mergeArgs')
 const parseArgs         = require('./src/parser/parseArgs')
 const sliceArgv         = require('./src/parser/sliceArgv')
 const splitShortOptions = require('./src/parser/splitShortOptions')
+const cast              = require('./src/parser/cast')
+const validate          = require('./src/parser/validate')
 
 const {argv} = process
+
+const preprocess = pipe(cast, validate)
 
 function fooParser (opts) {
   return parser(
     splitShortOptions,
-    parseArgs(opts),
+    parseArgs(preprocess)(opts),
     mergeArgs(fooParser)
   )(opts)
 }
@@ -52,16 +57,18 @@ console.log('parse', JSON.stringify(
   2
 ))
 
-const questionCmd = string('question', ['--question'])
-const answerCmd   = number('answer', ['--answer', '-a'], {only: [42]})
+const questionCmd  = string('question', ['--question'])
+const answerCmd    = number('answer', ['--answer', '-a'], {only: [42]})
+const answerStrCmd = string('answerStr', ['--answer', '-a'])
 
-const questionOpt = option(questionCmd)
-const answerOpt   = option(answerCmd)
-const combinedOpt = combine(questionOpt, answerOpt)
+const questionOpt  = option(questionCmd)
+const answerOpt    = option(answerCmd)
+const answerStrOpt = option(answerStrCmd)
+const combinedOpt  = combine(questionOpt, answerOpt, answerStrOpt)
 
-const deepThought = opts => parser(
+const deepThought  = opts => parser(
   splitShortOptions,
-  parseArgs(opts),
+  parseArgs(preprocess)(opts),
   mergeArgs()
 )(opts)
 
