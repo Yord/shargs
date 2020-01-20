@@ -1,3 +1,6 @@
+const combine = require('../dsl/fp/combine')
+const option  = require('../dsl/fp/option')
+
 module.exports = parser => ({errs = [], argv = []} = {}) => {
   let errs2   = []
   const argv2 = {_: []}
@@ -8,7 +11,14 @@ module.exports = parser => ({errs = [], argv = []} = {}) => {
     if (typeof types === 'undefined') {
       if (arg !== '--') argv2['_'].push(arg)
     } else if (types === null) {
-      const parse = parser(opts || {})
+      const options = []
+      for (let j = 0; j < (opts || []).length; j++) {
+        const opt   = opts[j]
+        options.push(option(opt))
+      }
+
+      const combined = combine(...options)
+      const parse    = parser(combined || {})
       const {errs: errs3, argv} = parse({errs, argv: params})
 
       errs2      = errs3

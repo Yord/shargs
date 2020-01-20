@@ -1,7 +1,4 @@
-const cast     = require('./cast')
-const validate = require('./validate')
-
-module.exports = ({args = []} = {}) => ({errs = [], argv = []} = {}) => {
+module.exports = postprocess => ({args = []} = {}) => ({errs = [], argv = []} = {}) => {
   let errs2   = []
   const argv2 = []
 
@@ -35,8 +32,7 @@ module.exports = ({args = []} = {}) => ({errs = [], argv = []} = {}) => {
           arr = argv.slice(at + 1, at + types.length + 1)
         }
 
-        let res = cast(types)({errs, argv: arr})
-        res     = validate(only)(res)
+        const res = postprocess(option)({errs, argv: arr})
 
         errs2 = errs2.concat(res.errs)
         argv2.push([key, res.argv, option.types, opts])

@@ -1,4 +1,4 @@
-module.exports = types => ({errs = [], argv = []} = {}) => {
+module.exports = ({types}) => ({errs = [], argv = []} = {}) => {
   const errs2 = []
   const argv2 = []
 

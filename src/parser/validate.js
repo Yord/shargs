@@ -1,4 +1,4 @@
-module.exports = (only = null) => ({errs = [], argv = []} = {}) => {
+module.exports = ({only = null}) => ({errs = [], argv = []} = {}) => {
   const errs2 = []
   let argv2   = []
 
