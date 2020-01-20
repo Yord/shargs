@@ -32,7 +32,7 @@ module.exports = preprocess => ({args = []} = {}) => ({errs = [], argv = []} = {
           arr = argv.slice(at + 1, at + types.length + 1)
         }
 
-        const res = preprocess(option)({errs, argv: arr})
+        const res = preprocess(option)({errs: [], argv: arr})
 
         errs2 = errs2.concat(res.errs)
         argv2.push([key, res.argv, option.types, opts])
