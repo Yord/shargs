@@ -7,10 +7,10 @@ const {array, number, string, bool, flag, command} = require('./src/dsl/fp/types
 const numStr  = array(['number', 'string'])
 
 const opts = [
-  number('chunker', ['--chunker', '-c', '-a'], {only: [42]}),
+  number('chunker', ['--chunker', '-c'], {only: [42]}),
   string('applier', ['--applier', '-a']),
   numStr('numStr', ['--num-str', '-n']),
-  flag('verbose', ['--verbose', '-v', '-a']),
+  flag('verbose', ['--verbose', '-v']),
   bool('truFal', ['--tru-fal', '-t']),
   command('strlist', ['--strlist', '-s']),
   string('noMinus', ['noMinus']),
