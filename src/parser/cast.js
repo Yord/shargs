@@ -1,13 +1,14 @@
-module.exports = ({types}) => ({errs = [], argv = []} = {}) => {
+module.exports = option => ({errs = [], argv = []} = {}) => {
   const errs2 = []
   const argv2 = []
+
+  const {types} = option
 
   if (types !== null) {
     if (types.length === 0) {
       argv2.push(true)
     } else {
       for (let i = 0; i < types.length; i++) {
-
         const type = types[i]
         const arg  = argv[i]
         switch (type) {
@@ -23,7 +24,7 @@ module.exports = ({types}) => ({errs = [], argv = []} = {}) => {
               const argumentIsNotANumber = {
                 code: 'Argument is not a number',
                 msg:  'The passed command line argument must be a number',
-                info: {arg}
+                info: {option, arg}
               }
               errs2.push(argumentIsNotANumber)
             } else {
@@ -37,7 +38,7 @@ module.exports = ({types}) => ({errs = [], argv = []} = {}) => {
               const argumentIsNotABool = {
                 code: 'Argument is not a boolean',
                 msg:  "The passed command line argument must either be 'true' or 'false'",
-                info: {arg}
+                info: {option, arg}
               }
               errs2.push(argumentIsNotABool)
             }
