@@ -30,5 +30,5 @@ module.exports = parser => ({errs = [], argv = []} = {}) => {
     }
   }
 
-  return {errs: errs2, argv: argv2}
+  return {errs: errs.concat(errs2), argv: argv2}
 }
