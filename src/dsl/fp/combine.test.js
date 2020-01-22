@@ -47,19 +47,21 @@ test("combine fails with an error if an argument's list is null, undefined or em
   const optionResult = integer(1, 20).chain(len =>
     array(
       oneof(...[null, undefined, []].map(constant)).chain(list =>
-        option(true, list).map(option => ({option, list}))
+        base64().chain(arg =>
+          option(arg, true, list).map(option => ({option, arg, list}))
+        )
       ),
       1,
       len
     ).map(options =>
       ({
-        options: options.map(o => o.option),
+        options: options.map(info => info.option),
         results: {
           args: {},
-          errs: options.map(o => ({
+          errs: options.map(info => ({
             code: 'Invalid options list in combine',
             msg:  'Options list in combine was undefined, null or empty',
-            info: {list: o.list}
+            info
           }))
         }
       })
@@ -77,14 +79,14 @@ test("combine fails with an error if an argument's list is null, undefined or em
   )
 })
 
-function option (hasArguments, _arguments) {
+function option (_arg, hasArguments, _arguments) {
   return base64().chain(arg =>
     base64().chain(key =>
       types().map(types =>
         ({
           errs: [],
           args: {
-            [arg]: hasArguments ? _arguments : [{key, types}]
+            [_arg || arg]: hasArguments ? _arguments : [{key, types}]
           }
         })
       )
