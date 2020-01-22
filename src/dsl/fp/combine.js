@@ -34,8 +34,8 @@ module.exports = (...options) => {
                 msg:  'Each argument must have a types key that must be null or an array',
                 info: {argument}
               })
-            } else if (argument.types === types || argument.types.length === types.length) {
-              args2[key].push(argument)
+            } else if ((argument.types || []).length === (types || []).length) {
+              args2[arg].push(argument)
             } else {
               errs2.push({
                 code: 'Non-matching argument types',
