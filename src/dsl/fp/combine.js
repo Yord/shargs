@@ -14,14 +14,14 @@ module.exports = (...options) => {
         const arg  = keys[j]
         const list = args[arg]
         if (typeof args2[arg] === 'undefined') {
-          if (typeof list !== 'undefined' && list !== null && list.length > 0) {
-            args2[arg] = list
-          } else {
+          if (typeof list === 'undefined' || list === null || list.length === 0) {
             errs2.push({
               code: 'Invalid options list in combine',
               msg:  'Options list in combine was undefined, null or empty',
               info: {list}
             })
+          } else {
+            args2[arg] = list
           }
         } else {
           const ref   = args2[arg][0]
