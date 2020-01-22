@@ -28,7 +28,7 @@ module.exports = (...options) => {
           const types = ref.types
           for (let k = 0; k < list.length; k++) {
             const argument = list[k]
-            if (argument.types !== null && !Array.isArray(argument.types)) {
+            if (!(Array.isArray(argument.types) || argument.types === null)) {
               errs2.push({
                 code: 'Invalid types in argument',
                 msg:  'Each argument must have a types key that must be null or an array',
