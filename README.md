@@ -126,7 +126,7 @@ const combinedOpt = combine(questionOpt, answerOpt)
 const combinedOpt = {
   errs: [],
   args: {
-    '--question': [{key: 'question', types: ['string']            }],
+    '--question': [{key: 'question', types: ['string']}],
     '--answer':   [{key: 'answer',   types: ['number'], only: [42]}],
     '-a':         [{key: 'answer',   types: ['number'], only: [42]}]
   }
@@ -151,7 +151,7 @@ const combinedOpt  = {
     '--answer': [
       {key: 'answer',    types: ['number'], only: [42]}
     ],
-    '-a':       [
+    '-a': [
       {key: 'answer',    types: ['number'], only: [42]}
       {key: 'answerStr', types: ['string']}
     ]
