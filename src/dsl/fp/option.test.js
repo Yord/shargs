@@ -1,7 +1,7 @@
 const {anything, array, assert, base64, property} = require('fast-check')
 const option = require('./option')
 
-test('option transforms options DSL into arguments DSL', () => {
+test('option transforms arguments DSL into options DSL', () => {
   const optionsArguments = base64().chain(key =>
     array(base64(), 1, 20).chain(args =>
       anything().chain(types =>

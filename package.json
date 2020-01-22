@@ -1,6 +1,6 @@
 {
   "name": "pxi-args",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "A command-line arguments parser for pxi (pixie), the small, fast, and magical command-line data processor",
   "keywords": [
     "pxi",
