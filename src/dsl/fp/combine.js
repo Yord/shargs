@@ -18,7 +18,7 @@ module.exports = (...options) => {
             errs2.push({
               code: 'Invalid options list in combine',
               msg:  'Options list in combine was undefined, null or empty',
-              info: {list}
+              info: {list, arg, option: options[i]}
             })
           } else {
             args2[arg] = list
