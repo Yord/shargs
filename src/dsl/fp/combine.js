@@ -21,7 +21,19 @@ module.exports = (...options) => {
               info: {list, arg, option: options[i]}
             })
           } else {
-            args2[arg] = list
+            for (let k = 0; k < list.length; k++) {
+              const argument = list[k]
+              if (!(Array.isArray(argument.types) || argument.types === null)) {
+                errs2.push({
+                  code: 'Invalid types in argument',
+                  msg:  'Each argument must have a types key that must be null or an array',
+                  info: {types: argument.types, argument}
+                })
+              } else {
+                if (typeof args2[arg] === 'undefined') args2[arg] = []
+                args2[arg].push(argument)
+              }
+            }
           }
         } else {
           const ref   = args2[arg][0]
