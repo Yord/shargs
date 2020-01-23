@@ -32,7 +32,7 @@ module.exports = (...options) => {
               errs2.push({
                 code: 'Invalid types in argument',
                 msg:  'Each argument must have a types key that must be null or an array',
-                info: {argument}
+                info: {types: argument.types, argument}
               })
             } else if ((argument.types || []).length === (types || []).length) {
               args2[arg].push(argument)
