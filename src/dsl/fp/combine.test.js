@@ -1,4 +1,4 @@
-const {array, assert, base64, constant, integer, oneof, property} = require('fast-check')
+const {anything, array, assert, base64, constant, integer, oneof, property} = require('fast-check')
 const combine = require('./combine')
 
 test('combine combines all options and appends options if they have the same argument', () => {
@@ -79,14 +79,42 @@ test("combine fails with an error if an argument's list is null, undefined or em
   )
 })
 
-function option (_arg, hasArguments, _arguments) {
+test("combine fails with an error if an argument has a types key that is not null or an array", () => {
+  const optionResult = anything().filter(a => a !== null && !Array.isArray(a)).chain(types =>
+    option(undefined, false, undefined, true, types).map(option => ({option, types}))
+  ).map(o =>
+    ({
+      option: o.option,
+      result: {
+        args: {},
+        errs: [{
+          code: 'Invalid types in argument',
+          msg:  'Each argument must have a types key that must be null or an array',
+          info: {types: o.types, argument: Object.values(o.option.args)[0][0]}
+        }]
+      }
+    })
+  )
+
+  assert(
+    property(optionResult, ({option, result}) =>
+      expect(
+        combine(option)
+      ).toStrictEqual(
+        result
+      )
+    )
+  )
+})
+
+function option (_arg, hasArguments, _arguments, hasTypes, _types) {
   return base64().chain(arg =>
     base64().chain(key =>
       types().map(types =>
         ({
           errs: [],
           args: {
-            [_arg || arg]: hasArguments ? _arguments : [{key, types}]
+            [_arg || arg]: hasArguments ? _arguments : [{key, types: hasTypes ? _types : types}]
           }
         })
       )
