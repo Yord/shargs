@@ -1,6 +1,7 @@
 module.exports = {
   argumentIsNotABool,
   argumentIsNotANumber,
+  argumentValueRestrictionsViolated,
   invalidOptionsListInCombine,
   invalidTypesInArgument,
   noArgumentProvidedInOption,
@@ -21,6 +22,14 @@ function argumentIsNotANumber ({option, arg}) {
     code: 'Argument is not a number',
     msg:  'The passed command line argument must be a number',
     info: {option, arg}
+  }
+}
+
+function argumentValueRestrictionsViolated ({arg, only}) {
+  return {
+    code: 'Argument value restrictions violated',
+    msg:  'The argument is not in the allowed set of values',
+    info: {arg, only}
   }
 }
 

@@ -1,3 +1,5 @@
+const {argumentValueRestrictionsViolated} = require('../errors')
+
 module.exports = ({only = null}) => ({errs = [], argv = []} = {}) => {
   const errs2 = []
   let argv2   = []
@@ -16,12 +18,4 @@ module.exports = ({only = null}) => ({errs = [], argv = []} = {}) => {
   }
 
   return {errs: errs.concat(errs2), argv: argv2}
-}
-
-function argumentValueRestrictionsViolated ({arg, only}) {
-  return {
-    code: 'Argument value restrictions violated',
-    msg:  'The argument is not in the allowed set of values',
-    info: {arg, only}
-  }
 }
