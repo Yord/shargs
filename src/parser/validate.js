@@ -10,15 +10,18 @@ module.exports = ({only = null}) => ({errs = [], argv = []} = {}) => {
       if (only.indexOf(arg) > -1) {
         argv2.push(arg)
       } else {
-        const argsValueRestrictionsViolated = {
-          code: 'Argument value restrictions violated',
-          msg:  'The argument is not in the allowed set of values',
-          info: {arg, only}
-        }
-        errs2.push(argsValueRestrictionsViolated)
+        errs2.push(argumentValueRestrictionsViolated({arg, only}))
       }
     }
   }
 
   return {errs: errs.concat(errs2), argv: argv2}
+}
+
+function argumentValueRestrictionsViolated ({arg, only}) {
+  return {
+    code: 'Argument value restrictions violated',
+    msg:  'The argument is not in the allowed set of values',
+    info: {arg, only}
+  }
 }
