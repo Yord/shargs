@@ -24,11 +24,7 @@ module.exports = (...options) => {
             for (let k = 0; k < list.length; k++) {
               const argument = list[k]
               if (!(Array.isArray(argument.types) || argument.types === null)) {
-                errs2.push({
-                  code: 'Invalid types in argument',
-                  msg:  'Each argument must have a types key that must be null or an array',
-                  info: {types: argument.types, argument}
-                })
+                errs2.push(invalidTypesInArgument(argument))
               } else {
                 if (typeof args2[arg] === 'undefined') args2[arg] = []
                 args2[arg].push(argument)
@@ -41,11 +37,7 @@ module.exports = (...options) => {
           for (let k = 0; k < list.length; k++) {
             const argument = list[k]
             if (!(Array.isArray(argument.types) || argument.types === null)) {
-              errs2.push({
-                code: 'Invalid types in argument',
-                msg:  'Each argument must have a types key that must be null or an array',
-                info: {types: argument.types, argument}
-              })
+              errs2.push(invalidTypesInArgument(argument))
             } else if ((argument.types || []).length === (types || []).length) {
               args2[arg].push(argument)
             } else {
@@ -62,4 +54,12 @@ module.exports = (...options) => {
   }
 
   return {errs: errs2, args: args2}
+}
+
+function invalidTypesInArgument (argument) {
+  return {
+    code: 'Invalid types in argument',
+    msg:  'Each argument must have a types key that must be null or an array',
+    info: {types: argument.types, argument}
+  }
 }
