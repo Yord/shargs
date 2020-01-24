@@ -15,11 +15,7 @@ module.exports = (...options) => {
         const list = args[arg]
         if (typeof args2[arg] === 'undefined') {
           if (typeof list === 'undefined' || list === null || list.length === 0) {
-            errs2.push({
-              code: 'Invalid options list in combine',
-              msg:  'Options list in combine was undefined, null or empty',
-              info: {list, arg, option: options[i]}
-            })
+            errs2.push(invalidOptionsListInCombine({list, arg, option: options[i]}))
           } else {
             for (let k = 0; k < list.length; k++) {
               const argument = list[k]
@@ -65,5 +61,13 @@ function nonMatchingArgumentTypes ({arg, ref, argument}) {
     code: 'Non-matching argument types',
     msg:  'If arguments have the same arg, their types must either be equal or have the same length',
     info: {arg, ref, argument}
+  }
+}
+
+function invalidOptionsListInCombine ({list, arg, option}) {
+  return {
+    code: 'Invalid options list in combine',
+    msg:  'Options list in combine was undefined, null or empty',
+    info: {list, arg, option}
   }
 }
