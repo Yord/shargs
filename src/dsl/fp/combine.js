@@ -41,11 +41,7 @@ module.exports = (...options) => {
             } else if ((argument.types || []).length === (types || []).length) {
               args2[arg].push(argument)
             } else {
-              errs2.push({
-                code: 'Non-matching argument types',
-                msg:  'If arguments have the same arg, their types must either be equal or have the same length',
-                info: {arg, ref, argument}
-              })
+              errs2.push(nonMatchingArgumentTypes({arg, ref, argument}))
             }
           }
         }
@@ -61,5 +57,13 @@ function invalidTypesInArgument ({types, argument}) {
     code: 'Invalid types in argument',
     msg:  'Each argument must have a types key that must be null or an array',
     info: {types, argument}
+  }
+}
+
+function nonMatchingArgumentTypes ({arg, ref, argument}) {
+  return {
+    code: 'Non-matching argument types',
+    msg:  'If arguments have the same arg, their types must either be equal or have the same length',
+    info: {arg, ref, argument}
   }
 }
