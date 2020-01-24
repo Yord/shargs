@@ -33,7 +33,6 @@ const options = combine(...opts.map(option))
 
 const mergeArgs         = require('./src/parser/mergeArgs')
 const parseArgs         = require('./src/parser/parseArgs')
-const sliceArgv         = require('./src/parser/sliceArgv')
 const splitShortOptions = require('./src/parser/splitShortOptions')
 const cast              = require('./src/parser/cast')
 const validate          = require('./src/parser/validate')
