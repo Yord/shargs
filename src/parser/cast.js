@@ -20,23 +20,13 @@ module.exports = option => ({errs = [], argv = []} = {}) => {
             break
           case 'number':
             const float = parseFloat(arg)
-            if (Number.isNaN(float)) {
-              const argumentIsNotANumber = {
-                code: 'Argument is not a number',
-                msg:  'The passed command line argument must be a number',
-                info: {option, arg}
-              }
-              errs2.push(argumentIsNotANumber)
-            } else {
-              argv2.push(float)
-            }
+            if (!Number.isNaN(float)) argv2.push(float)
+            else errs2.push(argumentIsNotANumber({option, arg}))
             break
           case 'bool':
             if (arg === 'true')       argv2.push(true)
             else if (arg === 'false') argv2.push(false)
-            else {
-              errs2.push(argumentIsNotABool({option, arg}))
-            }
+            else errs2.push(argumentIsNotABool({option, arg}))
             break
           default:
             break
@@ -52,6 +42,14 @@ function argumentIsNotABool ({option, arg}) {
   return {
     code: 'Argument is not a boolean',
     msg:  "The passed command line argument must either be 'true' or 'false'",
+    info: {option, arg}
+  }
+}
+
+function argumentIsNotANumber ({option, arg}) {
+  return {
+    code: 'Argument is not a number',
+    msg:  'The passed command line argument must be a number',
     info: {option, arg}
   }
 }
