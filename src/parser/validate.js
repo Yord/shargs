@@ -1,3 +1,5 @@
+const {argumentValueRestrictionsViolated} = require('../errors')
+
 module.exports = ({only = null}) => ({errs = [], argv = []} = {}) => {
   const errs2 = []
   let argv2   = []
@@ -10,12 +12,7 @@ module.exports = ({only = null}) => ({errs = [], argv = []} = {}) => {
       if (only.indexOf(arg) > -1) {
         argv2.push(arg)
       } else {
-        const argsValueRestrictionsViolated = {
-          code: 'Argument value restrictions violated',
-          msg:  'The argument is not in the allowed set of values',
-          info: {arg, only}
-        }
-        errs2.push(argsValueRestrictionsViolated)
+        errs2.push(argumentValueRestrictionsViolated({arg, only}))
       }
     }
   }
