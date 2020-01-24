@@ -1,3 +1,5 @@
+const {noArgumentProvidedInOption, noArgumentsProvidedInOption} = require('../../errors')
+
 module.exports = (options = {}) => {
   const {key = null, args = [], types = null, only = null, desc = '', opts = null} = options
 
@@ -21,20 +23,4 @@ module.exports = (options = {}) => {
   }
 
   return {errs, args: args2}
-}
-
-function noArgumentProvidedInOption ({options}) {
-  return {
-    code: 'No argument provided in option',
-    msg:  "Please provide a key (e.g. [{key: 'foo', ...}])",
-    info: {options}
-  }
-}
-
-function noArgumentsProvidedInOption ({options}) {
-  return {
-    code: 'No arguments provided in option',
-    msg:  "Please provide at least one argument (e.g. [{args: ['--foo'], ...}])",
-    info: {options}
-  }
 }

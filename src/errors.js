@@ -1,7 +1,9 @@
 module.exports = {
+  invalidOptionsListInCombine,
   invalidTypesInArgument,
-  nonMatchingArgumentTypes,
-  invalidOptionsListInCombine
+  noArgumentProvidedInOption,
+  noArgumentsProvidedInOption,
+  nonMatchingArgumentTypes
 }
 
 function invalidTypesInArgument ({types, argument}) {
@@ -25,5 +27,21 @@ function invalidOptionsListInCombine ({list, arg, option}) {
     code: 'Invalid options list in combine',
     msg:  'Options list in combine was undefined, null or empty',
     info: {list, arg, option}
+  }
+}
+
+function noArgumentProvidedInOption ({options}) {
+  return {
+    code: 'No argument provided in option',
+    msg:  "Please provide a key (e.g. [{key: 'foo', ...}])",
+    info: {options}
+  }
+}
+
+function noArgumentsProvidedInOption ({options}) {
+  return {
+    code: 'No arguments provided in option',
+    msg:  "Please provide at least one argument (e.g. [{args: ['--foo'], ...}])",
+    info: {options}
   }
 }
