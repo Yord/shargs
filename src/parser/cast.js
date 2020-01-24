@@ -35,12 +35,7 @@ module.exports = option => ({errs = [], argv = []} = {}) => {
             if (arg === 'true')       argv2.push(true)
             else if (arg === 'false') argv2.push(false)
             else {
-              const argumentIsNotABool = {
-                code: 'Argument is not a boolean',
-                msg:  "The passed command line argument must either be 'true' or 'false'",
-                info: {option, arg}
-              }
-              errs2.push(argumentIsNotABool)
+              errs2.push(argumentIsNotABool({option, arg}))
             }
             break
           default:
@@ -51,4 +46,12 @@ module.exports = option => ({errs = [], argv = []} = {}) => {
   }
 
   return {errs: errs.concat(errs2), argv: argv2}
+}
+
+function argumentIsNotABool ({option, arg}) {
+  return {
+    code: 'Argument is not a boolean',
+    msg:  "The passed command line argument must either be 'true' or 'false'",
+    info: {option, arg}
+  }
 }
