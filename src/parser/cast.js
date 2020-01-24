@@ -1,3 +1,5 @@
+const {argumentIsNotABool, argumentIsNotANumber} = require('../errors')
+
 module.exports = option => ({errs = [], argv = []} = {}) => {
   const errs2 = []
   const argv2 = []
@@ -36,20 +38,4 @@ module.exports = option => ({errs = [], argv = []} = {}) => {
   }
 
   return {errs: errs.concat(errs2), argv: argv2}
-}
-
-function argumentIsNotABool ({option, arg}) {
-  return {
-    code: 'Argument is not a boolean',
-    msg:  "The passed command line argument must either be 'true' or 'false'",
-    info: {option, arg}
-  }
-}
-
-function argumentIsNotANumber ({option, arg}) {
-  return {
-    code: 'Argument is not a number',
-    msg:  'The passed command line argument must be a number',
-    info: {option, arg}
-  }
 }

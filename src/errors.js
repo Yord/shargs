@@ -1,9 +1,27 @@
 module.exports = {
+  argumentIsNotABool,
+  argumentIsNotANumber,
   invalidOptionsListInCombine,
   invalidTypesInArgument,
   noArgumentProvidedInOption,
   noArgumentsProvidedInOption,
   nonMatchingArgumentTypes
+}
+
+function argumentIsNotABool ({option, arg}) {
+  return {
+    code: 'Argument is not a boolean',
+    msg:  "The passed command line argument must either be 'true' or 'false'",
+    info: {option, arg}
+  }
+}
+
+function argumentIsNotANumber ({option, arg}) {
+  return {
+    code: 'Argument is not a number',
+    msg:  'The passed command line argument must be a number',
+    info: {option, arg}
+  }
 }
 
 function invalidTypesInArgument ({types, argument}) {
