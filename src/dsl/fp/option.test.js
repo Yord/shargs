@@ -1,5 +1,6 @@
 const {anything, array, assert, base64, property} = require('fast-check')
 const option = require('./option')
+const {noArgumentProvidedInOption, noArgumentsProvidedInOption} = require('../../errors')
 
 test('option transforms arguments DSL into options DSL', () => {
   const optionsArguments = base64().chain(key =>
@@ -61,11 +62,9 @@ test('option fails if no key is given', () => {
             return {
               options: {...options, args},
               _arguments: {
-                errs: [{
-                  code: 'No argument provided in option',
-                  msg:  "Please provide a key (e.g. [{key: 'foo', ...}])",
-                  info: {options: {...options, args}}
-                }],
+                errs: [
+                  noArgumentProvidedInOption({options: {...options, args}})
+                ],
                 args: {}
               }
             }
@@ -102,11 +101,9 @@ test('option fails if no args are given', () => {
             return {
               options,
               _arguments: {
-                errs: [{
-                  code: 'No arguments provided in option',
-                  msg:  "Please provide at least one argument (e.g. [{args: ['--foo'], ...}])",
-                  info: {options}
-                }],
+                errs: [
+                  noArgumentsProvidedInOption({options})
+                ],
                 args: {}
               }
             }
@@ -130,16 +127,8 @@ test('option fails if no args are given', () => {
 test('option fails if passed undefined', () => {
   const _arguments = {
     errs: [
-      {
-        code: 'No argument provided in option',
-        msg:  "Please provide a key (e.g. [{key: 'foo', ...}])",
-        info: {options: {}}
-      },
-      {
-        code: 'No arguments provided in option',
-        msg:  "Please provide at least one argument (e.g. [{args: ['--foo'], ...}])",
-        info: {options: {}}
-      }
+      noArgumentProvidedInOption({options: {}}),
+      noArgumentsProvidedInOption({options: {}})
     ],
     args: {}
   }
