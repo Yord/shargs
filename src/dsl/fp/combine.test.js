@@ -77,24 +77,34 @@ test("combine fails with an error if an argument's list is null, undefined or em
 })
 
 test("combine fails with an error if an argument has a types key that is not null or an array", () => {
-  const optionResult = anything().filter(a => a !== null && !Array.isArray(a)).chain(types =>
-    option(undefined, false, undefined, true, types).map(option => ({option, types}))
-  ).map(o =>
-    ({
-      option: o.option,
-      result: {
-        args: {},
-        errs: [
-          invalidTypesInArgument({types: o.types, argument: Object.values(o.option.args)[0][0]})
-        ]
-      }
-    })
+  const optionResult = (
+    array(
+      anything()
+      .filter(a => a !== null && !Array.isArray(a))
+      .chain(types =>
+        option(undefined, false, undefined, true, types)
+        .map(option => ({option, types}))
+      ),
+      1,
+      10
+    )
+    .map(os =>
+      ({
+        options: os.map(o => o.option),
+        result: {
+          args: {},
+          errs: os.map(o =>
+            invalidTypesInArgument({types: o.types, argument: Object.values(o.option.args)[0][0]})
+          )
+        }
+      })
+    )
   )
 
   assert(
-    property(optionResult, ({option, result}) =>
+    property(optionResult, ({options, result}) =>
       expect(
-        combine(option)
+        combine(...options)
       ).toStrictEqual(
         result
       )
