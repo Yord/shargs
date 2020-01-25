@@ -22,5 +22,5 @@ module.exports = ({errs: ERRS = [], opts: OPTS = []} = {}) => {
     }
   }
 
-  return {errs: ERRS.concat(errs), opts: opts}
+  return {errs: ERRS.concat(errs), opts}
 }
