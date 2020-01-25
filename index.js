@@ -33,26 +33,6 @@ const restrictValue     = require('./src/parser/options/restrictValue')
 
 const argv = process.argv.slice(2)
 
-/*
-function fooParser (opts) {
-  const {errs = [], args} = combine(...opts.map(option))
-
-  if (errs.length > 0) {
-    process.write(errs.join('\n') + '\n')
-    process.exit(1)
-  }
-
-  return pipe(
-    splitShortOptions(args),
-    parseArgs(args)(option => pipe(
-      cast(option),
-      validate(option)
-    )),
-    mergeArgs(args)(fooParser)
-  )
-}
-*/
-
 function fooParser (opts) {
   return parser({
     argv: [
