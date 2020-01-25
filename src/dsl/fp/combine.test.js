@@ -154,7 +154,7 @@ function option (_arg, hasArguments, _arguments, hasTypes, _types) {
   )
 }
 
-function types() {
+function types () {
   const oneElem = ['string', 'number', 'bool']
   const arr = array(oneof(...oneElem.map(constant)), 2, 10)
   return oneof(...[...oneElem.map(a => [a]), [], null].map(constant), arr)
