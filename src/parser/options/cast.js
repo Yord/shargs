@@ -1,4 +1,4 @@
-const {argumentIsNotABool, argumentIsNotANumber} = require('../errors')
+const {argumentIsNotABool, argumentIsNotANumber} = require('../../errors')
 
 module.exports = ({errs = [], argv = []} = {}) => {
   const errs2 = []
