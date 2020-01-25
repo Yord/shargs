@@ -27,7 +27,7 @@ const opts = [
 //console.log('opts', JSON.stringify(opts, null, 2))
 
 const mergeArgs         = require('./src/parser/mergeArgs')
-const parseArgs         = require('./src/parser/parseArgs')
+const toOptions         = require('./src/parser/toOptions')
 const splitShortOptions = require('./src/parser/splitShortOptions')
 const cast              = require('./src/parser/cast')
 const validate          = require('./src/parser/validate')
@@ -59,7 +59,7 @@ function fooParser (opts) {
     preprocessing: [
       splitShortOptions
     ],
-    toOptions: parseArgs,
+    toOptions,
     processing: [
       cast,
       validate
@@ -86,7 +86,7 @@ const opts2 = [
 
 const deepThought = parser({
   preprocessing: [splitShortOptions],
-  toOptions: parseArgs,
+  toOptions,
   processing: [cast, validate],
   toResults: mergeArgs()
 })
