@@ -1,5 +1,6 @@
 const {anything, array, assert, base64, constant, integer, oneof, property} = require('fast-check')
 const combine = require('./combine')
+const {invalidOptionsListInCombine, invalidTypesInArgument} = require('../../errors')
 
 test('combine combines all options and appends options if they have the same argument', () => {
   const optionsCombined = array(option(), 2, 20).map(opts => {
@@ -58,11 +59,7 @@ test("combine fails with an error if an argument's list is null, undefined or em
         options: options.map(info => info.option),
         results: {
           args: {},
-          errs: options.map(info => ({
-            code: 'Invalid options list in combine',
-            msg:  'Options list in combine was undefined, null or empty',
-            info
-          }))
+          errs: options.map(invalidOptionsListInCombine)
         }
       })
     )
@@ -80,26 +77,61 @@ test("combine fails with an error if an argument's list is null, undefined or em
 })
 
 test("combine fails with an error if an argument has a types key that is not null or an array", () => {
-  const optionResult = anything().filter(a => a !== null && !Array.isArray(a)).chain(types =>
-    option(undefined, false, undefined, true, types).map(option => ({option, types}))
-  ).map(o =>
-    ({
-      option: o.option,
-      result: {
-        args: {},
-        errs: [{
-          code: 'Invalid types in argument',
-          msg:  'Each argument must have a types key that must be null or an array',
-          info: {types: o.types, argument: Object.values(o.option.args)[0][0]}
-        }]
-      }
-    })
+  const optionResult = (
+    array(
+      anything()
+      .filter(a => a !== null && !Array.isArray(a))
+      .chain(types =>
+        option(undefined, false, undefined, true, types)
+        .map(option => ({option, types}))
+      ),
+      1,
+      10
+    )
+    .map(os =>
+      ({
+        options: os.map(o => o.option),
+        result: {
+          args: {},
+          errs: os.map(o =>
+            invalidTypesInArgument({types: o.types, argument: Object.values(o.option.args)[0][0]})
+          )
+        }
+      })
+    )
   )
 
   assert(
-    property(optionResult, ({option, result}) =>
+    property(optionResult, ({options, result}) =>
       expect(
-        combine(option)
+        combine(...options)
+      ).toStrictEqual(
+        result
+      )
+    )
+  )
+})
+
+test("combine passes on errors", () => {
+  const optionsResult = (
+    array(
+      array(anything(), 1, 5).map(a => ({args: {}, errs: a})),
+      1,
+      10
+    )
+    .map(options => ({
+      options,
+      result: options.reduce(
+        ({args, errs}, option) => ({args, errs: [...errs, ...option.errs]}),
+        {args: {}, errs: []}
+      )
+    }))
+  )
+
+  assert(
+    property(optionsResult, ({options, result}) =>
+      expect(
+        combine(...options)
       ).toStrictEqual(
         result
       )
@@ -122,7 +154,7 @@ function option (_arg, hasArguments, _arguments, hasTypes, _types) {
   )
 }
 
-function types() {
+function types () {
   const oneElem = ['string', 'number', 'bool']
   const arr = array(oneof(...oneElem.map(constant)), 2, 10)
   return oneof(...[...oneElem.map(a => [a]), [], null].map(constant), arr)

@@ -1,6 +1,6 @@
 {
   "name": "pxi-args",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "A command-line arguments parser for pxi (pixie), the small, fast, and magical command-line data processor",
   "keywords": [
     "pxi",
@@ -32,7 +32,7 @@
   },
   "scripts": {
     "start": "./index.js",
-    "test": "jest --ci --coverage --logHeapUsage --passWithNoTests"
+    "test": "jest --ci --coverage --collectCoverageFrom 'src/**/*.js' --logHeapUsage --passWithNoTests"
   },
   "engines": {
     "node": ">=8.3.0"
