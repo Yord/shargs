@@ -8,11 +8,11 @@ module.exports = parser => ({errs: ERRS = [], opts: OPTS = []} = {}) => {
     if (typeof types === 'undefined') {
       if (key !== '--') args['_'] = args['_'].concat(argv)
     } else if (types === null) {
-      const parse    = parser(opts || [])
-      const {errs: errs2, args: args2} = parse({errs: [], argv})
+      const parse = parser(opts || [])
+      const res   = parse({errs: [], argv})
 
-      errs      = errs2
-      args[key] = Object.assign({}, args[key], args2)
+      errs      = res.errs
+      args[key] = Object.assign({}, args[key], res.args)
     } else if (types.length === 0) {
       args[key] = typeof args[key] === 'undefined' ? true : args[key] < 2 ? 2 : args[key] + 1
     } else {
