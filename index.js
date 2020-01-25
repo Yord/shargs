@@ -26,7 +26,7 @@ const opts = [
 //console.log('opts', JSON.stringify(opts, null, 2))
 
 const toResults         = require('./src/parser/toResults')
-const toOptions         = require('./src/parser/toOptions')
+const toOpts            = require('./src/parser/toOpts')
 const splitShortOptions = require('./src/parser/argv/splitShortOptions')
 const cast              = require('./src/parser/options/cast')
 const restrictValue     = require('./src/parser/options/restrictValue')
@@ -38,7 +38,7 @@ function fooParser (opts) {
     argv: [
       splitShortOptions
     ],
-    toOptions,
+    toOpts,
     options: [
       cast,
       restrictValue
@@ -65,7 +65,7 @@ const opts2 = [
 
 const deepThought = parser({
   argv:      [splitShortOptions],
-  toOptions,
+  toOpts,
   options:   [cast, restrictValue],
   toResults: toResults()
 })
