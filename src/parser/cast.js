@@ -1,40 +1,49 @@
 const {argumentIsNotABool, argumentIsNotANumber} = require('../errors')
 
-module.exports = option => ({errs = [], argv = []} = {}) => {
+module.exports = ({errs = [], argv = []} = {}) => {
   const errs2 = []
   const argv2 = []
 
-  const {types} = option
+  for (let i = 0; i < argv.length; i++) {
+    const option = argv[i]
+    const {values, types} = option
 
-  if (types !== null) {
-    if (types.length === 0) {
-      argv2.push(true)
+    let values2 = []
+
+    if (typeof types === 'undefined' || types === null) {
+      values2 = values
     } else {
-      for (let i = 0; i < types.length; i++) {
-        const type = types[i]
-        const arg  = argv[i]
-        switch (type) {
-          case 'count':
-            argv2.push(1)
-            break
-          case 'string':
-            argv2.push(arg)
-            break
-          case 'number':
-            const float = parseFloat(arg)
-            if (!Number.isNaN(float)) argv2.push(float)
-            else errs2.push(argumentIsNotANumber({option, arg}))
-            break
-          case 'bool':
-            if (arg === 'true')       argv2.push(true)
-            else if (arg === 'false') argv2.push(false)
-            else errs2.push(argumentIsNotABool({option, arg}))
-            break
-          default:
-            break
+      if (types.length === 0) {
+        values2.push(true)
+      } else {
+        for (let j = 0; j < types.length; j++) {
+          const type = types[j]
+          const arg  = values[j]
+          switch (type) {
+            case 'count':
+              values2.push(1)
+              break
+            case 'string':
+              values2.push(arg)
+              break
+            case 'number':
+              const float = parseFloat(arg)
+              if (!Number.isNaN(float)) values2.push(float)
+              else errs2.push(argumentIsNotANumber({arg, option}))
+              break
+            case 'bool':
+              if (arg === 'true')       values2.push(true)
+              else if (arg === 'false') values2.push(false)
+              else errs2.push(argumentIsNotABool({arg, option}))
+              break
+            default:
+              break
+          }
         }
       }
     }
+
+    argv2.push({...option, values: values2, types})
   }
 
   return {errs: errs.concat(errs2), argv: argv2}
