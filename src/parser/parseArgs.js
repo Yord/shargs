@@ -1,4 +1,4 @@
-module.exports = (preprocess, args = []) => ({errs = [], argv = []} = {}) => {
+module.exports = (args, preprocess) => ({errs = [], argv = []} = {}) => {
   let errs2   = []
   const argv2 = []
 

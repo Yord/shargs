@@ -47,7 +47,7 @@ function fooParser (opts) {
 
   return pipe(
     splitShortOptions,
-    parseArgs(preprocess, args),
+    parseArgs(args, preprocess),
     mergeArgs(fooParser)
   )
 }
@@ -79,7 +79,7 @@ const deepThought  = opts => {
 
   return pipe(
     splitShortOptions,
-    parseArgs(preprocess, args),
+    parseArgs(args, preprocess),
     mergeArgs()
   )
 }
