@@ -1,11 +1,11 @@
 const {argumentIsNotABool, argumentIsNotANumber} = require('../../errors')
 
-module.exports = ({errs = [], opts = []} = {}) => {
-  const errs2 = []
-  const opts2 = []
+module.exports = ({errs: ERRS = [], opts: OPTS = []} = {}) => {
+  const errs = []
+  const opts = []
 
-  for (let i = 0; i < opts.length; i++) {
-    const option = opts[i]
+  for (let i = 0; i < OPTS.length; i++) {
+    const option = OPTS[i]
     const {values, types} = option
 
     let values2 = []
@@ -29,12 +29,12 @@ module.exports = ({errs = [], opts = []} = {}) => {
             case 'number':
               const float = parseFloat(arg)
               if (!Number.isNaN(float)) values2.push(float)
-              else errs2.push(argumentIsNotANumber({arg, option}))
+              else errs.push(argumentIsNotANumber({arg, option}))
               break
             case 'bool':
               if (arg === 'true')       values2.push(true)
               else if (arg === 'false') values2.push(false)
-              else errs2.push(argumentIsNotABool({arg, option}))
+              else errs.push(argumentIsNotABool({arg, option}))
               break
             default:
               break
@@ -43,8 +43,8 @@ module.exports = ({errs = [], opts = []} = {}) => {
       }
     }
 
-    opts2.push({...option, values: values2, types})
+    opts.push({...option, values: values2, types})
   }
 
-  return {errs: errs.concat(errs2), opts: opts2}
+  return {errs: ERRS.concat(errs), opts}
 }

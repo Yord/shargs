@@ -1,24 +1,24 @@
-module.exports = parser => ({errs = [], opts = []} = {}) => {
-  let errs2   = []
+module.exports = parser => ({errs: ERRS = [], opts: OPTS = []} = {}) => {
+  let errs   = []
   const args = {_: []}
 
-  for (let i = 0; i < opts.length; i++) {
-    const {key, values, types, opts: opts2} = opts[i]
+  for (let i = 0; i < OPTS.length; i++) {
+    const {key, values: argv, types, opts} = OPTS[i]
 
     if (typeof types === 'undefined') {
-      if (key !== '--') args['_'] = args['_'].concat(values)
+      if (key !== '--') args['_'] = args['_'].concat(argv)
     } else if (types === null) {
-      const parse    = parser(opts2 || [])
-      const {errs: errs3, args: args2} = parse({errs: [], argv: values})
+      const parse    = parser(opts || [])
+      const {errs: errs2, args: args2} = parse({errs: [], argv})
 
-      errs2      = errs3
+      errs      = errs2
       args[key] = Object.assign({}, args[key], args2)
     } else if (types.length === 0) {
       args[key] = typeof args[key] === 'undefined' ? true : args[key] < 2 ? 2 : args[key] + 1
     } else {
-      args[key] = types.length === 1 ? values[0] : values
+      args[key] = types.length === 1 ? argv[0] : argv
     }
   }
 
-  return {errs: errs.concat(errs2), args}
+  return {errs: ERRS.concat(errs), args}
 }
