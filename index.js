@@ -1,5 +1,4 @@
-const combine = require('./src/dsl/fp/combine')
-const option  = require('./src/dsl/fp/option')
+const parser  = require('./src/dsl/fp/parser')
 const pipe    = require('./src/dsl/fp/pipe')
 const {array, number, string, bool, flag, command} = require('./src/dsl/fp/types')
 
@@ -35,6 +34,7 @@ const validate          = require('./src/parser/validate')
 
 const argv = process.argv.slice(2)
 
+/*
 function fooParser (opts) {
   const {errs = [], args} = combine(...opts.map(option))
 
@@ -43,11 +43,21 @@ function fooParser (opts) {
     process.exit(1)
   }
 
-  const preprocess = option => pipe(cast(option), validate(option))
-
   return pipe(
+    splitShortOptions(args),
+    parseArgs(args)(option => pipe(
+      cast(option),
+      validate(option)
+    )),
+    mergeArgs(args)(fooParser)
+  )
+}
+*/
+
+function fooParser (opts) {
+  return parser(opts)(
     splitShortOptions,
-    parseArgs(args, preprocess),
+    parseArgs(option => pipe(cast(option), validate(option))),
     mergeArgs(fooParser)
   )
 }
@@ -67,22 +77,11 @@ const opts2 = [
   string('answerStr', ['--answer', '-a'])
 ]
 
-const deepThought  = opts => {
-  const {errs, args} = combine(...opts.map(option))
-  
-  if (errs.length > 0) {
-    process.write(errs.join('\n') + '\n')
-    process.exit(1)
-  }
-
-  const preprocess = option => pipe(cast(option), validate(option))
-
-  return pipe(
-    splitShortOptions,
-    parseArgs(args, preprocess),
-    mergeArgs()
-  )
-}
+const deepThought = opts => parser(opts)(
+  splitShortOptions,
+  parseArgs(option => pipe(cast(option), validate(option))),
+  mergeArgs()
+)
 
 const parse2 = deepThought(opts2)
 
@@ -91,5 +90,3 @@ console.log('parse2', JSON.stringify(
   null,
   2
 ))
-
-process.exit(0)
