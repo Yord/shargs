@@ -1,4 +1,4 @@
-module.exports = preprocess => ({args = []} = {}) => ({errs = [], argv = []} = {}) => {
+module.exports = args => ({errs = [], argv = []} = {}) => {
   let errs2   = []
   const argv2 = []
 
@@ -14,34 +14,29 @@ module.exports = preprocess => ({args = []} = {}) => ({errs = [], argv = []} = {
       for (let j = 0; j < options.length; j++) {
         const option = options[j]
 
-        const {key, only, opts} = option
-        let   {types} = option
-
-        let arr = []
+        let {types} = option
+        let values  = []
         if (typeof types === 'undefined' || types === null) {
           let i = at + 1
           let arg2 = argv[i] || '--'
           while (arg2 !== '--') {
             if (types === null) types = []
             types.push('string')
-            arr.push(arg2)
+            values.push(arg2)
             i++
             arg2 = argv[i] || '--'
           }
         } else {
-          arr = argv.slice(at + 1, at + types.length + 1)
+          values = argv.slice(at + 1, at + types.length + 1)
         }
 
-        const res = preprocess(option)({errs: [], argv: arr})
-
-        errs2 = errs2.concat(res.errs)
-        argv2.push([key, res.argv, option.types, opts])
+        argv2.push({...option, values})
 
         newAt = at + (types === null ? 0 : types.length) + 1
       }
     } else {
-      const arr = argv.slice(at, at + 1)
-      if (arr.length > 0) argv2.push(arr)
+      const values = argv.slice(at, at + 1)
+      if (values.length > 0) argv2.push({values})
     }
 
     at  = newAt
