@@ -1,11 +1,11 @@
 const {argumentValueRestrictionsViolated} = require('../../errors')
 
-module.exports = ({errs = [], argv = []} = {}) => {
+module.exports = ({errs = [], opts = []} = {}) => {
   const errs2 = []
   const opts2 = []
 
-  for (let i = 0; i < argv.length; i++) {
-    const option = argv[i]
+  for (let i = 0; i < opts.length; i++) {
+    const option = opts[i]
     const {values, only} = option
 
     if (typeof only === 'undefined' || only === null) {

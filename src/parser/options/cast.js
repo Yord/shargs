@@ -2,7 +2,7 @@ const {argumentIsNotABool, argumentIsNotANumber} = require('../../errors')
 
 module.exports = ({errs = [], argv = []} = {}) => {
   const errs2 = []
-  const argv2 = []
+  const opts2 = []
 
   for (let i = 0; i < argv.length; i++) {
     const option = argv[i]
@@ -43,8 +43,8 @@ module.exports = ({errs = [], argv = []} = {}) => {
       }
     }
 
-    argv2.push({...option, values: values2, types})
+    opts2.push({...option, values: values2, types})
   }
 
-  return {errs: errs.concat(errs2), argv: argv2}
+  return {errs: errs.concat(errs2), opts: opts2}
 }
