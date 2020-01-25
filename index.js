@@ -1,5 +1,4 @@
 const parser  = require('./src/dsl/fp/parser')
-const pipe    = require('./src/dsl/fp/pipe')
 const {array, number, string, bool, flag, command} = require('./src/dsl/fp/types')
 
 const numStr  = array(['number', 'string'])
