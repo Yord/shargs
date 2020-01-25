@@ -39,7 +39,7 @@ function fooParser (opts) {
       splitShortOptions
     ],
     toOpts,
-    options: [
+    opts: [
       cast,
       restrictValue
     ],
@@ -64,10 +64,10 @@ const opts2 = [
 ]
 
 const deepThought = parser({
-  argv:    [splitShortOptions],
+  argv:   [splitShortOptions],
   toOpts,
-  options: [cast, restrictValue],
-  toArgs:  toArgs()
+  opts:   [cast, restrictValue],
+  toArgs: toArgs()
 })
 
 const parse2 = deepThought(opts2)
