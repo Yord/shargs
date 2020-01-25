@@ -2,15 +2,15 @@ const combine  = require('./combine')
 const option   = require('./option')
 const pipe     = require('./pipe')
 
-module.exports = ({preprocessing = [], toOptions, processing = [], toResults, postprocessing = []}) => opts => {
+module.exports = ({argv = [], toOptions, options = [], toResults, results = []}) => opts => {
   const {errs: combineErrors = [], args} = combine(...opts.map(option))
 
   return pipe(
     ({errs = [], argv = []}) => ({errs: errs.concat(combineErrors), argv}),
-    ...preprocessing,
+    ...argv,
     toOptions(args),
-    ...processing,
+    ...options,
     toResults,
-    ...postprocessing
+    ...results
   )
 }

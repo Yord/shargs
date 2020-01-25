@@ -55,16 +55,16 @@ function fooParser (opts) {
 
 function fooParser (opts) {
   return parser({
-    preprocessing: [
+    argv: [
       splitShortOptions
     ],
     toOptions,
-    processing: [
+    options: [
       cast,
       validate
     ],
     toResults: toResults(fooParser),
-    postprocessing: []
+    results: []
   })(opts)
 }
 
@@ -84,9 +84,9 @@ const opts2 = [
 ]
 
 const deepThought = parser({
-  preprocessing: [splitShortOptions],
+  argv:      [splitShortOptions],
   toOptions,
-  processing: [cast, validate],
+  options:   [cast, validate],
   toResults: toResults()
 })
 
