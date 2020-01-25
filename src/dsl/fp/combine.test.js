@@ -1,5 +1,6 @@
 const {anything, array, assert, base64, constant, integer, oneof, property} = require('fast-check')
 const combine = require('./combine')
+const {invalidOptionsListInCombine, invalidTypesInArgument} = require('../../errors')
 
 test('combine combines all options and appends options if they have the same argument', () => {
   const optionsCombined = array(option(), 2, 20).map(opts => {
@@ -58,11 +59,7 @@ test("combine fails with an error if an argument's list is null, undefined or em
         options: options.map(info => info.option),
         results: {
           args: {},
-          errs: options.map(info => ({
-            code: 'Invalid options list in combine',
-            msg:  'Options list in combine was undefined, null or empty',
-            info
-          }))
+          errs: options.map(invalidOptionsListInCombine)
         }
       })
     )
@@ -87,11 +84,9 @@ test("combine fails with an error if an argument has a types key that is not nul
       option: o.option,
       result: {
         args: {},
-        errs: [{
-          code: 'Invalid types in argument',
-          msg:  'Each argument must have a types key that must be null or an array',
-          info: {types: o.types, argument: Object.values(o.option.args)[0][0]}
-        }]
+        errs: [
+          invalidTypesInArgument({types: o.types, argument: Object.values(o.option.args)[0][0]})
+        ]
       }
     })
   )
