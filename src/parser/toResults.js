@@ -1,14 +1,14 @@
-module.exports = parser => ({errs = [], argv = []} = {}) => {
+module.exports = parser => ({errs = [], opts = []} = {}) => {
   let errs2   = []
   const args = {_: []}
 
-  for (let i = 0; i < argv.length; i++) {
-    const {key, values, types, opts} = argv[i]
+  for (let i = 0; i < opts.length; i++) {
+    const {key, values, types, opts: opts2} = opts[i]
 
     if (typeof types === 'undefined') {
       if (key !== '--') args['_'] = args['_'].concat(values)
     } else if (types === null) {
-      const parse    = parser(opts || [])
+      const parse    = parser(opts2 || [])
       const {errs: errs3, args: args2} = parse({errs: [], argv: values})
 
       errs2      = errs3
