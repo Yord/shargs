@@ -35,16 +35,11 @@ const argv = process.argv.slice(2)
 
 function fooParser (opts) {
   return parser({
-    argv: [
-      splitShortOptions
-    ],
+    argv:   [splitShortOptions],
     toOpts,
-    opts: [
-      cast,
-      restrictValue
-    ],
-    toArgs:  toArgs(fooParser),
-    results: []
+    opts:   [cast, restrictValue],
+    toArgs: toArgs(fooParser),
+    args:   []
   })(opts)
 }
 
