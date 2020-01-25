@@ -112,6 +112,33 @@ test("combine fails with an error if an argument has a types key that is not nul
   )
 })
 
+test("combine passes on errors", () => {
+  const optionsResult = (
+    array(
+      array(anything(), 1, 5).map(a => ({args: {}, errs: a})),
+      1,
+      10
+    )
+    .map(options => ({
+      options,
+      result: options.reduce(
+        ({args, errs}, option) => ({args, errs: [...errs, ...option.errs]}),
+        {args: {}, errs: []}
+      )
+    }))
+  )
+
+  assert(
+    property(optionsResult, ({options, result}) =>
+      expect(
+        combine(...options)
+      ).toStrictEqual(
+        result
+      )
+    )
+  )
+})
+
 function option (_arg, hasArguments, _arguments, hasTypes, _types) {
   return base64().chain(arg =>
     base64().chain(key =>
