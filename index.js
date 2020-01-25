@@ -55,11 +55,18 @@ function fooParser (opts) {
 */
 
 function fooParser (opts) {
-  return parser(opts)(
-    splitShortOptions,
-    parseArgs(option => pipe(cast(option), validate(option))),
-    mergeArgs(fooParser)
-  )
+  return parser({
+    preprocessing: [
+      splitShortOptions
+    ],
+    toOptions: parseArgs,
+    processing: [
+      cast,
+      validate
+    ],
+    toResults: mergeArgs(fooParser),
+    postprocessing: []
+  })(opts)
 }
 
 const parse = fooParser(opts)
@@ -77,11 +84,12 @@ const opts2 = [
   string('answerStr', ['--answer', '-a'])
 ]
 
-const deepThought = opts => parser(opts)(
-  splitShortOptions,
-  parseArgs(option => pipe(cast(option), validate(option))),
-  mergeArgs()
-)
+const deepThought = parser({
+  preprocessing: [splitShortOptions],
+  toOptions: parseArgs,
+  processing: [cast, validate],
+  toResults: mergeArgs()
+})
 
 const parse2 = deepThought(opts2)
 
