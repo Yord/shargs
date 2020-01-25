@@ -9,10 +9,10 @@ module.exports = {
     msg:  'The passed command line argument must be a number',
     info: {option, arg}
   }),
-  argumentValueRestrictionsViolated: ({arg, only}) => ({
+  argumentValueRestrictionsViolated: ({value, only, option}) => ({
     code: 'Argument value restrictions violated',
     msg:  'The argument is not in the allowed set of values',
-    info: {arg, only}
+    info: {value, only, option}
   }),
   invalidOptionsListInCombine: ({list, arg, option}) => ({
     code: 'Invalid options list in combine',
