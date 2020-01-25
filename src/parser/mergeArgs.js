@@ -1,4 +1,4 @@
-module.exports = parser => ({errs = [], argv = []} = {}) => {
+module.exports = parser => () => ({errs = [], argv = []} = {}) => {
   let errs2   = []
   const argv2 = {_: []}
 
