@@ -1,5 +1,4 @@
-module.exports = ({errs: ERRS = [], argv: ARGV = []} = {}) => {
-  const errs = []
+module.exports = ({errs = [], argv: ARGV = []} = {}) => {
   const argv = []
 
   for (let i = 0; i < ARGV.length; i++) {
@@ -14,5 +13,5 @@ module.exports = ({errs: ERRS = [], argv: ARGV = []} = {}) => {
     }
   }
 
-  return {errs: ERRS.concat(errs), argv}
+  return {errs, argv}
 }

@@ -1,5 +1,4 @@
-module.exports = parser => ({errs: ERRS = [], opts: OPTS = []} = {}) => {
-  let errs   = []
+module.exports = parser => ({errs = [], opts: OPTS = []} = {}) => {
   const args = {_: []}
 
   for (let i = 0; i < OPTS.length; i++) {
@@ -11,7 +10,7 @@ module.exports = parser => ({errs: ERRS = [], opts: OPTS = []} = {}) => {
       const parse = parser(opts || [])
       const res   = parse({errs: [], argv})
 
-      errs      = res.errs
+      errs      = errs.concat(res.errs)
       args[key] = Object.assign({}, args[key], res.args)
     } else if (types.length === 0) {
       args[key] = typeof args[key] === 'undefined' ? true : args[key] < 2 ? 2 : args[key] + 1
@@ -20,5 +19,5 @@ module.exports = parser => ({errs: ERRS = [], opts: OPTS = []} = {}) => {
     }
   }
 
-  return {errs: ERRS.concat(errs), args}
+  return {errs, args}
 }

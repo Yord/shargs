@@ -1,5 +1,4 @@
-module.exports = args => ({errs: ERRS = [], argv: ARGV = []} = {}) => {
-  let errs   = []
+module.exports = args => ({errs = [], argv: ARGV = []} = {}) => {
   const opts = []
 
   let at  = 0
@@ -43,5 +42,5 @@ module.exports = args => ({errs: ERRS = [], argv: ARGV = []} = {}) => {
     ARG = ARGV[at]
   }
 
-  return {errs: ERRS.concat(errs), opts}
+  return {errs, opts}
 }

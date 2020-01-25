@@ -1,7 +1,6 @@
 const {argumentValueRestrictionsViolated} = require('../../errors')
 
-module.exports = ({errs: ERRS = [], opts: OPTS = []} = {}) => {
-  const errs = []
+module.exports = ({errs = [], opts: OPTS = []} = {}) => {
   const opts = []
 
   for (let i = 0; i < OPTS.length; i++) {
@@ -22,5 +21,5 @@ module.exports = ({errs: ERRS = [], opts: OPTS = []} = {}) => {
     }
   }
 
-  return {errs: ERRS.concat(errs), opts}
+  return {errs, opts}
 }

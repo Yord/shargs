@@ -3,10 +3,10 @@ const option   = require('./option')
 const pipe     = require('./pipe')
 
 module.exports = ({argv = [], toOpts, opts = [], toArgs, args = []}) => OPTS => {
-  const {errs: combineErrors = [], args: ARGS} = combine(...OPTS.map(option))
+  const {errs: ERRS = [], args: ARGS} = combine(...OPTS.map(option))
 
   return pipe(
-    ({errs = [], argv = []}) => ({errs: errs.concat(combineErrors), argv}),
+    ({errs = [], argv = []}) => ({errs: errs.concat(ERRS), argv}),
     ...argv,
     toOpts(ARGS),
     ...opts,
