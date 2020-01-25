@@ -1,4 +1,4 @@
-module.exports = preprocess => ({args = []} = {}) => ({errs = [], argv = []} = {}) => {
+module.exports = (preprocess, args = []) => ({errs = [], argv = []} = {}) => {
   let errs2   = []
   const argv2 = []
 
@@ -14,7 +14,7 @@ module.exports = preprocess => ({args = []} = {}) => ({errs = [], argv = []} = {
       for (let j = 0; j < options.length; j++) {
         const option = options[j]
 
-        const {key, only, opts} = option
+        const {key, opts} = option
         let   {types} = option
 
         let arr = []
