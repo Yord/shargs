@@ -28,8 +28,8 @@ const opts = [
 const toArgs            = require('./src/parser/toArgs')
 const toOpts            = require('./src/parser/toOpts')
 const splitShortOptions = require('./src/parser/argv/splitShortOptions')
-const cast              = require('./src/parser/options/cast')
-const restrictValue     = require('./src/parser/options/restrictValue')
+const cast              = require('./src/parser/opts/cast')
+const restrictValue     = require('./src/parser/opts/restrictValue')
 
 const argv = process.argv.slice(2)
 
