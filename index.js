@@ -25,46 +25,21 @@ const opts = [
 ]
 //console.log('opts', JSON.stringify(opts, null, 2))
 
-const toResults         = require('./src/parser/toResults')
-const toOptions         = require('./src/parser/toOptions')
+const toArgs            = require('./src/parser/toArgs')
+const toOpts            = require('./src/parser/toOpts')
 const splitShortOptions = require('./src/parser/argv/splitShortOptions')
-const cast              = require('./src/parser/options/cast')
-const restrictValue     = require('./src/parser/options/restrictValue')
+const cast              = require('./src/parser/opts/cast')
+const restrictValue     = require('./src/parser/opts/restrictValue')
 
 const argv = process.argv.slice(2)
 
-/*
-function fooParser (opts) {
-  const {errs = [], args} = combine(...opts.map(option))
-
-  if (errs.length > 0) {
-    process.write(errs.join('\n') + '\n')
-    process.exit(1)
-  }
-
-  return pipe(
-    splitShortOptions(args),
-    parseArgs(args)(option => pipe(
-      cast(option),
-      validate(option)
-    )),
-    mergeArgs(args)(fooParser)
-  )
-}
-*/
-
 function fooParser (opts) {
   return parser({
-    argv: [
-      splitShortOptions
-    ],
-    toOptions,
-    options: [
-      cast,
-      restrictValue
-    ],
-    toResults: toResults(fooParser),
-    results: []
+    argv:   [splitShortOptions],
+    toOpts,
+    opts:   [cast, restrictValue],
+    toArgs: toArgs(fooParser),
+    args:   []
   })(opts)
 }
 
@@ -84,10 +59,10 @@ const opts2 = [
 ]
 
 const deepThought = parser({
-  argv:      [splitShortOptions],
-  toOptions,
-  options:   [cast, restrictValue],
-  toResults: toResults()
+  argv:   [splitShortOptions],
+  toOpts,
+  opts:   [cast, restrictValue],
+  toArgs: toArgs()
 })
 
 const parse2 = deepThought(opts2)

@@ -1,18 +1,17 @@
-module.exports = ({errs = [], argv = []} = {}) => {
-  const errs2 = []
-  const argv2 = []
+module.exports = ({errs = [], argv: ARGV = []} = {}) => {
+  const argv = []
 
-  for (let i = 0; i < argv.length; i++) {
-    const arg = argv[i]
+  for (let i = 0; i < ARGV.length; i++) {
+    const arg = ARGV[i]
     if (arg.length > 2 && arg[0] === '-' && arg[1] !== '-') {
       for (let at = 1; at < arg.length; at++) {
         const ch = arg[at]
-        argv2.push('-' + ch)
+        argv.push('-' + ch)
       }
     } else {
-      argv2.push(arg)
+      argv.push(arg)
     }
   }
 
-  return {errs: errs.concat(errs2), argv: argv2}
+  return {errs, argv}
 }
