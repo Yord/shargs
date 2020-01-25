@@ -3,20 +3,20 @@ module.exports = parser => () => ({errs = [], argv = []} = {}) => {
   const argv2 = {_: []}
 
   for (let i = 0; i < argv.length; i++) {
-    const [arg, params, types, opts] = argv[i]
+    const {key, values, types, opts} = argv[i]
 
     if (typeof types === 'undefined') {
-      if (arg !== '--') argv2['_'].push(arg)
+      if (key !== '--') argv2['_'] = argv2['_'].concat(values)
     } else if (types === null) {
       const parse    = parser(opts || [])
-      const {errs: errs3, argv} = parse({errs: [], argv: params})
+      const {errs: errs3, argv} = parse({errs: [], argv: values})
 
       errs2      = errs3
-      argv2[arg] = Object.assign({}, argv2[arg], argv)
+      argv2[key] = Object.assign({}, argv2[key], argv)
     } else if (types.length === 0) {
-      argv2[arg] = typeof argv2[arg] === 'undefined' ? true : argv2[arg] < 2 ? 2 : argv2[arg] + 1
+      argv2[key] = typeof argv2[key] === 'undefined' ? true : argv2[key] < 2 ? 2 : argv2[key] + 1
     } else {
-      argv2[arg] = types.length === 1 ? params[0] : params
+      argv2[key] = types.length === 1 ? values[0] : values
     }
   }
 
