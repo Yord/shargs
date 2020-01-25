@@ -1,6 +1,6 @@
 module.exports = args => ({errs = [], argv = []} = {}) => {
-  let errs2   = []
-  const argv2 = []
+  let errs2  = []
+  const opts = []
 
   let at  = 0
   let arg = argv[at]
@@ -30,18 +30,18 @@ module.exports = args => ({errs = [], argv = []} = {}) => {
           values = argv.slice(at + 1, at + types.length + 1)
         }
 
-        argv2.push({...option, values})
+        opts.push({...option, values})
 
         newAt = at + (types === null ? 0 : types.length) + 1
       }
     } else {
       const values = argv.slice(at, at + 1)
-      if (values.length > 0) argv2.push({values})
+      if (values.length > 0) opts.push({values})
     }
 
     at  = newAt
     arg = argv[at]
   }
 
-  return {errs: errs.concat(errs2), argv: argv2}
+  return {errs: errs.concat(errs2), opts}
 }
