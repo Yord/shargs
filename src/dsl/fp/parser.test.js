@@ -1,4 +1,4 @@
-const {anything, array, assert, base64, constant, integer, oneof, property} = require('fast-check')
+const {anything, array, assert, constant, oneof, property} = require('fast-check')
 const parser = require('./parser')
 
 test('parser concats errors', () => {
