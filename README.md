@@ -1,6 +1,6 @@
 ![shargs teaser][teaser]
 
-`shargs` is a highly configurable and extensible command-line arguments parser.
+🦈 `shargs` is a highly configurable and extensible command-line arguments parser.
 
 [![node version][shield-node]][node]
 [![npm version][shield-npm]][npm-package]
@@ -23,7 +23,7 @@ $ npm i --save shargs
 This project is work in progress.
 Use it at your own risk!
 
-## `shargs`
+## 🦈 `shargs`
 
 `shargs` is the command-line argument parser used by [`pxi`][pxi].
 
