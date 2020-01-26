@@ -1,6 +1,6 @@
-![pxi teaser][teaser]
+![shargs teaser][teaser]
 
-`pxi-args` is a command-line arguments parser for [`pxi`][pxi] (pixie), the small, fast, and magical command-line data processor.
+`shargs` is a highly configurable and extensible command-line arguments parser.
 
 [![node version][shield-node]][node]
 [![npm version][shield-npm]][npm-package]
@@ -15,7 +15,7 @@
 Installation is done using [`npm`][npm-install].
 
 ```bash
-$ npm i --save pxi-args
+$ npm i --save shargs
 ```
 
 ## Work in Progress
@@ -23,9 +23,9 @@ $ npm i --save pxi-args
 This project is work in progress.
 Use it at your own risk!
 
-## `pxi-args`
+## `shargs`
 
-`pxi-args` is the command-line argument parser used by [`pxi`][pxi].
+`shargs` is the command-line argument parser used by [`pxi`][pxi].
 
 ### Defining Command-Line Arguments
 
@@ -228,22 +228,22 @@ Please read the [contributing guide][contribute].
 
 ## License
 
-`pxi-args` is [MIT licensed][license].
+`shargs` is [MIT licensed][license].
 
-[actions]: https://github.com/Yord/pxi-args/actions
-[code]: https://github.com/Yord/pxi-args/blob/master/CODE_OF_CONDUCT.md
-[contribute]: https://github.com/Yord/pxi-args/blob/master/CONTRIBUTING.md
-[issues]: https://github.com/Yord/pxi-args/issues
-[license]: https://github.com/Yord/pxi-args/blob/master/LICENSE
+[actions]: https://github.com/Yord/shargs/actions
+[code]: https://github.com/Yord/shargs/blob/master/CODE_OF_CONDUCT.md
+[contribute]: https://github.com/Yord/shargs/blob/master/CONTRIBUTING.md
+[issues]: https://github.com/Yord/shargs/issues
+[license]: https://github.com/Yord/shargs/blob/master/LICENSE
 [node]: https://nodejs.org/
 [npm-install]: https://docs.npmjs.com/downloading-and-installing-packages-globally
-[npm-package]: https://www.npmjs.com/package/pxi-args
+[npm-package]: https://www.npmjs.com/package/shargs
 [pxi]: https://github.com/Yord/pxi
-[shield-license]: https://img.shields.io/npm/l/pxi-args?color=yellow&labelColor=313A42
-[shield-node]: https://img.shields.io/node/v/pxi-args?color=red&labelColor=313A42
-[shield-npm]: https://img.shields.io/npm/v/pxi-args.svg?color=orange&labelColor=313A42
+[shield-license]: https://img.shields.io/npm/l/shargs?color=yellow&labelColor=313A42
+[shield-node]: https://img.shields.io/node/v/shargs?color=red&labelColor=313A42
+[shield-npm]: https://img.shields.io/npm/v/shargs.svg?color=orange&labelColor=313A42
 [shield-prs]: https://img.shields.io/badge/PRs-welcome-green.svg?labelColor=313A42
-[shield-unit-tests-linux]: https://github.com/Yord/pxi-args/workflows/linux/badge.svg?branch=master
-[shield-unit-tests-macos]: https://github.com/Yord/pxi-args/workflows/macos/badge.svg?branch=master
-[shield-unit-tests-windows]: https://github.com/Yord/pxi-args/workflows/windows/badge.svg?branch=master
+[shield-unit-tests-linux]: https://github.com/Yord/shargs/workflows/linux/badge.svg?branch=master
+[shield-unit-tests-macos]: https://github.com/Yord/shargs/workflows/macos/badge.svg?branch=master
+[shield-unit-tests-windows]: https://github.com/Yord/shargs/workflows/windows/badge.svg?branch=master
 [teaser]: https://github.com/Yord/pxi/blob/master/teaser.gif?raw=true

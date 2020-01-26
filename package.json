@@ -1,24 +1,15 @@
 {
-  "name": "pxi-args",
-  "version": "0.5.2",
-  "description": "A command-line arguments parser for pxi (pixie), the small, fast, and magical command-line data processor",
+  "name": "shargs",
+  "version": "0.6.0",
+  "description": "A highly configurable and extensible command-line arguments parser",
   "keywords": [
-    "pxi",
-    "pixie",
-    "json",
-    "csv",
-    "ssv",
-    "tsv",
-    "dsv",
-    "data-processing",
-    "deserializer",
-    "parser",
-    "serializer",
-    "marshaller"
+    "shargs",
+    "command-line",
+    "parser"
   ],
-  "homepage": "https://github.com/Yord/pxi-args",
+  "homepage": "https://github.com/Yord/shargs",
   "bugs": {
-    "url": "https://github.com/Yord/pxi-args/issues"
+    "url": "https://github.com/Yord/shargs/issues"
   },
   "license": "MIT",
   "author": "Philipp Wille <philipp.y.wille@gmail.com> (https://github.com/Yord)",
@@ -28,7 +19,7 @@
   "main": "./index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Yord/pxi-args.git"
+    "url": "https://github.com/Yord/shargs.git"
   },
   "scripts": {
     "start": "./index.js",
