@@ -14,7 +14,7 @@ As pixie is stable software, changes to its behavior are very carefully consider
 
 ### Getting Help
 
-**For support or usage questions like “how do I do X with pixie and “my code doesn't work”, please search and ask on [StackOverflow with a `pxi-args` tag][so-pxi-args] first.**
+**For support or usage questions like “how do I do X with pixie and “my code doesn't work”, please search and ask on [StackOverflow with a `shargs` tag][so-shargs] first.**
 
 We ask you to do this because StackOverflow does a much better job at keeping popular questions visible. Unfortunately good answers get lost and outdated on GitHub.
 
@@ -28,14 +28,14 @@ On both websites, it is a good idea to structure your code and question in a way
 
 Please keep in mind that people spend their free time trying to help you. You can make it easier for them if you provide versions of the relevant libraries and, if applicable, a runnable small project reproducing your issue. You can put your code on [JSBin](http://jsbin.com) or, for bigger projects, on GitHub. Make sure all the necessary dependencies are declared in `package.json` so anyone can run `npm install && npm start` and reproduce your issue.
 
-## Contributing to `pxi-args`
+## Contributing to `shargs`
 
 Visit the [issue tracker][issues] to find a list of open issues that need attention.
 
 Fork, then clone the repo:
 
 ```sh
-git clone https://github.com/your-username/pxi-args.git
+git clone https://github.com/your-username/shargs.git
 ```
 
 ### Running Pixie
@@ -89,6 +89,6 @@ After you have submitted your pull request, we'll try to get back to you as soon
 
 Thank you for contributing!
 
-[code]: https://github.com/Yord/pxi-args/blob/master/CODE_OF_CONDUCT.md
-[issues]: https://github.com/Yord/pxi-args/issues
-[so-pxi-args]: http://stackoverflow.com/questions/tagged/pxi-args?sort=votes&pageSize=50
+[code]: https://github.com/Yord/shargs/blob/master/CODE_OF_CONDUCT.md
+[issues]: https://github.com/Yord/shargs/issues
+[so-shargs]: http://stackoverflow.com/questions/tagged/shargs?sort=votes&pageSize=50
