@@ -19,17 +19,17 @@ const {array, number, string, bool, flag, command} = require('./src/dsl/fp/types
 const numStr  = array(['number', 'string'])
 
 const opts = [
-  number('chunker', ['--chunker', '-c'], {only: [42]}),
-  string('applier', ['--applier', '-a']),
-  numStr('numStr', ['--num-str', '-n']),
-  flag('verbose', ['--verbose', '-v']),
-  bool('truFal', ['--tru-fal', '-t']),
+  number( 'chunker', ['--chunker', '-c'], {only: [42]}),
+  string( 'applier', ['--applier', '-a']),
+  numStr( 'numStr',  ['--num-str', '-n']),
+  flag(   'verbose', ['--verbose', '-v']),
+  bool(   'truFal',  ['--tru-fal', '-t']),
   command('strlist', ['--strlist', '-s']),
-  string('noMinus', ['noMinus']),
+  string( 'noMinus', ['noMinus']),
   command('command', ['command'], {
     opts: [
       {key: 'foo', args: ['--foo'], types: ['number']},
-      flag('v', ['-v']),
+      flag(   'v', ['-v']),
       command('init', ['init'], {
         opts: [
           string('sub', ['--sub'])
