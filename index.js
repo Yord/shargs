@@ -844,7 +844,11 @@ function list (items = [], id = undefined) {
 
 
 
-// The following functions automatically deal with strings that contains opts
+// The following functions automatically deal with strings that contain opts
+
+function notes (strings = [], id = undefined) {
+  return () => texts(strings, id)
+}
 
 function note (string = '', id = undefined) {
   return () => text(string, id)
