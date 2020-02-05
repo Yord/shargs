@@ -46,7 +46,7 @@ const res = fooParser(opts)({argv})
 
 
 
-const style = {
+const exAStyle = {
   line: {
     width: 40
   },
@@ -63,7 +63,7 @@ const style = {
   }
 }
 
-const opts2 = [
+const exAOpts = [
   number('bar',     ['-b', '--bar'],  {desc: 'Foo bar baz.'}),
   flag(  'help',    ['-h', '--help'], {desc: 'Print this help message and exit.'}),
   flag(  'version', ['--version'],    {desc: 'Print the version number and exit.'})
@@ -71,7 +71,7 @@ const opts2 = [
 
 
 
-const foo0 = (
+const exA0 = (
   "foo [-b|--bar] [-h|--help] [--version]  \n" +
   "                                        \n" +
   "-b, --bar  Foo bar baz. [number]        \n" +
@@ -84,7 +84,7 @@ const foo0 = (
   "rights reserved.                        \n"
 )
 
-const foo1 = layout([
+const exA1 = layout([
   () => "foo [-b|--bar] [-h|--help] [--version]  \n",
   () => "                                        \n",
   () => "-b, --bar  Foo bar baz. [number]        \n",
@@ -97,7 +97,7 @@ const foo1 = layout([
   () => "rights reserved.                        \n"
 ])()
 
-const foo2 = layout([
+const exA2 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   line("-b, --bar  Foo bar baz. [number]"),
@@ -108,9 +108,9 @@ const foo2 = layout([
   line(),
   line("Copyright (c) 2020, Philipp Wille, all"),
   line("rights reserved.")
-])(style)
+])(exAStyle)
 
-const foo3 = layout([
+const exA3 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   cols([
@@ -132,9 +132,9 @@ const foo3 = layout([
   line(),
   line("Copyright (c) 2020, Philipp Wille, all"),
   line("rights reserved.")
-])(style)
+])(exAStyle)
 
-const foo4 = layout([
+const exA4 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
@@ -154,9 +154,9 @@ const foo4 = layout([
   line(),
   line("Copyright (c) 2020, Philipp Wille, all"),
   line("rights reserved.")
-])(style)
+])(exAStyle)
 
-const foo5 = layout([
+const exA5 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
@@ -176,9 +176,9 @@ const foo5 = layout([
   line(),
   line("Copyright (c) 2020, Philipp Wille, all"),
   line("rights reserved.")
-])(style)
+])(exAStyle)
 
-const foo6 = layout([
+const exA6 = layout([
   lines([
     "foo [-b|--bar] [-h|--help] [--version]"
   ]),
@@ -202,9 +202,9 @@ const foo6 = layout([
     "Copyright (c) 2020, Philipp Wille, all",
     "rights reserved."
   ])
-])(style)
+])(exAStyle)
 
-const foo7 = layout([
+const exA7 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
@@ -226,9 +226,9 @@ const foo7 = layout([
     "Copyright (c) 2020, Philipp Wille, all",
     "rights reserved."
   ])
-])(style)
+])(exAStyle)
 
-const foo8 = layout([
+const exA8 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
@@ -249,9 +249,9 @@ const foo8 = layout([
   texts([
     "Copyright (c) 2020, Philipp Wille, all rights reserved."
   ])
-])(style)
+])(exAStyle)
 
-const foo9 = layout([
+const exA9 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
@@ -270,9 +270,9 @@ const foo9 = layout([
   ]),
   line(),
   text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
-])(style)
+])(exAStyle)
 
-const foo10 = layout([
+const exA10 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
@@ -291,9 +291,9 @@ const foo10 = layout([
   ]),
   line(),
   text("Copyright (c) 2020, Philipp Wille, all rights reserved.", 'bar')
-])(style)
+])(exAStyle)
 
-const foo11 = layout([
+const exA11 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   br(),
   dl([
@@ -312,9 +312,9 @@ const foo11 = layout([
   ]),
   br(),
   text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
-])(style)
+])(exAStyle)
 
-const foo12 = usage([
+const exA12 = usage([
   () => text("foo [-b|--bar] [-h|--help] [--version]"),
   () => br(),
   () => dl([
@@ -333,9 +333,9 @@ const foo12 = usage([
   ]),
   () => br(),
   () => text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
-])(opts2)(style)
+])(exAOpts)(exAStyle)
 
-const foo13 = usage([
+const exA13 = usage([
   usageText("foo"),
   () => br(),
   () => dl([
@@ -354,65 +354,65 @@ const foo13 = usage([
   ]),
   () => br(),
   () => text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
-])(opts2)(style)
+])(exAOpts)(exAStyle)
 
-const foo14 = usage([
+const exA14 = usage([
   usageText("foo"),
   () => br(),
   dlOpts(),
   () => br(),
   () => text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
-])(opts2)(style)
+])(exAOpts)(exAStyle)
 
-const foo15 = usage([
+const exA15 = usage([
   usageText("foo"),
   () => br(),
   dlOpts(),
   () => br(),
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
-])(opts2)(style)
+])(exAOpts)(exAStyle)
 
-const foo16 = usage([
+const exA16 = usage([
   usageText("foo"),
   note(),
   dlOpts(),
   note(),
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
-])(opts2)(style)
+])(exAOpts)(exAStyle)
 
-const foo17 = usage([
+const exA17 = usage([
   usageText("foo"),
   space(),
   dlOpts(),
   space(),
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
-])(opts2)(style)
+])(exAOpts)(exAStyle)
 
 
 
-console.log('foo16')
-console.log(foo16)
-console.log('foo17')
-console.log(foo17)
+console.log('exA0')
+console.log(exA0)
+console.log('exA13')
+console.log(exA13)
 
 
-console.log('foo0  === foo1',  foo0  === foo1)
-console.log('foo1  === foo2',  foo1  === foo2)
-console.log('foo2  === foo3',  foo2  === foo3)
-console.log('foo3  === foo4',  foo3  === foo4)
-console.log('foo4  === foo5',  foo4  === foo5)
-console.log('foo5  === foo6',  foo5  === foo6)
-console.log('foo6  === foo7',  foo6  === foo7)
-console.log('foo7  === foo8',  foo7  === foo8)
-console.log('foo8  === foo9',  foo8  === foo9)
-console.log('foo9  === foo10', foo9  === foo10)
-console.log('foo10 === foo11', foo10 === foo11)
-console.log('foo11 === foo12', foo11 === foo12)
-console.log('foo12 === foo13', foo12 === foo13)
-console.log('foo13 === foo14', foo13 === foo14)
-console.log('foo14 === foo15', foo14 === foo15)
-console.log('foo15 === foo16', foo15 === foo16)
-console.log('foo16 === foo17', foo16 === foo17)
+console.log('exA0  === exA1',  exA0  === exA1)
+console.log('exA1  === exA2',  exA1  === exA2)
+console.log('exA2  === exA3',  exA2  === exA3)
+console.log('exA3  === exA4',  exA3  === exA4)
+console.log('exA4  === exA5',  exA4  === exA5)
+console.log('exA5  === exA6',  exA5  === exA6)
+console.log('exA6  === exA7',  exA6  === exA7)
+console.log('exA7  === exA8',  exA7  === exA8)
+console.log('exA8  === exA9',  exA8  === exA9)
+console.log('exA9  === exA10', exA9  === exA10)
+console.log('exA10 === exA11', exA10 === exA11)
+console.log('exA11 === exA12', exA11 === exA12)
+console.log('exA12 === exA13', exA12 === exA13)
+console.log('exA13 === exA14', exA13 === exA14)
+console.log('exA14 === exA15', exA14 === exA15)
+console.log('exA15 === exA16', exA15 === exA16)
+console.log('exA16 === exA17', exA16 === exA17)
 
 
 
