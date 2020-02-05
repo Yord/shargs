@@ -359,7 +359,7 @@ const foo13 = usage([
 const foo14 = usage([
   usageText("foo"),
   () => br(),
-  dlOpts,
+  dlOpts(),
   () => br(),
   () => text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(opts2)(style)
@@ -367,7 +367,7 @@ const foo14 = usage([
 const foo15 = usage([
   usageText("foo"),
   () => br(),
-  dlOpts,
+  dlOpts(),
   () => br(),
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(opts2)(style)
@@ -375,7 +375,7 @@ const foo15 = usage([
 const foo16 = usage([
   usageText("foo"),
   note(),
-  dlOpts,
+  dlOpts(),
   note(),
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(opts2)(style)
@@ -383,7 +383,7 @@ const foo16 = usage([
 const foo17 = usage([
   usageText("foo"),
   space(),
-  dlOpts,
+  dlOpts(),
   space(),
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(opts2)(style)
@@ -597,15 +597,17 @@ function usageText (programName = '', id = undefined) {
   }
 }
 
-function dlOpts (opts = [], id = undefined) {
-  const items = (
-    opts
-    .filter(({types}) => typeof types !== 'undefined' && types !== null) // Filter all commands
-    .map(opt => ({types} = opt, types.length === 0 ? {...opt, types: ['flag']} : opt))
-    .map(({args, desc, types}) => [args.join(', '), desc + ' [' + types.join(', ') + ']'])
-  )
-
-  return dl(items, id)
+function dlOpts (id = undefined) {
+  return (opts = []) => {
+    const items = (
+      opts
+      .filter(({types}) => typeof types !== 'undefined' && types !== null) // Filter all commands
+      .map(opt => ({types} = opt, types.length === 0 ? {...opt, types: ['flag']} : opt))
+      .map(({args, desc, types}) => [args.join(', '), desc + ' [' + types.join(', ') + ']'])
+    )
+  
+    return dl(items, id)
+  }
 }
 
 
