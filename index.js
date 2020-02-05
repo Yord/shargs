@@ -336,7 +336,7 @@ const exA12 = usage([
 ])(exAOpts)(exAStyle)
 
 const exA13 = usage([
-  usageText("foo"),
+  synopsis("foo"),
   () => br(),
   () => list([
     [
@@ -357,7 +357,7 @@ const exA13 = usage([
 ])(exAOpts)(exAStyle)
 
 const exA14 = usage([
-  usageText("foo"),
+  synopsis("foo"),
   () => br(),
   optsList(),
   () => br(),
@@ -365,7 +365,7 @@ const exA14 = usage([
 ])(exAOpts)(exAStyle)
 
 const exA15 = usage([
-  usageText("foo"),
+  synopsis("foo"),
   () => br(),
   optsList(),
   () => br(),
@@ -373,7 +373,7 @@ const exA15 = usage([
 ])(exAOpts)(exAStyle)
 
 const exA16 = usage([
-  usageText("foo"),
+  synopsis("foo"),
   note(),
   optsList(),
   note(),
@@ -381,7 +381,7 @@ const exA16 = usage([
 ])(exAOpts)(exAStyle)
 
 const exA17 = usage([
-  usageText("foo"),
+  synopsis("foo"),
   space(),
   optsList(),
   space(),
@@ -470,7 +470,7 @@ const exB1 = layout([
 ])(exBStyle)
 
 const exB2 = usage([
-  usageText("git", "<command> [args]"),
+  synopsis("git", "<command> [args]"),
   space(),
   note("These are common Git commands used in various situations:"),
   space(),
@@ -905,7 +905,7 @@ function space (id = undefined) {
   return note('', id)
 }
 
-function usageText (start = '', end = '', id = undefined) {
+function synopsis (start = '', end = '', id = undefined) {
   return (opts = []) => {
     const argsString  = ({args = []}) => '[' + args.join('|') + ']'
     const argsStrings = (
