@@ -659,12 +659,16 @@ function space (id = undefined) {
   return note('', id)
 }
 
-function usageText (programName = '', id = undefined) {
+function usageText (start = '', end = '', id = undefined) {
   return (opts = []) => {
     const argsString  = ({args = []}) => '[' + args.join('|') + ']'
-    const argsStrings = opts.map(argsString).join(' ')
+    const argsStrings = (
+      opts
+      .filter(({types}) => typeof types !== 'undefined' && types !== null) // Filter all commands
+      .map(argsString).join(' ')
+    )
 
-    return text(programName + ' ' + argsStrings, id)
+    return text(start + (start !== '' ? ' ' : '') + argsStrings + (end !== '' ? ' ' : '') + end, id)
   }
 }
 
