@@ -456,6 +456,24 @@ const exB0 = (
   "guides. See 'git help <command>' or 'git help <concept>' to read about a        \n" +
   "specific subcommand or concept.                                                 \n"
 )
+
+const exB1 = layout([
+  line("git [--version] [--help] <command> [args]"),
+  br(),
+  line("These are common Git commands used in various situations:"),
+  br(),
+  line("start a working area (see also: git help tutorial)"),
+  line("   clone      Clone a repository into a new directory"),
+  line("   init       Create an empty Git repository or reinitialize an existing one"),
+  br(),
+  line("work on the current change (see also: git help everyday)"),
+  line("   add        Add file contents to the index"),
+  line("   mv         Move or rename a file, a directory, or a symlink"),
+  br(),
+  line("'git help -a' and 'git help -g' list available subcommands and some concept"),
+  line("guides. See 'git help <command>' or 'git help <concept>' to read about a"),
+  line("specific subcommand or concept.")
+])(exBStyle)
 // [A] => String
 function layout (toStrings = []) {
   return (style = {}) => toStrings.map(toString => toString(style)).join('')
