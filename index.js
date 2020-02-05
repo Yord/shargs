@@ -366,7 +366,7 @@ function layout (toStrings = []) {
 }
 
 function usage (toStrings = []) {
-  return (opts = []) => (style = {}) => layout(toStrings.map(toString => toString(opts)))(style)
+  return (opts = []) => layout(toStrings.map(toString => toString(opts)))
 }
 
 
