@@ -51,12 +51,12 @@ const exAStyle = {
     width: 40
   },
   cols: [
-    {width:  9, paddingRight: 2}, // {width: width/cols = 40}
+    {width:  9, padEnd: 2}, // {width: width/cols = 40}
     {width: 29}  // {width: width/cols = 40}
   ],
   foo: [
-    {width:  9, paddingRight: 2}, // {width: width/cols = 40}
-    {width: 28, paddingRight: 1}  // {width: width/cols = 40}
+    {width:  9, padEnd: 2}, // {width: width/cols = 40}
+    {width: 28, padEnd: 1}  // {width: width/cols = 40}
   ],
   bar: {
     width: 40
@@ -466,10 +466,11 @@ function cols (columns = [], id = undefined) {
       for (let j = 0; j < columns.length; j++) {
         const text = columns[j][i] || ''
 
-        const width        = ((idCols || cols)[j] || {}).width
-        const paddingRight = ((idCols || cols)[j] || {}).paddingRight || 0
+        const width    = ((idCols || cols)[j] || {}).width
+        const padStart = ((idCols || cols)[j] || {}).padStart || 0
+        const padEnd   = ((idCols || cols)[j] || {}).padEnd   || 0
 
-        string += text.padEnd(width) + ''.padEnd(paddingRight)
+        string += ''.padStart(padStart) + text.padEnd(width) + ''.padEnd(padEnd)
       }
 
       strings.push(string)
