@@ -529,8 +529,8 @@ const exC0 = (
   'DESCRIPTION                                                                     \n' +
   '      Move or rename a file, directory or symlink.                              \n' +
   '                                                                                \n' +
-  '          git mv [-v] [-f] [-n] [-k] <source> <destination>                     \n' +
-  '          git mv [-v] [-f] [-n] [-k] <source> ... <destination directory>       \n' +
+  '          git mv [-f] [-k] [-n] [-v] <source> <destination>                     \n' +
+  '          git mv [-f] [-k] [-n] [-v] <source> ... <destination directory>       \n' +
   '                                                                                \n' +
   '      In the first form, it renames <source>, which must exist and be either a  \n' +
   '      file, symlink or directory, to <destination>. In the second form, the last\n' +
@@ -587,8 +587,8 @@ const exC1 = layout([
   line('DESCRIPTION', 'h1'),
   line('Move or rename a file, directory or symlink.'),
   br(),
-  line('git mv [-v] [-f] [-n] [-k] <source> <destination>', 'tab'),
-  line('git mv [-v] [-f] [-n] [-k] <source> ... <destination directory>', 'tab'),
+  line('git mv [-f] [-k] [-n] [-v] <source> <destination>', 'tab'),
+  line('git mv [-f] [-k] [-n] [-v] <source> ... <destination directory>', 'tab'),
   br(),
   line('In the first form, it renames <source>, which must exist and be either a'),
   line('file, symlink or directory, to <destination>. In the second form, the last'),
@@ -647,8 +647,8 @@ const exC2 = layout([
   br(),
   texts(
     [
-      'git mv [-v] [-f] [-n] [-k] <source> <destination>',
-      'git mv [-v] [-f] [-n] [-k] <source> ... <destination directory>'
+      'git mv [-f] [-k] [-n] [-v] <source> <destination>',
+      'git mv [-f] [-k] [-n] [-v] <source> ... <destination directory>'
     ],
     'tab'
   ),
@@ -680,6 +680,8 @@ const exC2 = layout([
   text('Part of the git(1) suite')
 ])(exCStyle)
 
+const o = require('./src/dsl/fp/compose')
+
 const exC3 = usage([
   note('NAME', 'h1'),
   note('git-mv - Move or rename a file, a directory, or a symlink'),
@@ -691,13 +693,8 @@ const exC3 = usage([
   note('DESCRIPTION', 'h1'),
   note('Move or rename a file, directory or symlink.'),
   space(),
-  notes(
-    [
-      'git mv [-v] [-f] [-n] [-k] <source> <destination>',
-      'git mv [-v] [-f] [-n] [-k] <source> ... <destination directory>'
-    ],
-    'tab'
-  ),
+  o(synopsis('git mv', '<source> <destination>', 'tab'), onlyFirstArg),
+  o(synopsis('git mv', '<source> ... <destination directory>', 'tab'), onlyFirstArg),
   space(),
   note('In the first form, it renames <source>, which must exist and be either a file, symlink or directory, to <destination>. In the second form, the last argument has to be an existing directory; the given sources will be moved into this directory.'),
   space(),
@@ -724,7 +721,7 @@ const exC3 = usage([
   space(),
   note('GIT', 'h1'),
   note('Part of the git(1) suite')
-])()(exCStyle)
+])(exCOpts)(exCStyle)
 
 
 
@@ -942,4 +939,8 @@ function optsList (filter = ({types}) => typeof types !== 'undefined' && types !
 
 function splitWords (string) {
   return string.split(/(\s+)/g)
+}
+
+function onlyFirstArg (opts = []) {
+  return opts.map(opt => ({...opt, args: (opt.args || []).slice(0, 1)}))
 }
