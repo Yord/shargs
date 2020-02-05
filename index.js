@@ -42,4 +42,361 @@ const opts = [
 const argv = process.argv.slice(2)
 
 const res = fooParser(opts)({argv})
-console.log('fooParser', JSON.stringify(res, null, 2))
+//console.log('fooParser', JSON.stringify(res, null, 2))
+
+
+
+const style = {
+  line: {
+    width: 40
+  },
+  cols: [
+    {width:  9, paddingRight: 2}, // {width: width/cols = 40}
+    {width: 29}  // {width: width/cols = 40}
+  ],
+  foo: [
+    {width:  9, paddingRight: 2}, // {width: width/cols = 40}
+    {width: 28, paddingRight: 1}  // {width: width/cols = 40}
+  ]
+}
+
+
+
+const foo0 = (
+  "usage: foo [-b|--bar] [-h] [--version]  \n" +
+  "                                        \n" +
+  "-b, --bar  Foo bar baz.                 \n" +
+  "-h,        Print this help message and  \n" +
+  "--help     exit.                        \n" +
+  "--version  Print the version number and \n" +
+  "           exit.                        \n" +
+  "                                        \n" +
+  "Copyright (c) 2020, Philipp Wille, all  \n" +
+  "rights reserved.                        \n"
+)
+
+const foo1 = usage([
+  () => "usage: foo [-b|--bar] [-h] [--version]  \n",
+  () => "                                        \n",
+  () => "-b, --bar  Foo bar baz.                 \n",
+  () => "-h,        Print this help message and  \n",
+  () => "--help     exit.                        \n",
+  () => "--version  Print the version number and \n",
+  () => "           exit.                        \n",
+  () => "                                        \n",
+  () => "Copyright (c) 2020, Philipp Wille, all  \n",
+  () => "rights reserved.                        \n"
+])(style)
+
+const foo2 = usage([
+  line("usage: foo [-b|--bar] [-h] [--version]"),
+  line(),
+  line("-b, --bar  Foo bar baz."),
+  line("-h,        Print this help message and"),
+  line("--help     exit."),
+  line("--version  Print the version number and"),
+  line("           exit."),
+  line(),
+  line("Copyright (c) 2020, Philipp Wille, all"),
+  line("rights reserved.")
+])(style)
+
+const foo3 = usage([
+  line("usage: foo [-b|--bar] [-h] [--version]"),
+  line(),
+  cols([
+    [
+      "-b, --bar",
+      "-h,",
+      "--help",
+      "--version",
+      ""
+    ],
+    [
+      "Foo bar baz.",
+      "Print this help message and",
+      "exit.",
+      "Print the version number and",
+      "exit.",
+    ]
+  ]),
+  line(),
+  line("Copyright (c) 2020, Philipp Wille, all"),
+  line("rights reserved.")
+])(style)
+
+const foo4 = usage([
+  line("usage: foo [-b|--bar] [-h] [--version]"),
+  line(),
+  dl([
+    [
+      "-b, --bar",
+      "Foo bar baz."
+    ],
+    [
+      "-h, --help",
+      "Print this help message and exit.",
+    ],
+    [
+      "--version",
+      "Print the version number and exit."
+    ]
+  ]),
+  line(),
+  line("Copyright (c) 2020, Philipp Wille, all"),
+  line("rights reserved.")
+])(style)
+
+const foo5 = usage([
+  line("usage: foo [-b|--bar] [-h] [--version]"),
+  line(),
+  dl([
+    [
+      "-b, --bar",
+      "Foo bar baz."
+    ],
+    [
+      "-h, --help",
+      "Print this help message and exit.",
+    ],
+    [
+      "--version",
+      "Print the version number and exit."
+    ]
+  ], 'foo'),
+  line(),
+  line("Copyright (c) 2020, Philipp Wille, all"),
+  line("rights reserved.")
+])(style)
+
+const foo6 = usage([
+  lines([
+    "usage: foo [-b|--bar] [-h] [--version]"
+  ]),
+  line(),
+  dl([
+    [
+      "-b, --bar",
+      "Foo bar baz."
+    ],
+    [
+      "-h, --help",
+      "Print this help message and exit.",
+    ],
+    [
+      "--version",
+      "Print the version number and exit."
+    ]
+  ]),
+  line(),
+  lines([
+    "Copyright (c) 2020, Philipp Wille, all",
+    "rights reserved."
+  ])
+])(style)
+
+const foo7 = usage([
+  text("usage: foo [-b|--bar] [-h] [--version]"),
+  line(),
+  dl([
+    [
+      "-b, --bar",
+      "Foo bar baz."
+    ],
+    [
+      "-h, --help",
+      "Print this help message and exit.",
+    ],
+    [
+      "--version",
+      "Print the version number and exit."
+    ]
+  ]),
+  line(),
+  text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
+])(style)
+
+const foo8 = usage([
+  text("usage: foo [-b|--bar] [-h] [--version]"),
+  br,
+  dl([
+    [
+      "-b, --bar",
+      "Foo bar baz."
+    ],
+    [
+      "-h, --help",
+      "Print this help message and exit.",
+    ],
+    [
+      "--version",
+      "Print the version number and exit."
+    ]
+  ]),
+  br,
+  text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
+])(style)
+
+
+
+console.log('foo5', foo5)
+console.log('foo7', foo7)
+
+
+console.log('foo0 === foo1', foo0 === foo1)
+console.log('foo1 === foo2', foo1 === foo2)
+console.log('foo2 === foo3', foo2 === foo3)
+console.log('foo3 === foo4', foo3 === foo4)
+console.log('foo4 === foo5', foo4 === foo5)
+console.log('foo5 === foo6', foo5 === foo6)
+console.log('foo6 === foo7', foo6 === foo7)
+console.log('foo7 === foo8', foo7 === foo8)
+
+
+
+
+
+// [A] => String
+function usage (toStrings = []) {
+  return (options = {}) => toStrings.map(toString => toString(options)).join('')
+}
+
+
+
+// A => String
+function br (options = {}) {
+  return line()(options)
+}
+
+// A => String
+function line (text = '') {
+  return ({line: {width} = {}} = {}) => text.padEnd(width) + '\n'
+}
+
+// A => String
+function lines (strings = []) {
+  return (options = {}) => strings.map(string => line(string)(options)).join('')
+}
+
+// A => String
+function cols (columns = [], id = undefined) {
+  // make sure options are long enough for all elements or have default options available
+  return ({cols = [], [id]: idCols = undefined} = {}) => {
+    const length = columns.reduce((max, column) => Math.max(max, column.length), 0)
+  
+    const lines = []
+
+    for (let i = 0; i < length; i++) {
+      let line = ''
+
+      for (let j = 0; j < columns.length; j++) {
+        const text = columns[j][i] || ''
+
+        const width        = ((idCols || cols)[j] || {}).width
+        const paddingRight = ((idCols || cols)[j] || {}).paddingRight || 0
+
+        line += text.padEnd(width) + ''.padEnd(paddingRight)
+      }
+
+      lines.push(line + '\n')
+    }
+
+    return lines.join('')
+  }
+}
+
+
+
+// B => A
+function text (string = '') {
+  return (options = {}) => {
+    const {line: {width} = {}} = options
+
+    const words = splitWords(string)
+
+    const strings = []
+    let line      = ''
+
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i]
+
+      const lineFull = (line + word).length > width
+      
+      if (lineFull) {
+        strings.push(line)
+        line = word
+      } else {
+        line += word
+      }
+    }
+
+    strings.push(line)
+
+    return lines(strings)(options)
+  }
+}
+
+// B => A
+function dl (items = [], id = undefined) {
+  return (options = {}) => {
+    const {cols: COLS, [id]: idCols = undefined} = options
+
+    const titleColWidth = ((idCols || COLS)[0] || {}).width // MAY BE UNDEFINED!
+    const descColWidth  = ((idCols || COLS)[1] || {}).width // MAY BE UNDEFINED!
+
+    const titleCol = []
+    const descCol  = []
+
+    for (let i = 0; i < items.length; i++) {
+      const [title, desc] = items[i]
+
+      const titleWords = splitWords(title)
+      const descWords  = splitWords(desc)
+
+      let iTitle = 0
+      let iDesc  = 0
+
+      let titleRow = ''
+      let descRow  = ''
+
+      while (iTitle < titleWords.length || iDesc < descWords.length) {
+        const titleWord = titleWords[iTitle] || ''
+        const descWord  = descWords[iDesc]   || ''
+
+        const titleFull = iTitle >= titleWords.length || (titleRow + titleWord).length > titleColWidth
+        const descFull  = iDesc  >= descWords.length  || (descRow  + descWord).length  > descColWidth
+
+        if (titleFull && descFull) {
+          titleCol.push(titleRow)
+          titleRow = titleWord !== ' ' ? titleWord : ''
+          iTitle++
+
+          descCol.push(descRow)
+          descRow  = descWord  !== ' ' ? descWord  : ''
+          iDesc++
+        }
+        
+        if (!titleFull) {
+          titleRow += titleWord
+          iTitle++
+        }
+        
+        if (!descFull) {
+          descRow += descWord
+          iDesc++
+        }
+      }
+
+      titleCol.push(titleRow)
+      descCol.push(descRow)
+    }
+
+    return cols([titleCol, descCol], id)(options)
+  }
+}
+
+
+
+function splitWords (string) {
+  return string.split(/(\s+)/g)
+}
