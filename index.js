@@ -511,6 +511,63 @@ const exCStyle = {
 
 
 
+const exC0 = (
+  'NAME                                                                            \n' +
+  '      git-mv - Move or rename a file, a directory, or a symlink                 \n' +
+  '                                                                                \n' +
+  'SYNOPSIS                                                                        \n' +
+  '      git mv <options>... <args>...                                             \n' +
+  '                                                                                \n' +
+  '                                                                                \n' +
+  'DESCRIPTION                                                                     \n' +
+  '      Move or rename a file, directory or symlink.                              \n' +
+  '                                                                                \n' +
+  '          git mv [-v] [-f] [-n] [-k] <source> <destination>                     \n' +
+  '          git mv [-v] [-f] [-n] [-k] <source> ... <destination directory>       \n' +
+  '                                                                                \n' +
+  '      In the first form, it renames <source>, which must exist and be either a  \n' +
+  '      file, symlink or directory, to <destination>. In the second form, the last\n' +
+  '      argument has to be an existing directory; the given sources will be moved \n' +
+  '      into this directory.                                                      \n' +
+  '                                                                                \n' +
+  '      The index is updated after successful completion, but the change must     \n' +
+  '      still be committed.                                                       \n' +
+  '                                                                                \n' +
+  'OPTIONS                                                                         \n' +
+  '      -f, --force                                                               \n' +
+  '          Force renaming or moving of a file even if the target exists          \n' +
+  '                                                                                \n' +
+  '      -k                                                                        \n' +
+  '          Skip move or rename actions which would lead to an error condition. An\n' +
+  '          error happens when a source is neither existing nor controlled by Git,\n' +
+  '          or when it would overwrite an existing file unless -f is given.       \n' +
+  '                                                                                \n' +
+  '      -n, --dry-run                                                             \n' +
+  '          Do nothing; only show what would happen                               \n' +
+  '                                                                                \n' +
+  '      -v, --verbose                                                             \n' +
+  '          Report the names of files as they are moved.                          \n' +
+  '                                                                                \n' +
+  'SUBMODULES                                                                      \n' +
+  '      Moving a submodule using a gitfile (which means they were cloned with a   \n' +
+  '      Git version 1.7.8 or newer) will update the gitfile and core.worktree     \n' +
+  '      setting to make the submodule work in the new location. It also will      \n' +
+  '      attempt to update the submodule.<name>.path setting in the gitmodules(5)  \n' +
+  '      file and stage that file (unless -n is used).                             \n' +
+  '                                                                                \n' +
+  'BUGS                                                                            \n' +
+  '      Each time a superproject update moves a populated submodule (e.g. when    \n' +
+  '      switching between commits before and after the move) a stale submodule    \n' +
+  '      checkout will remain in the old location and an empty directory will      \n' +
+  '      appear in the new location. To populate the submodule again in the new    \n' +
+  '      location the user will have to run "git submodule update" afterwards.     \n' +
+  '      Removing the old directory is only safe when it uses a gitfile, as        \n' +
+  '      otherwise the history of the submodule will be deleted too. Both steps    \n' +
+  '      will be obsolete when recursive submodule update has been implemented.    \n' +
+  '                                                                                \n' +
+  'GIT                                                                             \n' +
+  '      Part of the git(1) suite                                                  \n'
+)
 
 
 // [A] => String
