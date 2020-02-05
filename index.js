@@ -335,12 +335,33 @@ const foo12 = usage([
   () => text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(opts2)(style)
 
+const foo13 = usage([
+  usageText("foo"),
+  () => br(),
+  () => dl([
+    [
+      "-b, --bar",
+      "Foo bar baz. [number]"
+    ],
+    [
+      "-h, --help",
+      "Print this help message and exit. [flag]",
+    ],
+    [
+      "--version",
+      "Print the version number and exit. [flag]"
+    ]
+  ]),
+  () => br(),
+  () => text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
+])(opts2)(style)
 
 
-console.log('foo5')
-console.log(foo5)
+
 console.log('foo12')
 console.log(foo12)
+console.log('foo13')
+console.log(foo13)
 
 
 console.log('foo0  === foo1',  foo0  === foo1)
@@ -355,6 +376,7 @@ console.log('foo8  === foo9',  foo8  === foo9)
 console.log('foo9  === foo10', foo9  === foo10)
 console.log('foo10 === foo11', foo10 === foo11)
 console.log('foo11 === foo12', foo11 === foo12)
+console.log('foo12 === foo13', foo12 === foo13)
 
 
 
@@ -515,6 +537,19 @@ function dl (items = [], id = undefined) {
     }
 
     return cols([titleCol, descCol], id)(style)
+  }
+}
+
+
+
+// The following functions automatically deal with strings that contains opts
+
+function usageText (programName = '') {
+  return (opts = []) => {
+    const argsString  = ({args = []}) => '[' + args.join('|') + ']'
+    const argsStrings = opts.map(argsString).join(' ')
+
+    return text(programName + ' ' + argsStrings)
   }
 }
 
