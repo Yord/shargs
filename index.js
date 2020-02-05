@@ -488,6 +488,24 @@ const exB2 = usage([
   space(),
   note("'git help -a' and 'git help -g' list available subcommands and some concept guides. See 'git help <command>' or 'git help <concept>' to read about a specific subcommand or concept.")
 ])(exBOpts)(exBStyle)
+
+
+
+console.log('exB0')
+console.log(exB0)
+console.log('exB2')
+console.log(exB2)
+
+
+
+console.log('exB0  === exB1',  exB0  === exB1)
+console.log('exB1  === exB2',  exB1  === exB2)
+//console.log('exB2  === exB3',  exB2  === exB3)
+
+
+
+
+
 // [A] => String
 function layout (toStrings = []) {
   return (style = {}) => toStrings.map(toString => toString(style)).join('')
