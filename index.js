@@ -216,7 +216,10 @@ const foo7 = usage([
     ]
   ]),
   line(),
-  text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
+  texts([
+    "Copyright (c) 2020, Philipp Wille, all",
+    "rights reserved."
+  ])
 ])(style)
 
 const foo8 = usage([
@@ -237,10 +240,54 @@ const foo8 = usage([
     ]
   ]),
   line(),
-  text("Copyright (c) 2020, Philipp Wille, all rights reserved.", 'bar')
+  texts([
+    "Copyright (c) 2020, Philipp Wille, all rights reserved."
+  ])
 ])(style)
 
 const foo9 = usage([
+  text("usage: foo [-b|--bar] [-h] [--version]"),
+  line(),
+  dl([
+    [
+      "-b, --bar",
+      "Foo bar baz."
+    ],
+    [
+      "-h, --help",
+      "Print this help message and exit.",
+    ],
+    [
+      "--version",
+      "Print the version number and exit."
+    ]
+  ]),
+  line(),
+  text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
+])(style)
+
+const foo10 = usage([
+  text("usage: foo [-b|--bar] [-h] [--version]"),
+  line(),
+  dl([
+    [
+      "-b, --bar",
+      "Foo bar baz."
+    ],
+    [
+      "-h, --help",
+      "Print this help message and exit.",
+    ],
+    [
+      "--version",
+      "Print the version number and exit."
+    ]
+  ]),
+  line(),
+  text("Copyright (c) 2020, Philipp Wille, all rights reserved.", 'bar')
+])(style)
+
+const foo11 = usage([
   text("usage: foo [-b|--bar] [-h] [--version]"),
   br(),
   dl([
@@ -267,15 +314,17 @@ console.log('foo5', foo5)
 console.log('foo7', foo7)
 
 
-console.log('foo0 === foo1', foo0 === foo1)
-console.log('foo1 === foo2', foo1 === foo2)
-console.log('foo2 === foo3', foo2 === foo3)
-console.log('foo3 === foo4', foo3 === foo4)
-console.log('foo4 === foo5', foo4 === foo5)
-console.log('foo5 === foo6', foo5 === foo6)
-console.log('foo6 === foo7', foo6 === foo7)
-console.log('foo7 === foo8', foo7 === foo8)
-console.log('foo8 === foo9', foo8 === foo9)
+console.log('foo0  === foo1',  foo0  === foo1)
+console.log('foo1  === foo2',  foo1  === foo2)
+console.log('foo2  === foo3',  foo2  === foo3)
+console.log('foo3  === foo4',  foo3  === foo4)
+console.log('foo4  === foo5',  foo4  === foo5)
+console.log('foo5  === foo6',  foo5  === foo6)
+console.log('foo6  === foo7',  foo6  === foo7)
+console.log('foo7  === foo8',  foo7  === foo8)
+console.log('foo8  === foo9',  foo8  === foo9)
+console.log('foo9  === foo10', foo9  === foo10)
+console.log('foo10 === foo11', foo10 === foo11)
 
 
 
@@ -331,6 +380,11 @@ function cols (columns = [], id = undefined) {
 }
 
 
+
+// B => String
+function texts (strings = [], id = undefined) {
+  return (options = {}) => strings.map(string => text(string, id)(options)).join('')
+}
 
 // B => A
 function text (STRING = '', id = undefined) {
