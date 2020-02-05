@@ -337,6 +337,8 @@ function usage (toStrings = []) {
 
 
 
+// The following functions automatically deal with line breaks
+
 // A => String
 function br (id = undefined) {
   return (options = {}) => line('', id)(options)
@@ -352,16 +354,22 @@ function lines (strings = [], id = undefined) {
   return (options = {}) => strings.map(string => line(string, id)(options)).join('')
 }
 
+
+
+// The following functions automatically deal with organizing text into columns
+
 // A => String
 function cols (columns = [], id = undefined) {
   // make sure options are long enough for all elements or have default options available
-  return ({cols = [], [id]: idCols = undefined} = {}) => {
+  return (options = {}) => {
+    const {cols = [], [id]: idCols = undefined} = options
+
     const length = columns.reduce((max, column) => Math.max(max, column.length), 0)
   
-    const lines = []
+    const strings = []
 
     for (let i = 0; i < length; i++) {
-      let line = ''
+      let string = ''
 
       for (let j = 0; j < columns.length; j++) {
         const text = columns[j][i] || ''
@@ -369,17 +377,19 @@ function cols (columns = [], id = undefined) {
         const width        = ((idCols || cols)[j] || {}).width
         const paddingRight = ((idCols || cols)[j] || {}).paddingRight || 0
 
-        line += text.padEnd(width) + ''.padEnd(paddingRight)
+        string += text.padEnd(width) + ''.padEnd(paddingRight)
       }
 
-      lines.push(line + '\n')
+      strings.push(string)
     }
 
-    return lines.join('')
+    return lines(strings, id)(options)
   }
 }
 
 
+
+// The following functions automatically deal with strings that are longer than the width
 
 // B => String
 function texts (strings = [], id = undefined) {
