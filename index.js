@@ -64,9 +64,9 @@ const style = {
 }
 
 const opts2 = [
-  number('bar',     ['-b', '--bar']),
-  flag(  'help',    ['-h', '--help']),
-  flag(  'version', ['--version'])
+  number('bar',     ['-b', '--bar'],  {desc: 'Foo bar baz.'}),
+  flag(  'help',    ['-h', '--help'], {desc: 'Print this help message and exit.'}),
+  flag(  'version', ['--version'],    {desc: 'Print the version number and exit.'})
 ]
 
 
@@ -356,12 +356,20 @@ const foo13 = usage([
   () => text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(opts2)(style)
 
+const foo14 = usage([
+  usageText("foo"),
+  () => br(),
+  dlOpts,
+  () => br(),
+  () => text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
+])(opts2)(style)
 
 
-console.log('foo12')
-console.log(foo12)
+
 console.log('foo13')
 console.log(foo13)
+console.log('foo14')
+console.log(foo14)
 
 
 console.log('foo0  === foo1',  foo0  === foo1)
@@ -377,6 +385,7 @@ console.log('foo9  === foo10', foo9  === foo10)
 console.log('foo10 === foo11', foo10 === foo11)
 console.log('foo11 === foo12', foo11 === foo12)
 console.log('foo12 === foo13', foo12 === foo13)
+console.log('foo13 === foo14', foo13 === foo14)
 
 
 
@@ -544,13 +553,24 @@ function dl (items = [], id = undefined) {
 
 // The following functions automatically deal with strings that contains opts
 
-function usageText (programName = '') {
+function usageText (programName = '', id = undefined) {
   return (opts = []) => {
     const argsString  = ({args = []}) => '[' + args.join('|') + ']'
     const argsStrings = opts.map(argsString).join(' ')
 
-    return text(programName + ' ' + argsStrings)
+    return text(programName + ' ' + argsStrings, id)
   }
+}
+
+function dlOpts (opts = [], id = undefined) {
+  const items = (
+    opts
+    .filter(({types}) => typeof types !== 'undefined' && types !== null) // Filter all commands
+    .map(opt => ({types} = opt, types.length === 0 ? {...opt, types: ['flag']} : opt))
+    .map(({args, desc, types}) => [args.join(', '), desc + ' [' + types.join(', ') + ']'])
+  )
+
+  return dl(items, id)
 }
 
 
