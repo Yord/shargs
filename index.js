@@ -63,6 +63,12 @@ const style = {
   }
 }
 
+const opts2 = [
+  number('bar',     ['-b', '--bar']),
+  flag(  'help',    ['-h', '--help']),
+  flag(  'version', ['--version'])
+]
+
 
 
 const foo0 = (
@@ -308,12 +314,33 @@ const foo11 = layout([
   text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(style)
 
+const foo12 = usage([
+  () => text("foo [-b|--bar] [-h|--help] [--version]"),
+  () => br(),
+  () => dl([
+    [
+      "-b, --bar",
+      "Foo bar baz. [number]"
+    ],
+    [
+      "-h, --help",
+      "Print this help message and exit. [flag]",
+    ],
+    [
+      "--version",
+      "Print the version number and exit. [flag]"
+    ]
+  ]),
+  () => br(),
+  () => text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
+])(opts2)(style)
+
 
 
 console.log('foo5')
 console.log(foo5)
-console.log('foo7')
-console.log(foo7)
+console.log('foo12')
+console.log(foo12)
 
 
 console.log('foo0  === foo1',  foo0  === foo1)
@@ -327,6 +354,7 @@ console.log('foo7  === foo8',  foo7  === foo8)
 console.log('foo8  === foo9',  foo8  === foo9)
 console.log('foo9  === foo10', foo9  === foo10)
 console.log('foo10 === foo11', foo10 === foo11)
+console.log('foo11 === foo12', foo11 === foo12)
 
 
 
@@ -335,6 +363,10 @@ console.log('foo10 === foo11', foo10 === foo11)
 // [A] => String
 function layout (toStrings = []) {
   return (options = {}) => toStrings.map(toString => toString(options)).join('')
+}
+
+function usage (toStrings = []) {
+  return (opts = []) => (style = {}) => layout(toStrings.map(toString => toString(opts)))(style)
 }
 
 
