@@ -590,7 +590,7 @@ function br (id = undefined) {
 
 // A => String
 function line (text = '', id = undefined) {
-  return ({line = {}, [id]: idLine} = {}) => text.padEnd((idLine || line).width) + '\n'
+  return ({line = {}, [id]: idLine} = {}) => ''.padStart((idLine || line).padStart) + text.padEnd((idLine || line).width) + '\n'
 }
 
 // A => String
