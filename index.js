@@ -362,7 +362,7 @@ console.log('foo11 === foo12', foo11 === foo12)
 
 // [A] => String
 function layout (toStrings = []) {
-  return (options = {}) => toStrings.map(toString => toString(options)).join('')
+  return (style = {}) => toStrings.map(toString => toString(style)).join('')
 }
 
 function usage (toStrings = []) {
@@ -375,7 +375,7 @@ function usage (toStrings = []) {
 
 // A => String
 function br (id = undefined) {
-  return (options = {}) => line('', id)(options)
+  return (style = {}) => line('', id)(style)
 }
 
 // A => String
@@ -385,7 +385,7 @@ function line (text = '', id = undefined) {
 
 // A => String
 function lines (strings = [], id = undefined) {
-  return (options = {}) => strings.map(string => line(string, id)(options)).join('')
+  return (style = {}) => strings.map(string => line(string, id)(style)).join('')
 }
 
 
@@ -394,9 +394,9 @@ function lines (strings = [], id = undefined) {
 
 // A => String
 function cols (columns = [], id = undefined) {
-  // make sure options are long enough for all elements or have default options available
-  return (options = {}) => {
-    const {cols = [], [id]: idCols = undefined} = options
+  // make sure cols are long enough for all elements or have default cols available
+  return (style = {}) => {
+    const {cols = [], [id]: idCols = undefined} = style
 
     const length = columns.reduce((max, column) => Math.max(max, column.length), 0)
   
@@ -417,7 +417,7 @@ function cols (columns = [], id = undefined) {
       strings.push(string)
     }
 
-    return lines(strings, id)(options)
+    return lines(strings, id)(style)
   }
 }
 
@@ -427,13 +427,13 @@ function cols (columns = [], id = undefined) {
 
 // B => String
 function texts (strings = [], id = undefined) {
-  return (options = {}) => strings.map(string => text(string, id)(options)).join('')
+  return (style = {}) => strings.map(string => text(string, id)(style)).join('')
 }
 
 // B => A
 function text (STRING = '', id = undefined) {
-  return (options = {}) => {
-    const {line = {}, [id]: idLine} = options
+  return (style = {}) => {
+    const {line = {}, [id]: idLine} = style
 
     const words = splitWords(STRING)
 
@@ -455,14 +455,14 @@ function text (STRING = '', id = undefined) {
 
     strings.push(string)
 
-    return lines(strings, id)(options)
+    return lines(strings, id)(style)
   }
 }
 
 // B => A
 function dl (items = [], id = undefined) {
-  return (options = {}) => {
-    const {cols: COLS, [id]: idCols = undefined} = options
+  return (style = {}) => {
+    const {cols: COLS, [id]: idCols = undefined} = style
 
     const titleColWidth = ((idCols || COLS)[0] || {}).width // MAY BE UNDEFINED!
     const descColWidth  = ((idCols || COLS)[1] || {}).width // MAY BE UNDEFINED!
@@ -514,7 +514,7 @@ function dl (items = [], id = undefined) {
       descCol.push(descRow)
     }
 
-    return cols([titleCol, descCol], id)(options)
+    return cols([titleCol, descCol], id)(style)
   }
 }
 
