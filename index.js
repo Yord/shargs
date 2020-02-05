@@ -569,6 +569,71 @@ const exC0 = (
   '      Part of the git(1) suite                                                  \n'
 )
 
+const exC1 = layout([
+  line('NAME', 'h1'),
+  line('git-mv - Move or rename a file, a directory, or a symlink'),
+  br(),
+  line('SYNOPSIS', 'h1'),
+  line('git mv <options>... <args>...'),
+  br(),
+  br(),
+  line('DESCRIPTION', 'h1'),
+  line('Move or rename a file, directory or symlink.'),
+  br(),
+  line('git mv [-v] [-f] [-n] [-k] <source> <destination>', 'tab'),
+  line('git mv [-v] [-f] [-n] [-k] <source> ... <destination directory>', 'tab'),
+  br(),
+  line('In the first form, it renames <source>, which must exist and be either a'),
+  line('file, symlink or directory, to <destination>. In the second form, the last'),
+  line('argument has to be an existing directory; the given sources will be moved'),
+  line('into this directory.'),
+  br(),
+  line('The index is updated after successful completion, but the change must'),
+  line('still be committed.'),
+  br(),
+  line('OPTIONS', 'h1'),
+  line('-f, --force'),
+  line('Force renaming or moving of a file even if the target exists', 'tab'),
+  br(),
+  line('-k'),
+  line('Skip move or rename actions which would lead to an error condition. An', 'tab'),
+  line('error happens when a source is neither existing nor controlled by Git,', 'tab'),
+  line('or when it would overwrite an existing file unless -f is given.', 'tab'),
+  br(),
+  line('-n, --dry-run'),
+  line('Do nothing; only show what would happen', 'tab'),
+  br(),
+  line('-v, --verbose'),
+  line('Report the names of files as they are moved.', 'tab'),
+  br(),
+  line('SUBMODULES', 'h1'),
+  line('Moving a submodule using a gitfile (which means they were cloned with a'),
+  line('Git version 1.7.8 or newer) will update the gitfile and core.worktree'),
+  line('setting to make the submodule work in the new location. It also will'),
+  line('attempt to update the submodule.<name>.path setting in the gitmodules(5)'),
+  line('file and stage that file (unless -n is used).'),
+  br(),
+  line('BUGS', 'h1'),
+  line('Each time a superproject update moves a populated submodule (e.g. when'),
+  line('switching between commits before and after the move) a stale submodule'),
+  line('checkout will remain in the old location and an empty directory will'),
+  line('appear in the new location. To populate the submodule again in the new'),
+  line('location the user will have to run "git submodule update" afterwards.'),
+  line('Removing the old directory is only safe when it uses a gitfile, as'),
+  line('otherwise the history of the submodule will be deleted too. Both steps'),
+  line('will be obsolete when recursive submodule update has been implemented.'),
+  br(),
+  line('GIT', 'h1'),
+  line('Part of the git(1) suite')
+])(exCStyle)
+
+console.log('exC1')
+console.log(exC1)
+
+console.log('exC0  === exC1',  exC0  === exC1)
+//console.log('exC1  === exC2',  exC1  === exC2)
+
+
 
 // [A] => String
 function layout (toStrings = []) {
