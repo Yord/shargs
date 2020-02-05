@@ -723,7 +723,7 @@ function text (STRING = '', id = undefined) {
       
       if (lineFull) {
         strings.push(string)
-        string = word
+        string = word === ' ' ? '' : word
       } else {
         string += word
       }
