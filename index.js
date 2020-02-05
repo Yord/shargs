@@ -437,6 +437,25 @@ const exBOpts = [
   command('help',    ['help'])
 ]
 
+
+
+const exB0 = (
+  "git [--version] [--help] <command> [args]                                       \n" +
+  "                                                                                \n" +
+  "These are common Git commands used in various situations:                       \n" +
+  "                                                                                \n" +
+  "start a working area (see also: git help tutorial)                              \n" +
+  "   clone      Clone a repository into a new directory                           \n" +
+  "   init       Create an empty Git repository or reinitialize an existing one    \n" +
+  "                                                                                \n" +
+  "work on the current change (see also: git help everyday)                        \n" +
+  "   add        Add file contents to the index                                    \n" +
+  "   mv         Move or rename a file, a directory, or a symlink                  \n" +
+  "                                                                                \n" +
+  "'git help -a' and 'git help -g' list available subcommands and some concept     \n" +
+  "guides. See 'git help <command>' or 'git help <concept>' to read about a        \n" +
+  "specific subcommand or concept.                                                 \n"
+)
 // [A] => String
 function layout (toStrings = []) {
   return (style = {}) => toStrings.map(toString => toString(style)).join('')
