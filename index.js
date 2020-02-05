@@ -672,13 +672,13 @@ function usageText (start = '', end = '', id = undefined) {
   }
 }
 
-function dlOpts (id = undefined) {
+function dlOpts (filter = ({types}) => typeof types !== 'undefined' && types !== null, id = undefined) {  // Filter all commands
   return (opts = []) => {
     const items = (
       opts
-      .filter(({types}) => typeof types !== 'undefined' && types !== null) // Filter all commands
-      .map(opt => ({types} = opt, types.length === 0 ? {...opt, types: ['flag']} : opt))
-      .map(({args, desc, types}) => [args.join(', '), desc + ' [' + types.join(', ') + ']'])
+      .filter(filter)
+      .map(opt => ({types} = opt, types !== null && types.length === 0 ? {...opt, types: ['flag']} : opt))
+      .map(({args, desc, types}) => [args.join(', '), desc + (types === null ? '' : ' [' + types.join(', ') + ']')])
     )
   
     return dl(items, id)
