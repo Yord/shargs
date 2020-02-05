@@ -95,7 +95,7 @@ const foo1 = layout([
   () => "                                        \n",
   () => "Copyright (c) 2020, Philipp Wille, all  \n",
   () => "rights reserved.                        \n"
-])(style)
+])()
 
 const foo2 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
