@@ -417,6 +417,25 @@ console.log('exA16 === exA17', exA16 === exA17)
 
 
 
+const exBStyle = {
+  line: {
+    width: 80
+  },
+  cols: [
+    {padStart: 3, width: 11},
+    {width: 66}
+  ]
+}
+
+const exBOpts = [
+  flag(   'version', ['--version']),
+  flag(   'githelp', ['--help']),
+  command('clone',   ['clone'], {desc: 'Clone a repository into a new directory'}),
+  command('init',    ['init'],  {desc: 'Create an empty Git repository or reinitialize an existing one'}),
+  command('add',     ['add'],   {desc: 'Add file contents to the index'}),
+  command('mv',      ['mv'],    {desc: 'Move or rename a file, a directory, or a symlink'}),
+  command('help',    ['help'])
+]
 
 // [A] => String
 function layout (toStrings = []) {
