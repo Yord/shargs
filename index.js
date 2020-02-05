@@ -57,7 +57,10 @@ const style = {
   foo: [
     {width:  9, paddingRight: 2}, // {width: width/cols = 40}
     {width: 28, paddingRight: 1}  // {width: width/cols = 40}
-  ]
+  ],
+  bar: {
+    width: 40
+  }
 }
 
 
@@ -218,7 +221,7 @@ const foo7 = usage([
 
 const foo8 = usage([
   text("usage: foo [-b|--bar] [-h] [--version]"),
-  br,
+  line(),
   dl([
     [
       "-b, --bar",
@@ -233,7 +236,28 @@ const foo8 = usage([
       "Print the version number and exit."
     ]
   ]),
-  br,
+  line(),
+  text("Copyright (c) 2020, Philipp Wille, all rights reserved.", 'bar')
+])(style)
+
+const foo9 = usage([
+  text("usage: foo [-b|--bar] [-h] [--version]"),
+  br(),
+  dl([
+    [
+      "-b, --bar",
+      "Foo bar baz."
+    ],
+    [
+      "-h, --help",
+      "Print this help message and exit.",
+    ],
+    [
+      "--version",
+      "Print the version number and exit."
+    ]
+  ]),
+  br(),
   text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(style)
 
@@ -251,6 +275,7 @@ console.log('foo4 === foo5', foo4 === foo5)
 console.log('foo5 === foo6', foo5 === foo6)
 console.log('foo6 === foo7', foo6 === foo7)
 console.log('foo7 === foo8', foo7 === foo8)
+console.log('foo8 === foo9', foo8 === foo9)
 
 
 
@@ -264,18 +289,18 @@ function usage (toStrings = []) {
 
 
 // A => String
-function br (options = {}) {
-  return line()(options)
+function br (id = undefined) {
+  return (options = {}) => line('', id)(options)
 }
 
 // A => String
-function line (text = '') {
-  return ({line: {width} = {}} = {}) => text.padEnd(width) + '\n'
+function line (text = '', id = undefined) {
+  return ({line = {}, [id]: idLine} = {}) => text.padEnd((idLine || line).width) + '\n'
 }
 
 // A => String
-function lines (strings = []) {
-  return (options = {}) => strings.map(string => line(string)(options)).join('')
+function lines (strings = [], id = undefined) {
+  return (options = {}) => strings.map(string => line(string, id)(options)).join('')
 }
 
 // A => String
@@ -308,31 +333,31 @@ function cols (columns = [], id = undefined) {
 
 
 // B => A
-function text (string = '') {
+function text (STRING = '', id = undefined) {
   return (options = {}) => {
-    const {line: {width} = {}} = options
+    const {line = {}, [id]: idLine} = options
 
-    const words = splitWords(string)
+    const words = splitWords(STRING)
 
     const strings = []
-    let line      = ''
+    let string    = ''
 
     for (let i = 0; i < words.length; i++) {
       const word = words[i]
 
-      const lineFull = (line + word).length > width
+      const lineFull = (string + word).length > (idLine || line).width
       
       if (lineFull) {
-        strings.push(line)
-        line = word
+        strings.push(string)
+        string = word
       } else {
-        line += word
+        string += word
       }
     }
 
-    strings.push(line)
+    strings.push(string)
 
-    return lines(strings)(options)
+    return lines(strings, id)(options)
   }
 }
 
