@@ -673,13 +673,60 @@ const exC2 = layout([
   text('Part of the git(1) suite')
 ])(exCStyle)
 
+const exC3 = usage([
+  note('NAME', 'h1'),
+  note('git-mv - Move or rename a file, a directory, or a symlink'),
+  space(),
+  note('SYNOPSIS', 'h1'),
+  note('git mv <options>... <args>...'),
+  space(),
+  space(),
+  note('DESCRIPTION', 'h1'),
+  note('Move or rename a file, directory or symlink.'),
+  space(),
+  notes(
+    [
+      'git mv [-v] [-f] [-n] [-k] <source> <destination>',
+      'git mv [-v] [-f] [-n] [-k] <source> ... <destination directory>'
+    ],
+    'tab'
+  ),
+  space(),
+  note('In the first form, it renames <source>, which must exist and be either a file, symlink or directory, to <destination>. In the second form, the last argument has to be an existing directory; the given sources will be moved into this directory.'),
+  space(),
+  note('The index is updated after successful completion, but the change must still be committed.'),
+  space(),
+  note('OPTIONS', 'h1'),
+  note('-f, --force'),
+  note('Force renaming or moving of a file even if the target exists', 'tab'),
+  space(),
+  note('-k'),
+  note('Skip move or rename actions which would lead to an error condition. An error happens when a source is neither existing nor controlled by Git, or when it would overwrite an existing file unless -f is given.', 'tab'),
+  space(),
+  note('-n, --dry-run'),
+  note('Do nothing; only show what would happen', 'tab'),
+  space(),
+  note('-v, --verbose'),
+  note('Report the names of files as they are moved.', 'tab'),
+  space(),
+  note('SUBMODULES', 'h1'),
+  note('Moving a submodule using a gitfile (which means they were cloned with a Git version 1.7.8 or newer) will update the gitfile and core.worktree setting to make the submodule work in the new location. It also will attempt to update the submodule.<name>.path setting in the gitmodules(5) file and stage that file (unless -n is used).'),
+  space(),
+  note('BUGS', 'h1'),
+  note('Each time a superproject update moves a populated submodule (e.g. when switching between commits before and after the move) a stale submodule checkout will remain in the old location and an empty directory will appear in the new location. To populate the submodule again in the new location the user will have to run "git submodule update" afterwards. Removing the old directory is only safe when it uses a gitfile, as otherwise the history of the submodule will be deleted too. Both steps will be obsolete when recursive submodule update has been implemented.'),
+  space(),
+  note('GIT', 'h1'),
+  note('Part of the git(1) suite')
+])()(exCStyle)
 
 
-console.log('exC2')
-console.log(exC2)
+
+console.log('exC3')
+console.log(exC3)
 
 console.log('exC0  === exC1',  exC0  === exC1)
 console.log('exC1  === exC2',  exC1  === exC2)
+console.log('exC2  === exC3',  exC2  === exC3)
 
 
 
