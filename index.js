@@ -66,46 +66,46 @@ const style = {
 
 
 const foo0 = (
-  "usage: foo [-b|--bar] [-h] [--version]  \n" +
+  "foo [-b|--bar] [-h|--help] [--version]  \n" +
   "                                        \n" +
-  "-b, --bar  Foo bar baz.                 \n" +
+  "-b, --bar  Foo bar baz. [number]        \n" +
   "-h,        Print this help message and  \n" +
-  "--help     exit.                        \n" +
+  "--help     exit. [flag]                 \n" +
   "--version  Print the version number and \n" +
-  "           exit.                        \n" +
+  "           exit. [flag]                 \n" +
   "                                        \n" +
   "Copyright (c) 2020, Philipp Wille, all  \n" +
   "rights reserved.                        \n"
 )
 
 const foo1 = usage([
-  () => "usage: foo [-b|--bar] [-h] [--version]  \n",
+  () => "foo [-b|--bar] [-h|--help] [--version]  \n",
   () => "                                        \n",
-  () => "-b, --bar  Foo bar baz.                 \n",
+  () => "-b, --bar  Foo bar baz. [number]        \n",
   () => "-h,        Print this help message and  \n",
-  () => "--help     exit.                        \n",
+  () => "--help     exit. [flag]                 \n",
   () => "--version  Print the version number and \n",
-  () => "           exit.                        \n",
+  () => "           exit. [flag]                 \n",
   () => "                                        \n",
   () => "Copyright (c) 2020, Philipp Wille, all  \n",
   () => "rights reserved.                        \n"
 ])(style)
 
 const foo2 = usage([
-  line("usage: foo [-b|--bar] [-h] [--version]"),
+  line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  line("-b, --bar  Foo bar baz."),
+  line("-b, --bar  Foo bar baz. [number]"),
   line("-h,        Print this help message and"),
-  line("--help     exit."),
+  line("--help     exit. [flag]"),
   line("--version  Print the version number and"),
-  line("           exit."),
+  line("           exit. [flag]"),
   line(),
   line("Copyright (c) 2020, Philipp Wille, all"),
   line("rights reserved.")
 ])(style)
 
 const foo3 = usage([
-  line("usage: foo [-b|--bar] [-h] [--version]"),
+  line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   cols([
     [
@@ -116,11 +116,11 @@ const foo3 = usage([
       ""
     ],
     [
-      "Foo bar baz.",
+      "Foo bar baz. [number]",
       "Print this help message and",
-      "exit.",
+      "exit. [flag]",
       "Print the version number and",
-      "exit.",
+      "exit. [flag]",
     ]
   ]),
   line(),
@@ -129,20 +129,20 @@ const foo3 = usage([
 ])(style)
 
 const foo4 = usage([
-  line("usage: foo [-b|--bar] [-h] [--version]"),
+  line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
     [
       "-b, --bar",
-      "Foo bar baz."
+      "Foo bar baz. [number]"
     ],
     [
       "-h, --help",
-      "Print this help message and exit.",
+      "Print this help message and exit. [flag]",
     ],
     [
       "--version",
-      "Print the version number and exit."
+      "Print the version number and exit. [flag]"
     ]
   ]),
   line(),
@@ -151,20 +151,20 @@ const foo4 = usage([
 ])(style)
 
 const foo5 = usage([
-  line("usage: foo [-b|--bar] [-h] [--version]"),
+  line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
     [
       "-b, --bar",
-      "Foo bar baz."
+      "Foo bar baz. [number]"
     ],
     [
       "-h, --help",
-      "Print this help message and exit.",
+      "Print this help message and exit. [flag]",
     ],
     [
       "--version",
-      "Print the version number and exit."
+      "Print the version number and exit. [flag]"
     ]
   ], 'foo'),
   line(),
@@ -174,21 +174,21 @@ const foo5 = usage([
 
 const foo6 = usage([
   lines([
-    "usage: foo [-b|--bar] [-h] [--version]"
+    "foo [-b|--bar] [-h|--help] [--version]"
   ]),
   line(),
   dl([
     [
       "-b, --bar",
-      "Foo bar baz."
+      "Foo bar baz. [number]"
     ],
     [
       "-h, --help",
-      "Print this help message and exit.",
+      "Print this help message and exit. [flag]",
     ],
     [
       "--version",
-      "Print the version number and exit."
+      "Print the version number and exit. [flag]"
     ]
   ]),
   line(),
@@ -199,20 +199,20 @@ const foo6 = usage([
 ])(style)
 
 const foo7 = usage([
-  text("usage: foo [-b|--bar] [-h] [--version]"),
+  text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
     [
       "-b, --bar",
-      "Foo bar baz."
+      "Foo bar baz. [number]"
     ],
     [
       "-h, --help",
-      "Print this help message and exit.",
+      "Print this help message and exit. [flag]",
     ],
     [
       "--version",
-      "Print the version number and exit."
+      "Print the version number and exit. [flag]"
     ]
   ]),
   line(),
@@ -223,20 +223,20 @@ const foo7 = usage([
 ])(style)
 
 const foo8 = usage([
-  text("usage: foo [-b|--bar] [-h] [--version]"),
+  text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
     [
       "-b, --bar",
-      "Foo bar baz."
+      "Foo bar baz. [number]"
     ],
     [
       "-h, --help",
-      "Print this help message and exit.",
+      "Print this help message and exit. [flag]",
     ],
     [
       "--version",
-      "Print the version number and exit."
+      "Print the version number and exit. [flag]"
     ]
   ]),
   line(),
@@ -246,20 +246,20 @@ const foo8 = usage([
 ])(style)
 
 const foo9 = usage([
-  text("usage: foo [-b|--bar] [-h] [--version]"),
+  text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
     [
       "-b, --bar",
-      "Foo bar baz."
+      "Foo bar baz. [number]"
     ],
     [
       "-h, --help",
-      "Print this help message and exit.",
+      "Print this help message and exit. [flag]",
     ],
     [
       "--version",
-      "Print the version number and exit."
+      "Print the version number and exit. [flag]"
     ]
   ]),
   line(),
@@ -267,20 +267,20 @@ const foo9 = usage([
 ])(style)
 
 const foo10 = usage([
-  text("usage: foo [-b|--bar] [-h] [--version]"),
+  text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
     [
       "-b, --bar",
-      "Foo bar baz."
+      "Foo bar baz. [number]"
     ],
     [
       "-h, --help",
-      "Print this help message and exit.",
+      "Print this help message and exit. [flag]",
     ],
     [
       "--version",
-      "Print the version number and exit."
+      "Print the version number and exit. [flag]"
     ]
   ]),
   line(),
@@ -288,20 +288,20 @@ const foo10 = usage([
 ])(style)
 
 const foo11 = usage([
-  text("usage: foo [-b|--bar] [-h] [--version]"),
+  text("foo [-b|--bar] [-h|--help] [--version]"),
   br(),
   dl([
     [
       "-b, --bar",
-      "Foo bar baz."
+      "Foo bar baz. [number]"
     ],
     [
       "-h, --help",
-      "Print this help message and exit.",
+      "Print this help message and exit. [flag]",
     ],
     [
       "--version",
-      "Print the version number and exit."
+      "Print the version number and exit. [flag]"
     ]
   ]),
   br(),
@@ -310,8 +310,10 @@ const foo11 = usage([
 
 
 
-console.log('foo5', foo5)
-console.log('foo7', foo7)
+console.log('foo5')
+console.log(foo5)
+console.log('foo7')
+console.log(foo7)
 
 
 console.log('foo0  === foo1',  foo0  === foo1)
