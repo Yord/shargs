@@ -364,12 +364,20 @@ const foo14 = usage([
   () => text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(opts2)(style)
 
+const foo15 = usage([
+  usageText("foo"),
+  () => br(),
+  dlOpts,
+  () => br(),
+  note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
+])(opts2)(style)
 
 
-console.log('foo13')
-console.log(foo13)
+
 console.log('foo14')
 console.log(foo14)
+console.log('foo15')
+console.log(foo15)
 
 
 console.log('foo0  === foo1',  foo0  === foo1)
@@ -386,6 +394,7 @@ console.log('foo10 === foo11', foo10 === foo11)
 console.log('foo11 === foo12', foo11 === foo12)
 console.log('foo12 === foo13', foo12 === foo13)
 console.log('foo13 === foo14', foo13 === foo14)
+console.log('foo14 === foo15', foo14 === foo15)
 
 
 
@@ -552,6 +561,10 @@ function dl (items = [], id = undefined) {
 
 
 // The following functions automatically deal with strings that contains opts
+
+function note (string = '', id = undefined) {
+  return () => text(string, id)
+}
 
 function usageText (programName = '', id = undefined) {
   return (opts = []) => {
