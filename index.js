@@ -509,6 +509,13 @@ const exCStyle = {
   }
 }
 
+const exCOpts = [
+  flag('force',   ['-f', '--force'  ], {desc: 'Force renaming or moving of a file even if the target exists'}),
+  flag('k',       ['-k'             ], {desc: 'Skip move or rename actions which would lead to an error condition. An error happens when a source is neither existing nor controlled by Git, or when it would overwrite an existing file unless -f is given.'}),
+  flag('dryRun',  ['-n', '--dry-run'], {desc: 'Do nothing; only show what would happen'}),
+  flag('verbose', ['-v', '--verbose'], {desc: 'Report the names of files as they are moved.'})
+]
+
 
 
 const exC0 = (
