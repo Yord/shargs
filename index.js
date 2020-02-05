@@ -390,12 +390,6 @@ const exA17 = usage([
 
 
 
-console.log('exA0')
-console.log(exA0)
-console.log('exA13')
-console.log(exA13)
-
-
 console.log('exA0  === exA1',  exA0  === exA1)
 console.log('exA1  === exA2',  exA1  === exA2)
 console.log('exA2  === exA3',  exA2  === exA3)
@@ -491,16 +485,11 @@ const exB2 = usage([
 
 
 
-console.log('exB0')
-console.log(exB0)
-console.log('exB2')
-console.log(exB2)
-
-
-
 console.log('exB0  === exB1',  exB0  === exB1)
 console.log('exB1  === exB2',  exB1  === exB2)
-//console.log('exB2  === exB3',  exB2  === exB3)
+
+
+
 
 
 
