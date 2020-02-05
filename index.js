@@ -372,12 +372,20 @@ const foo15 = usage([
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(opts2)(style)
 
+const foo16 = usage([
+  usageText("foo"),
+  note(),
+  dlOpts,
+  note(),
+  note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
+])(opts2)(style)
 
 
-console.log('foo14')
-console.log(foo14)
+
 console.log('foo15')
 console.log(foo15)
+console.log('foo16')
+console.log(foo16)
 
 
 console.log('foo0  === foo1',  foo0  === foo1)
@@ -395,6 +403,7 @@ console.log('foo11 === foo12', foo11 === foo12)
 console.log('foo12 === foo13', foo12 === foo13)
 console.log('foo13 === foo14', foo13 === foo14)
 console.log('foo14 === foo15', foo14 === foo15)
+console.log('foo15 === foo16', foo15 === foo16)
 
 
 
