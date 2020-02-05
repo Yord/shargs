@@ -433,7 +433,7 @@ function usage (toStrings = []) {
 
 // A => String
 function br (id = undefined) {
-  return (style = {}) => line('', id)(style)
+  return line('', id)
 }
 
 // A => String
