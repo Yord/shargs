@@ -46,24 +46,24 @@ const res = fooParser(opts)({argv})
 
 
 
-const style = {
+const exAStyle = {
   line: {
     width: 40
   },
   cols: [
-    {width:  9, paddingRight: 2}, // {width: width/cols = 40}
+    {width:  9, padEnd: 2}, // {width: width/cols = 40}
     {width: 29}  // {width: width/cols = 40}
   ],
   foo: [
-    {width:  9, paddingRight: 2}, // {width: width/cols = 40}
-    {width: 28, paddingRight: 1}  // {width: width/cols = 40}
+    {width:  9, padEnd: 2}, // {width: width/cols = 40}
+    {width: 28, padEnd: 1}  // {width: width/cols = 40}
   ],
   bar: {
     width: 40
   }
 }
 
-const opts2 = [
+const exAOpts = [
   number('bar',     ['-b', '--bar'],  {desc: 'Foo bar baz.'}),
   flag(  'help',    ['-h', '--help'], {desc: 'Print this help message and exit.'}),
   flag(  'version', ['--version'],    {desc: 'Print the version number and exit.'})
@@ -71,7 +71,7 @@ const opts2 = [
 
 
 
-const foo0 = (
+const exA0 = (
   "foo [-b|--bar] [-h|--help] [--version]  \n" +
   "                                        \n" +
   "-b, --bar  Foo bar baz. [number]        \n" +
@@ -84,7 +84,7 @@ const foo0 = (
   "rights reserved.                        \n"
 )
 
-const foo1 = layout([
+const exA1 = layout([
   () => "foo [-b|--bar] [-h|--help] [--version]  \n",
   () => "                                        \n",
   () => "-b, --bar  Foo bar baz. [number]        \n",
@@ -95,9 +95,9 @@ const foo1 = layout([
   () => "                                        \n",
   () => "Copyright (c) 2020, Philipp Wille, all  \n",
   () => "rights reserved.                        \n"
-])(style)
+])()
 
-const foo2 = layout([
+const exA2 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   line("-b, --bar  Foo bar baz. [number]"),
@@ -108,9 +108,9 @@ const foo2 = layout([
   line(),
   line("Copyright (c) 2020, Philipp Wille, all"),
   line("rights reserved.")
-])(style)
+])(exAStyle)
 
-const foo3 = layout([
+const exA3 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   cols([
@@ -132,12 +132,12 @@ const foo3 = layout([
   line(),
   line("Copyright (c) 2020, Philipp Wille, all"),
   line("rights reserved.")
-])(style)
+])(exAStyle)
 
-const foo4 = layout([
+const exA4 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  dl([
+  list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -154,12 +154,12 @@ const foo4 = layout([
   line(),
   line("Copyright (c) 2020, Philipp Wille, all"),
   line("rights reserved.")
-])(style)
+])(exAStyle)
 
-const foo5 = layout([
+const exA5 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  dl([
+  list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -176,14 +176,14 @@ const foo5 = layout([
   line(),
   line("Copyright (c) 2020, Philipp Wille, all"),
   line("rights reserved.")
-])(style)
+])(exAStyle)
 
-const foo6 = layout([
+const exA6 = layout([
   lines([
     "foo [-b|--bar] [-h|--help] [--version]"
   ]),
   line(),
-  dl([
+  list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -202,12 +202,12 @@ const foo6 = layout([
     "Copyright (c) 2020, Philipp Wille, all",
     "rights reserved."
   ])
-])(style)
+])(exAStyle)
 
-const foo7 = layout([
+const exA7 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  dl([
+  list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -226,12 +226,12 @@ const foo7 = layout([
     "Copyright (c) 2020, Philipp Wille, all",
     "rights reserved."
   ])
-])(style)
+])(exAStyle)
 
-const foo8 = layout([
+const exA8 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  dl([
+  list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -249,12 +249,12 @@ const foo8 = layout([
   texts([
     "Copyright (c) 2020, Philipp Wille, all rights reserved."
   ])
-])(style)
+])(exAStyle)
 
-const foo9 = layout([
+const exA9 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  dl([
+  list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -270,12 +270,12 @@ const foo9 = layout([
   ]),
   line(),
   text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
-])(style)
+])(exAStyle)
 
-const foo10 = layout([
+const exA10 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  dl([
+  list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -291,12 +291,12 @@ const foo10 = layout([
   ]),
   line(),
   text("Copyright (c) 2020, Philipp Wille, all rights reserved.", 'bar')
-])(style)
+])(exAStyle)
 
-const foo11 = layout([
+const exA11 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   br(),
-  dl([
+  list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -312,12 +312,12 @@ const foo11 = layout([
   ]),
   br(),
   text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
-])(style)
+])(exAStyle)
 
-const foo12 = usage([
+const exA12 = usage([
   () => text("foo [-b|--bar] [-h|--help] [--version]"),
   () => br(),
-  () => dl([
+  () => list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -333,12 +333,12 @@ const foo12 = usage([
   ]),
   () => br(),
   () => text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
-])(opts2)(style)
+])(exAOpts)(exAStyle)
 
-const foo13 = usage([
-  usageText("foo"),
+const exA13 = usage([
+  synopsis("foo"),
   () => br(),
-  () => dl([
+  () => list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -354,67 +354,383 @@ const foo13 = usage([
   ]),
   () => br(),
   () => text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
-])(opts2)(style)
+])(exAOpts)(exAStyle)
 
-const foo14 = usage([
-  usageText("foo"),
+const exA14 = usage([
+  synopsis("foo"),
   () => br(),
-  dlOpts(),
+  optsList(),
   () => br(),
   () => text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
-])(opts2)(style)
+])(exAOpts)(exAStyle)
 
-const foo15 = usage([
-  usageText("foo"),
+const exA15 = usage([
+  synopsis("foo"),
   () => br(),
-  dlOpts(),
+  optsList(),
   () => br(),
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
-])(opts2)(style)
+])(exAOpts)(exAStyle)
 
-const foo16 = usage([
-  usageText("foo"),
+const exA16 = usage([
+  synopsis("foo"),
   note(),
-  dlOpts(),
+  optsList(),
   note(),
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
-])(opts2)(style)
+])(exAOpts)(exAStyle)
 
-const foo17 = usage([
-  usageText("foo"),
+const exA17 = usage([
+  synopsis("foo"),
   space(),
-  dlOpts(),
+  optsList(),
   space(),
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
-])(opts2)(style)
+])(exAOpts)(exAStyle)
 
 
 
-console.log('foo16')
-console.log(foo16)
-console.log('foo17')
-console.log(foo17)
+console.log('exA0  === exA1',  exA0  === exA1)
+console.log('exA1  === exA2',  exA1  === exA2)
+console.log('exA2  === exA3',  exA2  === exA3)
+console.log('exA3  === exA4',  exA3  === exA4)
+console.log('exA4  === exA5',  exA4  === exA5)
+console.log('exA5  === exA6',  exA5  === exA6)
+console.log('exA6  === exA7',  exA6  === exA7)
+console.log('exA7  === exA8',  exA7  === exA8)
+console.log('exA8  === exA9',  exA8  === exA9)
+console.log('exA9  === exA10', exA9  === exA10)
+console.log('exA10 === exA11', exA10 === exA11)
+console.log('exA11 === exA12', exA11 === exA12)
+console.log('exA12 === exA13', exA12 === exA13)
+console.log('exA13 === exA14', exA13 === exA14)
+console.log('exA14 === exA15', exA14 === exA15)
+console.log('exA15 === exA16', exA15 === exA16)
+console.log('exA16 === exA17', exA16 === exA17)
 
 
-console.log('foo0  === foo1',  foo0  === foo1)
-console.log('foo1  === foo2',  foo1  === foo2)
-console.log('foo2  === foo3',  foo2  === foo3)
-console.log('foo3  === foo4',  foo3  === foo4)
-console.log('foo4  === foo5',  foo4  === foo5)
-console.log('foo5  === foo6',  foo5  === foo6)
-console.log('foo6  === foo7',  foo6  === foo7)
-console.log('foo7  === foo8',  foo7  === foo8)
-console.log('foo8  === foo9',  foo8  === foo9)
-console.log('foo9  === foo10', foo9  === foo10)
-console.log('foo10 === foo11', foo10 === foo11)
-console.log('foo11 === foo12', foo11 === foo12)
-console.log('foo12 === foo13', foo12 === foo13)
-console.log('foo13 === foo14', foo13 === foo14)
-console.log('foo14 === foo15', foo14 === foo15)
-console.log('foo15 === foo16', foo15 === foo16)
-console.log('foo16 === foo17', foo16 === foo17)
 
 
+const exBStyle = {
+  line: {
+    width: 80
+  },
+  cols: [
+    {padStart: 3, width: 11},
+    {width: 66}
+  ]
+}
+
+const exBOpts = [
+  flag(   'version', ['--version']),
+  flag(   'githelp', ['--help']),
+  command('clone',   ['clone'], {desc: 'Clone a repository into a new directory'}),
+  command('init',    ['init'],  {desc: 'Create an empty Git repository or reinitialize an existing one'}),
+  command('add',     ['add'],   {desc: 'Add file contents to the index'}),
+  command('mv',      ['mv'],    {desc: 'Move or rename a file, a directory, or a symlink'}),
+  command('help',    ['help'])
+]
+
+
+
+const exB0 = (
+  "git [--version] [--help] <command> [args]                                       \n" +
+  "                                                                                \n" +
+  "These are common Git commands used in various situations:                       \n" +
+  "                                                                                \n" +
+  "start a working area (see also: git help tutorial)                              \n" +
+  "   clone      Clone a repository into a new directory                           \n" +
+  "   init       Create an empty Git repository or reinitialize an existing one    \n" +
+  "                                                                                \n" +
+  "work on the current change (see also: git help everyday)                        \n" +
+  "   add        Add file contents to the index                                    \n" +
+  "   mv         Move or rename a file, a directory, or a symlink                  \n" +
+  "                                                                                \n" +
+  "'git help -a' and 'git help -g' list available subcommands and some concept     \n" +
+  "guides. See 'git help <command>' or 'git help <concept>' to read about a        \n" +
+  "specific subcommand or concept.                                                 \n"
+)
+
+const exB1 = layout([
+  line("git [--version] [--help] <command> [args]"),
+  br(),
+  line("These are common Git commands used in various situations:"),
+  br(),
+  line("start a working area (see also: git help tutorial)"),
+  line("   clone      Clone a repository into a new directory"),
+  line("   init       Create an empty Git repository or reinitialize an existing one"),
+  br(),
+  line("work on the current change (see also: git help everyday)"),
+  line("   add        Add file contents to the index"),
+  line("   mv         Move or rename a file, a directory, or a symlink"),
+  br(),
+  line("'git help -a' and 'git help -g' list available subcommands and some concept"),
+  line("guides. See 'git help <command>' or 'git help <concept>' to read about a"),
+  line("specific subcommand or concept.")
+])(exBStyle)
+
+const exB2 = usage([
+  synopsis("git", "<command> [args]"),
+  space(),
+  note("These are common Git commands used in various situations:"),
+  space(),
+  note("start a working area (see also: git help tutorial)"),
+  optsList(({args}) => ['clone', 'init'].some(cmd => args.includes(cmd))),
+  space(),
+  note("work on the current change (see also: git help everyday)"),
+  optsList(({args}) => ['add', 'mv'].some(cmd => args.includes(cmd))),
+  space(),
+  note("'git help -a' and 'git help -g' list available subcommands and some concept guides. See 'git help <command>' or 'git help <concept>' to read about a specific subcommand or concept.")
+])(exBOpts)(exBStyle)
+
+
+
+console.log('exB0  === exB1',  exB0  === exB1)
+console.log('exB1  === exB2',  exB1  === exB2)
+
+
+
+const exCStyle = {
+  line: {
+    padStart: 6,
+    width: 74
+  },
+  cols: [
+    {padStart: 3, width: 11},
+    {width: 66}
+  ],
+  h1: {
+    padStart: 0,
+    width: 80
+  },
+  tab: {
+    padStart: 10,
+    width: 70
+  }
+}
+
+const exCOpts = [
+  flag('force',   ['-f', '--force'  ], {desc: 'Force renaming or moving of a file even if the target exists'}),
+  flag('k',       ['-k'             ], {desc: 'Skip move or rename actions which would lead to an error condition. An error happens when a source is neither existing nor controlled by Git, or when it would overwrite an existing file unless -f is given.'}),
+  flag('dryRun',  ['-n', '--dry-run'], {desc: 'Do nothing; only show what would happen'}),
+  flag('verbose', ['-v', '--verbose'], {desc: 'Report the names of files as they are moved.'})
+]
+
+
+
+const exC0 = (
+  'NAME                                                                            \n' +
+  '      git-mv - Move or rename a file, a directory, or a symlink                 \n' +
+  '                                                                                \n' +
+  'SYNOPSIS                                                                        \n' +
+  '      git mv <options>... <args>...                                             \n' +
+  '                                                                                \n' +
+  '                                                                                \n' +
+  'DESCRIPTION                                                                     \n' +
+  '      Move or rename a file, directory or symlink.                              \n' +
+  '                                                                                \n' +
+  '          git mv [-f] [-k] [-n] [-v] <source> <destination>                     \n' +
+  '          git mv [-f] [-k] [-n] [-v] <source> ... <destination directory>       \n' +
+  '                                                                                \n' +
+  '      In the first form, it renames <source>, which must exist and be either a  \n' +
+  '      file, symlink or directory, to <destination>. In the second form, the last\n' +
+  '      argument has to be an existing directory; the given sources will be moved \n' +
+  '      into this directory.                                                      \n' +
+  '                                                                                \n' +
+  '      The index is updated after successful completion, but the change must     \n' +
+  '      still be committed.                                                       \n' +
+  '                                                                                \n' +
+  'OPTIONS                                                                         \n' +
+  '      -f, --force                                                               \n' +
+  '          Force renaming or moving of a file even if the target exists          \n' +
+  '                                                                                \n' +
+  '      -k                                                                        \n' +
+  '          Skip move or rename actions which would lead to an error condition. An\n' +
+  '          error happens when a source is neither existing nor controlled by Git,\n' +
+  '          or when it would overwrite an existing file unless -f is given.       \n' +
+  '                                                                                \n' +
+  '      -n, --dry-run                                                             \n' +
+  '          Do nothing; only show what would happen                               \n' +
+  '                                                                                \n' +
+  '      -v, --verbose                                                             \n' +
+  '          Report the names of files as they are moved.                          \n' +
+  '                                                                                \n' +
+  'SUBMODULES                                                                      \n' +
+  '      Moving a submodule using a gitfile (which means they were cloned with a   \n' +
+  '      Git version 1.7.8 or newer) will update the gitfile and core.worktree     \n' +
+  '      setting to make the submodule work in the new location. It also will      \n' +
+  '      attempt to update the submodule.<name>.path setting in the gitmodules(5)  \n' +
+  '      file and stage that file (unless -n is used).                             \n' +
+  '                                                                                \n' +
+  'BUGS                                                                            \n' +
+  '      Each time a superproject update moves a populated submodule (e.g. when    \n' +
+  '      switching between commits before and after the move) a stale submodule    \n' +
+  '      checkout will remain in the old location and an empty directory will      \n' +
+  '      appear in the new location. To populate the submodule again in the new    \n' +
+  '      location the user will have to run "git submodule update" afterwards.     \n' +
+  '      Removing the old directory is only safe when it uses a gitfile, as        \n' +
+  '      otherwise the history of the submodule will be deleted too. Both steps    \n' +
+  '      will be obsolete when recursive submodule update has been implemented.    \n' +
+  '                                                                                \n' +
+  'GIT                                                                             \n' +
+  '      Part of the git(1) suite                                                  \n'
+)
+
+const exC1 = layout([
+  line('NAME', 'h1'),
+  line('git-mv - Move or rename a file, a directory, or a symlink'),
+  br(),
+  line('SYNOPSIS', 'h1'),
+  line('git mv <options>... <args>...'),
+  br(),
+  br(),
+  line('DESCRIPTION', 'h1'),
+  line('Move or rename a file, directory or symlink.'),
+  br(),
+  line('git mv [-f] [-k] [-n] [-v] <source> <destination>', 'tab'),
+  line('git mv [-f] [-k] [-n] [-v] <source> ... <destination directory>', 'tab'),
+  br(),
+  line('In the first form, it renames <source>, which must exist and be either a'),
+  line('file, symlink or directory, to <destination>. In the second form, the last'),
+  line('argument has to be an existing directory; the given sources will be moved'),
+  line('into this directory.'),
+  br(),
+  line('The index is updated after successful completion, but the change must'),
+  line('still be committed.'),
+  br(),
+  line('OPTIONS', 'h1'),
+  line('-f, --force'),
+  line('Force renaming or moving of a file even if the target exists', 'tab'),
+  br(),
+  line('-k'),
+  line('Skip move or rename actions which would lead to an error condition. An', 'tab'),
+  line('error happens when a source is neither existing nor controlled by Git,', 'tab'),
+  line('or when it would overwrite an existing file unless -f is given.', 'tab'),
+  br(),
+  line('-n, --dry-run'),
+  line('Do nothing; only show what would happen', 'tab'),
+  br(),
+  line('-v, --verbose'),
+  line('Report the names of files as they are moved.', 'tab'),
+  br(),
+  line('SUBMODULES', 'h1'),
+  line('Moving a submodule using a gitfile (which means they were cloned with a'),
+  line('Git version 1.7.8 or newer) will update the gitfile and core.worktree'),
+  line('setting to make the submodule work in the new location. It also will'),
+  line('attempt to update the submodule.<name>.path setting in the gitmodules(5)'),
+  line('file and stage that file (unless -n is used).'),
+  br(),
+  line('BUGS', 'h1'),
+  line('Each time a superproject update moves a populated submodule (e.g. when'),
+  line('switching between commits before and after the move) a stale submodule'),
+  line('checkout will remain in the old location and an empty directory will'),
+  line('appear in the new location. To populate the submodule again in the new'),
+  line('location the user will have to run "git submodule update" afterwards.'),
+  line('Removing the old directory is only safe when it uses a gitfile, as'),
+  line('otherwise the history of the submodule will be deleted too. Both steps'),
+  line('will be obsolete when recursive submodule update has been implemented.'),
+  br(),
+  line('GIT', 'h1'),
+  line('Part of the git(1) suite')
+])(exCStyle)
+
+const exC2 = layout([
+  text('NAME', 'h1'),
+  text('git-mv - Move or rename a file, a directory, or a symlink'),
+  br(),
+  text('SYNOPSIS', 'h1'),
+  text('git mv <options>... <args>...'),
+  br(),
+  br(),
+  text('DESCRIPTION', 'h1'),
+  text('Move or rename a file, directory or symlink.'),
+  br(),
+  texts(
+    [
+      'git mv [-f] [-k] [-n] [-v] <source> <destination>',
+      'git mv [-f] [-k] [-n] [-v] <source> ... <destination directory>'
+    ],
+    'tab'
+  ),
+  br(),
+  text('In the first form, it renames <source>, which must exist and be either a file, symlink or directory, to <destination>. In the second form, the last argument has to be an existing directory; the given sources will be moved into this directory.'),
+  br(),
+  text('The index is updated after successful completion, but the change must still be committed.'),
+  br(),
+  text('OPTIONS', 'h1'),
+  text('-f, --force'),
+  text('Force renaming or moving of a file even if the target exists', 'tab'),
+  br(),
+  text('-k'),
+  text('Skip move or rename actions which would lead to an error condition. An error happens when a source is neither existing nor controlled by Git, or when it would overwrite an existing file unless -f is given.', 'tab'),
+  br(),
+  text('-n, --dry-run'),
+  text('Do nothing; only show what would happen', 'tab'),
+  br(),
+  text('-v, --verbose'),
+  text('Report the names of files as they are moved.', 'tab'),
+  br(),
+  text('SUBMODULES', 'h1'),
+  text('Moving a submodule using a gitfile (which means they were cloned with a Git version 1.7.8 or newer) will update the gitfile and core.worktree setting to make the submodule work in the new location. It also will attempt to update the submodule.<name>.path setting in the gitmodules(5) file and stage that file (unless -n is used).'),
+  br(),
+  text('BUGS', 'h1'),
+  text('Each time a superproject update moves a populated submodule (e.g. when switching between commits before and after the move) a stale submodule checkout will remain in the old location and an empty directory will appear in the new location. To populate the submodule again in the new location the user will have to run "git submodule update" afterwards. Removing the old directory is only safe when it uses a gitfile, as otherwise the history of the submodule will be deleted too. Both steps will be obsolete when recursive submodule update has been implemented.'),
+  br(),
+  text('GIT', 'h1'),
+  text('Part of the git(1) suite')
+])(exCStyle)
+
+const o = require('./src/dsl/fp/compose')
+
+const exC3 = usage([
+  note('NAME', 'h1'),
+  note('git-mv - Move or rename a file, a directory, or a symlink'),
+  space(),
+  note('SYNOPSIS', 'h1'),
+  note('git mv <options>... <args>...'),
+  space(),
+  space(),
+  note('DESCRIPTION', 'h1'),
+  note('Move or rename a file, directory or symlink.'),
+  space(),
+  o(synopsis('git mv', '<source> <destination>', 'tab'), onlyFirstArg),
+  o(synopsis('git mv', '<source> ... <destination directory>', 'tab'), onlyFirstArg),
+  space(),
+  note('In the first form, it renames <source>, which must exist and be either a file, symlink or directory, to <destination>. In the second form, the last argument has to be an existing directory; the given sources will be moved into this directory.'),
+  space(),
+  note('The index is updated after successful completion, but the change must still be committed.'),
+  space(),
+  note('OPTIONS', 'h1'),
+  note('-f, --force'),
+  note('Force renaming or moving of a file even if the target exists', 'tab'),
+  space(),
+  note('-k'),
+  note('Skip move or rename actions which would lead to an error condition. An error happens when a source is neither existing nor controlled by Git, or when it would overwrite an existing file unless -f is given.', 'tab'),
+  space(),
+  note('-n, --dry-run'),
+  note('Do nothing; only show what would happen', 'tab'),
+  space(),
+  note('-v, --verbose'),
+  note('Report the names of files as they are moved.', 'tab'),
+  space(),
+  note('SUBMODULES', 'h1'),
+  note('Moving a submodule using a gitfile (which means they were cloned with a Git version 1.7.8 or newer) will update the gitfile and core.worktree setting to make the submodule work in the new location. It also will attempt to update the submodule.<name>.path setting in the gitmodules(5) file and stage that file (unless -n is used).'),
+  space(),
+  note('BUGS', 'h1'),
+  note('Each time a superproject update moves a populated submodule (e.g. when switching between commits before and after the move) a stale submodule checkout will remain in the old location and an empty directory will appear in the new location. To populate the submodule again in the new location the user will have to run "git submodule update" afterwards. Removing the old directory is only safe when it uses a gitfile, as otherwise the history of the submodule will be deleted too. Both steps will be obsolete when recursive submodule update has been implemented.'),
+  space(),
+  note('GIT', 'h1'),
+  note('Part of the git(1) suite')
+])(exCOpts)(exCStyle)
+
+
+
+console.log('exC3')
+console.log(exC3)
+
+console.log('exC0  === exC1',  exC0  === exC1)
+console.log('exC1  === exC2',  exC1  === exC2)
+console.log('exC2  === exC3',  exC2  === exC3)
 
 
 
@@ -438,7 +754,7 @@ function br (id = undefined) {
 
 // A => String
 function line (text = '', id = undefined) {
-  return ({line = {}, [id]: idLine} = {}) => text.padEnd((idLine || line).width) + '\n'
+  return ({line = {}, [id]: idLine} = {}) => ''.padStart((idLine || line).padStart) + text.padEnd((idLine || line).width) + '\n'
 }
 
 // A => String
@@ -466,10 +782,11 @@ function cols (columns = [], id = undefined) {
       for (let j = 0; j < columns.length; j++) {
         const text = columns[j][i] || ''
 
-        const width        = ((idCols || cols)[j] || {}).width
-        const paddingRight = ((idCols || cols)[j] || {}).paddingRight || 0
+        const width    = ((idCols || cols)[j] || {}).width
+        const padStart = ((idCols || cols)[j] || {}).padStart || 0
+        const padEnd   = ((idCols || cols)[j] || {}).padEnd   || 0
 
-        string += text.padEnd(width) + ''.padEnd(paddingRight)
+        string += ''.padStart(padStart) + text.padEnd(width) + ''.padEnd(padEnd)
       }
 
       strings.push(string)
@@ -505,7 +822,7 @@ function text (STRING = '', id = undefined) {
       
       if (lineFull) {
         strings.push(string)
-        string = word
+        string = word === ' ' ? '' : word
       } else {
         string += word
       }
@@ -518,7 +835,7 @@ function text (STRING = '', id = undefined) {
 }
 
 // B => A
-function dl (items = [], id = undefined) {
+function list (items = [], id = undefined) {
   return (style = {}) => {
     const {cols: COLS, [id]: idCols = undefined} = style
 
@@ -578,7 +895,11 @@ function dl (items = [], id = undefined) {
 
 
 
-// The following functions automatically deal with strings that contains opts
+// The following functions automatically deal with strings that contain opts
+
+function notes (strings = [], id = undefined) {
+  return () => texts(strings, id)
+}
 
 function note (string = '', id = undefined) {
   return () => text(string, id)
@@ -588,25 +909,29 @@ function space (id = undefined) {
   return note('', id)
 }
 
-function usageText (programName = '', id = undefined) {
+function synopsis (start = '', end = '', id = undefined) {
   return (opts = []) => {
     const argsString  = ({args = []}) => '[' + args.join('|') + ']'
-    const argsStrings = opts.map(argsString).join(' ')
+    const argsStrings = (
+      opts
+      .filter(({types}) => typeof types !== 'undefined' && types !== null) // Filter all commands
+      .map(argsString).join(' ')
+    )
 
-    return text(programName + ' ' + argsStrings, id)
+    return text(start + (start !== '' ? ' ' : '') + argsStrings + (end !== '' ? ' ' : '') + end, id)
   }
 }
 
-function dlOpts (id = undefined) {
+function optsList (filter = ({types}) => typeof types !== 'undefined' && types !== null, id = undefined) {  // Filter all commands
   return (opts = []) => {
     const items = (
       opts
-      .filter(({types}) => typeof types !== 'undefined' && types !== null) // Filter all commands
-      .map(opt => ({types} = opt, types.length === 0 ? {...opt, types: ['flag']} : opt))
-      .map(({args, desc, types}) => [args.join(', '), desc + ' [' + types.join(', ') + ']'])
+      .filter(filter)
+      .map(opt => ({types} = opt, types !== null && types.length === 0 ? {...opt, types: ['flag']} : opt))
+      .map(({args, desc, types}) => [args.join(', '), desc + (types === null ? '' : ' [' + types.join(', ') + ']')])
     )
   
-    return dl(items, id)
+    return list(items, id)
   }
 }
 
@@ -614,4 +939,8 @@ function dlOpts (id = undefined) {
 
 function splitWords (string) {
   return string.split(/(\s+)/g)
+}
+
+function onlyFirstArg (opts = []) {
+  return opts.map(opt => ({...opt, args: (opt.args || []).slice(0, 1)}))
 }
