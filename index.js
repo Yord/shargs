@@ -78,7 +78,7 @@ const foo0 = (
   "rights reserved.                        \n"
 )
 
-const foo1 = usage([
+const foo1 = layout([
   () => "foo [-b|--bar] [-h|--help] [--version]  \n",
   () => "                                        \n",
   () => "-b, --bar  Foo bar baz. [number]        \n",
@@ -91,7 +91,7 @@ const foo1 = usage([
   () => "rights reserved.                        \n"
 ])(style)
 
-const foo2 = usage([
+const foo2 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   line("-b, --bar  Foo bar baz. [number]"),
@@ -104,7 +104,7 @@ const foo2 = usage([
   line("rights reserved.")
 ])(style)
 
-const foo3 = usage([
+const foo3 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   cols([
@@ -128,7 +128,7 @@ const foo3 = usage([
   line("rights reserved.")
 ])(style)
 
-const foo4 = usage([
+const foo4 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
@@ -150,7 +150,7 @@ const foo4 = usage([
   line("rights reserved.")
 ])(style)
 
-const foo5 = usage([
+const foo5 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
@@ -172,7 +172,7 @@ const foo5 = usage([
   line("rights reserved.")
 ])(style)
 
-const foo6 = usage([
+const foo6 = layout([
   lines([
     "foo [-b|--bar] [-h|--help] [--version]"
   ]),
@@ -198,7 +198,7 @@ const foo6 = usage([
   ])
 ])(style)
 
-const foo7 = usage([
+const foo7 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
@@ -222,7 +222,7 @@ const foo7 = usage([
   ])
 ])(style)
 
-const foo8 = usage([
+const foo8 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
@@ -245,7 +245,7 @@ const foo8 = usage([
   ])
 ])(style)
 
-const foo9 = usage([
+const foo9 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
@@ -266,7 +266,7 @@ const foo9 = usage([
   text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(style)
 
-const foo10 = usage([
+const foo10 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
   dl([
@@ -287,7 +287,7 @@ const foo10 = usage([
   text("Copyright (c) 2020, Philipp Wille, all rights reserved.", 'bar')
 ])(style)
 
-const foo11 = usage([
+const foo11 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   br(),
   dl([
@@ -333,7 +333,7 @@ console.log('foo10 === foo11', foo10 === foo11)
 
 
 // [A] => String
-function usage (toStrings = []) {
+function layout (toStrings = []) {
   return (options = {}) => toStrings.map(toString => toString(options)).join('')
 }
 
