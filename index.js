@@ -137,7 +137,7 @@ const exA3 = layout([
 const exA4 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  dl([
+  list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -159,7 +159,7 @@ const exA4 = layout([
 const exA5 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  dl([
+  list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -183,7 +183,7 @@ const exA6 = layout([
     "foo [-b|--bar] [-h|--help] [--version]"
   ]),
   line(),
-  dl([
+  list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -207,7 +207,7 @@ const exA6 = layout([
 const exA7 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  dl([
+  list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -231,7 +231,7 @@ const exA7 = layout([
 const exA8 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  dl([
+  list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -254,7 +254,7 @@ const exA8 = layout([
 const exA9 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  dl([
+  list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -275,7 +275,7 @@ const exA9 = layout([
 const exA10 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  dl([
+  list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -296,7 +296,7 @@ const exA10 = layout([
 const exA11 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   br(),
-  dl([
+  list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -317,7 +317,7 @@ const exA11 = layout([
 const exA12 = usage([
   () => text("foo [-b|--bar] [-h|--help] [--version]"),
   () => br(),
-  () => dl([
+  () => list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -338,7 +338,7 @@ const exA12 = usage([
 const exA13 = usage([
   usageText("foo"),
   () => br(),
-  () => dl([
+  () => list([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -359,7 +359,7 @@ const exA13 = usage([
 const exA14 = usage([
   usageText("foo"),
   () => br(),
-  dlOpts(),
+  optsList(),
   () => br(),
   () => text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAOpts)(exAStyle)
@@ -367,7 +367,7 @@ const exA14 = usage([
 const exA15 = usage([
   usageText("foo"),
   () => br(),
-  dlOpts(),
+  optsList(),
   () => br(),
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAOpts)(exAStyle)
@@ -375,7 +375,7 @@ const exA15 = usage([
 const exA16 = usage([
   usageText("foo"),
   note(),
-  dlOpts(),
+  optsList(),
   note(),
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAOpts)(exAStyle)
@@ -383,7 +383,7 @@ const exA16 = usage([
 const exA17 = usage([
   usageText("foo"),
   space(),
-  dlOpts(),
+  optsList(),
   space(),
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAOpts)(exAStyle)
@@ -475,10 +475,10 @@ const exB2 = usage([
   note("These are common Git commands used in various situations:"),
   space(),
   note("start a working area (see also: git help tutorial)"),
-  dlOpts(({args}) => ['clone', 'init'].some(cmd => args.includes(cmd))),
+  optsList(({args}) => ['clone', 'init'].some(cmd => args.includes(cmd))),
   space(),
   note("work on the current change (see also: git help everyday)"),
-  dlOpts(({args}) => ['add', 'mv'].some(cmd => args.includes(cmd))),
+  optsList(({args}) => ['add', 'mv'].some(cmd => args.includes(cmd))),
   space(),
   note("'git help -a' and 'git help -g' list available subcommands and some concept guides. See 'git help <command>' or 'git help <concept>' to read about a specific subcommand or concept.")
 ])(exBOpts)(exBStyle)
@@ -784,7 +784,7 @@ function text (STRING = '', id = undefined) {
 }
 
 // B => A
-function dl (items = [], id = undefined) {
+function list (items = [], id = undefined) {
   return (style = {}) => {
     const {cols: COLS, [id]: idCols = undefined} = style
 
@@ -867,7 +867,7 @@ function usageText (start = '', end = '', id = undefined) {
   }
 }
 
-function dlOpts (filter = ({types}) => typeof types !== 'undefined' && types !== null, id = undefined) {  // Filter all commands
+function optsList (filter = ({types}) => typeof types !== 'undefined' && types !== null, id = undefined) {  // Filter all commands
   return (opts = []) => {
     const items = (
       opts
@@ -876,7 +876,7 @@ function dlOpts (filter = ({types}) => typeof types !== 'undefined' && types !==
       .map(({args, desc, types}) => [args.join(', '), desc + (types === null ? '' : ' [' + types.join(', ') + ']')])
     )
   
-    return dl(items, id)
+    return list(items, id)
   }
 }
 
