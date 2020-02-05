@@ -490,6 +490,24 @@ console.log('exB1  === exB2',  exB1  === exB2)
 
 
 
+const exCStyle = {
+  line: {
+    padStart: 6,
+    width: 74
+  },
+  cols: [
+    {padStart: 3, width: 11},
+    {width: 66}
+  ],
+  h1: {
+    padStart: 0,
+    width: 80
+  },
+  tab: {
+    padStart: 10,
+    width: 70
+  }
+}
 
 
 
