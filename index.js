@@ -380,12 +380,20 @@ const foo16 = usage([
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(opts2)(style)
 
+const foo17 = usage([
+  usageText("foo"),
+  space(),
+  dlOpts,
+  space(),
+  note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
+])(opts2)(style)
 
 
-console.log('foo15')
-console.log(foo15)
+
 console.log('foo16')
 console.log(foo16)
+console.log('foo17')
+console.log(foo17)
 
 
 console.log('foo0  === foo1',  foo0  === foo1)
@@ -404,6 +412,7 @@ console.log('foo12 === foo13', foo12 === foo13)
 console.log('foo13 === foo14', foo13 === foo14)
 console.log('foo14 === foo15', foo14 === foo15)
 console.log('foo15 === foo16', foo15 === foo16)
+console.log('foo16 === foo17', foo16 === foo17)
 
 
 
@@ -573,6 +582,10 @@ function dl (items = [], id = undefined) {
 
 function note (string = '', id = undefined) {
   return () => text(string, id)
+}
+
+function space (id = undefined) {
+  return note('', id)
 }
 
 function usageText (programName = '', id = undefined) {
