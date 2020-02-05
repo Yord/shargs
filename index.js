@@ -474,6 +474,20 @@ const exB1 = layout([
   line("guides. See 'git help <command>' or 'git help <concept>' to read about a"),
   line("specific subcommand or concept.")
 ])(exBStyle)
+
+const exB2 = usage([
+  usageText("git", "<command> [args]"),
+  space(),
+  note("These are common Git commands used in various situations:"),
+  space(),
+  note("start a working area (see also: git help tutorial)"),
+  dlOpts(({args}) => ['clone', 'init'].some(cmd => args.includes(cmd))),
+  space(),
+  note("work on the current change (see also: git help everyday)"),
+  dlOpts(({args}) => ['add', 'mv'].some(cmd => args.includes(cmd))),
+  space(),
+  note("'git help -a' and 'git help -g' list available subcommands and some concept guides. See 'git help <command>' or 'git help <concept>' to read about a specific subcommand or concept.")
+])(exBOpts)(exBStyle)
 // [A] => String
 function layout (toStrings = []) {
   return (style = {}) => toStrings.map(toString => toString(style)).join('')
