@@ -499,6 +499,10 @@ const exCStyle = {
     {padStart: 3, width: 11},
     {width: 66}
   ],
+  defs: {
+    title: {padStart:  6, width: 74},
+    desc:  {padStart: 10, width: 70}
+  },
   h1: {
     padStart: 0,
     width: 80
@@ -532,27 +536,22 @@ const exC0 = (
   '          git mv [-f] [-k] [-n] [-v] <source> <destination>                     \n' +
   '          git mv [-f] [-k] [-n] [-v] <source> ... <destination directory>       \n' +
   '                                                                                \n' +
-  '      In the first form, it renames <source>, which must exist and be either a  \n' +
-  '      file, symlink or directory, to <destination>. In the second form, the last\n' +
-  '      argument has to be an existing directory; the given sources will be moved \n' +
-  '      into this directory.                                                      \n' +
-  '                                                                                \n' +
   '      The index is updated after successful completion, but the change must     \n' +
   '      still be committed.                                                       \n' +
   '                                                                                \n' +
   'OPTIONS                                                                         \n' +
-  '      -f, --force                                                               \n' +
+  '      -f, --force [flag]                                                        \n' +
   '          Force renaming or moving of a file even if the target exists          \n' +
   '                                                                                \n' +
-  '      -k                                                                        \n' +
+  '      -k [flag]                                                                 \n' +
   '          Skip move or rename actions which would lead to an error condition. An\n' +
   '          error happens when a source is neither existing nor controlled by Git,\n' +
   '          or when it would overwrite an existing file unless -f is given.       \n' +
   '                                                                                \n' +
-  '      -n, --dry-run                                                             \n' +
+  '      -n, --dry-run [flag]                                                      \n' +
   '          Do nothing; only show what would happen                               \n' +
   '                                                                                \n' +
-  '      -v, --verbose                                                             \n' +
+  '      -v, --verbose [flag]                                                      \n' +
   '          Report the names of files as they are moved.                          \n' +
   '                                                                                \n' +
   'SUBMODULES                                                                      \n' +
@@ -561,16 +560,6 @@ const exC0 = (
   '      setting to make the submodule work in the new location. It also will      \n' +
   '      attempt to update the submodule.<name>.path setting in the gitmodules(5)  \n' +
   '      file and stage that file (unless -n is used).                             \n' +
-  '                                                                                \n' +
-  'BUGS                                                                            \n' +
-  '      Each time a superproject update moves a populated submodule (e.g. when    \n' +
-  '      switching between commits before and after the move) a stale submodule    \n' +
-  '      checkout will remain in the old location and an empty directory will      \n' +
-  '      appear in the new location. To populate the submodule again in the new    \n' +
-  '      location the user will have to run "git submodule update" afterwards.     \n' +
-  '      Removing the old directory is only safe when it uses a gitfile, as        \n' +
-  '      otherwise the history of the submodule will be deleted too. Both steps    \n' +
-  '      will be obsolete when recursive submodule update has been implemented.    \n' +
   '                                                                                \n' +
   'GIT                                                                             \n' +
   '      Part of the git(1) suite                                                  \n'
@@ -590,27 +579,22 @@ const exC1 = layout([
   line('git mv [-f] [-k] [-n] [-v] <source> <destination>', 'tab'),
   line('git mv [-f] [-k] [-n] [-v] <source> ... <destination directory>', 'tab'),
   br(),
-  line('In the first form, it renames <source>, which must exist and be either a'),
-  line('file, symlink or directory, to <destination>. In the second form, the last'),
-  line('argument has to be an existing directory; the given sources will be moved'),
-  line('into this directory.'),
-  br(),
   line('The index is updated after successful completion, but the change must'),
   line('still be committed.'),
   br(),
   line('OPTIONS', 'h1'),
-  line('-f, --force'),
+  line('-f, --force [flag]'),
   line('Force renaming or moving of a file even if the target exists', 'tab'),
   br(),
-  line('-k'),
+  line('-k [flag]'),
   line('Skip move or rename actions which would lead to an error condition. An', 'tab'),
   line('error happens when a source is neither existing nor controlled by Git,', 'tab'),
   line('or when it would overwrite an existing file unless -f is given.', 'tab'),
   br(),
-  line('-n, --dry-run'),
+  line('-n, --dry-run [flag]'),
   line('Do nothing; only show what would happen', 'tab'),
   br(),
-  line('-v, --verbose'),
+  line('-v, --verbose [flag]'),
   line('Report the names of files as they are moved.', 'tab'),
   br(),
   line('SUBMODULES', 'h1'),
@@ -619,16 +603,6 @@ const exC1 = layout([
   line('setting to make the submodule work in the new location. It also will'),
   line('attempt to update the submodule.<name>.path setting in the gitmodules(5)'),
   line('file and stage that file (unless -n is used).'),
-  br(),
-  line('BUGS', 'h1'),
-  line('Each time a superproject update moves a populated submodule (e.g. when'),
-  line('switching between commits before and after the move) a stale submodule'),
-  line('checkout will remain in the old location and an empty directory will'),
-  line('appear in the new location. To populate the submodule again in the new'),
-  line('location the user will have to run "git submodule update" afterwards.'),
-  line('Removing the old directory is only safe when it uses a gitfile, as'),
-  line('otherwise the history of the submodule will be deleted too. Both steps'),
-  line('will be obsolete when recursive submodule update has been implemented.'),
   br(),
   line('GIT', 'h1'),
   line('Part of the git(1) suite')
@@ -640,8 +614,7 @@ const exC2 = layout([
   br(),
   text('SYNOPSIS', 'h1'),
   text('git mv <options>... <args>...'),
-  br(),
-  br(),
+  brs(2),
   text('DESCRIPTION', 'h1'),
   text('Move or rename a file, directory or symlink.'),
   br(),
@@ -653,28 +626,29 @@ const exC2 = layout([
     'tab'
   ),
   br(),
-  text('In the first form, it renames <source>, which must exist and be either a file, symlink or directory, to <destination>. In the second form, the last argument has to be an existing directory; the given sources will be moved into this directory.'),
-  br(),
   text('The index is updated after successful completion, but the change must still be committed.'),
   br(),
   text('OPTIONS', 'h1'),
-  text('-f, --force'),
-  text('Force renaming or moving of a file even if the target exists', 'tab'),
-  br(),
-  text('-k'),
-  text('Skip move or rename actions which would lead to an error condition. An error happens when a source is neither existing nor controlled by Git, or when it would overwrite an existing file unless -f is given.', 'tab'),
-  br(),
-  text('-n, --dry-run'),
-  text('Do nothing; only show what would happen', 'tab'),
-  br(),
-  text('-v, --verbose'),
-  text('Report the names of files as they are moved.', 'tab'),
-  br(),
+  defs([
+    {
+      title: '-f, --force [flag]',
+      desc:  'Force renaming or moving of a file even if the target exists'
+    },
+    {
+      title: '-k [flag]',
+      desc:  'Skip move or rename actions which would lead to an error condition. An error happens when a source is neither existing nor controlled by Git, or when it would overwrite an existing file unless -f is given.'
+    },
+    {
+      title: '-n, --dry-run [flag]',
+      desc:  'Do nothing; only show what would happen'
+    },
+    {
+      title: '-v, --verbose [flag]',
+      desc:  'Report the names of files as they are moved.'
+    }
+  ]),
   text('SUBMODULES', 'h1'),
   text('Moving a submodule using a gitfile (which means they were cloned with a Git version 1.7.8 or newer) will update the gitfile and core.worktree setting to make the submodule work in the new location. It also will attempt to update the submodule.<name>.path setting in the gitmodules(5) file and stage that file (unless -n is used).'),
-  br(),
-  text('BUGS', 'h1'),
-  text('Each time a superproject update moves a populated submodule (e.g. when switching between commits before and after the move) a stale submodule checkout will remain in the old location and an empty directory will appear in the new location. To populate the submodule again in the new location the user will have to run "git submodule update" afterwards. Removing the old directory is only safe when it uses a gitfile, as otherwise the history of the submodule will be deleted too. Both steps will be obsolete when recursive submodule update has been implemented.'),
   br(),
   text('GIT', 'h1'),
   text('Part of the git(1) suite')
@@ -688,36 +662,19 @@ const exC3 = usage([
   space(),
   note('SYNOPSIS', 'h1'),
   note('git mv <options>... <args>...'),
-  space(),
-  space(),
+  spaces(2),
   note('DESCRIPTION', 'h1'),
   note('Move or rename a file, directory or symlink.'),
   space(),
   o(synopsis('git mv', '<source> <destination>', 'tab'), onlyFirstArg),
   o(synopsis('git mv', '<source> ... <destination directory>', 'tab'), onlyFirstArg),
   space(),
-  note('In the first form, it renames <source>, which must exist and be either a file, symlink or directory, to <destination>. In the second form, the last argument has to be an existing directory; the given sources will be moved into this directory.'),
-  space(),
   note('The index is updated after successful completion, but the change must still be committed.'),
   space(),
   note('OPTIONS', 'h1'),
-  note('-f, --force'),
-  note('Force renaming or moving of a file even if the target exists', 'tab'),
-  space(),
-  note('-k'),
-  note('Skip move or rename actions which would lead to an error condition. An error happens when a source is neither existing nor controlled by Git, or when it would overwrite an existing file unless -f is given.', 'tab'),
-  space(),
-  note('-n, --dry-run'),
-  note('Do nothing; only show what would happen', 'tab'),
-  space(),
-  note('-v, --verbose'),
-  note('Report the names of files as they are moved.', 'tab'),
-  space(),
+  optsDefs(),
   note('SUBMODULES', 'h1'),
   note('Moving a submodule using a gitfile (which means they were cloned with a Git version 1.7.8 or newer) will update the gitfile and core.worktree setting to make the submodule work in the new location. It also will attempt to update the submodule.<name>.path setting in the gitmodules(5) file and stage that file (unless -n is used).'),
-  space(),
-  note('BUGS', 'h1'),
-  note('Each time a superproject update moves a populated submodule (e.g. when switching between commits before and after the move) a stale submodule checkout will remain in the old location and an empty directory will appear in the new location. To populate the submodule again in the new location the user will have to run "git submodule update" afterwards. Removing the old directory is only safe when it uses a gitfile, as otherwise the history of the submodule will be deleted too. Both steps will be obsolete when recursive submodule update has been implemented.'),
   space(),
   note('GIT', 'h1'),
   note('Part of the git(1) suite')
@@ -750,6 +707,10 @@ function usage (toStrings = []) {
 // A => String
 function br (id = undefined) {
   return line('', id)
+}
+
+function brs (length = 1, id = undefined) {
+  return (style = {}) => Array.from({length}, () => br(id)(style)).join('')
 }
 
 // A => String
@@ -834,6 +795,18 @@ function text (STRING = '', id = undefined) {
   }
 }
 
+function defs (definitions = [], id = undefined) {
+  return (style = {}) => {
+    const {defs: {title: TITLE = {}, desc: DESC = {}} = {}} = style
+
+    return definitions.map(({title, desc}) =>
+      text(title)({line: TITLE}) +
+      text(desc)({line: DESC})   +
+      br()(style)
+    ).join('')
+  }
+}
+
 // B => A
 function list (items = [], id = undefined) {
   return (style = {}) => {
@@ -905,6 +878,10 @@ function note (string = '', id = undefined) {
   return () => text(string, id)
 }
 
+function spaces (length, id = undefined) {
+  return () => brs(length, id)
+}
+
 function space (id = undefined) {
   return note('', id)
 }
@@ -919,6 +896,22 @@ function synopsis (start = '', end = '', id = undefined) {
     )
 
     return text(start + (start !== '' ? ' ' : '') + argsStrings + (end !== '' ? ' ' : '') + end, id)
+  }
+}
+
+function optsDefs (filter = ({types}) => typeof types !== 'undefined' && types !== null, id = undefined) {
+  return (opts = []) => {
+    const items = (
+      opts
+      .filter(filter)
+      .map(opt => ({types} = opt, types !== null && types.length === 0 ? {...opt, types: ['flag']} : opt))
+      .map(({args, desc, types}) => ({
+        title: args.join(', ') + ' [' + types.join(', ') + ']',
+        desc
+      }))
+    )
+
+    return defs(items, id)
   }
 }
 
