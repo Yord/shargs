@@ -644,8 +644,7 @@ const exC2 = layout([
   br(),
   text('SYNOPSIS', 'h1'),
   text('git mv <options>... <args>...'),
-  br(),
-  br(),
+  brs(2),
   text('DESCRIPTION', 'h1'),
   text('Move or rename a file, directory or symlink.'),
   br(),
@@ -698,8 +697,7 @@ const exC3 = usage([
   space(),
   note('SYNOPSIS', 'h1'),
   note('git mv <options>... <args>...'),
-  space(),
-  space(),
+  spaces(2),
   note('DESCRIPTION', 'h1'),
   note('Move or rename a file, directory or symlink.'),
   space(),
@@ -749,6 +747,10 @@ function usage (toStrings = []) {
 // A => String
 function br (id = undefined) {
   return line('', id)
+}
+
+function brs (length = 1, id = undefined) {
+  return (style = {}) => Array.from({length}, () => br(id)(style)).join('')
 }
 
 // A => String
@@ -914,6 +916,10 @@ function notes (strings = [], id = undefined) {
 
 function note (string = '', id = undefined) {
   return () => text(string, id)
+}
+
+function spaces (length, id = undefined) {
+  return () => brs(length, id)
 }
 
 function space (id = undefined) {
