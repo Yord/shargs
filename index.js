@@ -545,18 +545,18 @@ const exC0 = (
   '      still be committed.                                                       \n' +
   '                                                                                \n' +
   'OPTIONS                                                                         \n' +
-  '      -f, --force                                                               \n' +
+  '      -f, --force [flag]                                                        \n' +
   '          Force renaming or moving of a file even if the target exists          \n' +
   '                                                                                \n' +
-  '      -k                                                                        \n' +
+  '      -k [flag]                                                                 \n' +
   '          Skip move or rename actions which would lead to an error condition. An\n' +
   '          error happens when a source is neither existing nor controlled by Git,\n' +
   '          or when it would overwrite an existing file unless -f is given.       \n' +
   '                                                                                \n' +
-  '      -n, --dry-run                                                             \n' +
+  '      -n, --dry-run [flag]                                                      \n' +
   '          Do nothing; only show what would happen                               \n' +
   '                                                                                \n' +
-  '      -v, --verbose                                                             \n' +
+  '      -v, --verbose [flag]                                                      \n' +
   '          Report the names of files as they are moved.                          \n' +
   '                                                                                \n' +
   'SUBMODULES                                                                      \n' +
@@ -603,18 +603,18 @@ const exC1 = layout([
   line('still be committed.'),
   br(),
   line('OPTIONS', 'h1'),
-  line('-f, --force'),
+  line('-f, --force [flag]'),
   line('Force renaming or moving of a file even if the target exists', 'tab'),
   br(),
-  line('-k'),
+  line('-k [flag]'),
   line('Skip move or rename actions which would lead to an error condition. An', 'tab'),
   line('error happens when a source is neither existing nor controlled by Git,', 'tab'),
   line('or when it would overwrite an existing file unless -f is given.', 'tab'),
   br(),
-  line('-n, --dry-run'),
+  line('-n, --dry-run [flag]'),
   line('Do nothing; only show what would happen', 'tab'),
   br(),
-  line('-v, --verbose'),
+  line('-v, --verbose [flag]'),
   line('Report the names of files as they are moved.', 'tab'),
   br(),
   line('SUBMODULES', 'h1'),
@@ -664,19 +664,19 @@ const exC2 = layout([
   text('OPTIONS', 'h1'),
   defs([
     {
-      title: '-f, --force',
+      title: '-f, --force [flag]',
       desc:  'Force renaming or moving of a file even if the target exists'
     },
     {
-      title: '-k',
+      title: '-k [flag]',
       desc:  'Skip move or rename actions which would lead to an error condition. An error happens when a source is neither existing nor controlled by Git, or when it would overwrite an existing file unless -f is given.'
     },
     {
-      title: '-n, --dry-run',
+      title: '-n, --dry-run [flag]',
       desc:  'Do nothing; only show what would happen'
     },
     {
-      title: '-v, --verbose',
+      title: '-v, --verbose [flag]',
       desc:  'Report the names of files as they are moved.'
     }
   ]),
@@ -711,18 +711,7 @@ const exC3 = usage([
   note('The index is updated after successful completion, but the change must still be committed.'),
   space(),
   note('OPTIONS', 'h1'),
-  note('-f, --force'),
-  note('Force renaming or moving of a file even if the target exists', 'tab'),
-  space(),
-  note('-k'),
-  note('Skip move or rename actions which would lead to an error condition. An error happens when a source is neither existing nor controlled by Git, or when it would overwrite an existing file unless -f is given.', 'tab'),
-  space(),
-  note('-n, --dry-run'),
-  note('Do nothing; only show what would happen', 'tab'),
-  space(),
-  note('-v, --verbose'),
-  note('Report the names of files as they are moved.', 'tab'),
-  space(),
+  optsDefs(),
   note('SUBMODULES', 'h1'),
   note('Moving a submodule using a gitfile (which means they were cloned with a Git version 1.7.8 or newer) will update the gitfile and core.worktree setting to make the submodule work in the new location. It also will attempt to update the submodule.<name>.path setting in the gitmodules(5) file and stage that file (unless -n is used).'),
   space(),
@@ -735,8 +724,8 @@ const exC3 = usage([
 
 
 
-console.log('exC2')
-console.log(exC2)
+console.log('exC3')
+console.log(exC3)
 
 console.log('exC0  === exC1',  exC0  === exC1)
 console.log('exC1  === exC2',  exC1  === exC2)
@@ -941,6 +930,22 @@ function synopsis (start = '', end = '', id = undefined) {
     )
 
     return text(start + (start !== '' ? ' ' : '') + argsStrings + (end !== '' ? ' ' : '') + end, id)
+  }
+}
+
+function optsDefs (filter = ({types}) => typeof types !== 'undefined' && types !== null, id = undefined) {
+  return (opts = []) => {
+    const items = (
+      opts
+      .filter(filter)
+      .map(opt => ({types} = opt, types !== null && types.length === 0 ? {...opt, types: ['flag']} : opt))
+      .map(({args, desc, types}) => ({
+        title: args.join(', ') + ' [' + types.join(', ') + ']',
+        desc
+      }))
+    )
+
+    return defs(items, id)
   }
 }
 
