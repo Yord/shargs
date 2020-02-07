@@ -137,7 +137,7 @@ const exA3 = layout([
 const exA4 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  list([
+  table([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -159,7 +159,7 @@ const exA4 = layout([
 const exA5 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  list([
+  table([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -183,7 +183,7 @@ const exA6 = layout([
     "foo [-b|--bar] [-h|--help] [--version]"
   ]),
   line(),
-  list([
+  table([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -207,7 +207,7 @@ const exA6 = layout([
 const exA7 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  list([
+  table([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -231,7 +231,7 @@ const exA7 = layout([
 const exA8 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  list([
+  table([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -254,7 +254,7 @@ const exA8 = layout([
 const exA9 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  list([
+  table([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -275,7 +275,7 @@ const exA9 = layout([
 const exA10 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  list([
+  table([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -296,7 +296,7 @@ const exA10 = layout([
 const exA11 = layout([
   text("foo [-b|--bar] [-h|--help] [--version]"),
   br(),
-  list([
+  table([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -317,7 +317,7 @@ const exA11 = layout([
 const exA12 = usage([
   () => text("foo [-b|--bar] [-h|--help] [--version]"),
   () => br(),
-  () => list([
+  () => table([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -338,7 +338,7 @@ const exA12 = usage([
 const exA13 = usage([
   synopsis("foo"),
   () => br(),
-  () => list([
+  () => table([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -682,12 +682,65 @@ const exC3 = usage([
 
 
 
-console.log('exC3')
-console.log(exC3)
-
 console.log('exC0  === exC1',  exC0  === exC1)
 console.log('exC1  === exC2',  exC1  === exC2)
 console.log('exC2  === exC3',  exC2  === exC3)
+
+
+
+const exDStyle = {
+  cols: [
+    {width: 20},
+    {width: 20},
+    {width: 20},
+    {width: 20}
+  ]
+}
+
+const exD0 = layout([
+  cols([
+    [
+      'foo',
+      'foo'
+    ],
+    [
+      'bar',
+      'bar'
+    ],
+    [
+      'baz',
+      'baz'
+    ],
+    [
+      'bat',
+      'bat'
+    ]
+  ])
+])(exDStyle)
+
+const exD1 = layout([
+  table([
+    [
+      'foo',
+      'bar',
+      'baz',
+      'bat'
+    ],
+    [
+      'foo',
+      'bar',
+      'baz',
+      'bat'
+    ]
+  ])
+])(exDStyle)
+
+
+
+console.log('exD0')
+console.log(exD0)
+
+console.log('exD0  === exD1',  exD0  === exD1)
 
 
 
@@ -808,61 +861,50 @@ function defs (definitions = [], id = undefined) {
 }
 
 // B => A
-function list (items = [], id = undefined) {
+function table (items = [], id = undefined) {
   return (style = {}) => {
     const {cols: COLS, [id]: idCols = undefined} = style
 
-    const titleColWidth = ((idCols || COLS)[0] || {}).width // MAY BE UNDEFINED!
-    const descColWidth  = ((idCols || COLS)[1] || {}).width // MAY BE UNDEFINED!
+    const colsStyle = idCols || COLS
 
-    const titleCol = []
-    const descCol  = []
+    const colWidthN = colsStyle.map(col => col.width)
+
+    const indexes = colsStyle.map((_, i) => i)
+
+    let colN = indexes.map(() => [])
 
     for (let i = 0; i < items.length; i++) {
-      const [title, desc] = items[i]
+      const itemN = items[i]
 
-      const titleWords = splitWords(title)
-      const descWords  = splitWords(desc)
+      const wordsN = itemN.map(splitWords)
 
-      let iTitle = 0
-      let iDesc  = 0
+      let kN = indexes.map(() => 0)
 
-      let titleRow = ''
-      let descRow  = ''
+      let rowN = indexes.map(() => '')
 
-      while (iTitle < titleWords.length || iDesc < descWords.length) {
-        const titleWord = titleWords[iTitle] || ''
-        const descWord  = descWords[iDesc]   || ''
+      while (indexes.reduce((bool, index) => bool || kN[index] < wordsN[index].length, false)) {
+        const wordN = indexes.map(index => wordsN[index][kN[index]] || '')
 
-        const titleFull = iTitle >= titleWords.length || (titleRow + titleWord).length > titleColWidth
-        const descFull  = iDesc  >= descWords.length  || (descRow  + descWord).length  > descColWidth
+        const fullN = indexes.map(index => kN[index] >= wordsN[index].length || (rowN[index] + wordN[index]).length > colWidthN[index])
 
-        if (titleFull && descFull) {
-          titleCol.push(titleRow)
-          titleRow = titleWord !== ' ' ? titleWord : ''
-          iTitle++
-
-          descCol.push(descRow)
-          descRow  = descWord  !== ' ' ? descWord  : ''
-          iDesc++
+        if (fullN.reduce((bool, p) => bool && p, true)) {
+          colN = indexes.map(index => [...colN[index], rowN[index]])
+          rowN = indexes.map(index => wordN[index] !== ' ' ? wordN[index] : '')
+          kN   = indexes.map(index => kN[index] + 1)
         }
         
-        if (!titleFull) {
-          titleRow += titleWord
-          iTitle++
-        }
-        
-        if (!descFull) {
-          descRow += descWord
-          iDesc++
-        }
+        indexes.forEach(index => {
+          if (!fullN[index]) {
+            rowN[index] = rowN[index] + wordN[index]
+            kN[index]   = kN[index] + 1
+          }
+        })
       }
 
-      titleCol.push(titleRow)
-      descCol.push(descRow)
+      colN = indexes.map(index => [...colN[index], rowN[index]])
     }
 
-    return cols([titleCol, descCol], id)(style)
+    return cols(colN, id)(style)
   }
 }
 
@@ -924,7 +966,7 @@ function optsList (filter = ({types}) => typeof types !== 'undefined' && types !
       .map(({args, desc, types}) => [args.join(', '), desc + (types === null ? '' : ' [' + types.join(', ') + ']')])
     )
   
-    return list(items, id)
+    return table(items, id)
   }
 }
 
