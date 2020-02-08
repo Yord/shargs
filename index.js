@@ -53,6 +53,7 @@ const cols   = require('./src/help/layout/cols')
 const defs   = require('./src/help/layout/defs')
 const line   = require('./src/help/layout/line')
 const lines  = require('./src/help/layout/lines')
+const table  = require('./src/help/layout/table')
 const text   = require('./src/help/layout/text')
 const texts  = require('./src/help/layout/texts')
 const usage  = require('./src/help/usage')
@@ -760,54 +761,6 @@ console.log('exD1  === exD2',  exD1  === exD2)
 
 
 
-// The following functions automatically deal with strings that are longer than the width
-
-// B => A
-function table (itemsList = [], id = undefined) {
-  return (style = {}) => {
-    const {cols: COLS, [id]: idCols = undefined} = style
-
-    const colsStyle = idCols || COLS
-    const colWidths = colsStyle.map(col => col.width)
-    const indexes   = colsStyle.map((_, i) => i)
-    let columns     = indexes.map(() => [])
-
-    for (let i = 0; i < itemsList.length; i++) {
-      const items = itemsList[i]
-
-      const wordsList = items.map(splitWords)
-
-      let ks   = indexes.map(() => 0)
-      let rows = indexes.map(() => '')
-
-      while (indexes.reduce((bool, index) => bool || ks[index] < wordsList[index].length, false)) {
-        const words = indexes.map(index => wordsList[index][ks[index]] || '')
-
-        const fulls = indexes.map(index => ks[index] >= wordsList[index].length || (rows[index] + words[index]).length > colWidths[index])
-
-        if (fulls.reduce((bool, p) => bool && p, true)) {
-          columns = indexes.map(index => [...columns[index], rows[index]])
-          rows    = indexes.map(index => words[index] !== ' ' ? words[index] : '')
-          ks      = indexes.map(index => ks[index] + 1)
-        }
-
-        indexes.forEach(index => {
-          if (!fulls[index]) {
-            rows[index] = rows[index] + words[index]
-            ks[index]   = ks[index] + 1
-          }
-        })
-      }
-
-      columns = indexes.map(index => [...columns[index], rows[index]])
-    }
-
-    return cols(columns, id)(style)
-  }
-}
-
-
-
 // The following functions automatically deal with strings that contain opts
 
 function notes (strings = [], id = undefined) {
@@ -869,10 +822,6 @@ function optsList (filter = ({types}) => typeof types !== 'undefined' && types !
 }
 
 
-
-function splitWords (string) {
-  return string.split(/(\s+)/g)
-}
 
 function onlyFirstArg (opts = []) {
   return opts.map(opt => ({...opt, args: (opt.args || []).slice(0, 1)}))
