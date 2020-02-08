@@ -59,6 +59,7 @@ const texts  = require('./src/help/layout/texts')
 const usage  = require('./src/help/usage')
 const note   = require('./src/help/usage/note')
 const notes  = require('./src/help/usage/notes')
+const spaces = require('./src/help/usage/spaces')
 
 
 
@@ -764,10 +765,6 @@ console.log('exD1  === exD2',  exD1  === exD2)
 
 
 // The following functions automatically deal with strings that contain opts
-
-function spaces (length, id = undefined) {
-  return () => brs(length, id)
-}
 
 function space (id = undefined) {
   return note('', id)
