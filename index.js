@@ -697,7 +697,12 @@ const exDStyle = {
   ]
 }
 
-const exD0 = layout([
+const exD0 = (
+  'foo                 bar                 baz                 bat                 \n' +
+  'foo                 bar                 baz                 bat                 \n'
+)
+
+const exD1 = layout([
   cols([
     [
       'foo',
@@ -718,7 +723,7 @@ const exD0 = layout([
   ])
 ])(exDStyle)
 
-const exD1 = layout([
+const exD2 = layout([
   table([
     [
       'foo',
@@ -737,10 +742,8 @@ const exD1 = layout([
 
 
 
-console.log('exD0')
-console.log(exD0)
-
 console.log('exD0  === exD1',  exD0  === exD1)
+console.log('exD1  === exD2',  exD1  === exD2)
 
 
 
@@ -855,56 +858,52 @@ function defs (definitions = [], id = undefined) {
     return definitions.map(({title, desc}) =>
       text(title)({line: TITLE}) +
       text(desc)({line: DESC})   +
-      br()(style)
+      br()(style) // We should not assume a br here by default. Make it configurable!
     ).join('')
   }
 }
 
 // B => A
-function table (items = [], id = undefined) {
+function table (itemsList = [], id = undefined) {
   return (style = {}) => {
     const {cols: COLS, [id]: idCols = undefined} = style
 
     const colsStyle = idCols || COLS
+    const colWidths = colsStyle.map(col => col.width)
+    const indexes   = colsStyle.map((_, i) => i)
+    let columns     = indexes.map(() => [])
 
-    const colWidthN = colsStyle.map(col => col.width)
+    for (let i = 0; i < itemsList.length; i++) {
+      const items = itemsList[i]
 
-    const indexes = colsStyle.map((_, i) => i)
+      const wordsList = items.map(splitWords)
 
-    let colN = indexes.map(() => [])
+      let ks   = indexes.map(() => 0)
+      let rows = indexes.map(() => '')
 
-    for (let i = 0; i < items.length; i++) {
-      const itemN = items[i]
+      while (indexes.reduce((bool, index) => bool || ks[index] < wordsList[index].length, false)) {
+        const words = indexes.map(index => wordsList[index][ks[index]] || '')
 
-      const wordsN = itemN.map(splitWords)
+        const fulls = indexes.map(index => ks[index] >= wordsList[index].length || (rows[index] + words[index]).length > colWidths[index])
 
-      let kN = indexes.map(() => 0)
-
-      let rowN = indexes.map(() => '')
-
-      while (indexes.reduce((bool, index) => bool || kN[index] < wordsN[index].length, false)) {
-        const wordN = indexes.map(index => wordsN[index][kN[index]] || '')
-
-        const fullN = indexes.map(index => kN[index] >= wordsN[index].length || (rowN[index] + wordN[index]).length > colWidthN[index])
-
-        if (fullN.reduce((bool, p) => bool && p, true)) {
-          colN = indexes.map(index => [...colN[index], rowN[index]])
-          rowN = indexes.map(index => wordN[index] !== ' ' ? wordN[index] : '')
-          kN   = indexes.map(index => kN[index] + 1)
+        if (fulls.reduce((bool, p) => bool && p, true)) {
+          columns = indexes.map(index => [...columns[index], rows[index]])
+          rows    = indexes.map(index => words[index] !== ' ' ? words[index] : '')
+          ks      = indexes.map(index => ks[index] + 1)
         }
-        
+
         indexes.forEach(index => {
-          if (!fullN[index]) {
-            rowN[index] = rowN[index] + wordN[index]
-            kN[index]   = kN[index] + 1
+          if (!fulls[index]) {
+            rows[index] = rows[index] + words[index]
+            ks[index]   = ks[index] + 1
           }
         })
       }
 
-      colN = indexes.map(index => [...colN[index], rowN[index]])
+      columns = indexes.map(index => [...columns[index], rows[index]])
     }
 
-    return cols(colN, id)(style)
+    return cols(columns, id)(style)
   }
 }
 
