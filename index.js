@@ -46,8 +46,8 @@ const res = fooParser(opts)({argv})
 
 
 
-const line  = require('./src/help/line')
-const lines = require('./src/help/lines')
+const line  = require('./src/help/layout/line')
+const lines = require('./src/help/layout/lines')
 
 
 
