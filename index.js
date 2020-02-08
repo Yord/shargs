@@ -46,6 +46,10 @@ const res = fooParser(opts)({argv})
 
 
 
+const line = require('./src/help/line')
+
+
+
 const exAStyle = {
   line: {
     width: 40
@@ -767,11 +771,6 @@ function br (id = undefined) {
 
 function brs (length = 1, id = undefined) {
   return (style = {}) => Array.from({length}, () => br(id)(style)).join('')
-}
-
-// A => String
-function line (text = '', id = undefined) {
-  return ({line = {}, [id]: idLine} = {}) => ''.padStart((idLine || line).padStart) + text.padEnd((idLine || line).width) + '\n'
 }
 
 // A => String
