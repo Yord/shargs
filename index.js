@@ -46,6 +46,27 @@ const res = fooParser(opts)({argv})
 
 
 
+const layout   = require('./src/help/layout')
+const br       = require('./src/help/layout/br')
+const brs      = require('./src/help/layout/brs')
+const cols     = require('./src/help/layout/cols')
+const defs     = require('./src/help/layout/defs')
+const line     = require('./src/help/layout/line')
+const lines    = require('./src/help/layout/lines')
+const table    = require('./src/help/layout/table')
+const text     = require('./src/help/layout/text')
+const texts    = require('./src/help/layout/texts')
+const usage    = require('./src/help/usage')
+const note     = require('./src/help/usage/note')
+const notes    = require('./src/help/usage/notes')
+const optsDefs = require('./src/help/usage/optsDefs')
+const optsList = require('./src/help/usage/optsList')
+const space    = require('./src/help/usage/space')
+const spaces   = require('./src/help/usage/spaces')
+const synopsis = require('./src/help/usage/synopsis')
+
+
+
 const exAStyle = {
   line: {
     width: 40
@@ -746,234 +767,6 @@ console.log('exD0  === exD1',  exD0  === exD1)
 console.log('exD1  === exD2',  exD1  === exD2)
 
 
-
-// [A] => String
-function layout (toStrings = []) {
-  return (style = {}) => toStrings.map(toString => toString(style)).join('')
-}
-
-function usage (toStrings = []) {
-  return (opts = []) => layout(toStrings.map(toString => toString(opts)))
-}
-
-
-
-// The following functions automatically deal with line breaks
-
-// A => String
-function br (id = undefined) {
-  return line('', id)
-}
-
-function brs (length = 1, id = undefined) {
-  return (style = {}) => Array.from({length}, () => br(id)(style)).join('')
-}
-
-// A => String
-function line (text = '', id = undefined) {
-  return ({line = {}, [id]: idLine} = {}) => ''.padStart((idLine || line).padStart) + text.padEnd((idLine || line).width) + '\n'
-}
-
-// A => String
-function lines (strings = [], id = undefined) {
-  return (style = {}) => strings.map(string => line(string, id)(style)).join('')
-}
-
-
-
-// The following functions automatically deal with organizing text into columns
-
-// A => String
-function cols (columns = [], id = undefined) {
-  // make sure cols are long enough for all elements or have default cols available
-  return (style = {}) => {
-    const {cols = [], [id]: idCols = undefined} = style
-
-    const length = columns.reduce((max, column) => Math.max(max, column.length), 0)
-  
-    const strings = []
-
-    for (let i = 0; i < length; i++) {
-      let string = ''
-
-      for (let j = 0; j < columns.length; j++) {
-        const text = columns[j][i] || ''
-
-        const width    = ((idCols || cols)[j] || {}).width
-        const padStart = ((idCols || cols)[j] || {}).padStart || 0
-        const padEnd   = ((idCols || cols)[j] || {}).padEnd   || 0
-
-        string += ''.padStart(padStart) + text.padEnd(width) + ''.padEnd(padEnd)
-      }
-
-      strings.push(string)
-    }
-
-    return lines(strings, id)(style)
-  }
-}
-
-
-
-// The following functions automatically deal with strings that are longer than the width
-
-// B => String
-function texts (strings = [], id = undefined) {
-  return (style = {}) => strings.map(string => text(string, id)(style)).join('')
-}
-
-// B => A
-function text (STRING = '', id = undefined) {
-  return (style = {}) => {
-    const {line = {}, [id]: idLine} = style
-
-    const words = splitWords(STRING)
-
-    const strings = []
-    let string    = ''
-
-    for (let i = 0; i < words.length; i++) {
-      const word = words[i]
-
-      const lineFull = (string + word).length > (idLine || line).width
-      
-      if (lineFull) {
-        strings.push(string)
-        string = word === ' ' ? '' : word
-      } else {
-        string += word
-      }
-    }
-
-    strings.push(string)
-
-    return lines(strings, id)(style)
-  }
-}
-
-function defs (definitions = [], id = undefined) {
-  return (style = {}) => {
-    const {defs: {title: TITLE = {}, desc: DESC = {}} = {}} = style
-
-    return definitions.map(({title, desc}) =>
-      text(title)({line: TITLE}) +
-      text(desc)({line: DESC})   +
-      br()(style) // We should not assume a br here by default. Make it configurable!
-    ).join('')
-  }
-}
-
-// B => A
-function table (itemsList = [], id = undefined) {
-  return (style = {}) => {
-    const {cols: COLS, [id]: idCols = undefined} = style
-
-    const colsStyle = idCols || COLS
-    const colWidths = colsStyle.map(col => col.width)
-    const indexes   = colsStyle.map((_, i) => i)
-    let columns     = indexes.map(() => [])
-
-    for (let i = 0; i < itemsList.length; i++) {
-      const items = itemsList[i]
-
-      const wordsList = items.map(splitWords)
-
-      let ks   = indexes.map(() => 0)
-      let rows = indexes.map(() => '')
-
-      while (indexes.reduce((bool, index) => bool || ks[index] < wordsList[index].length, false)) {
-        const words = indexes.map(index => wordsList[index][ks[index]] || '')
-
-        const fulls = indexes.map(index => ks[index] >= wordsList[index].length || (rows[index] + words[index]).length > colWidths[index])
-
-        if (fulls.reduce((bool, p) => bool && p, true)) {
-          columns = indexes.map(index => [...columns[index], rows[index]])
-          rows    = indexes.map(index => words[index] !== ' ' ? words[index] : '')
-          ks      = indexes.map(index => ks[index] + 1)
-        }
-
-        indexes.forEach(index => {
-          if (!fulls[index]) {
-            rows[index] = rows[index] + words[index]
-            ks[index]   = ks[index] + 1
-          }
-        })
-      }
-
-      columns = indexes.map(index => [...columns[index], rows[index]])
-    }
-
-    return cols(columns, id)(style)
-  }
-}
-
-
-
-// The following functions automatically deal with strings that contain opts
-
-function notes (strings = [], id = undefined) {
-  return () => texts(strings, id)
-}
-
-function note (string = '', id = undefined) {
-  return () => text(string, id)
-}
-
-function spaces (length, id = undefined) {
-  return () => brs(length, id)
-}
-
-function space (id = undefined) {
-  return note('', id)
-}
-
-function synopsis (start = '', end = '', id = undefined) {
-  return (opts = []) => {
-    const argsString  = ({args = []}) => '[' + args.join('|') + ']'
-    const argsStrings = (
-      opts
-      .filter(({types}) => typeof types !== 'undefined' && types !== null) // Filter all commands
-      .map(argsString).join(' ')
-    )
-
-    return text(start + (start !== '' ? ' ' : '') + argsStrings + (end !== '' ? ' ' : '') + end, id)
-  }
-}
-
-function optsDefs (filter = ({types}) => typeof types !== 'undefined' && types !== null, id = undefined) {
-  return (opts = []) => {
-    const items = (
-      opts
-      .filter(filter)
-      .map(opt => ({types} = opt, types !== null && types.length === 0 ? {...opt, types: ['flag']} : opt))
-      .map(({args, desc, types}) => ({
-        title: args.join(', ') + ' [' + types.join(', ') + ']',
-        desc
-      }))
-    )
-
-    return defs(items, id)
-  }
-}
-
-function optsList (filter = ({types}) => typeof types !== 'undefined' && types !== null, id = undefined) {  // Filter all commands
-  return (opts = []) => {
-    const items = (
-      opts
-      .filter(filter)
-      .map(opt => ({types} = opt, types !== null && types.length === 0 ? {...opt, types: ['flag']} : opt))
-      .map(({args, desc, types}) => [args.join(', '), desc + (types === null ? '' : ' [' + types.join(', ') + ']')])
-    )
-  
-    return table(items, id)
-  }
-}
-
-
-
-function splitWords (string) {
-  return string.split(/(\s+)/g)
-}
 
 function onlyFirstArg (opts = []) {
   return opts.map(opt => ({...opt, args: (opt.args || []).slice(0, 1)}))
