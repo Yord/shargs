@@ -46,8 +46,9 @@ const res = fooParser(opts)({argv})
 
 
 
-const line  = require('./src/help/layout/line')
-const lines = require('./src/help/layout/lines')
+const layout = require('./src/help/layout')
+const line   = require('./src/help/layout/line')
+const lines  = require('./src/help/layout/lines')
 
 
 
@@ -751,11 +752,6 @@ console.log('exD0  === exD1',  exD0  === exD1)
 console.log('exD1  === exD2',  exD1  === exD2)
 
 
-
-// [A] => String
-function layout (toStrings = []) {
-  return (style = {}) => toStrings.map(toString => toString(style)).join('')
-}
 
 function usage (toStrings = []) {
   return (opts = []) => layout(toStrings.map(toString => toString(opts)))
