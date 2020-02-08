@@ -46,7 +46,8 @@ const res = fooParser(opts)({argv})
 
 
 
-const line = require('./src/help/line')
+const line  = require('./src/help/line')
+const lines = require('./src/help/lines')
 
 
 
@@ -771,11 +772,6 @@ function br (id = undefined) {
 
 function brs (length = 1, id = undefined) {
   return (style = {}) => Array.from({length}, () => br(id)(style)).join('')
-}
-
-// A => String
-function lines (strings = [], id = undefined) {
-  return (style = {}) => strings.map(string => line(string, id)(style)).join('')
 }
 
 
