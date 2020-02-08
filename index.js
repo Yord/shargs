@@ -57,6 +57,7 @@ const table  = require('./src/help/layout/table')
 const text   = require('./src/help/layout/text')
 const texts  = require('./src/help/layout/texts')
 const usage  = require('./src/help/usage')
+const note   = require('./src/help/usage/note')
 const notes  = require('./src/help/usage/notes')
 
 
@@ -763,10 +764,6 @@ console.log('exD1  === exD2',  exD1  === exD2)
 
 
 // The following functions automatically deal with strings that contain opts
-
-function note (string = '', id = undefined) {
-  return () => text(string, id)
-}
 
 function spaces (length, id = undefined) {
   return () => brs(length, id)
