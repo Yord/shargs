@@ -50,6 +50,7 @@ const layout = require('./src/help/layout')
 const br     = require('./src/help/layout/br')
 const brs    = require('./src/help/layout/brs')
 const cols   = require('./src/help/layout/cols')
+const defs   = require('./src/help/layout/defs')
 const line   = require('./src/help/layout/line')
 const lines  = require('./src/help/layout/lines')
 const text   = require('./src/help/layout/text')
@@ -760,18 +761,6 @@ console.log('exD1  === exD2',  exD1  === exD2)
 
 
 // The following functions automatically deal with strings that are longer than the width
-
-function defs (definitions = [], id = undefined) {
-  return (style = {}) => {
-    const {defs: {title: TITLE = {}, desc: DESC = {}} = {}} = style
-
-    return definitions.map(({title, desc}) =>
-      text(title)({line: TITLE}) +
-      text(desc)({line: DESC})   +
-      br()(style) // We should not assume a br here by default. Make it configurable!
-    ).join('')
-  }
-}
 
 // B => A
 function table (itemsList = [], id = undefined) {
