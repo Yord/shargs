@@ -50,6 +50,7 @@ const layout = require('./src/help/layout')
 const line   = require('./src/help/layout/line')
 const lines  = require('./src/help/layout/lines')
 const text   = require('./src/help/layout/text')
+const texts  = require('./src/help/layout/texts')
 const usage  = require('./src/help/usage')
 
 
@@ -803,11 +804,6 @@ function cols (columns = [], id = undefined) {
 
 
 // The following functions automatically deal with strings that are longer than the width
-
-// B => String
-function texts (strings = [], id = undefined) {
-  return (style = {}) => strings.map(string => text(string, id)(style)).join('')
-}
 
 function defs (definitions = [], id = undefined) {
   return (style = {}) => {
