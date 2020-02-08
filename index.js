@@ -59,6 +59,7 @@ const texts    = require('./src/help/layout/texts')
 const usage    = require('./src/help/usage')
 const note     = require('./src/help/usage/note')
 const notes    = require('./src/help/usage/notes')
+const optsDefs = require('./src/help/usage/optsDefs')
 const space    = require('./src/help/usage/space')
 const spaces   = require('./src/help/usage/spaces')
 const synopsis = require('./src/help/usage/synopsis')
@@ -767,22 +768,6 @@ console.log('exD1  === exD2',  exD1  === exD2)
 
 
 // The following functions automatically deal with strings that contain opts
-
-function optsDefs (filter = ({types}) => typeof types !== 'undefined' && types !== null, id = undefined) {
-  return (opts = []) => {
-    const items = (
-      opts
-      .filter(filter)
-      .map(opt => ({types} = opt, types !== null && types.length === 0 ? {...opt, types: ['flag']} : opt))
-      .map(({args, desc, types}) => ({
-        title: args.join(', ') + ' [' + types.join(', ') + ']',
-        desc
-      }))
-    )
-
-    return defs(items, id)
-  }
-}
 
 function optsList (filter = ({types}) => typeof types !== 'undefined' && types !== null, id = undefined) {  // Filter all commands
   return (opts = []) => {
