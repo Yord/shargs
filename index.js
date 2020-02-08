@@ -46,21 +46,22 @@ const res = fooParser(opts)({argv})
 
 
 
-const layout = require('./src/help/layout')
-const br     = require('./src/help/layout/br')
-const brs    = require('./src/help/layout/brs')
-const cols   = require('./src/help/layout/cols')
-const defs   = require('./src/help/layout/defs')
-const line   = require('./src/help/layout/line')
-const lines  = require('./src/help/layout/lines')
-const table  = require('./src/help/layout/table')
-const text   = require('./src/help/layout/text')
-const texts  = require('./src/help/layout/texts')
-const usage  = require('./src/help/usage')
-const note   = require('./src/help/usage/note')
-const notes  = require('./src/help/usage/notes')
-const space  = require('./src/help/usage/space')
-const spaces = require('./src/help/usage/spaces')
+const layout   = require('./src/help/layout')
+const br       = require('./src/help/layout/br')
+const brs      = require('./src/help/layout/brs')
+const cols     = require('./src/help/layout/cols')
+const defs     = require('./src/help/layout/defs')
+const line     = require('./src/help/layout/line')
+const lines    = require('./src/help/layout/lines')
+const table    = require('./src/help/layout/table')
+const text     = require('./src/help/layout/text')
+const texts    = require('./src/help/layout/texts')
+const usage    = require('./src/help/usage')
+const note     = require('./src/help/usage/note')
+const notes    = require('./src/help/usage/notes')
+const space    = require('./src/help/usage/space')
+const spaces   = require('./src/help/usage/spaces')
+const synopsis = require('./src/help/usage/synopsis')
 
 
 
@@ -766,19 +767,6 @@ console.log('exD1  === exD2',  exD1  === exD2)
 
 
 // The following functions automatically deal with strings that contain opts
-
-function synopsis (start = '', end = '', id = undefined) {
-  return (opts = []) => {
-    const argsString  = ({args = []}) => '[' + args.join('|') + ']'
-    const argsStrings = (
-      opts
-      .filter(({types}) => typeof types !== 'undefined' && types !== null) // Filter all commands
-      .map(argsString).join(' ')
-    )
-
-    return text(start + (start !== '' ? ' ' : '') + argsStrings + (end !== '' ? ' ' : '') + end, id)
-  }
-}
 
 function optsDefs (filter = ({types}) => typeof types !== 'undefined' && types !== null, id = undefined) {
   return (opts = []) => {
