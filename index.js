@@ -48,6 +48,7 @@ const res = fooParser(opts)({argv})
 
 const layout = require('./src/help/layout')
 const br     = require('./src/help/layout/br')
+const brs    = require('./src/help/layout/brs')
 const line   = require('./src/help/layout/line')
 const lines  = require('./src/help/layout/lines')
 const text   = require('./src/help/layout/text')
@@ -754,14 +755,6 @@ const exD2 = layout([
 
 console.log('exD0  === exD1',  exD0  === exD1)
 console.log('exD1  === exD2',  exD1  === exD2)
-
-
-
-// The following functions automatically deal with line breaks
-
-function brs (length = 1, id = undefined) {
-  return (style = {}) => Array.from({length}, () => br(id)(style)).join('')
-}
 
 
 
