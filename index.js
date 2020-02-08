@@ -49,6 +49,7 @@ const res = fooParser(opts)({argv})
 const layout = require('./src/help/layout')
 const line   = require('./src/help/layout/line')
 const lines  = require('./src/help/layout/lines')
+const text   = require('./src/help/layout/text')
 const usage  = require('./src/help/usage')
 
 
@@ -806,35 +807,6 @@ function cols (columns = [], id = undefined) {
 // B => String
 function texts (strings = [], id = undefined) {
   return (style = {}) => strings.map(string => text(string, id)(style)).join('')
-}
-
-// B => A
-function text (STRING = '', id = undefined) {
-  return (style = {}) => {
-    const {line = {}, [id]: idLine} = style
-
-    const words = splitWords(STRING)
-
-    const strings = []
-    let string    = ''
-
-    for (let i = 0; i < words.length; i++) {
-      const word = words[i]
-
-      const lineFull = (string + word).length > (idLine || line).width
-      
-      if (lineFull) {
-        strings.push(string)
-        string = word === ' ' ? '' : word
-      } else {
-        string += word
-      }
-    }
-
-    strings.push(string)
-
-    return lines(strings, id)(style)
-  }
 }
 
 function defs (definitions = [], id = undefined) {
