@@ -49,6 +49,7 @@ const res = fooParser(opts)({argv})
 const layout = require('./src/help/layout')
 const br     = require('./src/help/layout/br')
 const brs    = require('./src/help/layout/brs')
+const cols   = require('./src/help/layout/cols')
 const line   = require('./src/help/layout/line')
 const lines  = require('./src/help/layout/lines')
 const text   = require('./src/help/layout/text')
@@ -755,40 +756,6 @@ const exD2 = layout([
 
 console.log('exD0  === exD1',  exD0  === exD1)
 console.log('exD1  === exD2',  exD1  === exD2)
-
-
-
-// The following functions automatically deal with organizing text into columns
-
-// A => String
-function cols (columns = [], id = undefined) {
-  // make sure cols are long enough for all elements or have default cols available
-  return (style = {}) => {
-    const {cols = [], [id]: idCols = undefined} = style
-
-    const length = columns.reduce((max, column) => Math.max(max, column.length), 0)
-  
-    const strings = []
-
-    for (let i = 0; i < length; i++) {
-      let string = ''
-
-      for (let j = 0; j < columns.length; j++) {
-        const text = columns[j][i] || ''
-
-        const width    = ((idCols || cols)[j] || {}).width
-        const padStart = ((idCols || cols)[j] || {}).padStart || 0
-        const padEnd   = ((idCols || cols)[j] || {}).padEnd   || 0
-
-        string += ''.padStart(padStart) + text.padEnd(width) + ''.padEnd(padEnd)
-      }
-
-      strings.push(string)
-    }
-
-    return lines(strings, id)(style)
-  }
-}
 
 
 
