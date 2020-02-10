@@ -4,6 +4,7 @@ const toOpts            = require('./src/parser/toOpts')
 const splitShortOptions = require('./src/parser/argv/splitShortOptions')
 const cast              = require('./src/parser/opts/cast')
 const restrictToOnly    = require('./src/parser/opts/restrictToOnly')
+const emptyRest         = require('./src/parser/args/emptyRest')
 
 function fooParser (opts) {
   return parser({
@@ -11,7 +12,7 @@ function fooParser (opts) {
     toOpts,
     opts:   [cast, restrictToOnly],
     toArgs: toArgs(fooParser),
-    args:   []
+    args:   [emptyRest]
   })(opts)
 }
 
