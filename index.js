@@ -523,7 +523,11 @@ const exCStyle = {
   tab: {
     padStart: 10,
     width: 70
-  }
+  },
+  tabTable: [
+    {padStart: 10, width: 7},
+    {width: 63}
+  ]
 }
 
 const exCOpts = [
@@ -677,8 +681,8 @@ const exC3 = usage([
   note('DESCRIPTION', 'h1'),
   note('Move or rename a file, directory or symlink.'),
   space(),
-  o(synopsis('git mv', '<source> <destination>', 'tab'), onlyFirstArg),
-  o(synopsis('git mv', '<source> ... <destination directory>', 'tab'), onlyFirstArg),
+  o(synopsis('git mv', '<source> <destination>', 'tabTable'), onlyFirstArg),
+  o(synopsis('git mv', '<source> ... <destination directory>', 'tabTable'), onlyFirstArg),
   space(),
   note('The index is updated after successful completion, but the change must still be committed.'),
   space(),
