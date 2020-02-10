@@ -1,4 +1,4 @@
-const text = require('../layout/text')
+const table = require('../layout/table')
 
 module.exports = (start = '', end = '', id = undefined) => (
   (opts = []) => {
@@ -9,6 +9,19 @@ module.exports = (start = '', end = '', id = undefined) => (
       .map(argsString).join(' ')
     )
 
-    return text(start + (start !== '' ? ' ' : '') + argsStrings + (end !== '' ? ' ' : '') + end, id)
+    return STYLE => {
+      const width = STYLE.line.width
+      const style = {
+        ...STYLE,
+        cols: [
+          {width: Math.min(start.length, width), padEnd: start.length < width ? 1 : 0},
+          {width: start.length < width ? width - start.length - 1 : width}
+        ]
+      }
+      return table(
+        [[start, argsStrings + (end !== '' ? ' ' : '') + end]],
+        id
+      )(style)
+    }
   }
 )

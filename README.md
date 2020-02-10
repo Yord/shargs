@@ -23,57 +23,346 @@ $ npm i --save shargs
 This project is work in progress.
 Use it at your own risk!
 
-## 🦈 `shargs`
+## Features
 
-`shargs` is the command-line argument parser used by [`pxi`][pxi].
++   **Declarative:** Describe command-line arguments using a declarative DSL and derive parsers and usage from that.
++   **Modular Parsers:** Compose your own parsers choosing from an abundance of parser functions.
++   **Predefined Parsers:** Instead of building your own, choose between many predefined parsers.
++   **Modular Usage Texts:** Build your own usage documentation by composing command-line arguments with text blocks.
++   **Predefined Usage Texts:** Instead of building your own, choose between many predefined parsers.
 
-### Defining Command-Line Arguments
+## Getting Started
 
-The following definitions of `answerCmd` are identical:
+<details>
+<summary>
+Describe command-line arguments:
+
+<p>
 
 ```js
-const answerCmd = {key: 'answer', args: ['--answer', '-a'], types: ['number'], only: [42]}
-const answerCmd = number('answer', ['--answer', '-a'], {only: [42]})
-
-const questionCmd = string('question', ['--question'])
+const opts = [
+  string('question', ['-q', '--question'], {desc: 'A question.'}),
+  number('answer', ['-a', '--answer'], {desc: 'The (default) answer.', only: [42]}),
+  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
+]
 ```
 
-You may either describe command-line arguments using a plain object
-or a type function like `number` or `string` from the functional DSL.
+</p>
+</summary>
 
-The definition of `answerCmd` reads as follows:
+Shargs provides a DSL for declaring command-line arguments.
+This simple example uses three different shargs type constructors:
+`string`, `number`, and `flag`. All type constructors take the same arguments:
 
-> `answerCmd` is a command-line argument that is read to the `answer` key
-> and is set using either `--answer` or `-a`.
-> It must be followed by exactly one number that can only be `42`.
+1.  *(required)* An object key used to store the parsed values.
+2.  *(required)* An array of command-line arguments that users may use to define the value.
+3.  *(optional)* An object holding optional keys like `desc` and `only`.
 
-The object syntax takes `key`, `args`, and `types` as keys,
-while the type function syntax takes `key` and `args` as the first two arguments
-and sets `types` depending on the type function.
-Additional fields are passed as additional keys in the object syntax
-or in an object as the third parameter in the type function syntax.
+Type constructors are only syntactic sugar.
+In fact, `opts` could also be written as:
 
-#### Fields
+```js
+const opts = [
+  {key: 'question', types: ['string'], args: ['-q', '--question'], desc: 'A question.'},
+  {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The (default) answer.', only: [42]},
+  {key: 'help', types: [], args: ['-h', '--help'], desc: 'Print this help message and exit.'}
+]
+```
 
-The following command-line argument fields are available:
+</details>
 
-| Field   | Value                                                        | Default | Description                                                                                                                                    |
-|---------|--------------------------------------------------------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------|
-| `key`   | string                                                       | `null`  | The command-line argument's value is assigned to a key of this name.                                                                           |
-| `args`  | array of strings                                             | `[]`    | A list of options that may be used to set the command-line option.                                                                             |
-| `desc`  | string                                                       | `''`    | Description of the command-line argument for use in the usage text.                                                                            |
-| `only`  | array of values                                              | `null`  | The command-line argument's value can only be one of the values in this list. If `only` is `null`, the value may be set freely.                |
-| `opts`  | [command-line option](#defining-command-line-options) object | `null`  | This field is only used if the command-line argument is a command (if `types` is `null`).                                                      |
-| `types` | `['number']`                                                 |         | This command-line argument takes exactly one number.                                                                                           |
-| `types` | `['string']`                                                 |         | This command-line argument takes exactly one string.                                                                                           |
-| `types` | `['bool']`                                                   |         | This command-line argument takes exactly one boolean, `true` or `false`.                                                                       |
-| `types` | `['number','string']`                                        |         | This command-line argument takes exactly two values, a number and a string.                                                                    |
-| `types` | `[]`                                                         |         | This command-line argument takes no value. It is a flag that is `true` if used and `false` if not used.                                        |
-| `types` | `null`                                                       |         | This command-line argument is a command. It may have its own list of arguments (see `opts`) and is terminated by either `--` or a line ending. |
+<details>
+<summary>
+Declare a parser:
 
-#### Functional DSL
+<p>
 
-The following type functions are available to generate command-line arguments:
+```js
+const deepThought = parser({
+  argv: [splitShortOptions],
+  toOpts,
+  opts: [cast, restrictToOnly],
+  toArgs: toArgs(),
+  args: [emptyRest]
+})
+```
+
+</p>
+</summary>
+
+The parser consists of six parser functions are applied in the following order:
+
+1.  `splitShortOptions`
+2.  `toOpts`
+3.  `cast`
+4.  `restrictToOnly`
+5.  `toArgs`
+6.  `removeRest`
+
+</details>
+
+<details>
+<summary>
+Apply the parser:
+
+<p>
+
+```js
+// node index.js --unknown -ha 42
+const argv = ['--unknown', '-ha', '42']
+
+const {errs, args} = deepThought(opts)({argv})
+```
+
+</p>
+</summary>
+
+To demonstrate intermediate parsing results, logging was added to `deepThought`:
+
+```js
+const log = text => obj => {
+  const {argv, opts, args} = obj
+  console.log(text, argv || opts || args)
+  return obj
+}
+
+const deepThought = parser({
+  argv: [log('A'), splitShortOptions, log('B')],
+  toOpts,
+  opts: [log('C'), cast, restrictToOnly, log('D')],
+  toArgs: toArgs(),
+  args: [log('E'), emptyRest, log('F')]
+})
+
+// node index.js --unknown -ha 42
+const argv = ['--unknown', '-ha', '42']
+
+const {errs, args} = deepThought(opts)({argv})
+```
+
+The logging output reads:
+
+```bash
+A ['--unknown', '-ha', '42']
+B ['--unknown', '-h', '-a', '42']
+C [
+  {values: ['--unknown']},
+  {key: 'help', types: [], ... values: []},
+  {key: 'answer', types: ['number'], ... values: ['42']}
+]
+D [
+  {values: ['--unknown']},
+  {key: 'help', types: [], ... values: []},
+  {key: 'answer', types: ['number'], ... values: [42]}
+]
+E {help: true, answer: 42, _: ['--unknown']}
+F {help: true, answer: 42, _: []}
+```
+
+Shargs parses command-line argument values in five stages:
+
+1.  The first stage applies functions that transform `argv` arrays into other `argv` arrays.<br />
+    E.g. `splitShortOptions` transforms `A` into `B` by splitting `-ha` into `-h` and `-a`.
+2.  The second stage transforms `argv` arrays into `opts` objects.<br />
+    E.g. see the difference between `B` and `C`.
+3.  The third stage applies functions that transform `opts` objects into other `opts` objects.<br />
+    E.g. `cast` transforms `C` into `D` by casting `'42'` to the number `42`.
+4.  The fourth stage transforms `opts` objects into `args` objects.<br />
+    E.g. see the difference between `D` and `E`.
+5.  The fifth stage applies functions that transform `args` objects into other `args` objects.<br />
+    E.g. `emptyRest` transforms `E` into `F` by emptying the `'_'` key.
+
+</details>
+
+<details>
+<summary>
+Declare a usage documentation:
+
+<p>
+
+```js
+const docs = usage([
+  synopsis('deepThought'),
+  space(),
+  optsList(),
+  space(),
+  note(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+])
+```
+
+</p>
+</summary>
+
+Every command-line tools benefits from a well-formatted usage documentation.
+Shargs brings its own DSL for defining one that can easily be extended with user functions.
+The DSL is declarative, which means it describes the desired structure without concerning itself with the details.
+Try changing `optsList` to `optsDefs` later to experience of what this means:
+
+```js
+const docs = usage([
+  synopsis('deepThought'),
+  space(),
+  optsDefs(),
+  space(),
+  note(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+])
+```
+
+</details>
+
+<details>
+<summary>
+Build the usage documentation:
+
+<p>
+
+```js
+const style = {
+  line: {width: 80},
+  cols: [{width: 20}, {width: 60}]
+}
+
+const help = docs(opts)(style)
+```
+
+</p>
+</summary>
+
+Supplying `opts` and a `style` to `docs` renders a help text.
+The style defines how the help is layouted.
+With the current style, the following is rendered:
+
+```bash
+deepThought [-q|--question] [-a|--answer] [-h|--help]                           
+                                                                                
+-q, --question      A question. [string]                                        
+-a, --answer        The (default) answer. [number]                              
+-h, --help          Print this help message and exit. [flag]                    
+                                                                                
+Deep Thought was created to come up with the Answer to The Ultimate Question of 
+Life, the Universe, and Everything.
+```
+
+You may experiment with `style` to get the result you like.
+E.g. you may want to change the style to the following:
+
+```js
+const style = {
+  line: {width: 40},
+  cols: [{width: 10, padEnd: 2}, {width: 28}]
+}
+
+const help = docs(opts)(style)
+```
+
+`help` now reads:
+
+```bash
+deepThought [-q|--question]
+            [-a|--answer] [-h|--help]
+
+-q,         A question. [string]
+--question
+-a,         The (default) answer.
+--answer    [number]
+-h, --help  Print this help message and
+            exit. [flag]
+
+Deep Thought was created to come up with
+the Answer to The Ultimate Question of
+Life, the Universe, and Everything.
+```
+
+Note, how shargs automatically takes care of line breaks and other formatting for you.
+
+</details>
+
+<details>
+<summary>
+Use the parsed values in your program:
+
+<p>
+
+```js
+if (args.help) {
+  console.log(help)
+} else {
+  console.log('The answer is: ' + args.answer)
+}
+```
+
+</p>
+</summary>
+
+Other command-line argument parsers handle displaying usage documentation for you.
+Shargs makes the deliberate decision to leave that to the user,
+thus giving him more control.
+
+If `args` contains a `help` field, the `help` text is printed:
+
+```bash
+deepThought [-q|--question] [-a|--answer] [-h|--help]                           
+                                                                                
+-q, --question      A question. [string]                                        
+-a, --answer        The (default) answer. [number]                              
+-h, --help          Print this help message and exit. [flag]                    
+                                                                                
+Deep Thought was created to come up with the Answer to The Ultimate Question of 
+Life, the Universe, and Everything.
+```
+
+Otherwise, the answer is printed.
+
+</details>
+
+## 🦈 `shargs`
+
+Shargs is the command-line argument parser used by [`pxi`][pxi].
+
+### Command-Line Arguments DSL
+
+Foo
+
+```js
+const askOpts = [
+  {key: 'question', types: ['string'], args: ['-q', '--question'], desc: 'A question.'},
+  {key: 'help', types: [], args: ['-h', '--help'], desc: 'Print this help message and exit.'}
+]
+```
+
+Foo
+
+| Field   | Value                        | Default | Description                                                                                                                                    |
+|---------|------------------------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| `key`   | string                       | `null`  | The command-line argument's value is assigned to a key of this name.                                                                           |
+| `args`  | array of strings             | `[]`    | A list of options that may be used to set the command-line option.                                                                             |
+| `desc`  | string                       | `''`    | Description of the command-line argument for use in the usage text.                                                                            |
+| `only`  | array of values              | `null`  | The command-line argument's value can only be one of the values in this list. If `only` is `null`, the value may be set freely.                |
+| `opts`  | command-line arguments array | `null`  | This field is only used if the command-line argument is a command (if `types` is `null`).                                                      |
+| `types` | `['number']`                 |         | This command-line argument takes exactly one number.                                                                                           |
+| `types` | `['string']`                 |         | This command-line argument takes exactly one string.                                                                                           |
+| `types` | `['bool']`                   |         | This command-line argument takes exactly one boolean, `true` or `false`.                                                                       |
+| `types` | `['number','string']`        |         | This command-line argument takes exactly two values, a number and a string.                                                                    |
+| `types` | `[]`                         |         | This command-line argument takes no value. It is a flag that is `true` if used and `false` if not used.                                        |
+| `types` | `null`                       |         | This command-line argument is a command. It may have its own list of arguments (see `opts`) and is terminated by either `--` or a line ending. |
+
+Foo
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The (default) answer.', only: [42]}),
+  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'}),
+  command('ask', ['ask'], {opts: askOpts})
+]
+```
+
+Foo
 
 | Function                          | Description                                                |
 |-----------------------------------|------------------------------------------------------------|
@@ -84,137 +373,130 @@ The following type functions are available to generate command-line arguments:
 | `number(key, args, fields)`       | Assigns `types: ['number']`, `key` and `args` to `fields`. |
 | `string(key, args, fields)`       | Assigns `types: ['string']`, `key` and `args` to `fields`. |
 
-### Defining Command-Line Options
+Foo
 
-Command-line options are very similar to command-line arguments.
-In fact, most [command-line parsers](#defining-command-line-parsers) use the `option` function
-to generate them based on command-line arguments.
+### Command-Line Parsers DSL
 
-The following definitions of `answerOpt` are identical:
+Foo
 
 ```js
-const answerOpt = {
-  errs: [],
-  args: {
-    '--answer': [{key: 'answer', types: ['number'], only: [42]}],
-    '-a':       [{key: 'answer', types: ['number'], only: [42]}]
-  }
-}
-const answerOpt = option(answerCmd)
-```
-
-You may either describe command-line options using a plain object
-or the `option` function that takes a [command-line argument](#defining-command-line-arguments).
-
-The definition of `answerOpt` reads as follows:
-
-> `answerOpt` is a command-line option that has no errors and the following arguments:
-> `--answer` is an argument that is read to the `answer` key and
-> must be followed by exactly one number that can only be `42`.
-> `-a` is an argument that is read to the `answer` key and
-> must be followed by exactly one number that can only be `42`.
-
-The reason why options are defined redundant is because that makes it easier for parsers to look them up.
-Command-line arguments exist, because their syntax is easier to parse for usage generators.
-
-Several Command-line options may be combined:
-
-```js
-const questionOpt = option(questionCmd)
-
-const combinedOpt = combine(questionOpt, answerOpt)
-const combinedOpt = {
-  errs: [],
-  args: {
-    '--question': [{key: 'question', types: ['string']}],
-    '--answer':   [{key: 'answer',   types: ['number'], only: [42]}],
-    '-a':         [{key: 'answer',   types: ['number'], only: [42]}]
-  }
+function deepThought (opts) {
+  return parser({
+    argv: [splitShortOptions],
+    toOpts,
+    opts: [cast, restrictToOnly],
+    toArgs: toArgs(deepThought),
+    args: [emptyRest]
+  })(opts)
 }
 ```
 
-The `combinedOpt` includes `questionOpt` as well as `answerOpt`.
-If either one has errors, they are gathered in the `errs` array.
-Setting errors explicitly does not make much sense.
-However, `option` uses `errs` if e.g. a command-line argument does not set an `arg` or has an empty `args`.
+Foo
 
-In some cases (most cases actually), an answer is not a number but a string.
+| Stage    | Plugin                            | Description                                                                                                     |
+|----------|-----------------------------------|-----------------------------------------------------------------------------------------------------------------|
+| `argv`   | `splitShortOptions({errs, argv})` | Splits argument groups of shape `-vs` to `-v -s`. Only works if the arguments are preceded by a single dash.    |
+| `toOpts` | `toOpts(args)({errs, argv})`      | Groups arguments together with their values, types, and options if an argument is a command.                    |
+| `opts`   | `cast(opts)`                      |                                                                                                                 |
+| `opts`   | `restrictToOnly(opts)`            |                                                                                                                 |
+| `toArgs` | `toArgs(parser)({errs, argv})`    | Casts values to their types, validates values, and outputs the parsing result in a hierarchical JSON structure. |
+| `args`   | `emptyRest(args)`                 |                                                                                                                 |
+
+Foo
+
+### Usage Documentation DSL
+
+Foo
 
 ```js
-const answerStrCmd = string('answerStr', ['-a']})
-const answerStrOpt = option(answerStrCmd)
+const docs = usage([
+  synopsis('deepThought'),
+  space(),
+  optsList(),
+  space(),
+  note(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+])
+```
 
-const combinedOpt  = combine(answerCmd, answerStrCmd)
-const combinedOpt  = {
-  errs: [],
-  args: {
-    '--answer': [
-      {key: 'answer',    types: ['number'], only: [42]}
-    ],
-    '-a': [
-      {key: 'answer',    types: ['number'], only: [42]}
-      {key: 'answerStr', types: ['string']}
-    ]
-  }
+Foo
+
+| Function                            | Description                                                |
+|-------------------------------------|------------------------------------------------------------|
+| `usage(toStrings)(opts)(style)`     | Foo                                                        |
+| `note(string, id)(opts)(style)`     | Foo                                                        |
+| `notes(string, id)(opts)(style)`    | Foo                                                        |
+| `optsDefs(string, id)(opts)(style)` | Foo                                                        |
+| `optsLine(string, id)(opts)(style)` | Foo                                                        |
+| `space(string, id)(opts)(style)`    | Foo                                                        |
+| `spaces(string, id)(opts)(style)`   | Foo                                                        |
+| `synopsis(string, id)(opts)(style)` | Foo                                                        |
+
+Foo
+
+```js
+const askDocs = layout([
+  text('deepThought ask [-q|--question] [-h|--help]'),
+  br(),
+  table([
+    ['-q, --question', 'A question. [string]'],
+    ['-h, --help', 'Print this help message and exit. [flag]']
+  ]),
+  br(),
+  text(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+])
+```
+
+Foo
+
+| Function                       | Description                                                |
+|--------------------------------|------------------------------------------------------------|
+| `layout(toStrings)(style)`     | Foo                                                        |
+| `br(id)(style)`                | Foo                                                        |
+| `brs(id)(style)`               | Foo                                                        |
+| `cols(columns, id)(style)`     | Foo                                                        |
+| `defs(definitions, id)(style)` | Foo                                                        |
+| `line(string, id)(style)`      | Foo                                                        |
+| `lines(strings, id)(style)`    | Foo                                                        |
+| `table(itemsList, id)(style)`  | Foo                                                        |
+| `text(string, id)(style)`      | Foo                                                        |
+| `texts(strings, id)(style)`    | Foo                                                        |
+
+Foo
+
+### Bringing It All Together
+
+Foo
+
+```js
+// node index.js ask -q 'What is the answer to everything?'
+const argv = ['ask', '-q', 'What is the answer to everything?']
+
+const {errs, args} = deepThought(opts)({argv})
+
+const style = {
+  line: {width: 80},
+  cols: [{width: 20}, {width: 60}]
+}
+
+const help = docs(opts)(style)
+const askHelp = askDocs(style)
+
+if (args.help) {
+  console.log(help)
+} else if (args.ask.help) {
+  console.log(askHelp)
+} else {
+  console.log('The answer is: ' + args.answer)
 }
 ```
 
-Here, a new command-line argument `answerStr` is defined that has the same argument `-a` as `answer`.
-If options of both command-line arguments are combined, the `-a` argument is interpreted twice:
-By `answer` as a number that can only be `42`, as well as by `answerStr` as a string without restrictions.
-An option can only be written two several keys, if the number of its arguments match.
-If `combine` tries to adds another interpretation to an argument that does not have the same number of keys,
-an error is recorded instead.
-
-### Defining Command-Line Parsers
-
-Command-line parsers combine command-line options with parser plugins
-to process the command-line string given to a command-line program.
-The following parser uses `combinedOpts`:
-
-```js
-const deepThought = opts => parser(
-  splitShortOptions,
-  parseArgs(opts),
-  mergeArgs()
-)(opts)
-
-const parse = deepThought(combinedOpt)
-
-const result = parse(sliceArgv({argv: process.argv}))
-```
-
-The `deepThought` parser lets you parse command line input of the following kind:
-
-```bash
-$ node index.js --question "What is the answer to everything?" -a 42
-```
-
-Which would be equivalent to the following:
-
-```js
-const result = {
-  errs: [],
-  argv: {
-    "_": [],
-    question: "What is the answer to everything?",
-    answer: 42
-  }
-}
-```
-
-#### Parser Plugins
-
-The following parser plugins are available:
-
-| Plugin                            | Description                                                                                                     |
-|-----------------------------------|-----------------------------------------------------------------------------------------------------------------|
-| `sliceArgv({errs, argv})`         | Removes the first two elements from a process.argv array, as they are meta data.                                |
-| `splitShortOptions({errs, argv})` | Splits argument groups of shape `-vs` to `-v -s`. Only works if the arguments are preceded by a single dash.    |
-| `parseArgs({args})({errs, argv})` | Groups arguments together with their values, types, and options if an argument is a command.                    |
-| `mergeArgs(parser)({errs, argv})` | Casts values to their types, validates values, and outputs the parsing result in a hierarchical JSON structure. |
-
-Note that not every combination of plugins produces a valid parser.
+Foo
 
 ## Reporting Issues
 

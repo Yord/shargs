@@ -4,6 +4,7 @@ const toOpts            = require('./src/parser/toOpts')
 const splitShortOptions = require('./src/parser/argv/splitShortOptions')
 const cast              = require('./src/parser/opts/cast')
 const restrictToOnly    = require('./src/parser/opts/restrictToOnly')
+const emptyRest         = require('./src/parser/args/emptyRest')
 
 function fooParser (opts) {
   return parser({
@@ -11,7 +12,7 @@ function fooParser (opts) {
     toOpts,
     opts:   [cast, restrictToOnly],
     toArgs: toArgs(fooParser),
-    args:   []
+    args:   [emptyRest]
   })(opts)
 }
 
@@ -42,7 +43,7 @@ const opts = [
 const argv = process.argv.slice(2)
 
 const res = fooParser(opts)({argv})
-//console.log('fooParser', JSON.stringify(res, null, 2))
+console.log('fooParser', JSON.stringify(res, null, 2))
 
 
 
@@ -89,8 +90,6 @@ const exAOpts = [
   flag(  'help',    ['-h', '--help'], {desc: 'Print this help message and exit.'}),
   flag(  'version', ['--version'],    {desc: 'Print the version number and exit.'})
 ]
-
-
 
 const exA0 = (
   "foo [-b|--bar] [-h|--help] [--version]  \n" +
@@ -409,8 +408,6 @@ const exA17 = usage([
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAOpts)(exAStyle)
 
-
-
 console.log('exA0  === exA1',  exA0  === exA1)
 console.log('exA1  === exA2',  exA1  === exA2)
 console.log('exA2  === exA3',  exA2  === exA3)
@@ -428,7 +425,6 @@ console.log('exA13 === exA14', exA13 === exA14)
 console.log('exA14 === exA15', exA14 === exA15)
 console.log('exA15 === exA16', exA15 === exA16)
 console.log('exA16 === exA17', exA16 === exA17)
-
 
 
 
@@ -451,8 +447,6 @@ const exBOpts = [
   command('mv',      ['mv'],    {desc: 'Move or rename a file, a directory, or a symlink'}),
   command('help',    ['help'])
 ]
-
-
 
 const exB0 = (
   "git [--version] [--help] <command> [args]                                       \n" +
@@ -504,8 +498,6 @@ const exB2 = usage([
   note("'git help -a' and 'git help -g' list available subcommands and some concept guides. See 'git help <command>' or 'git help <concept>' to read about a specific subcommand or concept.")
 ])(exBOpts)(exBStyle)
 
-
-
 console.log('exB0  === exB1',  exB0  === exB1)
 console.log('exB1  === exB2',  exB1  === exB2)
 
@@ -531,7 +523,11 @@ const exCStyle = {
   tab: {
     padStart: 10,
     width: 70
-  }
+  },
+  tabTable: [
+    {padStart: 10, width: 7},
+    {width: 63}
+  ]
 }
 
 const exCOpts = [
@@ -540,8 +536,6 @@ const exCOpts = [
   flag('dryRun',  ['-n', '--dry-run'], {desc: 'Do nothing; only show what would happen'}),
   flag('verbose', ['-v', '--verbose'], {desc: 'Report the names of files as they are moved.'})
 ]
-
-
 
 const exC0 = (
   'NAME                                                                            \n' +
@@ -687,8 +681,8 @@ const exC3 = usage([
   note('DESCRIPTION', 'h1'),
   note('Move or rename a file, directory or symlink.'),
   space(),
-  o(synopsis('git mv', '<source> <destination>', 'tab'), onlyFirstArg),
-  o(synopsis('git mv', '<source> ... <destination directory>', 'tab'), onlyFirstArg),
+  o(synopsis('git mv', '<source> <destination>', 'tabTable'), onlyFirstArg),
+  o(synopsis('git mv', '<source> ... <destination directory>', 'tabTable'), onlyFirstArg),
   space(),
   note('The index is updated after successful completion, but the change must still be committed.'),
   space(),
@@ -700,8 +694,6 @@ const exC3 = usage([
   note('GIT', 'h1'),
   note('Part of the git(1) suite')
 ])(exCOpts)(exCStyle)
-
-
 
 console.log('exC0  === exC1',  exC0  === exC1)
 console.log('exC1  === exC2',  exC1  === exC2)
@@ -761,8 +753,6 @@ const exD2 = layout([
   ])
 ])(exDStyle)
 
-
-
 console.log('exD0  === exD1',  exD0  === exD1)
 console.log('exD1  === exD2',  exD1  === exD2)
 
@@ -771,3 +761,118 @@ console.log('exD1  === exD2',  exD1  === exD2)
 function onlyFirstArg (opts = []) {
   return opts.map(opt => ({...opt, args: (opt.args || []).slice(0, 1)}))
 }
+
+
+
+;(function () {
+  const opts = [
+    string('question', ['-q', '--question'], {desc: 'A question.'}),
+    number('answer', ['-a', '--answer'], {desc: 'The (default) answer.', only: [42]}),
+    flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
+  ]
+
+  const log = text => obj => {
+    const {argv, opts, args} = obj
+    console.log(text, argv || opts || args)
+    return obj
+  }
+
+  const deepThought = parser({
+    argv: [log('A'), splitShortOptions, log('B')],
+    toOpts,
+    opts: [log('C'), cast, restrictToOnly, log('D')],
+    toArgs: toArgs(),
+    args: [log('E'), emptyRest, log('F')]
+  })
+
+  // node index.js --unknown -ha 42
+  const argv = process.argv.slice(2)//['--unknown', '-ha', '42']
+
+  const {errs, args} = deepThought(opts)({argv})
+
+  const docs = usage([
+    synopsis('deepThought'),
+    space(),
+    optsList(),
+    space(),
+    note('Deep Thought was created to come up with the Answer to The Ultimate Question of Life, the Universe, and Everything.')
+  ])
+
+  const style = {
+    line: {width: 80},
+    cols: [{width: 20}, {width: 60}]
+  }
+  
+  const help = docs(opts)(style)
+
+  if (args.help) {
+    console.log(help)
+  } else {
+    console.log('The answer is: ' + args.answer)
+  }
+}())
+
+
+
+;(function () {
+  const askOpts = [
+    {key: 'question', types: ['string'], args: ['-q', '--question'], desc: 'A question.'},
+    {key: 'help', types: [], args: ['-h', '--help'], desc: 'Print this help message and exit.'}
+  ]
+
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The (default) answer.', only: [42]}),
+    flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'}),
+    command('ask', ['ask'], {opts: askOpts})
+  ]
+
+  function deepThought (opts) {
+    return parser({
+      argv: [splitShortOptions],
+      toOpts,
+      opts: [cast, restrictToOnly],
+      toArgs: toArgs(deepThought),
+      args: [emptyRest]
+    })(opts)
+  }
+
+  const argv = process.argv.slice(2)
+
+  const {errs, args} = deepThought(opts)({argv})
+
+  const docs = usage([
+    synopsis('deepThought'),
+    space(),
+    optsList(),
+    space(),
+    note('Deep Thought was created to come up with the Answer to The Ultimate Question of Life, the Universe, and Everything.')
+  ])
+
+  const askDocs = layout([
+    text('deepThought ask [-q|--question] [-h|--help]'),
+    br(),
+    table([
+      ['-q, --question', 'A question. [string]'],
+      ['-h, --help', 'Print this help message and exit. [flag]']
+    ]),
+    br(),
+    text('Deep Thought was created to come up with the Answer to The Ultimate Question of Life, the Universe, and Everything.')
+  ])
+
+  const style = {
+    line: {width: 80},
+    cols: [{width: 20}, {width: 60}]
+  }
+  
+  const help = docs(opts)(style)
+
+  const askHelp = askDocs(style)
+
+  if (args.help) {
+    console.log(help)
+  } else if (args.ask.help) {
+    console.log(askHelp)
+  } else {
+    console.log('The answer is: ' + (args.answer || 42))
+  }
+}())

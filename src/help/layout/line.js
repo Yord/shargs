@@ -1,5 +1,5 @@
-module.exports = (text = '', id = undefined) => (
+module.exports = (string = '', id = undefined) => (
   ({line = {}, [id]: idLine} = {}) => (
-    ''.padStart((idLine || line).padStart) + text.padEnd((idLine || line).width) + '\n'
+    ''.padStart((idLine || line).padStart) + string.padEnd((idLine || line).width) + '\n'
   )
 )
