@@ -31,6 +31,298 @@ Use it at your own risk!
 +   **Modular Usage Texts:** Build your own usage documentation by composing command-line arguments with text blocks.
 +   **Predefined Usage Texts:** Instead of building your own, choose between many predefined parsers.
 
+## Getting Started
+
+<details>
+<summary>
+Describe command-line arguments:
+
+<p>
+
+```js
+const opts = [
+  string('question', ['-q', '--question'], {desc: 'A question.'}),
+  number('answer', ['-a', '--answer'], {desc: 'The (default) answer.', only: [42]}),
+  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
+]
+```
+
+</p>
+</summary>
+
+Shargs provides a DSL for declaring command-line arguments.
+This simple example uses three different shargs type constructors:
+`string`, `number`, and `flag`. All type constructors take the same arguments:
+
+1.  *(required)* An object key used to store the parsed values.
+2.  *(required)* An array of command-line arguments that users may use to define the value.
+3.  *(optional)* An object holding optional keys like `desc` and `only`.
+
+Type constructors are only syntactic sugar.
+In fact, `opts` could also be written as:
+
+```js
+const opts = [
+  {key: 'question', types: ['string'], args: ['-q', '--question'], desc: 'A question.'},
+  {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The (default) answer.', only: [42]},
+  {key: 'help', types: [], args: ['-h', '--help'], desc: 'Print this help message and exit.'}
+]
+```
+
+</details>
+
+<details>
+<summary>
+Declare a parser:
+
+<p>
+
+```js
+const deepThought = parser({
+  argv: [splitShortOptions],
+  toOpts,
+  opts: [cast, restrictToOnly],
+  toArgs: toArgs(),
+  args: [emptyRest]
+})
+```
+
+</p>
+</summary>
+
+The parser consists of six parser functions are applied in the following order:
+
+1.  `splitShortOptions`
+2.  `toOpts`
+3.  `cast`
+4.  `restrictToOnly`
+5.  `toArgs`
+6.  `removeRest`
+
+</details>
+
+<details>
+<summary>
+Apply the parser:
+
+<p>
+
+```js
+// node index.js --unknown -ha 42
+const argv = ['--unknown', '-ha', '42']
+
+const {errs, args} = deepThought(opts)({argv})
+```
+
+</p>
+</summary>
+
+To demonstrate intermediate parsing results, logging was added to `deepThought`:
+
+```js
+const log = text => obj => {
+  const {argv, opts, args} = obj
+  console.log(text, argv || opts || args)
+  return obj
+}
+
+const deepThought = parser({
+  argv: [log('A'), splitShortOptions, log('B')],
+  toOpts,
+  opts: [log('C'), cast, restrictToOnly, log('D')],
+  toArgs: toArgs(),
+  args: [log('E'), emptyRest, log('F')]
+})
+
+// node index.js --unknown -ha 42
+const argv = ['--unknown', '-ha', '42']
+
+const {errs, args} = deepThought(opts)({argv})
+```
+
+The logging output reads:
+
+```bash
+A ['--unknown', '-ha', '42']
+B ['--unknown', '-h', '-a', '42']
+C [
+  {values: ['--unknown']},
+  {key: 'help', types: [], ... values: []},
+  {key: 'answer', types: ['number'], ... values: ['42']}
+]
+D [
+  {values: ['--unknown']},
+  {key: 'help', types: [], ... values: []},
+  {key: 'answer', types: ['number'], ... values: [42]}
+]
+E {help: true, answer: 42, _: ['--unknown']}
+F {help: true, answer: 42, _: []}
+```
+
+Shargs parses command-line argument values in five stages:
+
+1.  The first stage applies functions that transform `argv` arrays into other `argv` arrays.<br />
+    E.g. `splitShortOptions` transforms `A` into `B` by splitting `-ha` into `-h` and `-a`.
+2.  The second stage transforms `argv` arrays into `opts` objects.<br />
+    E.g. see the difference between `B` and `C`.
+3.  The third stage applies functions that transform `opts` objects into other `opts` objects.<br />
+    E.g. `cast` transforms `C` into `D` by casting `'42'` to the number `42`.
+4.  The fourth stage transforms `opts` objects into `args` objects.<br />
+    E.g. see the difference between `D` and `E`.
+5.  The fifth stage applies functions that transform `args` objects into other `args` objects.<br />
+    E.g. `emptyRest` transforms `E` into `F` by emptying the `'_'` key.
+
+</details>
+
+<details>
+<summary>
+Declare a usage documentation:
+
+<p>
+
+```js
+const docs = usage([
+  synopsis('deepThought'),
+  space(),
+  optsList(),
+  space(),
+  note(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+])
+```
+
+</p>
+</summary>
+
+Every command-line tools benefits from a well-formatted usage documentation.
+Shargs brings its own DSL for defining one that can easily be extended with user functions.
+The DSL is declarative, which means it describes the desired structure without concerning itself with the details.
+Try changing `optsList` to `optsDefs` later to experience of what this means:
+
+```js
+const docs = usage([
+  synopsis('deepThought'),
+  space(),
+  optsDefs(),
+  space(),
+  note(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+])
+```
+
+</details>
+
+<details>
+<summary>
+Build the usage documentation:
+
+<p>
+
+```js
+const style = {
+  line: {width: 80},
+  cols: [{width: 20}, {width: 60}]
+}
+
+const help = docs(opts)(style)
+```
+
+</p>
+</summary>
+
+Supplying `opts` and a `style` to `docs` renders a help text.
+The style defines how the help is layouted.
+With the current style, the following is rendered:
+
+```bash
+deepThought [-q|--question] [-a|--answer] [-h|--help]                           
+                                                                                
+-q, --question      A question. [string]                                        
+-a, --answer        The (default) answer. [number]                              
+-h, --help          Print this help message and exit. [flag]                    
+                                                                                
+Deep Thought was created to come up with the Answer to The Ultimate Question of 
+Life, the Universe, and Everything.
+```
+
+You may experiment with `style` to get the result you like.
+E.g. you may want to change the style to the following:
+
+```js
+const style = {
+  line: {width: 40},
+  cols: [{width: 10, padEnd: 2}, {width: 28}]
+}
+
+const help = docs(opts)(style)
+```
+
+`help` now reads:
+
+```bash
+deepThought [-q|--question]
+            [-a|--answer] [-h|--help]
+
+-q,         A question. [string]
+--question
+-a,         The (default) answer.
+--answer    [number]
+-h, --help  Print this help message and
+            exit. [flag]
+
+Deep Thought was created to come up with
+the Answer to The Ultimate Question of
+Life, the Universe, and Everything.
+```
+
+Note, how shargs automatically takes care of line breaks and other formatting for you.
+
+</details>
+
+<details>
+<summary>
+Use the parsed values in your program:
+
+<p>
+
+```js
+if (args.help) {
+  console.log(help)
+} else {
+  console.log('The answer is: ' + args.answer)
+}
+```
+
+</p>
+</summary>
+
+Other command-line argument parsers handle displaying usage documentation for you.
+Shargs makes the deliberate decision to leave that to the user,
+thus giving him more control.
+
+If `args` contains a `help` field, the `help` text is printed:
+
+```bash
+deepThought [-q|--question] [-a|--answer] [-h|--help]                           
+                                                                                
+-q, --question      A question. [string]                                        
+-a, --answer        The (default) answer. [number]                              
+-h, --help          Print this help message and exit. [flag]                    
+                                                                                
+Deep Thought was created to come up with the Answer to The Ultimate Question of 
+Life, the Universe, and Everything.
+```
+
+Otherwise, the answer is printed.
+
+</details>
+
+
+
 ## 🦈 `shargs`
 
 `shargs` is the command-line argument parser used by [`pxi`][pxi].
