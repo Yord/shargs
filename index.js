@@ -761,3 +761,53 @@ console.log('exD1  === exD2',  exD1  === exD2)
 function onlyFirstArg (opts = []) {
   return opts.map(opt => ({...opt, args: (opt.args || []).slice(0, 1)}))
 }
+
+
+
+;(function () {
+  const opts = [
+    string('question', ['-q', '--question'], {desc: 'A question.'}),
+    number('answer', ['-a', '--answer'], {desc: 'The (default) answer.', only: [42]}),
+    flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
+  ]
+
+  const log = text => obj => {
+    const {argv, opts, args} = obj
+    console.log(text, argv || opts || args)
+    return obj
+  }
+
+  const deepThought = parser({
+    argv: [log('A'), splitShortOptions, log('B')],
+    toOpts,
+    opts: [log('C'), cast, restrictToOnly, log('D')],
+    toArgs: toArgs(),
+    args: [log('E'), emptyRest, log('F')]
+  })
+
+  // node index.js --unknown -ha 42
+  const argv = process.argv.slice(2)//['--unknown', '-ha', '42']
+
+  const {errs, args} = deepThought(opts)({argv})
+
+  const docs = usage([
+    synopsis('deepThought'),
+    space(),
+    optsList(),
+    space(),
+    note('Deep Thought was created to come up with the Answer to The Ultimate Question of Life, the Universe, and Everything.')
+  ])
+
+  const style = {
+    line: {width: 80},
+    cols: [{width: 20}, {width: 60}]
+  }
+  
+  const help = docs(opts)(style)
+
+  if (args.help) {
+    console.log(help)
+  } else {
+    console.log('The answer is: ' + args.answer)
+  }
+}())
