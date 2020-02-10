@@ -23,6 +23,14 @@ $ npm i --save shargs
 This project is work in progress.
 Use it at your own risk!
 
+## Features
+
++   **Declarative:** Describe command-line arguments using a declarative DSL and derive parsers and usage from that.
++   **Modular Parsers:** Compose your own parsers choosing from an abundance of parser functions.
++   **Predefined Parsers:** Instead of building your own, choose between many predefined parsers.
++   **Modular Usage Texts:** Build your own usage documentation by composing command-line arguments with text blocks.
++   **Predefined Usage Texts:** Instead of building your own, choose between many predefined parsers.
+
 ## 🦈 `shargs`
 
 `shargs` is the command-line argument parser used by [`pxi`][pxi].
