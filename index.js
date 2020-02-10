@@ -43,7 +43,7 @@ const opts = [
 const argv = process.argv.slice(2)
 
 const res = fooParser(opts)({argv})
-//console.log('fooParser', JSON.stringify(res, null, 2))
+console.log('fooParser', JSON.stringify(res, null, 2))
 
 
 
