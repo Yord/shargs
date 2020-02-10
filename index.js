@@ -811,3 +811,68 @@ function onlyFirstArg (opts = []) {
     console.log('The answer is: ' + args.answer)
   }
 }())
+
+
+
+;(function () {
+  const askOpts = [
+    {key: 'question', types: ['string'], args: ['-q', '--question'], desc: 'A question.'},
+    {key: 'help', types: [], args: ['-h', '--help'], desc: 'Print this help message and exit.'}
+  ]
+
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The (default) answer.', only: [42]}),
+    flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'}),
+    command('ask', ['ask'], {opts: askOpts})
+  ]
+
+  function deepThought (opts) {
+    return parser({
+      argv: [splitShortOptions],
+      toOpts,
+      opts: [cast, restrictToOnly],
+      toArgs: toArgs(deepThought),
+      args: [emptyRest]
+    })(opts)
+  }
+
+  const argv = process.argv.slice(2)
+
+  const {errs, args} = deepThought(opts)({argv})
+
+  const docs = usage([
+    synopsis('deepThought'),
+    space(),
+    optsList(),
+    space(),
+    note('Deep Thought was created to come up with the Answer to The Ultimate Question of Life, the Universe, and Everything.')
+  ])
+
+  const askDocs = layout([
+    text('deepThought ask [-q|--question] [-h|--help]'),
+    br(),
+    table([
+      ['-q, --question', 'A question. [string]'],
+      ['-h, --help', 'Print this help message and exit. [flag]']
+    ]),
+    br(),
+    text('Deep Thought was created to come up with the Answer to The Ultimate Question of Life, the Universe, and Everything.')
+  ])
+
+  const style = {
+    line: {width: 80},
+    cols: [{width: 20}, {width: 60}]
+  }
+  
+  const help = docs(opts)(style)
+
+  const askHelp = askDocs(style)
+
+  if (args.help) {
+    console.log(help)
+  } else if (args.ask.help) {
+    console.log(askHelp)
+  } else {
+    console.log('The answer is: ' + (args.answer || 42))
+  }
+}())
