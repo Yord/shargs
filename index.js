@@ -91,8 +91,6 @@ const exAOpts = [
   flag(  'version', ['--version'],    {desc: 'Print the version number and exit.'})
 ]
 
-
-
 const exA0 = (
   "foo [-b|--bar] [-h|--help] [--version]  \n" +
   "                                        \n" +
@@ -410,8 +408,6 @@ const exA17 = usage([
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAOpts)(exAStyle)
 
-
-
 console.log('exA0  === exA1',  exA0  === exA1)
 console.log('exA1  === exA2',  exA1  === exA2)
 console.log('exA2  === exA3',  exA2  === exA3)
@@ -429,7 +425,6 @@ console.log('exA13 === exA14', exA13 === exA14)
 console.log('exA14 === exA15', exA14 === exA15)
 console.log('exA15 === exA16', exA15 === exA16)
 console.log('exA16 === exA17', exA16 === exA17)
-
 
 
 
@@ -452,8 +447,6 @@ const exBOpts = [
   command('mv',      ['mv'],    {desc: 'Move or rename a file, a directory, or a symlink'}),
   command('help',    ['help'])
 ]
-
-
 
 const exB0 = (
   "git [--version] [--help] <command> [args]                                       \n" +
@@ -505,8 +498,6 @@ const exB2 = usage([
   note("'git help -a' and 'git help -g' list available subcommands and some concept guides. See 'git help <command>' or 'git help <concept>' to read about a specific subcommand or concept.")
 ])(exBOpts)(exBStyle)
 
-
-
 console.log('exB0  === exB1',  exB0  === exB1)
 console.log('exB1  === exB2',  exB1  === exB2)
 
@@ -541,8 +532,6 @@ const exCOpts = [
   flag('dryRun',  ['-n', '--dry-run'], {desc: 'Do nothing; only show what would happen'}),
   flag('verbose', ['-v', '--verbose'], {desc: 'Report the names of files as they are moved.'})
 ]
-
-
 
 const exC0 = (
   'NAME                                                                            \n' +
@@ -702,8 +691,6 @@ const exC3 = usage([
   note('Part of the git(1) suite')
 ])(exCOpts)(exCStyle)
 
-
-
 console.log('exC0  === exC1',  exC0  === exC1)
 console.log('exC1  === exC2',  exC1  === exC2)
 console.log('exC2  === exC3',  exC2  === exC3)
@@ -761,8 +748,6 @@ const exD2 = layout([
     ]
   ])
 ])(exDStyle)
-
-
 
 console.log('exD0  === exD1',  exD0  === exD1)
 console.log('exD1  === exD2',  exD1  === exD2)
