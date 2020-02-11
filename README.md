@@ -473,7 +473,7 @@ Foo
 
 Foo
 
-### Bringing It All Together
+### Combining Options, Parser, and Usage Documentation
 
 Foo
 
