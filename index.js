@@ -773,7 +773,7 @@ function onlyFirstArg (opts = []) {
 
   const log = text => obj => {
     const {argv, opts, args} = obj
-    console.log(text, argv || opts || args)
+    //console.log(text, argv || opts || args)
     return obj
   }
 
@@ -806,9 +806,9 @@ function onlyFirstArg (opts = []) {
   const help = docs(opts)(style)
 
   if (args.help) {
-    console.log(help)
+    //console.log(help)
   } else {
-    console.log('The answer is: ' + args.answer)
+    //console.log('The answer is: ' + args.answer)
   }
 }())
 
