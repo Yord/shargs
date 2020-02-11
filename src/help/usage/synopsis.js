@@ -1,11 +1,11 @@
 const table = require('../layout/table')
 
-module.exports = (start = '', end = '', id = undefined) => (
+module.exports = (start = '', end = '', filter = ({types}) => typeof types !== 'undefined' && types !== null, id = undefined) => (
   (opts = []) => {
     const argsString  = ({args = []}) => '[' + args.join('|') + ']'
     const argsStrings = (
       opts
-      .filter(({types}) => typeof types !== 'undefined' && types !== null) // Filter all commands
+      .filter(filter)
       .map(argsString).join(' ')
     )
 

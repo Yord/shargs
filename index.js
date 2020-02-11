@@ -681,8 +681,8 @@ const exC3 = usage([
   note('DESCRIPTION', 'h1'),
   note('Move or rename a file, directory or symlink.'),
   space(),
-  o(synopsis('git mv', '<source> <destination>', 'tabTable'), onlyFirstArg),
-  o(synopsis('git mv', '<source> ... <destination directory>', 'tabTable'), onlyFirstArg),
+  o(synopsis('git mv', '<source> <destination>', () => true, 'tabTable'), onlyFirstArg),
+  o(synopsis('git mv', '<source> ... <destination directory>', () => true, 'tabTable'), onlyFirstArg),
   space(),
   note('The index is updated after successful completion, but the change must still be committed.'),
   space(),
@@ -773,7 +773,7 @@ function onlyFirstArg (opts = []) {
 
   const log = text => obj => {
     const {argv, opts, args} = obj
-    console.log(text, argv || opts || args)
+    //console.log(text, argv || opts || args)
     return obj
   }
 
@@ -806,9 +806,9 @@ function onlyFirstArg (opts = []) {
   const help = docs(opts)(style)
 
   if (args.help) {
-    console.log(help)
+    //console.log(help)
   } else {
-    console.log('The answer is: ' + args.answer)
+    //console.log('The answer is: ' + args.answer)
   }
 }())
 
@@ -823,7 +823,7 @@ function onlyFirstArg (opts = []) {
   const opts = [
     number('answer', ['-a', '--answer'], {desc: 'The (default) answer.', only: [42]}),
     flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'}),
-    command('ask', ['ask'], {opts: askOpts})
+    command('ask', ['ask'], {desc: 'Ask a question with this command.', opts: askOpts})
   ]
 
   function deepThought (opts) {
