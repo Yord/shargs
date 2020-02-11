@@ -823,7 +823,7 @@ function onlyFirstArg (opts = []) {
   const opts = [
     number('answer', ['-a', '--answer'], {desc: 'The (default) answer.', only: [42]}),
     flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'}),
-    command('ask', ['ask'], {opts: askOpts})
+    command('ask', ['ask'], {desc: 'Ask a question with this command.', opts: askOpts})
   ]
 
   function deepThought (opts) {
