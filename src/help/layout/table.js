@@ -20,7 +20,9 @@ module.exports = (itemsList = [], id = undefined) => (
       while (indexes.reduce((bool, index) => bool || ks[index] < wordsList[index].length, false)) {
         const words = indexes.map(index => wordsList[index][ks[index]] || '')
 
-        const fulls = indexes.map(index => ks[index] >= wordsList[index].length || (rows[index] + words[index]).length > colWidths[index])
+        const fulls = indexes.map(index =>
+          ks[index] >= wordsList[index].length || (rows[index] + words[index]).length > colWidths[index]
+        )
 
         if (fulls.reduce((bool, p) => bool && p, true)) {
           columns = indexes.map(index => [...columns[index], rows[index]])

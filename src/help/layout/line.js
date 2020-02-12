@@ -1,5 +1,6 @@
 module.exports = (string = '', id = undefined) => (
-  ({line = {}, [id]: idLine} = {}) => (
-    ''.padStart((idLine || line).padStart) + string.padEnd((idLine || line).width) + '\n'
-  )
+  ({line: LINE = {}, [id]: idLine} = {}) => {
+    const line = idLine || LINE
+    return ''.padStart(line.padStart) + string.padEnd(line.width) + '\n'
+  }
 )
