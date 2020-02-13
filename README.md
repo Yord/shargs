@@ -80,9 +80,7 @@ Declare a parser:
 ```js
 const deepThought = parser({
   argv: [splitShortOptions],
-  toOpts,
   opts: [cast, restrictToOnly],
-  toArgs: toArgs(),
   args: [emptyRest]
 })
 ```
@@ -93,10 +91,10 @@ const deepThought = parser({
 The parser consists of six parser functions are applied in the following order:
 
 1.  `splitShortOptions`
-2.  `toOpts`
+2.  `toOpts` (implicit)
 3.  `cast`
 4.  `restrictToOnly`
-5.  `toArgs`
+5.  `toArgs` (implicit)
 6.  `removeRest`
 
 </details>
@@ -128,9 +126,7 @@ const log = text => obj => {
 
 const deepThought = parser({
   argv: [log('A'), splitShortOptions, log('B')],
-  toOpts,
   opts: [log('C'), cast, restrictToOnly, log('D')],
-  toArgs: toArgs(),
   args: [log('E'), emptyRest, log('F')]
 })
 
@@ -340,14 +336,14 @@ const askOpts = [
 
 A command-line option is described by an object having a subset of the following fields:
 
-| Field     | Value                                                         | Default | Description                                                                                                                   |
-|-----------|---------------------------------------------------------------|---------|-------------------------------------------------------------------------------------------------------------------------------|
-| `key`\*   | string                                                        |         | The command-line option's value is assigned to a key of this name.                                                            |
-| `args`\*  | array of strings                                              |         | A list of options that may be used to set the command-line option.                                                            |
-| `types`\* | `['string']`, `['number']`, `['bool']`, `[]`, `null`, `[...]` |         | <ul><li>`['string']` takes exactly one string.</li><li>`['number']` takes exactly one number.</li><li>`['bool']` takes exactly one boolean, `true` or `false`.</li><li>`[]` takes no value. It is a flag that is `true` if used and `false` if not used.</li><li>`null` is a command. It may have its own list of arguments (see `opts`) and is terminated by either `--` or a line ending.</li><li>`['number'|'string'|'bool',...]` takes an array of types of arbitrary length. The values are expected to be in the specified order and of the the specified type.</li></ul> |
-| `desc`    | string                                                        | `''`    | Description of the command-line option for use in the usage text.                                                             |
-| `only`    | array of values                                               | `null`  | The command-line option's value can only be one of the values in this list. If `only` is `null`, the value may be set freely. |
-| `opts`    | command-line options array                                    | `null`  | This field is used if the command-line option is a command (if `types` is `null`) to describe the command's options.          |
+| Field     | Value                                                                                  | Default | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|-----------|----------------------------------------------------------------------------------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `key`\*   | string                                                                                 |         | The command-line option's value is assigned to a key of this name.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `args`\*  | array of strings                                                                       |         | A list of options that may be used to set the command-line option.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `types`\* | `['string']`, `['number']`, `['bool']`, `[]`, `null`, `['string','number','bool',...]` |         | <ul><li>`['string']` takes exactly one string.</li><li>`['number']` takes exactly one number.</li><li>`['bool']` takes exactly one boolean, `true` or `false`.</li><li>`[]` takes no value. It is a flag that is `true` if used and `false` if not used.</li><li>`null` is a command. It may have its own list of arguments (see `opts`) and is terminated by either `--` or a line ending.</li><li>`['number','string','bool',...]` takes an array of any types of arbitrary length. The values are expected to be in the specified order and of the specified type.</li></ul> |
+| `desc`    | string                                                                                 | `''`    | Description of the command-line option for use in the usage text.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `only`    | array of values                                                                        | `null`  | The command-line option's value can only be one of the values in this list. If `only` is `null`, the value may be set freely.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `opts`    | command-line options array                                                             | `null`  | This field is used if the command-line option is a command (if `types` is `null`) to describe the command's options.                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
 \* these fields are required, all others are optional
 
