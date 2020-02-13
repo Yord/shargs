@@ -327,7 +327,9 @@ Shargs is the command-line argument parser used by [`pxi`][pxi].
 
 ### Command-Line Options DSL
 
-Foo
+The most important concept in shargs is that of command-line arguments.
+They are the basis for parsers as well as for usage documentation.
+Command-line arguments in their plain form are expressed in shargs as follows: 
 
 ```js
 const askOpts = [
@@ -336,27 +338,27 @@ const askOpts = [
 ]
 ```
 
-Foo
+A command-line argument is described by an object having a subset of the following fields:
 
-| Field   | Value                      | Default | Description                                                                                                                                  |
-|---------|----------------------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| `key`   | string                     | `null`  | The command-line option's value is assigned to a key of this name.                                                                           |
-| `args`  | array of strings           | `[]`    | A list of options that may be used to set the command-line option.                                                                           |
-| `desc`  | string                     | `''`    | Description of the command-line option for use in the usage text.                                                                            |
-| `only`  | array of values            | `null`  | The command-line option's value can only be one of the values in this list. If `only` is `null`, the value may be set freely.                |
-| `opts`  | command-line options array | `null`  | This field is only used if the command-line option is a command (if `types` is `null`).                                                      |
-| `types` | `['number']`               |         | This command-line option takes exactly one number.                                                                                           |
-| `types` | `['string']`               |         | This command-line option takes exactly one string.                                                                                           |
-| `types` | `['bool']`                 |         | This command-line option takes exactly one boolean, `true` or `false`.                                                                       |
-| `types` | `['number','string']`      |         | This command-line option takes exactly two values, a number and a string.                                                                    |
-| `types` | `[]`                       |         | This command-line option takes no value. It is a flag that is `true` if used and `false` if not used.                                        |
-| `types` | `null`                     |         | This command-line option is a command. It may have its own list of arguments (see `opts`) and is terminated by either `--` or a line ending. |
+| Field    | Value                      | Default | Description                                                                                                                                  |
+|----------|----------------------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| `key`*   | string                     | `null`  | The command-line option's value is assigned to a key of this name.                                                                           |
+| `args`*  | array of strings           | `[]`    | A list of options that may be used to set the command-line option.                                                                           |
+| `types`* | `['number']`               |         | This command-line option takes exactly one number.                                                                                           |
+|          | `['string']`               |         | This command-line option takes exactly one string.                                                                                           |
+|          | `['bool']`                 |         | This command-line option takes exactly one boolean, `true` or `false`.                                                                       |
+|          | `['number','string']`      |         | This command-line option takes exactly two values, a number and a string.                                                                    |
+|          | `[]`                       |         | This command-line option takes no value. It is a flag that is `true` if used and `false` if not used.                                        |
+|          | `null`                     |         | This command-line option is a command. It may have its own list of arguments (see `opts`) and is terminated by either `--` or a line ending. |
+| `desc`   | string                     | `''`    | Description of the command-line option for use in the usage text.                                                                            |
+| `only`   | array of values            | `null`  | The command-line option's value can only be one of the values in this list. If `only` is `null`, the value may be set freely.                |
+| `opts`   | command-line options array | `null`  | This field is used if the command-line option is a command (if `types` is `null`) to describe its arguments.                                 |
 
-Foo
+\* these fields are required, all others are optional
 
 #### Functional Options DSL
 
-Foo
+Since writing out objects may get tedious, shargs offers a DSL for creating plain command-line argument descriptions:
 
 ```js
 const opts = [
@@ -366,7 +368,9 @@ const opts = [
 ]
 ```
 
-Foo
+Each supported type has its own function, that takes `key` and `args` as arguments
+as well as an object holding any optional field.
+If an optional field is left out, the DSL takes care of setting a sensible default for it.
 
 | Function                          | Description                                                |
 |-----------------------------------|------------------------------------------------------------|
@@ -377,7 +381,9 @@ Foo
 | `number(key, args, fields)`       | Assigns `types: ['number']`, `key` and `args` to `fields`. |
 | `string(key, args, fields)`       | Assigns `types: ['string']`, `key` and `args` to `fields`. |
 
-Foo
+The `array` function describes arrays with a known length and known types,
+while the `command` function describes variable-length arrays.
+The `opts` field is used to determine a `command`'s types.
 
 ### Command-Line Parsers DSL
 
