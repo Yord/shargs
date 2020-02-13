@@ -327,9 +327,9 @@ Shargs is the command-line argument parser used by [`pxi`][pxi].
 
 ### Command-Line Options DSL
 
-The most important concept in shargs is that of command-line arguments.
+The most important concept in shargs is that of command-line options.
 They are the basis for parsers as well as for usage documentation.
-Command-line arguments in their plain form are expressed in shargs as follows: 
+Command-line options in their plain form are expressed in shargs as follows: 
 
 ```js
 const askOpts = [
@@ -338,7 +338,7 @@ const askOpts = [
 ]
 ```
 
-A command-line argument is described by an object having a subset of the following fields:
+A command-line option is described by an object having a subset of the following fields:
 
 | Field    | Value                      | Default | Description                                                                                                                                  |
 |----------|----------------------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------|
@@ -358,7 +358,7 @@ A command-line argument is described by an object having a subset of the followi
 
 #### Functional Options DSL
 
-Since writing out objects may get tedious, shargs offers a DSL for creating plain command-line argument descriptions:
+Since writing out objects may get tedious, shargs offers a DSL for creating plain command-line option descriptions:
 
 ```js
 const opts = [
