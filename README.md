@@ -417,11 +417,11 @@ The following parser functions are available:
 | Stage    | Plugin                            | Description                                                                                                     |
 |----------|-----------------------------------|-----------------------------------------------------------------------------------------------------------------|
 | `argv`   | `splitShortOptions({errs, argv})` | Splits argument groups of shape `-vs` to `-v -s`. Only works if the arguments are preceded by a single dash.    |
-| `toOpts` | `toOpts(args)({errs, argv})`      | Groups arguments together with their values, types, and options if an argument is a command.                    |
-| `opts`   | `cast(opts)`                      |                                                                                                                 |
-| `opts`   | `restrictToOnly(opts)`            |                                                                                                                 |
-| `toArgs` | `toArgs(parser)({errs, argv})`    | Casts values to their types, validates values, and outputs the parsing result in a hierarchical JSON structure. |
-| `args`   | `emptyRest(args)`                 |                                                                                                                 |
+| `toOpts` | `toOpts(args)({errs, argv})`      | Transforms `argv` arrays into the command-line option DSL and adds a `values` field.                            |
+| `opts`   | `cast(opts)`                      | Casts all `values` according to the options' types.                                                             |
+| `opts`   | `restrictToOnly(opts)`            | Records an error if the `values` are not contained in the `only` list.                                          |
+| `toArgs` | `toArgs(parser)({errs, argv})`    | Transforms `opts` into an object of `key` / `values` pairs.                                                     |
+| `args`   | `emptyRest(args)`                 | Removes all entries from the `_` key.                                                                           |
 
 #### Functional Parsers DSL
 
