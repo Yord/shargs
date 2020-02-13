@@ -340,19 +340,14 @@ const askOpts = [
 
 A command-line option is described by an object having a subset of the following fields:
 
-| Field    | Value                      | Default | Description                                                                                                                                  |
-|----------|----------------------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| `key`*   | string                     | `null`  | The command-line option's value is assigned to a key of this name.                                                                           |
-| `args`*  | array of strings           | `[]`    | A list of options that may be used to set the command-line option.                                                                           |
-| `types`* | `['number']`               |         | This command-line option takes exactly one number.                                                                                           |
-|          | `['string']`               |         | This command-line option takes exactly one string.                                                                                           |
-|          | `['bool']`                 |         | This command-line option takes exactly one boolean, `true` or `false`.                                                                       |
-|          | `['number','string']`      |         | This command-line option takes exactly two values, a number and a string.                                                                    |
-|          | `[]`                       |         | This command-line option takes no value. It is a flag that is `true` if used and `false` if not used.                                        |
-|          | `null`                     |         | This command-line option is a command. It may have its own list of arguments (see `opts`) and is terminated by either `--` or a line ending. |
-| `desc`   | string                     | `''`    | Description of the command-line option for use in the usage text.                                                                            |
-| `only`   | array of values            | `null`  | The command-line option's value can only be one of the values in this list. If `only` is `null`, the value may be set freely.                |
-| `opts`   | command-line options array | `null`  | This field is used if the command-line option is a command (if `types` is `null`) to describe its arguments.                                 |
+| Field    | Value                                                         | Default | Description                                                                                                                                  |
+|----------|---------------------------------------------------------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| `key`*   | string                                                        |         | The command-line option's value is assigned to a key of this name.                                                                           |
+| `args`*  | array of strings                                              |         | A list of options that may be used to set the command-line option.                                                                           |
+| `types`* | `['string']`, `['number']`, `['bool']`, `[]`, `null`, `[...]` |         | <ul><li>`['string']` takes exactly one string.</li><li>`['number']` takes exactly one number.</li><li>`['bool']` takes exactly one boolean, `true` or `false`.</li><li>`[]` takes no value. It is a flag that is `true` if used and `false` if not used.</li><li>`null` is a command. It may have its own list of arguments (see `opts`) and is terminated by either `--` or a line ending.</li><li>`['number'|'string'|'bool',...]` takes an array of types of arbitrary length. The values are expected to be in the specified order and of the the specified type.</li></ul> |
+| `desc`   | string                                                        | `''`    | Description of the command-line option for use in the usage text.                                                                            |
+| `only`   | array of values                                               | `null`  | The command-line option's value can only be one of the values in this list. If `only` is `null`, the value may be set freely.                |
+| `opts`   | command-line options array                                    | `null`  | This field is used if the command-line option is a command (if `types` is `null`) to describe the command's options.                         |
 
 \* these fields are required, all others are optional
 
