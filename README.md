@@ -387,21 +387,32 @@ The `opts` field is used to determine a `command`'s types.
 
 ### Command-Line Parsers DSL
 
-Foo
+A shargs command-line parser is a composition of parser functions:
 
 ```js
 function deepThought (opts) {
-  return parser({
-    argv: [splitShortOptions],
-    toOpts,
-    opts: [cast, restrictToOnly],
-    toArgs: toArgs(deepThought),
-    args: [emptyRest]
-  })(opts)
+  return pipe(
+    splitShortOptions,
+    toOpts(combine(...opts.map(option)).args),
+    cast,
+    restrictToOnly,
+    toArgs(deepThought),
+    emptyRest
+  )
 }
 ```
 
-Foo
+There are five stages of parser functions:
+
+1.  `argv` functions modify arrays of command-line arguments.
+2.  `toOpts` transforms `argv` arrays into the command-line option DSL and adds a `values` field.
+3.  `opts` functions modify command-line options.
+4.  `toArgs` transforms `opts` into an object of `key` / `values` pairs.
+5.  `args` functions modify `args` objects.
+
+Functions from different stages must be applied in the given order,
+while functions from the same stage may be supplied in any order that makes sense.
+The following parser functions are available:
 
 | Stage    | Plugin                            | Description                                                                                                     |
 |----------|-----------------------------------|-----------------------------------------------------------------------------------------------------------------|
@@ -412,7 +423,20 @@ Foo
 | `toArgs` | `toArgs(parser)({errs, argv})`    | Casts values to their types, validates values, and outputs the parsing result in a hierarchical JSON structure. |
 | `args`   | `emptyRest(args)`                 |                                                                                                                 |
 
-Foo
+#### Functional Parsers DSL
+
+The functional parser DSL takes care of applying parser stages in the correct order under the hood.
+It also passes on errors for you:
+
+```js
+const deepThought = parser({
+  argv: [splitShortOptions],
+  opts: [cast, restrictToOnly],
+  args: [emptyRest]
+})
+```
+
+When using `parser`, the only thing you have to take care of is supplying parser functions in the desired order.
 
 ### Usage Documentation DSL
 
