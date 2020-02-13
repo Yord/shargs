@@ -1,4 +1,4 @@
-const parser            = require('./src/dsl/fp/parser')
+const parser            = require('./src/parser')
 const toArgs            = require('./src/parser/toArgs')
 const toOpts            = require('./src/parser/toOpts')
 const splitShortOptions = require('./src/parser/argv/splitShortOptions')
@@ -826,15 +826,11 @@ function onlyFirstArg (opts = []) {
     command('ask', ['ask'], {desc: 'Ask a question with this command.', opts: askOpts})
   ]
 
-  function deepThought (opts) {
-    return parser({
-      argv: [splitShortOptions],
-      toOpts,
-      opts: [cast, restrictToOnly],
-      toArgs: toArgs(deepThought),
-      args: [emptyRest]
-    })(opts)
-  }
+  const deepThought = parser({
+    argv: [splitShortOptions],
+    opts: [cast, restrictToOnly],
+    args: [emptyRest]
+  })
 
   const argv = process.argv.slice(2)
 
