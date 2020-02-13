@@ -80,9 +80,7 @@ Declare a parser:
 ```js
 const deepThought = parser({
   argv: [splitShortOptions],
-  toOpts,
   opts: [cast, restrictToOnly],
-  toArgs: toArgs(),
   args: [emptyRest]
 })
 ```
@@ -93,10 +91,10 @@ const deepThought = parser({
 The parser consists of six parser functions are applied in the following order:
 
 1.  `splitShortOptions`
-2.  `toOpts`
+2.  `toOpts` (implicit)
 3.  `cast`
 4.  `restrictToOnly`
-5.  `toArgs`
+5.  `toArgs` (implicit)
 6.  `removeRest`
 
 </details>
