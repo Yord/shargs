@@ -9,12 +9,14 @@ module.exports = function parser (stages = {}) {
   return OPTS => {
     const {errs: ERRS = [], args: ARGS} = combine(...OPTS.map(option))
 
+    // Add error handling if toOpts or toArgs are not functions
+
     return pipe(
       ({errs = [], argv = []}) => ({errs: errs.concat(ERRS), argv}),
       ...argv,
-      toOpts && toOpts(ARGS) || TO_OPTS(ARGS),
+      typeof toOpts === 'function' ? toOpts(ARGS) : TO_OPTS(ARGS),
       ...opts,
-      toArgs || TO_ARGS(parser(stages)),
+      typeof toArgs === 'function' ? toArgs : TO_ARGS(parser(stages)),
       ...args
     )
   }
