@@ -449,16 +449,16 @@ const docs = usage([
 
 Foo
 
-| Function                            | Description                                                |
-|-------------------------------------|------------------------------------------------------------|
-| `usage(toStrings)(opts)(style)`     | Foo                                                        |
-| `note(string, id)(opts)(style)`     | Foo                                                        |
-| `notes(string, id)(opts)(style)`    | Foo                                                        |
-| `optsDefs(string, id)(opts)(style)` | Foo                                                        |
-| `optsLine(string, id)(opts)(style)` | Foo                                                        |
-| `space(string, id)(opts)(style)`    | Foo                                                        |
-| `spaces(string, id)(opts)(style)`   | Foo                                                        |
-| `synopsis(string, id)(opts)(style)` | Foo                                                        |
+| Function                                            | Description                                                |
+|-----------------------------------------------------|------------------------------------------------------------|
+| `usage(toStrings)(opts)(style)`                     | Foo                                                        |
+| `note(string, id)(opts)(style)`                     | Foo                                                        |
+| `notes(strings, id)(opts)(style)`                   | Foo                                                        |
+| `optsDefs(filter, id)(opts)(style)`                 | Foo                                                        |
+| `optsList(filter, id)(opts)(style)`                 | Foo                                                        |
+| `space(id)(opts)(style)`                            | Foo                                                        |
+| `spaces(id)(opts)(style)`                           | Foo                                                        |
+| `synopsis(string, string, filter, id)(opts)(style)` | Foo                                                        |
 
 Foo
 
