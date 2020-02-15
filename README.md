@@ -427,39 +427,31 @@ const deepThought = parser({
 })
 ```
 
-When using `parser`, the only thing you have to take care of is supplying parser functions in the desired order.
+When using `parser`, the only thing you have to take care of
+is supplying parser functions in the desired order per stage.
 
-### Usage Documentation DSL
+### Usage Documentation
 
-Foo
+Based on the command-line options defined above, the `deepThought` tool should have the following usage documentation:
 
-```js
-const docs = usage([
-  synopsis('deepThought'),
-  space(),
-  optsList(),
-  space(),
-  note(
-    'Deep Thought was created to come up with the Answer to ' +
-    'The Ultimate Question of Life, the Universe, and Everything.'
-  )
-])
+```bash
+deepThought ask [-q|--question] [-h|--help]                                     
+                                                                                
+-q, --question      A question. [string]                                        
+-h, --help          Print this help message and exit. [flag]                    
+                                                                                
+Deep Thought was created to come up with the Answer to The Ultimate Question of 
+Life, the Universe, and Everything. 
 ```
 
-Foo
+Since command-line options may change, writing the documentation manually is not a good idea,
+because it would mean updating changed options in two different places.
+This is why shargs provides DSLs for writing usage documentation.
 
-| Function                            | Description                                                |
-|-------------------------------------|------------------------------------------------------------|
-| `usage(toStrings)(opts)(style)`     | Foo                                                        |
-| `note(string, id)(opts)(style)`     | Foo                                                        |
-| `notes(string, id)(opts)(style)`    | Foo                                                        |
-| `optsDefs(string, id)(opts)(style)` | Foo                                                        |
-| `optsLine(string, id)(opts)(style)` | Foo                                                        |
-| `space(string, id)(opts)(style)`    | Foo                                                        |
-| `spaces(string, id)(opts)(style)`   | Foo                                                        |
-| `synopsis(string, id)(opts)(style)` | Foo                                                        |
+#### Layout Documentation DSL
 
-Foo
+The layout DSL functions are a markup language for writing text to the console.
+The `deepThought` documentation could be written as follows in layout syntax:
 
 ```js
 const askDocs = layout([
@@ -477,22 +469,78 @@ const askDocs = layout([
 ])
 ```
 
-Foo
+The layout DSL includes the following functions:
 
-| Function                       | Description                                                |
-|--------------------------------|------------------------------------------------------------|
-| `layout(toStrings)(style)`     | Foo                                                        |
-| `br(id)(style)`                | Foo                                                        |
-| `brs(id)(style)`               | Foo                                                        |
-| `cols(columns, id)(style)`     | Foo                                                        |
-| `defs(definitions, id)(style)` | Foo                                                        |
-| `line(string, id)(style)`      | Foo                                                        |
-| `lines(strings, id)(style)`    | Foo                                                        |
-| `table(itemsList, id)(style)`  | Foo                                                        |
-| `text(string, id)(style)`      | Foo                                                        |
-| `texts(strings, id)(style)`    | Foo                                                        |
+| Function                       | Description                                                                     |
+|--------------------------------|---------------------------------------------------------------------------------|
+| `layout(toStrings)(style)`     | Foo                                                                             |
+| `br(id)(style)`                | Introduces a single blank line.                                                 |
+| `brs(length, id)(style)`       | Introduces several blank lines with the number defined by the length parameter. |
+| `cols(columns, id)(style)`     | Foo                                                                             |
+| `defs(definitions, id)(style)` | Foo                                                                             |
+| `line(string, id)(style)`      | Foo                                                                             |
+| `lines(strings, id)(style)`    | Foo                                                                             |
+| `table(itemsList, id)(style)`  | Foo                                                                             |
+| `text(string, id)(style)`      | Foo                                                                             |
+| `texts(strings, id)(style)`    | Foo                                                                             |
 
-Foo
+#### Style DSL
+
+Note how all DSL functions take a style argument as last parameter.
+The following is a minimum definition of `style` for `deepThought`:
+
+```js
+const style = {
+  line: {width: 80},
+  cols: [{width: 20}, {width: 60}]
+}
+```
+
+It defines style objects for two ids: `line` and `cols`.
+These two ids are used internally by the layout functions to decide, how lines and columns should be printed.
+A style object may have the following parameters:
+
+| Parameter  | Type   | Description                                                     |
+|------------|--------|-----------------------------------------------------------------|
+| `padEnd`   | number | Defines a padding to the right of a line.                       |
+| `padStart` | number | Defines a padding to the left of a line.                        |
+| `width`    | number | Defines the length of a line before a line break is introduced. |
+
+While `line` and `cols` are the default ids, any valid key may be used as an id.
+In order to connect leyout functions to a different id than the default, pass it as a string to the `id` parameter.
+
+#### Usage Documentation DSL
+
+The usage DSL extends the layout DSL by providing functions that incorporate command-line options.
+Using this DSL makes defining usage documentation for command-line options very simple:
+
+```js
+const docs = usage([
+  synopsis('deepThought'),
+  space(),
+  optsList(),
+  space(),
+  note(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+])
+```
+
+`docs` prints exactly the same documentation text, but is declarative,
+in that it defines what should be displayed, but leaves the details to how it is defined for later.
+The usage DSL includes the following functions:
+
+| Function                                            | Description |
+|-----------------------------------------------------|-------------|
+| `usage(toStrings)(opts)(style)`                     | Foo         |
+| `note(string, id)(opts)(style)`                     | Foo         |
+| `notes(strings, id)(opts)(style)`                   | Foo         |
+| `optsDefs(filter, id)(opts)(style)`                 | Foo         |
+| `optsList(filter, id)(opts)(style)`                 | Foo         |
+| `space(id)(opts)(style)`                            | Foo         |
+| `spaces(id)(opts)(style)`                           | Foo         |
+| `synopsis(string, string, filter, id)(opts)(style)` | Foo         |
 
 ### Combining Options, Parser, and Usage Documentation
 
@@ -503,11 +551,6 @@ Foo
 const argv = ['ask', '-q', 'What is the answer to everything?']
 
 const {errs, args} = deepThought(opts)({argv})
-
-const style = {
-  line: {width: 80},
-  cols: [{width: 20}, {width: 60}]
-}
 
 const help = docs(opts)(style)
 const askHelp = askDocs(style)
