@@ -427,7 +427,8 @@ const deepThought = parser({
 })
 ```
 
-When using `parser`, the only thing you have to take care of is supplying parser functions in the desired order.
+When using `parser`, the only thing you have to take care of
+is supplying parser functions in the desired order per stage.
 
 ### Usage Documentation DSL
 
