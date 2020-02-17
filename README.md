@@ -471,18 +471,365 @@ const askDocs = layout([
 
 The layout DSL includes the following functions:
 
-| Function                       | Description                                                                     |
-|--------------------------------|---------------------------------------------------------------------------------|
-| `layout(toStrings)(style)`     | Foo                                                                             |
-| `br(id)(style)`                | Introduces a single blank line.                                                 |
-| `brs(length, id)(style)`       | Introduces several blank lines with the number defined by the length parameter. |
-| `cols(columns, id)(style)`     | Foo                                                                             |
-| `defs(definitions, id)(style)` | Foo                                                                             |
-| `line(string, id)(style)`      | Foo                                                                             |
-| `lines(strings, id)(style)`    | Foo                                                                             |
-| `table(itemsList, id)(style)`  | Foo                                                                             |
-| `text(string, id)(style)`      | Foo                                                                             |
-| `texts(strings, id)(style)`    | Foo                                                                             |
+<table>
+<tr>
+<th>Layout&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description (and Example)</th>
+</tr>
+<tr>
+<td><code>layout(functions)(style)</code></td>
+<td>
+<details>
+<summary>
+Transforms layout DSL functions into a string following a style.
+</summary>
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+layout([
+  line('First line'),
+  line('Last line')
+])(style)
+```
+
+Result:
+
+```bash
+First line                              
+Last line                               
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>line(string, id)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints the string with a line break at the end. Takes the line width from style and pads with spaces at the end. If the string is too long to fit the line's width, it is cut off.
+</summary>
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+layout([
+  line('First line'),
+  line('Last line')
+])(style)
+```
+
+Result:
+
+```bash
+First line                              
+Last line                               
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>lines(strings, id)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints several strings using the <code>line</code> function for each.
+</summary>
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+const text = lines([
+  'First line',
+  'Last line'
+])(style)
+```
+
+Result:
+
+```bash
+First line                              
+Last line                               
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>br(id)(style)</code></td>
+<td>
+<details>
+<summary>
+Introduces a single blank line.
+</summary>
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+layout([
+  line('First line'),
+  br(),
+  line('Last line')
+])(style)
+```
+
+Result:
+
+```bash
+First line                              
+                                        
+Last line                               
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>brs(length, id)(style)</code></td>
+<td>
+<details>
+<summary>
+Introduces several blank lines with the number defined by the length parameter.
+</summary>
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+layout([
+  line('First line'),
+  brs(2),
+  line('Last line')
+])(style)
+```
+
+Result:
+
+```bash
+First line                              
+                                        
+                                        
+Last line                               
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>cols(columns, id)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes a list of columns with each column consisting of several strings.
+Prints the first column at the left and the last column at the right.
+The style parameter must have a <code>cols</code> id with a number of style objects equal to the number of columns.
+If a column string is longer than a column's width, it is cut off.
+</summary>
+
+Example:
+
+```js
+const style = {
+  cols: [
+    {width: 15},
+    {width: 25}
+  ]
+}
+
+cols([
+  [
+    '-h, --help',
+    '-v, --version'
+  ],
+  [
+    'Prints the help.',
+    'Prints the version.'
+  ]
+])(style)
+```
+
+Result:
+
+```bash
+-h, --help     Prints the help.         
+-v, --version  Prints the version.      
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>text(string, id)(style)</code></td>
+<td>
+<details>
+<summary>
+Text acts much like <code>line</code>, but does not cut off lines that surpass a line's width.
+Instead, it splits the string by words and adds a new line with the rest of the string.
+</summary>
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+text('Deep Thought was created to come up with the Answer.')(style)
+```
+
+Result:
+
+```bash
+Deep Thought was created to come up with
+the Answer.                             
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>texts(strings, id)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes several strings and applies the <code>text</code> function to each.
+</summary>
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+texts([
+  'Deep Thought was created to come up with the Answer.',
+  'To The Ultimate Question of Life, the Universe, and Everything.'
+])(style)
+```
+
+Result:
+
+```bash
+Deep Thought was created to come up with
+the Answer.                             
+To The Ultimate Question of Life, the   
+Universe, and Everything.
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>defs(definitions, id)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes a list of definitions with each definition being an object with a <code>title</code> and a <code>desc</code> key.
+Prints the title as a <code>text</code> before printing the desc as a <code>text</code>.
+The style parameter must have a <code>defs</code> key that holds an object with <code>title</code> and <code>desc</code> keys that each hold a style object.
+</summary>
+
+Example:
+
+```js
+const style = {
+  defs: {
+    title: {width: 40},
+    desc: {padStart: 4, width: 36}
+  }
+}
+
+defs([
+  {
+    title: '-h, --help',
+    desc: 'Prints the help.'
+  },
+  {
+    title: '-v, --version',
+    desc: 'Prints the version.'
+  }
+])(line)
+```
+
+Result:
+
+```bash
+-h, --help                              
+    Prints the help.                    
+
+-v, --version                           
+    Prints the version.                 
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>table(rowsList, id)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes a rows list with each row holding a number of strings equal to the number of columns.
+The style parameter must have a <code>cols</code> key with a number of style objects equal to the number of columns.
+The strings in each row are formatted according to the defined columns.
+If a string surpasses the width of a column, its remaining words are printed in the following rows.
+</summary>
+
+Example:
+
+```js
+const style = {
+  cols: [
+    {width: 15},
+    {width: 25}
+  ]
+}
+
+table([
+  [
+    '-h, --help',
+    'Prints the help.'
+  ],
+  [
+    '-v, --version',
+    'Prints the version.'
+  ]
+])(style)
+```
+
+Result:
+
+```bash
+-h, --help     Prints the help.         
+-v, --version  Prints the version.      
+```
+
+</details>
+</td>
+</tr>
+</table>
 
 #### Style DSL
 
@@ -507,7 +854,7 @@ A style object may have the following parameters:
 | `width`    | number | Defines the length of a line before a line break is introduced. |
 
 While `line` and `cols` are the default ids, any valid key may be used as an id.
-In order to connect leyout functions to a different id than the default, pass it as a string to the `id` parameter.
+In order to connect layout functions to a different id than the default, pass it as a string to the `id` parameter.
 
 #### Usage Documentation DSL
 
