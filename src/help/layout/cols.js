@@ -1,6 +1,7 @@
 const lines = require('./lines')
 
-// make sure cols are long enough for all elements or have default cols available
+// TODO: make sure cols are long enough for all elements or have default cols available
+// TODO: cut strings if they are too long for a column!
 module.exports = (columns = [], id = undefined) => (
   (style = {}) => {
     const {cols: COLS = [], [id]: idCols = undefined} = style
