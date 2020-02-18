@@ -1,12 +1,11 @@
 const cols = require('./cols')
 
-module.exports = (itemsList = [], id = undefined) => (
+module.exports = (itemsList = [], id = 'cols') => (
   (style = {}) => {
-    const {cols: COLS, [id]: idCols = undefined} = style
+    const {[id]: COLS = []} = style
 
-    const colsStyle = idCols || COLS
-    const colWidths = colsStyle.map(col => col.width)
-    const indexes   = colsStyle.map((_, i) => i)
+    const colWidths = COLS.map(col => col.width)
+    const indexes   = COLS.map((_, i) => i)
     let columns     = indexes.map(() => [])
 
     for (let i = 0; i < itemsList.length; i++) {

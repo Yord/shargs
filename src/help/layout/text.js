@@ -1,9 +1,8 @@
 const lines = require('./lines')
 
-module.exports = (STRING = '', id = undefined) => (
+module.exports = (STRING = '', id = 'line') => (
   (style = {}) => {
-    const {line: LINE = {}, [id]: idLine} = style
-    const line = idLine || LINE
+    const {[id]: line = {}} = style
 
     const words = splitWords(STRING)
 
