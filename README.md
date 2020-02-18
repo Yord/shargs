@@ -88,7 +88,7 @@ const deepThought = parser({
 </p>
 </summary>
 
-The parser consists of six parser functions are applied in the following order:
+The parser consists of six parser functions that are applied in the following order:
 
 1.  `splitShortOptions`
 2.  `toOpts` (implicit)
@@ -684,8 +684,8 @@ Result:
 <td>
 <details>
 <summary>
-Text acts much like <code>line</code>, but does not cut off lines that surpass a line's width.
-Instead, it splits the string by words and adds a new line with the rest of the string.
+Text acts much like <code>line</code>, but does not cut off strings that surpass a line's width.
+Instead, it splits the string by words and adds new lines with the remaining words.
 </summary>
 
 Example:
