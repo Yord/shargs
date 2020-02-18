@@ -553,7 +553,7 @@ const style = {
   line: {width: 40}
 }
 
-const text = lines([
+lines([
   'First line',
   'Last line'
 ])(style)
