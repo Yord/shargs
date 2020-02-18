@@ -450,7 +450,7 @@ This is why shargs provides DSLs for writing usage documentation.
 
 #### Layout Documentation DSL
 
-The layout DSL functions are a markup language for writing text to the console.
+The layout DSL functions are a markup language for formatting text in the terminal.
 The `deepThought` documentation could be written as follows in layout syntax:
 
 ```js
