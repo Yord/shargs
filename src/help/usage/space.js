@@ -1,5 +1,5 @@
 const note = require('./note')
 
-module.exports = (id = undefined) => (
+module.exports = (id = 'line') => (
   note('', id)
 )

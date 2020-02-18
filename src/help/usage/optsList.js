@@ -1,6 +1,6 @@
 const table = require('../layout/table')
 
-module.exports = (filter = () => true, id = undefined) => (
+module.exports = (filter = () => true, id = 'cols') => (
   (opts = []) => {
     const items = (
       opts
