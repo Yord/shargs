@@ -861,8 +861,8 @@ In order to connect layout functions to a different id than the default, pass it
 
 #### Usage Documentation DSL
 
-The usage DSL extends the layout DSL by providing functions that incorporate command-line options.
-Using this DSL makes defining usage documentation for command-line options very simple:
+The usage DSL extends the layout DSL by providing functions that may access command-line options.
+Using this DSL makes defining usage documentation for command-line options very straight forward:
 
 ```js
 const docs = usage([
