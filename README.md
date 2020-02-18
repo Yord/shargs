@@ -877,20 +877,325 @@ const docs = usage([
 ])
 ```
 
-`docs` prints exactly the same documentation text, but is declarative,
-in that it defines what should be displayed, but leaves the details to how it is defined for later.
+`docs` prints exactly the same documentation text, but needs much less configuration,
+since the declared command-line options are not repeated, but reused.
 The usage DSL includes the following functions:
 
-| Function                                            | Description |
-|-----------------------------------------------------|-------------|
-| `usage(toStrings)(opts)(style)`                     | Foo         |
-| `note(string, id)(opts)(style)`                     | Foo         |
-| `notes(strings, id)(opts)(style)`                   | Foo         |
-| `optsDefs(filter, id)(opts)(style)`                 | Foo         |
-| `optsList(filter, id)(opts)(style)`                 | Foo         |
-| `space(id)(opts)(style)`                            | Foo         |
-| `spaces(id)(opts)(style)`                           | Foo         |
-| `synopsis(string, string, filter, id)(opts)(style)` | Foo         |
+<table>
+<tr>
+<th>Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description (and Example)</th>
+</tr>
+<tr>
+<td><code>usage(toStrings)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Transforms usage DSL functions into a string having access to command-line options and following a style.
+</summary>
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  line: {width: 40},
+  cols: [
+    {width: 10, padEnd: 2},
+    {width: 28}
+  ]
+}
+
+usage([
+  synopsis('deepThought'),
+  space(),
+  optsList(),
+  space(),
+  note('Deep Thought was created to come up with the Answer.')
+])(opts)(style)
+```
+
+Result:
+
+```bash
+deepThought [-a|--answer] [-h|--help]   
+            [--version]                 
+                                        
+-a,         The answer. [number]        
+--answer                                
+-h, --help  Prints help. [flag]         
+--version   Prints version. [flag]      
+                                        
+Deep Thought was created to come up with
+the Answer.                             
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>note(string, id)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints the string with a line break at the end. Takes the line width from style and pads with spaces at the end. If the string is too long to fit the line's width, it is broken up into words, and all remaining words are put into the following line.
+</summary>
+
+Example:
+
+```js
+const opts = []
+
+const style = {
+  line: {width: 40}
+}
+
+note(
+  'Deep Thought was created to come up with the Answer.'
+)(opts)(style)
+```
+
+Result:
+
+```bash
+Deep Thought was created to come up with
+the Answer.                             
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>notes(strings, id)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints several strings using the <code>note</code> function for each.
+</summary>
+
+Example:
+
+```js
+const opts = []
+
+const style = {
+  line: {width: 40}
+}
+
+notes([
+  'Deep Thought answered',
+  'The Ultimate Question.'
+])(opts)(style)
+```
+
+Result:
+
+```bash
+Deep Thought answered                   
+The Ultimate Question.                  
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>space(id)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Introduces a single blank line.
+</summary>
+
+Example:
+
+```js
+const opts = []
+
+const style = {
+  line: {width: 40}
+}
+
+usage([
+  note('Deep Thought answered'),
+  space(),
+  note('The Ultimate Question.')
+])(opts)(style)
+```
+
+Result:
+
+```bash
+Deep Thought answered                   
+                                        
+The Ultimate Question.                  
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>spaces(length, id)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Introduces several blank lines with the number defined by the length parameter.
+</summary>
+
+Example:
+
+```js
+const opts = []
+
+const style = {
+  line: {width: 40}
+}
+
+usage([
+  note('Deep Thought answered'),
+  spaces(2),
+  note('The Ultimate Question.')
+])(opts)(style)
+```
+
+Result:
+
+```bash
+Deep Thought answered                   
+                                        
+                                        
+The Ultimate Question.                  
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>optsDefs(filter, id)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints a definition list, with the command-line option <code>args</code> as title
+and the <code>desc</code> key as text.
+</summary>
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  defs: {
+    title: {width: 40},
+    desc: {padStart: 4, width: 36}
+  }
+}
+
+optsDefs()(opts)(style)
+```
+
+Result:
+
+```bash
+-a, --answer [number]                   
+    The answer.                         
+
+-h, --help [flag]                       
+    Prints help.                        
+
+--version [flag]                        
+    Prints version.                     
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>optsList(filter, id)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints a table with two columns:
+The command-line option's <code>args</code> in the left,
+and the <code>desc</code> key in the right column.
+</summary>
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  cols: [
+    {width: 10, padEnd: 2},
+    {width: 28}
+  ]
+}
+
+optsList()(opts)(style)
+```
+
+Result:
+
+```bash
+-a,         The answer. [number]        
+--answer                                
+-h, --help  Prints help. [flag]         
+--version   Prints version. [flag]      
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>synopsis(start, end, filter, id)<br />(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints a command's synopsis:
+The <code>start</code> string is printed first, the command-line option's <code>args</code> next,
+followed by the <code>end</code> string.
+</summary>
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  line: {width: 40}
+}
+
+synopsis('deepThought')(opts)(style)
+```
+
+Result:
+
+```bash
+deepThought [-a|--answer] [-h|--help]   
+            [--version]                 
+```
+
+</details>
+</td>
+</tr>
+</table>
 
 ### Combining Options, Parser, and Usage Documentation
 
