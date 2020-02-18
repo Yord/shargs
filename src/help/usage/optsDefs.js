@@ -1,6 +1,6 @@
 const defs = require('../layout/defs')
 
-module.exports = (filter = () => true, id = undefined) => (
+module.exports = (filter = () => true, id = 'defs') => (
   (opts = []) => {
     const items = (
       opts

@@ -1,6 +1,6 @@
 const table = require('../layout/table')
 
-module.exports = (start = '', end = '', filter = ({types}) => typeof types !== 'undefined' && types !== null, id = undefined) => (
+module.exports = (start = '', end = '', filter = ({types}) => typeof types !== 'undefined' && types !== null, id = 'cols') => (
   (opts = []) => {
     const argsString  = ({args = []}) => '[' + args.join('|') + ']'
     const argsStrings = (
