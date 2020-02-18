@@ -802,19 +802,19 @@ Example:
 ```js
 const style = {
   cols: [
-    {width: 15},
-    {width: 25}
+    {width: 10, padEnd: 2},
+    {width: 28}
   ]
 }
 
 table([
   [
-    '-h, --help',
-    'Prints the help.'
-  ],
-  [
     '-v, --version',
     'Prints the version.'
+  ],
+  [
+    '-h, --help',
+    'Prints the help.'
   ]
 ])(style)
 ```
@@ -822,8 +822,9 @@ table([
 Result:
 
 ```bash
--h, --help     Prints the help.         
--v, --version  Prints the version.      
+-v,         Prints the version.         
+--version                                    
+-h, --help  Prints the help.            
 ```
 
 </details>
