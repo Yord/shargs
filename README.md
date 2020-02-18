@@ -695,7 +695,9 @@ const style = {
   line: {width: 40}
 }
 
-text('Deep Thought was created to come up with the Answer.')(style)
+text(
+  'Deep Thought was created to come up with the Answer.'
+)(style)
 ```
 
 Result:
