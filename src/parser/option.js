@@ -1,4 +1,4 @@
-const {noArgumentProvidedInOption, noArgumentsProvidedInOption} = require('../../errors')
+const {noArgumentProvidedInOption, noArgumentsProvidedInOption} = require('../errors')
 
 module.exports = (options = {}) => {
   const {key = null, args: ARGS = [], types = null, only = null, desc = '', opts = null} = options
