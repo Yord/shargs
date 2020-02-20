@@ -1,5 +1,5 @@
-const combine  = require('./parser/combine')
-const option   = require('./parser/option')
+const combine  = require('./utils/combine')
+const option   = require('./utils/option')
 const pipe     = require('./utils/pipe')
 const TO_ARGS  = require('./parser/toArgs')
 const TO_OPTS  = require('./parser/toOpts')
