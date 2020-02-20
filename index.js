@@ -669,7 +669,7 @@ const exC2 = layout([
   text('Part of the git(1) suite')
 ])(exCStyle)
 
-const o = require('./src/dsl/fp/compose')
+const o = require('./src/utils/compose')
 
 const exC3 = usage([
   note('NAME', 'h1'),
