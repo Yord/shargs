@@ -1,5 +1,5 @@
 const {anything, array: arbArray, assert, base64, constant, oneof, property, unicodeString} = require('fast-check')
-const {array} = require('./types')
+const {array} = require('.')
 
 test('types are correctly assembled', () => {
   const typesKeyArgsOptionsResult = types().chain(types =>

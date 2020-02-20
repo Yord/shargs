@@ -16,7 +16,7 @@ function fooParser (opts) {
   })(opts)
 }
 
-const {array, number, string, bool, flag, command} = require('./src/dsl/fp/types')
+const {array, number, string, bool, flag, command} = require('./src/options')
 const numStr  = array(['number', 'string'])
 
 const opts = [
