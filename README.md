@@ -1199,10 +1199,10 @@ deepThought [-a|--answer] [-h|--help]
 
 ### Combining Options, Parser, and Usage Documentation
 
-Foo
+The command-line options, the parser, and the usage documentation are combined to form a command-line argument parser:
 
 ```js
-// node index.js ask -q 'What is the answer to everything?'
+// ./deepThought ask -q 'What is the answer to everything?'
 const argv = ['ask', '-q', 'What is the answer to everything?']
 
 const {errs, args} = deepThought(opts)({argv})
@@ -1219,7 +1219,9 @@ if (args.help) {
 }
 ```
 
-Foo
+Shargs lets you define the three parts individually.
+This gives you a lot of flexibility:
+E.g. It lets you mix in custom parser and usage functions.
 
 ## Reporting Issues
 
@@ -1233,7 +1235,7 @@ Please read the [contributing guide][contribute].
 
 ## License
 
-`shargs` is [MIT licensed][license].
+Shargs is [MIT licensed][license].
 
 [actions]: https://github.com/Yord/shargs/actions
 [code]: https://github.com/Yord/shargs/blob/master/CODE_OF_CONDUCT.md
