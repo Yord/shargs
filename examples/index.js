@@ -1,10 +1,10 @@
-const parser            = require('./src/parser')
-const toArgs            = require('./src/parser/toArgs')
-const toOpts            = require('./src/parser/toOpts')
-const splitShortOptions = require('./src/parser/argv/splitShortOptions')
-const cast              = require('./src/parser/opts/cast')
-const restrictToOnly    = require('./src/parser/opts/restrictToOnly')
-const emptyRest         = require('./src/parser/args/emptyRest')
+const parser            = require('../src/parser')
+const toArgs            = require('../src/parser/toArgs')
+const toOpts            = require('../src/parser/toOpts')
+const splitShortOptions = require('../src/parser/argv/splitShortOptions')
+const cast              = require('../src/parser/opts/cast')
+const restrictToOnly    = require('../src/parser/opts/restrictToOnly')
+const emptyRest         = require('../src/parser/args/emptyRest')
 
 function fooParser (opts) {
   return parser({
@@ -16,7 +16,7 @@ function fooParser (opts) {
   })(opts)
 }
 
-const {array, number, string, bool, flag, command} = require('./src/dsl/fp/types')
+const {array, number, string, bool, flag, command} = require('../src/options')
 const numStr  = array(['number', 'string'])
 
 const opts = [
@@ -47,24 +47,25 @@ console.log('fooParser', JSON.stringify(res, null, 2))
 
 
 
-const layout   = require('./src/help/layout')
-const br       = require('./src/help/layout/br')
-const brs      = require('./src/help/layout/brs')
-const cols     = require('./src/help/layout/cols')
-const defs     = require('./src/help/layout/defs')
-const line     = require('./src/help/layout/line')
-const lines    = require('./src/help/layout/lines')
-const table    = require('./src/help/layout/table')
-const text     = require('./src/help/layout/text')
-const texts    = require('./src/help/layout/texts')
-const usage    = require('./src/help/usage')
-const note     = require('./src/help/usage/note')
-const notes    = require('./src/help/usage/notes')
-const optsDefs = require('./src/help/usage/optsDefs')
-const optsList = require('./src/help/usage/optsList')
-const space    = require('./src/help/usage/space')
-const spaces   = require('./src/help/usage/spaces')
-const synopsis = require('./src/help/usage/synopsis')
+const layout   = require('../src/layout')
+const usage    = require('../src/usage')
+
+const br       = require('../src/help/layout/br')
+const brs      = require('../src/help/layout/brs')
+const cols     = require('../src/help/layout/cols')
+const defs     = require('../src/help/layout/defs')
+const line     = require('../src/help/layout/line')
+const lines    = require('../src/help/layout/lines')
+const table    = require('../src/help/layout/table')
+const text     = require('../src/help/layout/text')
+const texts    = require('../src/help/layout/texts')
+const note     = require('../src/help/usage/note')
+const notes    = require('../src/help/usage/notes')
+const optsDefs = require('../src/help/usage/optsDefs')
+const optsList = require('../src/help/usage/optsList')
+const space    = require('../src/help/usage/space')
+const spaces   = require('../src/help/usage/spaces')
+const synopsis = require('../src/help/usage/synopsis')
 
 
 
@@ -669,7 +670,7 @@ const exC2 = layout([
   text('Part of the git(1) suite')
 ])(exCStyle)
 
-const o = require('./src/dsl/fp/compose')
+const o = require('../src/utils/compose')
 
 const exC3 = usage([
   note('NAME', 'h1'),
