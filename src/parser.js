@@ -1,8 +1,8 @@
-const combine  = require('./combine')
-const option   = require('./option')
-const pipe     = require('../utils/pipe')
-const TO_ARGS  = require('./toArgs')
-const TO_OPTS  = require('./toOpts')
+const combine  = require('./parser/combine')
+const option   = require('./parser/option')
+const pipe     = require('./utils/pipe')
+const TO_ARGS  = require('./parser/toArgs')
+const TO_OPTS  = require('./parser/toOpts')
 
 module.exports = function parser (stages = {}) {
   const {argv = [], toOpts, opts = [], toArgs, args = []} = stages
