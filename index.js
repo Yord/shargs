@@ -47,7 +47,9 @@ console.log('fooParser', JSON.stringify(res, null, 2))
 
 
 
-const layout   = require('./src/help/layout')
+const layout   = require('./src/layout')
+const usage    = require('./src/usage')
+
 const br       = require('./src/help/layout/br')
 const brs      = require('./src/help/layout/brs')
 const cols     = require('./src/help/layout/cols')
@@ -57,7 +59,6 @@ const lines    = require('./src/help/layout/lines')
 const table    = require('./src/help/layout/table')
 const text     = require('./src/help/layout/text')
 const texts    = require('./src/help/layout/texts')
-const usage    = require('./src/help/usage')
 const note     = require('./src/help/usage/note')
 const notes    = require('./src/help/usage/notes')
 const optsDefs = require('./src/help/usage/optsDefs')
