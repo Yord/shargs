@@ -1,4 +1,4 @@
-const combine  = require('../dsl/fp/combine')
+const combine  = require('./combine')
 const option   = require('./option')
 const pipe     = require('../dsl/fp/pipe')
 const TO_ARGS  = require('./toArgs')
