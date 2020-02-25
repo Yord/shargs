@@ -120,11 +120,13 @@ const optsList = require('../src/help/usage/optsList')
 const space    = require('../src/help/usage/space')
 const synopsis = require('../src/help/usage/synopsis')
 
+const example  = texts => usage([notes(texts, 'example'), space()])
+const examples = textsList => usage(textsList.map(example))
+const section  = text => usage([space(), note(text), space()])
+
 const help = usage([
   synopsis('klp', '< input'),
-  space(),
-  note('Commands:'),
-  space(),
+  section('Commands:'),
   opts => usage(
     opts
     .filter(({key}) => commands.some(o => o.key === key))
@@ -138,28 +140,22 @@ const help = usage([
       ])
     ])
   )(opts),
-  space(),
-  note('Stream Stages:'),
-  space(),
+  section('Stream Stages:'),
   optsList(({key}) => stages.some(o => o.key === key), 'stages'),
-  space(),
-  note('Options:'),
-  space(),
+  section('Options:'),
   optsList(({key}) => options.some(o => o.key === key)),
-  space(),
-  note('Examples:'),
-  space(),
-  notes([
-    "klp --from json --flatMap 'json => json.results' --map 'json => json.time' --to csv"
-  ], 'example'),
-  space(),
-  notes([
-    "klp --from json                      \\",
-    "    --flatMap 'json => json.results' \\",
-    "    --map     'json => json.time'    \\",
-    "    --to csv"
-  ], 'example'),
-  space(),
+  section('Examples:'),
+  examples([
+    [
+      "klp --from json --flatMap 'json => json.results' --map 'json => json.time' --to csv"
+    ],
+    [
+      "klp --from json                      \\",
+      "    --flatMap 'json => json.results' \\",
+      "    --map     'json => json.time'    \\",
+      "    --to csv"
+    ]
+  ]),
   note('Copyright (c) Philipp Wille 2019')
 ])
 
