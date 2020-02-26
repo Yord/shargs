@@ -1,7 +1,6 @@
-const line = require('./line')
+const layout = require('../../layout')
+const line   = require('./line')
 
-module.exports = (strings = [], id = 'line') => (
-  (style = {}) => (
-    strings.map(string => line(string, id)(style)).join('')
-  )
+module.exports = (strings = [], id = 'line') => layout(
+  strings.map(string => line(string, id))
 )

@@ -1,7 +1,6 @@
-const text = require('./text')
+const layout = require('../../layout')
+const text   = require('./text')
 
-module.exports = (strings = [], id = 'line') => (
-  (style = {}) => (
-    strings.map(string => text(string, id)(style)).join('')
-  )
+module.exports = (strings = [], id = 'line') => layout(
+  strings.map(string => text(string, id))
 )
