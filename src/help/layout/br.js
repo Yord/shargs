@@ -1,5 +1,10 @@
 const line = require('./line')
 
-module.exports = (id = 'line') => (
-  line('', id)
-)
+const brFrom = id => line('', id)
+
+const br = brFrom('line')
+
+module.exports = {
+  br,
+  brFrom
+}

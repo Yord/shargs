@@ -1,7 +1,7 @@
-const brs = require('../layout/brs')
+const {brsFrom} = require('../layout/brs')
 
 module.exports = (length, id = 'line') => (
   () => (
-    brs(length, id)
+    brsFrom(id)(length)
   )
 )
