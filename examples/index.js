@@ -64,7 +64,7 @@ const notes    = require('../src/help/usage/notes')
 const optsDefs = require('../src/help/usage/optsDefs')
 const optsList = require('../src/help/usage/optsList')
 const space    = require('../src/help/usage/space')
-const spaces   = require('../src/help/usage/spaces')
+const {spaces} = require('../src/help/usage/spaces')
 const synopsis = require('../src/help/usage/synopsis')
 
 
