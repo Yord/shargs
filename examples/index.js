@@ -6,15 +6,11 @@ const cast              = require('../src/parser/opts/cast')
 const restrictToOnly    = require('../src/parser/opts/restrictToOnly')
 const emptyRest         = require('../src/parser/args/emptyRest')
 
-function fooParser (opts) {
-  return parser({
-    argv:   [splitShortOptions],
-    toOpts,
-    opts:   [cast, restrictToOnly],
-    toArgs: toArgs(fooParser),
-    args:   [emptyRest]
-  })(opts)
-}
+const fooParser = parser({
+  argv: [splitShortOptions],
+  opts: [cast, restrictToOnly],
+  args: [emptyRest]
+})
 
 const {array, number, string, bool, flag, command} = require('../src/options')
 const numStr  = array(['number', 'string'])
