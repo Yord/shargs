@@ -687,7 +687,7 @@ const exC3 = usage([
   note('The index is updated after successful completion, but the change must still be committed.'),
   space,
   noteFrom('h1')('OPTIONS'),
-  optsDefs(),
+  optsDefs,
   noteFrom('h1')('SUBMODULES'),
   note('Moving a submodule using a gitfile (which means they were cloned with a Git version 1.7.8 or newer) will update the gitfile and core.worktree setting to make the submodule work in the new location. It also will attempt to update the submodule.<name>.path setting in the gitmodules(5) file and stage that file (unless -n is used).'),
   space,

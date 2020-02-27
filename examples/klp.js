@@ -136,7 +136,7 @@ const help = usage([
         space,
         noteFrom('commandsOpts')(`"${o.args.join('')}" ${o.desc}`),
         space,
-        () => optsDefs()(o.opts)
+        () => optsDefs(o.opts)
       ])
     ])
   )(opts),
