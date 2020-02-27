@@ -1,6 +1,6 @@
-const {noteFrom} = require('./note')
+const {brFrom} = require('../layout/br')
 
-const spaceFrom = id => noteFrom(id)('')
+const spaceFrom = id => () => brFrom(id)
 
 const space = spaceFrom('line')
 
