@@ -1,4 +1,4 @@
-const layout = require('../../layout')
+const layout     = require('../../layout')
 const {textFrom} = require('./text')
 
 const textsFrom = id => (strings = []) => layout(

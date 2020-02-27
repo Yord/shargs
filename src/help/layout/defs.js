@@ -1,4 +1,4 @@
-const {br} = require('./br')
+const {br}   = require('./br')
 const {text} = require('./text')
 
 const defsFrom = id => (definitions = []) => (
