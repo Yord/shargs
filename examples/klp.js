@@ -112,15 +112,15 @@ const options = [
 
 const opts = [...commands, ...stages, ...options]
 
-const usage    = require('../src/usage')
-const note     = require('../src/help/usage/note')
-const notes    = require('../src/help/usage/notes')
-const optsDefs = require('../src/help/usage/optsDefs')
-const optsList = require('../src/help/usage/optsList')
-const space    = require('../src/help/usage/space')
-const synopsis = require('../src/help/usage/synopsis')
+const usage       = require('../src/usage')
+const note        = require('../src/help/usage/note')
+const {notesFrom} = require('../src/help/usage/notes')
+const optsDefs    = require('../src/help/usage/optsDefs')
+const optsList    = require('../src/help/usage/optsList')
+const space       = require('../src/help/usage/space')
+const synopsis    = require('../src/help/usage/synopsis')
 
-const example  = texts => usage([notes(texts, 'example'), space()])
+const example  = texts => usage([notesFrom('example')(texts), space()])
 const examples = textsList => usage(textsList.map(example))
 const section  = text => usage([space(), note(text), space()])
 

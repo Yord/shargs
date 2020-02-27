@@ -1,7 +1,10 @@
 const texts = require('../layout/texts')
 
-module.exports = (strings = [], id = 'line') => (
-  () => (
-    texts(strings, id)
-  )
-)
+const notesFrom = id => (strings = []) => () => texts(strings, id)
+
+const notes = notesFrom('line')
+
+module.exports = {
+  notes,
+  notesFrom
+}
