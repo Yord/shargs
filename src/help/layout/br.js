@@ -1,4 +1,4 @@
-const line = require('./line')
+const {line} = require('./line')
 
 const brFrom = id => line('', id)
 
