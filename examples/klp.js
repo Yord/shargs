@@ -116,7 +116,7 @@ const usage       = require('../src/usage')
 const {note, noteFrom} = require('../src/help/usage/note')
 const {notesFrom} = require('../src/help/usage/notes')
 const {optsDefs}  = require('../src/help/usage/optsDefs')
-const optsList    = require('../src/help/usage/optsList')
+const {optsList, optsListFrom} = require('../src/help/usage/optsList')
 const {space}     = require('../src/help/usage/space')
 const synopsis    = require('../src/help/usage/synopsis')
 
@@ -141,7 +141,7 @@ const help = usage([
     ])
   )(opts),
   section('Stream Stages:'),
-  optsList(({key}) => stages.some(o => o.key === key), 'stages'),
+  optsListFrom('stages')(({key}) => stages.some(o => o.key === key)),
   section('Options:'),
   optsList(({key}) => options.some(o => o.key === key)),
   section('Examples:'),
