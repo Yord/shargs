@@ -1,6 +1,13 @@
-const layout = require('../../layout')
-const br     = require('./br')
+const layout   = require('../../layout')
+const {brFrom} = require('./br')
 
-module.exports = (length = 1, id = 'line') => layout(
-  Array.from({length}, () => br(id))
+const brsFrom = id => (length = 1) => layout(
+  Array.from({length}, () => brFrom(id))
 )
+
+const brs = brsFrom('line')
+
+module.exports = {
+  brs,
+  brsFrom
+}
