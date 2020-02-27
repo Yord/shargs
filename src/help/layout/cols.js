@@ -1,4 +1,4 @@
-const lines = require('./lines')
+const {linesFrom} = require('./lines')
 
 // TODO: make sure cols are long enough for all elements or have default cols available
 // TODO: cut strings if they are too long for a column!
@@ -25,6 +25,6 @@ module.exports = (columns = [], id = 'cols') => (
       strings.push(string)
     }
 
-    return lines(strings, id)(style)
+    return linesFrom(id)(strings)(style)
   }
 )
