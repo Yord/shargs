@@ -63,7 +63,7 @@ const {note, noteFrom} = require('../src/help/usage/note')
 const {notes}  = require('../src/help/usage/notes')
 const optsDefs = require('../src/help/usage/optsDefs')
 const optsList = require('../src/help/usage/optsList')
-const space    = require('../src/help/usage/space')
+const {space}  = require('../src/help/usage/space')
 const {spaces} = require('../src/help/usage/spaces')
 const synopsis = require('../src/help/usage/synopsis')
 
@@ -403,9 +403,9 @@ const exA16 = usage([
 
 const exA17 = usage([
   synopsis("foo"),
-  space(),
+  space,
   optsList(),
-  space(),
+  space,
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAOpts)(exAStyle)
 
@@ -487,15 +487,15 @@ const exB1 = layout([
 
 const exB2 = usage([
   synopsis("git", "<command> [args]"),
-  space(),
+  space,
   note("These are common Git commands used in various situations:"),
-  space(),
+  space,
   note("start a working area (see also: git help tutorial)"),
   optsList(({args}) => ['clone', 'init'].some(cmd => args.includes(cmd))),
-  space(),
+  space,
   note("work on the current change (see also: git help everyday)"),
   optsList(({args}) => ['add', 'mv'].some(cmd => args.includes(cmd))),
-  space(),
+  space,
   note("'git help -a' and 'git help -g' list available subcommands and some concept guides. See 'git help <command>' or 'git help <concept>' to read about a specific subcommand or concept.")
 ])(exBOpts)(exBStyle)
 
@@ -674,23 +674,23 @@ const o = require('../src/utils/compose')
 const exC3 = usage([
   noteFrom('h1')('NAME'),
   note('git-mv - Move or rename a file, a directory, or a symlink'),
-  space(),
+  space,
   noteFrom('h1')('SYNOPSIS'),
   note('git mv <options>... <args>...'),
   spaces(2),
   noteFrom('h1')('DESCRIPTION'),
   note('Move or rename a file, directory or symlink.'),
-  space(),
+  space,
   o(synopsis('git mv', '<source> <destination>', () => true, 'tabTable'), onlyFirstArg),
   o(synopsis('git mv', '<source> ... <destination directory>', () => true, 'tabTable'), onlyFirstArg),
-  space(),
+  space,
   note('The index is updated after successful completion, but the change must still be committed.'),
-  space(),
+  space,
   noteFrom('h1')('OPTIONS'),
   optsDefs(),
   noteFrom('h1')('SUBMODULES'),
   note('Moving a submodule using a gitfile (which means they were cloned with a Git version 1.7.8 or newer) will update the gitfile and core.worktree setting to make the submodule work in the new location. It also will attempt to update the submodule.<name>.path setting in the gitmodules(5) file and stage that file (unless -n is used).'),
-  space(),
+  space,
   noteFrom('h1')('GIT'),
   note('Part of the git(1) suite')
 ])(exCOpts)(exCStyle)
@@ -792,9 +792,9 @@ function onlyFirstArg (opts = []) {
 
   const docs = usage([
     synopsis('deepThought'),
-    space(),
+    space,
     optsList(),
-    space(),
+    space,
     note('Deep Thought was created to come up with the Answer to The Ultimate Question of Life, the Universe, and Everything.')
   ])
 
@@ -838,9 +838,9 @@ function onlyFirstArg (opts = []) {
 
   const docs = usage([
     synopsis('deepThought'),
-    space(),
+    space,
     optsList(),
-    space(),
+    space,
     note('Deep Thought was created to come up with the Answer to The Ultimate Question of Life, the Universe, and Everything.')
   ])
 

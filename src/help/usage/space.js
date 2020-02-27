@@ -1,5 +1,10 @@
 const {noteFrom} = require('./note')
 
-module.exports = (id = 'line') => (
-  noteFrom(id)('')
-)
+const spaceFrom = id => noteFrom(id)('')
+
+const space = spaceFrom('line')
+
+module.exports = {
+  space,
+  spaceFrom
+}
