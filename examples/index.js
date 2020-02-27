@@ -65,7 +65,7 @@ const {optsDefs} = require('../src/help/usage/optsDefs')
 const {optsList} = require('../src/help/usage/optsList')
 const {space}  = require('../src/help/usage/space')
 const {spaces} = require('../src/help/usage/spaces')
-const synopsis = require('../src/help/usage/synopsis')
+const {synopsis, synopsisFrom} = require('../src/help/usage/synopsis')
 
 
 
@@ -681,8 +681,8 @@ const exC3 = usage([
   noteFrom('h1')('DESCRIPTION'),
   note('Move or rename a file, directory or symlink.'),
   space,
-  o(synopsis('git mv', '<source> <destination>', () => true, 'tabTable'), onlyFirstArg),
-  o(synopsis('git mv', '<source> ... <destination directory>', () => true, 'tabTable'), onlyFirstArg),
+  o(synopsisFrom('tabTable')('git mv', '<source> <destination>', () => true), onlyFirstArg),
+  o(synopsisFrom('tabTable')('git mv', '<source> ... <destination directory>', () => true), onlyFirstArg),
   space,
   note('The index is updated after successful completion, but the change must still be committed.'),
   space,

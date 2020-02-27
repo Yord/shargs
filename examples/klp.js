@@ -118,7 +118,7 @@ const {notesFrom} = require('../src/help/usage/notes')
 const {optsDefs}  = require('../src/help/usage/optsDefs')
 const {optsList, optsListFrom} = require('../src/help/usage/optsList')
 const {space}     = require('../src/help/usage/space')
-const synopsis    = require('../src/help/usage/synopsis')
+const {synopsis}  = require('../src/help/usage/synopsis')
 
 const example  = texts => usage([notesFrom('example')(texts), space])
 const examples = textsList => usage(textsList.map(example))
@@ -131,7 +131,7 @@ const help = usage([
     opts
     .filter(({key}) => commands.some(o => o.key === key))
     .flatMap(cmd => [
-      () => optsList(() => true, 'commands')([cmd]),
+      () => optsListFrom('commands')(() => true)([cmd]),
       ...cmd.opts.flatMap(o => [
         space,
         noteFrom('commandsOpts')(`"${o.args.join('')}" ${o.desc}`),
