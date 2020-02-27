@@ -47,25 +47,27 @@ console.log('fooParser', JSON.stringify(res, null, 2))
 
 
 
-const layout                   = require('../src/layout')
-const usage                    = require('../src/usage')
+const layout                     = require('../src/layout')
+const usage                      = require('../src/usage')
 
-const {br}                     = require('../src/help/layout/br')
-const {brs}                    = require('../src/help/layout/brs')
-const {cols}                   = require('../src/help/layout/cols')
-const {defs}                   = require('../src/help/layout/defs')
-const {line, lineFrom}         = require('../src/help/layout/line')
-const {lines}                  = require('../src/help/layout/lines')
-const {table, tableFrom}       = require('../src/help/layout/table')
-const {text, textFrom}         = require('../src/help/layout/text')
-const {texts, textsFrom}       = require('../src/help/layout/texts')
-const {note, noteFrom}         = require('../src/help/usage/note')
-const {notes}                  = require('../src/help/usage/notes')
-const {optsDefs}               = require('../src/help/usage/optsDefs')
-const {optsList}               = require('../src/help/usage/optsList')
-const {space}                  = require('../src/help/usage/space')
-const {spaces}                 = require('../src/help/usage/spaces')
-const {synopsis, synopsisFrom} = require('../src/help/usage/synopsis')
+const {br}                       = require('../src/help/layout/br')
+const {brs}                      = require('../src/help/layout/brs')
+const {cols}                     = require('../src/help/layout/cols')
+const {defs}                     = require('../src/help/layout/defs')
+const {line, lineFrom}           = require('../src/help/layout/line')
+const {lines}                    = require('../src/help/layout/lines')
+const {table, tableFrom}         = require('../src/help/layout/table')
+const {text, textFrom}           = require('../src/help/layout/text')
+const {texts, textsFrom}         = require('../src/help/layout/texts')
+const {note, noteFrom}           = require('../src/help/usage/note')
+const {notes}                    = require('../src/help/usage/notes')
+const {optsDefs}                 = require('../src/help/usage/optsDefs')
+const {optsList}                 = require('../src/help/usage/optsList')
+const {space}                    = require('../src/help/usage/space')
+const {spaces}                   = require('../src/help/usage/spaces')
+const {synopsis, synopsisFrom}   = require('../src/help/usage/synopsis')
+
+const {noCommands, onlyFirstArg} = require('../src/utils/usageDecorators')
 
 
 
@@ -486,7 +488,7 @@ const exB1 = layout([
 ])(exBStyle)
 
 const exB2 = usage([
-  synopsis("git", "<command> [args]"),
+  noCommands(synopsis("git", "<command> [args]")),
   space,
   note("These are common Git commands used in various situations:"),
   space,
@@ -669,8 +671,6 @@ const exC2 = layout([
   text('Part of the git(1) suite')
 ])(exCStyle)
 
-const o = require('../src/utils/compose')
-
 const exC3 = usage([
   noteFrom('h1')('NAME'),
   note('git-mv - Move or rename a file, a directory, or a symlink'),
@@ -681,8 +681,8 @@ const exC3 = usage([
   noteFrom('h1')('DESCRIPTION'),
   note('Move or rename a file, directory or symlink.'),
   space,
-  o(synopsisFrom('tabTable')('git mv', '<source> <destination>', () => true), onlyFirstArg),
-  o(synopsisFrom('tabTable')('git mv', '<source> ... <destination directory>', () => true), onlyFirstArg),
+  onlyFirstArg(synopsisFrom('tabTable')('git mv', '<source> <destination>')),
+  onlyFirstArg(synopsisFrom('tabTable')('git mv', '<source> ... <destination directory>')),
   space,
   note('The index is updated after successful completion, but the change must still be committed.'),
   space,
@@ -757,10 +757,6 @@ console.log('exD0  === exD1',  exD0  === exD1)
 console.log('exD1  === exD2',  exD1  === exD2)
 
 
-
-function onlyFirstArg (opts = []) {
-  return opts.map(opt => ({...opt, args: (opt.args || []).slice(0, 1)}))
-}
 
 
 

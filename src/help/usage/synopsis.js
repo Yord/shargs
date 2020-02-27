@@ -1,12 +1,8 @@
 const {tableFrom} = require('../layout/table')
 
-const synopsisFrom = id => (start = '', end = '', filter = ({types}) => typeof types !== 'undefined' && types !== null) => (opts = []) => {
+const synopsisFrom = id => (start = '', end = '') => (opts = []) => {
   const argsString  = ({args = []}) => '[' + args.join('|') + ']'
-  const argsStrings = (
-    opts
-    .filter(filter)
-    .map(argsString).join(' ')
-  )
+  const argsStrings = opts.map(argsString).join(' ')
 
   return STYLE => {
     const width = STYLE.line.width
