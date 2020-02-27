@@ -1,5 +1,5 @@
 const {br} = require('./br')
-const text = require('./text')
+const {text} = require('./text')
 
 // Do something with id
 module.exports = (definitions = [], id = 'defs') => (

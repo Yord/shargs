@@ -57,7 +57,7 @@ const defs     = require('../src/help/layout/defs')
 const {line, lineFrom} = require('../src/help/layout/line')
 const {lines}  = require('../src/help/layout/lines')
 const table    = require('../src/help/layout/table')
-const text     = require('../src/help/layout/text')
+const {text, textFrom} = require('../src/help/layout/text')
 const texts    = require('../src/help/layout/texts')
 const note     = require('../src/help/usage/note')
 const {notes}  = require('../src/help/usage/notes')
@@ -311,7 +311,7 @@ const exA10 = layout([
     ]
   ]),
   line(),
-  text("Copyright (c) 2020, Philipp Wille, all rights reserved.", 'bar')
+  textFrom('bar')("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAStyle)
 
 const exA11 = layout([
@@ -625,13 +625,13 @@ const exC1 = layout([
 ])(exCStyle)
 
 const exC2 = layout([
-  text('NAME', 'h1'),
+  textFrom('h1')('NAME'),
   text('git-mv - Move or rename a file, a directory, or a symlink'),
   br,
-  text('SYNOPSIS', 'h1'),
+  textFrom('h1')('SYNOPSIS'),
   text('git mv <options>... <args>...'),
   brs(2),
-  text('DESCRIPTION', 'h1'),
+  textFrom('h1')('DESCRIPTION'),
   text('Move or rename a file, directory or symlink.'),
   br,
   texts(
@@ -644,7 +644,7 @@ const exC2 = layout([
   br,
   text('The index is updated after successful completion, but the change must still be committed.'),
   br,
-  text('OPTIONS', 'h1'),
+  textFrom('h1')('OPTIONS'),
   defs([
     {
       title: '-f, --force [flag]',
@@ -663,10 +663,10 @@ const exC2 = layout([
       desc:  'Report the names of files as they are moved.'
     }
   ]),
-  text('SUBMODULES', 'h1'),
+  textFrom('h1')('SUBMODULES'),
   text('Moving a submodule using a gitfile (which means they were cloned with a Git version 1.7.8 or newer) will update the gitfile and core.worktree setting to make the submodule work in the new location. It also will attempt to update the submodule.<name>.path setting in the gitmodules(5) file and stage that file (unless -n is used).'),
   br,
-  text('GIT', 'h1'),
+  textFrom('h1')('GIT'),
   text('Part of the git(1) suite')
 ])(exCStyle)
 
