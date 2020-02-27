@@ -1,4 +1,4 @@
-const table = require('../layout/table')
+const {tableFrom} = require('../layout/table')
 
 module.exports = (start = '', end = '', filter = ({types}) => typeof types !== 'undefined' && types !== null, id = 'cols') => (
   (opts = []) => {
@@ -18,9 +18,8 @@ module.exports = (start = '', end = '', filter = ({types}) => typeof types !== '
           {width: start.length < width ? width - start.length - 1 : width}
         ]
       }
-      return table(
-        [[start, argsStrings + (end !== '' ? ' ' : '') + end]],
-        id
+      return tableFrom(id)(
+        [[start, argsStrings + (end !== '' ? ' ' : '') + end]]
       )(style)
     }
   }

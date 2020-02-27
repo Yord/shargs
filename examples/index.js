@@ -56,7 +56,7 @@ const {cols}   = require('../src/help/layout/cols')
 const {defs}   = require('../src/help/layout/defs')
 const {line, lineFrom} = require('../src/help/layout/line')
 const {lines}  = require('../src/help/layout/lines')
-const table    = require('../src/help/layout/table')
+const {table, tableFrom} = require('../src/help/layout/table')
 const {text, textFrom} = require('../src/help/layout/text')
 const {texts, textsFrom} = require('../src/help/layout/texts')
 const note     = require('../src/help/usage/note')
@@ -180,7 +180,7 @@ const exA4 = layout([
 const exA5 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  table([
+  tableFrom('foo')([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -193,7 +193,7 @@ const exA5 = layout([
       "--version",
       "Print the version number and exit. [flag]"
     ]
-  ], 'foo'),
+  ]),
   line(),
   line("Copyright (c) 2020, Philipp Wille, all"),
   line("rights reserved.")

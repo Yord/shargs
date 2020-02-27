@@ -1,4 +1,4 @@
-const table = require('../layout/table')
+const {tableFrom} = require('../layout/table')
 
 module.exports = (filter = () => true, id = 'cols') => (
   (opts = []) => {
@@ -12,6 +12,6 @@ module.exports = (filter = () => true, id = 'cols') => (
       ])
     )
 
-    return table(items, id)
+    return tableFrom(id)(items)
   }
 )
