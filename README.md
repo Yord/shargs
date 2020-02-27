@@ -179,9 +179,9 @@ Declare a usage documentation:
 ```js
 const docs = usage([
   synopsis('deepThought'),
-  space(),
-  optsList(),
-  space(),
+  space,
+  optsList,
+  space,
   note(
     'Deep Thought was created to come up with the Answer to ' +
     'The Ultimate Question of Life, the Universe, and Everything.'
@@ -200,9 +200,9 @@ Try changing `optsList` to `optsDefs` later to experience of what this means:
 ```js
 const docs = usage([
   synopsis('deepThought'),
-  space(),
-  optsDefs(),
-  space(),
+  space,
+  optsDefs,
+  space,
   note(
     'Deep Thought was created to come up with the Answer to ' +
     'The Ultimate Question of Life, the Universe, and Everything.'
@@ -456,12 +456,12 @@ The `deepThought` documentation could be written as follows in layout syntax:
 ```js
 const askDocs = layout([
   text('deepThought ask [-q|--question] [-h|--help]'),
-  br(),
+  br,
   table([
     ['-q, --question', 'A question. [string]'],
     ['-h, --help', 'Print this help message and exit. [flag]']
   ]),
-  br(),
+  br,
   text(
     'Deep Thought was created to come up with the Answer to ' +
     'The Ultimate Question of Life, the Universe, and Everything.'
@@ -508,7 +508,7 @@ Last line
 </td>
 </tr>
 <tr>
-<td><code>line(string, id)(style)</code></td>
+<td><code>line(string)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -539,7 +539,7 @@ Last line
 </td>
 </tr>
 <tr>
-<td><code>lines(strings, id)(style)</code></td>
+<td><code>lines(strings)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -570,7 +570,7 @@ Last line
 </td>
 </tr>
 <tr>
-<td><code>br(id)(style)</code></td>
+<td><code>br(style)</code></td>
 <td>
 <details>
 <summary>
@@ -586,7 +586,7 @@ const style = {
 
 layout([
   line('First line'),
-  br(),
+  br,
   line('Last line')
 ])(style)
 ```
@@ -603,7 +603,7 @@ Last line
 </td>
 </tr>
 <tr>
-<td><code>brs(length, id)(style)</code></td>
+<td><code>brs(length)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -637,7 +637,7 @@ Last line
 </td>
 </tr>
 <tr>
-<td><code>cols(columns, id)(style)</code></td>
+<td><code>cols(columns)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -680,7 +680,7 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>text(string, id)(style)</code></td>
+<td><code>text(string)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -711,7 +711,7 @@ the Answer.
 </td>
 </tr>
 <tr>
-<td><code>texts(strings, id)(style)</code></td>
+<td><code>texts(strings)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -744,7 +744,7 @@ Universe, and Everything.
 </td>
 </tr>
 <tr>
-<td><code>defs(definitions, id)(style)</code></td>
+<td><code>defs(definitions)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -789,7 +789,7 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>table(rowsList, id)(style)</code></td>
+<td><code>table(rowsList)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -867,9 +867,9 @@ Using this DSL makes defining usage documentation for command-line options very 
 ```js
 const docs = usage([
   synopsis('deepThought'),
-  space(),
-  optsList(),
-  space(),
+  space,
+  optsList,
+  space,
   note(
     'Deep Thought was created to come up with the Answer to ' +
     'The Ultimate Question of Life, the Universe, and Everything.'
@@ -913,9 +913,9 @@ const style = {
 
 usage([
   synopsis('deepThought'),
-  space(),
-  optsList(),
-  space(),
+  space,
+  optsList,
+  space,
   note('Deep Thought was created to come up with the Answer.')
 ])(opts)(style)
 ```
@@ -939,7 +939,7 @@ the Answer.
 </td>
 </tr>
 <tr>
-<td><code>note(string, id)(opts)(style)</code></td>
+<td><code>note(string)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -971,7 +971,7 @@ the Answer.
 </td>
 </tr>
 <tr>
-<td><code>notes(strings, id)(opts)(style)</code></td>
+<td><code>notes(strings)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1004,7 +1004,7 @@ The Ultimate Question.
 </td>
 </tr>
 <tr>
-<td><code>space(id)(opts)(style)</code></td>
+<td><code>space(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1022,7 +1022,7 @@ const style = {
 
 usage([
   note('Deep Thought answered'),
-  space(),
+  space,
   note('The Ultimate Question.')
 ])(opts)(style)
 ```
@@ -1039,7 +1039,7 @@ The Ultimate Question.
 </td>
 </tr>
 <tr>
-<td><code>spaces(length, id)(opts)(style)</code></td>
+<td><code>spaces(length)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1075,7 +1075,7 @@ The Ultimate Question.
 </td>
 </tr>
 <tr>
-<td><code>optsDefs(filter, id)(opts)(style)</code></td>
+<td><code>optsDefs(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1099,7 +1099,7 @@ const style = {
   }
 }
 
-optsDefs()(opts)(style)
+optsDefs(opts)(style)
 ```
 
 Result:
@@ -1119,7 +1119,7 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>optsList(filter, id)(opts)(style)</code></td>
+<td><code>optsList(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1144,7 +1144,7 @@ const style = {
   ]
 }
 
-optsList()(opts)(style)
+optsList(opts)(style)
 ```
 
 Result:
@@ -1160,7 +1160,7 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>synopsis(start, end, filter, id)<br />(opts)(style)</code></td>
+<td><code>synopsis(start, end)<br />(opts)(style)</code></td>
 <td>
 <details>
 <summary>
