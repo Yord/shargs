@@ -1,7 +1,14 @@
 const {textFrom} = require('../layout/text')
 
-module.exports = (string = '', id = 'line') => (
+const noteFrom = id => (string = '') => (
   () => (
     textFrom(id)(string)
   )
 )
+
+const note = noteFrom('line')
+
+module.exports = {
+  note,
+  noteFrom
+}

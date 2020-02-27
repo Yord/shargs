@@ -1,5 +1,5 @@
-const note = require('./note')
+const {noteFrom} = require('./note')
 
 module.exports = (id = 'line') => (
-  note('', id)
+  noteFrom(id)('')
 )

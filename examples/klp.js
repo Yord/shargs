@@ -113,7 +113,7 @@ const options = [
 const opts = [...commands, ...stages, ...options]
 
 const usage       = require('../src/usage')
-const note        = require('../src/help/usage/note')
+const {note, noteFrom} = require('../src/help/usage/note')
 const {notesFrom} = require('../src/help/usage/notes')
 const optsDefs    = require('../src/help/usage/optsDefs')
 const optsList    = require('../src/help/usage/optsList')
@@ -134,7 +134,7 @@ const help = usage([
       () => optsList(() => true, 'commands')([cmd]),
       ...cmd.opts.flatMap(o => [
         space(),
-        note(`"${o.args.join('')}" ${o.desc}`, 'commandsOpts'),
+        noteFrom('commandsOpts')(`"${o.args.join('')}" ${o.desc}`),
         space(),
         () => optsDefs()(o.opts)
       ])

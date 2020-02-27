@@ -59,7 +59,7 @@ const {lines}  = require('../src/help/layout/lines')
 const {table, tableFrom} = require('../src/help/layout/table')
 const {text, textFrom} = require('../src/help/layout/text')
 const {texts, textsFrom} = require('../src/help/layout/texts')
-const note     = require('../src/help/usage/note')
+const {note, noteFrom} = require('../src/help/usage/note')
 const {notes}  = require('../src/help/usage/notes')
 const optsDefs = require('../src/help/usage/optsDefs')
 const optsList = require('../src/help/usage/optsList')
@@ -672,13 +672,13 @@ const exC2 = layout([
 const o = require('../src/utils/compose')
 
 const exC3 = usage([
-  note('NAME', 'h1'),
+  noteFrom('h1')('NAME'),
   note('git-mv - Move or rename a file, a directory, or a symlink'),
   space(),
-  note('SYNOPSIS', 'h1'),
+  noteFrom('h1')('SYNOPSIS'),
   note('git mv <options>... <args>...'),
   spaces(2),
-  note('DESCRIPTION', 'h1'),
+  noteFrom('h1')('DESCRIPTION'),
   note('Move or rename a file, directory or symlink.'),
   space(),
   o(synopsis('git mv', '<source> <destination>', () => true, 'tabTable'), onlyFirstArg),
@@ -686,12 +686,12 @@ const exC3 = usage([
   space(),
   note('The index is updated after successful completion, but the change must still be committed.'),
   space(),
-  note('OPTIONS', 'h1'),
+  noteFrom('h1')('OPTIONS'),
   optsDefs(),
-  note('SUBMODULES', 'h1'),
+  noteFrom('h1')('SUBMODULES'),
   note('Moving a submodule using a gitfile (which means they were cloned with a Git version 1.7.8 or newer) will update the gitfile and core.worktree setting to make the submodule work in the new location. It also will attempt to update the submodule.<name>.path setting in the gitmodules(5) file and stage that file (unless -n is used).'),
   space(),
-  note('GIT', 'h1'),
+  noteFrom('h1')('GIT'),
   note('Part of the git(1) suite')
 ])(exCOpts)(exCStyle)
 
