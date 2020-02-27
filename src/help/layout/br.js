@@ -1,6 +1,6 @@
-const {line} = require('./line')
+const {lineFrom} = require('./line')
 
-const brFrom = id => line('', id)
+const brFrom = id => lineFrom(id)('')
 
 const br = brFrom('line')
 
