@@ -1,4 +1,4 @@
-const cols = require('./cols')
+const {colsFrom} = require('./cols')
 
 module.exports = (itemsList = [], id = 'cols') => (
   (style = {}) => {
@@ -40,7 +40,7 @@ module.exports = (itemsList = [], id = 'cols') => (
       columns = indexes.map(index => [...columns[index], rows[index]])
     }
 
-    return cols(columns, id)(style)
+    return colsFrom(id)(columns)(style)
   }
 )
 

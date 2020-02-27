@@ -52,7 +52,7 @@ const usage    = require('../src/usage')
 
 const {br}     = require('../src/help/layout/br')
 const {brs}    = require('../src/help/layout/brs')
-const cols     = require('../src/help/layout/cols')
+const {cols}   = require('../src/help/layout/cols')
 const defs     = require('../src/help/layout/defs')
 const {line, lineFrom} = require('../src/help/layout/line')
 const {lines}  = require('../src/help/layout/lines')
