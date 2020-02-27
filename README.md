@@ -473,7 +473,7 @@ The layout DSL includes the following functions:
 
 <table>
 <tr>
-<th>Layout&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Layout&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description (and Example)</th>
 </tr>
 <tr>
@@ -484,6 +484,8 @@ The layout DSL includes the following functions:
 Transforms layout DSL functions into a string following a style.
 </summary>
 
+<br />
+
 Example:
 
 ```js
@@ -508,13 +510,19 @@ Last line
 </td>
 </tr>
 <tr>
-<td><code>line(string)(style)</code></td>
+<td><code>line(string)(style)</code><br /><code>lineFrom(id)(string)(style)</code></td>
 <td>
 <details>
 <summary>
 Prints the string with a line break at the end. Takes the line width from style and pads with spaces at the end. If the string is too long to fit the line's width, it is cut off.
 </summary>
 
+<br />
+
+```js
+const line = lineFrom('line')
+```
+
 Example:
 
 ```js
@@ -539,12 +547,18 @@ Last line
 </td>
 </tr>
 <tr>
-<td><code>lines(strings)(style)</code></td>
+<td><code>lines(strings)(style)</code><br /><code>linesFrom(id)(strings)(style)</code></td>
 <td>
 <details>
 <summary>
 Prints several strings using the <code>line</code> function for each.
 </summary>
+
+<br />
+
+```js
+const lines = linesFrom('line')
+```
 
 Example:
 
@@ -570,12 +584,18 @@ Last line
 </td>
 </tr>
 <tr>
-<td><code>br(style)</code></td>
+<td><code>br(style)</code><br /><code>brFrom(id)(style)</code></td>
 <td>
 <details>
 <summary>
 Introduces a single blank line.
 </summary>
+
+<br />
+
+```js
+const br = brFrom('line')
+```
 
 Example:
 
@@ -603,12 +623,18 @@ Last line
 </td>
 </tr>
 <tr>
-<td><code>brs(length)(style)</code></td>
+<td><code>brs(length)(style)</code><br /><code>brsFrom(id)(length)(style)</code></td>
 <td>
 <details>
 <summary>
 Introduces several blank lines with the number defined by the length parameter.
 </summary>
+
+<br />
+
+```js
+const brs = brsFrom('line')
+```
 
 Example:
 
@@ -637,7 +663,7 @@ Last line
 </td>
 </tr>
 <tr>
-<td><code>cols(columns)(style)</code></td>
+<td><code>cols(columns)(style)</code><br /><code>colsFrom(id)(columns)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -646,6 +672,12 @@ Prints the first column at the left and the last column at the right.
 The style parameter must have a <code>cols</code> id with a number of style objects equal to the number of columns.
 If a column string is longer than a column's width, it is cut off.
 </summary>
+
+<br />
+
+```js
+const cols = colsFrom('cols')
+```
 
 Example:
 
@@ -680,13 +712,19 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>text(string)(style)</code></td>
+<td><code>text(string)(style)</code><br /><code>textFrom(id)(string)(style)</code></td>
 <td>
 <details>
 <summary>
 Text acts much like <code>line</code>, but does not cut off strings that surpass a line's width.
 Instead, it splits the string by words and adds new lines with the remaining words.
 </summary>
+
+<br />
+
+```js
+const text = textFrom('line')
+```
 
 Example:
 
@@ -711,12 +749,18 @@ the Answer.
 </td>
 </tr>
 <tr>
-<td><code>texts(strings)(style)</code></td>
+<td><code>texts(strings)(style)</code><br /><code>textsFrom(id)(strings)(style)</code></td>
 <td>
 <details>
 <summary>
 Takes several strings and applies the <code>text</code> function to each.
 </summary>
+
+<br />
+
+```js
+const texts = textsFrom('line')
+```
 
 Example:
 
@@ -727,7 +771,7 @@ const style = {
 
 texts([
   'Deep Thought was created to come up with the Answer.',
-  'To The Ultimate Question of Life, the Universe, and Everything.'
+  'To The Ultimate Question.'
 ])(style)
 ```
 
@@ -736,15 +780,14 @@ Result:
 ```bash
 Deep Thought was created to come up with
 the Answer.                             
-To The Ultimate Question of Life, the   
-Universe, and Everything.
+To The Ultimate Question.
 ```
 
 </details>
 </td>
 </tr>
 <tr>
-<td><code>defs(definitions)(style)</code></td>
+<td><code>defs(definitions)(style)</code><br /><code>defsFrom(id)(definitions)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -752,6 +795,12 @@ Takes a list of definitions with each definition being an object with a <code>ti
 Prints the title as a <code>text</code> before printing the desc as a <code>text</code>.
 The style parameter must have a <code>defs</code> key that holds an object with <code>title</code> and <code>desc</code> keys that each hold a style object.
 </summary>
+
+<br />
+
+```js
+const defs = defsFrom('defs')
+```
 
 Example:
 
@@ -789,7 +838,7 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>table(rowsList)(style)</code></td>
+<td><code>table(rowsList)(style)</code><br /><code>tableFrom(id)(rowsList)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -798,6 +847,12 @@ The style parameter must have a <code>cols</code> key with a number of style obj
 The strings in each row are formatted according to the defined columns.
 If a string surpasses the width of a column, its remaining words are printed in the following rows.
 </summary>
+
+<br />
+
+```js
+const table = tableFrom('cols')
+```
 
 Example:
 
@@ -883,7 +938,7 @@ The usage DSL includes the following functions:
 
 <table>
 <tr>
-<th>Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description (and Example)</th>
 </tr>
 <tr>
@@ -893,6 +948,8 @@ The usage DSL includes the following functions:
 <summary>
 Transforms usage DSL functions into a string having access to command-line options and following a style.
 </summary>
+
+<br />
 
 Example:
 
@@ -939,12 +996,18 @@ the Answer.
 </td>
 </tr>
 <tr>
-<td><code>note(string)(opts)(style)</code></td>
+<td><code>note(string)(opts)(style)</code><br /><code>noteFrom(id)(string)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
 Prints the string with a line break at the end. Takes the line width from style and pads with spaces at the end. If the string is too long to fit the line's width, it is broken up into words, and all remaining words are put into the following line.
 </summary>
+
+<br />
+
+```js
+const note = noteFrom('line')
+```
 
 Example:
 
@@ -971,12 +1034,18 @@ the Answer.
 </td>
 </tr>
 <tr>
-<td><code>notes(strings)(opts)(style)</code></td>
+<td><code>notes(strings)(opts)(style)</code><br /><code>notesFrom(id)(strings)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
 Prints several strings using the <code>note</code> function for each.
 </summary>
+
+<br />
+
+```js
+const notes = notesFrom('line')
+```
 
 Example:
 
@@ -1004,12 +1073,18 @@ The Ultimate Question.
 </td>
 </tr>
 <tr>
-<td><code>space(opts)(style)</code></td>
+<td><code>space(opts)(style)</code><br /><code>spaceFrom(id)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
 Introduces a single blank line.
 </summary>
+
+<br />
+
+```js
+const space = spaceFrom('line')
+```
 
 Example:
 
@@ -1039,12 +1114,18 @@ The Ultimate Question.
 </td>
 </tr>
 <tr>
-<td><code>spaces(length)(opts)(style)</code></td>
+<td><code>spaces(length)(opts)(style)</code><br /><code>spacesFrom(id)(length)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
 Introduces several blank lines with the number defined by the length parameter.
 </summary>
+
+<br />
+
+```js
+const spaces = spacesFrom('line')
+```
 
 Example:
 
@@ -1075,13 +1156,19 @@ The Ultimate Question.
 </td>
 </tr>
 <tr>
-<td><code>optsDefs(opts)(style)</code></td>
+<td><code>optsDefs(opts)(style)</code><br /><code>optsDefsFrom(id)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
 Prints a definition list, with the command-line option <code>args</code> as title
 and the <code>desc</code> key as text.
 </summary>
+
+<br />
+
+```js
+const optsDefs = optsDefsFrom('defs')
+```
 
 Example:
 
@@ -1119,7 +1206,7 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>optsList(opts)(style)</code></td>
+<td><code>optsList(opts)(style)</code><br /><code>optsListFrom(id)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1127,6 +1214,12 @@ Prints a table with two columns:
 The command-line option's <code>args</code> in the left,
 and the <code>desc</code> key in the right column.
 </summary>
+
+<br />
+
+```js
+const optsList = optsListFrom('cols')
+```
 
 Example:
 
@@ -1160,7 +1253,7 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>synopsis(start, end)<br />(opts)(style)</code></td>
+<td><code>synopsis(start, end)(opts)(style)</code><br /><code>synopsisFrom(id)(start, end)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1168,6 +1261,12 @@ Prints a command's synopsis:
 The <code>start</code> string is printed first, the command-line option's <code>args</code> next,
 followed by the <code>end</code> string.
 </summary>
+
+<br />
+
+```js
+const synopsis = synopsisFrom('cols')
+```
 
 Example:
 
