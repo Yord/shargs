@@ -58,7 +58,7 @@ const {line, lineFrom} = require('../src/help/layout/line')
 const {lines}  = require('../src/help/layout/lines')
 const table    = require('../src/help/layout/table')
 const {text, textFrom} = require('../src/help/layout/text')
-const texts    = require('../src/help/layout/texts')
+const {texts, textsFrom} = require('../src/help/layout/texts')
 const note     = require('../src/help/usage/note')
 const {notes}  = require('../src/help/usage/notes')
 const optsDefs = require('../src/help/usage/optsDefs')
@@ -634,12 +634,11 @@ const exC2 = layout([
   textFrom('h1')('DESCRIPTION'),
   text('Move or rename a file, directory or symlink.'),
   br,
-  texts(
+  textsFrom('tab')(
     [
       'git mv [-f] [-k] [-n] [-v] <source> <destination>',
       'git mv [-f] [-k] [-n] [-v] <source> ... <destination directory>'
-    ],
-    'tab'
+    ]
   ),
   br,
   text('The index is updated after successful completion, but the change must still be committed.'),

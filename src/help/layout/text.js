@@ -30,11 +30,11 @@ const textFrom = id => (STRING = '') => (
 
 const text = textFrom('line')
 
+function splitWords (string) {
+  return string.split(/(\s+)/g)
+}
+
 module.exports = {
   text,
   textFrom
-}
-
-function splitWords (string) {
-  return string.split(/(\s+)/g)
 }
