@@ -1,6 +1,6 @@
-const texts = require('../layout/texts')
+const {textsFrom} = require('../layout/texts')
 
-const notesFrom = id => (strings = []) => () => texts(strings, id)
+const notesFrom = id => (strings = []) => () => textsFrom(id)(strings)
 
 const notes = notesFrom('line')
 

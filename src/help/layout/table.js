@@ -1,6 +1,6 @@
-const cols = require('./cols')
+const {colsFrom} = require('./cols')
 
-module.exports = (itemsList = [], id = 'cols') => (
+const tableFrom = id => (itemsList = []) => (
   (style = {}) => {
     const {[id]: COLS = []} = style
 
@@ -40,10 +40,17 @@ module.exports = (itemsList = [], id = 'cols') => (
       columns = indexes.map(index => [...columns[index], rows[index]])
     }
 
-    return cols(columns, id)(style)
+    return colsFrom(id)(columns)(style)
   }
 )
 
+const table = tableFrom('cols')
+
 function splitWords (string) {
   return string.split(/(\s+)/g)
+}
+
+module.exports = {
+  table,
+  tableFrom
 }

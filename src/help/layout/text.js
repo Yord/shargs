@@ -1,6 +1,6 @@
-const lines = require('./lines')
+const {linesFrom} = require('./lines')
 
-module.exports = (STRING = '', id = 'line') => (
+const textFrom = id => (STRING = '') => (
   (style = {}) => {
     const {[id]: line = {}} = style
 
@@ -24,10 +24,17 @@ module.exports = (STRING = '', id = 'line') => (
 
     strings.push(string)
 
-    return lines(strings, id)(style)
+    return linesFrom(id)(strings)(style)
   }
 )
 
+const text = textFrom('line')
+
 function splitWords (string) {
   return string.split(/(\s+)/g)
+}
+
+module.exports = {
+  text,
+  textFrom
 }

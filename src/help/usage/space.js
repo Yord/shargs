@@ -1,5 +1,10 @@
-const note = require('./note')
+const {brFrom} = require('../layout/br')
 
-module.exports = (id = 'line') => (
-  note('', id)
-)
+const spaceFrom = id => () => brFrom(id)
+
+const space = spaceFrom('line')
+
+module.exports = {
+  space,
+  spaceFrom
+}

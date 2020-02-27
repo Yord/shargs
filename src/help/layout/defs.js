@@ -1,8 +1,7 @@
-const {br} = require('./br')
-const text = require('./text')
+const {br}   = require('./br')
+const {text} = require('./text')
 
-// Do something with id
-module.exports = (definitions = [], id = 'defs') => (
+const defsFrom = id => (definitions = []) => (
   (style = {}) => (
     {[id]: {title: TITLE = {}, desc: DESC = {}} = {}} = style,
     definitions.map(({title, desc}) =>
@@ -12,3 +11,10 @@ module.exports = (definitions = [], id = 'defs') => (
     ).join('')
   )
 )
+
+const defs = defsFrom('defs')
+
+module.exports = {
+  defs,
+  defsFrom
+}

@@ -6,15 +6,11 @@ const cast              = require('../src/parser/opts/cast')
 const restrictToOnly    = require('../src/parser/opts/restrictToOnly')
 const emptyRest         = require('../src/parser/args/emptyRest')
 
-function fooParser (opts) {
-  return parser({
-    argv:   [splitShortOptions],
-    toOpts,
-    opts:   [cast, restrictToOnly],
-    toArgs: toArgs(fooParser),
-    args:   [emptyRest]
-  })(opts)
-}
+const fooParser = parser({
+  argv: [splitShortOptions],
+  opts: [cast, restrictToOnly],
+  args: [emptyRest]
+})
 
 const {array, number, string, bool, flag, command} = require('../src/options')
 const numStr  = array(['number', 'string'])
@@ -47,25 +43,27 @@ console.log('fooParser', JSON.stringify(res, null, 2))
 
 
 
-const layout   = require('../src/layout')
-const usage    = require('../src/usage')
+const layout                   = require('../src/layout')
+const usage                    = require('../src/usage')
 
-const {br}     = require('../src/help/layout/br')
-const {brs}    = require('../src/help/layout/brs')
-const cols     = require('../src/help/layout/cols')
-const defs     = require('../src/help/layout/defs')
-const line     = require('../src/help/layout/line')
-const lines    = require('../src/help/layout/lines')
-const table    = require('../src/help/layout/table')
-const text     = require('../src/help/layout/text')
-const texts    = require('../src/help/layout/texts')
-const note     = require('../src/help/usage/note')
-const {notes}  = require('../src/help/usage/notes')
-const optsDefs = require('../src/help/usage/optsDefs')
-const optsList = require('../src/help/usage/optsList')
-const space    = require('../src/help/usage/space')
-const {spaces} = require('../src/help/usage/spaces')
-const synopsis = require('../src/help/usage/synopsis')
+const {br}                     = require('../src/help/layout/br')
+const {brs}                    = require('../src/help/layout/brs')
+const {cols}                   = require('../src/help/layout/cols')
+const {defs}                   = require('../src/help/layout/defs')
+const {line, lineFrom}         = require('../src/help/layout/line')
+const {lines}                  = require('../src/help/layout/lines')
+const {table, tableFrom}       = require('../src/help/layout/table')
+const {text, textFrom}         = require('../src/help/layout/text')
+const {texts, textsFrom}       = require('../src/help/layout/texts')
+const {note, noteFrom}         = require('../src/help/usage/note')
+const {notes}                  = require('../src/help/usage/notes')
+const {optsDefs}               = require('../src/help/usage/optsDefs')
+const {optsList}               = require('../src/help/usage/optsList')
+const {space}                  = require('../src/help/usage/space')
+const {spaces}                 = require('../src/help/usage/spaces')
+const {synopsis, synopsisFrom} = require('../src/help/usage/synopsis')
+
+const {justArgs, noCommands, onlyFirstArg} = require('../src/utils/usageDecorators')
 
 
 
@@ -180,7 +178,7 @@ const exA4 = layout([
 const exA5 = layout([
   line("foo [-b|--bar] [-h|--help] [--version]"),
   line(),
-  table([
+  tableFrom('foo')([
     [
       "-b, --bar",
       "Foo bar baz. [number]"
@@ -193,7 +191,7 @@ const exA5 = layout([
       "--version",
       "Print the version number and exit. [flag]"
     ]
-  ], 'foo'),
+  ]),
   line(),
   line("Copyright (c) 2020, Philipp Wille, all"),
   line("rights reserved.")
@@ -311,7 +309,7 @@ const exA10 = layout([
     ]
   ]),
   line(),
-  text("Copyright (c) 2020, Philipp Wille, all rights reserved.", 'bar')
+  textFrom('bar')("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAStyle)
 
 const exA11 = layout([
@@ -380,7 +378,7 @@ const exA13 = usage([
 const exA14 = usage([
   synopsis("foo"),
   () => br,
-  optsList(),
+  optsList,
   () => br,
   () => text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAOpts)(exAStyle)
@@ -388,7 +386,7 @@ const exA14 = usage([
 const exA15 = usage([
   synopsis("foo"),
   () => br,
-  optsList(),
+  optsList,
   () => br,
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAOpts)(exAStyle)
@@ -396,16 +394,16 @@ const exA15 = usage([
 const exA16 = usage([
   synopsis("foo"),
   note(),
-  optsList(),
+  optsList,
   note(),
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAOpts)(exAStyle)
 
 const exA17 = usage([
   synopsis("foo"),
-  space(),
-  optsList(),
-  space(),
+  space,
+  optsList,
+  space,
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAOpts)(exAStyle)
 
@@ -486,16 +484,16 @@ const exB1 = layout([
 ])(exBStyle)
 
 const exB2 = usage([
-  synopsis("git", "<command> [args]"),
-  space(),
+  noCommands(synopsis("git", "<command> [args]")),
+  space,
   note("These are common Git commands used in various situations:"),
-  space(),
+  space,
   note("start a working area (see also: git help tutorial)"),
-  optsList(({args}) => ['clone', 'init'].some(cmd => args.includes(cmd))),
-  space(),
+  justArgs(['clone', 'init'])(optsList),
+  space,
   note("work on the current change (see also: git help everyday)"),
-  optsList(({args}) => ['add', 'mv'].some(cmd => args.includes(cmd))),
-  space(),
+  justArgs(['add', 'mv'])(optsList),
+  space,
   note("'git help -a' and 'git help -g' list available subcommands and some concept guides. See 'git help <command>' or 'git help <concept>' to read about a specific subcommand or concept.")
 ])(exBOpts)(exBStyle)
 
@@ -582,69 +580,68 @@ const exC0 = (
 )
 
 const exC1 = layout([
-  line('NAME', 'h1'),
+  lineFrom('h1')('NAME'),
   line('git-mv - Move or rename a file, a directory, or a symlink'),
   br,
-  line('SYNOPSIS', 'h1'),
+  lineFrom('h1')('SYNOPSIS'),
   line('git mv <options>... <args>...'),
   br,
   br,
-  line('DESCRIPTION', 'h1'),
+  lineFrom('h1')('DESCRIPTION'),
   line('Move or rename a file, directory or symlink.'),
   br,
-  line('git mv [-f] [-k] [-n] [-v] <source> <destination>', 'tab'),
-  line('git mv [-f] [-k] [-n] [-v] <source> ... <destination directory>', 'tab'),
+  lineFrom('tab')('git mv [-f] [-k] [-n] [-v] <source> <destination>'),
+  lineFrom('tab')('git mv [-f] [-k] [-n] [-v] <source> ... <destination directory>'),
   br,
   line('The index is updated after successful completion, but the change must'),
   line('still be committed.'),
   br,
-  line('OPTIONS', 'h1'),
+  lineFrom('h1')('OPTIONS'),
   line('-f, --force [flag]'),
-  line('Force renaming or moving of a file even if the target exists', 'tab'),
+  lineFrom('tab')('Force renaming or moving of a file even if the target exists'),
   br,
   line('-k [flag]'),
-  line('Skip move or rename actions which would lead to an error condition. An', 'tab'),
-  line('error happens when a source is neither existing nor controlled by Git,', 'tab'),
-  line('or when it would overwrite an existing file unless -f is given.', 'tab'),
+  lineFrom('tab')('Skip move or rename actions which would lead to an error condition. An'),
+  lineFrom('tab')('error happens when a source is neither existing nor controlled by Git,'),
+  lineFrom('tab')('or when it would overwrite an existing file unless -f is given.'),
   br,
   line('-n, --dry-run [flag]'),
-  line('Do nothing; only show what would happen', 'tab'),
+  lineFrom('tab')('Do nothing; only show what would happen'),
   br,
   line('-v, --verbose [flag]'),
-  line('Report the names of files as they are moved.', 'tab'),
+  lineFrom('tab')('Report the names of files as they are moved.'),
   br,
-  line('SUBMODULES', 'h1'),
+  lineFrom('h1')('SUBMODULES'),
   line('Moving a submodule using a gitfile (which means they were cloned with a'),
   line('Git version 1.7.8 or newer) will update the gitfile and core.worktree'),
   line('setting to make the submodule work in the new location. It also will'),
   line('attempt to update the submodule.<name>.path setting in the gitmodules(5)'),
   line('file and stage that file (unless -n is used).'),
   br,
-  line('GIT', 'h1'),
+  lineFrom('h1')('GIT'),
   line('Part of the git(1) suite')
 ])(exCStyle)
 
 const exC2 = layout([
-  text('NAME', 'h1'),
+  textFrom('h1')('NAME'),
   text('git-mv - Move or rename a file, a directory, or a symlink'),
   br,
-  text('SYNOPSIS', 'h1'),
+  textFrom('h1')('SYNOPSIS'),
   text('git mv <options>... <args>...'),
   brs(2),
-  text('DESCRIPTION', 'h1'),
+  textFrom('h1')('DESCRIPTION'),
   text('Move or rename a file, directory or symlink.'),
   br,
-  texts(
+  textsFrom('tab')(
     [
       'git mv [-f] [-k] [-n] [-v] <source> <destination>',
       'git mv [-f] [-k] [-n] [-v] <source> ... <destination directory>'
-    ],
-    'tab'
+    ]
   ),
   br,
   text('The index is updated after successful completion, but the change must still be committed.'),
   br,
-  text('OPTIONS', 'h1'),
+  textFrom('h1')('OPTIONS'),
   defs([
     {
       title: '-f, --force [flag]',
@@ -663,36 +660,34 @@ const exC2 = layout([
       desc:  'Report the names of files as they are moved.'
     }
   ]),
-  text('SUBMODULES', 'h1'),
+  textFrom('h1')('SUBMODULES'),
   text('Moving a submodule using a gitfile (which means they were cloned with a Git version 1.7.8 or newer) will update the gitfile and core.worktree setting to make the submodule work in the new location. It also will attempt to update the submodule.<name>.path setting in the gitmodules(5) file and stage that file (unless -n is used).'),
   br,
-  text('GIT', 'h1'),
+  textFrom('h1')('GIT'),
   text('Part of the git(1) suite')
 ])(exCStyle)
 
-const o = require('../src/utils/compose')
-
 const exC3 = usage([
-  note('NAME', 'h1'),
+  noteFrom('h1')('NAME'),
   note('git-mv - Move or rename a file, a directory, or a symlink'),
-  space(),
-  note('SYNOPSIS', 'h1'),
+  space,
+  noteFrom('h1')('SYNOPSIS'),
   note('git mv <options>... <args>...'),
   spaces(2),
-  note('DESCRIPTION', 'h1'),
+  noteFrom('h1')('DESCRIPTION'),
   note('Move or rename a file, directory or symlink.'),
-  space(),
-  o(synopsis('git mv', '<source> <destination>', () => true, 'tabTable'), onlyFirstArg),
-  o(synopsis('git mv', '<source> ... <destination directory>', () => true, 'tabTable'), onlyFirstArg),
-  space(),
+  space,
+  onlyFirstArg(synopsisFrom('tabTable')('git mv', '<source> <destination>')),
+  onlyFirstArg(synopsisFrom('tabTable')('git mv', '<source> ... <destination directory>')),
+  space,
   note('The index is updated after successful completion, but the change must still be committed.'),
-  space(),
-  note('OPTIONS', 'h1'),
-  optsDefs(),
-  note('SUBMODULES', 'h1'),
+  space,
+  noteFrom('h1')('OPTIONS'),
+  optsDefs,
+  noteFrom('h1')('SUBMODULES'),
   note('Moving a submodule using a gitfile (which means they were cloned with a Git version 1.7.8 or newer) will update the gitfile and core.worktree setting to make the submodule work in the new location. It also will attempt to update the submodule.<name>.path setting in the gitmodules(5) file and stage that file (unless -n is used).'),
-  space(),
-  note('GIT', 'h1'),
+  space,
+  noteFrom('h1')('GIT'),
   note('Part of the git(1) suite')
 ])(exCOpts)(exCStyle)
 
@@ -759,10 +754,6 @@ console.log('exD1  === exD2',  exD1  === exD2)
 
 
 
-function onlyFirstArg (opts = []) {
-  return opts.map(opt => ({...opt, args: (opt.args || []).slice(0, 1)}))
-}
-
 
 
 ;(function () {
@@ -793,9 +784,9 @@ function onlyFirstArg (opts = []) {
 
   const docs = usage([
     synopsis('deepThought'),
-    space(),
-    optsList(),
-    space(),
+    space,
+    optsList,
+    space,
     note('Deep Thought was created to come up with the Answer to The Ultimate Question of Life, the Universe, and Everything.')
   ])
 
@@ -839,9 +830,9 @@ function onlyFirstArg (opts = []) {
 
   const docs = usage([
     synopsis('deepThought'),
-    space(),
-    optsList(),
-    space(),
+    space,
+    optsList,
+    space,
     note('Deep Thought was created to come up with the Answer to The Ultimate Question of Life, the Universe, and Everything.')
   ])
 

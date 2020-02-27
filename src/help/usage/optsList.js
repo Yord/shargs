@@ -1,17 +1,21 @@
-const table = require('../layout/table')
+const {tableFrom} = require('../layout/table')
 
-module.exports = (filter = () => true, id = 'cols') => (
-  (opts = []) => {
-    const items = (
-      opts
-      .filter(filter)
-      .map(opt => ({types} = opt, Array.isArray(types) && types.length === 0 ? {...opt, types: ['flag']} : opt))
-      .map(({args = [], desc = '', types}) => [
-        args.join(', '),
-        desc + (types === null ? '' : ' [' + types.join(', ') + ']')
-      ])
-    )
+const optsListFrom = id => (opts = []) => {
+  const items = (
+    opts
+    .map(opt => ({types} = opt, Array.isArray(types) && types.length === 0 ? {...opt, types: ['flag']} : opt))
+    .map(({args = [], desc = '', types}) => [
+      args.join(', '),
+      desc + (types === null ? '' : ' [' + types.join(', ') + ']')
+    ])
+  )
 
-    return table(items, id)
-  }
-)
+  return tableFrom(id)(items)
+}
+
+const optsList = optsListFrom('cols')
+
+module.exports = {
+  optsList,
+  optsListFrom
+}

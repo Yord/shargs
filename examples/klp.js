@@ -112,17 +112,17 @@ const options = [
 
 const opts = [...commands, ...stages, ...options]
 
-const usage       = require('../src/usage')
-const note        = require('../src/help/usage/note')
-const {notesFrom} = require('../src/help/usage/notes')
-const optsDefs    = require('../src/help/usage/optsDefs')
-const optsList    = require('../src/help/usage/optsList')
-const space       = require('../src/help/usage/space')
-const synopsis    = require('../src/help/usage/synopsis')
+const usage                    = require('../src/usage')
+const {note, noteFrom}         = require('../src/help/usage/note')
+const {notesFrom}              = require('../src/help/usage/notes')
+const {optsDefs}               = require('../src/help/usage/optsDefs')
+const {optsList, optsListFrom} = require('../src/help/usage/optsList')
+const {space}                  = require('../src/help/usage/space')
+const {synopsis}               = require('../src/help/usage/synopsis')
 
-const example  = texts => usage([notesFrom('example')(texts), space()])
+const example  = texts => usage([notesFrom('example')(texts), space])
 const examples = textsList => usage(textsList.map(example))
-const section  = text => usage([space(), note(text), space()])
+const section  = text => usage([space, note(text), space])
 
 const help = usage([
   synopsis('klp', '< input'),
@@ -131,19 +131,19 @@ const help = usage([
     opts
     .filter(({key}) => commands.some(o => o.key === key))
     .flatMap(cmd => [
-      () => optsList(() => true, 'commands')([cmd]),
+      () => optsListFrom('commands')([cmd]),
       ...cmd.opts.flatMap(o => [
-        space(),
-        note(`"${o.args.join('')}" ${o.desc}`, 'commandsOpts'),
-        space(),
-        () => optsDefs()(o.opts)
+        space,
+        noteFrom('commandsOpts')(`"${o.args.join('')}" ${o.desc}`),
+        space,
+        () => optsDefs(o.opts)
       ])
     ])
   )(opts),
   section('Stream Stages:'),
-  optsList(({key}) => stages.some(o => o.key === key), 'stages'),
+  opts => optsListFrom('stages')(opts.filter(({key}) => stages.some(o => o.key === key))),
   section('Options:'),
-  optsList(({key}) => options.some(o => o.key === key)),
+  opts => optsList(opts.filter(({key}) => options.some(o => o.key === key))),
   section('Examples:'),
   examples([
     [
