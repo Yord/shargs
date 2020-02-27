@@ -380,7 +380,7 @@ const exA13 = usage([
 const exA14 = usage([
   synopsis("foo"),
   () => br,
-  optsList(),
+  optsList,
   () => br,
   () => text("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAOpts)(exAStyle)
@@ -388,7 +388,7 @@ const exA14 = usage([
 const exA15 = usage([
   synopsis("foo"),
   () => br,
-  optsList(),
+  optsList,
   () => br,
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAOpts)(exAStyle)
@@ -396,7 +396,7 @@ const exA15 = usage([
 const exA16 = usage([
   synopsis("foo"),
   note(),
-  optsList(),
+  optsList,
   note(),
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAOpts)(exAStyle)
@@ -404,7 +404,7 @@ const exA16 = usage([
 const exA17 = usage([
   synopsis("foo"),
   space,
-  optsList(),
+  optsList,
   space,
   note("Copyright (c) 2020, Philipp Wille, all rights reserved.")
 ])(exAOpts)(exAStyle)
@@ -491,10 +491,10 @@ const exB2 = usage([
   note("These are common Git commands used in various situations:"),
   space,
   note("start a working area (see also: git help tutorial)"),
-  optsList(({args}) => ['clone', 'init'].some(cmd => args.includes(cmd))),
+  opts => optsList(opts.filter(({args}) => ['clone', 'init'].some(cmd => args.includes(cmd)))),
   space,
   note("work on the current change (see also: git help everyday)"),
-  optsList(({args}) => ['add', 'mv'].some(cmd => args.includes(cmd))),
+  opts => optsList(opts.filter(({args}) => ['add', 'mv'].some(cmd => args.includes(cmd)))),
   space,
   note("'git help -a' and 'git help -g' list available subcommands and some concept guides. See 'git help <command>' or 'git help <concept>' to read about a specific subcommand or concept.")
 ])(exBOpts)(exBStyle)
@@ -793,7 +793,7 @@ function onlyFirstArg (opts = []) {
   const docs = usage([
     synopsis('deepThought'),
     space,
-    optsList(),
+    optsList,
     space,
     note('Deep Thought was created to come up with the Answer to The Ultimate Question of Life, the Universe, and Everything.')
   ])
@@ -839,7 +839,7 @@ function onlyFirstArg (opts = []) {
   const docs = usage([
     synopsis('deepThought'),
     space,
-    optsList(),
+    optsList,
     space,
     note('Deep Thought was created to come up with the Answer to The Ultimate Question of Life, the Universe, and Everything.')
   ])

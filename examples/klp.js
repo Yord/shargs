@@ -131,7 +131,7 @@ const help = usage([
     opts
     .filter(({key}) => commands.some(o => o.key === key))
     .flatMap(cmd => [
-      () => optsListFrom('commands')(() => true)([cmd]),
+      () => optsListFrom('commands')([cmd]),
       ...cmd.opts.flatMap(o => [
         space,
         noteFrom('commandsOpts')(`"${o.args.join('')}" ${o.desc}`),
@@ -141,9 +141,9 @@ const help = usage([
     ])
   )(opts),
   section('Stream Stages:'),
-  optsListFrom('stages')(({key}) => stages.some(o => o.key === key)),
+  opts => optsListFrom('stages')(opts.filter(({key}) => stages.some(o => o.key === key))),
   section('Options:'),
-  optsList(({key}) => options.some(o => o.key === key)),
+  opts => optsList(opts.filter(({key}) => options.some(o => o.key === key))),
   section('Examples:'),
   examples([
     [
