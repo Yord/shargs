@@ -1,4 +1,4 @@
-const defs = require('../layout/defs')
+const {defsFrom} = require('../layout/defs')
 
 module.exports = (filter = () => true, id = 'defs') => (
   (opts = []) => {
@@ -12,6 +12,6 @@ module.exports = (filter = () => true, id = 'defs') => (
       }))
     )
 
-    return defs(items, id)
+    return defsFrom(id)(items)
   }
 )
