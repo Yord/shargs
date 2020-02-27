@@ -47,27 +47,27 @@ console.log('fooParser', JSON.stringify(res, null, 2))
 
 
 
-const layout                     = require('../src/layout')
-const usage                      = require('../src/usage')
+const layout                   = require('../src/layout')
+const usage                    = require('../src/usage')
 
-const {br}                       = require('../src/help/layout/br')
-const {brs}                      = require('../src/help/layout/brs')
-const {cols}                     = require('../src/help/layout/cols')
-const {defs}                     = require('../src/help/layout/defs')
-const {line, lineFrom}           = require('../src/help/layout/line')
-const {lines}                    = require('../src/help/layout/lines')
-const {table, tableFrom}         = require('../src/help/layout/table')
-const {text, textFrom}           = require('../src/help/layout/text')
-const {texts, textsFrom}         = require('../src/help/layout/texts')
-const {note, noteFrom}           = require('../src/help/usage/note')
-const {notes}                    = require('../src/help/usage/notes')
-const {optsDefs}                 = require('../src/help/usage/optsDefs')
-const {optsList}                 = require('../src/help/usage/optsList')
-const {space}                    = require('../src/help/usage/space')
-const {spaces}                   = require('../src/help/usage/spaces')
-const {synopsis, synopsisFrom}   = require('../src/help/usage/synopsis')
+const {br}                     = require('../src/help/layout/br')
+const {brs}                    = require('../src/help/layout/brs')
+const {cols}                   = require('../src/help/layout/cols')
+const {defs}                   = require('../src/help/layout/defs')
+const {line, lineFrom}         = require('../src/help/layout/line')
+const {lines}                  = require('../src/help/layout/lines')
+const {table, tableFrom}       = require('../src/help/layout/table')
+const {text, textFrom}         = require('../src/help/layout/text')
+const {texts, textsFrom}       = require('../src/help/layout/texts')
+const {note, noteFrom}         = require('../src/help/usage/note')
+const {notes}                  = require('../src/help/usage/notes')
+const {optsDefs}               = require('../src/help/usage/optsDefs')
+const {optsList}               = require('../src/help/usage/optsList')
+const {space}                  = require('../src/help/usage/space')
+const {spaces}                 = require('../src/help/usage/spaces')
+const {synopsis, synopsisFrom} = require('../src/help/usage/synopsis')
 
-const {noCommands, onlyFirstArg} = require('../src/utils/usageDecorators')
+const {justArgs, noCommands, onlyFirstArg} = require('../src/utils/usageDecorators')
 
 
 
@@ -493,10 +493,10 @@ const exB2 = usage([
   note("These are common Git commands used in various situations:"),
   space,
   note("start a working area (see also: git help tutorial)"),
-  opts => optsList(opts.filter(({args}) => ['clone', 'init'].some(cmd => args.includes(cmd)))),
+  justArgs(['clone', 'init'])(optsList),
   space,
   note("work on the current change (see also: git help everyday)"),
-  opts => optsList(opts.filter(({args}) => ['add', 'mv'].some(cmd => args.includes(cmd)))),
+  justArgs(['add', 'mv'])(optsList),
   space,
   note("'git help -a' and 'git help -g' list available subcommands and some concept guides. See 'git help <command>' or 'git help <concept>' to read about a specific subcommand or concept.")
 ])(exBOpts)(exBStyle)

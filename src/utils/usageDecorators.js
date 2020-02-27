@@ -2,6 +2,10 @@ const optsFilter = p => uf => (opts = []) => uf(opts.filter(p))
 
 const optsMap = f => uf => (opts = []) => uf(opts.map(f))
 
+const justArgs = list => optsFilter(
+  ({args}) => list.some(cmd => args.includes(cmd))
+)
+
 const noCommands = optsFilter(
   ({types}) => typeof types !== 'undefined' && types !== null
 )
@@ -11,6 +15,7 @@ const onlyFirstArg = optsMap(
 )
 
 module.exports = {
+  justArgs,
   noCommands,
   onlyFirstArg,
   optsFilter,
