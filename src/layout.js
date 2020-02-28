@@ -1,5 +1,3 @@
-module.exports = (toStrings = []) => (
-  (style = {}) => (
-    toStrings.map(toString => toString(style)).join('')
-  )
+module.exports = (toStrings = []) => (style = {}) => (
+  toStrings.map(toString => toString(style)).join('')
 )
