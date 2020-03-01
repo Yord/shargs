@@ -18,11 +18,6 @@ Installation is done using [`npm`][npm-install].
 $ npm i --save shargs
 ```
 
-## Work in Progress
-
-This project is work in progress.
-Use it at your own risk!
-
 ## Features
 
 +   **Declarative:** Describe command-line arguments using a declarative DSL and derive parsers and usage from that.
