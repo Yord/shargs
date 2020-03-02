@@ -109,7 +109,7 @@ class Parser {
 
   get parse () {
     if (typeof this.result === 'undefined') {
-      this.result = this.parser(this._opts)({argv: this._argv})
+      this.result = this.parser(this._opts)(this._argv)
     }
     return this.result
   }

@@ -104,7 +104,7 @@ Apply the parser:
 // node index.js --unknown -ha 42
 const argv = ['--unknown', '-ha', '42']
 
-const {errs, args} = deepThought(opts)({argv})
+const {errs, args} = deepThought(opts)(argv)
 ```
 
 </p>
@@ -128,7 +128,7 @@ const deepThought = parser({
 // node index.js --unknown -ha 42
 const argv = ['--unknown', '-ha', '42']
 
-const {errs, args} = deepThought(opts)({argv})
+const {errs, args} = deepThought(opts)(argv)
 ```
 
 The logging output reads:
@@ -1299,7 +1299,7 @@ The command-line options, the parser, and the usage documentation are combined t
 // ./deepThought ask -q 'What is the answer to everything?'
 const argv = ['ask', '-q', 'What is the answer to everything?']
 
-const {errs, args} = deepThought(opts)({argv})
+const {errs, args} = deepThought(opts)(argv)
 
 const help = docs(opts)(style)
 const askHelp = askDocs(style)

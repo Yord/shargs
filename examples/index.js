@@ -38,7 +38,7 @@ const opts = [
 
 const argv = process.argv.slice(2)
 
-const res = fooParser(opts)({argv})
+const res = fooParser(opts)(argv)
 console.log('fooParser', JSON.stringify(res, null, 2))
 
 
@@ -780,7 +780,7 @@ console.log('exD1  === exD2',  exD1  === exD2)
   // node index.js --unknown -ha 42
   const argv = process.argv.slice(2)//['--unknown', '-ha', '42']
 
-  const {errs, args} = deepThought(opts)({argv})
+  const {errs, args} = deepThought(opts)(argv)
 
   const docs = usage([
     synopsis('deepThought'),
@@ -826,7 +826,7 @@ console.log('exD1  === exD2',  exD1  === exD2)
 
   const argv = process.argv.slice(2)
 
-  const {errs, args} = deepThought(opts)({argv})
+  const {errs, args} = deepThought(opts)(argv)
 
   const docs = usage([
     synopsis('deepThought'),

@@ -8,7 +8,7 @@ module.exports = parser => ({errs = [], opts: OPTS = []} = {}) => {
       if (key !== '--') args['_'] = args['_'].concat(argv)
     } else if (types === null) {
       const parse = parser(opts || [])
-      const res   = parse({errs: [], argv})
+      const res   = parse(argv, [])
 
       errs      = errs.concat(res.errs)
       args[key] = Object.assign({}, args[key], res.args)
