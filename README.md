@@ -138,7 +138,7 @@ const docs = usage([
 
 <details>
 <summary>
-Build the usage documentation:
+Style the usage documentation:
 
 <p>
 
@@ -147,14 +147,17 @@ const style = {
   line: {width: 80},
   cols: [{width: 20}, {width: 60}]
 }
-
-const help = docs(opts)(style)
 ```
 
 </p>
 </summary>
 
 Supplying `opts` and a `style` to `docs` renders a help text.
+
+```js
+const help = docs(opts)(style)
+```
+
 The style defines how the help is layouted.
 With the current style, the following is rendered:
 
@@ -214,6 +217,8 @@ Use the parser in your program:
 const argv = ['--unknown', '-ha', '42']
 
 const {errs, args} = deepThought(opts)(argv)
+
+const help = docs(opts)(style)
 
 if (args.help) {
   console.log(help)
