@@ -42,9 +42,6 @@ const opts = [
 ]
 ```
 
-Read [Functional Options DSL](#functional-options-dsl) or
-[Command Line Options DSL](#command-line-options-dsl) to learn more.
-
 </p>
 </summary>
 
@@ -83,9 +80,6 @@ const deepThought = parser({
 })
 ```
 
-Read [Functional Parsers DSL](#functional-parsers-dsl) or
-[Command Line Parsers DSL](#command-line-parsers-dsl) to learn more.
-
 </p>
 </summary>
 
@@ -118,10 +112,6 @@ const docs = usage([
   )
 ])
 ```
-
-Read [Usage Documentation DSL](#usage-documentation-dsl), [Layout Documentation DSL](#layout-documentation-dsl) or
-[Usage Documentation](#usage-documentation) to learn more.
-
 
 </p>
 </summary>
@@ -160,8 +150,6 @@ const style = {
 
 const help = docs(opts)(style)
 ```
-
-Read [Style DSL](#style-dsl) to learn more.
 
 </p>
 </summary>
@@ -233,9 +221,6 @@ if (args.help) {
   console.log('The answer is: ' + args.answer)
 }
 ```
-
-Read [Combining Options Parser and Usage Documentation](#combining-options-parser-and-usage-documentation)
-to learn more.
 
 </p>
 </summary>
