@@ -21,10 +21,10 @@ $ npm i --save shargs
 ## Features
 
 +   **Declarative:** Describe command-line arguments using a declarative DSL and derive parsers and usage from that.
-+   **Modular Parsers:** Compose your own parsers choosing from an abundance of parser functions.
-+   **Predefined Parsers:** Instead of building your own, choose between many predefined parsers.
-+   **Modular Usage Texts:** Build your own usage documentation by composing command-line arguments with text blocks.
-+   **Predefined Usage Texts:** Instead of building your own, choose between many predefined parsers.
++   **Predefined Parsers:** Choose between many predefined parsers.
++   **Modular Parsers:** Compose your own parsers by combining predefined parser functions with your own functions.
++   **Predefined Usage Texts:** Choose between many predefined usage documentation templates.
++   **Modular Usage Texts:** Build your own usage documentation template using a high-level DSL.
 
 ## Getting Started
 
@@ -104,7 +104,7 @@ Apply the parser:
 // node index.js --unknown -ha 42
 const argv = ['--unknown', '-ha', '42']
 
-const {errs, args} = deepThought(opts)({argv})
+const {errs, args} = deepThought(opts)(argv)
 ```
 
 </p>
@@ -128,7 +128,7 @@ const deepThought = parser({
 // node index.js --unknown -ha 42
 const argv = ['--unknown', '-ha', '42']
 
-const {errs, args} = deepThought(opts)({argv})
+const {errs, args} = deepThought(opts)(argv)
 ```
 
 The logging output reads:
@@ -1299,7 +1299,7 @@ The command-line options, the parser, and the usage documentation are combined t
 // ./deepThought ask -q 'What is the answer to everything?'
 const argv = ['ask', '-q', 'What is the answer to everything?']
 
-const {errs, args} = deepThought(opts)({argv})
+const {errs, args} = deepThought(opts)(argv)
 
 const help = docs(opts)(style)
 const askHelp = askDocs(style)

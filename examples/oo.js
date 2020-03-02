@@ -56,7 +56,7 @@ const bat = (
 )
 
 console.log('foo')
-console.log(fooParser(opts)({argv}))
+console.log(fooParser(opts)(argv))
 
 console.log('baz')
 console.log(baz)

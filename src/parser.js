@@ -11,13 +11,13 @@ module.exports = function parser (stages = {}) {
 
     // Add error handling if toOpts or toArgs are not functions
 
-    return pipe(
+    return (ARGV, ERRS2) => pipe(
       ({errs = [], argv = []}) => ({errs: errs.concat(ERRS), argv}),
       ...argv,
       typeof toOpts === 'function' ? toOpts(ARGS) : TO_OPTS(ARGS),
       ...opts,
       typeof toArgs === 'function' ? toArgs : TO_ARGS(parser(stages)),
       ...args
-    )
+    )({errs: ERRS2, argv: ARGV})
   }
 }
