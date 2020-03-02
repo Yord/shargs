@@ -42,6 +42,9 @@ const opts = [
 ]
 ```
 
+Read [Functional Options DSL](#functional-options-dsl) or
+[Command Line Options DSL](#command-line-options-dsl) to learn more.
+
 </p>
 </summary>
 
@@ -80,88 +83,20 @@ const deepThought = parser({
 })
 ```
 
+Read [Functional Parsers DSL](#functional-parsers-dsl) or
+[Command Line Parsers DSL](#command-line-parsers-dsl) to learn more.
+
 </p>
 </summary>
 
 The parser consists of six parser functions that are applied in the following order:
 
 1.  `splitShortOptions`
-2.  `toOpts` (implicit)
+2.  `toOpts` (is called after `argv` and before `opts`)
 3.  `cast`
 4.  `restrictToOnly`
-5.  `toArgs` (implicit)
+5.  `toArgs` (is called after `opts` and before `args`)
 6.  `removeRest`
-
-</details>
-
-<details>
-<summary>
-Apply the parser:
-
-<p>
-
-```js
-// node index.js --unknown -ha 42
-const argv = ['--unknown', '-ha', '42']
-
-const {errs, args} = deepThought(opts)(argv)
-```
-
-</p>
-</summary>
-
-To demonstrate intermediate parsing results, logging was added to `deepThought`:
-
-```js
-const log = text => obj => {
-  const {argv, opts, args} = obj
-  console.log(text, argv || opts || args)
-  return obj
-}
-
-const deepThought = parser({
-  argv: [log('A'), splitShortOptions, log('B')],
-  opts: [log('C'), cast, restrictToOnly, log('D')],
-  args: [log('E'), emptyRest, log('F')]
-})
-
-// node index.js --unknown -ha 42
-const argv = ['--unknown', '-ha', '42']
-
-const {errs, args} = deepThought(opts)(argv)
-```
-
-The logging output reads:
-
-```bash
-A ['--unknown', '-ha', '42']
-B ['--unknown', '-h', '-a', '42']
-C [
-  {values: ['--unknown']},
-  {key: 'help', types: [], ... values: []},
-  {key: 'answer', types: ['number'], ... values: ['42']}
-]
-D [
-  {values: ['--unknown']},
-  {key: 'help', types: [], ... values: []},
-  {key: 'answer', types: ['number'], ... values: [42]}
-]
-E {help: true, answer: 42, _: ['--unknown']}
-F {help: true, answer: 42, _: []}
-```
-
-Shargs parses command-line argument values in five stages:
-
-1.  The first stage applies functions that transform `argv` arrays into other `argv` arrays.<br />
-    E.g. `splitShortOptions` transforms `A` into `B` by splitting `-ha` into `-h` and `-a`.
-2.  The second stage transforms `argv` arrays into `opts` objects.<br />
-    E.g. see the difference between `B` and `C`.
-3.  The third stage applies functions that transform `opts` objects into other `opts` objects.<br />
-    E.g. `cast` transforms `C` into `D` by casting `'42'` to the number `42`.
-4.  The fourth stage transforms `opts` objects into `args` objects.<br />
-    E.g. see the difference between `D` and `E`.
-5.  The fifth stage applies functions that transform `args` objects into other `args` objects.<br />
-    E.g. `emptyRest` transforms `E` into `F` by emptying the `'_'` key.
 
 </details>
 
@@ -183,6 +118,10 @@ const docs = usage([
   )
 ])
 ```
+
+Read [Usage Documentation DSL](#usage-documentation-dsl), [Layout Documentation DSL](#layout-documentation-dsl) or
+[Usage Documentation](#usage-documentation) to learn more.
+
 
 </p>
 </summary>
@@ -221,6 +160,8 @@ const style = {
 
 const help = docs(opts)(style)
 ```
+
+Read [Style DSL](#style-dsl) to learn more.
 
 </p>
 </summary>
@@ -276,11 +217,16 @@ Note, how shargs automatically takes care of line breaks and other formatting fo
 
 <details>
 <summary>
-Use the parsed values in your program:
+Use the parser in your program:
 
 <p>
 
 ```js
+// node index.js --unknown -ha 42
+const argv = ['--unknown', '-ha', '42']
+
+const {errs, args} = deepThought(opts)(argv)
+
 if (args.help) {
   console.log(help)
 } else {
@@ -288,9 +234,19 @@ if (args.help) {
 }
 ```
 
+Read [Combining Options Parser and Usage Documentation](#combining-options-parser-and-usage-documentation)
+to learn more.
+
 </p>
 </summary>
 
+Parsing `argv` returned the following `args`:
+
+```json
+{help: true, answer: 42, _: []}
+```
+
+Note, that `help` is `true`.
 Other command-line argument parsers handle displaying usage documentation for you.
 Shargs makes the deliberate decision to leave that to the user,
 thus giving him more control.
