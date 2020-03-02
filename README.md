@@ -208,7 +208,7 @@ Note, how shargs automatically takes care of line breaks and other formatting fo
 
 <details>
 <summary>
-Use the parser in your program:
+Use the parser and the usage documentation in your program:
 
 <p>
 
@@ -266,7 +266,7 @@ Shargs is the command-line argument parser used by [`pxi`][pxi].
 
 The most important concept in shargs is that of command-line options.
 They are the basis for parsers as well as for usage documentation.
-Command-line options in their plain form are expressed in shargs as follows: 
+Command-line options are defined as objects in shargs: 
 
 ```js
 const askOpts = [
@@ -275,7 +275,7 @@ const askOpts = [
 ]
 ```
 
-A command-line option is described by an object having a subset of the following fields:
+Command-line options may have the following fields (\* these fields are required):
 
 | Field     | Value                                                                                  | Default | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 |-----------|----------------------------------------------------------------------------------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -286,11 +286,9 @@ A command-line option is described by an object having a subset of the following
 | `only`    | array of values                                                                        | `null`  | The command-line option's value can only be one of the values in this list. If `only` is `null`, the value may be set freely.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `opts`    | command-line options array                                                             | `null`  | This field is used if the command-line option is a command (if `types` is `null`) to describe the command's options.                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
-\* these fields are required, all others are optional
-
 #### Functional Options DSL
 
-Since writing out objects may get tedious, shargs offers a DSL for creating plain command-line option descriptions:
+Since writing out objects is repetetive, shargs includes a DSL for creating command-line options:
 
 ```js
 const opts = [
@@ -302,7 +300,7 @@ const opts = [
 
 Each supported type has its own function, that takes `key` and `args` as arguments
 as well as an object holding any optional field.
-If an optional field is left out, the DSL takes care of setting a sensible default for it.
+If an optional field is left out, the type functions sets a sensible default.
 
 | Function                          | Description                                                |
 |-----------------------------------|------------------------------------------------------------|
@@ -313,9 +311,9 @@ If an optional field is left out, the DSL takes care of setting a sensible defau
 | `number(key, args, fields)`       | Assigns `types: ['number']`, `key` and `args` to `fields`. |
 | `string(key, args, fields)`       | Assigns `types: ['string']`, `key` and `args` to `fields`. |
 
-The `array` function describes arrays with a known length and known types,
-while the `command` function describes variable-length arrays.
-The `opts` field is used to determine a `command`'s types.
+While the `array` function describes arrays with a known length and known types,
+the `command` function describes variable-length string arrays.
+If a command has an `opts` field, the string array is treated as command-line arguments.
 
 ### Command-Line Parsers DSL
 
