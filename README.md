@@ -21,10 +21,10 @@ $ npm i --save shargs
 ## Features
 
 +   **Declarative:** Describe command-line arguments using a declarative DSL and derive parsers and usage from that.
-+   **Modular Parsers:** Compose your own parsers choosing from an abundance of parser functions.
-+   **Predefined Parsers:** Instead of building your own, choose between many predefined parsers.
-+   **Modular Usage Texts:** Build your own usage documentation by composing command-line arguments with text blocks.
-+   **Predefined Usage Texts:** Instead of building your own, choose between many predefined parsers.
++   **Predefined Parsers:** Choose between many predefined parsers.
++   **Modular Parsers:** Compose your own parsers by combining predefined parser functions with your own functions.
++   **Predefined Usage Texts:** Choose between many predefined usage documentation templates.
++   **Modular Usage Texts:** Build your own usage documentation template using a high-level DSL.
 
 ## Getting Started
 
