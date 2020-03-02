@@ -20,7 +20,7 @@ $ npm i --save shargs
 
 ## Features
 
-+   **Declarative:** Describe command-line arguments using a declarative DSL and derive parsers and usage from that.
++   **Declarative:** Describe command-line options using a declarative DSL and derive parsers and usage from that.
 +   **Predefined Parsers:** Choose between many predefined parsers.
 +   **Modular Parsers:** Compose your own parsers by combining predefined parser functions with your own functions.
 +   **Predefined Usage Texts:** Choose between many predefined usage documentation templates.
@@ -30,7 +30,7 @@ $ npm i --save shargs
 
 <details>
 <summary>
-Describe command-line arguments:
+Describe command-line options:
 
 <p>
 
@@ -48,12 +48,12 @@ Read [Functional Options DSL](#functional-options-dsl) or
 </p>
 </summary>
 
-Shargs provides a DSL for declaring command-line arguments.
+Shargs provides a DSL for declaring command-line options.
 This simple example uses three different shargs type constructors:
 `string`, `number`, and `flag`. All type constructors take the same arguments:
 
 1.  *(required)* An object key used to store the parsed values.
-2.  *(required)* An array of command-line arguments that users may use to define the value.
+2.  *(required)* An array of command-line options that users may use to define the value.
 3.  *(optional)* An object holding optional keys like `desc` and `only`.
 
 Type constructors are only syntactic sugar.
