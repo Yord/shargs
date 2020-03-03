@@ -813,9 +813,9 @@ console.log('exD1  === exD2',  exD1  === exD2)
   ]
 
   const opts = [
+    command('ask', ['ask'], {desc: 'Just ask.', opts: askOpts}),
     number('answer', ['-a', '--answer'], {desc: 'The (default) answer.', only: [42]}),
-    flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'}),
-    command('ask', ['ask'], {desc: 'Ask a question with this command.', opts: askOpts})
+    flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
   ]
 
   const deepThought = parser({
@@ -823,18 +823,6 @@ console.log('exD1  === exD2',  exD1  === exD2)
     opts: [cast, restrictToOnly],
     args: [emptyRest]
   })
-
-  const argv = process.argv.slice(2)
-
-  const {errs, args} = deepThought(opts)(argv)
-
-  const docs = usage([
-    synopsis('deepThought'),
-    space,
-    optsList,
-    space,
-    note('Deep Thought was created to come up with the Answer to The Ultimate Question of Life, the Universe, and Everything.')
-  ])
 
   const askDocs = layout([
     text('deepThought ask [-q|--question] [-h|--help]'),
@@ -844,24 +832,42 @@ console.log('exD1  === exD2',  exD1  === exD2)
       ['-h, --help', 'Print this help message and exit. [flag]']
     ]),
     br,
-    text('Deep Thought was created to come up with the Answer to The Ultimate Question of Life, the Universe, and Everything.')
+    text(
+      'Deep Thought was created to come up with the Answer to ' +
+      'The Ultimate Question of Life, the Universe, and Everything.'
+    )
   ])
 
   const style = {
     line: {width: 80},
     cols: [{width: 20}, {width: 60}]
   }
-  
-  const help = docs(opts)(style)
 
+  const docs = usage([
+    noCommands(synopsis('deepThought')),
+    space,
+    optsList,
+    space,
+    note(
+      'Deep Thought was created to come up with the Answer to ' +
+      'The Ultimate Question of Life, the Universe, and Everything.'
+    )
+  ])
+
+  // ./deepThought ask -q 'What is the answer to everything?'
+  const argv = ['-a', '42', 'ask', '-q', 'What is the answer to everything?']
+
+  const {errs, args} = deepThought(opts)(argv)
+
+  const help = docs(opts)(style)
   const askHelp = askDocs(style)
 
   if (args.help) {
     console.log(help)
-  } else if (args.ask.help) {
+  } else if (args.ask && args.ask.help) {
     console.log(askHelp)
   } else {
-    console.log('The answer is: ' + (args.answer || 42))
+    console.log('The answer is: ' + args.answer)
   }
 }())
 
