@@ -64,7 +64,8 @@ const {space}                  = require('../src/help/usage/space')
 const {spaces}                 = require('../src/help/usage/spaces')
 const {synopsis, synopsisFrom} = require('../src/help/usage/synopsis')
 
-const {justArgs, noCommands, onlyCommands, onlyFirstArg} = require('../src/help/usage/decorators/usageDecorators')
+const justArgs                 = require('../src/help/usage/decorators/justArgs')
+const {noCommands, onlyCommands, onlyFirstArg} = require('../src/help/usage/decorators/usageDecorators')
 
 
 

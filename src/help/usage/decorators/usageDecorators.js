@@ -1,10 +1,6 @@
 const optsFilter = require('./optsFilter')
 const optsMap = require('./optsMap')
 
-const justArgs = list => optsFilter(
-  ({args}) => list.some(cmd => args.includes(cmd))
-)
-
 const noCommands = optsFilter(
   ({types}) => typeof types !== 'undefined' && types !== null
 )
@@ -18,7 +14,6 @@ const onlyFirstArg = optsMap(
 )
 
 module.exports = {
-  justArgs,
   noCommands,
   onlyCommands,
   onlyFirstArg,
