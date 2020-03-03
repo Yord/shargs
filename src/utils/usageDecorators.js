@@ -10,6 +10,10 @@ const noCommands = optsFilter(
   ({types}) => typeof types !== 'undefined' && types !== null
 )
 
+const onlyCommands = optsFilter(
+  ({types}) => typeof types === 'undefined' || types === null
+)
+
 const onlyFirstArg = optsMap(
   opt => ({...opt, args: (opt.args || []).slice(0, 1)})
 )
@@ -17,6 +21,7 @@ const onlyFirstArg = optsMap(
 module.exports = {
   justArgs,
   noCommands,
+  onlyCommands,
   onlyFirstArg,
   optsFilter,
   optsMap

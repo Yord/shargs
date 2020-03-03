@@ -20,7 +20,7 @@ $ npm i --save shargs
 
 ## Features
 
-+   **Declarative:** Describe command-line arguments using a declarative DSL and derive parsers and usage from that.
++   **Declarative:** Describe command-line options using a declarative DSL and derive parsers and usage from that.
 +   **Predefined Parsers:** Choose between many predefined parsers.
 +   **Modular Parsers:** Compose your own parsers by combining predefined parser functions with your own functions.
 +   **Predefined Usage Texts:** Choose between many predefined usage documentation templates.
@@ -30,7 +30,7 @@ $ npm i --save shargs
 
 <details>
 <summary>
-Describe command-line arguments:
+Describe command-line options:
 
 <p>
 
@@ -42,18 +42,15 @@ const opts = [
 ]
 ```
 
-Read [Functional Options DSL](#functional-options-dsl) or
-[Command Line Options DSL](#command-line-options-dsl) to learn more.
-
 </p>
 </summary>
 
-Shargs provides a DSL for declaring command-line arguments.
+Shargs provides a DSL for declaring command-line options.
 This simple example uses three different shargs type constructors:
 `string`, `number`, and `flag`. All type constructors take the same arguments:
 
 1.  *(required)* An object key used to store the parsed values.
-2.  *(required)* An array of command-line arguments that users may use to define the value.
+2.  *(required)* An array of command-line options that users may use to define the value.
 3.  *(optional)* An object holding optional keys like `desc` and `only`.
 
 Type constructors are only syntactic sugar.
@@ -82,9 +79,6 @@ const deepThought = parser({
   args: [emptyRest]
 })
 ```
-
-Read [Functional Parsers DSL](#functional-parsers-dsl) or
-[Command Line Parsers DSL](#command-line-parsers-dsl) to learn more.
 
 </p>
 </summary>
@@ -119,10 +113,6 @@ const docs = usage([
 ])
 ```
 
-Read [Usage Documentation DSL](#usage-documentation-dsl), [Layout Documentation DSL](#layout-documentation-dsl) or
-[Usage Documentation](#usage-documentation) to learn more.
-
-
 </p>
 </summary>
 
@@ -148,7 +138,7 @@ const docs = usage([
 
 <details>
 <summary>
-Build the usage documentation:
+Style the usage documentation:
 
 <p>
 
@@ -157,16 +147,17 @@ const style = {
   line: {width: 80},
   cols: [{width: 20}, {width: 60}]
 }
-
-const help = docs(opts)(style)
 ```
-
-Read [Style DSL](#style-dsl) to learn more.
 
 </p>
 </summary>
 
 Supplying `opts` and a `style` to `docs` renders a help text.
+
+```js
+const help = docs(opts)(style)
+```
+
 The style defines how the help is layouted.
 With the current style, the following is rendered:
 
@@ -217,7 +208,7 @@ Note, how shargs automatically takes care of line breaks and other formatting fo
 
 <details>
 <summary>
-Use the parser in your program:
+Use the parser and the usage documentation in your program:
 
 <p>
 
@@ -227,15 +218,14 @@ const argv = ['--unknown', '-ha', '42']
 
 const {errs, args} = deepThought(opts)(argv)
 
+const help = docs(opts)(style)
+
 if (args.help) {
   console.log(help)
 } else {
   console.log('The answer is: ' + args.answer)
 }
 ```
-
-Read [Combining Options Parser and Usage Documentation](#combining-options-parser-and-usage-documentation)
-to learn more.
 
 </p>
 </summary>
@@ -276,7 +266,7 @@ Shargs is the command-line argument parser used by [`pxi`][pxi].
 
 The most important concept in shargs is that of command-line options.
 They are the basis for parsers as well as for usage documentation.
-Command-line options in their plain form are expressed in shargs as follows: 
+Command-line options are defined as objects in shargs: 
 
 ```js
 const askOpts = [
@@ -285,7 +275,7 @@ const askOpts = [
 ]
 ```
 
-A command-line option is described by an object having a subset of the following fields:
+Command-line options may have the following fields (\* these fields are required):
 
 | Field     | Value                                                                                  | Default | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 |-----------|----------------------------------------------------------------------------------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -296,23 +286,21 @@ A command-line option is described by an object having a subset of the following
 | `only`    | array of values                                                                        | `null`  | The command-line option's value can only be one of the values in this list. If `only` is `null`, the value may be set freely.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `opts`    | command-line options array                                                             | `null`  | This field is used if the command-line option is a command (if `types` is `null`) to describe the command's options.                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
-\* these fields are required, all others are optional
-
 #### Functional Options DSL
 
-Since writing out objects may get tedious, shargs offers a DSL for creating plain command-line option descriptions:
+Since writing out objects is repetetive, shargs includes a DSL for creating command-line options:
 
 ```js
 const opts = [
+  command('ask', ['ask'], {desc: 'Just ask.', opts: askOpts}),
   number('answer', ['-a', '--answer'], {desc: 'The (default) answer.', only: [42]}),
-  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'}),
-  command('ask', ['ask'], {opts: askOpts})
+  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
 ]
 ```
 
 Each supported type has its own function, that takes `key` and `args` as arguments
 as well as an object holding any optional field.
-If an optional field is left out, the DSL takes care of setting a sensible default for it.
+If an optional field is left out, the type functions sets a sensible default.
 
 | Function                          | Description                                                |
 |-----------------------------------|------------------------------------------------------------|
@@ -323,9 +311,9 @@ If an optional field is left out, the DSL takes care of setting a sensible defau
 | `number(key, args, fields)`       | Assigns `types: ['number']`, `key` and `args` to `fields`. |
 | `string(key, args, fields)`       | Assigns `types: ['string']`, `key` and `args` to `fields`. |
 
-The `array` function describes arrays with a known length and known types,
-while the `command` function describes variable-length arrays.
-The `opts` field is used to determine a `command`'s types.
+While the `array` function describes arrays with a known length and known types,
+the `command` function describes variable-length string arrays.
+If a command has an `opts` field, the string array is treated as command-line arguments.
 
 ### Command-Line Parsers DSL
 
@@ -333,14 +321,14 @@ A shargs command-line parser is a composition of parser functions:
 
 ```js
 function deepThought (opts) {
-  return pipe(
+  return argv => pipe(
     splitShortOptions,
     toOpts(combine(...opts.map(option)).args),
     cast,
     restrictToOnly,
     toArgs(deepThought),
     emptyRest
-  )
+  )({argv})
 }
 ```
 
@@ -352,8 +340,8 @@ There are five stages of parser functions:
 4.  `toArgs` transforms `opts` into an object of `key` / `values` pairs.
 5.  `args` functions modify `args` objects.
 
-Functions from different stages must be applied in the given order,
-while functions from the same stage may be supplied in any order that makes sense.
+The stages must always be applied in the given order,
+while functions from the same stage may be supplied in any order that makes sense for the parser.
 The following parser functions are available:
 
 | Stage    | Plugin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
@@ -378,12 +366,10 @@ const deepThought = parser({
 })
 ```
 
-When using `parser`, the only thing you have to take care of
-is supplying parser functions in the desired order per stage.
-
 ### Usage Documentation
 
-Based on the command-line options defined above, the `deepThought` tool should have the following usage documentation:
+Every decent command-line tools has a usage documentation.
+The `deepThought` tool is no exception and could e.g. show the following text if the `--help` flag is present:
 
 ```bash
 deepThought ask [-q|--question] [-h|--help]                                     
@@ -395,14 +381,14 @@ Deep Thought was created to come up with the Answer to The Ultimate Question of
 Life, the Universe, and Everything. 
 ```
 
-Since command-line options may change, writing the documentation manually is not a good idea,
-because it would mean updating changed options in two different places.
-This is why shargs provides DSLs for writing usage documentation.
+Writing the usage documentation yourself is not a good idea,
+because you would have to update it every time a command-line option is added or changed.
+This is why shargs takes care for writing usage documentation for you.
 
 #### Layout Documentation DSL
 
-The layout DSL functions are a markup language for formatting text in the terminal.
-The `deepThought` documentation could be written as follows in layout syntax:
+Shargs uses its own markup language for formatting text in the terminal called layout functions DSL.
+The `deepThought ask` documentation could be written as follows in layout syntax:
 
 ```js
 const askDocs = layout([
@@ -420,7 +406,7 @@ const askDocs = layout([
 ])
 ```
 
-The layout DSL includes the following functions:
+Shargs includes the following layout functions:
 
 <table>
 <tr>
@@ -432,7 +418,7 @@ The layout DSL includes the following functions:
 <td>
 <details>
 <summary>
-Transforms layout DSL functions into a string following a style.
+Groups several layout DSL functions together.
 </summary>
 
 <br />
@@ -863,12 +849,13 @@ A style object may have the following parameters:
 | `width`    | number | Defines the length of a line before a line break is introduced. |
 
 While `line` and `cols` are the default ids, any valid key may be used as an id.
-In order to connect layout functions to a different id than the default, pass it as a string to the `id` parameter.
+In order to connect layout functions to a different id than the default,
+pass it as a string to the `id` parameter of any `*From` function.
 
 #### Usage Documentation DSL
 
-The usage DSL extends the layout DSL by providing functions that may access command-line options.
-Using this DSL makes defining usage documentation for command-line options very straight forward:
+The usage DSL extends the layout DSL by providing functions that have access to command-line options.
+Using this DSL makes defining usage documentation for command-line options very declarative:
 
 ```js
 const docs = usage([
@@ -883,9 +870,9 @@ const docs = usage([
 ])
 ```
 
-`docs` prints exactly the same documentation text, but needs much less configuration,
-since the declared command-line options are not repeated, but reused.
-The usage DSL includes the following functions:
+Note how the usage DSL needs notably less code than the layout DSL,
+since its functions have access to the command-line options.
+Shargs includes the following usage functions:
 
 <table>
 <tr>
@@ -893,11 +880,11 @@ The usage DSL includes the following functions:
 <th>Description (and Example)</th>
 </tr>
 <tr>
-<td><code>usage(toStrings)(opts)(style)</code></td>
+<td><code>usage(functions)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
-Transforms usage DSL functions into a string having access to command-line options and following a style.
+Groups several usage DSL functions together.
 </summary>
 
 <br />
@@ -1247,13 +1234,46 @@ deepThought [-a|--answer] [-h|--help]
 </tr>
 </table>
 
-### Combining Options, Parser, and Usage Documentation
+#### Usage Decorators DSL
 
-The command-line options, the parser, and the usage documentation are combined to form a command-line argument parser:
+Sometimes you want to pass only a selection of the command-line options to a usage function.
+Shargs has usage decorators for that:
 
 ```js
-// ./deepThought ask -q 'What is the answer to everything?'
-const argv = ['ask', '-q', 'What is the answer to everything?']
+const decoratedDocs = usage([
+  synopsis('deepThought'),
+  space,
+  onlyCommands(optsDefs),
+  space,
+  noCommands(optsList),
+  space,
+  note(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+])
+```
+
+`decoratedDocs` displays commands and other command-line options in separate text blocks
+by using the `onlyCommands` and `noCommands` decorators to filter relevant options.
+Shargs includes the following usage decorators:
+
+| Usage Decorator                          | Description |
+|------------------------------------------|-------------|
+| `optsFilter(pred)(usageFunction)(opts)`  | Foo         |
+| `optsMap(func)(usageFunction)(opts)`     | Foo         |
+| `justArgs(list)(usageFunction)(opts)`    | Foo         |
+| `noCommands(usageFunction)(opts)`        | Foo         |
+| `onlyCommands(usageFunction)(opts)`      | Foo         |
+| `onlyFirstArg(usageFunction)(opts)`      | Foo         |
+
+### Combining Options, Parser, and Usage Documentation
+
+The command-line options, the parser, and the usage documentation are combined to a program:
+
+```js
+// ./deepThought -a 42 ask -q 'What is the answer to everything?'
+const argv = ['-a', '42', 'ask', '-q', 'What is the answer to everything?']
 
 const {errs, args} = deepThought(opts)(argv)
 
@@ -1262,7 +1282,7 @@ const askHelp = askDocs(style)
 
 if (args.help) {
   console.log(help)
-} else if (args.ask.help) {
+} else if (args.ask && args.ask.help) {
   console.log(askHelp)
 } else {
   console.log('The answer is: ' + args.answer)
