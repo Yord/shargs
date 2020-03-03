@@ -5,7 +5,7 @@ const optsDefsFrom = id => (opts = []) => {
     opts
     .map(opt => ({types} = opt, Array.isArray(types) && types.length === 0 ? {...opt, types: ['flag']} : opt))
     .map(({args = [], desc = '', types}) => ({
-      title: args.join(', ') + ' [' + types.join(', ') + ']',
+      title: args.join(', ') + (types === null ? '' : ' [' + types.join(', ') + ']'),
       desc
     }))
   )
