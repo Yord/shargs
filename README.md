@@ -292,9 +292,9 @@ Since writing out objects is repetetive, shargs includes a DSL for creating comm
 
 ```js
 const opts = [
+  command('ask', ['ask'], {desc: 'Just ask.', opts: askOpts}),
   number('answer', ['-a', '--answer'], {desc: 'The (default) answer.', only: [42]}),
-  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'}),
-  command('ask', ['ask'], {opts: askOpts})
+  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
 ]
 ```
 
@@ -340,8 +340,8 @@ There are five stages of parser functions:
 4.  `toArgs` transforms `opts` into an object of `key` / `values` pairs.
 5.  `args` functions modify `args` objects.
 
-Functions from different stages must be applied in the given order,
-while functions from the same stage may be supplied in any order that makes sense.
+The stages must always be applied in the given order,
+while functions from the same stage may be supplied in any order that makes sense for the parser.
 The following parser functions are available:
 
 | Stage    | Plugin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
@@ -366,12 +366,10 @@ const deepThought = parser({
 })
 ```
 
-When using `parser`, the only thing you have to take care of
-is supplying parser functions in the desired order per stage.
-
 ### Usage Documentation
 
-Based on the command-line options defined above, the `deepThought` tool should have the following usage documentation:
+Every decent command-line tools has a usage documentation.
+The `deepThought` tool is no exception and could e.g. show the following text if the `--help` flag is present:
 
 ```bash
 deepThought ask [-q|--question] [-h|--help]                                     
@@ -383,14 +381,14 @@ Deep Thought was created to come up with the Answer to The Ultimate Question of
 Life, the Universe, and Everything. 
 ```
 
-Since command-line options may change, writing the documentation manually is not a good idea,
-because it would mean updating changed options in two different places.
-This is why shargs provides DSLs for writing usage documentation.
+Writing the usage documentation yourself is not a good idea,
+because you would have to update it every time a command-line option is added or changed.
+This is why shargs takes care for writing usage documentation for you.
 
 #### Layout Documentation DSL
 
-The layout DSL functions are a markup language for formatting text in the terminal.
-The `deepThought` documentation could be written as follows in layout syntax:
+Shargs uses its own markup language for formatting text in the terminal called layout functions DSL.
+The `deepThought ask` documentation could be written as follows in layout syntax:
 
 ```js
 const askDocs = layout([
@@ -408,7 +406,7 @@ const askDocs = layout([
 ])
 ```
 
-The layout DSL includes the following functions:
+Shargs includes the following layout functions:
 
 <table>
 <tr>
@@ -420,7 +418,7 @@ The layout DSL includes the following functions:
 <td>
 <details>
 <summary>
-Transforms layout DSL functions into a string following a style.
+Groups several layout DSL functions together.
 </summary>
 
 <br />
@@ -851,12 +849,13 @@ A style object may have the following parameters:
 | `width`    | number | Defines the length of a line before a line break is introduced. |
 
 While `line` and `cols` are the default ids, any valid key may be used as an id.
-In order to connect layout functions to a different id than the default, pass it as a string to the `id` parameter.
+In order to connect layout functions to a different id than the default,
+pass it as a string to the `id` parameter of any `*From` function.
 
 #### Usage Documentation DSL
 
-The usage DSL extends the layout DSL by providing functions that may access command-line options.
-Using this DSL makes defining usage documentation for command-line options very straight forward:
+The usage DSL extends the layout DSL by providing functions that have access to command-line options.
+Using this DSL makes defining usage documentation for command-line options very declarative:
 
 ```js
 const docs = usage([
@@ -871,9 +870,9 @@ const docs = usage([
 ])
 ```
 
-`docs` prints exactly the same documentation text, but needs much less configuration,
-since the declared command-line options are not repeated, but reused.
-The usage DSL includes the following functions:
+Note how the usage DSL needs notably less code than the layout DSL,
+since its functions have access to the command-line options.
+Shargs includes the following usage functions:
 
 <table>
 <tr>
@@ -881,11 +880,11 @@ The usage DSL includes the following functions:
 <th>Description (and Example)</th>
 </tr>
 <tr>
-<td><code>usage(toStrings)(opts)(style)</code></td>
+<td><code>usage(functions)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
-Transforms usage DSL functions into a string having access to command-line options and following a style.
+Groups several usage DSL functions together.
 </summary>
 
 <br />
@@ -1237,11 +1236,11 @@ deepThought [-a|--answer] [-h|--help]
 
 ### Combining Options, Parser, and Usage Documentation
 
-The command-line options, the parser, and the usage documentation are combined to form a command-line argument parser:
+The command-line options, the parser, and the usage documentation are combined to a program:
 
 ```js
-// ./deepThought ask -q 'What is the answer to everything?'
-const argv = ['ask', '-q', 'What is the answer to everything?']
+// ./deepThought -a 42 ask -q 'What is the answer to everything?'
+const argv = ['-a', '42', 'ask', '-q', 'What is the answer to everything?']
 
 const {errs, args} = deepThought(opts)(argv)
 
@@ -1250,7 +1249,7 @@ const askHelp = askDocs(style)
 
 if (args.help) {
   console.log(help)
-} else if (args.ask.help) {
+} else if (args.ask && args.ask.help) {
   console.log(askHelp)
 } else {
   console.log('The answer is: ' + args.answer)
