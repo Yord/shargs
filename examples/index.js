@@ -67,7 +67,7 @@ const {synopsis, synopsisFrom} = require('../src/help/usage/synopsis')
 const justArgs                 = require('../src/help/usage/decorators/justArgs')
 const noCommands               = require('../src/help/usage/decorators/noCommands')
 const onlyCommands             = require('../src/help/usage/decorators/onlyCommands')
-const {onlyFirstArg} = require('../src/help/usage/decorators/usageDecorators')
+const onlyFirstArg             = require('../src/help/usage/decorators/onlyFirstArg')
 
 
 
