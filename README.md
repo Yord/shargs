@@ -1234,6 +1234,39 @@ deepThought [-a|--answer] [-h|--help]
 </tr>
 </table>
 
+#### Usage Decorators DSL
+
+Sometimes you want to pass only a selection of the command-line options to a usage function.
+Shargs has usage decorators for that:
+
+```js
+const decoratedDocs = usage([
+  synopsis('deepThought'),
+  space,
+  onlyCommands(optsDefs),
+  space,
+  noCommands(optsList),
+  space,
+  note(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+])
+```
+
+`decoratedDocs` displays commands and other command-line options in separate text blocks
+by using the `onlyCommands` and `noCommands` decorators to filter relevant options.
+Shargs includes the following usage decorators:
+
+| Usage Decorator                          | Description |
+|------------------------------------------|-------------|
+| `optsFilter(pred)(usageFunction)(opts)`  | Foo         |
+| `optsMap(func)(usageFunction)(opts)`     | Foo         |
+| `justArgs(list)(usageFunction)(opts)`    | Foo         |
+| `noCommands(usageFunction)(opts)`        | Foo         |
+| `onlyCommands(usageFunction)(opts)`      | Foo         |
+| `onlyFirstArg(usageFunction)(opts)`      | Foo         |
+
 ### Combining Options, Parser, and Usage Documentation
 
 The command-line options, the parser, and the usage documentation are combined to a program:
