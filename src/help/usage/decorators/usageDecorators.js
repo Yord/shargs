@@ -1,6 +1,4 @@
-const optsFilter = p => usageFunction => (opts = []) => (
-  usageFunction(opts.filter(p))
-)
+const optsFilter = require('./optsFilter')
 
 const optsMap = f => usageFunction => (opts = []) => (
   usageFunction(opts.map(f))
@@ -27,6 +25,5 @@ module.exports = {
   noCommands,
   onlyCommands,
   onlyFirstArg,
-  optsFilter,
   optsMap
 }
