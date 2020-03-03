@@ -1241,7 +1241,7 @@ Shargs has usage decorators for that:
 
 ```js
 const decoratedDocs = usage([
-  synopsis('deepThought'),
+  decorate(noCommands, onlyFirstArg)(synopsis('deepThought')),
   space,
   onlyCommands(optsDefs),
   space,

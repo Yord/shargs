@@ -45,6 +45,7 @@ console.log('fooParser', JSON.stringify(res, null, 2))
 
 const layout                   = require('../src/layout')
 const usage                    = require('../src/usage')
+const decorate                 = require('../src/decorate')
 
 const {br}                     = require('../src/help/layout/br')
 const {brs}                    = require('../src/help/layout/brs')
@@ -63,7 +64,10 @@ const {space}                  = require('../src/help/usage/space')
 const {spaces}                 = require('../src/help/usage/spaces')
 const {synopsis, synopsisFrom} = require('../src/help/usage/synopsis')
 
-const {decorate, justArgs, noCommands, onlyCommands, onlyFirstArg} = require('../src/utils/usageDecorators')
+const justArgs                 = require('../src/help/usage/decorators/justArgs')
+const noCommands               = require('../src/help/usage/decorators/noCommands')
+const onlyCommands             = require('../src/help/usage/decorators/onlyCommands')
+const onlyFirstArg             = require('../src/help/usage/decorators/onlyFirstArg')
 
 
 
