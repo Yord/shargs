@@ -63,7 +63,7 @@ const {space}                  = require('../src/help/usage/space')
 const {spaces}                 = require('../src/help/usage/spaces')
 const {synopsis, synopsisFrom} = require('../src/help/usage/synopsis')
 
-const {justArgs, noCommands, onlyFirstArg} = require('../src/utils/usageDecorators')
+const {justArgs, noCommands, onlyCommands, onlyFirstArg} = require('../src/utils/usageDecorators')
 
 
 
@@ -840,13 +840,19 @@ console.log('exD1  === exD2',  exD1  === exD2)
 
   const style = {
     line: {width: 80},
-    cols: [{width: 20}, {width: 60}]
+    cols: [{width: 20}, {width: 60}],
+    defs: {
+      title: {width: 20},
+      desc: {width: 60}
+    }
   }
 
   const docs = usage([
-    noCommands(synopsis('deepThought')),
+    synopsis('deepThought'),
     space,
-    optsList,
+    onlyCommands(optsDefs),
+    space,
+    noCommands(optsList),
     space,
     note(
       'Deep Thought was created to come up with the Answer to ' +
@@ -855,7 +861,7 @@ console.log('exD1  === exD2',  exD1  === exD2)
   ])
 
   // ./deepThought ask -q 'What is the answer to everything?'
-  const argv = ['-a', '42', 'ask', '-q', 'What is the answer to everything?']
+  const argv = ['-h', '-a', '42', 'ask', '-q', 'What is the answer to everything?']
 
   const {errs, args} = deepThought(opts)(argv)
 
