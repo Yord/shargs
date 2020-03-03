@@ -63,7 +63,7 @@ const {space}                  = require('../src/help/usage/space')
 const {spaces}                 = require('../src/help/usage/spaces')
 const {synopsis, synopsisFrom} = require('../src/help/usage/synopsis')
 
-const {justArgs, noCommands, onlyCommands, onlyFirstArg} = require('../src/utils/usageDecorators')
+const {decorate, justArgs, noCommands, onlyCommands, onlyFirstArg} = require('../src/utils/usageDecorators')
 
 
 
@@ -848,7 +848,7 @@ console.log('exD1  === exD2',  exD1  === exD2)
   }
 
   const docs = usage([
-    synopsis('deepThought'),
+    decorate(noCommands, onlyFirstArg)(synopsis('deepThought')),
     space,
     onlyCommands(optsDefs),
     space,
