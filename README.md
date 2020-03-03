@@ -1258,14 +1258,15 @@ const decoratedDocs = usage([
 by using the `onlyCommands` and `noCommands` decorators to filter relevant options.
 Shargs includes the following usage decorators:
 
-| Usage&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
-|-----------------------------------------|----------------------------------------------------------------------------------------|
-| `optsFilter(pred)(usageFunction)(opts)` | Applies `filter` to the `opts` array using a `pred`icate.                              |
-| `optsMap(func)(usageFunction)(opts)`    | Applies `map` to the `opts` array using a `func`tion.                                  |
-| `justArgs(array)(usageFunction)(opts)`  | Takes an array of args and keeps only those `opts` that have an arg in the args array. |
-| `noCommands(usageFunction)(opts)`       | Filters out all commands from `opts`.                                                  |
-| `onlyCommands(usageFunction)(opts)`     | Keeps only commands in `opts`.                                                         |
-| `onlyFirstArg(usageFunction)(opts)`     | Keeps only the first arg from each opt.                                                |
+| Usage&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
+|---------------------------------------------|----------------------------------------------------------------------------------------|
+| `decorate(decorators)(usageFunction)(opts)` | Combines several usage decorators to one decorator.                                    |
+| `justArgs(array)(usageFunction)(opts)`      | Takes an array of args and keeps only those `opts` that have an arg in the args array. |
+| `noCommands(usageFunction)(opts)`           | Filters out all commands from `opts`.                                                  |
+| `onlyCommands(usageFunction)(opts)`         | Keeps only commands in `opts`.                                                         |
+| `onlyFirstArg(usageFunction)(opts)`         | Keeps only the first arg from each opt.                                                |
+| `optsFilter(p)(usageFunction)(opts)`        | Applies `filter` to the `opts` array using a predicate `p`.                            |
+| `optsMap(f)(usageFunction)(opts)`           | Applies `map` to the `opts` array using a function `f`.                                |
 
 ### Combining Options, Parser, and Usage Documentation
 
