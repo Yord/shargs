@@ -1,8 +1,5 @@
 const optsFilter = require('./optsFilter')
-
-const optsMap = f => usageFunction => (opts = []) => (
-  usageFunction(opts.map(f))
-)
+const optsMap = require('./optsMap')
 
 const justArgs = list => optsFilter(
   ({args}) => list.some(cmd => args.includes(cmd))
