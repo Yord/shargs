@@ -1236,7 +1236,7 @@ deepThought [-a|--answer] [-h|--help]
 
 #### Usage Decorators DSL
 
-Sometimes you want to pass only a selection of the command-line options to a usage function.
+Sometimes you want to pass only a portion of the command-line options to a usage function.
 Shargs has usage decorators for that:
 
 ```js
@@ -1258,14 +1258,14 @@ const decoratedDocs = usage([
 by using the `onlyCommands` and `noCommands` decorators to filter relevant options.
 Shargs includes the following usage decorators:
 
-| Usage Decorator                          | Description |
-|------------------------------------------|-------------|
-| `optsFilter(pred)(usageFunction)(opts)`  | Foo         |
-| `optsMap(func)(usageFunction)(opts)`     | Foo         |
-| `justArgs(list)(usageFunction)(opts)`    | Foo         |
-| `noCommands(usageFunction)(opts)`        | Foo         |
-| `onlyCommands(usageFunction)(opts)`      | Foo         |
-| `onlyFirstArg(usageFunction)(opts)`      | Foo         |
+| Usage&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
+|-----------------------------------------|----------------------------------------------------------------------------------------|
+| `optsFilter(pred)(usageFunction)(opts)` | Applies `filter` to the `opts` array using a `pred`icate.                              |
+| `optsMap(func)(usageFunction)(opts)`    | Applies `map` to the `opts` array using a `func`tion.                                  |
+| `justArgs(array)(usageFunction)(opts)`  | Takes an array of args and keeps only those `opts` that have an arg in the args array. |
+| `noCommands(usageFunction)(opts)`       | Filters out all commands from `opts`.                                                  |
+| `onlyCommands(usageFunction)(opts)`     | Keeps only commands in `opts`.                                                         |
+| `onlyFirstArg(usageFunction)(opts)`     | Keeps only the first arg from each opt.                                                |
 
 ### Combining Options, Parser, and Usage Documentation
 
