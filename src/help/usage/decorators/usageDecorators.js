@@ -6,10 +6,6 @@ const optsMap = f => usageFunction => (opts = []) => (
   usageFunction(opts.map(f))
 )
 
-const decorate = (f, ...fs) => usageFunction => (
-  [f, ...fs].reduce((uf, f) => f(uf), usageFunction)
-)
-
 const justArgs = list => optsFilter(
   ({args}) => list.some(cmd => args.includes(cmd))
 )
@@ -27,7 +23,6 @@ const onlyFirstArg = optsMap(
 )
 
 module.exports = {
-  decorate,
   justArgs,
   noCommands,
   onlyCommands,
