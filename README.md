@@ -258,7 +258,7 @@ Otherwise, the answer is printed.
 
 </details>
 
-## 🦈 `shargs`
+## 🦈 Shargs
 
 Shargs is the command-line argument parser used by [`pxi`][pxi].
 
