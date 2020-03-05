@@ -1,6 +1,6 @@
 ![shargs teaser][teaser]
 
-🦈 `shargs` (**sh**ell **args**) is a highly customizable and extensible command-line arguments parser.
+🦈 Shargs (**sh**ell **args**) is a highly customizable and extensible command-line arguments parser.
 
 [![node version][shield-node]][node]
 [![npm version][shield-npm]][npm-package]
