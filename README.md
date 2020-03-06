@@ -233,7 +233,7 @@ if (args.help) {
 Parsing `argv` returned the following `args`:
 
 ```json
-{help: true, answer: 42, _: []}
+{"help": true, "answer": 42, "_": []}
 ```
 
 Note, that `help` is `true`.
