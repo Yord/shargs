@@ -46,15 +46,11 @@ const opts = [
 </summary>
 
 Shargs provides a DSL for declaring command-line options.
-This simple example uses three different shargs type constructors:
-`string`, `number`, and `flag`. All type constructors take the same arguments:
-
-1.  *(required)* An object key used to store the parsed values.
-2.  *(required)* An array of command-line options that users may use to define the value.
-3.  *(optional)* An object holding optional keys like `desc` and `only`.
+This example uses three different shargs type constructors:
+`string`, `number`, and `flag`.
 
 Type constructors are only syntactic sugar.
-In fact, `opts` could also be written as:
+In fact, `opts` could have also been written as:
 
 ```js
 const opts = [
@@ -83,7 +79,14 @@ const deepThought = parser({
 </p>
 </summary>
 
-The parser consists of six parser functions that are applied in the following order:
+Parsers have three different stages:
+`argv`, `opts`, and `args`.
+Each stage takes several parser functions that are used to transform input in the order they are defined.
+Two special stages transform data between the three stages:
+`toOpts` and `toArgs`.
+These two stages take exactly one parser function that is predefined, but can also be passed by the user.
+
+The `deepThought` parser consists of six parser functions that are applied in the following order:
 
 1.  `splitShortOptions`
 2.  `toOpts` (is called after `argv` and before `opts`)
@@ -237,10 +240,10 @@ Parsing `argv` returned the following `args`:
 ```
 
 Note, that `help` is `true`.
-Other command-line argument parsers handle displaying usage documentation for you.
-Shargs makes the deliberate decision to leave that to the user,
-thus giving him more control.
+Other command-line argument parsers would now display usage documentation for you.
+Shargs leaves that to the user, giving him more control.
 
+Our program reads:
 If `args` contains a `help` field, the `help` text is printed:
 
 ```bash
