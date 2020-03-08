@@ -44,7 +44,7 @@ console.log('fooParser', JSON.stringify(res, null, 2))
 
 
 const usage                    = require('../src/help/usage/combinators/usage')
-const decorate                 = require('../src/decorate')
+const decorate                 = require('../src/help/usage/combinators/decorate')
 
 const layout                   = require('../src/help/layout/combinators/layout')
 const {br}                     = require('../src/help/layout/br')
