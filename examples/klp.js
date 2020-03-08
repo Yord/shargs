@@ -112,7 +112,7 @@ const options = [
 
 const opts = [...commands, ...stages, ...options]
 
-const usage                    = require('../src/usage')
+const usage                    = require('../src/help/usage/combinators/usage')
 const {note, noteFrom}         = require('../src/help/usage/note')
 const {notesFrom}              = require('../src/help/usage/notes')
 const {optsDefsFrom}           = require('../src/help/usage/optsDefs')
