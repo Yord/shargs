@@ -792,7 +792,7 @@ To The Ultimate Question.
 </tr>
 </table>
 
-The layout functions can be combined with the following layout combinators:
+Layout functions can be combined with the following layout combinators:
 
 <table>
 <tr>
