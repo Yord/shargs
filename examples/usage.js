@@ -1,9 +1,12 @@
 const {flag, number} = require('../src/options')
 
+const usage      = require('../src/help/usage/combinators/usage')
+
 const {note}     = require('../src/help/usage/note')
 const {notes}    = require('../src/help/usage/notes')
 const {optsDefs} = require('../src/help/usage/optsDefs')
 const {optsList} = require('../src/help/usage/optsList')
+const {space}    = require('../src/help/usage/space')
 
 ;(function () {
   const opts = []
@@ -66,6 +69,22 @@ const {optsList} = require('../src/help/usage/optsList')
   }
   
   const res = optsList(opts)(style)
+
+  console.log(res)
+}())
+
+;(function () {
+  const opts = []
+
+  const style = {
+    line: {width: 40}
+  }
+  
+  const res = usage([
+    note('Deep Thought answered'),
+    space,
+    note('The Ultimate Question.')
+  ])(opts)(style)
 
   console.log(res)
 }())
