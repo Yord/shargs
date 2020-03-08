@@ -15,12 +15,12 @@ const {texts} = require('../src/help/layout/texts')
     line: {width: 40}
   }
   
-  const text = layout([
+  const res = layout([
     line('First line'),
     line('Last line')
   ])(style)
 
-  console.log(text)
+  console.log(res)
 }())
 
 ;(function () {
@@ -28,31 +28,31 @@ const {texts} = require('../src/help/layout/texts')
     line: {width: 40}
   }
 
-  const text = layout([
+  const res = layout([
     line('First line'),
     br,
     line('Last line')
   ])(style)
 
-  console.log(text)
+  console.log(res)
 }())
 
 ;(function () {
   const style = {line: {width: 40}}
   
-  const text = layout([
+  const res = layout([
     line('First line'),
     brs(2),
     line('Last line')
   ])(style)
 
-  console.log(text)
+  console.log(res)
 }())
 
 ;(function () {
   const style = {cols: [{width: 15}, {width: 25}]}
   
-  const text = cols([
+  const res = cols([
     [
       '-h, --help',
       '-v, --version'
@@ -63,13 +63,13 @@ const {texts} = require('../src/help/layout/texts')
     ]
   ])(style)
 
-  console.log(text)
+  console.log(res)
 }())
 
 ;(function () {
   const style = {defs: {title: {width: 40}, desc: {padStart: 3, width: 37}}}
   
-  const text = defs([
+  const res = defs([
     {
       title: '-h, --help',
       desc: 'Prints the help.'
@@ -80,7 +80,7 @@ const {texts} = require('../src/help/layout/texts')
     }
   ])(style)
 
-  console.log(text)
+  console.log(res)
 }())
 
 ;(function () {
@@ -88,12 +88,12 @@ const {texts} = require('../src/help/layout/texts')
     line: {width: 40}
   }
   
-  const text = lines([
+  const res = lines([
     'First line',
     'Last line'
   ])(style)
 
-  console.log(text)
+  console.log(res)
 }())
 
 ;(function () {
@@ -104,7 +104,7 @@ const {texts} = require('../src/help/layout/texts')
     ]
   }
   
-  const text = table([
+  const res = table([
     [
       '-h, --help',
       'Prints the help.'
@@ -115,7 +115,7 @@ const {texts} = require('../src/help/layout/texts')
     ]
   ])(style)
 
-  console.log(text)
+  console.log(res)
 }())
 
 ;(function () {
@@ -123,9 +123,9 @@ const {texts} = require('../src/help/layout/texts')
     line: {width: 40}
   }
   
-  const foo = text('Deep Thought was created to come up with the Answer.')(style)
+  const res = text('Deep Thought was created to come up with the Answer.')(style)
 
-  console.log(foo)
+  console.log(res)
 }())
 
 ;(function () {
@@ -133,10 +133,10 @@ const {texts} = require('../src/help/layout/texts')
     line: {width: 40}
   }
   
-  const foo = texts([
+  const res = texts([
     'Deep Thought was created to come up with the Answer.',
     'To The Ultimate Question of Life, the Universe, and Everything.'
   ])(style)
 
-  console.log(foo)
+  console.log(res)
 }())
