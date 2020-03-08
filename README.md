@@ -345,21 +345,27 @@ There are five stages of parser functions:
 
 The stages must always be applied in the given order,
 while functions from the same stage may be supplied in any order that makes sense for the parser.
-The following parser functions are available:
 
-| Stage    | Plugin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
-|----------|-----------------------------------|-----------------------------------------------------------------------------------------------------------------|
-| `argv`   | `splitShortOptions({errs, argv})` | Splits argument groups of shape `-vs` to `-v -s`. Only works if the arguments are preceded by a single dash.    |
-| `toOpts` | `toOpts(args)({errs, argv})`      | Transforms `argv` arrays into the command-line option DSL and adds a `values` field.                            |
-| `opts`   | `cast(opts)`                      | Casts all `values` according to the options' types.                                                             |
-| `opts`   | `restrictToOnly(opts)`            | Records an error if the `values` are not contained in the `only` list.                                          |
-| `toArgs` | `toArgs(parser)({errs, argv})`    | Transforms `opts` into an object of `key` / `values` pairs.                                                     |
-| `args`   | `emptyRest(args)`                 | Removes all entries from the `_` key.                                                                           |
+The following parser functions are available for the `argv` stage:
 
-#### Functional Parsers DSL
+| `argv`&nbsp;Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
+|-----------------------------------|----------------------------------------------------------------------------------------------------------------|
+| `splitShortOptions({errs, argv})` | Splits argument groups of shape `-vs` to `-v -s`. Only works if argument groups are preceded by a single dash. |
 
-The functional parser DSL takes care of applying parser stages in the correct order under the hood.
-It also passes on errors for you:
+The following parser functions are available for the `opts` stage:
+
+| `opts`&nbsp;Parser&nbsp;Function | Description                                                            |
+|----------------------------------|------------------------------------------------------------------------|
+| `cast({errs, opts})`             | Casts all `values` according to the options' types.                    |
+| `restrictToOnly({errs, opts})`   | Records an error if the `values` are not contained in the `only` list. |
+
+The following parser functions are available for the `args` stage:
+
+| `args`&nbsp;Parser&nbsp;Function | Description                           |
+|----------------------------------|---------------------------------------|
+| `emptyRest({errs, args})`        | Removes all entries from the `_` key. |
+
+Parser functions can be combined with `parser`:
 
 ```js
 const deepThought = parser({
