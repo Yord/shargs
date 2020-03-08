@@ -413,115 +413,8 @@ Shargs includes the following layout functions:
 
 <table>
 <tr>
-<th>Layout&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Layout&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description (and Example)</th>
-</tr>
-<tr>
-<td><code>layout(functions)(style)</code></td>
-<td>
-<details>
-<summary>
-Groups several layout DSL functions together.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const style = {
-  line: {width: 40}
-}
-
-layout([
-  line('First line'),
-  line('Last line')
-])(style)
-```
-
-Result:
-
-```bash
-First line                              
-Last line                               
-```
-
-</details>
-</td>
-</tr>
-<tr>
-<td><code>line(string)(style)</code><br /><code>lineFrom(id)(string)(style)</code></td>
-<td>
-<details>
-<summary>
-Prints the string with a line break at the end. Takes the line width from style and pads with spaces at the end. If the string is too long to fit the line's width, it is cut off.
-</summary>
-
-<br />
-
-```js
-const line = lineFrom('line')
-```
-
-Example:
-
-```js
-const style = {
-  line: {width: 40}
-}
-
-layout([
-  line('First line'),
-  line('Last line')
-])(style)
-```
-
-Result:
-
-```bash
-First line                              
-Last line                               
-```
-
-</details>
-</td>
-</tr>
-<tr>
-<td><code>lines(strings)(style)</code><br /><code>linesFrom(id)(strings)(style)</code></td>
-<td>
-<details>
-<summary>
-Prints several strings using the <code>line</code> function for each.
-</summary>
-
-<br />
-
-```js
-const lines = linesFrom('line')
-```
-
-Example:
-
-```js
-const style = {
-  line: {width: 40}
-}
-
-lines([
-  'First line',
-  'Last line'
-])(style)
-```
-
-Result:
-
-```bash
-First line                              
-Last line                               
-```
-
-</details>
-</td>
 </tr>
 <tr>
 <td><code>br(style)</code><br /><code>brFrom(id)(style)</code></td>
@@ -652,6 +545,177 @@ Result:
 </td>
 </tr>
 <tr>
+<td><code>line(string)(style)</code><br /><code>lineFrom(id)(string)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints the string with a line break at the end.
+Takes the line width from style and pads with spaces at the end.
+If the string is too long to fit the line's width, it is cut off.
+</summary>
+
+<br />
+
+```js
+const line = lineFrom('line')
+```
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+line('A line')(style)
+```
+
+Result:
+
+```bash
+A line                              
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>lines(strings)(style)</code><br /><code>linesFrom(id)(strings)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints several strings using the <code>line</code> function for each.
+</summary>
+
+<br />
+
+```js
+const lines = linesFrom('line')
+```
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+lines([
+  'First line',
+  'Last line'
+])(style)
+```
+
+Result:
+
+```bash
+First line                              
+Last line                               
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>defs(rowsList)(style)</code><br /><code>defsFrom(id1, id2)(rowsList)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes a list of title/desc row pairs.
+Prints the title as a <code>text</code> before printing the desc as a <code>text</code>.
+Title and text may be assigned different style ids.
+</summary>
+
+<br />
+
+```js
+const defs = defsFrom('line', 'desc')
+```
+
+Example:
+
+```js
+const style = {
+  line: {width: 40},
+  desc: {padStart: 4, width: 36}
+}
+
+defs([
+  [
+    '-h, --help',
+    'Prints the help.'
+  ],
+  [
+    '-v, --version',
+    'Prints the version.'
+  ]
+])(line)
+```
+
+Result:
+
+```bash
+-h, --help                              
+    Prints the help.                    
+
+-v, --version                           
+    Prints the version.                 
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>table(rowsList)(style)</code><br /><code>tableFrom(id)(rowsList)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes a rows list with each row holding a number of strings equal to the number of columns.
+The style parameter must have a <code>cols</code> key with a number of style objects equal to the number of columns.
+The strings in each row are formatted according to the defined columns.
+If a string surpasses the width of a column, its remaining words are printed in the following rows.
+</summary>
+
+<br />
+
+```js
+const table = tableFrom('cols')
+```
+
+Example:
+
+```js
+const style = {
+  cols: [
+    {width: 10, padEnd: 2},
+    {width: 28}
+  ]
+}
+
+table([
+  [
+    '-v, --version',
+    'Prints the version.'
+  ],
+  [
+    '-h, --help',
+    'Prints the help.'
+  ]
+])(style)
+```
+
+Result:
+
+```bash
+-v,         Prints the version.         
+--version                                    
+-h, --help  Prints the help.            
+```
+
+</details>
+</td>
+</tr>
+<tr>
 <td><code>text(string)(style)</code><br /><code>textFrom(id)(string)(style)</code></td>
 <td>
 <details>
@@ -726,102 +790,94 @@ To The Ultimate Question.
 </details>
 </td>
 </tr>
+</table>
+
+Layout functions can be combined with the following layout combinators:
+
+<table>
 <tr>
-<td><code>defs(definitions)(style)</code><br /><code>defsFrom(id)(definitions)(style)</code></td>
-<td>
-<details>
-<summary>
-Takes a list of definitions with each definition being an object with a <code>title</code> and a <code>desc</code> key.
-Prints the title as a <code>text</code> before printing the desc as a <code>text</code>.
-The style parameter must have a <code>defs</code> key that holds an object with <code>title</code> and <code>desc</code> keys that each hold a style object.
-</summary>
-
-<br />
-
-```js
-const defs = defsFrom('defs')
-```
-
-Example:
-
-```js
-const style = {
-  defs: {
-    title: {width: 40},
-    desc: {padStart: 4, width: 36}
-  }
-}
-
-defs([
-  {
-    title: '-h, --help',
-    desc: 'Prints the help.'
-  },
-  {
-    title: '-v, --version',
-    desc: 'Prints the version.'
-  }
-])(line)
-```
-
-Result:
-
-```bash
--h, --help                              
-    Prints the help.                    
-
--v, --version                           
-    Prints the version.                 
-```
-
-</details>
-</td>
+<th>Layout&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description (and Example)</th>
 </tr>
 <tr>
-<td><code>table(rowsList)(style)</code><br /><code>tableFrom(id)(rowsList)(style)</code></td>
+<td><code>layout(functions)(style)</code></td>
 <td>
 <details>
 <summary>
-Takes a rows list with each row holding a number of strings equal to the number of columns.
-The style parameter must have a <code>cols</code> key with a number of style objects equal to the number of columns.
-The strings in each row are formatted according to the defined columns.
-If a string surpasses the width of a column, its remaining words are printed in the following rows.
+Groups several layout DSL functions together.
 </summary>
 
 <br />
-
-```js
-const table = tableFrom('cols')
-```
 
 Example:
 
 ```js
 const style = {
-  cols: [
-    {width: 10, padEnd: 2},
-    {width: 28}
-  ]
+  line: {width: 40}
 }
 
-table([
-  [
-    '-v, --version',
-    'Prints the version.'
-  ],
-  [
-    '-h, --help',
-    'Prints the help.'
-  ]
+layout([
+  line('First line'),
+  line('Last line')
 ])(style)
 ```
 
 Result:
 
 ```bash
--v,         Prints the version.         
---version                                    
--h, --help  Prints the help.            
+First line                              
+Last line                               
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>layoutMap(f)(itemsList)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes a list of strings and a function <code>f</code>,
+which is applied to each string and is expected to return a layout function.
+The strings are then formatted according to f.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  line: {width: 40},
+  desc: {padStart: 3, width: 37}
+}
+
+const itemsList = [
+  [
+    '-h, --help',
+    'Prints the help.'
+  ],
+  [
+    '-v, --version',
+    'Prints the version.'
+  ]
+]
+
+const f = ([title, desc]) => [
+  text(title),
+  textFrom('desc')(desc)
+]
+
+layoutMap(f)(itemsList)(style)
+```
+
+Result:
+
+```bash
+-h, --help                              
+   Prints the help.                     
+-v, --version                           
+   Prints the version.                  
 ```
 
 </details>
@@ -881,60 +937,6 @@ Shargs includes the following usage functions:
 <tr>
 <th>Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description (and Example)</th>
-</tr>
-<tr>
-<td><code>usage(functions)(opts)(style)</code></td>
-<td>
-<details>
-<summary>
-Groups several usage DSL functions together.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
-
-const style = {
-  line: {width: 40},
-  cols: [
-    {width: 10, padEnd: 2},
-    {width: 28}
-  ]
-}
-
-usage([
-  synopsis('deepThought'),
-  space,
-  optsList,
-  space,
-  note('Deep Thought was created to come up with the Answer.')
-])(opts)(style)
-```
-
-Result:
-
-```bash
-deepThought [-a|--answer] [-h|--help]   
-            [--version]                 
-                                        
--a,         The answer. [number]        
---answer                                
--h, --help  Prints help. [flag]         
---version   Prints version. [flag]      
-                                        
-Deep Thought was created to come up with
-the Answer.                             
-```
-
-</details>
-</td>
 </tr>
 <tr>
 <td><code>note(string)(opts)(style)</code><br /><code>noteFrom(id)(string)(opts)(style)</code></td>
@@ -1008,6 +1010,101 @@ Result:
 ```bash
 Deep Thought answered                   
 The Ultimate Question.                  
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>optsDefs(opts)(style)</code><br /><code>optsDefsFrom(id1, id2)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints a definition list, with the command-line option <code>args</code> as title
+and the <code>desc</code> key as text.
+</summary>
+
+<br />
+
+```js
+const optsDefs = optsDefsFrom('line', 'desc')
+```
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  line: {width: 40},
+  desc: {padStart: 4, width: 36}
+}
+
+optsDefs(opts)(style)
+```
+
+Result:
+
+```bash
+-a, --answer [number]                   
+    The answer.                         
+
+-h, --help [flag]                       
+    Prints help.                        
+
+--version [flag]                        
+    Prints version.                     
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>optsList(opts)(style)</code><br /><code>optsListFrom(id)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints a table with two columns:
+The command-line option's <code>args</code> in the left,
+and the <code>desc</code> key in the right column.
+</summary>
+
+<br />
+
+```js
+const optsList = optsListFrom('cols')
+```
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  cols: [
+    {width: 10, padEnd: 2},
+    {width: 28}
+  ]
+}
+
+optsList(opts)(style)
+```
+
+Result:
+
+```bash
+-a,         The answer. [number]        
+--answer                                
+-h, --help  Prints help. [flag]         
+--version   Prints version. [flag]      
 ```
 
 </details>
@@ -1097,103 +1194,6 @@ The Ultimate Question.
 </td>
 </tr>
 <tr>
-<td><code>optsDefs(opts)(style)</code><br /><code>optsDefsFrom(id)(opts)(style)</code></td>
-<td>
-<details>
-<summary>
-Prints a definition list, with the command-line option <code>args</code> as title
-and the <code>desc</code> key as text.
-</summary>
-
-<br />
-
-```js
-const optsDefs = optsDefsFrom('defs')
-```
-
-Example:
-
-```js
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
-
-const style = {
-  defs: {
-    title: {width: 40},
-    desc: {padStart: 4, width: 36}
-  }
-}
-
-optsDefs(opts)(style)
-```
-
-Result:
-
-```bash
--a, --answer [number]                   
-    The answer.                         
-
--h, --help [flag]                       
-    Prints help.                        
-
---version [flag]                        
-    Prints version.                     
-```
-
-</details>
-</td>
-</tr>
-<tr>
-<td><code>optsList(opts)(style)</code><br /><code>optsListFrom(id)(opts)(style)</code></td>
-<td>
-<details>
-<summary>
-Prints a table with two columns:
-The command-line option's <code>args</code> in the left,
-and the <code>desc</code> key in the right column.
-</summary>
-
-<br />
-
-```js
-const optsList = optsListFrom('cols')
-```
-
-Example:
-
-```js
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
-
-const style = {
-  cols: [
-    {width: 10, padEnd: 2},
-    {width: 28}
-  ]
-}
-
-optsList(opts)(style)
-```
-
-Result:
-
-```bash
--a,         The answer. [number]        
---answer                                
--h, --help  Prints help. [flag]         
---version   Prints version. [flag]      
-```
-
-</details>
-</td>
-</tr>
-<tr>
 <td><code>synopsis(start, end)(opts)(style)</code><br /><code>synopsisFrom(id)(start, end)(opts)(style)</code></td>
 <td>
 <details>
@@ -1237,6 +1237,69 @@ deepThought [-a|--answer] [-h|--help]
 </tr>
 </table>
 
+Usage functions can be combined with the following usage combinators:
+
+<table>
+<tr>
+<th>Usage&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description (and Example)</th>
+</tr>
+<tr>
+<td><code>usage(functions)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Groups several usage DSL functions together.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  line: {width: 40},
+  cols: [
+    {width: 10, padEnd: 2},
+    {width: 28}
+  ]
+}
+
+usage([
+  synopsis('deepThought'),
+  space,
+  optsList,
+  space,
+  note('Deep Thought was created to come up with the Answer.')
+])(opts)(style)
+```
+
+Result:
+
+```bash
+deepThought [-a|--answer] [-h|--help]   
+            [--version]                 
+                                        
+-a,         The answer. [number]        
+--answer                                
+-h, --help  Prints help. [flag]         
+--version   Prints version. [flag]      
+                                        
+Deep Thought was created to come up with
+the Answer.                             
+```
+
+</details>
+</td>
+</tr>
+</table>
+
 #### Usage Decorators DSL
 
 Sometimes you want to pass only a portion of the command-line options to a usage function.
@@ -1261,15 +1324,20 @@ const decoratedDocs = usage([
 by using the `onlyCommands` and `noCommands` decorators to filter relevant options.
 Shargs includes the following usage decorators:
 
-| Usage&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
-|---------------------------------------------|----------------------------------------------------------------------------------------|
-| `decorate(decorators)(usageFunction)(opts)` | Combines several usage decorators to one decorator.                                    |
-| `justArgs(array)(usageFunction)(opts)`      | Takes an array of args and keeps only those `opts` that have an arg in the args array. |
-| `noCommands(usageFunction)(opts)`           | Filters out all commands from `opts`.                                                  |
-| `onlyCommands(usageFunction)(opts)`         | Keeps only commands in `opts`.                                                         |
-| `onlyFirstArg(usageFunction)(opts)`         | Keeps only the first arg from each opt.                                                |
-| `optsFilter(p)(usageFunction)(opts)`        | Applies `filter` to the `opts` array using a predicate `p`.                            |
-| `optsMap(f)(usageFunction)(opts)`           | Applies `map` to the `opts` array using a function `f`.                                |
+| Usage&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
+|----------------------------------------|----------------------------------------------------------------------------------------|
+| `justArgs(array)(usageFunction)(opts)` | Takes an array of args and keeps only those `opts` that have an arg in the args array. |
+| `noCommands(usageFunction)(opts)`      | Filters out all commands from `opts`.                                                  |
+| `onlyCommands(usageFunction)(opts)`    | Keeps only commands in `opts`.                                                         |
+| `onlyFirstArg(usageFunction)(opts)`    | Keeps only the first arg from each opt.                                                |
+| `optsFilter(p)(usageFunction)(opts)`   | Applies `filter` to the `opts` array using a predicate `p`.                            |
+| `optsMap(f)(usageFunction)(opts)`      | Applies `map` to the `opts` array using a function `f`.                                |
+
+Usage decorator functions can be combined with the following usage decorator combinators:
+
+| Usage&nbsp;Decorator&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
+|---------------------------------------------|-----------------------------------------------------|
+| `decorate(decorators)(usageFunction)(opts)` | Combines several usage decorators to one decorator. |
 
 ### Combining Options, Parser, and Usage Documentation
 

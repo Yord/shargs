@@ -1,6 +1,6 @@
 const {anything, array, assert, base64, property} = require('fast-check')
 const option = require('./option')
-const {noArgumentProvidedInOption, noArgumentsProvidedInOption} = require('../errors')
+const {noArgumentProvidedInOption, noArgumentsProvidedInOption} = require('../../errors')
 
 test('option transforms arguments DSL into options DSL', () => {
   const optionsArguments = base64().chain(key =>

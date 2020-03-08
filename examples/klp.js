@@ -112,10 +112,10 @@ const options = [
 
 const opts = [...commands, ...stages, ...options]
 
-const usage                    = require('../src/usage')
+const usage                    = require('../src/help/usage/combinators/usage')
 const {note, noteFrom}         = require('../src/help/usage/note')
 const {notesFrom}              = require('../src/help/usage/notes')
-const {optsDefs}               = require('../src/help/usage/optsDefs')
+const {optsDefsFrom}           = require('../src/help/usage/optsDefs')
 const {optsList, optsListFrom} = require('../src/help/usage/optsList')
 const {space}                  = require('../src/help/usage/space')
 const {synopsis}               = require('../src/help/usage/synopsis')
@@ -136,7 +136,7 @@ const help = usage([
         space,
         noteFrom('commandsOpts')(`"${o.args.join('')}" ${o.desc}`),
         space,
-        () => optsDefs(o.opts)
+        () => optsDefsFrom('title', 'desc')(o.opts)
       ])
     ])
   )(opts),
@@ -167,10 +167,8 @@ const style = {
     {padStart: 4, width: 13, padEnd: 2},
     {width: width - 4 - 13 - 2}
   ],
-  defs: {
-    title: {padStart: 12, width: width - 12},
-    desc:  {padStart: 16, width: width - 16}
-  },
+  title: {padStart: 12, width: width - 12},
+  desc:  {padStart: 16, width: width - 16},
   stages: [
     {padStart: 4, width: 9, padEnd: 2},
     {width: width - 4 - 9 - 2}

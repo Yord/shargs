@@ -1,4 +1,4 @@
-const parser            = require('../src/parser')
+const parser            = require('../src/parser/combinators/parser')
 const toArgs            = require('../src/parser/toArgs')
 const toOpts            = require('../src/parser/toOpts')
 const splitShortOptions = require('../src/parser/argv/splitShortOptions')
@@ -43,10 +43,10 @@ console.log('fooParser', JSON.stringify(res, null, 2))
 
 
 
-const layout                   = require('../src/layout')
-const usage                    = require('../src/usage')
-const decorate                 = require('../src/decorate')
+const usage                    = require('../src/help/usage/combinators/usage')
+const decorate                 = require('../src/help/usage/decorators/combinators/decorate')
 
+const layout                   = require('../src/help/layout/combinators/layout')
 const {br}                     = require('../src/help/layout/br')
 const {brs}                    = require('../src/help/layout/brs')
 const {cols}                   = require('../src/help/layout/cols')
@@ -515,11 +515,11 @@ const exCStyle = {
     {padStart: 3, width: 11},
     {width: 66}
   ],
-  defs: {
-    title: {padStart:  6, width: 74},
-    desc:  {padStart: 10, width: 70}
+  desc: {
+    padStart: 10,
+    width: 70
   },
-  h1: {
+  h1:   {
     padStart: 0,
     width: 80
   },
@@ -647,22 +647,22 @@ const exC2 = layout([
   br,
   textFrom('h1')('OPTIONS'),
   defs([
-    {
-      title: '-f, --force [flag]',
-      desc:  'Force renaming or moving of a file even if the target exists'
-    },
-    {
-      title: '-k [flag]',
-      desc:  'Skip move or rename actions which would lead to an error condition. An error happens when a source is neither existing nor controlled by Git, or when it would overwrite an existing file unless -f is given.'
-    },
-    {
-      title: '-n, --dry-run [flag]',
-      desc:  'Do nothing; only show what would happen'
-    },
-    {
-      title: '-v, --verbose [flag]',
-      desc:  'Report the names of files as they are moved.'
-    }
+    [
+      '-f, --force [flag]',
+      'Force renaming or moving of a file even if the target exists'
+    ],
+    [
+      '-k [flag]',
+      'Skip move or rename actions which would lead to an error condition. An error happens when a source is neither existing nor controlled by Git, or when it would overwrite an existing file unless -f is given.'
+    ],
+    [
+      '-n, --dry-run [flag]',
+      'Do nothing; only show what would happen'
+    ],
+    [
+      '-v, --verbose [flag]',
+      'Report the names of files as they are moved.'
+    ]
   ]),
   textFrom('h1')('SUBMODULES'),
   text('Moving a submodule using a gitfile (which means they were cloned with a Git version 1.7.8 or newer) will update the gitfile and core.worktree setting to make the submodule work in the new location. It also will attempt to update the submodule.<name>.path setting in the gitmodules(5) file and stage that file (unless -n is used).'),
@@ -882,138 +882,6 @@ console.log('exD1  === exD2',  exD1  === exD2)
 }())
 
 ;(function () {
-  const style = {
-    line: {width: 40}
-  }
-  
-  
-  const text = layout([
-    line('First line'),
-    line('Last line')
-  ])(style)
-
-  console.log(text)
-}())
-
-;(function () {
-  const style = {
-    line: {width: 40}
-  }
-
-  const text = layout([
-    line('First line'),
-    br,
-    line('Last line')
-  ])(style)
-
-  console.log(text)
-}())
-
-;(function () {
-  const style = {line: {width: 40}}
-  
-  const text = layout([
-    line('First line'),
-    brs(2),
-    line('Last line')
-  ])(style)
-
-  console.log(text)
-}())
-
-;(function () {
-  const style = {cols: [{width: 15}, {width: 25}]}
-  
-  const text = cols([
-    [
-      '-h, --help',
-      '-v, --version'
-    ],
-    [
-      'Prints the help.',
-      'Prints the version.'
-    ]
-  ])(style)
-
-  console.log(text)
-}())
-
-;(function () {
-  const style = {defs: {title: {width: 40}, desc: {padStart: 3, width: 37}}}
-  
-  const text = defs([
-    {
-      title: '-h, --help',
-      desc: 'Prints the help.'
-    },
-    {
-      title: '-v, --version',
-      desc: 'Prints the version.'
-    }
-  ])(style)
-
-  console.log(text)
-}())
-
-;(function () {
-  const style = {
-    line: {width: 40}
-  }
-  
-  const text = lines([
-    'First line',
-    'Last line'
-  ])(style)
-
-  console.log(text)
-}())
-
-;(function () {
-  const style = {
-    cols: [
-      {width: 15},
-      {width: 25}
-    ]
-  }
-  
-  const text = table([
-    [
-      '-h, --help',
-      'Prints the help.'
-    ],
-    [
-      '-v, --version',
-      'Prints the version.'
-    ]
-  ])(style)
-
-  console.log(text)
-}())
-
-;(function () {
-  const style = {
-    line: {width: 40}
-  }
-  
-  const foo = text('Deep Thought was created to come up with the Answer.')(style)
-
-  console.log(foo)
-}())
-
-;(function () {
-  const style = {
-    line: {width: 40}
-  }
-  
-  const foo = texts([
-    'Deep Thought was created to come up with the Answer.',
-    'To The Ultimate Question of Life, the Universe, and Everything.'
-  ])(style)
-
-  console.log(foo)
-}())
-
-;(function () {
   const opts = [
     number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
     flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
@@ -1021,10 +889,8 @@ console.log('exD1  === exD2',  exD1  === exD2)
   ]
   
   const style = {
-    defs: {
-      title: {width: 40},
-      desc: {padStart: 4, width: 36}
-    }
+    line: {width: 40},
+    desc: {padStart: 4, width: 36}
   }
   
   const foo = optsDefs(opts)(style)
