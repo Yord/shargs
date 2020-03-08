@@ -122,3 +122,29 @@ const {synopsis} = require('../src/help/usage/synopsis')
 
   console.log(res)
 }())
+
+;(function () {
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+  
+  const style = {
+    line: {width: 40},
+    cols: [
+      {width: 10, padEnd: 2},
+      {width: 28}
+    ]
+  }
+  
+  const res = usage([
+    synopsis('deepThought'),
+    space,
+    optsList,
+    space,
+    note('Deep Thought was created to come up with the Answer.')
+  ])(opts)(style)
+
+  console.log(res)
+}())
