@@ -1016,89 +1016,6 @@ The Ultimate Question.
 </td>
 </tr>
 <tr>
-<td><code>space(opts)(style)</code><br /><code>spaceFrom(id)(opts)(style)</code></td>
-<td>
-<details>
-<summary>
-Introduces a single blank line.
-</summary>
-
-<br />
-
-```js
-const space = spaceFrom('line')
-```
-
-Example:
-
-```js
-const opts = []
-
-const style = {
-  line: {width: 40}
-}
-
-usage([
-  note('Deep Thought answered'),
-  space,
-  note('The Ultimate Question.')
-])(opts)(style)
-```
-
-Result:
-
-```bash
-Deep Thought answered                   
-                                        
-The Ultimate Question.                  
-```
-
-</details>
-</td>
-</tr>
-<tr>
-<td><code>spaces(length)(opts)(style)</code><br /><code>spacesFrom(id)(length)(opts)(style)</code></td>
-<td>
-<details>
-<summary>
-Introduces several blank lines with the number defined by the length parameter.
-</summary>
-
-<br />
-
-```js
-const spaces = spacesFrom('line')
-```
-
-Example:
-
-```js
-const opts = []
-
-const style = {
-  line: {width: 40}
-}
-
-usage([
-  note('Deep Thought answered'),
-  spaces(2),
-  note('The Ultimate Question.')
-])(opts)(style)
-```
-
-Result:
-
-```bash
-Deep Thought answered                   
-                                        
-                                        
-The Ultimate Question.                  
-```
-
-</details>
-</td>
-</tr>
-<tr>
 <td><code>optsDefs(opts)(style)</code><br /><code>optsDefsFrom(id1, id2)(opts)(style)</code></td>
 <td>
 <details>
@@ -1188,6 +1105,89 @@ Result:
 --answer                                
 -h, --help  Prints help. [flag]         
 --version   Prints version. [flag]      
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>space(opts)(style)</code><br /><code>spaceFrom(id)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Introduces a single blank line.
+</summary>
+
+<br />
+
+```js
+const space = spaceFrom('line')
+```
+
+Example:
+
+```js
+const opts = []
+
+const style = {
+  line: {width: 40}
+}
+
+usage([
+  note('Deep Thought answered'),
+  space,
+  note('The Ultimate Question.')
+])(opts)(style)
+```
+
+Result:
+
+```bash
+Deep Thought answered                   
+                                        
+The Ultimate Question.                  
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>spaces(length)(opts)(style)</code><br /><code>spacesFrom(id)(length)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Introduces several blank lines with the number defined by the length parameter.
+</summary>
+
+<br />
+
+```js
+const spaces = spacesFrom('line')
+```
+
+Example:
+
+```js
+const opts = []
+
+const style = {
+  line: {width: 40}
+}
+
+usage([
+  note('Deep Thought answered'),
+  spaces(2),
+  note('The Ultimate Question.')
+])(opts)(style)
+```
+
+Result:
+
+```bash
+Deep Thought answered                   
+                                        
+                                        
+The Ultimate Question.                  
 ```
 
 </details>
@@ -1326,13 +1326,18 @@ Shargs includes the following usage decorators:
 
 | Usage&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
 |---------------------------------------------|----------------------------------------------------------------------------------------|
-| `decorate(decorators)(usageFunction)(opts)` | Combines several usage decorators to one decorator.                                    |
 | `justArgs(array)(usageFunction)(opts)`      | Takes an array of args and keeps only those `opts` that have an arg in the args array. |
 | `noCommands(usageFunction)(opts)`           | Filters out all commands from `opts`.                                                  |
 | `onlyCommands(usageFunction)(opts)`         | Keeps only commands in `opts`.                                                         |
 | `onlyFirstArg(usageFunction)(opts)`         | Keeps only the first arg from each opt.                                                |
 | `optsFilter(p)(usageFunction)(opts)`        | Applies `filter` to the `opts` array using a predicate `p`.                            |
 | `optsMap(f)(usageFunction)(opts)`           | Applies `map` to the `opts` array using a function `f`.                                |
+
+Usage decorator functions can be combined with the following usage decorator combinators:
+
+| Usage&nbsp;Decorator&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
+|---------------------------------------------|-----------------------------------------------------|
+| `decorate(decorators)(usageFunction)(opts)` | Combines several usage decorators to one decorator. |
 
 ### Combining Options, Parser, and Usage Documentation
 
