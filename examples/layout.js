@@ -1,4 +1,4 @@
-const layout  = require('../src/layout')
+const layout  = require('../src/help/layout/combinators/layout')
 
 const {br}    = require('../src/help/layout/br')
 const {brs}   = require('../src/help/layout/brs')

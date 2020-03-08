@@ -1,4 +1,4 @@
-const layout     = require('../../layout')
+const layout     = require('./combinators/layout')
 const {lineFrom} = require('./line')
 
 const linesFrom = id => (strings = []) => layout(

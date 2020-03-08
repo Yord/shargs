@@ -1,4 +1,4 @@
-const layout   = require('../../layout')
+const layout   = require('./combinators/layout')
 const {brFrom} = require('./br')
 
 const brsFrom = id => (length = 1) => layout(
