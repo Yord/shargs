@@ -1,3 +1,3 @@
-module.exports = (toStrings = []) => (style = {}) => (
-  toStrings.map(toString => toString(style)).join('')
+module.exports = (functions = []) => (style = {}) => (
+  functions.map(f => f(style)).join('')
 )
