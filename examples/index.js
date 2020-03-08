@@ -1,4 +1,4 @@
-const parser            = require('../src/parser')
+const parser            = require('../src/parser/combinators/parser')
 const toArgs            = require('../src/parser/toArgs')
 const toOpts            = require('../src/parser/toOpts')
 const splitShortOptions = require('../src/parser/argv/splitShortOptions')
