@@ -346,32 +346,24 @@ There are five stages of parser functions:
 The stages must always be applied in the given order,
 while functions from the same stage may be supplied in any order that makes sense for the parser.
 
-#### `argv` Parser Functions
-
 The following parser functions are available for the `argv` stage:
 
-| Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
-|-----------------------------------|-----------------------------------------------------------------------------------------------------------------|
-| `splitShortOptions({errs, argv})` | Splits argument groups of shape `-vs` to `-v -s`. Only works if the arguments are preceded by a single dash.    |
-
-#### `opts` Parser Functions
+| `argv`&nbsp;Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
+|-----------------------------------|----------------------------------------------------------------------------------------------------------------|
+| `splitShortOptions({errs, argv})` | Splits argument groups of shape `-vs` to `-v -s`. Only works if argument groups are preceded by a single dash. |
 
 The following parser functions are available for the `opts` stage:
 
-| Parser&nbsp;Function           | Description                                                            |
-|--------------------------------|------------------------------------------------------------------------|
-| `cast({errs, opts})`           | Casts all `values` according to the options' types.                    |
-| `restrictToOnly({errs, opts})` | Records an error if the `values` are not contained in the `only` list. |
-
-#### `args` Parser Functions
+| `opts`&nbsp;Parser&nbsp;Function | Description                                                            |
+|----------------------------------|------------------------------------------------------------------------|
+| `cast({errs, opts})`             | Casts all `values` according to the options' types.                    |
+| `restrictToOnly({errs, opts})`   | Records an error if the `values` are not contained in the `only` list. |
 
 The following parser functions are available for the `args` stage:
 
-| Parser&nbsp;Function      | Description                           |
-|---------------------------|---------------------------------------|
-| `emptyRest({errs, args})` | Removes all entries from the `_` key. |
-
-#### Parser Function Combinators
+| `args`&nbsp;Parser&nbsp;Function | Description                           |
+|----------------------------------|---------------------------------------|
+| `emptyRest({errs, args})`        | Removes all entries from the `_` key. |
 
 Parser functions can be combined with `parser`:
 
