@@ -470,17 +470,13 @@ const style = {
   line: {width: 40}
 }
 
-layout([
-  line('First line'),
-  line('Last line')
-])(style)
+line('A line')(style)
 ```
 
 Result:
 
 ```bash
-First line                              
-Last line                               
+A line                              
 ```
 
 </details>
