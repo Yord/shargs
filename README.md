@@ -939,60 +939,6 @@ Shargs includes the following usage functions:
 <th>Description (and Example)</th>
 </tr>
 <tr>
-<td><code>usage(functions)(opts)(style)</code></td>
-<td>
-<details>
-<summary>
-Groups several usage DSL functions together.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
-
-const style = {
-  line: {width: 40},
-  cols: [
-    {width: 10, padEnd: 2},
-    {width: 28}
-  ]
-}
-
-usage([
-  synopsis('deepThought'),
-  space,
-  optsList,
-  space,
-  note('Deep Thought was created to come up with the Answer.')
-])(opts)(style)
-```
-
-Result:
-
-```bash
-deepThought [-a|--answer] [-h|--help]   
-            [--version]                 
-                                        
--a,         The answer. [number]        
---answer                                
--h, --help  Prints help. [flag]         
---version   Prints version. [flag]      
-                                        
-Deep Thought was created to come up with
-the Answer.                             
-```
-
-</details>
-</td>
-</tr>
-<tr>
 <td><code>note(string)(opts)(style)</code><br /><code>noteFrom(id)(string)(opts)(style)</code></td>
 <td>
 <details>
@@ -1284,6 +1230,69 @@ Result:
 ```bash
 deepThought [-a|--answer] [-h|--help]   
             [--version]                 
+```
+
+</details>
+</td>
+</tr>
+</table>
+
+Usage functions can be combined with the following usage combinators:
+
+<table>
+<tr>
+<th>Usage&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description (and Example)</th>
+</tr>
+<tr>
+<td><code>usage(functions)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Groups several usage DSL functions together.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  line: {width: 40},
+  cols: [
+    {width: 10, padEnd: 2},
+    {width: 28}
+  ]
+}
+
+usage([
+  synopsis('deepThought'),
+  space,
+  optsList,
+  space,
+  note('Deep Thought was created to come up with the Answer.')
+])(opts)(style)
+```
+
+Result:
+
+```bash
+deepThought [-a|--answer] [-h|--help]   
+            [--version]                 
+                                        
+-a,         The answer. [number]        
+--answer                                
+-h, --help  Prints help. [flag]         
+--version   Prints version. [flag]      
+                                        
+Deep Thought was created to come up with
+the Answer.                             
 ```
 
 </details>
