@@ -551,6 +551,55 @@ Result:
 </td>
 </tr>
 <tr>
+<td><code>defs(rowsList)(style)</code><br /><code>defsFrom(id1, id2)(rowsList)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes a list of title/desc row pairs.
+Prints the title as a <code>text</code> before printing the desc as a <code>text</code>.
+Title and text may be assigned different style ids.
+</summary>
+
+<br />
+
+```js
+const defs = defsFrom('line', 'desc')
+```
+
+Example:
+
+```js
+const style = {
+  line: {width: 40},
+  desc: {padStart: 4, width: 36}
+}
+
+defs([
+  [
+    '-h, --help',
+    'Prints the help.'
+  ],
+  [
+    '-v, --version',
+    'Prints the version.'
+  ]
+])(line)
+```
+
+Result:
+
+```bash
+-h, --help                              
+    Prints the help.                    
+
+-v, --version                           
+    Prints the version.                 
+```
+
+</details>
+</td>
+</tr>
+<tr>
 <td><code>line(string)(style)</code><br /><code>lineFrom(id)(string)(style)</code></td>
 <td>
 <details>
@@ -617,55 +666,6 @@ Result:
 ```bash
 First line                              
 Last line                               
-```
-
-</details>
-</td>
-</tr>
-<tr>
-<td><code>defs(rowsList)(style)</code><br /><code>defsFrom(id1, id2)(rowsList)(style)</code></td>
-<td>
-<details>
-<summary>
-Takes a list of title/desc row pairs.
-Prints the title as a <code>text</code> before printing the desc as a <code>text</code>.
-Title and text may be assigned different style ids.
-</summary>
-
-<br />
-
-```js
-const defs = defsFrom('line', 'desc')
-```
-
-Example:
-
-```js
-const style = {
-  line: {width: 40},
-  desc: {padStart: 4, width: 36}
-}
-
-defs([
-  [
-    '-h, --help',
-    'Prints the help.'
-  ],
-  [
-    '-v, --version',
-    'Prints the version.'
-  ]
-])(line)
-```
-
-Result:
-
-```bash
--h, --help                              
-    Prints the help.                    
-
--v, --version                           
-    Prints the version.                 
 ```
 
 </details>
