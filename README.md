@@ -417,109 +417,6 @@ Shargs includes the following layout functions:
 <th>Description (and Example)</th>
 </tr>
 <tr>
-<td><code>layout(functions)(style)</code></td>
-<td>
-<details>
-<summary>
-Groups several layout DSL functions together.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const style = {
-  line: {width: 40}
-}
-
-layout([
-  line('First line'),
-  line('Last line')
-])(style)
-```
-
-Result:
-
-```bash
-First line                              
-Last line                               
-```
-
-</details>
-</td>
-</tr>
-<tr>
-<td><code>line(string)(style)</code><br /><code>lineFrom(id)(string)(style)</code></td>
-<td>
-<details>
-<summary>
-Prints the string with a line break at the end. Takes the line width from style and pads with spaces at the end. If the string is too long to fit the line's width, it is cut off.
-</summary>
-
-<br />
-
-```js
-const line = lineFrom('line')
-```
-
-Example:
-
-```js
-const style = {
-  line: {width: 40}
-}
-
-line('A line')(style)
-```
-
-Result:
-
-```bash
-A line                              
-```
-
-</details>
-</td>
-</tr>
-<tr>
-<td><code>lines(strings)(style)</code><br /><code>linesFrom(id)(strings)(style)</code></td>
-<td>
-<details>
-<summary>
-Prints several strings using the <code>line</code> function for each.
-</summary>
-
-<br />
-
-```js
-const lines = linesFrom('line')
-```
-
-Example:
-
-```js
-const style = {
-  line: {width: 40}
-}
-
-lines([
-  'First line',
-  'Last line'
-])(style)
-```
-
-Result:
-
-```bash
-First line                              
-Last line                               
-```
-
-</details>
-</td>
-</tr>
-<tr>
 <td><code>br(style)</code><br /><code>brFrom(id)(style)</code></td>
 <td>
 <details>
@@ -648,18 +545,19 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>text(string)(style)</code><br /><code>textFrom(id)(string)(style)</code></td>
+<td><code>line(string)(style)</code><br /><code>lineFrom(id)(string)(style)</code></td>
 <td>
 <details>
 <summary>
-Text acts much like <code>line</code>, but does not cut off strings that surpass a line's width.
-Instead, it splits the string by words and adds new lines with the remaining words.
+Prints the string with a line break at the end.
+Takes the line width from style and pads with spaces at the end.
+If the string is too long to fit the line's width, it is cut off.
 </summary>
 
 <br />
 
 ```js
-const text = textFrom('line')
+const line = lineFrom('line')
 ```
 
 Example:
@@ -669,33 +567,30 @@ const style = {
   line: {width: 40}
 }
 
-text(
-  'Deep Thought was created to come up with the Answer.'
-)(style)
+line('A line')(style)
 ```
 
 Result:
 
 ```bash
-Deep Thought was created to come up with
-the Answer.                             
+A line                              
 ```
 
 </details>
 </td>
 </tr>
 <tr>
-<td><code>texts(strings)(style)</code><br /><code>textsFrom(id)(strings)(style)</code></td>
+<td><code>lines(strings)(style)</code><br /><code>linesFrom(id)(strings)(style)</code></td>
 <td>
 <details>
 <summary>
-Takes several strings and applies the <code>text</code> function to each.
+Prints several strings using the <code>line</code> function for each.
 </summary>
 
 <br />
 
 ```js
-const texts = textsFrom('line')
+const lines = linesFrom('line')
 ```
 
 Example:
@@ -705,18 +600,17 @@ const style = {
   line: {width: 40}
 }
 
-texts([
-  'Deep Thought was created to come up with the Answer.',
-  'To The Ultimate Question.'
+lines([
+  'First line',
+  'Last line'
 ])(style)
 ```
 
 Result:
 
 ```bash
-Deep Thought was created to come up with
-the Answer.                             
-To The Ultimate Question.
+First line                              
+Last line                               
 ```
 
 </details>
@@ -727,9 +621,9 @@ To The Ultimate Question.
 <td>
 <details>
 <summary>
-Takes a list of definitions with each definition being an object with a <code>title</code> and a <code>desc</code> key.
+Takes a list of title/desc row pairs.
 Prints the title as a <code>text</code> before printing the desc as a <code>text</code>.
-The style parameter must have a <code>defs</code> key that holds an object with <code>title</code> and <code>desc</code> keys that each hold a style object.
+Title and text may be assigned different style ids.
 </summary>
 
 <br />
@@ -816,6 +710,174 @@ Result:
 -v,         Prints the version.         
 --version                                    
 -h, --help  Prints the help.            
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>text(string)(style)</code><br /><code>textFrom(id)(string)(style)</code></td>
+<td>
+<details>
+<summary>
+Text acts much like <code>line</code>, but does not cut off strings that surpass a line's width.
+Instead, it splits the string by words and adds new lines with the remaining words.
+</summary>
+
+<br />
+
+```js
+const text = textFrom('line')
+```
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+text(
+  'Deep Thought was created to come up with the Answer.'
+)(style)
+```
+
+Result:
+
+```bash
+Deep Thought was created to come up with
+the Answer.                             
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>texts(strings)(style)</code><br /><code>textsFrom(id)(strings)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes several strings and applies the <code>text</code> function to each.
+</summary>
+
+<br />
+
+```js
+const texts = textsFrom('line')
+```
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+texts([
+  'Deep Thought was created to come up with the Answer.',
+  'To The Ultimate Question.'
+])(style)
+```
+
+Result:
+
+```bash
+Deep Thought was created to come up with
+the Answer.                             
+To The Ultimate Question.
+```
+
+</details>
+</td>
+</tr>
+</table>
+
+The layout functions can be combined with the following layout combinators:
+
+<table>
+<tr>
+<th>Layout&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description (and Example)</th>
+</tr>
+<tr>
+<td><code>layout(functions)(style)</code></td>
+<td>
+<details>
+<summary>
+Groups several layout DSL functions together.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+layout([
+  line('First line'),
+  line('Last line')
+])(style)
+```
+
+Result:
+
+```bash
+First line                              
+Last line                               
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>layoutMap(f)(itemsList)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes a list of strings and a function <code>f</code>,
+which is applied to each string and is expected to return a layout function.
+The strings are then formatted according to f.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  line: {width: 40},
+  desc: {padStart: 3, width: 37}
+}
+
+const itemsList = [
+  [
+    '-h, --help',
+    'Prints the help.'
+  ],
+  [
+    '-v, --version',
+    'Prints the version.'
+  ]
+]
+
+const f = ([title, desc]) => [
+  text(title),
+  textFrom('desc')(desc)
+]
+
+layoutMap(f)(itemsList)(style)
+```
+
+Result:
+
+```bash
+-h, --help                              
+   Prints the help.                     
+-v, --version                           
+   Prints the version.                  
 ```
 
 </details>
