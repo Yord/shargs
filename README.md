@@ -723,7 +723,7 @@ To The Ultimate Question.
 </td>
 </tr>
 <tr>
-<td><code>defs(definitions)(style)</code><br /><code>defsFrom(id)(definitions)(style)</code></td>
+<td><code>defs(definitions)(style)</code><br /><code>defsFrom(id1, id2)(definitions)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -735,28 +735,26 @@ The style parameter must have a <code>defs</code> key that holds an object with 
 <br />
 
 ```js
-const defs = defsFrom('defs')
+const defs = defsFrom('line', 'desc')
 ```
 
 Example:
 
 ```js
 const style = {
-  defs: {
-    title: {width: 40},
-    desc: {padStart: 4, width: 36}
-  }
+  line: {width: 40},
+  desc: {padStart: 4, width: 36}
 }
 
 defs([
-  {
-    title: '-h, --help',
-    desc: 'Prints the help.'
-  },
-  {
-    title: '-v, --version',
-    desc: 'Prints the version.'
-  }
+  [
+    '-h, --help',
+    'Prints the help.'
+  ],
+  [
+    '-v, --version',
+    'Prints the version.'
+  ]
 ])(line)
 ```
 
@@ -1093,7 +1091,7 @@ The Ultimate Question.
 </td>
 </tr>
 <tr>
-<td><code>optsDefs(opts)(style)</code><br /><code>optsDefsFrom(id)(opts)(style)</code></td>
+<td><code>optsDefs(opts)(style)</code><br /><code>optsDefsFrom(id1, id2)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1104,7 +1102,7 @@ and the <code>desc</code> key as text.
 <br />
 
 ```js
-const optsDefs = optsDefsFrom('defs')
+const optsDefs = optsDefsFrom('line', 'desc')
 ```
 
 Example:
@@ -1117,10 +1115,8 @@ const opts = [
 ]
 
 const style = {
-  defs: {
-    title: {width: 40},
-    desc: {padStart: 4, width: 36}
-  }
+  line: {width: 40},
+  desc: {padStart: 4, width: 36}
 }
 
 optsDefs(opts)(style)
