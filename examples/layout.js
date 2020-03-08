@@ -14,19 +14,6 @@ const {texts} = require('../src/help/layout/texts')
   const style = {
     line: {width: 40}
   }
-  
-  const res = layout([
-    line('First line'),
-    line('Last line')
-  ])(style)
-
-  console.log(res)
-}())
-
-;(function () {
-  const style = {
-    line: {width: 40}
-  }
 
   const res = layout([
     line('First line'),
@@ -67,18 +54,28 @@ const {texts} = require('../src/help/layout/texts')
 }())
 
 ;(function () {
-  const style = {defs: {title: {width: 40}, desc: {padStart: 3, width: 37}}}
+  const style = {line: {width: 40}, desc: {padStart: 3, width: 37}}
   
   const res = defs([
-    {
-      title: '-h, --help',
-      desc: 'Prints the help.'
-    },
-    {
-      title: '-v, --version',
-      desc: 'Prints the version.'
-    }
+    [
+      '-h, --help',
+      'Prints the help.'
+    ],
+    [
+      '-v, --version',
+      'Prints the version.'
+    ]
   ])(style)
+
+  console.log(res)
+}())
+
+;(function () {
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = line('A line')(style)
 
   console.log(res)
 }())

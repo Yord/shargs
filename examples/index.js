@@ -515,11 +515,11 @@ const exCStyle = {
     {padStart: 3, width: 11},
     {width: 66}
   ],
-  defs: {
-    title: {padStart:  6, width: 74},
-    desc:  {padStart: 10, width: 70}
+  desc: {
+    padStart: 10,
+    width: 70
   },
-  h1: {
+  h1:   {
     padStart: 0,
     width: 80
   },
@@ -647,22 +647,22 @@ const exC2 = layout([
   br,
   textFrom('h1')('OPTIONS'),
   defs([
-    {
-      title: '-f, --force [flag]',
-      desc:  'Force renaming or moving of a file even if the target exists'
-    },
-    {
-      title: '-k [flag]',
-      desc:  'Skip move or rename actions which would lead to an error condition. An error happens when a source is neither existing nor controlled by Git, or when it would overwrite an existing file unless -f is given.'
-    },
-    {
-      title: '-n, --dry-run [flag]',
-      desc:  'Do nothing; only show what would happen'
-    },
-    {
-      title: '-v, --verbose [flag]',
-      desc:  'Report the names of files as they are moved.'
-    }
+    [
+      '-f, --force [flag]',
+      'Force renaming or moving of a file even if the target exists'
+    ],
+    [
+      '-k [flag]',
+      'Skip move or rename actions which would lead to an error condition. An error happens when a source is neither existing nor controlled by Git, or when it would overwrite an existing file unless -f is given.'
+    ],
+    [
+      '-n, --dry-run [flag]',
+      'Do nothing; only show what would happen'
+    ],
+    [
+      '-v, --verbose [flag]',
+      'Report the names of files as they are moved.'
+    ]
   ]),
   textFrom('h1')('SUBMODULES'),
   text('Moving a submodule using a gitfile (which means they were cloned with a Git version 1.7.8 or newer) will update the gitfile and core.worktree setting to make the submodule work in the new location. It also will attempt to update the submodule.<name>.path setting in the gitmodules(5) file and stage that file (unless -n is used).'),
@@ -889,10 +889,8 @@ console.log('exD1  === exD2',  exD1  === exD2)
   ]
   
   const style = {
-    defs: {
-      title: {width: 40},
-      desc: {padStart: 4, width: 36}
-    }
+    line: {width: 40},
+    desc: {padStart: 4, width: 36}
   }
   
   const foo = optsDefs(opts)(style)
