@@ -3,6 +3,7 @@ const {flag, number} = require('../src/options')
 const {note}     = require('../src/help/usage/note')
 const {notes}    = require('../src/help/usage/notes')
 const {optsDefs} = require('../src/help/usage/optsDefs')
+const {optsList} = require('../src/help/usage/optsList')
 
 ;(function () {
   const opts = []
@@ -46,6 +47,25 @@ const {optsDefs} = require('../src/help/usage/optsDefs')
   }
   
   const res = optsDefs(opts)(style)
+
+  console.log(res)
+}())
+
+;(function () {
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+  
+  const style = {
+    cols: [
+      {width: 10, padEnd: 2},
+      {width: 28}
+    ]
+  }
+  
+  const res = optsList(opts)(style)
 
   console.log(res)
 }())
