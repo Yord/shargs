@@ -1304,6 +1304,51 @@ the Answer.
 </details>
 </td>
 </tr>
+<tr>
+<td><code>usageMap(f)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes an options list and a function <code>f</code>,
+which is applied to each option and is expected to return a layout function.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  line: {width: 40},
+  desc: {padStart: 3, width: 37}
+}
+
+usageMap(({args, desc}) => layout([
+  text(args.join(', ')),
+  textFrom('desc')(desc)
+]))(opts)(style)
+```
+
+Result:
+
+```bash
+-a, --answer                            
+   The answer.                          
+-h, --help                              
+   Prints help.                         
+--version                               
+   Prints version.                      
+```
+
+</details>
+</td>
+</tr>
 </table>
 
 #### Usage Decorators DSL
