@@ -1,21 +1,26 @@
 const {defsFrom} = require('../layout/defs')
 
-const optsDefsFrom = (id1, id2) => (opts = []) => {
-  const items = (
+const optsDefsFrom = (id1, id2) => (opts = []) => (
+  defsFrom(id1, id2)(
     opts
-    .map(opt => ({types} = opt, Array.isArray(types) && types.length === 0 ? {...opt, types: ['flag']} : opt))
     .map(({args = [], desc = '', types}) => [
-      args.join(', ') + (types === null ? '' : ' [' + types.join(', ') + ']'),
+      args.join(', ') + typesLabel(types),
       desc
     ])
   )
-
-  return defsFrom(id1, id2)(items)
-}
+)
 
 const optsDefs = optsDefsFrom('line', 'desc')
 
 module.exports = {
   optsDefs,
   optsDefsFrom
+}
+
+function typesLabel (types) {
+  return (
+    types === null     ? '' :
+    types.length === 0 ? ' [flag]'
+                       : ' [' + types.join(', ') + ']'
+  )
 }
