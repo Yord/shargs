@@ -1,14 +1,19 @@
-const {flag, number} = require('../src/options')
+const {flag, number}   = require('../src/options')
 
-const usage      = require('../src/help/usage/combinators/usage')
+const layout           = require('../src/help/layout/combinators/layout')
 
-const {note}     = require('../src/help/usage/note')
-const {notes}    = require('../src/help/usage/notes')
-const {optsDefs} = require('../src/help/usage/optsDefs')
-const {optsList} = require('../src/help/usage/optsList')
-const {space}    = require('../src/help/usage/space')
-const {spaces}   = require('../src/help/usage/spaces')
-const {synopsis} = require('../src/help/usage/synopsis')
+const {text, textFrom} = require('../src/help/layout/text')
+
+const usage            = require('../src/help/usage/combinators/usage')
+const usageMap         = require('../src/help/usage/combinators/usageMap')
+
+const {note}           = require('../src/help/usage/note')
+const {notes}          = require('../src/help/usage/notes')
+const {optsDefs}       = require('../src/help/usage/optsDefs')
+const {optsList}       = require('../src/help/usage/optsList')
+const {space}          = require('../src/help/usage/space')
+const {spaces}         = require('../src/help/usage/spaces')
+const {synopsis}       = require('../src/help/usage/synopsis')
 
 ;(function () {
   const opts = []
@@ -145,6 +150,26 @@ const {synopsis} = require('../src/help/usage/synopsis')
     space,
     note('Deep Thought was created to come up with the Answer.')
   ])(opts)(style)
+
+  console.log(res)
+}())
+
+;(function () {
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+  
+  const style = {
+    line: {width: 40},
+    desc: {padStart: 3, width: 37}
+  }
+  
+  const res = usageMap(({args, desc, types}) => layout([
+    text(args.join(', ') + (types ? ' [' + types.join(', ') + ']' : '')),
+    textFrom('desc')(desc)
+  ]))(opts)(style)
 
   console.log(res)
 }())
