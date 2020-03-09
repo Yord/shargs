@@ -880,20 +880,3 @@ console.log('exD1  === exD2',  exD1  === exD2)
     console.log('The answer is: ' + args.answer)
   }
 }())
-
-;(function () {
-  const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
-  ]
-  
-  const style = {
-    line: {width: 40},
-    desc: {padStart: 4, width: 36}
-  }
-  
-  const foo = optsDefs(opts)(style)
-
-  console.log(foo)
-}())
