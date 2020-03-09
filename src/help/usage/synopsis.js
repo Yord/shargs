@@ -5,7 +5,7 @@ const synopsisFrom = id => (start = '', end = '') => (opts = []) => {
   const argsStrings = opts.map(argsString).join(' ')
 
   return STYLE => {
-    const width = STYLE.line.width
+    const width = (STYLE.line || {}).width || 80
     const style = {
       ...STYLE,
       synopsis: [
