@@ -166,8 +166,8 @@ const {synopsis}       = require('../src/help/usage/synopsis')
     desc: {padStart: 3, width: 37}
   }
   
-  const res = usageMap(({args, desc, types}) => layout([
-    text(args.join(', ') + (types ? ' [' + types.join(', ') + ']' : '')),
+  const res = usageMap(({args, desc}) => layout([
+    text(args.join(', ')),
     textFrom('desc')(desc)
   ]))(opts)(style)
 
