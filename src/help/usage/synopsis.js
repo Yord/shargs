@@ -8,18 +8,26 @@ const synopsisFrom = id => (start = '', end = '') => (opts = []) => {
     const width = STYLE.line.width
     const style = {
       ...STYLE,
-      cols: [
-        {width: Math.min(start.length, width), padEnd: start.length < width ? 1 : 0},
-        {width: start.length < width ? width - start.length - 1 : width}
+      synopsis: [
+        {
+          width: Math.min(start.length, width),
+          padEnd: start.length < width ? 1 : 0
+        },
+        {
+          width: start.length < width ? width - start.length - 1 : width
+        }
       ]
     }
-    return tableFrom(id)(
-      [[start, argsStrings + (end !== '' ? ' ' : '') + end]]
-    )(style)
+    return tableFrom(id)([
+      [
+        start,
+        argsStrings + (end !== '' ? ' ' : '') + end
+      ]
+    ])(style)
   }
 }
 
-const synopsis = synopsisFrom('cols')
+const synopsis = synopsisFrom('synopsis')
 
 module.exports = {
   synopsis,
