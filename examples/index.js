@@ -897,26 +897,3 @@ console.log('exD1  === exD2',  exD1  === exD2)
 
   console.log(foo)
 }())
-
-;(function () {
-  const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
-  ]
-  
-  const style = {
-    title: {width: 40},
-    desc: {padStart: 4, width: 36}
-  }
-
-  const optsMap = f => opts => layout(opts.map(f))
-  
-  const foo = optsMap(({args, desc, types}) => layout([
-    textFrom('title')(args.join(', ') + (types ? ' [' + types.join(', ') + ']' : '')),
-    textFrom('desc')(desc),
-    br
-  ]))(opts)(style)
-
-  console.log(foo)
-}())
