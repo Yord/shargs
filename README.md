@@ -1423,7 +1423,7 @@ Please report issues [in the tracker][issues]!
 ## Contributing
 
 We are open to, and grateful for, any contributions made by the community.
-By contributing to pixie, you agree to abide by the [code of conduct][code].
+By contributing to shargs, you agree to abide by the [code of conduct][code].
 Please read the [contributing guide][contribute].
 
 ## License
