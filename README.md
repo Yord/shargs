@@ -1376,13 +1376,13 @@ by using the `onlyCommands` and `noCommands` decorators to filter relevant optio
 Shargs includes the following usage decorators:
 
 | Usage&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
-|----------------------------------------|----------------------------------------------------------------------------------------|
-| `justArgs(array)(usageFunction)(opts)` | Takes an array of args and keeps only those `opts` that have an arg in the args array. |
-| `noCommands(usageFunction)(opts)`      | Filters out all commands from `opts`.                                                  |
-| `onlyCommands(usageFunction)(opts)`    | Keeps only commands in `opts`.                                                         |
-| `onlyFirstArg(usageFunction)(opts)`    | Keeps only the first arg from each opt.                                                |
-| `optsFilter(p)(usageFunction)(opts)`   | Applies `filter` to the `opts` array using a predicate `p`.                            |
-| `optsMap(f)(usageFunction)(opts)`      | Applies `map` to the `opts` array using a function `f`.                                |
+|----------------------------------------|------------------------------------------------------------------------------------------|
+| `justArgs(array)(usageFunction)(opts)` | Takes an array of args and keeps only those `opts` that have an arg in the args `array`. |
+| `noCommands(usageFunction)(opts)`      | Filters out all commands from `opts`.                                                    |
+| `onlyCommands(usageFunction)(opts)`    | Keeps only commands in `opts`.                                                           |
+| `onlyFirstArg(usageFunction)(opts)`    | Keeps only the first arg from each opt.                                                  |
+| `optsFilter(p)(usageFunction)(opts)`   | Applies `filter` to the `opts` array using a predicate `p`.                              |
+| `optsMap(f)(usageFunction)(opts)`      | Applies `map` to the `opts` array using a function `f`.                                  |
 
 Usage decorator functions can be combined with the following usage decorator combinators:
 
