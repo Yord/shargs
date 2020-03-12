@@ -119,7 +119,7 @@ const docs = usage([
 </p>
 </summary>
 
-Every command-line tools benefits from a well-formatted usage documentation.
+Every command-line tool benefits from a well-formatted usage documentation.
 Shargs brings its own DSL for defining one that can easily be extended with user functions.
 The DSL is declarative, which means it describes the desired structure without concerning itself with the details.
 Try changing `optsList` to `optsDefs` later to experience of what this means:
