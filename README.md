@@ -604,7 +604,7 @@ Result:
 <td>
 <details>
 <summary>
-Prints the string with a line break at the end.
+Prints the string with a linebreak at the end.
 Takes the line width from style and pads with spaces at the end.
 If the string is too long to fit the line's width, it is cut off.
 </summary>
