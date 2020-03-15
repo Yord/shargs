@@ -41,6 +41,21 @@ test('table prints the empty string if an empty items list is given', () => {
   expect(res).toStrictEqual(txt)
 })
 
+test('table prints the empty string if the items list is undefined', () => {
+  const style = {
+    cols: [
+      {width: 12},
+      {width: 28}
+    ]
+  }
+  
+  const res = table()(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
+
 test('table drops all input that have no cols in style', () => {
   const style = {
     cols: [
