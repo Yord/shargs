@@ -35,3 +35,15 @@ test('texts retains more than one consecutive whitespace even after line breaks'
 
   expect(res).toStrictEqual(txt)
 })
+
+test('texts prints the empty string if no strings are given', () => {
+  const style = {
+    line: {width: 40}
+  }
+  
+  const res = texts()(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
