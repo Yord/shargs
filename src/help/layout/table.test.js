@@ -26,6 +26,21 @@ test('table generates expected string', () => {
   expect(res).toStrictEqual(txt)
 })
 
+test('table prints the empty string if an empty items list is given', () => {
+  const style = {
+    cols: [
+      {width: 12},
+      {width: 28}
+    ]
+  }
+  
+  const res = table([])(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
+
 test('table drops all input that have no cols in style', () => {
   const style = {
     cols: [
@@ -161,6 +176,34 @@ test('tableFrom correctly passes on id', () => {
   const txt = '-h, --help  Prints the help.            \n' +
               '-v,         Prints the version.         \n' +
               '--version                               \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
+test('tableFrom with wrong id uses default style', () => {
+  const id1 = 'test'
+  const id2 = 'wrong'
+  
+  const style = {
+    [id1]: [
+      {width: 12},
+      {width: 28}
+    ]
+  }
+
+  const res = tableFrom(id2)([
+    [
+      '-h, --help',
+      'Prints the help.'
+    ],
+    [
+      '-v, --version',
+      'Prints the version.'
+    ]
+  ])(style)
+
+  const txt = '-h, --help               Prints the help.                                       \n' +
+              '-v, --version            Prints the version.                                    \n'
 
   expect(res).toStrictEqual(txt)
 })
