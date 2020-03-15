@@ -37,3 +37,11 @@ test('text prints an empty line if no string is given', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('text uses default style if style is undefined', () => {
+  const res = text('Deep Thought was created to come up with the Answer.')()
+
+  const txt = 'Deep Thought was created to come up with the Answer.                            \n'
+
+  expect(res).toStrictEqual(txt)
+})
