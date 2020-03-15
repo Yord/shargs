@@ -51,6 +51,27 @@ test('table drops all input that have no cols in style', () => {
   expect(res).toStrictEqual(txt)
 })
 
+test('table prints the empty strings if style cols are empty', () => {
+  const style = {
+    cols: []
+  }
+  
+  const res = table([
+    [
+      '-h, --help',
+      'Prints the help.'
+    ],
+    [
+      '-v, --version',
+      'Prints the version.'
+    ]
+  ])(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
+
 test('table prints extra lines in col even of no input is given', () => {
   const style = {
     cols: [
