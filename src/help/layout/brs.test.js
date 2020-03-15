@@ -12,3 +12,15 @@ test('brs generates expected string', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('brs with default length generates expected string', () => {
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = brs()(style)
+
+  const txt = '                                        \n'
+
+  expect(res).toStrictEqual(txt)
+})
