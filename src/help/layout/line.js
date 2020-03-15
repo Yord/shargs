@@ -1,7 +1,13 @@
+const defaultLine = {width: 80}
+
+const defaultStyle = {
+  line: defaultLine
+}
+
 // TODO: cut off string if it surpasses the line's width
 const lineFrom = id => (string = '') => (
-  ({[id]: line = {padStart: 0, width: 80}} = {}) => (
-    ''.padStart(line.padStart) + string.padEnd(line.width) + '\n'
+  ({[id]: line = defaultLine} = defaultStyle) => (
+    ''.padStart(line.padStart || 0) + string.padEnd(line.width) + '\n'
   )
 )
 
