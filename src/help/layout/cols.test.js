@@ -24,3 +24,18 @@ test('cols generates expected string', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('cols with default columns generates expected string', () => {
+  const style = {
+    cols: [
+      {width: 15},
+      {width: 25}
+    ]
+  }
+
+  const res = cols()(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
