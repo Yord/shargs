@@ -40,6 +40,24 @@ test('cols with default columns generates expected string', () => {
   expect(res).toStrictEqual(txt)
 })
 
+test('cols with default style generates expected string', () => {
+  const res = cols([
+    [
+      '-h, --help',
+      '-v, --version'
+    ],
+    [
+      'Prints the help.',
+      'Prints the version.'
+    ]
+  ])()
+
+  const txt = '-h, --help               Prints the help.                                       \n' +
+              '-v, --version            Prints the version.                                    \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
 test('colsFrom correctly passes on id', () => {
   const id = 'test'
   
