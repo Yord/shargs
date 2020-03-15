@@ -25,6 +25,32 @@ test('cols generates expected string', () => {
   expect(res).toStrictEqual(txt)
 })
 
+test('cols with unaligned columns renders correctly', () => {
+  const style = {
+    cols: [
+      {width: 15},
+      {width: 25}
+    ]
+  }
+
+  const res = cols([
+    [
+      '-h, --help',
+      '-v,',
+      '--version'
+    ],
+    [
+      'Prints the help.'
+    ]
+  ])(style)
+
+  const txt = '-h, --help     Prints the help.         \n' +
+              '-v,                                     \n' +
+              '--version                               \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
 test('cols with default columns generates expected string', () => {
   const style = {
     cols: [
