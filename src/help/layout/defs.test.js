@@ -88,6 +88,37 @@ test('defs prints empty strings if columns are undefined', () => {
   expect(res).toStrictEqual(txt)
 })
 
+test('defs prints empty lines for each undefined columns entry', () => {
+  const style = {
+    line: {width: 40},
+    desc: {padStart: 4, width: 36}
+  }
+  
+  const res = defs([
+    [
+      '-h, --help',
+      'Prints the help.'
+    ],
+    undefined,
+    [
+      '-v, --version',
+      'Prints the version.'
+    ]
+  ])(style)
+
+  const txt = '-h, --help                              \n' +
+              '    Prints the help.                    \n' +
+              '                                        \n' +
+              '                                        \n' +
+              '                                        \n' +
+              '                                        \n' +
+              '-v, --version                           \n' +
+              '    Prints the version.                 \n' +
+              '                                        \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
 test('defsFrom correctly passes on first id', () => {
   const id = 'test'
   
