@@ -52,6 +52,32 @@ test('table keeps whitespaces if there are several', () => {
   expect(res).toStrictEqual(txt)
 })
 
+test('table keeps whitespaces if there are several even after word breaks', () => {
+  const style = {
+    cols: [
+      {width: 12},
+      {width: 16}
+    ]
+  }
+  
+  const res = table([
+    [
+      '-h, --help',
+      'Prints the help.'
+    ],
+    [
+      '-v, --version',
+      'Prints the        version.'
+    ]
+  ])(style)
+
+  const txt = '-h, --help  Prints the help.\n' +
+              '-v,         Prints the      \n' +
+              '--version           version.\n'
+
+  expect(res).toStrictEqual(txt)
+})
+
 test('table prints the empty string if an empty items list is given', () => {
   const style = {
     cols: [
