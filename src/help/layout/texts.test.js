@@ -105,3 +105,22 @@ test('textsFrom correctly passes on id', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('textsFrom with wrong id uses default style', () => {
+  const id1 = 'test'
+  const id2 = 'wrong'
+  
+  const style = {
+    [id1]: {width: 40}
+  }
+
+  const res = textsFrom(id2)([
+    'Deep Thought was created to come up with the Answer.',
+    'To The Ultimate Question of Life, the Universe, and Everything.'
+  ])(style)
+
+  const txt = 'Deep Thought was created to come up with the Answer.                            \n' +
+              'To The Ultimate Question of Life, the Universe, and Everything.                 \n'
+
+  expect(res).toStrictEqual(txt)
+})
