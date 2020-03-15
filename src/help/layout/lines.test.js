@@ -15,3 +15,15 @@ test('lines generates expected string', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('lines with undefined string prints the empty string', () => {
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = lines()(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
