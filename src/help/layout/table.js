@@ -1,8 +1,9 @@
-const {colsFrom} = require('./cols')
+const defaultStyle = require('../style')
+const {colsFrom}   = require('./cols')
 
 const tableFrom = id => (itemsList = []) => (
-  (style = {}) => {
-    const {[id]: COLS = []} = style
+  (style = defaultStyle) => {
+    const {[id]: COLS = defaultStyle.cols} = style
 
     const colWidths = COLS.map(col => col.width)
     const indexes   = COLS.map((_, i) => i)
