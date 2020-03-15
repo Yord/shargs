@@ -49,6 +49,28 @@ test('cols still work if style has too few entries', () => {
   expect(res).toStrictEqual(txt)
 })
 
+test('cols still work if style has no entries', () => {
+  const style = {
+    cols: []
+  }
+
+  const res = cols([
+    [
+      '-h, --help',
+      '-v, --version'
+    ],
+    [
+      'Prints the help.',
+      'Prints the version.'
+    ]
+  ])(style)
+
+  const txt = '-h, --helpPrints the help.\n' +
+              '-v, --versionPrints the version.\n'
+
+  expect(res).toStrictEqual(txt)
+})
+
 test('cols with unaligned columns renders correctly', () => {
   const style = {
     cols: [
