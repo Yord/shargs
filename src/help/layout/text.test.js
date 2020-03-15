@@ -1,4 +1,4 @@
-const {text} = require('./text')
+const {text, textFrom} = require('./text')
 
 test('text generates expected string', () => {
   const style = {
@@ -60,6 +60,21 @@ test('text uses default style if style has no line attribute', () => {
 
   const txt = 'Deep Thought was created to come up with the Answer to The Ultimate Question of \n' +
               'Life, the Universe, and Everything.                                             \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
+test('textFrom correctly passes on id', () => {
+  const id = 'test'
+  
+  const style = {
+    [id]: {width: 40}
+  }
+
+  const res = textFrom(id)('Deep Thought was created to come up with the Answer.')(style)
+
+  const txt = 'Deep Thought was created to come up with\n' +
+              'the Answer.                             \n'
 
   expect(res).toStrictEqual(txt)
 })
