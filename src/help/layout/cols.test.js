@@ -1,4 +1,4 @@
-const {cols} = require('./cols')
+const {cols, colsFrom} = require('./cols')
 
 test('cols generates expected string', () => {
   const style = {
@@ -36,6 +36,33 @@ test('cols with default columns generates expected string', () => {
   const res = cols()(style)
 
   const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
+
+test('colsFrom correctly passes on id', () => {
+  const id = 'test'
+  
+  const style = {
+    [id]: [
+      {width: 15},
+      {width: 25}
+    ]
+  }
+
+  const res = colsFrom(id)([
+    [
+      '-h, --help',
+      '-v, --version'
+    ],
+    [
+      'Prints the help.',
+      'Prints the version.'
+    ]
+  ])(style)
+
+  const txt = '-h, --help     Prints the help.         \n' +
+              '-v, --version  Prints the version.      \n'
 
   expect(res).toStrictEqual(txt)
 })
