@@ -66,7 +66,7 @@ test('defsFrom correctly passes on second id', () => {
     desc: {padStart: 4, width: 36}
   }
   
-  const res = defsFrom('line', 'test')([
+  const res = defsFrom('line', id)([
     [
       '-h, --help',
       'Prints the help.'
