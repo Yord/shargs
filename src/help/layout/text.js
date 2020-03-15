@@ -1,8 +1,9 @@
+const defaultStyle = require('../style')
 const {linesFrom} = require('./lines')
 
 const textFrom = id => (STRING = '') => (
-  (style = {}) => {
-    const {[id]: line = {}} = style
+  (style = defaultStyle) => {
+    const {[id]: line = defaultStyle.line} = style
 
     const words = splitWords(STRING)
 
