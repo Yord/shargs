@@ -23,3 +23,11 @@ test('line with undefined string prints the empty string', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('line with undefined style uses the default style', () => {
+  const res = line('A line')()
+
+  const txt = 'A line                                                                          \n'
+
+  expect(res).toStrictEqual(txt)
+})
