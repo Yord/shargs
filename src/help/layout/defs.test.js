@@ -27,6 +27,28 @@ test('defs generates expected string', () => {
   expect(res).toStrictEqual(txt)
 })
 
+test('defs generates string with default style if style is undefined', () => {
+  const res = defs([
+    [
+      '-h, --help',
+      'Prints the help.'
+    ],
+    [
+      '-v, --version',
+      'Prints the version.'
+    ]
+  ])()
+
+  const txt = '-h, --help                                                                      \n' +
+              '    Prints the help.                                                            \n' +
+              '                                                                                \n' +
+              '-v, --version                                                                   \n' +
+              '    Prints the version.                                                         \n' +
+              '                                                                                \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
 test('defs uses empty strings if columns are shorter than two elements', () => {
   const style = {
     line: {width: 40},
