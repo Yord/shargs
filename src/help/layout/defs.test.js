@@ -53,6 +53,19 @@ test('defs uses empty strings if columns are shorter than two elements', () => {
   expect(res).toStrictEqual(txt)
 })
 
+test('defs prints empty strings if columns are undefined', () => {
+  const style = {
+    line: {width: 40},
+    desc: {padStart: 4, width: 36}
+  }
+  
+  const res = defs()(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
+
 test('defsFrom correctly passes on first id', () => {
   const id = 'test'
   
