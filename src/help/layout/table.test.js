@@ -1,4 +1,4 @@
-const {table} = require('./table')
+const {table, tableFrom} = require('./table')
 
 test('table generates expected string', () => {
   const style = {
@@ -120,6 +120,34 @@ test('table prints extra lines in col even of no input is given', () => {
   }
   
   const res = table([
+    [
+      '-h, --help',
+      'Prints the help.'
+    ],
+    [
+      '-v, --version',
+      'Prints the version.'
+    ]
+  ])(style)
+
+  const txt = '-h, --help  Prints the help.            \n' +
+              '-v,         Prints the version.         \n' +
+              '--version                               \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
+test('tableFrom correctly passes on id', () => {
+  const id = 'test'
+  
+  const style = {
+    [id]: [
+      {width: 12},
+      {width: 28}
+    ]
+  }
+
+  const res = tableFrom(id)([
     [
       '-h, --help',
       'Prints the help.'
