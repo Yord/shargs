@@ -1,19 +1,11 @@
-const {linesFrom} = require('./lines')
-
-const defaultCols = [
-  {width: 25},
-  {width: 55}
-]
-
-const defaultStyle = {
-  cols: defaultCols
-}
+const defaultStyle = require('../style')
+const {linesFrom}  = require('./lines')
 
 // TODO: make sure cols are long enough for all elements or have default cols available
 // TODO: cut strings if they are too long for a column!
 const colsFrom = id => (columns = []) => (
   (style = defaultStyle) => {
-    const {[id]: cols = defaultCols} = style
+    const {[id]: cols = defaultStyle.cols} = style
     const length = columns.reduce((max, column) => Math.max(max, column.length), 0)
 
     const strings = []
