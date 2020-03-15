@@ -3,8 +3,8 @@ const {table} = require('./table')
 test('table generates expected string', () => {
   const style = {
     cols: [
-      {width: 15},
-      {width: 25}
+      {width: 12},
+      {width: 28}
     ]
   }
   
@@ -19,8 +19,9 @@ test('table generates expected string', () => {
     ]
   ])(style)
 
-  const txt = '-h, --help     Prints the help.         \n' +
-              '-v, --version  Prints the version.      \n'
+  const txt = '-h, --help  Prints the help.            \n' +
+              '-v,         Prints the version.         \n' +
+              '--version                               \n'
 
   expect(res).toStrictEqual(txt)
 })
