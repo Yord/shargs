@@ -71,3 +71,17 @@ test('texts uses default style if style is undefined', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('texts uses default style if style has no line attribute', () => {
+  const style = {}
+
+  const res = texts([
+    'Deep Thought was created to come up with the Answer.',
+    'To The Ultimate Question of Life, the Universe, and Everything.'
+  ])(style)
+
+  const txt = 'Deep Thought was created to come up with the Answer.                            \n' +
+              'To The Ultimate Question of Life, the Universe, and Everything.                 \n'
+
+  expect(res).toStrictEqual(txt)
+})
