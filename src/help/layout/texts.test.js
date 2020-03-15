@@ -1,4 +1,4 @@
-const {texts} = require('./texts')
+const {texts, textsFrom} = require('./texts')
 
 test('texts generates expected string', () => {
   const style = {
@@ -82,6 +82,26 @@ test('texts uses default style if style has no line attribute', () => {
 
   const txt = 'Deep Thought was created to come up with the Answer.                            \n' +
               'To The Ultimate Question of Life, the Universe, and Everything.                 \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
+test('textsFrom correctly passes on id', () => {
+  const id = 'test'
+  
+  const style = {
+    [id]: {width: 40}
+  }
+
+  const res = textsFrom(id)([
+    'Deep Thought was created to come up with the Answer.',
+    'To The Ultimate Question of Life, the Universe, and Everything.'
+  ])(style)
+
+  const txt = 'Deep Thought was created to come up with\n' +
+              'the Answer.                             \n' +
+              'To The Ultimate Question of Life, the   \n' +
+              'Universe, and Everything.               \n'
 
   expect(res).toStrictEqual(txt)
 })
