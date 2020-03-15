@@ -59,3 +59,15 @@ test('texts prints the empty string if strings are empty', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('texts uses default style if style is undefined', () => {
+  const res = texts([
+    'Deep Thought was created to come up with the Answer.',
+    'To The Ultimate Question of Life, the Universe, and Everything.'
+  ])()
+
+  const txt = 'Deep Thought was created to come up with the Answer.                            \n' +
+              'To The Ultimate Question of Life, the Universe, and Everything.                 \n'
+
+  expect(res).toStrictEqual(txt)
+})
