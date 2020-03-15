@@ -2,7 +2,7 @@ const layout     = require('./combinators/layout')
 const {textFrom} = require('./text')
 
 const textsFrom = id => (strings = []) => layout(
-  strings.map(string => textFrom(id)(string))
+  strings.map(textFrom(id))
 )
 
 const texts = textsFrom('line')
