@@ -3,7 +3,7 @@ const {defsFrom} = require('../layout/defs')
 const optsDefsFrom = (id1, id2) => (opts = []) => (
   defsFrom(id1, id2)(
     opts
-    .map(({args = [], desc = '', types}) => [
+    .map(({args = [], desc = '', types = null} = {}) => [
       args.join(', ') + typesLabel(types),
       desc
     ])

@@ -3,9 +3,9 @@ const {tableFrom} = require('../layout/table')
 const optsListFrom = id => (opts = []) => (
   tableFrom(id)(
     opts
-    .map(({args = [], desc = '', types}) => [
+    .map(({args = [], desc = '', types = null} = {}) => [
       args.join(', '),
-      desc + typesLabel(types)
+      desc + (desc === '' ? '' : ' ') + typesLabel(types)
     ])
   )
 )
@@ -20,7 +20,7 @@ module.exports = {
 function typesLabel (types) {
   return (
     types === null     ? '' :
-    types.length === 0 ? ' [flag]'
-                       : ' [' + types.join(', ') + ']'
+    types.length === 0 ? '[flag]'
+                       : '[' + types.join(', ') + ']'
   )
 }
