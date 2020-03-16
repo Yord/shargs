@@ -185,3 +185,21 @@ test('optsList prints the empty strings if style cols are empty', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsList uses default cols if style cols are undefined', () => {
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+
+  const style = {}
+  
+  const res = optsList(opts)(style)
+
+  const txt = '-a, --answer             The answer. [number]                                   \n' +
+              '-h, --help               Prints help.                                           \n' +
+              '--version                Prints version. [flag]                                 \n'
+
+  expect(res).toStrictEqual(txt)
+})
