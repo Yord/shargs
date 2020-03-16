@@ -85,3 +85,17 @@ test('notes assumes empty opts if opts is undefined', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('notes uses default style if style is undefined', () => {
+  const opts = []
+
+  const res = notes([
+    'Deep Thought was created to come up with the Answer.',
+    'To The Ultimate Question of Life, the Universe, and Everything.'
+  ])(opts)()
+
+  const txt = 'Deep Thought was created to come up with the Answer.                            \n' +
+              'To The Ultimate Question of Life, the Universe, and Everything.                 \n'
+
+  expect(res).toStrictEqual(txt)
+})
