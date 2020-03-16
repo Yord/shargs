@@ -131,3 +131,17 @@ test('synopsis uses default line if style line is undefined', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('synopsis uses default line if style is undefined', () => {
+  const opts = [
+    number('answer', ['-a', '--answer']),
+    command('help', ['-h', '--help']),
+    flag('version', ['--version'])
+  ]
+
+  const res = synopsis('deepThought', '<QUESTION>')(opts)()
+
+  const txt = 'deepThought [-a|--answer] [-h|--help] [--version] <QUESTION>                    \n'
+
+  expect(res).toStrictEqual(txt)
+})
