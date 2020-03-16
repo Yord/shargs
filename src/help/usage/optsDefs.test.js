@@ -108,3 +108,30 @@ test('optsDefs generates string with default style if style is undefined', () =>
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsDefs prints an empty line if no desc is given', () => {
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    command('help', ['-h', '--help']),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+
+  const style = {
+    line: {width: 40},
+    desc: {padStart: 4, width: 36}
+  }
+  
+  const res = optsDefs(opts)(style)
+
+  const txt = '-a, --answer [number]                   \n' +
+              '    The answer.                         \n' +
+              '                                        \n' +
+              '-h, --help                              \n' +
+              '                                        \n' +
+              '                                        \n' +
+              '--version [flag]                        \n' +
+              '    Prints version.                     \n' +
+              '                                        \n'
+
+  expect(res).toStrictEqual(txt)
+})
