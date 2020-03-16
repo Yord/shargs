@@ -178,3 +178,33 @@ test('optsDefsFrom correctly passes on first id', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsDefsFrom correctly passes on second id', () => {
+  const id = 'test'
+  
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+
+  const style = {
+    line: {width: 40},
+    test: {padStart: 4, width: 26},
+    desc: {padStart: 4, width: 36}
+  }
+  
+  const res = optsDefsFrom('line', id)(opts)(style)
+
+  const txt = '-a, --answer [number]                   \n' +
+              '    The answer.               \n' +
+              '                                        \n' +
+              '-h, --help                              \n' +
+              '    Prints help.              \n' +
+              '                                        \n' +
+              '--version [flag]                        \n' +
+              '    Prints version.           \n' +
+              '                                        \n'
+
+  expect(res).toStrictEqual(txt)
+})
