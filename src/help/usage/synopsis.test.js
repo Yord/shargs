@@ -83,3 +83,17 @@ test('synopsis prints start and end only if opts are undefined', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('synopsis prints start and end only if opts contains undefined values', () => {
+  const opts = [undefined]
+
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = synopsis('deepThought', '<QUESTION>')(opts)(style)
+
+  const txt = 'deepThought <QUESTION>                  \n'
+
+  expect(res).toStrictEqual(txt)
+})
