@@ -39,3 +39,17 @@ test('notes retains more than one consecutive whitespace even after line breaks'
 
   expect(res).toStrictEqual(txt)
 })
+
+test('notes prints the empty string if no strings are given', () => {
+  const opts = []
+
+  const style = {
+    line: {width: 40}
+  }
+  
+  const res = notes()(opts)(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
