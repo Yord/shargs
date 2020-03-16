@@ -67,3 +67,21 @@ test('notes prints the empty string if strings are empty', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('notes assumes empty opts if opts is undefined', () => {
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = notes([
+    'Deep Thought was created to come up with the Answer.',
+    'To The Ultimate Question of Life, the Universe, and Everything.'
+  ])()(style)
+
+  const txt = 'Deep Thought was created to come up with\n' +
+              'the Answer.                             \n' +
+              'To The Ultimate Question of Life, the   \n' +
+              'Universe, and Everything.               \n'
+
+  expect(res).toStrictEqual(txt)
+})
