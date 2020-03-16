@@ -97,3 +97,21 @@ test('synopsis prints start and end only if opts contains undefined values', () 
 
   expect(res).toStrictEqual(txt)
 })
+
+test('synopsis assumes an empty array if no args are given', () => {
+  const opts = [
+    number('answer', undefined, {desc: 'The answer.'}),
+    command('help', undefined, {desc: 'Prints help.'}),
+    flag('version', undefined, {desc: 'Prints version.'})
+  ]
+
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = synopsis('deepThought', '<QUESTION>')(opts)(style)
+
+  const txt = 'deepThought <QUESTION>                  \n'
+
+  expect(res).toStrictEqual(txt)
+})
