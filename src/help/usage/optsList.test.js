@@ -219,3 +219,28 @@ test('optsList uses default cols if style is undefined', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsList prints extra lines in col even of no input is given', () => {
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+
+  const style = {
+    cols: [
+      {width: 10, padEnd: 2},
+      {width: 23},
+      {width: 5}
+    ]
+  }
+  
+  const res = optsList(opts)(style)
+
+  const txt = '-a,         The answer. [number]        \n' +
+              '--answer                                \n' +
+              '-h, --help  Prints help.                \n' +
+              '--version   Prints version. [flag]      \n'
+
+  expect(res).toStrictEqual(txt)
+})
