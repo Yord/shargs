@@ -1,11 +1,13 @@
 const {space, spaceFrom} = require('./space')
 
 test('space generates expected string', () => {
+  const opts = []
+
   const style = {
     line: {width: 40}
   }
 
-  const res = space(style)
+  const res = space(opts)(style)
 
   const txt = '                                        \n'
 
@@ -15,11 +17,13 @@ test('space generates expected string', () => {
 test('spaceFrom correctly passes on id', () => {
   const id = 'test'
   
+  const opts = []
+
   const style = {
     [id]: {width: 40}
   }
 
-  const res = spaceFrom(id)(style)
+  const res = spaceFrom(id)(opts)(style)
 
   const txt = '                                        \n'
 
