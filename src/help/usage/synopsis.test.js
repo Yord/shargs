@@ -38,3 +38,22 @@ test('synopsis also works with just the first input', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('synopsis also works with just the second input', () => {
+  const opts = [
+    number('answer', ['-a', '--answer']),
+    command('help', ['-h', '--help']),
+    flag('version', ['--version'])
+  ]
+
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = synopsis(undefined, '<QUESTION>')(opts)(style)
+
+  const txt = '[-a|--answer] [-h|--help] [--version]   \n' +
+              '<QUESTION>                              \n'
+
+  expect(res).toStrictEqual(txt)
+})
