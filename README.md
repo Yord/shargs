@@ -84,7 +84,7 @@ Parsers have three different stages:
 Each stage takes several parser functions that are used to transform input in the order they are defined.
 Two special stages transform data between the three stages:
 `toOpts` and `toArgs`.
-These two stages take exactly one parser function that is predefined, but can also be passed by the user.
+These two stages take exactly one parser function that comes predefined, but can also be passed by the user.
 
 The `deepThought` parser consists of six parser functions that are applied in the following order:
 
