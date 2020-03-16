@@ -1,4 +1,4 @@
-const {spaces} = require('./spaces')
+const {spaces, spacesFrom} = require('./spaces')
 
 test('spaces generates expected string', () => {
   const opts = []
@@ -62,6 +62,23 @@ test('spaces uses default style if style has no line attribute', () => {
 
   const txt = '                                                                                \n' +
               '                                                                                \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
+test('spacesFrom correctly passes on id', () => {
+  const id = 'test'
+  
+  const opts = []
+
+  const style = {
+    [id]: {width: 40}
+  }
+
+  const res = spacesFrom(id)(2)(opts)(style)
+
+  const txt = '                                        \n' +
+              '                                        \n'
 
   expect(res).toStrictEqual(txt)
 })
