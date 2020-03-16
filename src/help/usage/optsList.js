@@ -3,7 +3,7 @@ const {tableFrom} = require('../layout/table')
 const optsListFrom = id => (opts = []) => (
   tableFrom(id)(
     opts
-    .map(({args = [], desc = '', types}) => [
+    .map(({args = [], desc = '', types = null} = {}) => [
       args.join(', '),
       desc + typesLabel(types)
     ])
