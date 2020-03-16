@@ -270,3 +270,29 @@ test('optsListFrom correctly passes on id', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsListFrom with wrong id uses default style', () => {
+  const id1 = 'test'
+  const id2 = 'wrong'
+  
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+
+  const style = {
+    [id1]: [
+      {width: 10, padEnd: 2},
+      {width: 28}
+    ]
+  }
+
+  const res = optsListFrom(id2)(opts)(style)
+
+  const txt = '-a, --answer             The answer. [number]                                   \n' +
+              '-h, --help               Prints help.                                           \n' +
+              '--version                Prints version. [flag]                                 \n'
+
+  expect(res).toStrictEqual(txt)
+})
