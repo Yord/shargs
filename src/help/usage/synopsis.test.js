@@ -169,3 +169,24 @@ test('synopsisFrom correctly passes on id', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('synopsisFrom with wrong id uses default style', () => {
+  const id1 = 'test'
+  const id2 = 'wrong'
+  
+  const opts = [
+    number('answer', ['-a', '--answer']),
+    command('help', ['-h', '--help']),
+    flag('version', ['--version'])
+  ]
+
+  const style = {
+    [id1]: {width: 40}
+  }
+
+  const res = synopsisFrom(id2)('deepThought', '<QUESTION>')(opts)(style)
+
+  const txt = 'deepThought              [-a|--answer] [-h|--help] [--version] <QUESTION>       \n'
+
+  expect(res).toStrictEqual(txt)
+})
