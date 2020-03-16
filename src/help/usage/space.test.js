@@ -36,6 +36,18 @@ test('space does not care if opts is undefined', () => {
   expect(res).toStrictEqual(txt)
 })
 
+test('space uses default style if style has no line attribute', () => {
+  const opts = []
+
+  const style = {}
+
+  const res = space(opts)(style)
+
+  const txt = '                                                                                \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
 test('spaceFrom correctly passes on id', () => {
   const id = 'test'
   
