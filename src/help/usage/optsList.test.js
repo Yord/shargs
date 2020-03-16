@@ -97,3 +97,26 @@ test('optsList prints an empty line if opts has undefined entries', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsList assumes an empty array if no args are given', () => {
+  const opts = [
+    number('answer', undefined, {desc: 'The answer.'}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+
+  const style = {
+    cols: [
+      {width: 10, padEnd: 2},
+      {width: 28}
+    ]
+  }
+  
+  const res = optsList(opts)(style)
+
+  const txt = '            The answer. [number]        \n' +
+              '-h, --help  Prints help.                \n' +
+              '--version   Prints version. [flag]      \n'
+
+  expect(res).toStrictEqual(txt)
+})
