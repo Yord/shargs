@@ -115,3 +115,19 @@ test('synopsis assumes an empty array if no args are given', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('synopsis uses default line if style line is undefined', () => {
+  const opts = [
+    number('answer', ['-a', '--answer']),
+    command('help', ['-h', '--help']),
+    flag('version', ['--version'])
+  ]
+
+  const style = {}
+
+  const res = synopsis('deepThought', '<QUESTION>')(opts)(style)
+
+  const txt = 'deepThought [-a|--answer] [-h|--help] [--version] <QUESTION>                    \n'
+
+  expect(res).toStrictEqual(txt)
+})
