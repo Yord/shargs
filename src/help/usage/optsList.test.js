@@ -48,3 +48,20 @@ test('optsList keeps whitespaces if there are several', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsList prints the empty string if opts are empty', () => {
+  const opts = []
+
+  const style = {
+    cols: [
+      {width: 10, padEnd: 2},
+      {width: 28}
+    ]
+  }
+  
+  const res = optsList(opts)(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
