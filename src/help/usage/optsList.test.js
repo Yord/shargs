@@ -65,3 +65,18 @@ test('optsList prints the empty string if opts are empty', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsList prints the empty string if opts undefined', () => {
+  const style = {
+    cols: [
+      {width: 10, padEnd: 2},
+      {width: 28}
+    ]
+  }
+  
+  const res = optsList()(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
