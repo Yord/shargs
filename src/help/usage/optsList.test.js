@@ -1,4 +1,4 @@
-const {optsList} = require('./optsList')
+const {optsList, optsListFrom} = require('./optsList')
 const {command, flag, number} = require('../../options')
 
 test('optsList generates expected string', () => {
@@ -236,6 +236,32 @@ test('optsList prints extra lines in col even of no input is given', () => {
   }
   
   const res = optsList(opts)(style)
+
+  const txt = '-a,         The answer. [number]        \n' +
+              '--answer                                \n' +
+              '-h, --help  Prints help.                \n' +
+              '--version   Prints version. [flag]      \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
+test('optsListFrom correctly passes on id', () => {
+  const id = 'test'
+  
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+
+  const style = {
+    [id]: [
+      {width: 10, padEnd: 2},
+      {width: 28}
+    ]
+  }
+
+  const res = optsListFrom(id)(opts)(style)
 
   const txt = '-a,         The answer. [number]        \n' +
               '--answer                                \n' +
