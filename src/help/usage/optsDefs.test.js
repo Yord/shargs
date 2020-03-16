@@ -27,3 +27,18 @@ test('optsDefs generates expected string', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsDefs prints an empty string if opts are empty', () => {
+  const opts = []
+
+  const style = {
+    line: {width: 40},
+    desc: {padStart: 4, width: 36}
+  }
+  
+  const res = optsDefs(opts)(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
