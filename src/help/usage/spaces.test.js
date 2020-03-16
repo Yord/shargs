@@ -14,3 +14,17 @@ test('spaces generates expected string', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('spaces with undefined length prints one space', () => {
+  const opts = []
+
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = spaces()(opts)(style)
+
+  const txt = '                                        \n'
+
+  expect(res).toStrictEqual(txt)
+})
