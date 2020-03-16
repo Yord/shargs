@@ -167,3 +167,21 @@ test('optsList drops all input that have no cols in style', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsList prints the empty strings if style cols are empty', () => {
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The  answer.'}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+
+  const style = {
+    cols: []
+  }
+  
+  const res = optsList(opts)(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
