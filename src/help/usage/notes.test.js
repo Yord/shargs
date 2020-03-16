@@ -53,3 +53,17 @@ test('notes prints the empty string if no strings are given', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('notes prints the empty string if strings are empty', () => {
+  const opts = []
+
+  const style = {
+    line: {width: 40}
+  }
+  
+  const res = notes([])(opts)(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
