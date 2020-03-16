@@ -26,6 +26,31 @@ test('table generates expected string', () => {
   expect(res).toStrictEqual(txt)
 })
 
+test('table does not print a column where all values are empty', () => {
+  const style = {
+    cols: [
+      {width: 0},
+      {width: 40}
+    ]
+  }
+  
+  const res = table([
+    [
+      '',
+      'Prints the help.'
+    ],
+    [
+      '',
+      'Prints the version.'
+    ]
+  ])(style)
+
+  const txt = 'Prints the help.                        \n' +
+              'Prints the version.                     \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
 test('table keeps whitespaces if there are several', () => {
   const style = {
     cols: [
