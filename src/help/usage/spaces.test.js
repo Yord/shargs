@@ -39,3 +39,16 @@ test('spaces uses default style if style is undefined', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('spaces does not care if opts is undefined', () => {
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = spaces(2)(undefined)(style)
+
+  const txt = '                                        \n' +
+              '                                        \n'
+
+  expect(res).toStrictEqual(txt)
+})
