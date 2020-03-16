@@ -1,4 +1,4 @@
-const {notes} = require('./notes')
+const {notes, notesFrom} = require('./notes')
 
 test('notes generates expected string', () => {
   const opts = []
@@ -112,6 +112,28 @@ test('notes uses default style if style has no line attribute', () => {
 
   const txt = 'Deep Thought was created to come up with the Answer.                            \n' +
               'To The Ultimate Question of Life, the Universe, and Everything.                 \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
+test('notesFrom correctly passes on id', () => {
+  const id = 'test'
+
+  const opts = []
+  
+  const style = {
+    [id]: {width: 40}
+  }
+
+  const res = notesFrom(id)([
+    'Deep Thought was created to come up with the Answer.',
+    'To The Ultimate Question of Life, the Universe, and Everything.'
+  ])(opts)(style)
+
+  const txt = 'Deep Thought was created to come up with\n' +
+              'the Answer.                             \n' +
+              'To The Ultimate Question of Life, the   \n' +
+              'Universe, and Everything.               \n'
 
   expect(res).toStrictEqual(txt)
 })
