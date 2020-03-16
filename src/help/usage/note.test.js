@@ -92,9 +92,9 @@ test('note uses default style if style has no line attribute', () => {
 })
 
 test('noteFrom correctly passes on id', () => {
-  const opts = []
-
   const id = 'test'
+
+  const opts = []
   
   const style = {
     [id]: {width: 40}
@@ -109,10 +109,10 @@ test('noteFrom correctly passes on id', () => {
 })
 
 test('noteFrom with wrong id uses default style', () => {
-  const opts = []
-
   const id1 = 'test'
   const id2 = 'wrong'
+
+  const opts = []
   
   const style = {
     [id1]: {width: 40}
