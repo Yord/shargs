@@ -120,3 +120,27 @@ test('optsList assumes an empty array if no args are given', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsList prints only the type if no desc is given', () => {
+  const opts = [
+    number('answer', ['-a', '--answer'], {}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+
+  const style = {
+    cols: [
+      {width: 10, padEnd: 2},
+      {width: 28}
+    ]
+  }
+  
+  const res = optsList(opts)(style)
+
+  const txt = '-a,         [number]                    \n' +
+              '--answer                                \n' +
+              '-h, --help  Prints help.                \n' +
+              '--version   Prints version. [flag]      \n'
+
+  expect(res).toStrictEqual(txt)
+})
