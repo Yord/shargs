@@ -28,3 +28,14 @@ test('spaces with undefined length prints one space', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('spaces uses default style if style is undefined', () => {
+  const opts = []
+
+  const res = spaces(2)(opts)()
+
+  const txt = '                                                                                \n' +
+              '                                                                                \n'
+
+  expect(res).toStrictEqual(txt)
+})
