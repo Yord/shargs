@@ -145,3 +145,27 @@ test('synopsis uses default line if style is undefined', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('synopsisFrom correctly passes on id', () => {
+  const id = 'test'
+  
+  const opts = [
+    number('answer', ['-a', '--answer']),
+    command('help', ['-h', '--help']),
+    flag('version', ['--version'])
+  ]
+
+  const style = {
+    [id]: [
+      {width: 15},
+      {width: 25}
+    ]
+  }
+
+  const res = synopsisFrom(id)('deepThought', '<QUESTION>')(opts)(style)
+
+  const txt = 'deepThought    [-a|--answer] [-h|--help]\n' +
+              '               [--version] <QUESTION>   \n'
+
+  expect(res).toStrictEqual(txt)
+})
