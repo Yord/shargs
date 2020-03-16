@@ -144,3 +144,26 @@ test('optsList prints only the type if no desc is given', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsList drops all input that have no cols in style', () => {
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The  answer.'}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+
+  const style = {
+    cols: [
+      {width: 10, padEnd: 2},
+    ]
+  }
+  
+  const res = optsList(opts)(style)
+
+  const txt = '-a,         \n' +
+              '--answer    \n' +
+              '-h, --help  \n' +
+              '--version   \n'
+
+  expect(res).toStrictEqual(txt)
+})
