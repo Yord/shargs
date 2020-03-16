@@ -203,3 +203,19 @@ test('optsList uses default cols if style cols are undefined', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsList uses default cols if style is undefined', () => {
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+
+  const res = optsList(opts)()
+
+  const txt = '-a, --answer             The answer. [number]                                   \n' +
+              '-h, --help               Prints help.                                           \n' +
+              '--version                Prints version. [flag]                                 \n'
+
+  expect(res).toStrictEqual(txt)
+})
