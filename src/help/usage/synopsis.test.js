@@ -57,3 +57,17 @@ test('synopsis also works with just the second input', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('synopsis prints start and end only if opts are empty', () => {
+  const opts = []
+
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = synopsis('deepThought', '<QUESTION>')(opts)(style)
+
+  const txt = 'deepThought <QUESTION>                  \n'
+
+  expect(res).toStrictEqual(txt)
+})
