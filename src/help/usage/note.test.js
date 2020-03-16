@@ -94,3 +94,24 @@ test('noteFrom correctly passes on id', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('noteFrom with wrong id uses default style', () => {
+  const opts = []
+
+  const id1 = 'test'
+  const id2 = 'wrong'
+  
+  const style = {
+    [id1]: {width: 40}
+  }
+
+  const res = noteFrom(id2)(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )(opts)(style)
+
+  const txt = 'Deep Thought was created to come up with the Answer to The Ultimate Question of \n' +
+              'Life, the Universe, and Everything.                                             \n'
+
+  expect(res).toStrictEqual(txt)
+})
