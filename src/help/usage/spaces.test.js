@@ -82,3 +82,21 @@ test('spacesFrom correctly passes on id', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('spacesFrom with wrong id uses default style', () => {
+  const id1 = 'test'
+  const id2 = 'wrong'
+  
+  const opts = []
+
+  const style = {
+    [id1]: {width: 40}
+  }
+
+  const res = spacesFrom(id2)(2)(opts)(style)
+
+  const txt = '                                                                                \n' +
+              '                                                                                \n'
+
+  expect(res).toStrictEqual(txt)
+})
