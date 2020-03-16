@@ -14,6 +14,16 @@ test('space generates expected string', () => {
   expect(res).toStrictEqual(txt)
 })
 
+test('space uses default style if style is undefined', () => {
+  const opts = []
+
+  const res = space(opts)()
+
+  const txt = '                                                                                \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
 test('spaceFrom correctly passes on id', () => {
   const id = 'test'
   
