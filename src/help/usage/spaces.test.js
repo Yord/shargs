@@ -1,0 +1,16 @@
+const {spaces} = require('./spaces')
+
+test('spaces generates expected string', () => {
+  const opts = []
+
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = spaces(2)(opts)(style)
+
+  const txt = '                                        \n' +
+              '                                        \n'
+
+  expect(res).toStrictEqual(txt)
+})
