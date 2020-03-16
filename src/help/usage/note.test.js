@@ -47,3 +47,17 @@ test('note returns an empty line if no string is given', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('note uses default style if style is undefined', () => {
+  const opts = []
+
+  const res = note(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )(opts)()
+
+  const txt = 'Deep Thought was created to come up with the Answer to The Ultimate Question of \n' +
+              'Life, the Universe, and Everything.                                             \n'
+
+  expect(res).toStrictEqual(txt)
+})
