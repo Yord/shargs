@@ -62,6 +62,19 @@ test('note uses default style if style is undefined', () => {
   expect(res).toStrictEqual(txt)
 })
 
+test('note assumes empty opts if opts is undefined', () => {
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = note('Deep Thought was created to come up with the Answer.')()(style)
+
+  const txt = 'Deep Thought was created to come up with\n' +
+              'the Answer.                             \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
 test('note uses default style if style has no line attribute', () => {
   const opts = []
 
