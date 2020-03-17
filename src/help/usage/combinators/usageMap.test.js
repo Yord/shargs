@@ -29,3 +29,19 @@ test('usageMap generates expected string', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('usageMap returns empty string if opts are undefined', () => {
+  const style = {
+    line: {width: 40},
+    desc: {padStart: 4, width: 36}
+  }
+  
+  const res = usageMap(({args, desc}) => layout([
+    text(args.join(', ')),
+    textFrom('desc')(desc)
+  ]))()(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
