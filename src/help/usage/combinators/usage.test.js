@@ -55,3 +55,17 @@ test('usage uses default style if style is undefined', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('usage passes on empty opts if opts are undefined', () => {
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = usage([
+    optsList
+  ])()(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
