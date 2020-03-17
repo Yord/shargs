@@ -1,3 +1,3 @@
 const layout = require('../../layout/combinators/layout')
 
-module.exports = f => opts => layout(opts.map(f))
+module.exports = (f = () => layout([])) => (opts = []) => layout(opts.map(f))
