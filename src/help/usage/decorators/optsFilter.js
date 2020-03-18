@@ -1,3 +1,3 @@
-module.exports = p => usageFunction => (opts = []) => (
+module.exports = (p = () => true) => usageFunction => (opts = []) => (
   usageFunction(opts.filter(p))
 )
