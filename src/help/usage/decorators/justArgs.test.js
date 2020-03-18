@@ -38,3 +38,15 @@ test('justArgs filters all opts', () => {
 
   expect(res).toStrictEqual(opts)
 })
+
+test('justArgs filters no opt if no opt has elements', () => {
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+
+  const res = justArgs(['--foo'])(id)(opts)
+
+  expect(res).toStrictEqual([])
+})
