@@ -1,3 +1,3 @@
-module.exports = f => usageFunction => (opts = []) => (
+module.exports = (f = a => a) => usageFunction => (opts = []) => (
   usageFunction(opts.map(f))
 )
