@@ -26,3 +26,15 @@ test('justArgs filters exactly one opt', () => {
 
   expect(res).toStrictEqual(opts.slice(2, 3))
 })
+
+test('justArgs filters all opts', () => {
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+
+  const res = justArgs(['-a', '-h', '--version'])(id)(opts)
+
+  expect(res).toStrictEqual(opts)
+})
