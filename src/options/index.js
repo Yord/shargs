@@ -1,6 +1,6 @@
 const array   = (
   types =>
-  (key, args, {only = null, desc = '', opts = null} = {}) =>
+  (key, args = [], {only = null, desc = '', opts = null} = {}) =>
   ({key, types, args, only, desc, opts})
 )
 

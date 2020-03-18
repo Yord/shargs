@@ -4,7 +4,7 @@ const {array} = require('.')
 test('types are correctly assembled', () => {
   const typesKeyArgsOptionsResult = types().chain(types =>
     base64().chain(key =>
-      anything().chain(args =>
+      anything().filter(a => typeof a !== 'undefined').chain(args =>
         oneof(constant(undefined), anything()).chain(only =>
           oneof(constant(undefined), unicodeString()).chain(desc =>
             oneof(constant(undefined), anything()).chain(opts =>
