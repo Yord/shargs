@@ -30,3 +30,11 @@ test('optsFilter does not filter if predicate is undefined', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('optsFilter returns an empty list if opts are empty', () => {
+  const opts = []
+
+  const res = optsFilter(({args}) => args.length > 1)(id)(opts)
+
+  expect(res).toStrictEqual([])
+})
