@@ -34,3 +34,9 @@ test('noCommands returns an empty list if opts are empty', () => {
 
   expect(res).toStrictEqual([])
 })
+
+test('noCommands returns an empty list if opts are undefined', () => {
+  const res = noCommands(id)()
+
+  expect(res).toStrictEqual([])
+})
