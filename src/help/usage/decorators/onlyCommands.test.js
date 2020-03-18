@@ -14,3 +14,15 @@ test('onlyCommands filters one opt', () => {
 
   expect(res).toStrictEqual(opts.slice(2, 3))
 })
+
+test('onlyCommands filters more than one opt', () => {
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    command('version', ['--version'], {desc: 'Prints version.'})
+  ]
+
+  const res = onlyCommands(id)(opts)
+
+  expect(res).toStrictEqual(opts.slice(1, 3))
+})
