@@ -38,3 +38,11 @@ test('onlyFirstArg returns empty array if args is undefined', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('onlyFirstArg returns an empty list if opts are empty', () => {
+  const opts = []
+
+  const res = onlyFirstArg(id)(opts)
+
+  expect(res).toStrictEqual([])
+})
