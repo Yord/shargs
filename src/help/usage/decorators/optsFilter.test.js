@@ -38,3 +38,9 @@ test('optsFilter returns an empty list if opts are empty', () => {
 
   expect(res).toStrictEqual([])
 })
+
+test('optsFilter returns an empty list if opts are undefined', () => {
+  const res = optsFilter(({args}) => args.length > 1)(id)()
+
+  expect(res).toStrictEqual([])
+})
