@@ -26,3 +26,11 @@ test('onlyCommands filters more than one opt', () => {
 
   expect(res).toStrictEqual(opts.slice(1, 3))
 })
+
+test('onlyCommands returns an empty list if opts are empty', () => {
+  const opts = []
+
+  const res = onlyCommands(id)(opts)
+
+  expect(res).toStrictEqual([])
+})
