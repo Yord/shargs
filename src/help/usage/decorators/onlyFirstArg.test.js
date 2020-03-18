@@ -20,3 +20,21 @@ test('onlyFirstArg filters one opt', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('onlyFirstArg returns empty array if args is undefined', () => {
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    {key: 'version', args: undefined, types: null, desc: 'Prints version.'}
+  ]
+
+  const res = onlyFirstArg(id)(opts)
+
+  const exp = [
+    number('answer', ['-a'], {desc: 'The answer.'}),
+    flag('help', ['-h'], {desc: 'Prints help.'}),
+    {key: 'version', args: [], types: null, desc: 'Prints version.'}
+  ]
+
+  expect(res).toStrictEqual(exp)
+})
