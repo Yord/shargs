@@ -46,3 +46,11 @@ test('optsMap returns an empty list if opts are empty', () => {
 
   expect(res).toStrictEqual([])
 })
+
+test('optsMap returns an empty list if opts are undefined', () => {
+  const res = optsMap(
+    opt => ({...opt, args: opt.args.length > 0 ? opt.args.slice(0, 1) : []})
+  )(id)()
+
+  expect(res).toStrictEqual([])
+})
