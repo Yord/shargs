@@ -74,3 +74,11 @@ test('justArgs filters no opt if list is undefined', () => {
 
   expect(res).toStrictEqual([])
 })
+
+test('justArgs returns an empty list if opts are empty', () => {
+  const opts = []
+
+  const res = justArgs(['-h'])(id)(opts)
+
+  expect(res).toStrictEqual([])
+})
