@@ -82,3 +82,9 @@ test('justArgs returns an empty list if opts are empty', () => {
 
   expect(res).toStrictEqual([])
 })
+
+test('justArgs returns an empty list if opts are undefined', () => {
+  const res = justArgs(['-h'])(id)()
+
+  expect(res).toStrictEqual([])
+})
