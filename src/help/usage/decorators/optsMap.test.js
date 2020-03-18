@@ -22,3 +22,17 @@ test('optsMap transforms opts', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('optsMap does not transforms if function is undefined', () => {
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    command('version', ['--version'], {desc: 'Prints version.'})
+  ]
+
+  const res = optsMap()(id)(opts)
+
+  const exp = opts
+
+  expect(res).toStrictEqual(exp)
+})
