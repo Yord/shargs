@@ -153,3 +153,15 @@ test('cast reports an error on wrong numbers', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('cast ignores all options with types it does not know', () => {
+  const option = {key: 'foo', types: ['foo'], args: ['-a', '--answer'], values: ['42']}
+
+  const obj = {opts: [option]}
+
+  const {opts} = cast(obj)
+
+  const exp = obj.opts
+
+  expect(opts).toStrictEqual(exp)
+})
