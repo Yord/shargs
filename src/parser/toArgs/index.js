@@ -10,7 +10,7 @@ module.exports = parser => ({errs = [], opts: OPTS = []} = {}) => {
       const parse = parser(opts || [])
       const res   = parse(argv, [])
 
-      errs      = errs.concat(res.errs)
+      errs      = errs.concat(res.errs || [])
       args[key] = Object.assign({}, args[key], res.args)
     } else if (types.length === 0) {
       args[key] = typeof args[key] === 'undefined' ? {count: 1} : {count: args[key].count + 1}
