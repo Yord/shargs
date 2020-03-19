@@ -35,3 +35,19 @@ test('toArgs transforms opts into args', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('toArgs removes double minus', () => {
+  const obj = {
+    opts: [
+      {values: ['--']}
+    ]
+  }
+
+  const {args} = toArgs(discard)(obj)
+
+  const exp = {
+    _: []
+  }
+
+  expect(args).toStrictEqual(exp)
+})
