@@ -120,3 +120,23 @@ test('toOpts transforms command opts at the end of the line with double minusses
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('toOpts transforms command opts at the start of the line with double minusses', () => {
+  const obj = {
+    argv: [
+      '-h', 'foo', '--bar',
+      '--',
+      'foo'
+    ]
+  }
+
+  const {opts} = toOpts(combined)(obj)
+
+  const exp = [
+    deleteArgs({...command('help', ['-h', '--help']), values: ['foo', '--bar']}),
+    {values: ['--']},
+    {values: ['foo']}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
