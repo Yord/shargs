@@ -244,3 +244,11 @@ test('toOpts works even if opts are undefined', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('toOpts passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = toOpts()({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
