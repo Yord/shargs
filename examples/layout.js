@@ -178,3 +178,19 @@ const {texts}          = require('../src/help/layout/texts')
 
   console.log(res)
 }())
+
+;(function () {
+  const style = {
+    line: {width: 40},
+    desc: {padStart: 3, width: 37}
+  }
+
+  const lines = layoutMap(line)
+
+  const res = lines([
+    '-h, --help',
+    'Prints the help.'
+  ])(style)
+
+  console.log(res)
+}())
