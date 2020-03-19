@@ -208,3 +208,21 @@ test('toOpts transforms undefined input into empty opts', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('toOpts works even if opts are empty', () => {
+  const obj = {
+    argv: [
+      '-h',
+      'foo'
+    ]
+  }
+
+  const {opts} = toOpts([])(obj)
+
+  const exp = [
+    {values: ['-h']},
+    {values: ['foo']}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
