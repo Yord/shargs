@@ -1,7 +1,7 @@
 const justArgs = require('./justArgs')
 const {command, flag, number} = require('../../../options')
 
-const id = a => a
+const id = opts => opts
 
 test('justArgs filters more than one opt', () => {
   const opts = [

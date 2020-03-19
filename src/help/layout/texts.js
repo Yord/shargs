@@ -1,9 +1,9 @@
-const layout     = require('./combinators/layout')
+const layoutMap  = require('./combinators/layoutMap')
 const {textFrom} = require('./text')
 
-const textsFrom = id => (strings = []) => layout(
-  strings.map(textFrom(id))
-)
+const o = (f, g) => x => f(g(x))
+
+const textsFrom = o(layoutMap, textFrom)
 
 const texts = textsFrom('line')
 
