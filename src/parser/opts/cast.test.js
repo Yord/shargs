@@ -125,3 +125,17 @@ test('cast casts arrays', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('cast reports an error on wrong bools', () => {
+  const option = {...bool('verbose', ['--verbose']), values: ['foo']}
+
+  const obj = {opts: [option]}
+
+  const {errs} = cast(obj)
+
+  const exp = [
+    argumentIsNotABool({value: option.values[0], option})
+  ]
+
+  expect(errs).toStrictEqual(exp)
+})
