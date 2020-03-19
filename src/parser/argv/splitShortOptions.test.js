@@ -30,16 +30,16 @@ test('splitShortOptions does not touch options without dashes', () => {
   expect(argv).toStrictEqual(exp)
 })
 
-test('splitShortOptions works if args is undefined', () => {
+test('splitShortOptions works if argv is undefined', () => {
   const obj = {}
 
-  const {args} = splitShortOptions(obj)
+  const {argv} = splitShortOptions(obj)
 
-  expect(args._).toStrictEqual([])
+  expect(argv._).toStrictEqual(undefined)
 })
 
 test('splitShortOptions works if input is undefined', () => {
-  const {args} = splitShortOptions()
+  const {argv} = splitShortOptions()
 
-  expect(args._).toStrictEqual([])
+  expect(argv._).toStrictEqual(undefined)
 })
