@@ -165,3 +165,11 @@ test('cast ignores all options with types it does not know', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('cast works if opts is undefined', () => {
+  const obj = {}
+
+  const {opts} = cast(obj)
+
+  expect(opts).toStrictEqual([])
+})
