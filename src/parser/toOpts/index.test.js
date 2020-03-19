@@ -68,3 +68,19 @@ test('toOpts keeps unrecognized strings', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('toOpts transforms unary options', () => {
+  const obj = {
+    argv: [
+      '--title', "The Hitchhiker's Guide to the Galaxy"
+    ]
+  }
+
+  const {opts} = toOpts(combined)(obj)
+
+  const exp = [
+    deleteArgs({...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]})
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
