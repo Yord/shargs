@@ -98,3 +98,22 @@ test('parser applies argv stages', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('parser applies opts stages', () => {
+  const argv = [
+    '-n', '23', 'true'
+  ]
+
+  const stages = {
+    opts: [cast]
+  }
+
+  const {args} = parser(stages)(opts)(argv)
+
+  const exp = {
+    _: [],
+    numBool: [23, true]
+  }
+
+  expect(args).toStrictEqual(exp)
+})
