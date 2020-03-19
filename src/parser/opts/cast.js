@@ -17,25 +17,23 @@ module.exports = ({errs = [], opts: OPTS = []} = {}) => {
       } else {
         for (let j = 0; j < types.length; j++) {
           const type = types[j]
-          const arg  = VALUES[j]
+          const value  = VALUES[j]
           switch (type) {
-            case 'count':
-              values.push(1)
-              break
             case 'string':
-              values.push(arg)
+              values.push(value)
               break
             case 'number':
-              const float = parseFloat(arg)
+              const float = parseFloat(value)
               if (!Number.isNaN(float)) values.push(float)
-              else errs.push(argumentIsNotANumber({arg, option}))
+              else errs.push(argumentIsNotANumber({value, option}))
               break
             case 'bool':
-              if (arg === 'true')       values.push(true)
-              else if (arg === 'false') values.push(false)
-              else errs.push(argumentIsNotABool({arg, option}))
+              if (value === 'true')       values.push(true)
+              else if (value === 'false') values.push(false)
+              else errs.push(argumentIsNotABool({value, option}))
               break
             default:
+              values.push(value)
               break
           }
         }
