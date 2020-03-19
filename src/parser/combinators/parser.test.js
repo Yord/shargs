@@ -49,3 +49,33 @@ test('parser transforms argv to args', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('parser works even if stages are undefined', () => {
+  const argv = [
+    'foo',
+    '--title', "The Hitchhiker's Guide to the Galaxy",
+    '-n', '23', 'true',
+    '-a', '42',
+    '--verbose', 'false',
+    '--version',
+    'bar',
+    '-h', 'foo', '--bar'
+  ]
+
+  const {args} = parser()(opts)(argv)
+
+  const exp = {
+    _: ['foo', 'bar'],
+    title: "The Hitchhiker's Guide to the Galaxy",
+    numBool: ['23', 'true'],
+    answer: '42',
+    verbose: 'false',
+    version: {count: 1},
+    help: {
+      _: ['foo'],
+      bar: {count: 1}
+    }
+  }
+
+  expect(args).toStrictEqual(exp)
+})
