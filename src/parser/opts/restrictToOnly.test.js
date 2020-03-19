@@ -88,3 +88,22 @@ test('restrictToOnly fails on the first value of an array', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('restrictToOnly fails on the second value of an array', () => {
+  const only   = [23, false]
+  const option = {...numberBool('numBool', ['-n', '--nb'], {only}), values: [23, true]}
+
+  const obj = {opts: [option]}
+
+  const {errs} = restrictToOnly(obj)
+
+  const exp = [
+    argumentValueRestrictionsViolated({
+      value: true,
+      only,
+      option
+    })
+  ]
+
+  expect(errs).toStrictEqual(exp)
+})
