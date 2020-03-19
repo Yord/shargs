@@ -40,3 +40,15 @@ test('layoutMap returns empty string if list is undefined', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('layoutMap returns default style if style is undefined', () => {
+  const res = layoutMap(line)([
+    'One line',
+    'And another'
+  ])()
+
+  const txt = 'One line                                                                        \n' +
+              'And another                                                                     \n'
+
+  expect(res).toStrictEqual(txt)
+})
