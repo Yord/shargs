@@ -87,3 +87,11 @@ test('toArgs counts the occurrences of flags', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('toArgs works if opts is undefined', () => {
+  const obj = {}
+
+  const {args} = toArgs(discard)(obj)
+
+  expect(args).toStrictEqual({_: []})
+})
