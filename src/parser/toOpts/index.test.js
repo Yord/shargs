@@ -190,3 +190,13 @@ test('toOpts transforms empty argv into empty opts', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('toOpts transforms missing argv into empty opts', () => {
+  const obj = {}
+
+  const {opts} = toOpts(combined)(obj)
+
+  const exp = []
+
+  expect(opts).toStrictEqual(exp)
+})
