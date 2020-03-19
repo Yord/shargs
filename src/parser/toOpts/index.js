@@ -1,4 +1,4 @@
-module.exports = args => ({errs = [], argv: ARGV = []} = {}) => {
+module.exports = (args = []) => ({errs = [], argv: ARGV = []} = {}) => {
   const opts = []
 
   let at  = 0
