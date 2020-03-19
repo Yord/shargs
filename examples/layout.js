@@ -169,10 +169,10 @@ const {texts}          = require('../src/help/layout/texts')
     ]
   ]
 
-  const f = ([title, desc]) => [
+  const f = ([title, desc]) => layout([
     text(title),
     textFrom('desc')(desc)
-  ]
+  ])
 
   const res = layoutMap(f)(itemsList)(style)
 
