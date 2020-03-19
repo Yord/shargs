@@ -162,3 +162,19 @@ test('toOpts transforms command opts in the middle of the line with double minus
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('toOpts works with commands that have no argv', () => {
+  const obj = {
+    argv: [
+      '-h'
+    ]
+  }
+
+  const {opts} = toOpts(combined)(obj)
+
+  const exp = [
+    deleteArgs({...command('help', ['-h', '--help']), values: []})
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
