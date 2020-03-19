@@ -95,3 +95,9 @@ test('toArgs works if opts is undefined', () => {
 
   expect(args).toStrictEqual({_: []})
 })
+
+test('toArgs works if input is undefined', () => {
+  const {args} = toArgs(discard)()
+
+  expect(args).toStrictEqual({_: []})
+})
