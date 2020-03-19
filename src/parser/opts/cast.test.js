@@ -179,3 +179,11 @@ test('cast works if input is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('cast passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = cast({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})

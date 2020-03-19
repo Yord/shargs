@@ -21,3 +21,11 @@ test('emptyRest even empties rest if input is undefined', () => {
 
   expect(args._).toStrictEqual([])
 })
+
+test('emptyRest passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = emptyRest({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})

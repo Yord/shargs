@@ -1,4 +1,4 @@
-module.exports = args => ({errs = [], argv: ARGV = []} = {}) => {
+module.exports = (args = []) => ({errs = [], argv: ARGV = []} = {}) => {
   const opts = []
 
   let at  = 0
@@ -35,7 +35,7 @@ module.exports = args => ({errs = [], argv: ARGV = []} = {}) => {
       }
     } else {
       const values = ARGV.slice(at, at + 1)
-      if (values.length > 0) opts.push({values})
+      opts.push({values})
     }
 
     at  = at2
