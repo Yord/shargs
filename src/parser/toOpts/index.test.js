@@ -84,3 +84,19 @@ test('toOpts transforms unary options', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('toOpts transforms command opts at the end of the line', () => {
+  const obj = {
+    argv: [
+      '-h', 'foo', '--bar'
+    ]
+  }
+
+  const {opts} = toOpts(combined)(obj)
+
+  const exp = [
+    deleteArgs({...command('help', ['-h', '--help']), values: ['foo', '--bar']})
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
