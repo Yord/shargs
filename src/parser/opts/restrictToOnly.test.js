@@ -21,3 +21,28 @@ test('restrictToOnly works as expected on all types', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('restrictToOnly does nothing if the only attribute is undefined or null', () => {
+  const obj = {
+    opts: [
+      {...string('title', ['--title'], {only: null}), values: ["The Hitchhiker's Guide to the Galaxy"]},
+      {...numberBool('numBool', ['-n', '--nb'], {only: null}), values: [23, true]},
+      {...number('answer', ['-a', '--answer'], {only: null}), values: [42]},
+      {...command('help', ['-h', '--help'], {only: null}), values: ['foo --bar']},
+      {...bool('verbose', ['--verbose'], {only: null}), values: [false]},
+      {...flag('version', ['--version'], {only: null}), values: [true]},
+      {...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]},
+      {...numberBool('numBool', ['-n', '--nb']), values: [23, true]},
+      {...number('answer', ['-a', '--answer']), values: [42]},
+      {...command('help', ['-h', '--help']), values: ['foo --bar']},
+      {...bool('verbose', ['--verbose']), values: [false]},
+      {...flag('version', ['--version']), values: [true]}
+    ]
+  }
+
+  const {opts} = restrictToOnly(obj)
+
+  const exp = obj.opts
+
+  expect(opts).toStrictEqual(exp)
+})
