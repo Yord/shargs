@@ -101,3 +101,11 @@ test('toArgs works if input is undefined', () => {
 
   expect(args).toStrictEqual({_: []})
 })
+
+test('toArgs passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = toArgs(discard)({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
