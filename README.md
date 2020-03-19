@@ -855,7 +855,7 @@ Style:
 ```js
 const style = {
   line: {width: 40},
-  desc: {padStart: 3, width: 37}
+  desc: {padStart: 4, width: 36}
 }
 ```
 
@@ -863,14 +863,8 @@ Example 1:
 
 ```js
 const itemsList = [
-  [
-    '-h, --help',
-    'Prints the help.'
-  ],
-  [
-    '-v, --version',
-    'Prints the version.'
-  ]
+  ['-h, --help', 'Prints the help.'],
+  ['-v, --version', 'Prints the version.']
 ]
 
 const f = ([title, desc]) => layout([
@@ -885,9 +879,9 @@ Result 1:
 
 ```bash
 -h, --help                              
-   Prints the help.                     
+    Prints the help.                    
 -v, --version                           
-   Prints the version.                  
+    Prints the version.                 
 ```
 
 Example 2:
