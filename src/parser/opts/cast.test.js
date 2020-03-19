@@ -109,3 +109,19 @@ test('cast casts flags', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('cast casts arrays', () => {
+  const obj = {
+    opts: [
+      {...numberBool('numBool', ['-n', '--nb']), values: ['23', 'true']}
+    ]
+  }
+
+  const {opts} = cast(obj)
+
+  const exp = [
+    {...numberBool('numBool', ['-n', '--nb']), values: [23, true]}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
