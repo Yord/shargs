@@ -51,3 +51,20 @@ test('toArgs removes double minus', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('toArgs represents flags as counts', () => {
+  const obj = {
+    opts: [
+      {...flag('verbose', ['-v']), values: [true]}
+    ]
+  }
+
+  const {args} = toArgs(discard)(obj)
+
+  const exp = {
+    _: [],
+    verbose: {count: 1}
+  }
+
+  expect(args).toStrictEqual(exp)
+})
