@@ -121,3 +121,11 @@ test('restrictToOnly works if input is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('restrictToOnly passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = restrictToOnly({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
