@@ -43,3 +43,11 @@ test('splitShortOptions works if input is undefined', () => {
 
   expect(argv._).toStrictEqual(undefined)
 })
+
+test('splitShortOptions passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = splitShortOptions({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
