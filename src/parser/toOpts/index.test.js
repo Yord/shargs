@@ -226,3 +226,21 @@ test('toOpts works even if opts are empty', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('toOpts works even if opts are undefined', () => {
+  const obj = {
+    argv: [
+      '-h',
+      'foo'
+    ]
+  }
+
+  const {opts} = toOpts()(obj)
+
+  const exp = [
+    {values: ['-h']},
+    {values: ['foo']}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
