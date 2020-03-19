@@ -1,17 +1,17 @@
-const {noArgumentProvidedInOption, noArgumentsProvidedInOption} = require('../../errors')
+const {noArgumentsProvidedInOption, noKeyProvidedInOption} = require('../../errors')
 
-module.exports = (options = {}) => {
-  const {key = null, args: ARGS = [], types = null, only = null, desc = '', opts = null} = options
+module.exports = (opt = {}) => {
+  const {key = null, args: ARGS = [], types = null, only = null, desc = '', opts = null} = opt
 
   const errs = []
   const args = {}
 
   if (key === null) {
-    errs.push(noArgumentProvidedInOption({options}))
+    errs.push(noKeyProvidedInOption({option: opt}))
   }
   
   if (ARGS === null || ARGS.length === 0) {
-    errs.push(noArgumentsProvidedInOption({options}))
+    errs.push(noArgumentsProvidedInOption({option: opt}))
   }
   
   if (key !== null && ARGS !== null && ARGS.length > 0) {

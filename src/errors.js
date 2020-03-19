@@ -28,16 +28,16 @@ const invalidTypesInArgument = ({types, argument}) =>({
   info: {types, argument}
 })
 
-const noArgumentProvidedInOption = ({options}) => ({
-  code: 'No argument provided in option',
-  msg:  "Please provide a key (e.g. [{key: 'foo', ...}])",
-  info: {options}
-})
-
-const noArgumentsProvidedInOption = ({options}) => ({
+const noArgumentsProvidedInOption = ({option}) => ({
   code: 'No arguments provided in option',
   msg:  "Please provide at least one argument (e.g. [{args: ['--foo'], ...}])",
-  info: {options}
+  info: {option}
+})
+
+const noKeyProvidedInOption = ({option}) => ({
+  code: 'No key provided in option',
+  msg:  "Please provide a key (e.g. [{key: 'foo', ...}])",
+  info: {option}
 })
 
 const nonMatchingArgumentTypes = ({arg, ref, argument}) => ({
@@ -52,7 +52,7 @@ module.exports = {
   argumentValueRestrictionsViolated,
   invalidOptionsListInCombine,
   invalidTypesInArgument,
-  noArgumentProvidedInOption,
+  noKeyProvidedInOption,
   noArgumentsProvidedInOption,
   nonMatchingArgumentTypes
 }
