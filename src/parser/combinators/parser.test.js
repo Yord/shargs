@@ -229,3 +229,25 @@ test('parser uses a custom toArgs function', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('parser accumulates errors', () => {
+  const option = string(undefined, ['--title'])
+
+  const opts = [
+    option
+  ]
+  
+  const argv = []
+
+  const stages = {
+    toArgs: toArgs()
+  }
+
+  const {errs} = parser(stages)(opts)(argv)
+
+  const exp = [
+    noKeyProvidedInOption({option})
+  ]
+
+  expect(errs).toStrictEqual(exp)
+})
