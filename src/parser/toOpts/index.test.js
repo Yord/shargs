@@ -50,3 +50,21 @@ test('toOpts transforms argv into opts', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('toOpts keeps unrecognized strings', () => {
+  const obj = {
+    argv: [
+      'foo',
+      'bar'
+    ]
+  }
+
+  const {opts} = toOpts(combined)(obj)
+
+  const exp = [
+    {values: ['foo']},
+    {values: ['bar']}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
