@@ -135,3 +135,19 @@ test('parser applies args stages', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('parser works with empty opts', () => {
+  const argv = [
+    'foo'
+  ]
+
+  const stages = {}
+
+  const {args} = parser(stages)([])(argv)
+
+  const exp = {
+    _: ['foo']
+  }
+
+  expect(args).toStrictEqual(exp)
+})
