@@ -28,3 +28,15 @@ test('layoutMap returns empty string if list is empty', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('layoutMap returns empty string if list is undefined', () => {
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = layoutMap(line)()(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
