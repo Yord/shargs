@@ -211,3 +211,21 @@ test('parser uses a custom toOpts function', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('parser uses a custom toArgs function', () => {
+  const argv = [
+    'foo'
+  ]
+
+  const stages = {
+    toArgs: toArgs()
+  }
+
+  const {args} = parser(stages)(opts)(argv)
+
+  const exp = {
+    _: ['foo']
+  }
+
+  expect(args).toStrictEqual(exp)
+})
