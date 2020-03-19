@@ -151,3 +151,19 @@ test('parser works with empty opts', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('parser works with undefined opts', () => {
+  const argv = [
+    'foo'
+  ]
+
+  const stages = {}
+
+  const {args} = parser(stages)()(argv)
+
+  const exp = {
+    _: ['foo']
+  }
+
+  expect(args).toStrictEqual(exp)
+})
