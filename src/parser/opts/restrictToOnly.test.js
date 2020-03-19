@@ -1,4 +1,5 @@
 const restrictToOnly = require('./restrictToOnly')
+const {argumentValueRestrictionsViolated} = require('../../errors')
 const {array, bool, command, flag, number, string} = require('../../options')
 
 const numberBool = array(['number', 'bool'])
@@ -45,4 +46,26 @@ test('restrictToOnly does nothing if the only attribute is undefined or null', (
   const exp = obj.opts
 
   expect(opts).toStrictEqual(exp)
+})
+
+test('restrictToOnly fails if a value is not allowed', () => {
+  const obj = {
+    opts: [
+      {...string('title', ['--title'], {only: ["Dirk Gently"]}), values: ["The Hitchhiker's Guide to the Galaxy"]},
+      {...number('answer', ['-a', '--answer'], {only: [23]}), values: [42]},
+      {...command('help', ['-h', '--help'], {only: ['--foo bar']}), values: ['foo --bar']},
+      {...bool('verbose', ['--verbose'], {only: [true]}), values: [false]},
+      {...flag('version', ['--version'], {only: [false]}), values: [true]}
+    ]
+  }
+
+  const {errs} = restrictToOnly(obj)
+
+  const exp = obj.opts.map(option => argumentValueRestrictionsViolated({
+    value: option.values[0],
+    only: option.only,
+    option
+  }))
+
+  expect(errs).toStrictEqual(exp)
 })
