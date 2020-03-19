@@ -193,3 +193,21 @@ test('parser works with undefined argv', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('parser uses a custom toOpts function', () => {
+  const argv = [
+    'foo'
+  ]
+
+  const stages = {
+    toOpts
+  }
+
+  const {args} = parser(stages)(opts)(argv)
+
+  const exp = {
+    _: ['foo']
+  }
+
+  expect(args).toStrictEqual(exp)
+})
