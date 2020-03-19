@@ -107,3 +107,11 @@ test('restrictToOnly fails on the second value of an array', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('restrictToOnly works if opts is undefined', () => {
+  const obj = {}
+
+  const {opts} = restrictToOnly(obj)
+
+  expect(opts).toStrictEqual([])
+})
