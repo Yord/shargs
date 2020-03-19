@@ -79,3 +79,22 @@ test('parser works even if stages are undefined', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('parser applies argv stages', () => {
+  const argv = [
+    '-VV'
+  ]
+
+  const stages = {
+    argv: [splitShortOptions]
+  }
+
+  const {args} = parser(stages)(opts)(argv)
+
+  const exp = {
+    _: [],
+    version: {count: 2}
+  }
+
+  expect(args).toStrictEqual(exp)
+})
