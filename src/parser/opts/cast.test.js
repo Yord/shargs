@@ -61,3 +61,19 @@ test('cast casts numbers', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('cast does not change commands', () => {
+  const obj = {
+    opts: [
+      {...command('help', ['-h', '--help']), values: ['foo --bar']}
+    ]
+  }
+
+  const {opts} = cast(obj)
+
+  const exp = [
+    {...command('help', ['-h', '--help']), values: ['foo --bar']}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
