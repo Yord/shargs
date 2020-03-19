@@ -115,3 +115,9 @@ test('restrictToOnly works if opts is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('restrictToOnly works if input is undefined', () => {
+  const {opts} = restrictToOnly()
+
+  expect(opts).toStrictEqual([])
+})
