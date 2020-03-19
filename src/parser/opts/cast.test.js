@@ -77,3 +77,19 @@ test('cast does not change commands', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('cast casts bools', () => {
+  const obj = {
+    opts: [
+      {...bool('verbose', ['--verbose']), values: ['false']}
+    ]
+  }
+
+  const {opts} = cast(obj)
+
+  const exp = [
+    {...bool('verbose', ['--verbose']), values: [false]}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
