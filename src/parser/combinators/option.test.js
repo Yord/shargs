@@ -1,6 +1,6 @@
 const {anything, array, assert, base64, property} = require('fast-check')
 const option = require('./option')
-const {noArgumentProvidedInOption, noArgumentsProvidedInOption} = require('../../errors')
+const {noArgumentsProvidedInOption, noKeyProvidedInOption} = require('../../errors')
 
 test('option transforms arguments DSL into options DSL', () => {
   const optionsArguments = base64().chain(key =>
@@ -63,7 +63,7 @@ test('option fails if no key is given', () => {
               options: {...options, args},
               _arguments: {
                 errs: [
-                  noArgumentProvidedInOption({options: {...options, args}})
+                  noKeyProvidedInOption({option: {...options, args}})
                 ],
                 args: {}
               }
@@ -102,7 +102,7 @@ test('option fails if no args are given', () => {
               options,
               _arguments: {
                 errs: [
-                  noArgumentsProvidedInOption({options})
+                  noArgumentsProvidedInOption({option: options})
                 ],
                 args: {}
               }
@@ -127,8 +127,8 @@ test('option fails if no args are given', () => {
 test('option fails if passed undefined', () => {
   const _arguments = {
     errs: [
-      noArgumentProvidedInOption({options: {}}),
-      noArgumentsProvidedInOption({options: {}})
+      noKeyProvidedInOption({option: {}}),
+      noArgumentsProvidedInOption({option: {}})
     ],
     args: {}
   }
