@@ -7,3 +7,11 @@ test('emptyRest works as expected', () => {
 
   expect(args._).toStrictEqual([])
 })
+
+test('emptyRest even empties rest if args is undefined', () => {
+  const obj = {}
+
+  const {args} = emptyRest(obj)
+
+  expect(args._).toStrictEqual([])
+})
