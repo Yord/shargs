@@ -15,3 +15,9 @@ test('emptyRest even empties rest if args is undefined', () => {
 
   expect(args._).toStrictEqual([])
 })
+
+test('emptyRest even empties rest if input is undefined', () => {
+  const {args} = emptyRest()
+
+  expect(args._).toStrictEqual([])
+})
