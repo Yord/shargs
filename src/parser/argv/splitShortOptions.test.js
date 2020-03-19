@@ -19,3 +19,13 @@ test('splitShortOptions does not touch options with two dashes', () => {
 
   expect(argv).toStrictEqual(exp)
 })
+
+test('splitShortOptions does not touch options without dashes', () => {
+  const obj = {argv: ['ab']}
+
+  const {argv} = splitShortOptions(obj)
+
+  const exp = ['ab']
+
+  expect(argv).toStrictEqual(exp)
+})
