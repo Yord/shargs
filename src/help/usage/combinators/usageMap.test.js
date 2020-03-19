@@ -30,6 +30,28 @@ test('usageMap generates expected string', () => {
   expect(res).toStrictEqual(txt)
 })
 
+test('usageMap uses default styles if style is undefined', () => {
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+
+  const res = usageMap(({args, desc}) => layout([
+    text(args.join(', ')),
+    textFrom('desc')(desc)
+  ]))(opts)()
+
+  const txt = '-a, --answer                                                                    \n' +
+              '    The answer.                                                                 \n' +
+              '-h, --help                                                                      \n' +
+              '    Prints help.                                                                \n' +
+              '--version                                                                       \n' +
+              '    Prints version.                                                             \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
 test('usageMap returns empty string if opts are undefined', () => {
   const style = {
     line: {width: 40},
