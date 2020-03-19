@@ -45,3 +45,19 @@ test('cast does not cast strings', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('cast casts numbers', () => {
+  const obj = {
+    opts: [
+      {...number('answer', ['-a', '--answer']), values: ['42']}
+    ]
+  }
+
+  const {opts} = cast(obj)
+
+  const exp = [
+    {...number('answer', ['-a', '--answer']), values: [42]}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
