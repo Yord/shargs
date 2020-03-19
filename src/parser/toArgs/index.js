@@ -5,7 +5,7 @@ module.exports = parser => ({errs = [], opts: OPTS = []} = {}) => {
     const {key, values: argv, types, opts} = OPTS[i]
 
     if (typeof types === 'undefined') {
-      if (key !== '--') args['_'] = args['_'].concat(argv)
+      if (argv.length !== 1 || argv[0] !== '--') args['_'] = args['_'].concat(argv)
     } else if (types === null) {
       const parse = parser(opts || [])
       const res   = parse(argv, [])
