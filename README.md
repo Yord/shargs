@@ -850,14 +850,18 @@ The strings are then formatted according to f.
 
 <br />
 
-Example:
+Style:
 
 ```js
 const style = {
   line: {width: 40},
   desc: {padStart: 3, width: 37}
 }
+```
 
+Example 1:
+
+```js
 const itemsList = [
   [
     '-h, --help',
@@ -869,21 +873,39 @@ const itemsList = [
   ]
 ]
 
-const f = ([title, desc]) => [
+const f = ([title, desc]) => layout([
   text(title),
   textFrom('desc')(desc)
-]
+])
 
 layoutMap(f)(itemsList)(style)
 ```
 
-Result:
+Result 1:
 
 ```bash
 -h, --help                              
    Prints the help.                     
 -v, --version                           
    Prints the version.                  
+```
+
+Example 2:
+
+```js
+const lines = layoutMap(line)
+
+lines([
+  '-h, --help',
+  'Prints the help.'
+])(style)
+```
+
+Result 2:
+
+```bash
+-h, --help                              
+Prints the help.                        
 ```
 
 </details>
