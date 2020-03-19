@@ -68,3 +68,22 @@ test('toArgs represents flags as counts', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('toArgs counts the occurrences of flags', () => {
+  const obj = {
+    opts: [
+      {...flag('verbose', ['-v']), values: [true]},
+      {...flag('verbose', ['-v']), values: [true]},
+      {...flag('verbose', ['-v']), values: [true]}
+    ]
+  }
+
+  const {args} = toArgs(discard)(obj)
+
+  const exp = {
+    _: [],
+    verbose: {count: 3}
+  }
+
+  expect(args).toStrictEqual(exp)
+})
