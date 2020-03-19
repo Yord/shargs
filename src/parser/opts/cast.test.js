@@ -93,3 +93,19 @@ test('cast casts bools', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('cast casts flags', () => {
+  const obj = {
+    opts: [
+      {...flag('version', ['--version']), values: []}
+    ]
+  }
+
+  const {opts} = cast(obj)
+
+  const exp = [
+    {...flag('version', ['--version']), values: [true]}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
