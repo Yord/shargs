@@ -173,3 +173,9 @@ test('cast works if opts is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('cast works if input is undefined', () => {
+  const {opts} = cast()
+
+  expect(opts).toStrictEqual([])
+})
