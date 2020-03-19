@@ -178,3 +178,15 @@ test('toOpts works with commands that have no argv', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('toOpts transforms empty argv into empty opts', () => {
+  const obj = {
+    argv: []
+  }
+
+  const {opts} = toOpts(combined)(obj)
+
+  const exp = []
+
+  expect(opts).toStrictEqual(exp)
+})
