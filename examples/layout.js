@@ -11,36 +11,41 @@ const {table}          = require('../src/help/layout/table')
 const {text, textFrom} = require('../src/help/layout/text')
 const {texts}          = require('../src/help/layout/texts')
 
-;(function () {
-  const style = {
-    line: {width: 40}
-  }
+const example = (desc, a) => console.log(
+  layout([
+    text(desc),
+    a
+  ])({
+    line: {width: 40},
+    desc: {padStart: 4, width: 36},
+    cols: [
+      {width: 15},
+      {width: 25}
+    ]
+  })
+)
 
-  const res = layout([
+example(
+  'Sample use of br.',
+  layout([
     line('First line'),
     br,
     line('Last line')
-  ])(style)
+  ])
+)
 
-  console.log(res)
-}())
-
-;(function () {
-  const style = {line: {width: 40}}
-  
-  const res = layout([
+example(
+  'Sample use of brs.',
+  layout([
     line('First line'),
     brs(2),
     line('Last line')
-  ])(style)
+  ])
+)
 
-  console.log(res)
-}())
-
-;(function () {
-  const style = {cols: [{width: 15}, {width: 25}]}
-  
-  const res = cols([
+example(
+  'Sample use of cols.',
+  cols([
     [
       '-h, --help',
       '-v, --version'
@@ -49,15 +54,12 @@ const {texts}          = require('../src/help/layout/texts')
       'Prints the help.',
       'Prints the version.'
     ]
-  ])(style)
+  ])
+)
 
-  console.log(res)
-}())
-
-;(function () {
-  const style = {line: {width: 40}, desc: {padStart: 3, width: 37}}
-  
-  const res = defs([
+example(
+  'Sample use of defs.',
+  defs([
     [
       '-h, --help',
       'Prints the help.'
@@ -66,43 +68,25 @@ const {texts}          = require('../src/help/layout/texts')
       '-v, --version',
       'Prints the version.'
     ]
-  ])(style)
+  ])
+)
 
-  console.log(res)
-}())
+example(
+  'Sample use of line.',
+  line('A line')
+)
 
-;(function () {
-  const style = {
-    line: {width: 40}
-  }
-
-  const res = line('A line')(style)
-
-  console.log(res)
-}())
-
-;(function () {
-  const style = {
-    line: {width: 40}
-  }
-  
-  const res = lines([
+example(
+  'Sample use of lines.',
+  lines([
     'First line',
     'Last line'
-  ])(style)
+  ])
+)
 
-  console.log(res)
-}())
-
-;(function () {
-  const style = {
-    cols: [
-      {width: 15},
-      {width: 25}
-    ]
-  }
-  
-  const res = table([
+example(
+  'Sample use of table.',
+  table([
     [
       '-h, --help',
       'Prints the help.'
@@ -111,86 +95,55 @@ const {texts}          = require('../src/help/layout/texts')
       '-v, --version',
       'Prints the version.'
     ]
-  ])(style)
+  ])
+)
 
-  console.log(res)
-}())
+example(
+  'Sample use of text.',
+  text('Deep Thought was created to come up with the Answer.')
+)
 
-;(function () {
-  const style = {
-    line: {width: 40}
-  }
-  
-  const res = text('Deep Thought was created to come up with the Answer.')(style)
-
-  console.log(res)
-}())
-
-;(function () {
-  const style = {
-    line: {width: 40}
-  }
-  
-  const res = texts([
+example(
+  'Sample use of texts.',
+  texts([
     'Deep Thought was created to come up with the Answer.',
     'To The Ultimate Question of Life, the Universe, and Everything.'
-  ])(style)
+  ])
+)
 
-  console.log(res)
-}())
-
-;(function () {
-  const style = {
-    line: {width: 40}
-  }
-
-  const res = layout([
+example(
+  'Sample use of layout.',
+  layout([
     line('First line'),
     line('Last line')
-  ])(style)
-
-  console.log(res)
-}())
-
-;(function () {
-  const style = {
-    line: {width: 40},
-    desc: {padStart: 3, width: 37}
-  }
-
-  const itemsList = [
-    [
-      '-h, --help',
-      'Prints the help.'
-    ],
-    [
-      '-v, --version',
-      'Prints the version.'
-    ]
-  ]
-
-  const f = ([title, desc]) => layout([
-    text(title),
-    textFrom('desc')(desc)
   ])
+)
 
-  const res = layoutMap(f)(itemsList)(style)
+example(
+  'Sample use of layoutMap 1/2.',
+  layoutMap(
+    ([title, desc]) => layout([
+      text(title),
+      textFrom('desc')(desc)
+    ])
+  )(
+    [
+      [
+        '-h, --help',
+        'Prints the help.'
+      ],
+      [
+        '-v, --version',
+        'Prints the version.'
+      ]
+    ]
+  )
+)
 
-  console.log(res)
-}())
-
-;(function () {
-  const style = {
-    line: {width: 40},
-    desc: {padStart: 3, width: 37}
-  }
-
-  const lines = layoutMap(line)
-
-  const res = lines([
+example(
+  'Sample use of layoutMap 2/2.',
+  layoutMap(line)([
     '-h, --help',
     'Prints the help.'
-  ])(style)
-
-  console.log(res)
-}())
+  ])
+)
