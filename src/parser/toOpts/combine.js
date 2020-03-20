@@ -5,7 +5,7 @@ module.exports = (...options) => {
   const args = {}
 
   for (let i = 0; i < options.length; i++) {
-    const {errs: ERRS = [], args: ARGS} = options[i]
+    const {errs: ERRS = [], args: ARGS = []} = options[i]
 
     if (ERRS.length > 0) {
       errs = errs.concat(ERRS)

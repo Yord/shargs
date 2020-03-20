@@ -1,6 +1,4 @@
 const toOpts  = require('./index')
-const combine = require('../combinators/combine')
-const option  = require('../combinators/option')
 const {array, bool, command, flag, number, string} = require('../../options')
 
 const deleteArgs = obj => {
@@ -10,7 +8,7 @@ const deleteArgs = obj => {
 
 const numberBool = array(['number', 'bool'])
 
-const opts = [
+const OPTS = [
   string('title', ['--title']),
   numberBool('numBool', ['-n', '--nb']),
   number('answer', ['-a', '--answer']),
@@ -18,8 +16,6 @@ const opts = [
   bool('verbose', ['--verbose']),
   flag('version', ['--version'])
 ]
-
-const combined = combine(...opts.map(option)).args
 
 test('toOpts transforms argv into opts', () => {
   const obj = {
@@ -35,7 +31,7 @@ test('toOpts transforms argv into opts', () => {
     ]
   }
 
-  const {opts} = toOpts(combined)(obj)
+  const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
     {values: ['foo']},
@@ -59,7 +55,7 @@ test('toOpts keeps unrecognized strings', () => {
     ]
   }
 
-  const {opts} = toOpts(combined)(obj)
+  const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
     {values: ['foo']},
@@ -76,7 +72,7 @@ test('toOpts transforms unary options', () => {
     ]
   }
 
-  const {opts} = toOpts(combined)(obj)
+  const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
     deleteArgs({...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]})
@@ -92,7 +88,7 @@ test('toOpts transforms command opts at the end of the line', () => {
     ]
   }
 
-  const {opts} = toOpts(combined)(obj)
+  const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
     deleteArgs({...command('help', ['-h', '--help']), values: ['foo', '--bar']})
@@ -110,7 +106,7 @@ test('toOpts transforms command opts at the end of the line with double minusses
     ]
   }
 
-  const {opts} = toOpts(combined)(obj)
+  const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
     {values: ['foo']},
@@ -130,7 +126,7 @@ test('toOpts transforms command opts at the start of the line with double minuss
     ]
   }
 
-  const {opts} = toOpts(combined)(obj)
+  const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
     deleteArgs({...command('help', ['-h', '--help']), values: ['foo', '--bar']}),
@@ -151,7 +147,7 @@ test('toOpts transforms command opts in the middle of the line with double minus
     ]
   }
 
-  const {opts} = toOpts(combined)(obj)
+  const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
     {values: ['foo']},
@@ -170,7 +166,7 @@ test('toOpts works with commands that have no argv', () => {
     ]
   }
 
-  const {opts} = toOpts(combined)(obj)
+  const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
     deleteArgs({...command('help', ['-h', '--help']), values: []})
@@ -184,7 +180,7 @@ test('toOpts transforms empty argv into empty opts', () => {
     argv: []
   }
 
-  const {opts} = toOpts(combined)(obj)
+  const {opts} = toOpts(OPTS)(obj)
 
   const exp = []
 
@@ -194,7 +190,7 @@ test('toOpts transforms empty argv into empty opts', () => {
 test('toOpts transforms missing argv into empty opts', () => {
   const obj = {}
 
-  const {opts} = toOpts(combined)(obj)
+  const {opts} = toOpts(OPTS)(obj)
 
   const exp = []
 
@@ -202,7 +198,7 @@ test('toOpts transforms missing argv into empty opts', () => {
 })
 
 test('toOpts transforms undefined input into empty opts', () => {
-  const {opts} = toOpts(combined)()
+  const {opts} = toOpts(OPTS)()
 
   const exp = []
 
