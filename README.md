@@ -326,7 +326,7 @@ A shargs command-line parser is a composition of parser functions:
 function deepThought (opts) {
   return argv => pipe(
     splitShortOptions,
-    toOpts(combine(...opts.map(option)).args),
+    toOpts(opts),
     cast,
     restrictToOnly,
     toArgs(deepThought),
