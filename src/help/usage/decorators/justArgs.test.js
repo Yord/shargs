@@ -1,7 +1,28 @@
 const justArgs = require('./justArgs')
 const {command, flag, number} = require('../../../options')
+const {optsList} = require('../optsList')
 
 const id = opts => opts
+
+test('justArgs README example works', () => {
+  const style = {
+    cols: [{width: 10, padEnd: 2}, {width: 28}]
+  }
+  
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+  
+  const res = justArgs(['-a', '-h'])(optsList)(opts)(style)
+
+  const exp = '-a,         The answer. [number]        \n' +
+              '--answer                                \n' +
+              '-h, --help  Prints help.                \n'
+
+  expect(res).toStrictEqual(exp)
+})
 
 test('justArgs filters more than one opt', () => {
   const opts = [
