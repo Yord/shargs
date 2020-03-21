@@ -1,7 +1,28 @@
 const noCommands = require('./noCommands')
 const {command, flag, number} = require('../../../options')
+const {optsList} = require('../optsList')
 
 const id = opts => opts
+
+test('noCommands README example works', () => {
+  const style = {
+    cols: [{width: 10, padEnd: 2}, {width: 28}]
+  }
+  
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+  
+  const res = noCommands(optsList)(opts)(style)
+
+  const exp = '-a,         The answer. [number]        \n' +
+              '--answer                                \n' +
+              '--version   Prints version. [flag]      \n'
+
+  expect(res).toStrictEqual(exp)
+})
 
 test('noCommands filters one opt', () => {
   const opts = [
