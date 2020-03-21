@@ -1391,14 +1391,237 @@ const decoratedDocs = usage([
 by using the `onlyCommands` and `noCommands` decorators to filter relevant options.
 Shargs includes the following usage decorators:
 
-| Usage&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
-|----------------------------------------|------------------------------------------------------------------------------------------|
-| `justArgs(array)(usageFunction)(opts)` | Takes an array of args and keeps only those `opts` that have an arg in the args `array`. |
-| `noCommands(usageFunction)(opts)`      | Filters out all commands from `opts`.                                                    |
-| `onlyCommands(usageFunction)(opts)`    | Keeps only commands in `opts`.                                                           |
-| `onlyFirstArg(usageFunction)(opts)`    | Keeps only the first arg from each opt.                                                  |
-| `optsFilter(p)(usageFunction)(opts)`   | Applies `filter` to the `opts` array using a predicate `p`.                              |
-| `optsMap(f)(usageFunction)(opts)`      | Applies `map` to the `opts` array using a function `f`.                                  |
+<table>
+<tr>
+<th>Usage&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr>
+<tr>
+<td><code>justArgs(array)(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Takes an array of args and keeps only those <code>opts</code> that have an arg in the args <code>array</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 10, padEnd: 2}, {width: 28}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+justArgs(['-a', '-h'])(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-a,         The answer [number]         
+--answer                                
+-h, --help  Prints help                 
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>noCommands(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Filters out all commands from <code>opts</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 10, padEnd: 2}, {width: 28}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+noCommands(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-a,         The answer [number]         
+--answer                                
+--version   Prints version [flag]       
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>onlyCommands(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Keeps only commands in <code>opts</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 10, padEnd: 2}, {width: 28}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+onlyCommands(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-h, --help  Prints help                 
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>onlyFirstArg(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Keeps only the first arg from each opt.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 10, padEnd: 2}, {width: 28}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+onlyFirstArg(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-a          The answer [number]         
+-h          Prints help                 
+--version   Prints version [flag]       
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>optsFilter(p)(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Applies <code>filter</code> to the <code>opts</code> array using a predicate <code>p</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 10, padEnd: 2}, {width: 28}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+optsFilter(
+  ({types}) => types !== null
+)(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-a,         The answer [number]         
+--answer                                
+--version   Prints version [flag]       
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>optsMap(f)(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Applies <code>map</code> to the <code>opts</code> array using a function <code>f</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 10, padEnd: 2}, {width: 28}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+optsMap(
+  opt => ({...opt, args: opt.args.slice(0, 1)})
+)(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-a          The answer [number]         
+-h          Prints help                 
+--version   Prints version [flag]       
+```
+
+</details>
+</td>
+</tr>
+</table>
 
 Usage decorator functions can be combined with the following usage decorator combinators:
 
