@@ -1,7 +1,26 @@
 const onlyCommands = require('./onlyCommands')
 const {command, flag, number} = require('../../../options')
+const {optsList} = require('../optsList')
 
 const id = opts => opts
+
+test('onlyCommands README example works', () => {
+  const style = {
+    cols: [{width: 10, padEnd: 2}, {width: 28}]
+  }
+  
+  const opts = [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+  
+  const res = onlyCommands(optsList)(opts)(style)
+
+  const exp = '-h, --help  Prints help.                \n'
+
+  expect(res).toStrictEqual(exp)
+})
 
 test('onlyCommands filters one opt', () => {
   const opts = [
