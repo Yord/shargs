@@ -378,7 +378,7 @@ const deepThought = parser({
 ### Usage Documentation
 
 Every decent command-line tools has a usage documentation.
-The `deepThought` tool is no exception and could e.g. show the following text if the `--help` flag is present:
+The `deepThought` tool is no exception and should e.g. show the following text if the `--help` flag is present:
 
 ```bash
 deepThought ask [-q|--question] [-h|--help]                                     
@@ -392,7 +392,7 @@ Life, the Universe, and Everything.
 
 Writing the usage documentation yourself is not a good idea,
 because you would have to update it every time a command-line option is added or changed.
-This is why shargs takes care for writing usage documentation for you.
+This is why shargs takes care for generating usage documentation for you.
 
 #### Layout Documentation DSL
 
