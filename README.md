@@ -1,6 +1,6 @@
 ![shargs teaser][teaser]
 
-🦈 Shargs (**sh**ell **args**) is a highly customizable command-line arguments parser and usage documentation generator.
+🦈 shargs (**sh**ell **args**) is a highly customizable command-line arguments parser and usage documentation generator.
 
 [![node version][shield-node]][node]
 [![npm version][shield-npm]][npm-package]
@@ -274,7 +274,7 @@ The advantages of this approach are:
 
 +   You get exactly the parser you need, without unnecessary features.
 +   You are able to mix in your own problem-specific parser functions.
-+   There is no magic going on in the background, everything is specific.
++   There is no magic going on in the background, everything is explicit.
 
 With the same philosophy, shargs offers automatic usage documentation generation.
 The advantages for the user are:
@@ -304,7 +304,7 @@ The following type functions are available:
 
 | Type&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
 |-----------------------------------|--------------------------------------------------------------------------------------------|
-| `array(types)(key, args, fields)` | An array of known length. The types parameter describe the type for each individual item.  |
+| `array(types)(key, args, fields)` | An array of known length. The types parameter holds the types for each individual entry.   |
 | `bool(key, args, fields)`         | An explicitly defined boolean value. May be `true` or `false`.                             |
 | `command(key, args, fields)`      | An array of unknown length. If `fields` contains an `opts` field, it turns into a command. |
 | `flag(key, args, fields)`         | A type describing a self-sufficient command-line option. Like e.g. `--help`.               |
