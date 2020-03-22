@@ -13,17 +13,18 @@ module.exports = (...ARGUMENTS) => {
       const keys = Object.keys(ARGS)
 
       for (let j = 0; j < keys.length; j++) {
-        const arg     = keys[j]
-        const options = ARGS[arg]
-        if (typeof args[arg] === 'undefined') {
+        const arg          = keys[j]
+        const options      = ARGS[arg]
+        const firstTimeArg = typeof args[arg] === 'undefined'
+        if (firstTimeArg) {
           if (Array.isArray(options) && options.length > 0) {
             for (let k = 0; k < options.length; k++) {
               const option = options[k]
-              if (!(Array.isArray(option.types) || option.types === null)) {
-                errs.push(invalidTypesInArgument({types: option.types, option}))
-              } else {
+              if (Array.isArray(option.types) || option.types === null) {
                 if (typeof args[arg] === 'undefined') args[arg] = []
                 args[arg].push(option)
+              } else {
+                errs.push(invalidTypesInArgument({types: option.types, option}))
               }
             }
           } else {
