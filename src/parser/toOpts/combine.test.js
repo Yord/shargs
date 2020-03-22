@@ -163,6 +163,30 @@ test('combine fails with an error if two options with different types lengths ar
   })
 })
 
+test('combine fails with an error if two options are grouped in the same argument and the second does not have a valid type', () => {
+  const optionA = {key: 'A', args: ['-a'], types: ['string'], desc: '', only: null, opts: null}
+  const optionB = {key: 'B', args: ['-a'], types: 42, desc: '', only: null, opts: null}
+
+  const noArgs = ({args, ...rest}) => rest
+
+  const opts = [
+    optionA,
+    optionB
+  ]
+
+  const {errs, args} = combine(...opts.map(require('./option')))
+
+  const exp = [
+    invalidTypesInArgument({types: 42, option: noArgs(optionB)})
+  ]
+
+  expect(errs).toStrictEqual(exp)
+
+  expect(args).toStrictEqual({
+    '-a': [noArgs(optionA)]
+  })
+})
+
 function option (_arg, hasArguments, _arguments, hasTypes, _types) {
   return base64().chain(arg =>
     base64().chain(key =>
