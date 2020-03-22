@@ -16,7 +16,7 @@ module.exports = (...ARGUMENTS) => {
         const arg     = keys[j]
         const options = ARGS[arg]
         if (typeof args[arg] === 'undefined') {
-          if (typeof options === 'undefined' || options === null || options.length === 0) {
+          if (!Array.isArray(options) || options.length === 0) {
             errs.push(invalidOptionsListInCombine({options, arg, argument: ARGUMENTS[i]}))
           } else {
             for (let k = 0; k < options.length; k++) {
