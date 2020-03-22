@@ -325,7 +325,7 @@ const askOpts = [
 ```
 
 Each command-line option may contain a subset of the fields described below.
-Fields with a \* are required.
+Fields with a \* are required and have their own parameters in the type functions.
 All fields without a \* are set in the type functions' `fields` parameter.
 The following fields are available:
 
