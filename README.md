@@ -12,7 +12,7 @@
 
 ## Installation
 
-Installation is done using [`npm`][npm-install].
+Installation with [`npm`][npm-install]:
 
 ```bash
 $ npm i --save shargs
@@ -99,7 +99,7 @@ The `deepThought` parser consists of six parser functions that are applied in th
 
 <details>
 <summary>
-Declare a usage documentation:
+Layout a usage documentation:
 
 <p>
 
@@ -263,35 +263,33 @@ Otherwise, the answer is printed.
 
 ## 🦈 Shargs
 
-Shargs is the command-line argument parser used by [`pxi`][pxi].
+Other command-line parsers are often black boxes that offer very limited control over parsing.
+Shargs is a very different beast:
+It turns command-line arguments parsing inside out and gives you fine-grained control over parser functions and usage docs.
+
+### Shargs' Philosophy
+
+Shargs' philosophy is to give the user as much control over parsing as possible.
+The advantages of this approach are:
+
++   You get exactly the parser you need, without unnecessary features.
++   You are able to mix in your own problem-specific parser functions.
++   There is no magic going on in the background, everything is specific.
+
+With the same philosophy, shargs offers automatic usage documentation generation.
+The advantages for the user are:
+
++   You get exactly the usage documentation you need, no unnecessary extras.
++   You have fine-grained control over the documentation layout if you need that.
++   You can write your own layout functions and combine them with existing ones.
+
+Its extensibility and inversion of control is what sets shargs apart from other command-line parsers.
 
 ### Command-Line Options DSL
 
-The most important concept in shargs is that of command-line options.
-They are the basis for parsers as well as for usage documentation.
-Command-line options are defined as objects in shargs: 
-
-```js
-const askOpts = [
-  {key: 'question', types: ['string'], args: ['-q', '--question'], desc: 'A question.'},
-  {key: 'help', types: [], args: ['-h', '--help'], desc: 'Print this help message and exit.'}
-]
-```
-
-Command-line options may have the following fields (\* these fields are required):
-
-| Field     | Value                                                                                  | Default | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-|-----------|----------------------------------------------------------------------------------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `key`\*   | string                                                                                 |         | The command-line option's value is assigned to a key of this name.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| `args`\*  | array of strings                                                                       |         | A list of options that may be used to set the command-line option.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| `types`\* | `['string']`, `['number']`, `['bool']`, `[]`, `null`, `['string','number','bool',...]` |         | <ul><li>`['string']` takes exactly one string.</li><li>`['number']` takes exactly one number.</li><li>`['bool']` takes exactly one boolean, `true` or `false`.</li><li>`[]` takes no value. It is a flag that is `true` if used and `false` if not used.</li><li>`null` is a command. It may have its own list of arguments (see `opts`) and is terminated by either `--` or a line ending.</li><li>`['number','string','bool',...]` takes an array of any types of arbitrary length. The values are expected to be in the specified order and of the specified type.</li></ul> |
-| `desc`    | string                                                                                 | `''`    | Description of the command-line option for use in the usage text.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| `only`    | array of values                                                                        | `null`  | The command-line option's value can only be one of the values in this list. If `only` is `null`, the value may be set freely.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `opts`    | command-line options array                                                             | `null`  | This field is used if the command-line option is a command (if `types` is `null`) to describe the command's options.                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-
-#### Functional Options DSL
-
-Since writing out objects is repetetive, shargs includes a DSL for creating command-line options:
+The most important concept in a command-line parser are command-line options.
+They form the basis for parsers as well as for generating usage documentation.
+Shargs gives you a simple DSL for defining command-line options:
 
 ```js
 const opts = [
@@ -301,71 +299,48 @@ const opts = [
 ]
 ```
 
-Each supported type has its own function, that takes `key` and `args` as arguments
-as well as an object holding any optional field.
-If an optional field is left out, the type functions sets a sensible default.
+The DSL lets you define options based on their types.
+The following type functions are available:
 
-| Function                          | Description                                                |
-|-----------------------------------|------------------------------------------------------------|
-| `array(types)(key, args, fields)` | Assigns `types`, `key`, and `args` to `fields`.            |
-| `bool(key, args, fields)`         | Assigns `types: ['bool']`, `key` and `args` to `fields`.   |
-| `command(key, args, fields)`      | Assigns `types: null`, `key` and `args` to `fields`.       |
-| `flag(key, args, fields)`         | Assigns `types: []`, `key` and `args` to `fields`.         |
-| `number(key, args, fields)`       | Assigns `types: ['number']`, `key` and `args` to `fields`. |
-| `string(key, args, fields)`       | Assigns `types: ['string']`, `key` and `args` to `fields`. |
+| Type&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
+|-----------------------------------|--------------------------------------------------------------------------------------------|
+| `array(types)(key, args, fields)` | An array of known length. The types parameter describe the type for each individual item.  |
+| `bool(key, args, fields)`         | An explicitly defined boolean value. May be `true` or `false`.                             |
+| `command(key, args, fields)`      | An array of unknown length. If `fields` contains an `opts` field, it turns into a command. |
+| `flag(key, args, fields)`         | A type describing a self-sufficient command-line option. Like e.g. `--help`.               |
+| `number(key, args, fields)`       | An option that takes exactly one value that is meant to represent a number.                |
+| `string(key, args, fields)`       | An option that takes exactly one string.                                                   |
 
-While the `array` function describes arrays with a known length and known types,
-the `command` function describes variable-length string arrays.
-If a command has an `opts` field, the string array is treated as command-line arguments.
+Type functions do two things:
+They combine all their arguments in an object, and they set sensibe defaults for missing `fields`.
+
+If you want to write options by hand or write your own DSL, feel free.
+Options use the following syntax:
+
+```js
+const askOpts = [
+  {key: 'question', types: ['string'], args: ['-q', '--question'], desc: 'A question.'},
+  {key: 'help', types: [], args: ['-h', '--help'], desc: 'Print this help message and exit.'}
+]
+```
+
+Each command-line option may contain a subset of the fields described below.
+Fields with a \* are required and have their own parameters in the type functions.
+All fields without a \* are set in the type functions' `fields` parameter.
+The following fields are available:
+
+| Field     | Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Default | Description |
+|-----------|---------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `key`\*   | string                          |         | `key` is the name of the variable the parser uses to store the command-line option's value. It should be a unique identifier or otherwise risks to be overridden by other command-line options.                                                                                                                                                                                         |
+| `args`\*  | array of strings                |         | `args` is an array of strings that may be used to define a command-line option. E.g. `['--help', '-h']` could be used for a help `flag` or `['-f', '--file']` could be used in a `string` option that parses a file path.                                                                                                                                                               |
+| `types`\* | array of type strings or `null` |         | `types` is an array of strings that represents the command-line option's type. `null` describes a command, `[]` describes a flag, arrays with one element either describe a number (`['number']`), a string (`['string']`), or a boolean (`['bool']`), and arrays with more than one element describe an array of known size (e.g. `['string','number','bool']` is an array of size 3). |
+| `desc`    | string                          | `''`    | `desc` is the user-facing description of a command-line option that is used by the automatic usage documentation generation.                                                                                                                                                                                                                                                            |
+| `only`    | array of values                 | `null`  | `only` is used by the `restrictToOnly` parser stage to validate user input. It takes a non-empty array of values. If `only` is set to `null`, the `restrictToOnly` parser stage skips validation.                                                                                                                                                                                       |
+| `opts`    | array of command-line options   | `null`  | `opts` can be set if the command-line option is a command (if `types` is `null`) to describe the command's options. It uses the same syntax as regular command-line options.                                                                                                                                                                                                            |
 
 ### Command-Line Parsers DSL
 
-A shargs command-line parser is a composition of parser functions:
-
-```js
-function deepThought (opts) {
-  return argv => pipe(
-    splitShortOptions,
-    toOpts(opts),
-    cast,
-    restrictToOnly,
-    toArgs(deepThought),
-    emptyRest
-  )({argv})
-}
-```
-
-There are five stages of parser functions:
-
-1.  `argv` functions modify arrays of command-line arguments.
-2.  `toOpts` transforms `argv` arrays into the command-line option DSL and adds a `values` field.
-3.  `opts` functions modify command-line options.
-4.  `toArgs` transforms `opts` into an object of `key` / `values` pairs.
-5.  `args` functions modify `args` objects.
-
-The stages must always be applied in the given order,
-while functions from the same stage may be supplied in any order that makes sense for the parser.
-
-The following parser functions are available for the `argv` stage:
-
-| `argv`&nbsp;Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
-|-----------------------------------|----------------------------------------------------------------------------------------------------------------|
-| `splitShortOptions({errs, argv})` | Splits argument groups of shape `-vs` to `-v -s`. Only works if argument groups are preceded by a single dash. |
-
-The following parser functions are available for the `opts` stage:
-
-| `opts`&nbsp;Parser&nbsp;Function | Description                                                            |
-|----------------------------------|------------------------------------------------------------------------|
-| `cast({errs, opts})`             | Casts all `values` according to the options' types.                    |
-| `restrictToOnly({errs, opts})`   | Records an error if the `values` are not contained in the `only` list. |
-
-The following parser functions are available for the `args` stage:
-
-| `args`&nbsp;Parser&nbsp;Function | Description                           |
-|----------------------------------|---------------------------------------|
-| `emptyRest({errs, args})`        | Removes all entries from the `_` key. |
-
-Parser functions can be combined with `parser`:
+Shargs lets you define command-line parsers with the `parser` function:
 
 ```js
 const deepThought = parser({
@@ -374,6 +349,29 @@ const deepThought = parser({
   args: [emptyRest]
 })
 ```
+
+`parser` takes an object with three keys: `argv`, `opts`, and `args`.
+Each key is the name of a shargs parsing stage.
+
+Shargs has five stages:
+
+1.  `argv` functions modify arrays of command-line arguments.
+2.  `toOpts` transforms `argv` arrays into the command-line options DSL.
+3.  `opts` functions modify command-line options.
+4.  `toArgs` transforms `opts` into an object holding the parsed arguments.
+5.  `args` functions modify `args` objects.
+
+`parser` applies the stages in the given order.
+Each stage takes an array of parser functions, that are applied from left to right.
+
+The following parser functions are available:
+
+|        | Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
+|--------|-----------------------------------|----------------------------------------------------------------------------------------------------------------|
+| `argv` | `splitShortOptions({errs, argv})` | Splits argument groups of shape `-vs` to `-v -s`. Only works if argument groups are preceded by a single dash. |
+| `opts` | `cast({errs, opts})`              | Casts all `values` according to the options' types.                                                            |
+| `opts` | `restrictToOnly({errs, opts})`    | Records an error if the `values` are not contained in the `only` list.                                         |
+| `args` | `emptyRest({errs, args})`         | Removes all entries from the `_` key.                                                                          |
 
 ### Usage Documentation
 
