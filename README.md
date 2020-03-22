@@ -304,7 +304,7 @@ The following type functions are available:
 
 | Type&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
 |-----------------------------------|--------------------------------------------------------------------------------------------|
-| `array(types)(key, args, fields)` | An array of known length. The types parameter describe the type for each individual item.  |
+| `array(types)(key, args, fields)` | An array of known length. The types parameter holds the types for each individual entry.   |
 | `bool(key, args, fields)`         | An explicitly defined boolean value. May be `true` or `false`.                             |
 | `command(key, args, fields)`      | An array of unknown length. If `fields` contains an `opts` field, it turns into a command. |
 | `flag(key, args, fields)`         | A type describing a self-sufficient command-line option. Like e.g. `--help`.               |
