@@ -2,7 +2,7 @@ const combine = require('./combine')
 const option  = require('./option')
 
 module.exports = (opts2 = []) => {
-  const {args, errs: ERRS = []} = combine(...opts2.map(option))
+  const {args, errs: ERRS} = combine(...opts2.map(option))
 
   return ({errs = [], argv: ARGV = []} = {}) => {
     errs = errs.concat(ERRS)

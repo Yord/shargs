@@ -1,6 +1,6 @@
 const {anything, array, assert, base64, constant, integer, oneof, property} = require('fast-check')
 const combine = require('./combine')
-const {invalidOptionsListInCombine, invalidTypesInArgument} = require('../../errors')
+const {invalidTypesInArgument, nonMatchingArgumentTypes, invalidOptionsListInCombine} = require('../../errors')
 
 test('combine combines all options and appends options if they have the same argument', () => {
   const optionsCombined = array(option(), 2, 20).map(opts => {
@@ -47,16 +47,16 @@ test('combine combines all options and appends options if they have the same arg
 test("combine fails with an error if an argument's list is null, undefined or empty", () => {
   const optionResult = integer(1, 20).chain(len =>
     array(
-      oneof(...[null, undefined, []].map(constant)).chain(list =>
+      oneof(...[null, undefined, []].map(constant)).chain(options =>
         base64().chain(arg =>
-          option(arg, true, list).map(option => ({option, arg, list}))
+          option(arg, true, options).map(argument => ({argument, arg, options}))
         )
       ),
       1,
       len
     ).map(options =>
       ({
-        options: options.map(info => info.option),
+        arguments: options.map(info => info.argument),
         results: {
           args: {},
           errs: options.map(invalidOptionsListInCombine)
@@ -66,9 +66,9 @@ test("combine fails with an error if an argument's list is null, undefined or em
   )
 
   assert(
-    property(optionResult, ({options, results}) =>
+    property(optionResult, ({arguments: args, results}) =>
       expect(
-        combine(...options)
+        combine(...args)
       ).toStrictEqual(
         results
       )
@@ -94,7 +94,7 @@ test("combine fails with an error if an argument has a types key that is not nul
         result: {
           args: {},
           errs: os.map(o =>
-            invalidTypesInArgument({types: o.types, argument: Object.values(o.option.args)[0][0]})
+            invalidTypesInArgument({types: o.types, option: Object.values(o.option.args)[0][0]})
           )
         }
       })
@@ -137,6 +137,89 @@ test("combine passes on errors", () => {
       )
     )
   )
+})
+
+test('combine fails with an error if two options with different types lengths are grouped in the same argument', () => {
+  const optionA = {key: 'A', args: ['-a'], types: ['string'], desc: '', only: null, opts: null}
+  const optionB = {key: 'B', args: ['-a'], types: ['string', 'number'], desc: '', only: null, opts: null}
+
+  const noArgs = ({args, ...rest}) => rest
+
+  const opts = [
+    optionA,
+    optionB
+  ]
+
+  const {errs, args} = combine(...opts.map(require('./option')))
+
+  const exp = [
+    nonMatchingArgumentTypes({arg: '-a', ref: noArgs(optionA), option: noArgs(optionB)})
+  ]
+
+  expect(errs).toStrictEqual(exp)
+
+  expect(args).toStrictEqual({
+    '-a': [noArgs(optionA)]
+  })
+})
+
+test('combine fails with an error if two options are grouped in the same argument and the second does not have a valid type', () => {
+  const optionA = {key: 'A', args: ['-a'], types: ['string'], desc: '', only: null, opts: null}
+  const optionB = {key: 'B', args: ['-a'], types: 42, desc: '', only: null, opts: null}
+
+  const noArgs = ({args, ...rest}) => rest
+
+  const opts = [
+    optionA,
+    optionB
+  ]
+
+  const {errs, args} = combine(...opts.map(require('./option')))
+
+  const exp = [
+    invalidTypesInArgument({types: 42, option: noArgs(optionB)})
+  ]
+
+  expect(errs).toStrictEqual(exp)
+
+  expect(args).toStrictEqual({
+    '-a': [noArgs(optionA)]
+  })
+})
+
+test('combine works if opts are empty', () => {
+  const opts = []
+
+  const {args} = combine(...opts.map(require('./option')))
+
+  expect(args).toStrictEqual({})
+})
+
+test('combine works if opts are undefined', () => {
+  const {args} = combine()
+
+  expect(args).toStrictEqual({})
+})
+
+test('combine works if args are empty', () => {
+  const {args} = combine({})
+
+  expect(args).toStrictEqual({})
+})
+
+test('combine also takes several options at the same time', () => {
+  const optionA = {key: 'A', args: ['-a'], types: ['string'], desc: '', only: null, opts: null}
+  const optionB = {key: 'B', args: ['-a'], types: ['number'], desc: '', only: null, opts: null}
+
+  const noArgs = ({args, ...rest}) => rest
+
+  const {args} = combine({
+    args: {'-a': [noArgs(optionA), noArgs(optionB)]}
+  })
+
+  expect(args).toStrictEqual({
+    '-a': [noArgs(optionA), noArgs(optionB)]
+  })
 })
 
 function option (_arg, hasArguments, _arguments, hasTypes, _types) {

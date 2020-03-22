@@ -16,16 +16,16 @@ const argumentValueRestrictionsViolated = ({value, only, option}) => ({
   info: {value, only, option}
 })
 
-const invalidOptionsListInCombine = ({list, arg, option}) => ({
+const invalidOptionsListInCombine = ({options, arg, argument}) => ({
   code: 'Invalid options list in combine',
   msg:  'Options list in combine was undefined, null or empty',
-  info: {list, arg, option}
+  info: {options, arg, argument}
 })
 
-const invalidTypesInArgument = ({types, argument}) =>({
+const invalidTypesInArgument = ({types, option}) =>({
   code: 'Invalid types in argument',
   msg:  'Each argument must have a types key that must be null or an array',
-  info: {types, argument}
+  info: {types, option}
 })
 
 const noArgumentsProvidedInOption = ({option}) => ({
@@ -40,10 +40,10 @@ const noKeyProvidedInOption = ({option}) => ({
   info: {option}
 })
 
-const nonMatchingArgumentTypes = ({arg, ref, argument}) => ({
+const nonMatchingArgumentTypes = ({arg, ref, option}) => ({
   code: 'Non-matching argument types',
   msg:  'If arguments have the same arg, their types must either be equal or have the same length',
-  info: {arg, ref, argument}
+  info: {arg, ref, option}
 })
 
 module.exports = {
