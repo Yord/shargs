@@ -274,7 +274,7 @@ The advantages of this approach are:
 
 +   You get exactly the parser you need, without unnecessary features.
 +   You are able to mix in your own problem-specific parser functions.
-+   There is no magic going on in the background, everything is specific.
++   There is no magic going on in the background, everything is explicit.
 
 With the same philosophy, shargs offers automatic usage documentation generation.
 The advantages for the user are:
