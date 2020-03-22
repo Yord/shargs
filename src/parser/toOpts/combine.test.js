@@ -187,6 +187,14 @@ test('combine fails with an error if two options are grouped in the same argumen
   })
 })
 
+test('combine works if opts are empty', () => {
+  const opts = []
+
+  const {args} = combine(...opts.map(require('./option')))
+
+  expect(args).toStrictEqual({})
+})
+
 function option (_arg, hasArguments, _arguments, hasTypes, _types) {
   return base64().chain(arg =>
     base64().chain(key =>
