@@ -1,6 +1,6 @@
 const {anything, array, assert, base64, constant, integer, oneof, property} = require('fast-check')
 const combine = require('./combine')
-const {invalidOptionsListInCombine, invalidTypesInArgument} = require('../../errors')
+const {invalidTypesInArgument, nonMatchingArgumentTypes, invalidOptionsListInCombine} = require('../../errors')
 
 test('combine combines all options and appends options if they have the same argument', () => {
   const optionsCombined = array(option(), 2, 20).map(opts => {
@@ -137,6 +137,30 @@ test("combine passes on errors", () => {
       )
     )
   )
+})
+
+test('combine fails with an error if two options with different types lengths are grouped in the same argument', () => {
+  const optionA = {key: 'A', args: ['-a'], types: ['string'], desc: '', only: null, opts: null}
+  const optionB = {key: 'B', args: ['-a'], types: ['string', 'number'], desc: '', only: null, opts: null}
+
+  const noArgs = ({args, ...rest}) => rest
+
+  const opts = [
+    optionA,
+    optionB
+  ]
+
+  const {errs, args} = combine(...opts.map(require('./option')))
+
+  const exp = [
+    nonMatchingArgumentTypes({arg: '-a', ref: noArgs(optionA), option: noArgs(optionB)})
+  ]
+
+  expect(errs).toStrictEqual(exp)
+
+  expect(args).toStrictEqual({
+    '-a': [noArgs(optionA)]
+  })
 })
 
 function option (_arg, hasArguments, _arguments, hasTypes, _types) {
