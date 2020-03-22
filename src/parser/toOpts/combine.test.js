@@ -201,6 +201,12 @@ test('combine works if opts are undefined', () => {
   expect(args).toStrictEqual({})
 })
 
+test('combine works if args are empty', () => {
+  const {args} = combine({})
+
+  expect(args).toStrictEqual({})
+})
+
 function option (_arg, hasArguments, _arguments, hasTypes, _types) {
   return base64().chain(arg =>
     base64().chain(key =>
