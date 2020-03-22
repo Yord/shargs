@@ -12,7 +12,7 @@
 
 ## Installation
 
-Installation is done using [`npm`][npm-install].
+Installation with [`npm`][npm-install]:
 
 ```bash
 $ npm i --save shargs
@@ -99,7 +99,7 @@ The `deepThought` parser consists of six parser functions that are applied in th
 
 <details>
 <summary>
-Declare a usage documentation:
+Layout a usage documentation:
 
 <p>
 
