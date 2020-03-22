@@ -1,11 +1,11 @@
 const {invalidTypesInArgument, nonMatchingArgumentTypes, invalidOptionsListInCombine} = require('../../errors')
 
-module.exports = (...options) => {
+module.exports = (...ARGUMENTS) => {
   let errs   = []
   const args = {}
 
-  for (let i = 0; i < options.length; i++) {
-    const {errs: ERRS = [], args: ARGS = []} = options[i]
+  for (let i = 0; i < ARGUMENTS.length; i++) {
+    const {errs: ERRS = [], args: ARGS = []} = ARGUMENTS[i]
 
     if (ERRS.length > 0) {
       errs = errs.concat(ERRS)
@@ -13,33 +13,33 @@ module.exports = (...options) => {
       const keys = Object.keys(ARGS)
 
       for (let j = 0; j < keys.length; j++) {
-        const arg  = keys[j]
-        const list = ARGS[arg]
+        const arg     = keys[j]
+        const options = ARGS[arg]
         if (typeof args[arg] === 'undefined') {
-          if (typeof list === 'undefined' || list === null || list.length === 0) {
-            errs.push(invalidOptionsListInCombine({list, arg, option: options[i]}))
+          if (typeof options === 'undefined' || options === null || options.length === 0) {
+            errs.push(invalidOptionsListInCombine({options, arg, argument: ARGUMENTS[i]}))
           } else {
-            for (let k = 0; k < list.length; k++) {
-              const argument = list[k]
-              if (!(Array.isArray(argument.types) || argument.types === null)) {
-                errs.push(invalidTypesInArgument({types: argument.types, argument}))
+            for (let k = 0; k < options.length; k++) {
+              const option = options[k]
+              if (!(Array.isArray(option.types) || option.types === null)) {
+                errs.push(invalidTypesInArgument({types: option.types, option}))
               } else {
                 if (typeof args[arg] === 'undefined') args[arg] = []
-                args[arg].push(argument)
+                args[arg].push(option)
               }
             }
           }
         } else {
           const ref   = args[arg][0]
           const types = ref.types
-          for (let k = 0; k < list.length; k++) {
-            const argument = list[k]
-            if (!(Array.isArray(argument.types) || argument.types === null)) {
-              errs.push(invalidTypesInArgument({types: argument.types, argument}))
-            } else if ((argument.types || []).length === (types || []).length) {
-              args[arg].push(argument)
+          for (let k = 0; k < options.length; k++) {
+            const option = options[k]
+            if (!(Array.isArray(option.types) || option.types === null)) {
+              errs.push(invalidTypesInArgument({types: option.types, option}))
+            } else if ((option.types || []).length === (types || []).length) {
+              args[arg].push(option)
             } else {
-              errs.push(nonMatchingArgumentTypes({arg, ref, argument}))
+              errs.push(nonMatchingArgumentTypes({arg, ref, option}))
             }
           }
         }

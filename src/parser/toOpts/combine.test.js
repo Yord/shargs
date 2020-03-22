@@ -47,16 +47,16 @@ test('combine combines all options and appends options if they have the same arg
 test("combine fails with an error if an argument's list is null, undefined or empty", () => {
   const optionResult = integer(1, 20).chain(len =>
     array(
-      oneof(...[null, undefined, []].map(constant)).chain(list =>
+      oneof(...[null, undefined, []].map(constant)).chain(options =>
         base64().chain(arg =>
-          option(arg, true, list).map(option => ({option, arg, list}))
+          option(arg, true, options).map(argument => ({argument, arg, options}))
         )
       ),
       1,
       len
     ).map(options =>
       ({
-        options: options.map(info => info.option),
+        arguments: options.map(info => info.argument),
         results: {
           args: {},
           errs: options.map(invalidOptionsListInCombine)
@@ -66,9 +66,9 @@ test("combine fails with an error if an argument's list is null, undefined or em
   )
 
   assert(
-    property(optionResult, ({options, results}) =>
+    property(optionResult, ({arguments: args, results}) =>
       expect(
-        combine(...options)
+        combine(...args)
       ).toStrictEqual(
         results
       )
@@ -94,7 +94,7 @@ test("combine fails with an error if an argument has a types key that is not nul
         result: {
           args: {},
           errs: os.map(o =>
-            invalidTypesInArgument({types: o.types, argument: Object.values(o.option.args)[0][0]})
+            invalidTypesInArgument({types: o.types, option: Object.values(o.option.args)[0][0]})
           )
         }
       })
