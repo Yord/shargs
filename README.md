@@ -276,14 +276,14 @@ The advantages of this approach are:
 +   You are able to mix in your own problem-specific parser functions.
 +   There is no magic going on in the background, everything is specific.
 
-With the same philosophy, Shargs offers automatic usage documentation generation.
+With the same philosophy, shargs offers automatic usage documentation generation.
 The advantages for the user are:
 
 +   You get exactly the usage documentation you need, no unnecessary extras.
 +   You have fine-grained control over the documentation layout if you need that.
 +   You can write your own layout functions and combine them with existing ones.
 
-Its extensibility and inversion of control is what sets Shargs apart from other command-line parsers.
+Its extensibility and inversion of control is what sets shargs apart from other command-line parsers.
 
 ### Command-Line Options DSL
 
