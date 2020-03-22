@@ -207,6 +207,21 @@ test('combine works if args are empty', () => {
   expect(args).toStrictEqual({})
 })
 
+test('combine also takes several options at the same time', () => {
+  const optionA = {key: 'A', args: ['-a'], types: ['string'], desc: '', only: null, opts: null}
+  const optionB = {key: 'B', args: ['-a'], types: ['number'], desc: '', only: null, opts: null}
+
+  const noArgs = ({args, ...rest}) => rest
+
+  const {args} = combine({
+    args: {'-a': [noArgs(optionA), noArgs(optionB)]}
+  })
+
+  expect(args).toStrictEqual({
+    '-a': [noArgs(optionA), noArgs(optionB)]
+  })
+})
+
 function option (_arg, hasArguments, _arguments, hasTypes, _types) {
   return base64().chain(arg =>
     base64().chain(key =>
