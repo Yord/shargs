@@ -263,35 +263,28 @@ Otherwise, the answer is printed.
 
 ## 🦈 Shargs
 
-Shargs is the command-line argument parser used by [`pxi`][pxi].
+Other command-line parsers are often black boxes that offer very limited control over parsing.
+Shargs is a very different beast:
+It turns command-line arguments parsing inside out and gives you fine-grained control over parser functions and usage docs.
 
-### Command-Line Options DSL
+### Shargs' Philosophy
 
-The most important concept in shargs is that of command-line options.
-They are the basis for parsers as well as for usage documentation.
-Command-line options are defined as objects in shargs: 
+Shargs' philosophy is to give the user as much control over parsing as possible.
+The advantages of this approach are:
 
-```js
-const askOpts = [
-  {key: 'question', types: ['string'], args: ['-q', '--question'], desc: 'A question.'},
-  {key: 'help', types: [], args: ['-h', '--help'], desc: 'Print this help message and exit.'}
-]
-```
++   You get exactly the parser you need, without unnecessary features.
++   You are able to mix in your own problem-specific parser functions.
++   There is no magic going on in the background, everything is specific.
 
-Command-line options may have the following fields (\* these fields are required):
+With the same philosophy, Shargs offers automatic usage documentation generation.
+The advantages for the user are:
 
-| Field     | Value                                                                                  | Default | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-|-----------|----------------------------------------------------------------------------------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `key`\*   | string                                                                                 |         | The command-line option's value is assigned to a key of this name.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| `args`\*  | array of strings                                                                       |         | A list of options that may be used to set the command-line option.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| `types`\* | `['string']`, `['number']`, `['bool']`, `[]`, `null`, `['string','number','bool',...]` |         | <ul><li>`['string']` takes exactly one string.</li><li>`['number']` takes exactly one number.</li><li>`['bool']` takes exactly one boolean, `true` or `false`.</li><li>`[]` takes no value. It is a flag that is `true` if used and `false` if not used.</li><li>`null` is a command. It may have its own list of arguments (see `opts`) and is terminated by either `--` or a line ending.</li><li>`['number','string','bool',...]` takes an array of any types of arbitrary length. The values are expected to be in the specified order and of the specified type.</li></ul> |
-| `desc`    | string                                                                                 | `''`    | Description of the command-line option for use in the usage text.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| `only`    | array of values                                                                        | `null`  | The command-line option's value can only be one of the values in this list. If `only` is `null`, the value may be set freely.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `opts`    | command-line options array                                                             | `null`  | This field is used if the command-line option is a command (if `types` is `null`) to describe the command's options.                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
++   You get exactly the usage documentation you need, no unnecessary extras.
++   You have fine-grained control over the documentation layout if you need that.
++   You can write your own layout functions and combine them with existing ones.
 
-#### Functional Options DSL
+Its extensibility and inversion of control is what sets Shargs apart from other command-line parsers.
 
-Since writing out objects is repetetive, shargs includes a DSL for creating command-line options:
 
 ```js
 const opts = [
