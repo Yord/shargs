@@ -340,52 +340,7 @@ The following fields are available:
 
 ### Command-Line Parsers DSL
 
-A shargs command-line parser is a composition of parser functions:
-
-```js
-function deepThought (opts) {
-  return argv => pipe(
-    splitShortOptions,
-    toOpts(opts),
-    cast,
-    restrictToOnly,
-    toArgs(deepThought),
-    emptyRest
-  )({argv})
-}
-```
-
-There are five stages of parser functions:
-
-1.  `argv` functions modify arrays of command-line arguments.
-2.  `toOpts` transforms `argv` arrays into the command-line option DSL and adds a `values` field.
-3.  `opts` functions modify command-line options.
-4.  `toArgs` transforms `opts` into an object of `key` / `values` pairs.
-5.  `args` functions modify `args` objects.
-
-The stages must always be applied in the given order,
-while functions from the same stage may be supplied in any order that makes sense for the parser.
-
-The following parser functions are available for the `argv` stage:
-
-| `argv`&nbsp;Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
-|-----------------------------------|----------------------------------------------------------------------------------------------------------------|
-| `splitShortOptions({errs, argv})` | Splits argument groups of shape `-vs` to `-v -s`. Only works if argument groups are preceded by a single dash. |
-
-The following parser functions are available for the `opts` stage:
-
-| `opts`&nbsp;Parser&nbsp;Function | Description                                                            |
-|----------------------------------|------------------------------------------------------------------------|
-| `cast({errs, opts})`             | Casts all `values` according to the options' types.                    |
-| `restrictToOnly({errs, opts})`   | Records an error if the `values` are not contained in the `only` list. |
-
-The following parser functions are available for the `args` stage:
-
-| `args`&nbsp;Parser&nbsp;Function | Description                           |
-|----------------------------------|---------------------------------------|
-| `emptyRest({errs, args})`        | Removes all entries from the `_` key. |
-
-Parser functions can be combined with `parser`:
+Shargs lets you define command-line parsers with the `parser` function:
 
 ```js
 const deepThought = parser({
@@ -394,6 +349,29 @@ const deepThought = parser({
   args: [emptyRest]
 })
 ```
+
+`parser` takes an object with three keys: `argv`, `opts`, and `args`.
+Each key is the name of a shargs parsing stage.
+
+Shargs has five stages:
+
+1.  `argv` functions modify arrays of command-line arguments.
+2.  `toOpts` transforms `argv` arrays into the command-line options DSL.
+3.  `opts` functions modify command-line options.
+4.  `toArgs` transforms `opts` into an object holding the parsed arguments.
+5.  `args` functions modify `args` objects.
+
+`parser` applies the stages in the given order.
+Each stage takes an array of parser functions, that are applied from left to right.
+
+The following parser functions are available:
+
+|        | Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
+|--------|-----------------------------------|----------------------------------------------------------------------------------------------------------------|
+| `argv` | `splitShortOptions({errs, argv})` | Splits argument groups of shape `-vs` to `-v -s`. Only works if argument groups are preceded by a single dash. |
+| `opts` | `cast({errs, opts})`              | Casts all `values` according to the options' types.                                                            |
+| `opts` | `restrictToOnly({errs, opts})`    | Records an error if the `values` are not contained in the `only` list.                                         |
+| `args` | `emptyRest({errs, args})`         | Removes all entries from the `_` key.                                                                          |
 
 ### Usage Documentation
 
