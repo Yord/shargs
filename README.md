@@ -285,6 +285,11 @@ The advantages for the user are:
 
 Its extensibility and inversion of control is what sets Shargs apart from other command-line parsers.
 
+### Command-Line Options DSL
+
+The most important concept in a command-line parser are command-line options.
+They form the basis for parsers as well as for generating usage documentation.
+Shargs gives you a simple DSL for defining command-line options:
 
 ```js
 const opts = [
@@ -294,22 +299,44 @@ const opts = [
 ]
 ```
 
-Each supported type has its own function, that takes `key` and `args` as arguments
-as well as an object holding any optional field.
-If an optional field is left out, the type functions sets a sensible default.
+The DSL lets you define options based on their types.
+The following type functions are available:
 
-| Function                          | Description                                                |
-|-----------------------------------|------------------------------------------------------------|
-| `array(types)(key, args, fields)` | Assigns `types`, `key`, and `args` to `fields`.            |
-| `bool(key, args, fields)`         | Assigns `types: ['bool']`, `key` and `args` to `fields`.   |
-| `command(key, args, fields)`      | Assigns `types: null`, `key` and `args` to `fields`.       |
-| `flag(key, args, fields)`         | Assigns `types: []`, `key` and `args` to `fields`.         |
-| `number(key, args, fields)`       | Assigns `types: ['number']`, `key` and `args` to `fields`. |
-| `string(key, args, fields)`       | Assigns `types: ['string']`, `key` and `args` to `fields`. |
+| Type&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
+|-----------------------------------|--------------------------------------------------------------------------------------------|
+| `array(types)(key, args, fields)` | An array of known length. The types parameter describe the type for each individual item.  |
+| `bool(key, args, fields)`         | An explicitly defined boolean value. May be `true` or `false`.                             |
+| `command(key, args, fields)`      | An array of unknown length. If `fields` contains an `opts` field, it turns into a command. |
+| `flag(key, args, fields)`         | A type describing a self-sufficient command-line option. Like e.g. `--help`.               |
+| `number(key, args, fields)`       | An option that takes exactly one value that is meant to represent a number.                |
+| `string(key, args, fields)`       | An option that takes exactly one string.                                                   |
 
-While the `array` function describes arrays with a known length and known types,
-the `command` function describes variable-length string arrays.
-If a command has an `opts` field, the string array is treated as command-line arguments.
+Type functions do two things:
+They combine all their arguments in an object, and they set sensibe defaults for missing `fields`.
+
+If you want to write options by hand or write your own DSL, feel free.
+Options use the following syntax:
+
+```js
+const askOpts = [
+  {key: 'question', types: ['string'], args: ['-q', '--question'], desc: 'A question.'},
+  {key: 'help', types: [], args: ['-h', '--help'], desc: 'Print this help message and exit.'}
+]
+```
+
+Each command-line option may contain a subset of the fields described below.
+Fields with a \* are required.
+All fields without a \* are set in the type functions' `fields` parameter.
+The following fields are available:
+
+| Field     | Value                                                                                  | Default | Description                                                                                                                                                                                                                                                                                                                                                                             |
+|-----------|----------------------------------------------------------------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `key`\*   | string                                                                                 |         | `key` is the name of the variable the parser uses to store the command-line option's value. It should be a unique identifier or otherwise risks to be overridden by other command-line options.                                                                                                                                                                                         |
+| `args`\*  | array of strings                                                                       |         | `args` is an array of strings that may be used to define a command-line option. E.g. `['--help', '-h']` could be used for a help `flag` or `['-f', '--file']` could be used in a `string` option that parses a file path.                                                                                                                                                               |
+| `types`\* | `null`, `[]`, `['string']`, `['number']`, `['bool']`, `['string','number','bool',...]` |         | `types` is an array of strings that represents the command-line option's type. `null` describes a command, `[]` describes a flag, arrays with one element either describe a number (`['number']`), a string (`['string']`), or a boolean (`['bool']`), and arrays with more than one element describe an array of known size (e.g. `['string','number','bool']` is an array of size 3). |
+| `desc`    | string                                                                                 | `''`    | `desc` is the user-facing description of a command-line option that is used by the automatic usage documentation generation.                                                                                                                                                                                                                                                            |
+| `only`    | array of values                                                                        | `null`  | `only` is used by the `restrictToOnly` parser stage to validate user input. It takes a non-empty array of values. If `only` is set to `null`, the `restrictToOnly` parser stage skips validation.                                                                                                                                                                                       |
+| `opts`    | command-line options array                                                             | `null`  | `opts` can be set if the command-line option is a command (if `types` is `null`) to describe the command's options. It uses the same syntax as regular command-line options.                                                                                                                                                                                                            |
 
 ### Command-Line Parsers DSL
 
