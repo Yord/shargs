@@ -62,6 +62,20 @@ test('restrictToOnly does nothing if the only attribute is undefined or null', (
   expect(opts).toStrictEqual(exp)
 })
 
+test('restrictToOnly works if values are undefined', () => {
+  const answer = number('answer', ['-a', '--answer'], {only: [42]})
+
+  const obj = {
+    opts: [answer]
+  }
+
+  const {opts} = restrictToOnly(obj)
+
+  const exp = [answer]
+
+  expect(opts).toStrictEqual(exp)
+})
+
 test('restrictToOnly fails if a value is not allowed', () => {
   const obj = {
     opts: [
