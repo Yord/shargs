@@ -6,30 +6,33 @@ test('option transforms arguments DSL into options DSL', () => {
   const optionsArguments = base64().chain(key =>
     array(base64(), 1, 20).chain(args =>
       anything().chain(types =>
-        anything().chain(only =>
-          anything().chain(desc =>
-            anything().map(opts => {
-              const options = {
-                key,
-                types: typeof types !== 'undefined' ? types : null,
-                only:  typeof only  !== 'undefined' ? only  : null,
-                desc:  typeof desc  !== 'undefined' ? desc  : '',
-                opts:  typeof opts  !== 'undefined' ? opts  : null
-              }
-              return {
-                options: {...options, args},
-                _arguments: {
-                  errs: [],
-                  args: args.reduce(
-                    (obj, arg) => ({
-                      ...obj,
-                      [arg]: obj[arg] ? obj[arg].concat([options]) : [options]
-                    }),
-                    {}
-                  )
+        anything().chain(desc =>
+          anything().chain(only =>
+            anything().chain(opts =>
+              anything().map(values => {
+                const options = {
+                  key,
+                  types:  typeof types  !== 'undefined' ? types  : null,
+                  only:   typeof only   !== 'undefined' ? only   : null,
+                  desc:   typeof desc   !== 'undefined' ? desc   : '',
+                  opts:   typeof opts   !== 'undefined' ? opts   : null,
+                  values: typeof values !== 'undefined' ? values : null
                 }
-              }
-            })
+                return {
+                  options: {...options, args},
+                  _arguments: {
+                    errs: [],
+                    args: args.reduce(
+                      (obj, arg) => ({
+                        ...obj,
+                        [arg]: obj[arg] ? obj[arg].concat([options]) : [options]
+                      }),
+                      {}
+                    )
+                  }
+                }
+              })
+            )
           )
         )
       )
@@ -50,25 +53,28 @@ test('option transforms arguments DSL into options DSL', () => {
 test('option fails if no key is given', () => {
   const optionsArguments = array(base64(), 1, 20).chain(args =>
     anything().chain(types =>
-      anything().chain(only =>
-        anything().chain(desc =>
-          anything().map(opts => {
-            const options = {
-              types: typeof types !== 'undefined' ? types : null,
-              only:  typeof only  !== 'undefined' ? only  : null,
-              desc:  typeof desc  !== 'undefined' ? desc  : '',
-              opts:  typeof opts  !== 'undefined' ? opts  : null
-            }
-            return {
-              options: {...options, args},
-              _arguments: {
-                errs: [
-                  noKeyProvidedInOption({option: {...options, args}})
-                ],
-                args: {}
+      anything().chain(desc =>
+        anything().chain(only =>
+          anything().chain(opts =>
+            anything().map(values => {
+              const options = {
+                types:  typeof types  !== 'undefined' ? types  : null,
+                only:   typeof only   !== 'undefined' ? only   : null,
+                desc:   typeof desc   !== 'undefined' ? desc   : '',
+                opts:   typeof opts   !== 'undefined' ? opts   : null,
+                values: typeof values !== 'undefined' ? values : null
               }
-            }
-          })
+              return {
+                options: {...options, args},
+                _arguments: {
+                  errs: [
+                    noKeyProvidedInOption({option: {...options, args}})
+                  ],
+                  args: {}
+                }
+              }
+            })
+          )
         )
       )
     )
@@ -88,26 +94,29 @@ test('option fails if no key is given', () => {
 test('option fails if no args are given', () => {
   const optionsArguments = base64().chain(key =>
     anything().chain(types =>
-      anything().chain(only =>
-        anything().chain(desc =>
-          anything().map(opts => {
-            const options = {
-              key,
-              types: typeof types !== 'undefined' ? types : null,
-              only:  typeof only  !== 'undefined' ? only  : null,
-              desc:  typeof desc  !== 'undefined' ? desc  : '',
-              opts:  typeof opts  !== 'undefined' ? opts  : null
-            }
-            return {
-              options,
-              _arguments: {
-                errs: [
-                  noArgumentsProvidedInOption({option: options})
-                ],
-                args: {}
+      anything().chain(desc =>
+        anything().chain(only =>
+          anything().chain(opts =>
+            anything().map(values => {
+              const options = {
+                key,
+                types:  typeof types  !== 'undefined' ? types  : null,
+                only:   typeof only   !== 'undefined' ? only   : null,
+                desc:   typeof desc   !== 'undefined' ? desc   : '',
+                opts:   typeof opts   !== 'undefined' ? opts   : null,
+                values: typeof values !== 'undefined' ? values : null
               }
-            }
-          })
+              return {
+                options,
+                _arguments: {
+                  errs: [
+                    noArgumentsProvidedInOption({option: options})
+                  ],
+                  args: {}
+                }
+              }
+            })
+          )
         )
       )
     )
