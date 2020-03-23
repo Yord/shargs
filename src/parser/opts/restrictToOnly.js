@@ -7,7 +7,7 @@ module.exports = ({errs = [], opts: OPTS = []} = {}) => {
     const option = OPTS[i]
     const {values, only} = option
 
-    if (typeof only === 'undefined' || only === null) {
+    if (only === null || values === null || typeof only === 'undefined' || typeof values === 'undefined') {
       opts.push(option)
     } else {
       let correct = 0

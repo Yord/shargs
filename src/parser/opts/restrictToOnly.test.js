@@ -26,7 +26,7 @@ test('restrictToOnly works as expected on all types', () => {
       {...number('answer', ['-a', '--answer'], {only: [42]}), values: [42]},
       {...command('help', ['-h', '--help'], {only: ['foo --bar']}), values: ['foo --bar']},
       {...bool('verbose', ['--verbose'], {only: [false]}), values: [false]},
-      {...flag('version', ['--version'], {only: [true]}), values: [true]}
+      {...flag('version', ['--version'], {only: []}), values: []}
     ]
   }
 
@@ -45,13 +45,13 @@ test('restrictToOnly does nothing if the only attribute is undefined or null', (
       {...number('answer', ['-a', '--answer'], {only: null}), values: [42]},
       {...command('help', ['-h', '--help'], {only: null}), values: ['foo --bar']},
       {...bool('verbose', ['--verbose'], {only: null}), values: [false]},
-      {...flag('version', ['--version'], {only: null}), values: [true]},
+      {...flag('version', ['--version'], {only: null}), values: []},
       {...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]},
       {...numberBool('numBool', ['-n', '--nb']), values: [23, true]},
       {...number('answer', ['-a', '--answer']), values: [42]},
       {...command('help', ['-h', '--help']), values: ['foo --bar']},
       {...bool('verbose', ['--verbose']), values: [false]},
-      {...flag('version', ['--version']), values: [true]}
+      {...flag('version', ['--version']), values: []}
     ]
   }
 
@@ -62,14 +62,41 @@ test('restrictToOnly does nothing if the only attribute is undefined or null', (
   expect(opts).toStrictEqual(exp)
 })
 
+test('restrictToOnly works if values are undefined', () => {
+  const answer = number('answer', ['-a', '--answer'], {only: [42]})
+
+  const obj = {
+    opts: [answer]
+  }
+
+  const {opts} = restrictToOnly(obj)
+
+  const exp = [answer]
+
+  expect(opts).toStrictEqual(exp)
+})
+
+test('restrictToOnly works if values are null', () => {
+  const answer = {...number('answer', ['-a', '--answer'], {only: [42]}), values: null}
+  
+  const obj = {
+    opts: [answer]
+  }
+
+  const {opts} = restrictToOnly(obj)
+
+  const exp = [answer]
+
+  expect(opts).toStrictEqual(exp)
+})
+
 test('restrictToOnly fails if a value is not allowed', () => {
   const obj = {
     opts: [
       {...string('title', ['--title'], {only: ["Dirk Gently"]}), values: ["The Hitchhiker's Guide to the Galaxy"]},
       {...number('answer', ['-a', '--answer'], {only: [23]}), values: [42]},
       {...command('help', ['-h', '--help'], {only: ['--foo bar']}), values: ['foo --bar']},
-      {...bool('verbose', ['--verbose'], {only: [true]}), values: [false]},
-      {...flag('version', ['--version'], {only: [false]}), values: [true]}
+      {...bool('verbose', ['--verbose'], {only: [true]}), values: [false]}
     ]
   }
 

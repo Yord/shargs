@@ -24,7 +24,7 @@ test('cast README example works', () => {
     {...number('answer', ['-a', '--answer']), values: [42]},
     {...command('help', ['-h', '--help']), values: ['foo --bar']},
     {...bool('verbose', ['--verbose']), values: [false]},
-    {...flag('version', ['--version']), values: [true]}
+    {...flag('version', ['--version']), values: []}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -94,18 +94,16 @@ test('cast casts bools', () => {
   expect(opts).toStrictEqual(exp)
 })
 
-test('cast casts flags', () => {
+test('cast does not change flags', () => {
+  const version = {...flag('version', ['--version']), values: []}
+
   const obj = {
-    opts: [
-      {...flag('version', ['--version']), values: []}
-    ]
+    opts: [version]
   }
 
   const {opts} = cast(obj)
 
-  const exp = [
-    {...flag('version', ['--version']), values: [true]}
-  ]
+  const exp = [version]
 
   expect(opts).toStrictEqual(exp)
 })
@@ -162,6 +160,36 @@ test('cast ignores all options with types it does not know', () => {
   const {opts} = cast(obj)
 
   const exp = obj.opts
+
+  expect(opts).toStrictEqual(exp)
+})
+
+test('cast works if values is undefined', () => {
+  const obj = {
+    opts: [
+      number('answer', ['-a', '--answer'])
+    ]
+  }
+
+  const {opts} = cast(obj)
+
+  const exp = [
+    number('answer', ['-a', '--answer'])
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
+
+test('cast works if values is null', () => {
+  const answer = {...number('answer', ['-a', '--answer']), values: null}
+
+  const obj = {
+    opts: [answer]
+  }
+
+  const {opts} = cast(obj)
+
+  const exp = [answer]
 
   expect(opts).toStrictEqual(exp)
 })
