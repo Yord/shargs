@@ -545,6 +545,40 @@ Result:
 </details>
 </td>
 </tr>
+<tr>
+<td><code>args</code></td>
+<td><code>flagAsNumber({errs, args})</code></td>
+<td>
+<details>
+<summary>
+Transforms all count-based <code>flag</code> options into numbers, that correspond to the count.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const args = {
+  version: {type: 'flag', count: 2}
+}
+
+flagAsBool({args})
+```
+
+Result:
+
+```js
+{
+  args: {
+    version: 2
+  }
+}
+```
+
+</details>
+</td>
+</tr>
 </table>
 
 ### Usage Documentation
