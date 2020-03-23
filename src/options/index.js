@@ -1,7 +1,20 @@
 const array   = (
   types =>
-  (key, args = [], {only = null, desc = '', opts = null} = {}) =>
-  ({key, types, args, only, desc, opts})
+  (key, args = [], {
+    desc = '',
+    only = null,
+    opts = null,
+    values = null
+  } = {}) =>
+  ({
+    key,
+    types,
+    args,
+    desc,
+    only,
+    opts,
+    values
+  })
 )
 
 const number  = array(['number'])

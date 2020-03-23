@@ -5,24 +5,27 @@ test('types are correctly assembled', () => {
   const typesKeyArgsOptionsResult = types().chain(types =>
     base64().chain(key =>
       anything().filter(a => typeof a !== 'undefined').chain(args =>
-        oneof(constant(undefined), anything()).chain(only =>
-          oneof(constant(undefined), unicodeString()).chain(desc =>
+        oneof(constant(undefined), unicodeString()).chain(desc =>
+          oneof(constant(undefined), anything()).chain(only =>
             oneof(constant(undefined), anything()).chain(opts =>
-              oneof(constant(undefined), constant({only, desc, opts})).map(options =>
-                ({
-                  types,
-                  key,
-                  args,
-                  options,
-                  result: {
-                    key,
+              oneof(constant(undefined), anything()).chain(values =>
+                oneof(constant(undefined), constant({desc, only, opts, values})).map(options =>
+                  ({
                     types,
+                    key,
                     args,
-                    only: typeof options !== 'undefined' && typeof only !== 'undefined' ? only : null,
-                    desc: typeof options !== 'undefined' && typeof desc !== 'undefined' ? desc : '',
-                    opts: typeof options !== 'undefined' && typeof opts !== 'undefined' ? opts : null
-                  }
-                })
+                    options,
+                    result: {
+                      key,
+                      types,
+                      args,
+                      only: typeof options !== 'undefined' && typeof only !== 'undefined' ? only : null,
+                      desc: typeof options !== 'undefined' && typeof desc !== 'undefined' ? desc : '',
+                      opts: typeof options !== 'undefined' && typeof opts !== 'undefined' ? opts : null,
+                      values: typeof options !== 'undefined' && typeof values !== 'undefined' ? values : null
+                    }
+                  })
+                )
               )
             )
           )
