@@ -579,6 +579,47 @@ Result:
 </details>
 </td>
 </tr>
+<tr>
+<td><code>args</code></td>
+<td><code>transformArgs(fs)({errs, args})</code></td>
+<td>
+<details>
+<summary>
+Transforms an args object into a new args object by applying functions <code>fs</code> based on the value type.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const args = {
+  version: {type: 'flag', count: 2}
+}
+
+const fs = {
+  flag: (key, val, errs, args) => ({
+    errs,
+    args: {...args, [key]: val.count}
+  })
+}
+
+transformArgs(fs)({args})
+```
+
+Result:
+
+```js
+{
+  args: {
+    version: 2
+  }
+}
+```
+
+</details>
+</td>
+</tr>
 </table>
 
 ### Usage Documentation
