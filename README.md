@@ -337,7 +337,7 @@ The following fields are available:
 | `desc`    | string                          | `''`    | `desc` is the user-facing description of a command-line option that is used by the automatic usage documentation generation.                                                                                                                                                                                                                                                            |
 | `only`    | array of values                 | `null`  | `only` is used by the `restrictToOnly` parser stage to validate user input. It takes a non-empty array of values. If `only` is set to `null`, the `restrictToOnly` parser stage skips validation.                                                                                                                                                                                       |
 | `opts`    | array of command-line options   | `null`  | `opts` can be set if the command-line option is a command (if `types` is `null`) to describe the command's options. It uses the same syntax as regular command-line options.                                                                                                                                                                                                            |
-| `values`  | array of default values         | `null`  | `values` is used by the `toOpts` parser stage to set default values for command-line options, that are not been explicitly given. It takes an array of values that should have the same types as defined by the `types` field. The user is responsible for ensuring the correct types are used.                                                                                         |
+| `values`  | array of default values         | `null`  | `values` is used by the `toOpts` parser stage to set default values for command-line options, that are not explicitly given. It takes an array of values that should have the same types as defined by the `types` field. The user is responsible for ensuring the correct types are used.                                                                                              |
 
 ### Command-Line Parsers DSL
 
@@ -449,40 +449,6 @@ Result:
 </tr>
 <tr>
 <td><code>opts</code></td>
-<td><code>flagAsBool({errs, opts})</code></td>
-<td>
-<details>
-<summary>
-Transforms all count-based <code>flag</code> options into booleans, that are <code>true</code> if the count is greater than <code>0</code>.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const opts = [
-  flag('version', ['--version'], {values: {count: 1}})
-]
-
-flagAsBool({opts})
-```
-
-Result:
-
-```js
-{
-  opts: [
-    flag('version', ['--version'], {values: [true]})
-  ]
-}
-```
-
-</details>
-</td>
-</tr>
-<tr>
-<td><code>opts</code></td>
 <td><code>restrictToOnly({errs, opts})</code></td>
 <td>
 <details>
@@ -539,6 +505,115 @@ Result:
 ```js
 {
   args: {_: []}
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td><code>flagAsBool({errs, args})</code></td>
+<td>
+<details>
+<summary>
+Transforms all count-based <code>flag</code> options into booleans, that are <code>true</code> if the count is greater than <code>0</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const args = {
+  version: {type: 'flag', count: 1}
+}
+
+flagAsBool({args})
+```
+
+Result:
+
+```js
+{
+  args: {
+    version: true
+  }
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td><code>flagAsNumber({errs, args})</code></td>
+<td>
+<details>
+<summary>
+Transforms all count-based <code>flag</code> options into numbers, that correspond to the count.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const args = {
+  version: {type: 'flag', count: 2}
+}
+
+flagAsBool({args})
+```
+
+Result:
+
+```js
+{
+  args: {
+    version: 2
+  }
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td><code>transformArgs(fs)({errs, args})</code></td>
+<td>
+<details>
+<summary>
+Transforms an args object into a new args object by applying functions <code>fs</code> based on the value type.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const args = {
+  version: {type: 'flag', count: 2}
+}
+
+const fs = {
+  flag: (key, val, errs, args) => ({
+    errs,
+    args: {...args, [key]: val.count}
+  })
+}
+
+transformArgs(fs)({args})
+```
+
+Result:
+
+```js
+{
+  args: {
+    version: 2
+  }
 }
 ```
 

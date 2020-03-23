@@ -30,7 +30,7 @@ test('toArgs transforms opts into args', () => {
     answer: 42,
     help: {discarded: true},
     verbose: false,
-    version: {count: 1}
+    version: {type: 'flag', count: 1}
   }
 
   expect(args).toStrictEqual(exp)
@@ -63,7 +63,7 @@ test('toArgs represents flags as counts', () => {
 
   const exp = {
     _: [],
-    verbose: {count: 1}
+    verbose: {type: 'flag', count: 1}
   }
 
   expect(args).toStrictEqual(exp)
@@ -82,7 +82,7 @@ test('toArgs counts the occurrences of flags', () => {
 
   const exp = {
     _: [],
-    verbose: {count: 3}
+    verbose: {type: 'flag', count: 3}
   }
 
   expect(args).toStrictEqual(exp)
