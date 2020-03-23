@@ -164,6 +164,22 @@ test('cast ignores all options with types it does not know', () => {
   expect(opts).toStrictEqual(exp)
 })
 
+test('cast works if values is undefined', () => {
+  const obj = {
+    opts: [
+      number('answer', ['-a', '--answer'])
+    ]
+  }
+
+  const {opts} = cast(obj)
+
+  const exp = [
+    number('answer', ['-a', '--answer'])
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
+
 test('cast works if opts is undefined', () => {
   const obj = {}
 
