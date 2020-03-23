@@ -83,3 +83,9 @@ test('flagAsNumber works if opts is undefined', () => {
 
   expect(args).toStrictEqual({})
 })
+
+test('flagAsNumber works if input is undefined', () => {
+  const {args} = flagAsNumber()
+
+  expect(args).toStrictEqual({})
+})
