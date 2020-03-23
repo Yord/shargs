@@ -87,3 +87,23 @@ test('transformArgs README example works even if fs is undefined', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('transformArgs works if args are undefined', () => {
+  const obj = {}
+
+  const fs = {
+    undefined: constant('undefined'),
+    null:      constant('null'),
+    boolean:   constant('boolean'),
+    number:    constant('number'),
+    string:    constant('string'),
+    array:     constant('array'),
+    flag:      constant('flag'),
+    function:  constant('function'),
+    otherwise: constant('otherwise')
+  }
+
+  const {args} = transformArgs(fs)(obj)
+
+  expect(args).toStrictEqual({})
+})
