@@ -40,10 +40,10 @@ test('parser transforms argv to args', () => {
     numBool: ['23', 'true'],
     answer: '42',
     verbose: 'false',
-    version: {count: 1},
+    version: {type: 'flag', count: 1},
     help: {
       _: ['foo'],
-      bar: {count: 1}
+      bar: {type: 'flag', count: 1}
     }
   }
 
@@ -70,10 +70,10 @@ test('parser works even if stages are undefined', () => {
     numBool: ['23', 'true'],
     answer: '42',
     verbose: 'false',
-    version: {count: 1},
+    version: {type: 'flag', count: 1},
     help: {
       _: ['foo'],
-      bar: {count: 1}
+      bar: {type: 'flag', count: 1}
     }
   }
 
@@ -93,7 +93,7 @@ test('parser applies argv stages', () => {
 
   const exp = {
     _: [],
-    version: {count: 2}
+    version: {type: 'flag', count: 2}
   }
 
   expect(args).toStrictEqual(exp)
