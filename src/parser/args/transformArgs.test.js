@@ -51,3 +51,39 @@ test('transformArgs README example works', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('transformArgs README example works even if fs is undefined', () => {
+  const obj = {
+    args: {
+      title: "The Hitchhiker's Guide to the Galaxy",
+      numBool: [23, true],
+      answer: 42,
+      command: {
+        help: 'foo --bar',
+        verbose: false,
+        version: {type: 'flag', count: 1},
+        no: undefined,
+        nono: null,
+        f: () => {},
+        sym: Symbol('foo')
+      }
+    }
+  }
+
+  const {args} = transformArgs()(obj)
+
+  const exp = {
+    title: "The Hitchhiker's Guide to the Galaxy",
+    numBool: [23, true],
+    answer: 42,
+    command: {
+      help: 'foo --bar',
+      verbose: false,
+      version: {type: 'flag', count: 1},
+      no: undefined,
+      nono: null
+    }
+  }
+
+  expect(args).toStrictEqual(exp)
+})
