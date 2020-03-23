@@ -47,3 +47,35 @@ test('flagAsBool works as expected on all types', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('flagAsBool is recursive', () => {
+  const obj = {
+    args: {
+      title: "The Hitchhiker's Guide to the Galaxy",
+      numBool: [23, true],
+      command: {
+        answer: 42,
+        help: 'foo --bar',
+        verbose: false,
+        version1: {type: 'flag', count: 1},
+        version2: true
+      }
+    }
+  }
+
+  const {args} = flagAsBool(obj)
+
+  const exp = {
+    title: "The Hitchhiker's Guide to the Galaxy",
+    numBool: [23, true],
+    command: {
+      answer: 42,
+      help: 'foo --bar',
+      verbose: false,
+      version1: true,
+      version2: true
+    }
+  }
+
+  expect(args).toStrictEqual(exp)
+})
