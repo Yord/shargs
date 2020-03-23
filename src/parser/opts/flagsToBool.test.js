@@ -58,3 +58,9 @@ test('flagsToBool works if opts is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('flagsToBool works if input is undefined', () => {
+  const {opts} = flagsToBool()
+
+  expect(opts).toStrictEqual([])
+})
