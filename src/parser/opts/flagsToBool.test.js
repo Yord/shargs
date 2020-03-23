@@ -64,3 +64,11 @@ test('flagsToBool works if input is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('flagsToBool passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = flagsToBool({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
