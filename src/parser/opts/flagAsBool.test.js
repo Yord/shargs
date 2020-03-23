@@ -1,10 +1,10 @@
-const flagsToBool = require('./flagsToBool')
+const flagAsBool = require('./flagAsBool')
 const {array, bool, command, flag, number, string} = require('../../options')
 const {flagIsNotACount} = require('../../errors')
 
 const numberBool = array(['number', 'bool'])
 
-test('flagsToBool works as expected on all types', () => {
+test('flagAsBool works as expected on all types', () => {
   const versionCount = {...flag('version', ['--version']), values: {count: 1}}
   const versionBool = {...flag('version', ['--version']), values: [true]}
 
@@ -19,14 +19,14 @@ test('flagsToBool works as expected on all types', () => {
     ]
   })
 
-  const {opts} = flagsToBool(obj(versionCount))
+  const {opts} = flagAsBool(obj(versionCount))
 
   const exp = obj(versionBool).opts
 
   expect(opts).toStrictEqual(exp)
 })
 
-test('flagsToBool reports an error if a flag is not a count', () => {
+test('flagAsBool reports an error if a flag is not a count', () => {
   const versionBool = {...flag('version', ['--version']), values: [true]}
 
   const obj = version => ({
@@ -40,7 +40,7 @@ test('flagsToBool reports an error if a flag is not a count', () => {
     ]
   })
 
-  const {errs, opts} = flagsToBool(obj(versionBool))
+  const {errs, opts} = flagAsBool(obj(versionBool))
 
   const expOpts = obj().opts
   const expErrs = [
@@ -51,24 +51,24 @@ test('flagsToBool reports an error if a flag is not a count', () => {
   expect(errs).toStrictEqual(expErrs)
 })
 
-test('flagsToBool works if opts is undefined', () => {
+test('flagAsBool works if opts is undefined', () => {
   const obj = {}
 
-  const {opts} = flagsToBool(obj)
+  const {opts} = flagAsBool(obj)
 
   expect(opts).toStrictEqual([])
 })
 
-test('flagsToBool works if input is undefined', () => {
-  const {opts} = flagsToBool()
+test('flagAsBool works if input is undefined', () => {
+  const {opts} = flagAsBool()
 
   expect(opts).toStrictEqual([])
 })
 
-test('flagsToBool passes on errors', () => {
+test('flagAsBool passes on errors', () => {
   const ERRS = ['foo']
 
-  const {errs} = flagsToBool({errs: ERRS})
+  const {errs} = flagAsBool({errs: ERRS})
 
   expect(errs).toStrictEqual(ERRS)
 })
