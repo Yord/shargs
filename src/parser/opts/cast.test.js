@@ -180,6 +180,20 @@ test('cast works if values is undefined', () => {
   expect(opts).toStrictEqual(exp)
 })
 
+test('cast works if values is null', () => {
+  const answer = {...number('answer', ['-a', '--answer']), values: null}
+
+  const obj = {
+    opts: [answer]
+  }
+
+  const {opts} = cast(obj)
+
+  const exp = [answer]
+
+  expect(opts).toStrictEqual(exp)
+})
+
 test('cast works if opts is undefined', () => {
   const obj = {}
 
