@@ -4,6 +4,20 @@ const {flagIsNotACount} = require('../../errors')
 
 const numberBool = array(['number', 'bool'])
 
+test('flagAsBool README example works', () => {
+  const obj = {
+    opts: [
+      {...flag('version', ['--version']), values: {count: 1}}
+    ]
+  }
+
+  const {opts} = flagAsBool(obj)
+
+  const exp = [{...flag('version', ['--version']), values: [true]}]
+
+  expect(opts).toStrictEqual(exp)
+})
+
 test('flagAsBool works as expected on all types', () => {
   const versionCount = {...flag('version', ['--version']), values: {count: 1}}
   const versionBool = {...flag('version', ['--version']), values: [true]}
