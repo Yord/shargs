@@ -4,7 +4,7 @@ const {array, bool, command, flag, number, string} = require('../../options')
 
 const numberBool = array(['number', 'bool'])
 
-test('cast casts values into their types', () => {
+test('cast README example works', () => {
   const obj = {
     opts: [
       {...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]},
