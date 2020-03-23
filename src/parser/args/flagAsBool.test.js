@@ -93,3 +93,11 @@ test('flagAsBool removes functions', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('flagAsBool works if opts is undefined', () => {
+  const obj = {}
+
+  const {args} = flagAsBool(obj)
+
+  expect(args).toStrictEqual({})
+})
