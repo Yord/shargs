@@ -449,40 +449,6 @@ Result:
 </tr>
 <tr>
 <td><code>opts</code></td>
-<td><code>flagAsBool({errs, opts})</code></td>
-<td>
-<details>
-<summary>
-Transforms all count-based <code>flag</code> options into booleans, that are <code>true</code> if the count is greater than <code>0</code>.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const opts = [
-  flag('version', ['--version'], {values: {count: 1}})
-]
-
-flagAsBool({opts})
-```
-
-Result:
-
-```js
-{
-  opts: [
-    flag('version', ['--version'], {values: [true]})
-  ]
-}
-```
-
-</details>
-</td>
-</tr>
-<tr>
-<td><code>opts</code></td>
 <td><code>restrictToOnly({errs, opts})</code></td>
 <td>
 <details>
@@ -539,6 +505,40 @@ Result:
 ```js
 {
   args: {_: []}
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td><code>flagAsBool({errs, args})</code></td>
+<td>
+<details>
+<summary>
+Transforms all count-based <code>flag</code> options into booleans, that are <code>true</code> if the count is greater than <code>0</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const args = {
+  version: {type: 'flag', count: 1}
+}
+
+flagAsBool({args})
+```
+
+Result:
+
+```js
+{
+  args: {
+    version: true
+  }
 }
 ```
 
