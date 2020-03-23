@@ -12,9 +12,7 @@ module.exports = ({errs = [], opts: OPTS = []} = {}) => {
     if (typeof types === 'undefined' || types === null) {
       values = VALUES
     } else {
-      if (types.length === 0) {
-        values.push(true)
-      } else {
+      if (types.length !== 0) {
         for (let j = 0; j < types.length; j++) {
           const type = types[j]
           const value  = VALUES[j]

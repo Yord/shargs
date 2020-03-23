@@ -24,7 +24,7 @@ test('cast README example works', () => {
     {...number('answer', ['-a', '--answer']), values: [42]},
     {...command('help', ['-h', '--help']), values: ['foo --bar']},
     {...bool('verbose', ['--verbose']), values: [false]},
-    {...flag('version', ['--version']), values: [true]}
+    {...flag('version', ['--version']), values: []}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -94,18 +94,16 @@ test('cast casts bools', () => {
   expect(opts).toStrictEqual(exp)
 })
 
-test('cast casts flags', () => {
+test('cast does not change flags', () => {
+  const version = {...flag('version', ['--version']), values: []}
+
   const obj = {
-    opts: [
-      {...flag('version', ['--version']), values: []}
-    ]
+    opts: [version]
   }
 
   const {opts} = cast(obj)
 
-  const exp = [
-    {...flag('version', ['--version']), values: [true]}
-  ]
+  const exp = [version]
 
   expect(opts).toStrictEqual(exp)
 })
