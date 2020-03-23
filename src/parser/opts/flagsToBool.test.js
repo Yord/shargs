@@ -50,3 +50,11 @@ test('flagsToBool reports an error if a flag is not a count', () => {
   expect(opts).toStrictEqual(expOpts)
   expect(errs).toStrictEqual(expErrs)
 })
+
+test('flagsToBool works if opts is undefined', () => {
+  const obj = {}
+
+  const {opts} = flagsToBool(obj)
+
+  expect(opts).toStrictEqual([])
+})
