@@ -4,6 +4,20 @@ const {array, bool, command, flag, number, string} = require('../../options')
 
 const numberBool = array(['number', 'bool'])
 
+test('restrictToOnly README example works', () => {
+  const obj = {
+    opts: [
+      {...number('answer', ['-a', '--answer'], {only: [42]}), values: [42]}
+    ]
+  }
+
+  const {opts} = restrictToOnly(obj)
+
+  const exp = [{...number('answer', ['-a', '--answer'], {only: [42]}), values: [42]}]
+
+  expect(opts).toStrictEqual(exp)
+})
+
 test('restrictToOnly works as expected on all types', () => {
   const obj = {
     opts: [

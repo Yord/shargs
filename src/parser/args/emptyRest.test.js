@@ -1,6 +1,6 @@
 const emptyRest = require('./emptyRest')
 
-test('emptyRest works as expected', () => {
+test('emptyRest README example works', () => {
   const obj = {args: {_: ['foo']}}
 
   const {args} = emptyRest(obj)

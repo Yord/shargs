@@ -1,7 +1,15 @@
 const {noArgumentsProvidedInOption, noKeyProvidedInOption} = require('../../errors')
 
 module.exports = (opt = {}) => {
-  const {key = null, args: ARGS = [], types = null, only = null, desc = '', opts = null} = opt
+  const {
+    key = null,
+    args: ARGS = [],
+    types = null,
+    desc = '',
+    only = null,
+    opts = null,
+    values = null
+  } = opt
 
   const errs = []
   const args = {}
@@ -18,7 +26,9 @@ module.exports = (opt = {}) => {
     for (let i = 0; i < ARGS.length; i++) {
       const arg  = ARGS[i]
       if (typeof args[arg] === 'undefined') args[arg] = []
-      args[arg].push({key, types, only, desc, opts})
+
+      const {args: _, ...rest} = opt
+      args[arg].push(rest)
     }
   }
 

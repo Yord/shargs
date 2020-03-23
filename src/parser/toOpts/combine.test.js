@@ -140,8 +140,8 @@ test("combine passes on errors", () => {
 })
 
 test('combine fails with an error if two options with different types lengths are grouped in the same argument', () => {
-  const optionA = {key: 'A', args: ['-a'], types: ['string'], desc: '', only: null, opts: null}
-  const optionB = {key: 'B', args: ['-a'], types: ['string', 'number'], desc: '', only: null, opts: null}
+  const optionA = {key: 'A', args: ['-a'], types: ['string'], desc: '', only: null, opts: null, values: null}
+  const optionB = {key: 'B', args: ['-a'], types: ['string', 'number'], desc: '', only: null, opts: null, values: null}
 
   const noArgs = ({args, ...rest}) => rest
 
@@ -164,8 +164,8 @@ test('combine fails with an error if two options with different types lengths ar
 })
 
 test('combine fails with an error if two options are grouped in the same argument and the second does not have a valid type', () => {
-  const optionA = {key: 'A', args: ['-a'], types: ['string'], desc: '', only: null, opts: null}
-  const optionB = {key: 'B', args: ['-a'], types: 42, desc: '', only: null, opts: null}
+  const optionA = {key: 'A', args: ['-a'], types: ['string'], desc: '', only: null, opts: null, values: null}
+  const optionB = {key: 'B', args: ['-a'], types: 42, desc: '', only: null, opts: null, values: null}
 
   const noArgs = ({args, ...rest}) => rest
 
