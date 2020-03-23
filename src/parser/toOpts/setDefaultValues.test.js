@@ -65,3 +65,13 @@ test('setDefaultValues works if obj is undefined', () => {
 
   expect(opts2).toStrictEqual(exp)
 })
+
+test('setDefaultValues passes on errors', () => {
+  const opts = [number('answer', ['-a', '--answer'], {values: [42]})]
+
+  const ERRS = ['foo']
+
+  const {errs} = setDefaultValues(opts)({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
