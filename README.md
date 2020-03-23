@@ -370,6 +370,7 @@ The following parser functions are available:
 |--------|-----------------------------------|----------------------------------------------------------------------------------------------------------------|
 | `argv` | `splitShortOptions({errs, argv})` | Splits argument groups of shape `-vs` to `-v -s`. Only works if argument groups are preceded by a single dash. |
 | `opts` | `cast({errs, opts})`              | Casts all `values` according to the options' types.                                                            |
+| `opts` | `flagToBool({errs, opts})`        | Transforms all count-based `flag` options into booleans, that are `true` if the count is greater than `0`.     |
 | `opts` | `restrictToOnly({errs, opts})`    | Records an error if the `values` are not contained in the `only` list.                                         |
 | `args` | `emptyRest({errs, args})`         | Removes all entries from the `_` key.                                                                          |
 
