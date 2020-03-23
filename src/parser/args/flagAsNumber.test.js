@@ -89,3 +89,11 @@ test('flagAsNumber works if input is undefined', () => {
 
   expect(args).toStrictEqual({})
 })
+
+test('flagAsNumber passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = flagAsNumber({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
