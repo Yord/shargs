@@ -14,7 +14,7 @@ module.exports = (opts = []) => ({errs = [], opts: opts2 = []} = {}) => {
   return {errs: errs.concat(errs2), opts: opts3}
 }
 
-function optsContainsOpt (opt, opts = []) {
+function optsContainsOpt (opt, opts) {
   return opts.find(opt2 => opt2.key === opt.key)
 }
 
