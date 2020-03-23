@@ -16,6 +16,12 @@ const argumentValueRestrictionsViolated = ({value, only, option}) => ({
   info: {value, only, option}
 })
 
+const flagIsNotACount = ({key, types, option}) => ({
+  code: 'Flag is not a count',
+  msg:  'The flag option should be a count, but has a different type.',
+  info: {key, types, option}
+})
+
 const invalidOptionsListInCombine = ({options, arg, argument}) => ({
   code: 'Invalid options list in combine',
   msg:  'Options list in combine was undefined, null or empty',
@@ -50,6 +56,7 @@ module.exports = {
   argumentIsNotABool,
   argumentIsNotANumber,
   argumentValueRestrictionsViolated,
+  flagIsNotACount,
   invalidOptionsListInCombine,
   invalidTypesInArgument,
   noKeyProvidedInOption,
