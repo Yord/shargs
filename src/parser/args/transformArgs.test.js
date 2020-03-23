@@ -125,3 +125,23 @@ test('transformArgs works if input is undefined', () => {
 
   expect(args).toStrictEqual({})
 })
+
+test('transformArgs passes on errors', () => {
+  const ERRS = ['foo']
+
+  const fs = {
+    undefined: constant('undefined'),
+    null:      constant('null'),
+    boolean:   constant('boolean'),
+    number:    constant('number'),
+    string:    constant('string'),
+    array:     constant('array'),
+    flag:      constant('flag'),
+    function:  constant('function'),
+    otherwise: constant('otherwise')
+  }
+  
+  const {errs} = transformArgs(fs)({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
