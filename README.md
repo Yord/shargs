@@ -366,13 +366,185 @@ Each stage takes an array of parser functions, that are applied from left to rig
 
 The following parser functions are available:
 
-|        | Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
-|--------|-----------------------------------|----------------------------------------------------------------------------------------------------------------|
-| `argv` | `splitShortOptions({errs, argv})` | Splits argument groups of shape `-vs` to `-v -s`. Only works if argument groups are preceded by a single dash. |
-| `opts` | `cast({errs, opts})`              | Casts all `values` according to the options' types.                                                            |
-| `opts` | `flagAsBool({errs, opts})`        | Transforms all count-based `flag` options into booleans, that are `true` if the count is greater than `0`.     |
-| `opts` | `restrictToOnly({errs, opts})`    | Records an error if the `values` are not contained in the `only` list.                                         |
-| `args` | `emptyRest({errs, args})`         | Removes all entries from the `_` key.                                                                          |
+<table>
+<tr>
+<th>Stage</th>
+<th>Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr>
+<td><code>argv</code></td>
+<td><code>splitShortOptions({errs, argv})</code></td>
+<td>
+<details>
+<summary>
+Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const argv = ['-ab']
+
+splitShortOptions({argv})
+```
+
+Result:
+
+```js
+{
+  argv: ['-a', '-b']
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>opts</code></td>
+<td><code>cast({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Casts all <code>values</code> according to the options' types.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  string('title', ['--title'], {values: ["The Hitchhiker's Guide to the Galaxy"]}),
+  numberBool('numBool', ['-n', '--nb'], {values: ['23', 'true']}),
+  number('answer', ['-a', '--answer'], {values: ['42']}),
+  command('help', ['-h', '--help'], {values: ['foo --bar']}),
+  bool('verbose', ['--verbose'], {values: ['false']}),
+  flag('version', ['--version'], {values: []})
+]
+
+cast({opts})
+```
+
+Result:
+
+```js
+{
+  opts: [
+    string('title', ['--title'], {values: ["The Hitchhiker's Guide to the Galaxy"]}),
+    numberBool('numBool', ['-n', '--nb'], {values: [23, true]}),
+    number('answer', ['-a', '--answer'], {values: [42]}),
+    command('help', ['-h', '--help'], {values: ['foo --bar']}),
+    bool('verbose', ['--verbose'], {values: [false]}),
+    flag('version', ['--version'], {values: [true]})
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>opts</code></td>
+<td><code>flagAsBool({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Transforms all count-based <code>flag</code> options into booleans, that are <code>true</code> if the count is greater than <code>0</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  flag('version', ['--version'], {values: {count: 1}})
+]
+
+flagAsBool({opts})
+```
+
+Result:
+
+```js
+{
+  opts: [
+    flag('version', ['--version'], {values: [true]})
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>opts</code></td>
+<td><code>restrictToOnly({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Records an error if the <code>values</code> are not contained in the <code>only</code> list.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {only: [42], values: [42]})
+]
+
+restrictToOnly({opts})
+```
+
+Result:
+
+```js
+{
+  opts: [
+    number('answer', ['-a', '--answer'], {only: [42], values: [42]})
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td><code>emptyRest({errs, args})</code></td>
+<td>
+<details>
+<summary>
+Removes all entries from the <code>_</code> key.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const args = {_: ['foo']}
+
+emptyRest({args})
+```
+
+Result:
+
+```js
+{
+  args: {_: []}
+}
+```
+
+</details>
+</td>
+</tr>
+</table>
 
 ### Usage Documentation
 
