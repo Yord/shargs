@@ -29,3 +29,15 @@ test('setDefaultValues does not set default values if the option is present', ()
 
   expect(opts2).toStrictEqual(exp)
 })
+
+test('setDefaultValues works if obj is undefined', () => {
+  const opts = [number('answer', ['-a', '--answer'], {values: [42]})]
+
+  const obj = {}
+
+  const {opts: opts2} = setDefaultValues(opts)(obj)
+
+  const exp = opts.map(noArgs)
+
+  expect(opts2).toStrictEqual(exp)
+})
