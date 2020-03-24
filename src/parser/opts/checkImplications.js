@@ -8,8 +8,10 @@ module.exports = ({errs = [], opts = []} = {}) => {
     const {implies} = opt
 
     if (implies !== null) {
-      if (typeof implies === 'function' && !implies(opt)(opts)) {
-        errs2.push(falseImplication({implies, option: opt}))
+      if (typeof implies === 'function') {
+        if (implies(opt)(opts) === false) {
+          errs2.push(falseImplication({implies, option: opt}))
+        }
       } else {
         errs2.push(wrongImplicationType({type: typeof implies, option: opt}))
       }
