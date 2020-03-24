@@ -110,3 +110,11 @@ test('requireOptions works only with valid values', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('requireOptions works if opts is undefined', () => {
+  const obj = {}
+
+  const {errs} = requireOptions(obj)
+
+  expect(errs).toStrictEqual([])
+})
