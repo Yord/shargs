@@ -1,4 +1,10 @@
-module.exports = ({errs = [], args: ARGS = []} = {}) => {
-  const args = {...ARGS, '_': []}
-  return {errs, args}
-}
+const transformArgs = require('./transformArgs')
+
+module.exports = ({errs = [], args = {_: []}} = {}) => (
+  transformArgs({
+    array: ({key, val, errs, args}) => ({
+      errs,
+      args: {...args, [key]: key === '_' ? [] : val}
+    })
+  })({errs, args})
+)
