@@ -450,6 +450,52 @@ Result:
 </tr>
 <tr>
 <td><code>opts</code></td>
+<td><code>checkImplications({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Checks, whether the <code>implies</code> predicate holds for an option in relation to all options.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const implies = firstName => opts => (
+  firstName.values[0] === 'Logan' ||
+  opts.some(
+    ({key, values}) => key === 'lastName' && values !== null
+  )
+)
+
+const opts = [
+  string('firstName', ['-f'], {implies, values: ['Charles']}),
+  string('lastName', ['-l'])
+]
+
+checkImplications(obj)
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'False implication',
+      msg:  'An implication returned false. Please check your arguments.',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>opts</code></td>
 <td><code>requireOptions({errs, opts})</code></td>
 <td>
 <details>
@@ -628,7 +674,7 @@ Result:
 <td>
 <details>
 <summary>
-Records an error for each argument in a rest field. E.g. `{_: ['foo']}` would add an error for `foo`.
+Records an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
 </summary>
 
 <br />
@@ -666,7 +712,7 @@ Result:
 </tr>
 <tr>
 <td><code>args</code></td>
-<td><code>flagAsBool({errs, args})</code></td>
+<td><code>flagsAsBools({errs, args})</code></td>
 <td>
 <details>
 <summary>
@@ -682,7 +728,7 @@ const args = {
   version: {type: 'flag', count: 1}
 }
 
-flagAsBool({args})
+flagsAsBools({args})
 ```
 
 Result:
@@ -700,7 +746,7 @@ Result:
 </tr>
 <tr>
 <td><code>args</code></td>
-<td><code>flagAsNumber({errs, args})</code></td>
+<td><code>flagsAsNumbers({errs, args})</code></td>
 <td>
 <details>
 <summary>
@@ -716,7 +762,7 @@ const args = {
   version: {type: 'flag', count: 2}
 }
 
-flagAsBool({args})
+flagsAsNumbers({args})
 ```
 
 Result:

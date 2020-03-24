@@ -6,29 +6,32 @@ test('options types are correctly assembled', () => {
     base64().chain(key =>
       anything().filter(a => typeof a !== 'undefined').chain(args =>
         oneof(constant(undefined), unicodeString()).chain(desc =>
-          oneof(constant(undefined), anything()).chain(only =>
-            oneof(constant(undefined), anything()).chain(opts =>
-              oneof(constant(false), constant(true)).chain(required =>
-                oneof(constant(false), constant(true)).chain(reverse =>
-                  oneof(constant(undefined), anything()).chain(values =>
-                    oneof(constant(undefined), constant({desc, only, opts, required, reverse, values})).map(options =>
-                      ({
-                        types,
-                        key,
-                        args,
-                        options,
-                        result: {
-                          key,
+          oneof(constant(undefined), anything()).chain(implies =>
+            oneof(constant(undefined), anything()).chain(only =>
+              oneof(constant(undefined), anything()).chain(opts =>
+                oneof(constant(false), constant(true)).chain(required =>
+                  oneof(constant(false), constant(true)).chain(reverse =>
+                    oneof(constant(undefined), anything()).chain(values =>
+                      oneof(constant(undefined), constant({desc, implies, only, opts, required, reverse, values})).map(options =>
+                        ({
                           types,
+                          key,
                           args,
-                          only:     typeof options !== 'undefined' && typeof only     !== 'undefined' ? only     : null,
-                          desc:     typeof options !== 'undefined' && typeof desc     !== 'undefined' ? desc     : '',
-                          opts:     typeof options !== 'undefined' && typeof opts     !== 'undefined' ? opts     : null,
-                          values:   typeof options !== 'undefined' && typeof values   !== 'undefined' ? values   : null,
-                          required: typeof options !== 'undefined' && typeof required !== 'undefined' ? required : false,
-                          reverse:  typeof options !== 'undefined' && typeof reverse  !== 'undefined' ? reverse  : false
-                        }
-                      })
+                          options,
+                          result: {
+                            key,
+                            types,
+                            args,
+                            desc:     typeof options !== 'undefined' && typeof desc     !== 'undefined' ? desc     : '',
+                            implies:  typeof options !== 'undefined' && typeof implies  !== 'undefined' ? implies  : null,
+                            only:     typeof options !== 'undefined' && typeof only     !== 'undefined' ? only     : null,
+                            opts:     typeof options !== 'undefined' && typeof opts     !== 'undefined' ? opts     : null,
+                            values:   typeof options !== 'undefined' && typeof values   !== 'undefined' ? values   : null,
+                            required: typeof options !== 'undefined' && typeof required !== 'undefined' ? required : false,
+                            reverse:  typeof options !== 'undefined' && typeof reverse  !== 'undefined' ? reverse  : false
+                          }
+                        })
+                      )
                     )
                   )
                 )
@@ -69,6 +72,7 @@ test('options allows any user defined field except __proto__', () => {
     types: ['number'],
     args: ['-a'],
     desc: '',
+    implies: null,
     only: null,
     opts: null,
     required: false,

@@ -169,6 +169,7 @@ test('option removes args and __proto__ fields', () => {
         key: 'answer',
         types: ['number'],
         desc: '',
+        implies: null,
         only: null,
         opts: null,
         required: false,

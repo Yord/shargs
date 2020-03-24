@@ -6,11 +6,11 @@ module.exports = ({errs = [], opts = []} = {}) => {
     const {reverse, values} = opt
 
     if (reverse === true && isBool(opt) && hasValidValues(opt)) {
-      const bool = values[0]
-      let res    = bool
-      if (bool === 'false')               res = 'true'
-      else if (bool === 'true')           res = 'false'
-      else if (typeof bool === 'boolean') res = !bool
+      const val = values[0]
+      let res   = val
+      if (val === 'false')               res = 'true'
+      else if (val === 'true')           res = 'false'
+      else if (typeof val === 'boolean') res = !val
       opts2.push({...opt, values: [res]})
     } else {
       opts2.push(opt)

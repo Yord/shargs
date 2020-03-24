@@ -16,6 +16,12 @@ const argumentValueRestrictionsViolated = ({value, only, option}) => ({
   info: {value, only, option}
 })
 
+const falseImplication = ({implies, option}) => ({
+  code: 'False implication',
+  msg:  'An implication returned false. Please check your arguments.',
+  info: {implies, option}
+})
+
 const invalidOptionsListInCombine = ({options, arg, argument}) => ({
   code: 'Invalid options list in combine',
   msg:  'Options list in combine was undefined, null or empty',
@@ -64,10 +70,17 @@ const unexpectedArgument = ({argument}) => ({
   info: {argument}
 })
 
+const wrongImplicationType = ({type, option}) => ({
+  code: 'Wrong implication type',
+  msg:  'Implication had the wrong type, please provide a predicate with the following signature: (option) => (options) => boolean',
+  info: {type, option}
+})
+
 module.exports = {
   argumentIsNotABool,
   argumentIsNotANumber,
   argumentValueRestrictionsViolated,
+  falseImplication,
   invalidOptionsListInCombine,
   invalidTypesInArgument,
   noKeyProvidedInOption,
@@ -75,5 +88,6 @@ module.exports = {
   nonMatchingArgumentTypes,
   requiredOptionFormat,
   requiredOptionMissing,
-  unexpectedArgument
+  unexpectedArgument,
+  wrongImplicationType
 }

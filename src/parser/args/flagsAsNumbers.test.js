@@ -1,13 +1,13 @@
-const flagAsNumber = require('./flagAsNumber')
+const flagsAsNumbers = require('./flagsAsNumbers')
 
-test('flagAsNumber README example works', () => {
+test('flagsAsNumbers README example works', () => {
   const obj = {
     args: {
       version: {type: 'flag', count: 2}
     }
   }
 
-  const {args} = flagAsNumber(obj)
+  const {args} = flagsAsNumbers(obj)
 
   const exp = {
     version: 2
@@ -16,7 +16,7 @@ test('flagAsNumber README example works', () => {
   expect(args).toStrictEqual(exp)
 })
 
-test('flagAsNumber works as expected on all types', () => {
+test('flagsAsNumbers works as expected on all types', () => {
   const obj = {
     args: {
       title: "The Hitchhiker's Guide to the Galaxy",
@@ -30,7 +30,7 @@ test('flagAsNumber works as expected on all types', () => {
     }
   }
 
-  const {args} = flagAsNumber(obj)
+  const {args} = flagsAsNumbers(obj)
 
   const exp = {
     title: "The Hitchhiker's Guide to the Galaxy",
@@ -46,7 +46,7 @@ test('flagAsNumber works as expected on all types', () => {
   expect(args).toStrictEqual(exp)
 })
 
-test('flagAsNumber is recursive', () => {
+test('flagsAsNumbers is recursive', () => {
   const obj = {
     args: {
       title: "The Hitchhiker's Guide to the Galaxy",
@@ -60,7 +60,7 @@ test('flagAsNumber is recursive', () => {
     }
   }
 
-  const {args} = flagAsNumber(obj)
+  const {args} = flagsAsNumbers(obj)
 
   const exp = {
     title: "The Hitchhiker's Guide to the Galaxy",
@@ -76,24 +76,24 @@ test('flagAsNumber is recursive', () => {
   expect(args).toStrictEqual(exp)
 })
 
-test('flagAsNumber works if opts is undefined', () => {
+test('flagsAsNumbers works if opts is undefined', () => {
   const obj = {}
 
-  const {args} = flagAsNumber(obj)
+  const {args} = flagsAsNumbers(obj)
 
   expect(args).toStrictEqual({})
 })
 
-test('flagAsNumber works if input is undefined', () => {
-  const {args} = flagAsNumber()
+test('flagsAsNumbers works if input is undefined', () => {
+  const {args} = flagsAsNumbers()
 
   expect(args).toStrictEqual({})
 })
 
-test('flagAsNumber passes on errors', () => {
+test('flagsAsNumbers passes on errors', () => {
   const ERRS = ['foo']
 
-  const {errs} = flagAsNumber({errs: ERRS})
+  const {errs} = flagsAsNumbers({errs: ERRS})
 
   expect(errs).toStrictEqual(ERRS)
 })

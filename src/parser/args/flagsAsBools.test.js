@@ -1,13 +1,13 @@
-const flagAsBool = require('./flagAsBool')
+const flagsAsBools = require('./flagsAsBools')
 
-test('flagAsBool README example works', () => {
+test('flagsAsBools README example works', () => {
   const obj = {
     args: {
       version: {type: 'flag', count: 1}
     }
   }
 
-  const {args} = flagAsBool(obj)
+  const {args} = flagsAsBools(obj)
 
   const exp = {
     version: true
@@ -16,7 +16,7 @@ test('flagAsBool README example works', () => {
   expect(args).toStrictEqual(exp)
 })
 
-test('flagAsBool works as expected on all types', () => {
+test('flagsAsBools works as expected on all types', () => {
   const obj = {
     args: {
       title: "The Hitchhiker's Guide to the Galaxy",
@@ -31,7 +31,7 @@ test('flagAsBool works as expected on all types', () => {
     }
   }
 
-  const {args} = flagAsBool(obj)
+  const {args} = flagsAsBools(obj)
 
   const exp = {
     title: "The Hitchhiker's Guide to the Galaxy",
@@ -48,7 +48,7 @@ test('flagAsBool works as expected on all types', () => {
   expect(args).toStrictEqual(exp)
 })
 
-test('flagAsBool is recursive', () => {
+test('flagsAsBools is recursive', () => {
   const obj = {
     args: {
       title: "The Hitchhiker's Guide to the Galaxy",
@@ -63,7 +63,7 @@ test('flagAsBool is recursive', () => {
     }
   }
 
-  const {args} = flagAsBool(obj)
+  const {args} = flagsAsBools(obj)
 
   const exp = {
     title: "The Hitchhiker's Guide to the Galaxy",
@@ -80,24 +80,24 @@ test('flagAsBool is recursive', () => {
   expect(args).toStrictEqual(exp)
 })
 
-test('flagAsBool works if opts is undefined', () => {
+test('flagsAsBools works if opts is undefined', () => {
   const obj = {}
 
-  const {args} = flagAsBool(obj)
+  const {args} = flagsAsBools(obj)
 
   expect(args).toStrictEqual({})
 })
 
-test('flagAsBool works if input is undefined', () => {
-  const {args} = flagAsBool()
+test('flagsAsBools works if input is undefined', () => {
+  const {args} = flagsAsBools()
 
   expect(args).toStrictEqual({})
 })
 
-test('flagAsBool passes on errors', () => {
+test('flagsAsBools passes on errors', () => {
   const ERRS = ['foo']
 
-  const {errs} = flagAsBool({errs: ERRS})
+  const {errs} = flagsAsBools({errs: ERRS})
 
   expect(errs).toStrictEqual(ERRS)
 })

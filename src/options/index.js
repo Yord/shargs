@@ -1,6 +1,7 @@
 const array   = types => (key, args = [], fields = {}) => {
   const {
     desc     = '',
+    implies  = null,
     only     = null,
     opts     = null,
     required = false,
@@ -16,6 +17,7 @@ const array   = types => (key, args = [], fields = {}) => {
     types,
     args,
     desc,
+    implies,
     only,
     opts,
     required,
