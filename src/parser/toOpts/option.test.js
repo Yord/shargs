@@ -1,5 +1,6 @@
 const {anything, array, assert, base64, property} = require('fast-check')
 const option = require('./option')
+const {array: arrayType} = require('../../options')
 const {noArgumentsProvidedInOption, noKeyProvidedInOption} = require('../../errors')
 
 test('option transforms arguments DSL into options DSL', () => {
@@ -153,4 +154,28 @@ test('option fails if passed undefined', () => {
   ).toStrictEqual(
     _arguments
   )
+})
+
+test('option removes args and __proto__ fields', () => {
+  const answer = arrayType(['number'])('answer', ['-a'], {foo: 'bar', baz: 42, __proto__: 42})
+
+  const {args} = option(answer)
+
+  const exp = {
+    '-a': [
+      {
+        foo: 'bar',
+        baz: 42,
+        key: 'answer',
+        types: ['number'],
+        desc: '',
+        only: null,
+        opts: null,
+        required: false,
+        values: null
+      }
+    ]
+  }
+
+  expect(args).toStrictEqual(exp)
 })
