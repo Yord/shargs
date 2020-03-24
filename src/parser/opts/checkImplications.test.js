@@ -42,3 +42,11 @@ test('checkImplications fails on wrong type', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('checkImplications works if opts is undefined', () => {
+  const obj = {}
+
+  const {opts} = checkImplications(obj)
+
+  expect(opts).toStrictEqual([])
+})
