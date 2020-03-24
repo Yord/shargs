@@ -559,6 +559,40 @@ Result:
 </td>
 </tr>
 <tr>
+<td><code>opts</code></td>
+<td><code>reverseFlags({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Reverses the value of a flag. This may be useful if the presence of a flag should imply <code>false</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  flag('flag', ['-f'], {reverse: true, values: [1]})
+]
+
+reverseFlags({opts})
+```
+
+Result:
+
+```js
+{
+  opts: [
+    flag('flag', ['-f'], {reverse: true, values: [-1]})
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
 <td><code>args</code></td>
 <td><code>clearRest({errs, args})</code></td>
 <td>
