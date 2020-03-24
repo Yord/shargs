@@ -11,7 +11,6 @@ test('transformArgs README example works', () => {
   }
 
   const fs = {
-    number: constant('number'),
     flag:   (key, val, errs, args) => ({
       errs,
       args: {...args, [key]: val.count}
