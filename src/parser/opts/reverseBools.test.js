@@ -1,14 +1,14 @@
-const reverseBooleans = require('./reverseBooleans')
+const reverseBools = require('./reverseBools')
 const {bool, flag} = require('../../options')
 
-test('reverseBooleans README example works', () => {
+test('reverseBools README example works', () => {
   const obj = {
     opts: [
       bool('bool', ['-b'], {reverse: true, values: [true]})
     ]
   }
 
-  const {opts} = reverseBooleans(obj)
+  const {opts} = reverseBools(obj)
 
   const exp = [
     bool('bool', ['-b'], {reverse: true, values: [false]})
@@ -17,7 +17,7 @@ test('reverseBooleans README example works', () => {
   expect(opts).toStrictEqual(exp)
 })
 
-test('reverseBooleans does not change flags', () => {
+test('reverseBools does not change flags', () => {
   const obj = {
     opts: [
       bool('bool', ['-b'], {reverse: true, values: [true]}),
@@ -25,7 +25,7 @@ test('reverseBooleans does not change flags', () => {
     ]
   }
 
-  const {opts} = reverseBooleans(obj)
+  const {opts} = reverseBools(obj)
 
   const exp = [
     bool('bool', ['-b'], {reverse: true, values: [false]}),
@@ -35,7 +35,7 @@ test('reverseBooleans does not change flags', () => {
   expect(opts).toStrictEqual(exp)
 })
 
-test('reverseBooleans does not reverse booleans without values', () => {
+test('reverseBools does not reverse booleans without values', () => {
   const obj = {
     opts: [
       bool('bool', ['-b'], {reverse: true, values: [true]}),
@@ -43,7 +43,7 @@ test('reverseBooleans does not reverse booleans without values', () => {
     ]
   }
 
-  const {opts} = reverseBooleans(obj)
+  const {opts} = reverseBools(obj)
 
   const exp = [
     bool('bool', ['-b'], {reverse: true, values: [false]}),
@@ -53,24 +53,24 @@ test('reverseBooleans does not reverse booleans without values', () => {
   expect(opts).toStrictEqual(exp)
 })
 
-test('reverseBooleans works if opts is undefined', () => {
+test('reverseBools works if opts is undefined', () => {
   const obj = {}
 
-  const {errs} = reverseBooleans(obj)
+  const {errs} = reverseBools(obj)
 
   expect(errs).toStrictEqual([])
 })
 
-test('reverseBooleans works if input is undefined', () => {
-  const {errs} = reverseBooleans()
+test('reverseBools works if input is undefined', () => {
+  const {errs} = reverseBools()
 
   expect(errs).toStrictEqual([])
 })
 
-test('reverseBooleans passes on errors', () => {
+test('reverseBools passes on errors', () => {
   const ERRS = ['foo']
 
-  const {errs} = reverseBooleans({errs: ERRS})
+  const {errs} = reverseBools({errs: ERRS})
 
   expect(errs).toStrictEqual(ERRS)
 })
