@@ -14,9 +14,9 @@ test('toArgs transforms opts into args', () => {
       {...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]},
       {...numberBool('numBool', ['-n', '--nb']), values: [23, true]},
       {...number('answer', ['-a', '--answer']), values: [42]},
-      {...command('help', ['-h', '--help']), values: ['foo --bar']},
+      {...command('help', ['-h', '--help']), values: ['foo', '--bar']},
       {...bool('verbose', ['--verbose']), values: [false]},
-      {...flag('version', ['--version']), values: [true]},
+      {...flag('version', ['--version']), values: []},
       {values: ['bar']}
     ]
   }
@@ -55,7 +55,7 @@ test('toArgs removes double minus', () => {
 test('toArgs represents flags as counts', () => {
   const obj = {
     opts: [
-      {...flag('verbose', ['-v']), values: [true]}
+      {...flag('verbose', ['-v']), values: []}
     ]
   }
 
@@ -72,9 +72,9 @@ test('toArgs represents flags as counts', () => {
 test('toArgs counts the occurrences of flags', () => {
   const obj = {
     opts: [
-      {...flag('verbose', ['-v']), values: [true]},
-      {...flag('verbose', ['-v']), values: [true]},
-      {...flag('verbose', ['-v']), values: [true]}
+      {...flag('verbose', ['-v']), values: []},
+      {...flag('verbose', ['-v']), values: []},
+      {...flag('verbose', ['-v']), values: []}
     ]
   }
 
