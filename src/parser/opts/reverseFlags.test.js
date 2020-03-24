@@ -66,3 +66,11 @@ test('reverseFlags works if input is undefined', () => {
 
   expect(errs).toStrictEqual([])
 })
+
+test('reverseFlags passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = reverseFlags({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
