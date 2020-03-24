@@ -69,6 +69,23 @@ test('toArgs represents flags as counts', () => {
   expect(args).toStrictEqual(exp)
 })
 
+test('toArgs represents flags as counts and uses 1 if the values are empty', () => {
+  const obj = {
+    opts: [
+      {...flag('verbose', ['-v']), values: []}
+    ]
+  }
+
+  const {args} = toArgs(discard)(obj)
+
+  const exp = {
+    _: [],
+    verbose: {type: 'flag', count: 1}
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
 test('toArgs counts the occurrences of flags', () => {
   const obj = {
     opts: [
