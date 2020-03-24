@@ -1,7 +1,7 @@
-const errorIfRest = require('./errorIfRest')
+const failRest = require('./failRest')
 const {unexpectedArgument} = require('../../errors')
 
-test('errorIfRest README example works', () => {
+test('failRest README example works', () => {
   const obj = {
     args: {
       _: ['foo'],
@@ -12,7 +12,7 @@ test('errorIfRest README example works', () => {
     }
   }
 
-  const {errs, args} = errorIfRest(obj)
+  const {errs, args} = failRest(obj)
 
   const expErrs = [
     unexpectedArgument({argument: 'foo'}),
@@ -25,24 +25,24 @@ test('errorIfRest README example works', () => {
   expect(args).toStrictEqual(expArgs)
 })
 
-test('errorIfRest even empties rest if args is undefined', () => {
+test('failRest even empties rest if args is undefined', () => {
   const obj = {}
 
-  const {args} = errorIfRest(obj)
+  const {args} = failRest(obj)
 
   expect(args).toStrictEqual({})
 })
 
-test('errorIfRest even empties rest if input is undefined', () => {
-  const {args} = errorIfRest()
+test('failRest even empties rest if input is undefined', () => {
+  const {args} = failRest()
 
   expect(args).toStrictEqual({})
 })
 
-test('errorIfRest passes on errors', () => {
+test('failRest passes on errors', () => {
   const ERRS = ['foo']
 
-  const {errs} = errorIfRest({errs: ERRS})
+  const {errs} = failRest({errs: ERRS})
 
   expect(errs).toStrictEqual(ERRS)
 })

@@ -554,7 +554,7 @@ Result:
 </tr>
 <tr>
 <td><code>args</code></td>
-<td><code>errorIfRest({errs, args})</code></td>
+<td><code>failRest({errs, args})</code></td>
 <td>
 <details>
 <summary>
@@ -574,7 +574,7 @@ const args = {
   }
 }
 
-errorIfRest({args})
+failRest({args})
 ```
 
 Result:
