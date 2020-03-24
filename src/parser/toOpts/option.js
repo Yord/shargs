@@ -3,12 +3,7 @@ const {noArgumentsProvidedInOption, noKeyProvidedInOption} = require('../../erro
 module.exports = (opt = {}) => {
   const {
     key = null,
-    args: ARGS = [],
-    types = null,
-    desc = '',
-    only = null,
-    opts = null,
-    values = null
+    args: ARGS = []
   } = opt
 
   const errs = []
@@ -27,7 +22,7 @@ module.exports = (opt = {}) => {
       const arg  = ARGS[i]
       if (typeof args[arg] === 'undefined') args[arg] = []
 
-      const {args: _, ...rest} = opt
+      const {args: _1, __proto__: _2, ...rest} = opt
       args[arg].push(rest)
     }
   }

@@ -4,12 +4,12 @@ const toOpts            = require('../src/parser/toOpts')
 const splitShortOptions = require('../src/parser/argv/splitShortOptions')
 const cast              = require('../src/parser/opts/cast')
 const restrictToOnly    = require('../src/parser/opts/restrictToOnly')
-const emptyRest         = require('../src/parser/args/emptyRest')
+const clearRest         = require('../src/parser/args/clearRest')
 
 const fooParser = parser({
   argv: [splitShortOptions],
   opts: [cast, restrictToOnly],
-  args: [emptyRest]
+  args: [clearRest]
 })
 
 const {array, number, string, bool, flag, command} = require('../src/options')
@@ -778,7 +778,7 @@ console.log('exD1  === exD2',  exD1  === exD2)
     toOpts,
     opts: [log('C'), cast, restrictToOnly, log('D')],
     toArgs: toArgs(),
-    args: [log('E'), emptyRest, log('F')]
+    args: [log('E'), clearRest, log('F')]
   })
 
   // node index.js --unknown -ha 42
@@ -825,7 +825,7 @@ console.log('exD1  === exD2',  exD1  === exD2)
   const deepThought = parser({
     argv: [splitShortOptions],
     opts: [cast, restrictToOnly],
-    args: [emptyRest]
+    args: [clearRest]
   })
 
   const askDocs = layout([

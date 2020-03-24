@@ -1,13 +1,16 @@
-const array   = (
-  types =>
-  (key, args = [], {
+const array   = types => (key, args = [], fields = {}) => {
+  const {
     desc     = '',
     only     = null,
     opts     = null,
     required = false,
     values   = null
-  } = {}) =>
-  ({
+  } = fields
+
+  const {__proto__, ...rest} = fields
+
+  return {
+    ...rest,
     key,
     types,
     args,
@@ -16,8 +19,8 @@ const array   = (
     opts,
     required,
     values
-  })
-)
+  }
+}
 
 const number  = array(['number'])
 const string  = array(['string'])

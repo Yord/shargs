@@ -58,6 +58,12 @@ const requiredOptionMissing = ({key, args, option}) => ({
   info: {key, args, option}
 })
 
+const unexpectedArgument = ({argument}) => ({
+  code: 'Unexpected argument',
+  msg:  'An unexpected argument was used that has no option defined.',
+  info: {argument}
+})
+
 module.exports = {
   argumentIsNotABool,
   argumentIsNotANumber,
@@ -68,5 +74,6 @@ module.exports = {
   noArgumentsProvidedInOption,
   nonMatchingArgumentTypes,
   requiredOptionFormat,
-  requiredOptionMissing
+  requiredOptionMissing,
+  unexpectedArgument
 }
