@@ -38,3 +38,11 @@ test('errorIfRest even empties rest if input is undefined', () => {
 
   expect(args).toStrictEqual({})
 })
+
+test('errorIfRest passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = errorIfRest({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
