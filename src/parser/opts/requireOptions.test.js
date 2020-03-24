@@ -60,3 +60,20 @@ test('requireOptions works as expected on all types', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('requireOptions works if required is false', () => {
+  const answer = number('answer', ['-a', '--answer'], {required: false})
+
+  const obj = {
+    opts: [answer]
+  }
+
+  const {errs, opts} = requireOptions(obj)
+
+  const expErrs = []
+
+  const expOpts = obj.opts
+
+  expect(errs).toStrictEqual(expErrs)
+  expect(opts).toStrictEqual(expOpts)
+})
