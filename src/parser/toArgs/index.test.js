@@ -88,6 +88,25 @@ test('toArgs counts the occurrences of flags', () => {
   expect(args).toStrictEqual(exp)
 })
 
+test('toArgs counts the occurrences of flags and has a negative count if the flag was reversed', () => {
+  const obj = {
+    opts: [
+      {...flag('verbose', ['-v']), values: [-1]},
+      {...flag('verbose', ['-v']), values: [-1]},
+      {...flag('verbose', ['-v']), values: [-1]}
+    ]
+  }
+
+  const {args} = toArgs(discard)(obj)
+
+  const exp = {
+    _: [],
+    verbose: {type: 'flag', count: -3}
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
 test('toArgs works if opts is undefined', () => {
   const obj = {}
 
