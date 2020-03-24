@@ -1,8 +1,8 @@
-const checkImplications = require('./checkImplications')
+const verifyRules = require('./verifyRules')
 const {falseImplication, wrongImplicationType} = require('../../errors')
 const {string} = require('../../options')
 
-test('checkImplications README example works', () => {
+test('verifyRules README example works', () => {
   const rules = firstName => opts => (
     firstName.values[0] === 'Logan' ||
     opts.some(({key, values}) => key === 'lastName' && values !== null)
@@ -15,7 +15,7 @@ test('checkImplications README example works', () => {
     opts: [firstName, lastName]
   }
 
-  const {errs} = checkImplications(obj)
+  const {errs} = verifyRules(obj)
 
   const exp = [
     falseImplication({rules, option: firstName})
@@ -24,7 +24,7 @@ test('checkImplications README example works', () => {
   expect(errs).toStrictEqual(exp)
 })
 
-test('checkImplications fails on wrong type', () => {
+test('verifyRules fails on wrong type', () => {
   const rules = 42
 
   const firstName = string('firstName', ['-f'], {rules, values: ['Charles']})
@@ -34,7 +34,7 @@ test('checkImplications fails on wrong type', () => {
     opts: [firstName, lastName]
   }
 
-  const {errs} = checkImplications(obj)
+  const {errs} = verifyRules(obj)
 
   const exp = [
     wrongImplicationType({type: 'number', option: firstName})
@@ -43,24 +43,24 @@ test('checkImplications fails on wrong type', () => {
   expect(errs).toStrictEqual(exp)
 })
 
-test('checkImplications works if opts is undefined', () => {
+test('verifyRules works if opts is undefined', () => {
   const obj = {}
 
-  const {opts} = checkImplications(obj)
+  const {opts} = verifyRules(obj)
 
   expect(opts).toStrictEqual([])
 })
 
-test('checkImplications works if input is undefined', () => {
-  const {opts} = checkImplications()
+test('verifyRules works if input is undefined', () => {
+  const {opts} = verifyRules()
 
   expect(opts).toStrictEqual([])
 })
 
-test('checkImplications passes on errors', () => {
+test('verifyRules passes on errors', () => {
   const ERRS = ['foo']
 
-  const {errs} = checkImplications({errs: ERRS})
+  const {errs} = verifyRules({errs: ERRS})
 
   expect(errs).toStrictEqual(ERRS)
 })

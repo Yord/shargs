@@ -338,7 +338,7 @@ The following fields are available:
 | `only`     | array of values                 | `null`  | `only` is used by the `restrictToOnly` parser stage to validate user input. It takes a non-empty array of values. If `only` is set to `null`, the `restrictToOnly` parser stage skips validation.                                                                                                                                                                                       |
 | `opts`     | array of command-line options   | `null`  | `opts` can be set if the command-line option is a command (if `types` is `null`) to describe the command's options. It uses the same syntax as regular command-line options.                                                                                                                                                                                                            |
 | `required` | boolean                         | `false` | `required` is used by the `requireOption` parser stage to control if an option is set. If a required option is not set, `requireOption` records an error.                                                                                                                                                                                                                               |
-| `rules`    | predicate                       | `null`  | `rules` is a predicate applied by `checkImplications` to check if parsed `opts` are correct.                                                                                                                                                                                                                                                                                            |
+| `rules`    | predicate                       | `null`  | `rules` is a predicate applied by `verifyRules` to check if parsed `opts` are correct.                                                                                                                                                                                                                                                                                            |
 | `values`   | array of default values         | `null`  | `values` is used by the `toOpts` parser stage to set default values for command-line options, that are not explicitly given. It takes an array of values that should have the same types as defined by the `types` field. The user is responsible for ensuring the correct types are used.                                                                                              |
 
 ### Command-Line Parsers
@@ -442,52 +442,6 @@ Result:
     command('help', ['-h', '--help'], {values: ['foo --bar']}),
     bool('verbose', ['--verbose'], {values: [false]}),
     flag('version', ['--version'], {values: [true]})
-  ]
-}
-```
-
-</details>
-</td>
-</tr>
-<tr>
-<td><code>opts</code></td>
-<td><code>checkImplications({errs, opts})</code></td>
-<td>
-<details>
-<summary>
-Checks, whether the <code>rules</code> predicate holds for an option in relation to all options.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const rules = firstName => opts => (
-  firstName.values[0] === 'Logan' ||
-  opts.some(
-    ({key, values}) => key === 'lastName' && values !== null
-  )
-)
-
-const opts = [
-  string('firstName', ['-f'], {rules, values: ['Charles']}),
-  string('lastName', ['-l'])
-]
-
-checkImplications(obj)
-```
-
-Result:
-
-```js
-{
-  errs: [
-    {
-      code: 'False implication',
-      msg:  'An implication returned false. Please check your arguments.',
-      info: {...}
-    }
   ]
 }
 ```
@@ -632,6 +586,52 @@ Result:
 {
   opts: [
     flag('flag', ['-f'], {reverse: true, values: [-1]})
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>opts</code></td>
+<td><code>verifyRules({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Checks, whether the <code>rules</code> predicate holds for an option in relation to all options.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const rules = firstName => opts => (
+  firstName.values[0] === 'Logan' ||
+  opts.some(
+    ({key, values}) => key === 'lastName' && values !== null
+  )
+)
+
+const opts = [
+  string('firstName', ['-f'], {rules, values: ['Charles']}),
+  string('lastName', ['-l'])
+]
+
+verifyRules(obj)
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'False implication',
+      msg:  'An implication returned false. Please check your arguments.',
+      info: {...}
+    }
   ]
 }
 ```
