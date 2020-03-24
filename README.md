@@ -669,6 +669,7 @@ Result:
 <details>
 <summary>
 Transforms an args object into a new args object by applying functions <code>fs</code> based on the value type.
+All fields of an object are updated independently and previous updates in the same run do not influence later updates.
 </summary>
 
 <br />
@@ -682,11 +683,11 @@ const args = {
 }
 
 const fs = {
-  flag:   (key, val, errs, args) => ({
+  flag:   ({key, val, errs, args}) => ({
     errs,
     args: {...args, [key]: val.count}
   }),
-  number: (key, val, errs, args) => ({
+  number: ({key, val, errs, args}) => ({
     errs,
     args: {...args, [key]: val + 19}
   })
