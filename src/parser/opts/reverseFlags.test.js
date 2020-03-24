@@ -34,3 +34,21 @@ test('reverseFlags does not change booleans', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('reverseFlags does not reverse flags without values', () => {
+  const obj = {
+    opts: [
+      flag('flag', ['-f'], {reverse: true, values: [1]}),
+      flag('flag2', ['--f2'], {reverse: true, values: null})
+    ]
+  }
+
+  const {opts} = reverseFlags(obj)
+
+  const exp = [
+    flag('flag', ['-f'], {reverse: true, values: [-1]}),
+    flag('flag2', ['--f2'], {reverse: true, values: null})
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
