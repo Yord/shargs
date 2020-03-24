@@ -56,3 +56,11 @@ test('checkImplications works if input is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('checkImplications passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = checkImplications({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
