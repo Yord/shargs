@@ -554,6 +554,48 @@ Result:
 </tr>
 <tr>
 <td><code>args</code></td>
+<td><code>errorIfRest({errs, args})</code></td>
+<td>
+<details>
+<summary>
+Records an error for each argument in a rest field. E.g. `{_: ['foo']}` would add an error for `foo`.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const args = {
+  _: ['foo'],
+  command: {
+    _: ['bar'],
+    foo: [42, 'foo']
+  }
+}
+
+errorIfRest({args})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'Unexpected argument',
+      msg:  'An unexpected argument was used that has no option defined.',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>args</code></td>
 <td><code>flagAsBool({errs, args})</code></td>
 <td>
 <details>
