@@ -14,6 +14,8 @@ module.exports = ({errs = [], opts: OPTS = []} = {}) => {
 
       if (typeof types === 'undefined' || types === null) {
         values = VALUES
+      } else if (Array.isArray(types) && types.length === 0) {
+        values = [1]
       } else {
         if (types.length !== 0) {
           for (let j = 0; j < types.length; j++) {

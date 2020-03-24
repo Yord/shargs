@@ -33,6 +33,8 @@ module.exports = (opts = []) => {
               i++
               arg = ARGV[i] || '--'
             }
+          } else if (Array.isArray(types) && types.length === 0) {
+            values = [1]
           } else {
             values = ARGV.slice(at + 1, at + types.length + 1)
           }

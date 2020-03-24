@@ -38,7 +38,7 @@ test('toOpts transforms argv into opts', () => {
     noArgs({...numberBool('numBool', ['-n', '--nb']), values: ['23', 'true']}),
     noArgs({...number('answer', ['-a', '--answer']), values: ['42']}),
     noArgs({...bool('verbose', ['--verbose']), values: ['false']}),
-    noArgs({...flag('version', ['--version']), values: []}),
+    noArgs({...flag('version', ['--version']), values: [1]}),
     {values: ['bar']},
     noArgs({...command('help', ['-h', '--help']), values: ['foo', '--bar']})
   ]
