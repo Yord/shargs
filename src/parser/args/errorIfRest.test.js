@@ -32,3 +32,9 @@ test('errorIfRest even empties rest if args is undefined', () => {
 
   expect(args).toStrictEqual({})
 })
+
+test('errorIfRest even empties rest if input is undefined', () => {
+  const {args} = errorIfRest()
+
+  expect(args).toStrictEqual({})
+})
