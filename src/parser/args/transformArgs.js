@@ -21,14 +21,6 @@ module.exports = function transformArgs (fs = {}) {
       otherwise: otherwiseF = rm
     } = fs
   
-    const recurse = (key, val, errs, args) => {
-      const {errs: errs2, args: args2} = transformArgs(fs)({args: val})
-      return {
-        errs: errs.concat(errs2),
-        args: {...args, [key]: args2}
-      }
-    }
-  
     return Object.keys(args).reduce(
       ({errs: errs2, args: args2}, arg) => {
         const val = args2[arg]
@@ -39,7 +31,13 @@ module.exports = function transformArgs (fs = {}) {
         else if (typeof val === 'string')                return stringF(   arg, val, errs2, args2)
         else if (Array.isArray(val))                     return arrayF(    arg, val, errs2, args2)
         else if (typeof val === 'object' && isFlag(val)) return flagF(     arg, val, errs2, args2)
-        else if (typeof val === 'object')                return recurse(   arg, val, errs2, args2)
+        else if (typeof val === 'object') {
+          const {errs: errs3, args: args3} = transformArgs(fs)({args: val})
+          return {
+            errs: errs2.concat(errs3),
+            args: {...args2, [arg]: args3}
+          }
+        }
         else if (typeof val === 'function')              return functionF( arg, val, errs2, args2)
         else                                             return otherwiseF(arg, val, errs2, args2)
       },
