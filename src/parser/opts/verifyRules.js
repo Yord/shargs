@@ -1,4 +1,4 @@
-const {falseImplication, wrongImplicationType} = require('../../errors')
+const {falseRules, wrongRulesType} = require('../../errors')
 
 module.exports = ({errs = [], opts = []} = {}) => {
   const errs2 = []
@@ -10,10 +10,10 @@ module.exports = ({errs = [], opts = []} = {}) => {
     if (rules !== null) {
       if (typeof rules === 'function') {
         if (rules(opt)(opts) === false) {
-          errs2.push(falseImplication({rules, option: opt}))
+          errs2.push(falseRules({rules, option: opt}))
         }
       } else {
-        errs2.push(wrongImplicationType({type: typeof rules, option: opt}))
+        errs2.push(wrongRulesType({type: typeof rules, option: opt}))
       }
     }
   }

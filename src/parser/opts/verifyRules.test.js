@@ -1,5 +1,5 @@
 const verifyRules = require('./verifyRules')
-const {falseImplication, wrongImplicationType} = require('../../errors')
+const {falseRules, wrongRulesType} = require('../../errors')
 const {string} = require('../../options')
 
 test('verifyRules README example works', () => {
@@ -18,7 +18,7 @@ test('verifyRules README example works', () => {
   const {errs} = verifyRules(obj)
 
   const exp = [
-    falseImplication({rules, option: firstName})
+    falseRules({rules, option: firstName})
   ]
 
   expect(errs).toStrictEqual(exp)
@@ -37,7 +37,7 @@ test('verifyRules fails on wrong type', () => {
   const {errs} = verifyRules(obj)
 
   const exp = [
-    wrongImplicationType({type: 'number', option: firstName})
+    wrongRulesType({type: 'number', option: firstName})
   ]
 
   expect(errs).toStrictEqual(exp)
