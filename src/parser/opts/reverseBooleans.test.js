@@ -60,3 +60,9 @@ test('reverseBooleans works if opts is undefined', () => {
 
   expect(errs).toStrictEqual([])
 })
+
+test('reverseBooleans works if input is undefined', () => {
+  const {errs} = reverseBooleans()
+
+  expect(errs).toStrictEqual([])
+})
