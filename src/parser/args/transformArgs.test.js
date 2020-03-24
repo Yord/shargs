@@ -1,6 +1,6 @@
 const transformArgs = require('./transformArgs')
 
-const constant = c => (key, val, errs, args) => ({errs, args: {...args, [key]: c}})
+const constant = c => ({key, errs, args}) => ({errs, args: {...args, [key]: c}})
 
 test('transformArgs README example works', () => {
   const obj = {
@@ -11,11 +11,11 @@ test('transformArgs README example works', () => {
   }
 
   const fs = {
-    flag:   (key, val, errs, args) => ({
+    flag:   ({key, val, errs, args}) => ({
       errs,
       args: {...args, [key]: val.count}
     }),
-    number: (key, val, errs, args) => ({
+    number: ({key, val, errs, args}) => ({
       errs,
       args: {...args, [key]: val + 19}
     })
