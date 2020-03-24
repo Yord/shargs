@@ -82,6 +82,12 @@ const wrongImplicationType = ({type, option}) => ({
   info: {type, option}
 })
 
+const wrongOptsRulesType = ({type, options}) => ({
+  code: 'Wrong opts rules type',
+  msg:  'The opts rules are of a wrong type, please provide a predicate with the following signature: (options) => boolean',
+  info: {type, options}
+})
+
 module.exports = {
   argumentIsNotABool,
   argumentIsNotANumber,
@@ -96,5 +102,6 @@ module.exports = {
   requiredOptionFormat,
   requiredOptionMissing,
   unexpectedArgument,
-  wrongImplicationType
+  wrongImplicationType,
+  wrongOptsRulesType
 }
