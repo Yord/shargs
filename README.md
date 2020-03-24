@@ -523,6 +523,42 @@ Result:
 </td>
 </tr>
 <tr>
+<td><code>opts</code></td>
+<td><code>reverseBools({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Reverses the value of a <code>bool</code>. Works on string (e.g. <code>['false']</code>) and boolean (e.g. <code>[false]</code>) values.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  bool('bool', ['-b'], {reverse: true, values: [true]}),
+  bool('bool', ['-b'], {reverse: true, values: ['true']})
+]
+
+reverseBools({opts})
+```
+
+Result:
+
+```js
+{
+  opts: [
+    bool('bool', ['-b'], {reverse: true, values: [false]}),
+    bool('bool', ['-b'], {reverse: true, values: ['false']})
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
 <td><code>args</code></td>
 <td><code>clearRest({errs, args})</code></td>
 <td>
