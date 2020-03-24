@@ -70,6 +70,12 @@ const unexpectedArgument = ({argument}) => ({
   info: {argument}
 })
 
+const wrongImplicationType = ({type, option}) => ({
+  code: 'Wrong implication type',
+  msg:  'Implication had the wrong type, please provide a predicate with the following signature: (option) => (options) => boolean',
+  info: {type, option}
+})
+
 module.exports = {
   argumentIsNotABool,
   argumentIsNotANumber,
@@ -82,5 +88,6 @@ module.exports = {
   nonMatchingArgumentTypes,
   requiredOptionFormat,
   requiredOptionMissing,
-  unexpectedArgument
+  unexpectedArgument,
+  wrongImplicationType
 }
