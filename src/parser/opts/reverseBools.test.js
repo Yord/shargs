@@ -22,20 +22,30 @@ test('reverseBools README example works', () => {
 test('reverseBools works as expected', () => {
   const obj = {
     opts: [
-      bool('bool', ['-b'], {reverse: true, values: [true]}),
-      bool('bool', ['-b'], {reverse: true, values: [false]}),
-      bool('bool', ['-b'], {reverse: true, values: ['true']}),
-      bool('bool', ['-b'], {reverse: true, values: ['false']})
+      bool('bool1', ['-b'], {reverse: true, values: [true]}),
+      bool('bool2', ['-b'], {reverse: true, values: [false]}),
+      bool('bool3', ['-b'], {reverse: true, values: ['true']}),
+      bool('bool4', ['-b'], {reverse: true, values: ['false']}),
+      bool('bool5', ['-b'], {reverse: true, values: [42]}),
+      bool('bool6', ['-b'], {reverse: true, values: [null]}),
+      bool('bool7', ['-b'], {reverse: true, values: [undefined]}),
+      bool('bool8', ['-b'], {reverse: true, values: [[42]]}),
+      bool('bool9', ['-b'], {reverse: true, values: [{}]})
     ]
   }
 
   const {opts} = reverseBools(obj)
 
   const exp = [
-    bool('bool', ['-b'], {reverse: true, values: [false]}),
-    bool('bool', ['-b'], {reverse: true, values: [true]}),
-    bool('bool', ['-b'], {reverse: true, values: ['false']}),
-    bool('bool', ['-b'], {reverse: true, values: ['true']})
+    bool('bool1', ['-b'], {reverse: true, values: [false]}),
+    bool('bool2', ['-b'], {reverse: true, values: [true]}),
+    bool('bool3', ['-b'], {reverse: true, values: ['false']}),
+    bool('bool4', ['-b'], {reverse: true, values: ['true']}),
+    bool('bool5', ['-b'], {reverse: true, values: [42]}),
+    bool('bool6', ['-b'], {reverse: true, values: [null]}),
+    bool('bool7', ['-b'], {reverse: true, values: [undefined]}),
+    bool('bool8', ['-b'], {reverse: true, values: [[42]]}),
+    bool('bool9', ['-b'], {reverse: true, values: [{}]})
   ]
 
   expect(opts).toStrictEqual(exp)
