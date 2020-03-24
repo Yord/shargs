@@ -56,6 +56,25 @@ test('options does not allow __proto__ field', () => {
   )
 })
 
+test('options allows any user defined field except __proto__', () => {
+  const answer = array(['number'])('answer', ['-a'], {foo: 'bar', baz: 42, __proto__: 42})
+
+  const exp = {
+    foo: 'bar',
+    baz: 42,
+    key: 'answer',
+    types: ['number'],
+    args: ['-a'],
+    desc: '',
+    only: null,
+    opts: null,
+    required: false,
+    values: null
+  }
+
+  expect(answer).toStrictEqual(exp)
+})
+
 function types () {
   const oneElem = ['string', 'number', 'bool']
   const arr = arbArray(oneof(...oneElem.map(constant)), 2, 10)
