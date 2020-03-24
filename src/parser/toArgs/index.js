@@ -14,7 +14,10 @@ module.exports = parser => ({errs = [], opts: OPTS = []} = {}) => {
         errs      = errs.concat(res.errs || [])
         args[key] = Object.assign({}, args[key], res.args)
       } else if (Array.isArray(types) && types.length === 0) {
-        args[key] = {type: 'flag', count: typeof args[key] === 'undefined' ? 1 : args[key].count + (values.length > 0 ? values[0] : 1)}
+        args[key] = {
+          type: 'flag',
+          count: values.length === 0 ? 1 : typeof args[key] === 'undefined' ? values[0] : args[key].count + values[0]
+        }
       } else {
         args[key] = types.length === 1 ? values[0] : values
       }
