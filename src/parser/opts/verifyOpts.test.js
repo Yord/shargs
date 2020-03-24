@@ -40,3 +40,11 @@ test('verifyOpts fails on wrong type', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('verifyOpts works if opts is undefined', () => {
+  const obj = {}
+
+  const {opts} = verifyOpts()(obj)
+
+  expect(opts).toStrictEqual([])
+})
