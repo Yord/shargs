@@ -52,3 +52,11 @@ test('reverseFlags does not reverse flags without values', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('reverseFlags works if opts is undefined', () => {
+  const obj = {}
+
+  const {errs} = reverseFlags(obj)
+
+  expect(errs).toStrictEqual([])
+})
