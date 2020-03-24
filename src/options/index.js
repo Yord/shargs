@@ -1,11 +1,11 @@
 const array   = types => (key, args = [], fields = {}) => {
   const {
     desc     = '',
-    implies  = null,
     only     = null,
     opts     = null,
     required = false,
     reverse  = false,
+    rules    = null,
     values   = null
   } = fields
 
@@ -17,11 +17,11 @@ const array   = types => (key, args = [], fields = {}) => {
     types,
     args,
     desc,
-    implies,
     only,
     opts,
     required,
     reverse,
+    rules,
     values
   }
 }

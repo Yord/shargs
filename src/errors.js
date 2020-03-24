@@ -16,10 +16,16 @@ const argumentValueRestrictionsViolated = ({value, only, option}) => ({
   info: {value, only, option}
 })
 
-const falseImplication = ({implies, option}) => ({
-  code: 'False implication',
-  msg:  'An implication returned false. Please check your arguments.',
-  info: {implies, option}
+const falseOptsRules = ({rules, options}) => ({
+  code: 'False opts rules',
+  msg:  'Your opts rules returned false. Please abide to the rules defined in verifyOpts.',
+  info: {rules, options}
+})
+
+const falseRules = ({rules, option}) => ({
+  code: 'False rules',
+  msg:  "An option's rules returned false. Please check your arguments.",
+  info: {rules, option}
 })
 
 const invalidOptionsListInCombine = ({options, arg, argument}) => ({
@@ -70,17 +76,24 @@ const unexpectedArgument = ({argument}) => ({
   info: {argument}
 })
 
-const wrongImplicationType = ({type, option}) => ({
-  code: 'Wrong implication type',
-  msg:  'Implication had the wrong type, please provide a predicate with the following signature: (option) => (options) => boolean',
-  info: {type, option}
+const wrongOptsRulesType = ({type, options}) => ({
+  code: 'Wrong opts rules type',
+  msg:  'The opts rules are of a wrong type, please provide a predicate with the following signature: (options) => boolean',
+  info: {type, options}
+})
+
+const wrongRulesType = ({type, options}) => ({
+  code: 'Wrong rules type',
+  msg:  'The rules have a wrong type, please provide a predicate with the following signature: (option) => (options) => boolean',
+  info: {type, options}
 })
 
 module.exports = {
   argumentIsNotABool,
   argumentIsNotANumber,
   argumentValueRestrictionsViolated,
-  falseImplication,
+  falseOptsRules,
+  falseRules,
   invalidOptionsListInCombine,
   invalidTypesInArgument,
   noKeyProvidedInOption,
@@ -89,5 +102,6 @@ module.exports = {
   requiredOptionFormat,
   requiredOptionMissing,
   unexpectedArgument,
-  wrongImplicationType
+  wrongOptsRulesType,
+  wrongRulesType
 }
