@@ -450,6 +450,50 @@ Result:
 </tr>
 <tr>
 <td><code>opts</code></td>
+<td><code>checkImplications({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Checks, whether the <code>implies</code> predicate holds for the option in relation to all options.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const implies = firstName => opts => (
+  firstName.values[0] === 'Logan' ||
+  opts.some(({key, values}) => key === 'lastName' && values !== null)
+)
+
+const opts = [
+  string('firstName', ['-f'], {implies, values: ['Charles']}),
+  string('lastName', ['-l'])
+]
+
+checkImplications(obj)
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'False implication',
+      msg:  'An implication returned false. Please check your arguments.',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>opts</code></td>
 <td><code>requireOptions({errs, opts})</code></td>
 <td>
 <details>
