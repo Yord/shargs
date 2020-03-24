@@ -700,7 +700,7 @@ Result:
 </tr>
 <tr>
 <td><code>args</code></td>
-<td><code>flagAsNumber({errs, args})</code></td>
+<td><code>flagsAsNumbers({errs, args})</code></td>
 <td>
 <details>
 <summary>
@@ -716,7 +716,7 @@ const args = {
   version: {type: 'flag', count: 2}
 }
 
-flagAsBool({args})
+flagsAsNumbers({args})
 ```
 
 Result:
