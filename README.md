@@ -450,6 +450,46 @@ Result:
 </tr>
 <tr>
 <td><code>opts</code></td>
+<td><code>requireOptions({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Controls, if options marked with <code>{required: true}</code> have valid <code>values</code>.
+If a required option is not present, an error message is recorded.
+</summary>
+
+<br />
+
+Example:
+
+```js
+
+const opts = [
+  number('answer', ['-a', '--answer'], {required: true})
+]
+
+requireOptions({opts})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'Required option is missing',
+      msg:  'An option that is marked as required has not been provided.',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>opts</code></td>
 <td><code>restrictToOnly({errs, opts})</code></td>
 <td>
 <details>
