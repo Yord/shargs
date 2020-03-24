@@ -77,3 +77,20 @@ test('requireOptions works if required is false', () => {
   expect(errs).toStrictEqual(expErrs)
   expect(opts).toStrictEqual(expOpts)
 })
+
+test('requireOptions works if required is undefined', () => {
+  const answer = number('answer', ['-a', '--answer'])
+
+  const obj = {
+    opts: [answer]
+  }
+
+  const {errs, opts} = requireOptions(obj)
+
+  const expErrs = []
+
+  const expOpts = obj.opts
+
+  expect(errs).toStrictEqual(expErrs)
+  expect(opts).toStrictEqual(expOpts)
+})
