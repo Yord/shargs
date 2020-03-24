@@ -66,3 +66,11 @@ test('reverseBooleans works if input is undefined', () => {
 
   expect(errs).toStrictEqual([])
 })
+
+test('reverseBooleans passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = reverseBooleans({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
