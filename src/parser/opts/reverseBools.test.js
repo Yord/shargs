@@ -19,6 +19,28 @@ test('reverseBools README example works', () => {
   expect(opts).toStrictEqual(exp)
 })
 
+test('reverseBools works as expected', () => {
+  const obj = {
+    opts: [
+      bool('bool', ['-b'], {reverse: true, values: [true]}),
+      bool('bool', ['-b'], {reverse: true, values: [false]}),
+      bool('bool', ['-b'], {reverse: true, values: ['true']}),
+      bool('bool', ['-b'], {reverse: true, values: ['false']})
+    ]
+  }
+
+  const {opts} = reverseBools(obj)
+
+  const exp = [
+    bool('bool', ['-b'], {reverse: true, values: [false]}),
+    bool('bool', ['-b'], {reverse: true, values: [true]}),
+    bool('bool', ['-b'], {reverse: true, values: ['false']}),
+    bool('bool', ['-b'], {reverse: true, values: ['true']})
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
+
 test('reverseBools does not change flags', () => {
   const obj = {
     opts: [
