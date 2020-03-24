@@ -48,3 +48,9 @@ test('verifyOpts works if opts is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('verifyOpts works if input is undefined', () => {
+  const {opts} = verifyOpts()()
+
+  expect(opts).toStrictEqual([])
+})
