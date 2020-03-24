@@ -24,3 +24,11 @@ test('errorIfRest README example works', () => {
   expect(errs).toStrictEqual(expErrs)
   expect(args).toStrictEqual(expArgs)
 })
+
+test('errorIfRest even empties rest if args is undefined', () => {
+  const obj = {}
+
+  const {args} = errorIfRest(obj)
+
+  expect(args).toStrictEqual({})
+})
