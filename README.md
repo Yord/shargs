@@ -595,6 +595,52 @@ Result:
 </tr>
 <tr>
 <td><code>opts</code></td>
+<td><code>verifyOpts(rules)({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Checks, whether the <code>opts</code> adher to a given <code>rules</code> predicate.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const implies = (p, q) => !p || q
+
+const rules = opts => implies(
+  opts.some(({key, values}) => key === 'firstName' && values !== null),
+  opts.some(({key, values}) => key === 'lastName' && values !== null)
+)
+
+const opts = [
+  string('firstName', ['-f'], {values: ['Charles']}),
+  string('lastName', ['-l'])
+]
+
+verifyOpts(rules)({opts})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'False opts rules',
+      msg:  'Your opts rules returned false. Please abide to the rules defined in verifyOpts.',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>opts</code></td>
 <td><code>verifyRules({errs, opts})</code></td>
 <td>
 <details>
