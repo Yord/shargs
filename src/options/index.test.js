@@ -1,7 +1,7 @@
 const {anything, array: arbArray, assert, base64, constant, oneof, property, unicodeString} = require('fast-check')
 const {array} = require('.')
 
-test('types are correctly assembled', () => {
+test('options types are correctly assembled', () => {
   const typesKeyArgsOptionsResult = types().chain(types =>
     base64().chain(key =>
       anything().filter(a => typeof a !== 'undefined').chain(args =>
@@ -45,6 +45,14 @@ test('types are correctly assembled', () => {
         result
       )
     )
+  )
+})
+
+test('options does not allow __proto__ field', () => {
+  const answer = array(['number'])('answer', ['-a'], {__proto__: {I: {am: 'evil'}}})
+
+  expect(answer).toStrictEqual(
+    array(['number'])('answer', ['-a'], {})
   )
 })
 
