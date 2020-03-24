@@ -94,3 +94,19 @@ test('requireOptions works if required is undefined', () => {
   expect(errs).toStrictEqual(expErrs)
   expect(opts).toStrictEqual(expOpts)
 })
+
+test('requireOptions works only with valid values', () => {
+  const answer = number('answer', ['-a', '--answer'], {required: true, values: 42})
+
+  const obj = {
+    opts: [answer]
+  }
+
+  const {errs} = requireOptions(obj)
+
+  const exp = [
+    requiredOptionFormat({key: answer.key, values: answer.values, option: answer})
+  ]
+
+  expect(errs).toStrictEqual(exp)
+})
