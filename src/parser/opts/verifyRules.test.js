@@ -24,6 +24,26 @@ test('verifyRules README example works', () => {
   expect(errs).toStrictEqual(exp)
 })
 
+test('verifyRules does not change anything if it passes', () => {
+  const rules = firstName => opts => (
+    firstName.values[0] === 'Logan' ||
+    opts.some(({key, values}) => key === 'lastName' && values !== null)
+  )
+
+  const firstName = string('firstName', ['-f'], {rules, values: ['Logan']})
+  const lastName  = string('lastName', ['-l'])
+
+  const obj = {
+    opts: [firstName, lastName]
+  }
+
+  const {opts} = verifyRules(obj)
+
+  const exp = obj.opts
+
+  expect(opts).toStrictEqual(exp)
+})
+
 test('verifyRules fails on wrong type', () => {
   const rules = 42
 
