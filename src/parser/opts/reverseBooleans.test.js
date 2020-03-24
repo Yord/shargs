@@ -52,3 +52,11 @@ test('reverseBooleans does not reverse booleans without values', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('reverseBooleans works if opts is undefined', () => {
+  const obj = {}
+
+  const {errs} = reverseBooleans(obj)
+
+  expect(errs).toStrictEqual([])
+})
