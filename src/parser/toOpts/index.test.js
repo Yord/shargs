@@ -1,10 +1,9 @@
 const toOpts  = require('./index')
 const {array, bool, command, flag, number, string} = require('../../options')
 
-const deleteArgs = obj => {
-  delete obj.args
-  return obj
-}
+const noArgs = ({args, ...rest}) => rest
+
+const without = (keys = [], opts = []) => opts.filter(({key}) => keys.indexOf(key) === -1)
 
 const numberBool = array(['number', 'bool'])
 
@@ -35,13 +34,13 @@ test('toOpts transforms argv into opts', () => {
 
   const exp = [
     {values: ['foo']},
-    deleteArgs({...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]}),
-    deleteArgs({...numberBool('numBool', ['-n', '--nb']), values: ['23', 'true']}),
-    deleteArgs({...number('answer', ['-a', '--answer']), values: ['42']}),
-    deleteArgs({...bool('verbose', ['--verbose']), values: ['false']}),
-    deleteArgs({...flag('version', ['--version']), values: []}),
+    noArgs({...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]}),
+    noArgs({...numberBool('numBool', ['-n', '--nb']), values: ['23', 'true']}),
+    noArgs({...number('answer', ['-a', '--answer']), values: ['42']}),
+    noArgs({...bool('verbose', ['--verbose']), values: ['false']}),
+    noArgs({...flag('version', ['--version']), values: []}),
     {values: ['bar']},
-    deleteArgs({...command('help', ['-h', '--help']), values: ['foo', '--bar']})
+    noArgs({...command('help', ['-h', '--help']), values: ['foo', '--bar']})
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -55,13 +54,14 @@ test('toOpts sets default values', () => {
   }
 
   const testDefault = string('testDefault', ['-d'], {values: ['This is a default value']})
-  const OPTS2 = [...OPTS, testDefault]
+  const OPTS2 = [testDefault, ...OPTS]
 
   const {opts} = toOpts(OPTS2)(obj)
 
   const exp = [
     {values: ['foo']},
-    deleteArgs(testDefault)
+    noArgs(testDefault),
+    ...without(['testDefault'], OPTS.map(noArgs))
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -79,7 +79,8 @@ test('toOpts keeps unrecognized strings', () => {
 
   const exp = [
     {values: ['foo']},
-    {values: ['bar']}
+    {values: ['bar']},
+    ...OPTS.map(noArgs)
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -95,7 +96,8 @@ test('toOpts transforms unary options', () => {
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    deleteArgs({...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]})
+    noArgs({...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]}),
+    ...without(['title'], OPTS.map(noArgs))
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -111,7 +113,8 @@ test('toOpts transforms command opts at the end of the line', () => {
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    deleteArgs({...command('help', ['-h', '--help']), values: ['foo', '--bar']})
+    noArgs({...command('help', ['-h', '--help']), values: ['foo', '--bar']}),
+    ...without(['help'], OPTS.map(noArgs))
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -130,8 +133,9 @@ test('toOpts transforms command opts at the end of the line with double minusses
 
   const exp = [
     {values: ['foo']},
-    deleteArgs({...command('help', ['-h', '--help']), values: ['foo', '--bar']}),
-    {values: ['--']}
+    noArgs({...command('help', ['-h', '--help']), values: ['foo', '--bar']}),
+    {values: ['--']},
+    ...without(['help'], OPTS.map(noArgs))
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -149,9 +153,10 @@ test('toOpts transforms command opts at the start of the line with double minuss
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    deleteArgs({...command('help', ['-h', '--help']), values: ['foo', '--bar']}),
+    noArgs({...command('help', ['-h', '--help']), values: ['foo', '--bar']}),
     {values: ['--']},
-    {values: ['foo']}
+    {values: ['foo']},
+    ...without(['help'], OPTS.map(noArgs))
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -171,9 +176,10 @@ test('toOpts transforms command opts in the middle of the line with double minus
 
   const exp = [
     {values: ['foo']},
-    deleteArgs({...command('help', ['-h', '--help']), values: ['foo', '--bar']}),
+    noArgs({...command('help', ['-h', '--help']), values: ['foo', '--bar']}),
     {values: ['--']},
-    {values: ['foo']}
+    {values: ['foo']},
+    ...without(['help'], OPTS.map(noArgs))
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -189,7 +195,8 @@ test('toOpts works with commands that have no argv', () => {
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    deleteArgs({...command('help', ['-h', '--help']), values: []})
+    noArgs({...command('help', ['-h', '--help']), values: []}),
+    ...without(['help'], OPTS.map(noArgs))
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -202,7 +209,7 @@ test('toOpts transforms empty argv into empty opts', () => {
 
   const {opts} = toOpts(OPTS)(obj)
 
-  const exp = []
+  const exp = OPTS.map(noArgs)
 
   expect(opts).toStrictEqual(exp)
 })
@@ -212,7 +219,7 @@ test('toOpts transforms missing argv into empty opts', () => {
 
   const {opts} = toOpts(OPTS)(obj)
 
-  const exp = []
+  const exp = OPTS.map(noArgs)
 
   expect(opts).toStrictEqual(exp)
 })
@@ -220,7 +227,7 @@ test('toOpts transforms missing argv into empty opts', () => {
 test('toOpts transforms undefined input into empty opts', () => {
   const {opts} = toOpts(OPTS)()
 
-  const exp = []
+  const exp = OPTS.map(noArgs)
 
   expect(opts).toStrictEqual(exp)
 })
