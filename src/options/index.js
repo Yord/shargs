@@ -1,7 +1,7 @@
 const array   = types => (key, args = [], fields = {}) => {
   const {
     desc     = '',
-    implies  = {},
+    implies  = null,
     only     = null,
     opts     = null,
     required = false,
