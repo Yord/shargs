@@ -118,3 +118,9 @@ test('requireOptions works if opts is undefined', () => {
 
   expect(errs).toStrictEqual([])
 })
+
+test('requireOptions works if input is undefined', () => {
+  const {errs} = requireOptions()
+
+  expect(errs).toStrictEqual([])
+})
