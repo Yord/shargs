@@ -677,13 +677,18 @@ Example:
 
 ```js
 const args = {
-  version: {type: 'flag', count: 2}
+  version: {type: 'flag', count: 2},
+  answer: 23
 }
 
 const fs = {
-  flag: (key, val, errs, args) => ({
+  flag:   (key, val, errs, args) => ({
     errs,
     args: {...args, [key]: val.count}
+  }),
+  number: (key, val, errs, args) => ({
+    errs,
+    args: {...args, [key]: val + 19}
   })
 }
 
@@ -695,7 +700,8 @@ Result:
 ```js
 {
   args: {
-    version: 2
+    version: 2,
+    answer: 42
   }
 }
 ```
