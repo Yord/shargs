@@ -22,6 +22,12 @@ const falseImplication = ({implies, option}) => ({
   info: {implies, option}
 })
 
+const falseOptsRules = ({rules, options}) => ({
+  code: 'False opts rules',
+  msg:  'Your opts rules returned false. Please abide to the rules defined in verifyOpts.',
+  info: {rules, options}
+})
+
 const invalidOptionsListInCombine = ({options, arg, argument}) => ({
   code: 'Invalid options list in combine',
   msg:  'Options list in combine was undefined, null or empty',
@@ -81,6 +87,7 @@ module.exports = {
   argumentIsNotANumber,
   argumentValueRestrictionsViolated,
   falseImplication,
+  falseOptsRules,
   invalidOptionsListInCombine,
   invalidTypesInArgument,
   noKeyProvidedInOption,
