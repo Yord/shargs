@@ -2,7 +2,7 @@ const transformArgs = require('./transformArgs')
 const {unexpectedArgument} = require('../../errors')
 
 module.exports = transformArgs({
-  array: (key, array, errs, args) => {
+  array: ({key, val: array, errs, args}) => {
     const errs2 = []
 
     if (key === '_') {

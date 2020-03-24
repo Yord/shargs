@@ -16,7 +16,7 @@ test('toArgs transforms opts into args', () => {
       {...number('answer', ['-a', '--answer']), values: [42]},
       {...command('help', ['-h', '--help']), values: ['foo', '--bar']},
       {...bool('verbose', ['--verbose']), values: [false]},
-      {...flag('version', ['--version']), values: []},
+      {...flag('version', ['--version']), values: [1]},
       {values: ['bar']}
     ]
   }
@@ -55,7 +55,7 @@ test('toArgs removes double minus', () => {
 test('toArgs represents flags as counts', () => {
   const obj = {
     opts: [
-      {...flag('verbose', ['-v']), values: []}
+      {...flag('verbose', ['-v']), values: [1]}
     ]
   }
 
@@ -72,9 +72,9 @@ test('toArgs represents flags as counts', () => {
 test('toArgs counts the occurrences of flags', () => {
   const obj = {
     opts: [
-      {...flag('verbose', ['-v']), values: []},
-      {...flag('verbose', ['-v']), values: []},
-      {...flag('verbose', ['-v']), values: []}
+      {...flag('verbose', ['-v']), values: [1]},
+      {...flag('verbose', ['-v']), values: [1]},
+      {...flag('verbose', ['-v']), values: [2]}
     ]
   }
 
@@ -82,7 +82,26 @@ test('toArgs counts the occurrences of flags', () => {
 
   const exp = {
     _: [],
-    verbose: {type: 'flag', count: 3}
+    verbose: {type: 'flag', count: 4}
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
+test('toArgs counts the occurrences of flags and has a negative count if the flag was reversed', () => {
+  const obj = {
+    opts: [
+      {...flag('verbose', ['-v']), values: [-1]},
+      {...flag('verbose', ['-v']), values: [-1]},
+      {...flag('verbose', ['-v']), values: [-1]}
+    ]
+  }
+
+  const {args} = toArgs(discard)(obj)
+
+  const exp = {
+    _: [],
+    verbose: {type: 'flag', count: -3}
   }
 
   expect(args).toStrictEqual(exp)

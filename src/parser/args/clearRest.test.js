@@ -8,6 +8,32 @@ test('clearRest README example works', () => {
   expect(args._).toStrictEqual([])
 })
 
+test('clearRest works on recursive objects', () => {
+  const obj = {
+    args: {
+      _: ['foo'],
+      foo: ['bar'],
+      command: {
+        _: ['bar'],
+        baz: ['bat']
+      }
+    }
+  }
+
+  const {args} = clearRest(obj)
+
+  const exp = {
+    _: [],
+    foo: ['bar'],
+    command: {
+      _: [],
+      baz: ['bat']
+    }
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
 test('clearRest even empties rest if args is undefined', () => {
   const obj = {}
 

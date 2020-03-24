@@ -523,6 +523,76 @@ Result:
 </td>
 </tr>
 <tr>
+<td><code>opts</code></td>
+<td><code>reverseBools({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Reverses the value of a <code>bool</code>. Works on string (e.g. <code>['false']</code>) and boolean (e.g. <code>[false]</code>) values.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  bool('bool', ['-b'], {reverse: true, values: [true]}),
+  bool('bool', ['-b'], {reverse: true, values: ['true']})
+]
+
+reverseBools({opts})
+```
+
+Result:
+
+```js
+{
+  opts: [
+    bool('bool', ['-b'], {reverse: true, values: [false]}),
+    bool('bool', ['-b'], {reverse: true, values: ['false']})
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>opts</code></td>
+<td><code>reverseFlags({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Reverses the value of a flag. This may be useful if the presence of a flag should imply <code>false</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  flag('flag', ['-f'], {reverse: true, values: [1]})
+]
+
+reverseFlags({opts})
+```
+
+Result:
+
+```js
+{
+  opts: [
+    flag('flag', ['-f'], {reverse: true, values: [-1]})
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
 <td><code>args</code></td>
 <td><code>clearRest({errs, args})</code></td>
 <td>
@@ -554,7 +624,7 @@ Result:
 </tr>
 <tr>
 <td><code>args</code></td>
-<td><code>errorIfRest({errs, args})</code></td>
+<td><code>failRest({errs, args})</code></td>
 <td>
 <details>
 <summary>
@@ -574,7 +644,7 @@ const args = {
   }
 }
 
-errorIfRest({args})
+failRest({args})
 ```
 
 Result:
@@ -669,6 +739,7 @@ Result:
 <details>
 <summary>
 Transforms an args object into a new args object by applying functions <code>fs</code> based on the value type.
+All fields of an object are updated independently and previous updates in the same run do not influence later updates.
 </summary>
 
 <br />
@@ -677,13 +748,18 @@ Example:
 
 ```js
 const args = {
-  version: {type: 'flag', count: 2}
+  version: {type: 'flag', count: 2},
+  answer: 23
 }
 
 const fs = {
-  flag: (key, val, errs, args) => ({
+  flag:   ({key, val, errs, args}) => ({
     errs,
     args: {...args, [key]: val.count}
+  }),
+  number: ({key, val, errs, args}) => ({
+    errs,
+    args: {...args, [key]: val + 19}
   })
 }
 
@@ -695,8 +771,25 @@ Result:
 ```js
 {
   args: {
-    version: 2
+    version: 2,
+    answer: 42
   }
+}
+```
+
+Allowed <code>fs</code> Fields:
+
+```js
+const fs = {
+  undefined: ({key, val, errs, args}) => ({errs, args}),
+  null:      ({key, val, errs, args}) => ({errs, args}),
+  boolean:   ({key, val, errs, args}) => ({errs, args}),
+  number:    ({key, val, errs, args}) => ({errs, args}),
+  string:    ({key, val, errs, args}) => ({errs, args}),
+  array:     ({key, val, errs, args}) => ({errs, args}),
+  flag:      ({key, val, errs, args}) => ({errs, args}),
+  function:  ({key, val, errs, args}) => ({errs, args}),
+  otherwise: ({key, val, errs, args}) => ({errs, args})
 }
 ```
 

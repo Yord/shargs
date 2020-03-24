@@ -172,6 +172,7 @@ test('option removes args and __proto__ fields', () => {
         only: null,
         opts: null,
         required: false,
+        reverse: false,
         values: null
       }
     ]

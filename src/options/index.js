@@ -4,6 +4,7 @@ const array   = types => (key, args = [], fields = {}) => {
     only     = null,
     opts     = null,
     required = false,
+    reverse  = false,
     values   = null
   } = fields
 
@@ -18,6 +19,7 @@ const array   = types => (key, args = [], fields = {}) => {
     only,
     opts,
     required,
+    reverse,
     values
   }
 }
