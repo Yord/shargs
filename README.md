@@ -454,7 +454,7 @@ Result:
 <td>
 <details>
 <summary>
-Checks, whether the <code>implies</code> predicate holds for an option in relation to all options.
+Checks, whether the <code>rules</code> predicate holds for an option in relation to all options.
 </summary>
 
 <br />
@@ -462,7 +462,7 @@ Checks, whether the <code>implies</code> predicate holds for an option in relati
 Example:
 
 ```js
-const implies = firstName => opts => (
+const rules = firstName => opts => (
   firstName.values[0] === 'Logan' ||
   opts.some(
     ({key, values}) => key === 'lastName' && values !== null
@@ -470,7 +470,7 @@ const implies = firstName => opts => (
 )
 
 const opts = [
-  string('firstName', ['-f'], {implies, values: ['Charles']}),
+  string('firstName', ['-f'], {rules, values: ['Charles']}),
   string('lastName', ['-l'])
 ]
 

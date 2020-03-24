@@ -5,15 +5,15 @@ module.exports = ({errs = [], opts = []} = {}) => {
 
   for (let i = 0; i < opts.length; i++) {
     const opt = opts[i]
-    const {implies} = opt
+    const {rules} = opt
 
-    if (implies !== null) {
-      if (typeof implies === 'function') {
-        if (implies(opt)(opts) === false) {
-          errs2.push(falseImplication({implies, option: opt}))
+    if (rules !== null) {
+      if (typeof rules === 'function') {
+        if (rules(opt)(opts) === false) {
+          errs2.push(falseImplication({rules, option: opt}))
         }
       } else {
-        errs2.push(wrongImplicationType({type: typeof implies, option: opt}))
+        errs2.push(wrongImplicationType({type: typeof rules, option: opt}))
       }
     }
   }
