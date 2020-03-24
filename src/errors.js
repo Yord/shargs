@@ -52,6 +52,12 @@ const requiredOptionFormat = ({key, values, option}) => ({
   info: {key, values, option}
 })
 
+const requiredOptionMissing = ({key, args, option}) => ({
+  code: 'Required option is missing',
+  msg:  'An option that is marked as required has not been provided.',
+  info: {key, args, option}
+})
+
 module.exports = {
   argumentIsNotABool,
   argumentIsNotANumber,
@@ -62,4 +68,5 @@ module.exports = {
   noArgumentsProvidedInOption,
   nonMatchingArgumentTypes,
   requiredOptionFormat,
+  requiredOptionMissing
 }
