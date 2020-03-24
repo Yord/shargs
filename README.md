@@ -285,7 +285,7 @@ The advantages for the user are:
 
 Its extensibility and inversion of control is what sets shargs apart from other command-line parsers.
 
-### Command-Line Options DSL
+### Command-Line Options
 
 The most important concept in a command-line parser are command-line options.
 They form the basis for parsers as well as for generating usage documentation.
@@ -340,7 +340,7 @@ The following fields are available:
 | `required` | boolean                         | `false` | `required` is used by the `requireOption` parser stage to control if an option is set. If a required option is not set, `requireOption` records an error.                                                                                                                                                                                                                               |
 | `values`   | array of default values         | `null`  | `values` is used by the `toOpts` parser stage to set default values for command-line options, that are not explicitly given. It takes an array of values that should have the same types as defined by the `types` field. The user is responsible for ensuring the correct types are used.                                                                                              |
 
-### Command-Line Parsers DSL
+### Command-Line Parsers
 
 Shargs lets you define command-line parsers with the `parser` function:
 
