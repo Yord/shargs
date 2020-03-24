@@ -5,6 +5,36 @@ const constant = c => (key, val, errs, args) => ({errs, args: {...args, [key]: c
 test('transformArgs README example works', () => {
   const obj = {
     args: {
+      version: {type: 'flag', count: 2},
+      answer: 23
+    }
+  }
+
+  const fs = {
+    number: constant('number'),
+    flag:   (key, val, errs, args) => ({
+      errs,
+      args: {...args, [key]: val.count}
+    }),
+    number: (key, val, errs, args) => ({
+      errs,
+      args: {...args, [key]: val + 19}
+    })
+  }
+
+  const {args} = transformArgs(fs)(obj)
+
+  const exp = {
+    version: 2,
+    answer: 42
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
+test('transformArgs works as expected', () => {
+  const obj = {
+    args: {
       title: "The Hitchhiker's Guide to the Galaxy",
       numBool: [23, true],
       answer: 42,
