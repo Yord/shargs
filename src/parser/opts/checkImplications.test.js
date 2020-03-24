@@ -50,3 +50,9 @@ test('checkImplications works if opts is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('checkImplications works if input is undefined', () => {
+  const {opts} = checkImplications()
+
+  expect(opts).toStrictEqual([])
+})
