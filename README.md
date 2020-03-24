@@ -628,8 +628,8 @@ Result:
 {
   errs: [
     {
-      code: 'False implication',
-      msg:  'An implication returned false. Please check your arguments.',
+      code: 'False rules',
+      msg:  "An option's rules returned false. Please check your arguments.",
       info: {...}
     }
   ]
