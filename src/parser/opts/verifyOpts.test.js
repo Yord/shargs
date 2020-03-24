@@ -1,5 +1,5 @@
 const verifyOpts = require('./verifyOpts')
-const {falseOptsRules} = require('../../errors')
+const {falseOptsRules, wrongOptsRulesType} = require('../../errors')
 const {string} = require('../../options')
 
 test('verifyOpts README example works', () => {
@@ -19,6 +19,23 @@ test('verifyOpts README example works', () => {
 
   const exp = [
     falseOptsRules({rules, options: opts})
+  ]
+
+  expect(errs).toStrictEqual(exp)
+})
+
+test('verifyOpts fails on wrong type', () => {
+  const rules = 42
+
+  const opts = [
+    string('firstName', ['-f'], {values: ['Charles']}),
+    string('lastName', ['-l'])
+  ]
+
+  const {errs} = verifyOpts(rules)({opts})
+
+  const exp = [
+    wrongOptsRulesType({type: 'number', options: opts})
   ]
 
   expect(errs).toStrictEqual(exp)
