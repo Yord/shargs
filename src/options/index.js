@@ -1,10 +1,11 @@
 const array   = (
   types =>
   (key, args = [], {
-    desc = '',
-    only = null,
-    opts = null,
-    values = null
+    desc     = '',
+    only     = null,
+    opts     = null,
+    required = false,
+    values   = null
   } = {}) =>
   ({
     key,
@@ -13,6 +14,7 @@ const array   = (
     desc,
     only,
     opts,
+    required,
     values
   })
 )

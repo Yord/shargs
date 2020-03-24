@@ -4,9 +4,10 @@ const {number} = require('../../options')
 const noArgs = ({args, ...rest}) => rest
 
 test('setDefaultValues works as expected', () => {
-  const answer = number('answer', ['-a', '--answer'], {values: [42]})
+  const answer   = number('answer', ['-a', '--answer'], {values: [42]})
+  const question = number('question', ['-q', '--question'])
 
-  const opts = [answer]
+  const opts = [answer, question]
 
   const {opts: opts2} = setDefaultValues(opts)({})
 
@@ -18,14 +19,15 @@ test('setDefaultValues works as expected', () => {
 test('setDefaultValues does not set default values if the option is present', () => {
   const answer42 = number('answer', ['-a', '--answer'], {values: [42]})
   const answer23 = number('answer', ['-a', '--answer'], {values: [23]})
+  const question = number('question', ['-q', '--question'])
 
-  const opts = [answer42]
+  const opts = [answer42, question]
 
   const {opts: opts2} = setDefaultValues(opts)({
     opts: [answer23]
   })
 
-  const exp = [answer23]
+  const exp = [answer23, question].map(noArgs)
 
   expect(opts2).toStrictEqual(exp)
 })
