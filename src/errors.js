@@ -46,6 +46,12 @@ const nonMatchingArgumentTypes = ({arg, ref, option}) => ({
   info: {arg, ref, option}
 })
 
+const requiredOptionFormat = ({key, values, option}) => ({
+  code: 'Wrong format for required option',
+  msg:  'A required option has values in the wrong format. It should be an array of values.',
+  info: {key, values, option}
+})
+
 module.exports = {
   argumentIsNotABool,
   argumentIsNotANumber,
@@ -54,5 +60,6 @@ module.exports = {
   invalidTypesInArgument,
   noKeyProvidedInOption,
   noArgumentsProvidedInOption,
-  nonMatchingArgumentTypes
+  nonMatchingArgumentTypes,
+  requiredOptionFormat,
 }
