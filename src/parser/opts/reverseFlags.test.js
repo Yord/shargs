@@ -16,3 +16,21 @@ test('reverseFlags README example works', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('reverseFlags does not change booleans', () => {
+  const obj = {
+    opts: [
+      flag('flag', ['-f'], {reverse: true, values: [1]}),
+      bool('bool', ['-b'], {reverse: true, values: [true]})
+    ]
+  }
+
+  const {opts} = reverseFlags(obj)
+
+  const exp = [
+    flag('flag', ['-f'], {reverse: true, values: [-1]}),
+    bool('bool', ['-b'], {reverse: true, values: [true]})
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
