@@ -628,7 +628,7 @@ Result:
 <td>
 <details>
 <summary>
-Records an error for each argument in a rest field. E.g. `{_: ['foo']}` would add an error for `foo`.
+Records an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
 </summary>
 
 <br />
