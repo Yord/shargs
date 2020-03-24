@@ -3,9 +3,15 @@ module.exports = ({errs = [], opts = []} = {}) => {
 
   for (let i = 0; i < opts.length; i++) {
     const opt = opts[i]
+    const {reverse, values} = opt
 
-    if (opt.reverse === true && isBool(opt) && hasValidValues(opt)) {
-      opts2.push({...opt, values: [!opt.values[0]]})
+    if (reverse === true && isBool(opt) && hasValidValues(opt)) {
+      const bool = values[0]
+      let res    = bool
+      if (bool === 'false')               res = 'true'
+      else if (bool === 'true')           res = 'false'
+      else if (typeof bool === 'boolean') res = !bool
+      opts2.push({...opt, values: [res]})
     } else {
       opts2.push(opt)
     }
