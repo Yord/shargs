@@ -1,7 +1,7 @@
 const parser            = require('./parser')
 const splitShortOptions = require('../argv/splitShortOptions')
 const cast              = require('../opts/cast')
-const emptyRest         = require('../args/emptyRest')
+const clearRest         = require('../args/clearRest')
 const toOpts            = require('../toOpts')
 const toArgs            = require('../toArgs')
 const {noKeyProvidedInOption} = require('../../errors')
@@ -124,7 +124,7 @@ test('parser applies args stages', () => {
   ]
 
   const stages = {
-    args: [emptyRest]
+    args: [clearRest]
   }
 
   const {args} = parser(stages)(opts)(argv)
