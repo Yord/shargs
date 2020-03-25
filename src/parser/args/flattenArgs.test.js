@@ -89,3 +89,9 @@ test('flattenArgs works if opts is undefined', () => {
 
   expect(args).toStrictEqual({})
 })
+
+test('flattenArgs works if input is undefined', () => {
+  const {args} = flattenArgs()()
+
+  expect(args).toStrictEqual({})
+})
