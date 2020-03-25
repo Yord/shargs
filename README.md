@@ -1006,6 +1006,54 @@ Result:
 </tr>
 <tr>
 <td><code>args</code></td>
+<td><code>mergeArgs(merge)({errs, args})</code></td>
+<td>
+<details>
+<summary>
+Recursively merges args objects of commands into their partent args objects.
+Results into a flat object, where no key is an object.
+Other merge functions can be given to the function.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const args = {
+  version: {type: 'flag', count: 2},
+  name: 'Logan',
+  command: {
+    version: {type: 'flag', count: 1},
+    name: 'Charles',
+    help: true
+  },
+  verbose: true
+}
+
+const mergeLeft = (outer, inner) => ({...inner, ...outer})
+
+mergeArgs(mergeLeft)({args})
+```
+
+Result:
+
+```js
+{
+  args: {
+    version: {type: 'flag', count: 2},
+    name: 'Logan',
+    help: true,
+    verbose: true
+  }
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>args</code></td>
 <td><code>transformArgs(fs)({errs, args})</code></td>
 <td>
 <details>
