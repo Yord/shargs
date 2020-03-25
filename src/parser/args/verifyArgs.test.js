@@ -35,3 +35,11 @@ test('verifyArgs README example works', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('verifyArgs works if opts is undefined', () => {
+  const obj = {}
+
+  const {args} = verifyArgs()(obj)
+
+  expect(args).toStrictEqual([])
+})
