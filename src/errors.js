@@ -94,6 +94,12 @@ const wrongArgsRulesType = ({type, args}) => ({
   info: {type, args}
 })
 
+const wrongArgvRulesType = ({type, argv}) => ({
+  code: 'Wrong argv rules type',
+  msg:  'The argv rules are of a wrong type, please provide a predicate with the following signature: (argv) => boolean',
+  info: {type, argv}
+})
+
 const wrongOptsRulesType = ({type, options}) => ({
   code: 'Wrong opts rules type',
   msg:  'The opts rules are of a wrong type, please provide a predicate with the following signature: (options) => boolean',
@@ -123,6 +129,7 @@ module.exports = {
   requiredOptionMissing,
   unexpectedArgument,
   wrongArgsRulesType,
+  wrongArgvRulesType,
   wrongOptsRulesType,
   wrongRulesType
 }
