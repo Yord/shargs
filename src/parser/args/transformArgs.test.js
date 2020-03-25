@@ -117,6 +117,51 @@ test('transformArgs README example works even if fs is undefined', () => {
   expect(args).toStrictEqual(exp)
 })
 
+test('transformArgs allows custom recursion with a custom object function', () => {
+  const obj = {
+    args: {
+      title: "The Hitchhiker's Guide to the Galaxy",
+      numBool: [23, true],
+      answer: 42,
+      command: {
+        help: 'foo --bar',
+        verbose: false,
+        version: {type: 'flag', count: 1},
+        no: undefined,
+        nono: null,
+        sym: Symbol('foo')
+      }
+    }
+  }
+
+  const fs = {
+    object: ({key, val, errs, args}) => {
+      const {errs: errs2, args: args2} = transformArgs(fs)({args: val})
+      const {[key]: _, ...rest} = args
+
+      return {
+        errs: errs.concat(errs2),
+        args: {...rest, ...args2}
+      }
+    }
+  }
+
+  const exp = {
+    title: "The Hitchhiker's Guide to the Galaxy",
+    numBool: [23, true],
+    answer: 42,
+    help: 'foo --bar',
+    verbose: false,
+    version: {type: 'flag', count: 1},
+    no: undefined,
+    nono: null
+  }
+
+  const {args} = transformArgs(fs)(obj)
+
+  expect(args).toStrictEqual(exp)
+})
+
 test('transformArgs works if args are undefined', () => {
   const obj = {}
 
