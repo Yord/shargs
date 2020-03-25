@@ -88,6 +88,12 @@ const unexpectedArgument = ({argument}) => ({
   info: {argument}
 })
 
+const wrongArgsRulesType = ({type, args}) => ({
+  code: 'Wrong args rules type',
+  msg:  'The args rules are of a wrong type, please provide a predicate with the following signature: (args) => boolean',
+  info: {type, args}
+})
+
 const wrongOptsRulesType = ({type, options}) => ({
   code: 'Wrong opts rules type',
   msg:  'The opts rules are of a wrong type, please provide a predicate with the following signature: (options) => boolean',
@@ -116,6 +122,7 @@ module.exports = {
   requiredOptionFormat,
   requiredOptionMissing,
   unexpectedArgument,
+  wrongArgsRulesType,
   wrongOptsRulesType,
   wrongRulesType
 }
