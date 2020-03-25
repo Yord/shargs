@@ -1,6 +1,6 @@
-const flattenArgs = require('./flattenArgs')
+const mergeArgs = require('./mergeArgs')
 
-test('flattenArgs README example works', () => {
+test('mergeArgs README example works', () => {
   const obj = {
     args: {
       version: {type: 'flag', count: 2},
@@ -14,7 +14,7 @@ test('flattenArgs README example works', () => {
     }
   }
 
-  const {args} = flattenArgs()(obj)
+  const {args} = mergeArgs()(obj)
 
   const exp = {
     version: {type: 'flag', count: 2},
@@ -26,7 +26,7 @@ test('flattenArgs README example works', () => {
   expect(args).toStrictEqual(exp)
 })
 
-test('flattenArgs takes custom merge functions 1/2', () => {
+test('mergeArgs takes custom merge functions 1/2', () => {
   const obj = {
     args: {
       version: {type: 'flag', count: 2},
@@ -42,7 +42,7 @@ test('flattenArgs takes custom merge functions 1/2', () => {
 
   const mergeLeft  = (obj1, obj2) => ({...obj2, ...obj1})
 
-  const {args} = flattenArgs(mergeLeft)(obj)
+  const {args} = mergeArgs(mergeLeft)(obj)
 
   const exp = {
     version: {type: 'flag', count: 2},
@@ -54,7 +54,7 @@ test('flattenArgs takes custom merge functions 1/2', () => {
   expect(args).toStrictEqual(exp)
 })
 
-test('flattenArgs takes custom merge functions 2/2', () => {
+test('mergeArgs takes custom merge functions 2/2', () => {
   const obj = {
     args: {
       version: {type: 'flag', count: 2},
@@ -70,7 +70,7 @@ test('flattenArgs takes custom merge functions 2/2', () => {
 
   const mergeRight = (obj1, obj2) => ({...obj1, ...obj2})
 
-  const {args} = flattenArgs(mergeRight)(obj)
+  const {args} = mergeArgs(mergeRight)(obj)
 
   const exp = {
     version: {type: 'flag', count: 1},
@@ -82,24 +82,24 @@ test('flattenArgs takes custom merge functions 2/2', () => {
   expect(args).toStrictEqual(exp)
 })
 
-test('flattenArgs works if opts is undefined', () => {
+test('mergeArgs works if opts is undefined', () => {
   const obj = {}
 
-  const {args} = flattenArgs()(obj)
+  const {args} = mergeArgs()(obj)
 
   expect(args).toStrictEqual({})
 })
 
-test('flattenArgs works if input is undefined', () => {
-  const {args} = flattenArgs()()
+test('mergeArgs works if input is undefined', () => {
+  const {args} = mergeArgs()()
 
   expect(args).toStrictEqual({})
 })
 
-test('flattenArgs passes on errors', () => {
+test('mergeArgs passes on errors', () => {
   const ERRS = ['foo']
 
-  const {errs} = flattenArgs()({errs: ERRS})
+  const {errs} = mergeArgs()({errs: ERRS})
 
   expect(errs).toStrictEqual(ERRS)
 })
