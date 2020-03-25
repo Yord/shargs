@@ -53,3 +53,31 @@ test('flattenArgs takes custom merge functions 1/2', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('flattenArgs takes custom merge functions 2/2', () => {
+  const obj = {
+    args: {
+      version: {type: 'flag', count: 2},
+      name: 'Logan',
+      command: {
+        version: {type: 'flag', count: 1},
+        name: 'Charles',
+        help: true
+      },
+      verbose: true
+    }
+  }
+
+  const mergeRight = (obj1, obj2) => ({...obj1, ...obj2})
+
+  const {args} = flattenArgs(mergeRight)(obj)
+
+  const exp = {
+    version: {type: 'flag', count: 1},
+    name: 'Charles',
+    help: true,
+    verbose: true
+  }
+
+  expect(args).toStrictEqual(exp)
+})
