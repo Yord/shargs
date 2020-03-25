@@ -731,6 +731,56 @@ Result:
 </tr>
 <tr>
 <td><code>args</code></td>
+<td><code>bestGuessRest({errs, args})</code></td>
+<td>
+<details>
+<summary>
+Tries its best to interpret strings in the <code>_</code> key as additional parameters.
+Supports only strings and flags and requires options to follow a pattern:
+A single minus and a single character for short options or exactly two minusses with any more characters for long options.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const obj = {
+  args: {
+    _: ['--name', 'Logan', 'foo', '-v'],
+    foo: 42,
+    command: {
+      _: ['bar', '-h', '--age', 'unknown', '-h']
+    }
+  }
+}
+
+bestGuessRest(obj)
+```
+
+Result:
+
+```js
+{
+  args: {
+    _: ['foo'],
+    name: 'Logan',
+    v: {type: 'flag', count: 1},
+    foo: 42,
+    command: {
+      _: ['bar'],
+      h: {type: 'flag', count: 2},
+      age: 'unknown'
+    }
+  }
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>args</code></td>
 <td><code>clearRest({errs, args})</code></td>
 <td>
 <details>
