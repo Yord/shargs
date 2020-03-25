@@ -408,7 +408,7 @@ Result:
 </tr>
 <tr>
 <td><code>argv</code></td>
-<td><code>verifyArgv(rules)({errs, opts})</code></td>
+<td><code>verifyArgv(rules)({errs, argv})</code></td>
 <td>
 <details>
 <summary>
@@ -571,7 +571,8 @@ Result:
 <td>
 <details>
 <summary>
-Reverses the value of a <code>bool</code>. Works on string (e.g. <code>['false']</code>) and boolean (e.g. <code>[false]</code>) values.
+Reverses the value of all <code>bool</code> options annotated with <code>{reverse: true}</code>.
+Works on strings (e.g. <code>['false']</code>) and booleans (e.g. <code>[false]</code>) values.
 </summary>
 
 <br />
@@ -607,7 +608,8 @@ Result:
 <td>
 <details>
 <summary>
-Reverses the value of a flag. This may be useful if the presence of a flag should imply <code>false</code>.
+Reverses the value of all flag options annotated with <code>{reverse: true}</code>.
+This may be useful if the presence of a flag should imply <code>false</code>.
 </summary>
 
 <br />
@@ -721,6 +723,56 @@ Result:
       info: {...}
     }
   ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td><code>bestGuessRest({errs, args})</code></td>
+<td>
+<details>
+<summary>
+Tries its best to interpret strings in the <code>_</code> key as additional parameters.
+Supports only strings and flags and requires options to follow a pattern:
+A single minus and a single character for short options or exactly two minusses with any more characters for long options.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const obj = {
+  args: {
+    _: ['--name', 'Logan', 'foo', '-v'],
+    foo: 42,
+    command: {
+      _: ['bar', '-h', '--age', 'unknown', '-h']
+    }
+  }
+}
+
+bestGuessRest(obj)
+```
+
+Result:
+
+```js
+{
+  args: {
+    _: ['foo'],
+    name: 'Logan',
+    v: {type: 'flag', count: 1},
+    foo: 42,
+    command: {
+      _: ['bar'],
+      h: {type: 'flag', count: 2},
+      age: 'unknown'
+    }
+  }
 }
 ```
 
@@ -933,7 +985,7 @@ const fs = {
 </tr>
 <tr>
 <td><code>args</code></td>
-<td><code>verifyArgs(rules)({errs, opts})</code></td>
+<td><code>verifyArgs(rules)({errs, args})</code></td>
 <td>
 <details>
 <summary>
