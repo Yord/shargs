@@ -81,3 +81,11 @@ test('flattenArgs takes custom merge functions 2/2', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('flattenArgs works if opts is undefined', () => {
+  const obj = {}
+
+  const {args} = flattenArgs()(obj)
+
+  expect(args).toStrictEqual({})
+})
