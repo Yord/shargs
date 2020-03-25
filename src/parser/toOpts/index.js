@@ -1,6 +1,6 @@
-const combine          = require('./combine')
-const option           = require('./option')
-const setDefaultValues = require('./setDefaultValues')
+const combine       = require('./combine')
+const option        = require('./option')
+const addUnusedOpts = require('./addUnusedOpts')
 
 module.exports = (opts = []) => {
   const {args, errs: ERRS} = combine(...opts.map(option))
@@ -52,7 +52,7 @@ module.exports = (opts = []) => {
       ARG = ARGV[at]
     }
 
-    const {errs: errs2, opts: opts3} = setDefaultValues(opts)({opts: opts2})
+    const {errs: errs2, opts: opts3} = addUnusedOpts(opts)({opts: opts2})
 
     return {errs: errs.concat(errs2), opts: opts3}
   }
