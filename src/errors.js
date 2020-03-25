@@ -46,6 +46,12 @@ const falseRules = ({rules, option}) => ({
   info: {rules, option}
 })
 
+const invalidArity = ({option}) => ({
+  code: 'Invalid arity',
+  msg:  "An option's types arity does not match its values arity.",
+  info: {option}
+})
+
 const invalidOptionsListInCombine = ({options, arg, argument}) => ({
   code: 'Invalid options list in combine',
   msg:  'Options list in combine was undefined, null or empty',
@@ -127,6 +133,7 @@ module.exports = {
   falseArgvRules,
   falseOptsRules,
   falseRules,
+  invalidArity,
   invalidOptionsListInCombine,
   invalidTypesInArgument,
   noKeyProvidedInOption,
