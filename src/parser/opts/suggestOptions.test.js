@@ -93,3 +93,9 @@ test('suggestOptions works if opts is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('suggestOptions works if input is undefined', () => {
+  const {opts} = suggestOptions()
+
+  expect(opts).toStrictEqual([])
+})
