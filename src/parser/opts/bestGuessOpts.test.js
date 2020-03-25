@@ -85,3 +85,11 @@ test('bestGuessOpts does work despite getting nonsensical input', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('bestGuessOpts works if opts is undefined', () => {
+  const obj = {}
+
+  const {opts} = bestGuessOpts(obj)
+
+  expect(opts).toStrictEqual([])
+})
