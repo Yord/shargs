@@ -536,6 +536,48 @@ Result:
 </tr>
 <tr>
 <td><code>opts</code></td>
+<td><code>demandACommand({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Checks if <code>opts</code> includes at least one command and records an exception if no command is found.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  string('title', ['--title'], {values: ["The Hitchhiker's Guide to the Galaxy"]}),
+  numberBool('numBool', ['-n', '--nb'], {values: ['23', 'true']}),
+  number('answer', ['-a', '--answer'], {values: ['42']}),
+  bool('verbose', ['--verbose'], {values: ['false']}),
+  flag('version', ['--version'], {values: [1]})
+]
+
+demandACommand({opts})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'Command required',
+      msg:  'No command found. Please use at least one command!',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>opts</code></td>
 <td><code>requireOptions({errs, opts})</code></td>
 <td>
 <details>
