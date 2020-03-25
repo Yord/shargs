@@ -85,3 +85,11 @@ test('suggestOptions works as expected', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('suggestOptions works if opts is undefined', () => {
+  const obj = {}
+
+  const {opts} = suggestOptions(obj)
+
+  expect(opts).toStrictEqual([])
+})
