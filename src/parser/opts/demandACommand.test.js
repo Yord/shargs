@@ -73,3 +73,16 @@ test('demandACommand trows if input is undefined', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('demandACommand passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = demandACommand({errs: ERRS})
+
+  const exp = [
+    ...ERRS,
+    commandRequired({options: []})
+  ]
+
+  expect(errs).toStrictEqual(exp)
+})
