@@ -70,3 +70,22 @@ test('bestGuessRest does not touch other arrays than _', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('bestGuessRest does work despite getting nonsensical input', () => {
+  const obj = {
+    args: {
+      _: ['--name', 42, '-f', [1], '-h', {foo: 42}]
+    }
+  }
+
+  const {args} = bestGuessRest(obj)
+
+  const exp = {
+    _: [42, [1], {foo: 42}],
+    name: {type: 'flag', count: 1},
+    f: {type: 'flag', count: 1},
+    h: {type: 'flag', count: 1}
+  }
+
+  expect(args).toStrictEqual(exp)
+})
