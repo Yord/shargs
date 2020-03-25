@@ -51,3 +51,15 @@ test('demandACommand records no error if two commands are defined', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('demandACommand trows if opts is undefined', () => {
+  const obj = {}
+
+  const {errs} = demandACommand(obj)
+
+  const exp = [
+    commandRequired({options: []})
+  ]
+
+  expect(errs).toStrictEqual(exp)
+})
