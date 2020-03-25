@@ -57,3 +57,31 @@ test('bestGuessOpts does not interpret short options that are too long', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('bestGuessOpts does work despite getting nonsensical input', () => {
+  const obj = {
+    opts: [
+      noArgs(string('name', ['--name'], {values: ['Charles']})),
+      {values: ['--foo']},
+      {values: [42]},
+      {values: ['-f']},
+      {values: [1]},
+      {values: ['-h']},
+      {values: [{foo: 42}]}
+    ]
+  }
+
+  const {opts} = bestGuessOpts(obj)
+
+  const exp = [
+    noArgs(string('name', ['--name'], {values: ['Charles']})),
+    noArgs(flag('foo', [], {values: [1]})),
+    {values: [42]},
+    noArgs(flag('f', [], {values: [1]})),
+    {values: [1]},
+    noArgs(flag('h', [], {values: [1]})),
+    {values: [{foo: 42}]}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
