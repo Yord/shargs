@@ -108,3 +108,25 @@ test('verifyValuesArity throws invalidArity error for incorrect arities for stri
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('verifyValuesArity throws invalidValues error for incorrect values for string, number, bool, and flag', () => {
+  const string1 = string('string1', [], {values: 42})
+  const string2 = string('string2', [], {values: {foo: 42}})
+
+  const number1 = number('number1', [], {values: 42})
+  const number2 = number('number2', [], {values: {foo: 42}})
+
+  const bool1 = bool('bool1', [], {values: 42})
+  const bool2 = bool('bool2', [], {values: {foo: 42}})
+
+  const flag1 = flag('flag1', [], {values: 42})
+  const flag2 = flag('flag2', [], {values: {foo: 42}})
+
+  const opts = [string1, string2, number1, number2, bool1, bool2, flag1, flag2]
+
+  const {errs} = verifyValuesArity({opts})
+
+  const exp = opts.map(option => invalidValues({values: option.values, option}))
+
+  expect(errs).toStrictEqual(exp)
+})
