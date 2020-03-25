@@ -93,3 +93,9 @@ test('bestGuessOpts works if opts is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('bestGuessOpts works if input is undefined', () => {
+  const {opts} = bestGuessOpts()
+
+  expect(opts).toStrictEqual([])
+})
