@@ -89,3 +89,11 @@ test('bestGuessRest does work despite getting nonsensical input', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('bestGuessRest even empties rest if args is undefined', () => {
+  const obj = {}
+
+  const {args} = bestGuessRest(obj)
+
+  expect(args._).toStrictEqual([])
+})
