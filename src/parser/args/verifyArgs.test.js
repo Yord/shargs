@@ -1,5 +1,5 @@
 const verifyArgs = require('./verifyArgs')
-const {falseArgsRules} = require('../../errors')
+const {falseArgsRules, wrongArgsRulesType} = require('../../errors')
 
 test('verifyArgs README example works', () => {
   const rules = args => (
@@ -15,6 +15,22 @@ test('verifyArgs README example works', () => {
 
   const exp = [
     falseArgsRules({rules, args})
+  ]
+
+  expect(errs).toStrictEqual(exp)
+})
+
+test('verifyArgs README example works', () => {
+  const rules = 42
+
+  const args = {
+    firstName: 'Logan'
+  }
+
+  const {errs} = verifyArgs(rules)({args})
+
+  const exp = [
+    wrongArgsRulesType({type: 'number', args})
   ]
 
   expect(errs).toStrictEqual(exp)
