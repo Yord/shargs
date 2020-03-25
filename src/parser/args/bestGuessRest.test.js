@@ -27,3 +27,18 @@ test('bestGuessRest README example works', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('bestGuessRest does not override existing keys', () => {
+  const obj = {
+    args: {
+      _: ['--name', 'Logan'],
+      name: 'Charles'
+    }
+  }
+
+  const {args} = bestGuessRest(obj)
+
+  const exp = obj.args
+
+  expect(args).toStrictEqual(exp)
+})
