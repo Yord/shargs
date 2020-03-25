@@ -43,3 +43,9 @@ test('verifyArgs works if opts is undefined', () => {
 
   expect(args).toStrictEqual([])
 })
+
+test('verifyArgs works if input is undefined', () => {
+  const {args} = verifyArgs()()
+
+  expect(args).toStrictEqual([])
+})
