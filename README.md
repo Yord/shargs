@@ -449,6 +449,49 @@ Result:
 </tr>
 <tr>
 <td><code>opts</code></td>
+<td><code>bestGuessOpts({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Tries its best to interpret unparsed strings (e.g. <code>{values: ['--foo']}</code>) as additional parameters.
+Supports only strings and flags and requires options to follow a pattern:
+A single minus and a single character for short options or exactly two minusses with any more characters for long options.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  string('age', ['--age'], {values: ['unknown']}),
+  {values: ['--angry']},
+  {values: ['--name']},
+  {values: ['Logan']},
+  {values: ['foo']}
+]
+
+bestGuessOpts({opts})
+```
+
+Result:
+
+```js
+{
+  opts: [
+    string('age', ['--age'], {values: ['unknown']}),
+    flag('angry', [], {values: [1]}),
+    string('name', [], {values: ['Logan']}),
+    {values: ['foo']}
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>opts</code></td>
 <td><code>cast({errs, opts})</code></td>
 <td>
 <details>
