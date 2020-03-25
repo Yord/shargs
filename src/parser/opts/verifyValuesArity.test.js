@@ -161,3 +161,11 @@ test('verifyValuesArity works if input is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('verifyValuesArity passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = verifyValuesArity({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
