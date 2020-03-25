@@ -38,3 +38,16 @@ test('demandACommand records no error if a command is defined', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('demandACommand records no error if two commands are defined', () => {
+  const opts = [
+    command('help', ['-h', '--help'], {values: ['foo', '--bar']}),
+    command('verbose', ['--verbose'], {values: ['false']})
+  ]
+
+  const {errs} = demandACommand({opts})
+
+  const exp = []
+
+  expect(errs).toStrictEqual(exp)
+})
