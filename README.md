@@ -407,6 +407,47 @@ Result:
 </td>
 </tr>
 <tr>
+<td><code>argv</code></td>
+<td><code>verifyArgv(rules)({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const rules = argv => (
+  argv.some(_ => _ === '-f') &&
+  argv.some(_ => _ === '-l')
+)
+
+const argv = ['-f', 'Logan']
+
+verifyArgv(rules)({argv})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'False argv rules',
+      msg:  'Your argv rules returned false...',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
 <td><code>opts</code></td>
 <td><code>cast({errs, opts})</code></td>
 <td>
