@@ -155,3 +155,9 @@ test('verifyValuesArity works if opts is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('verifyValuesArity works if input is undefined', () => {
+  const {opts} = verifyValuesArity()
+
+  expect(opts).toStrictEqual([])
+})
