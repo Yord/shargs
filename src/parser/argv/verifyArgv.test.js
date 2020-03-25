@@ -31,3 +31,11 @@ test('verifyArgv README example works', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('verifyArgv works if opts is undefined', () => {
+  const obj = {}
+
+  const {argv} = verifyArgv()(obj)
+
+  expect(argv).toStrictEqual([])
+})
