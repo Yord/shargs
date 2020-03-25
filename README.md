@@ -408,7 +408,7 @@ Result:
 </tr>
 <tr>
 <td><code>argv</code></td>
-<td><code>verifyArgv(rules)({errs, opts})</code></td>
+<td><code>verifyArgv(rules)({errs, argv})</code></td>
 <td>
 <details>
 <summary>
@@ -985,7 +985,7 @@ const fs = {
 </tr>
 <tr>
 <td><code>args</code></td>
-<td><code>verifyArgs(rules)({errs, opts})</code></td>
+<td><code>verifyArgs(rules)({errs, args})</code></td>
 <td>
 <details>
 <summary>
