@@ -815,6 +815,44 @@ Result:
 </td>
 </tr>
 <tr>
+<td><code>opts</code></td>
+<td><code>verifyValuesArity({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Checks, whether the <code>values</code> of an option fits its <code>types</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  string('name', ['--name'], {values: ['Charles', 'Francis']})
+]
+
+verifyValuesArity({opts})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'Invalid arity',
+      msg:  "An option's types arity does not match its values arity.",
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
 <td><code>args</code></td>
 <td><code>bestGuessRest({errs, args})</code></td>
 <td>

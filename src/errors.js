@@ -46,16 +46,28 @@ const falseRules = ({rules, option}) => ({
   info: {rules, option}
 })
 
+const invalidArity = ({option}) => ({
+  code: 'Invalid arity',
+  msg:  "An option's types arity does not match its values arity.",
+  info: {option}
+})
+
 const invalidOptionsListInCombine = ({options, arg, argument}) => ({
   code: 'Invalid options list in combine',
   msg:  'Options list in combine was undefined, null or empty',
   info: {options, arg, argument}
 })
 
-const invalidTypesInArgument = ({types, option}) =>({
-  code: 'Invalid types in argument',
+const invalidTypes = ({types, option}) => ({
+  code: 'Invalid types',
   msg:  'Each argument must have a types key that must be null or an array',
   info: {types, option}
+})
+
+const invalidValues = ({values, option}) => ({
+  code: 'Invalid values',
+  msg:  "An option's values field has an invalid type.",
+  info: {values, option}
 })
 
 const noArgumentsProvidedInOption = ({option}) => ({
@@ -127,8 +139,10 @@ module.exports = {
   falseArgvRules,
   falseOptsRules,
   falseRules,
+  invalidArity,
   invalidOptionsListInCombine,
-  invalidTypesInArgument,
+  invalidTypes,
+  invalidValues,
   noKeyProvidedInOption,
   noArgumentsProvidedInOption,
   nonMatchingArgumentTypes,

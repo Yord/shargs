@@ -1,6 +1,6 @@
 const {anything, array, assert, base64, constant, integer, oneof, property} = require('fast-check')
 const combine = require('./combine')
-const {invalidTypesInArgument, nonMatchingArgumentTypes, invalidOptionsListInCombine} = require('../../errors')
+const {invalidTypes, nonMatchingArgumentTypes, invalidOptionsListInCombine} = require('../../errors')
 
 test('combine combines all options and appends options if they have the same argument', () => {
   const optionsCombined = array(option(), 2, 20).map(opts => {
@@ -94,7 +94,7 @@ test("combine fails with an error if an argument has a types key that is not nul
         result: {
           args: {},
           errs: os.map(o =>
-            invalidTypesInArgument({types: o.types, option: Object.values(o.option.args)[0][0]})
+            invalidTypes({types: o.types, option: Object.values(o.option.args)[0][0]})
           )
         }
       })
@@ -177,7 +177,7 @@ test('combine fails with an error if two options are grouped in the same argumen
   const {errs, args} = combine(...opts.map(require('./option')))
 
   const exp = [
-    invalidTypesInArgument({types: 42, option: noArgs(optionB)})
+    invalidTypes({types: 42, option: noArgs(optionB)})
   ]
 
   expect(errs).toStrictEqual(exp)

@@ -1,4 +1,4 @@
-const {invalidTypesInArgument, nonMatchingArgumentTypes, invalidOptionsListInCombine} = require('../../errors')
+const {invalidTypes, nonMatchingArgumentTypes, invalidOptionsListInCombine} = require('../../errors')
 
 module.exports = (...ARGUMENTS) => {
   let errs   = []
@@ -27,7 +27,7 @@ module.exports = (...ARGUMENTS) => {
                 if (typeof args[arg] === 'undefined') args[arg] = []
                 args[arg].push(option)
               } else {
-                errs.push(invalidTypesInArgument({types: option.types, option}))
+                errs.push(invalidTypes({types: option.types, option}))
               }
             }
           } else {
@@ -47,7 +47,7 @@ module.exports = (...ARGUMENTS) => {
                 errs.push(nonMatchingArgumentTypes({arg, ref, option}))
               }
             } else {
-              errs.push(invalidTypesInArgument({types: option.types, option}))
+              errs.push(invalidTypes({types: option.types, option}))
             }
           }
         }
