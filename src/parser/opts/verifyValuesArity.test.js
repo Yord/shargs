@@ -71,3 +71,40 @@ test('verifyValuesArity does not throw for correct arities', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('verifyValuesArity throws invalidArity error for incorrect arities for string, number, bool, and flag', () => {
+  const undefinedTypes = setTypes(undefined)
+
+  const string1 = string('string1', [], {values: []})
+  const string2 = string('string2', [], {values: ['foo', 'bar']})
+  const string3 = undefinedTypes(string('string3', [], {values: []}))
+  const string4 = undefinedTypes(string('string4', [], {values: ['foo', 'bar']}))
+
+  const number1 = number('number1', [], {values: []})
+  const number2 = number('number2', [], {values: ['foo', 'bar']})
+  const number3 = undefinedTypes(number('number3', [], {values: []}))
+  const number4 = undefinedTypes(number('number4', [], {values: ['foo', 'bar']}))
+
+  const bool1 = bool('bool1', [], {values: []})
+  const bool2 = bool('bool2', [], {values: ['foo', 'bar']})
+  const bool3 = undefinedTypes(bool('bool3', [], {values: []}))
+  const bool4 = undefinedTypes(bool('bool4', [], {values: ['foo', 'bar']}))
+
+  const flag1 = flag('flag1', [], {values: []})
+  const flag2 = flag('flag2', [], {values: ['foo', 'bar']})
+  const flag3 = undefinedTypes(flag('flag3', [], {values: []}))
+  const flag4 = undefinedTypes(flag('flag4', [], {values: ['foo', 'bar']}))
+
+  const opts = [
+    string1, string2, string3, string4,
+    number1, number2, number3, number4,
+    bool1, bool2, bool3, bool4,
+    flag1, flag2, flag3, flag4
+  ]
+
+  const {errs} = verifyValuesArity({opts})
+
+  const exp = opts.map(option => invalidArity({option}))
+
+  expect(errs).toStrictEqual(exp)
+})
