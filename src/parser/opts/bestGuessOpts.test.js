@@ -25,3 +25,19 @@ test('bestGuessOpts README example works', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('bestGuessOpts does not override existing keys', () => {
+  const obj = {
+    opts: [
+      noArgs(string('name', ['--name'], {values: ['Charles']})),
+      {values: ['--name']},
+      {values: ['Logan']}
+    ]
+  }
+
+  const {opts} = bestGuessOpts(obj)
+
+  const exp = obj.opts
+
+  expect(opts).toStrictEqual(exp)
+})
