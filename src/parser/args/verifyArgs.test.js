@@ -3,7 +3,7 @@ const {falseArgsRules, wrongArgsRulesType} = require('../../errors')
 
 test('verifyArgs README example works', () => {
   const rules = args => (
-    typeof args.firstName !== 'undefined',
+    typeof args.firstName !== 'undefined' &&
     typeof args.lastName  !== 'undefined'
   )
 
