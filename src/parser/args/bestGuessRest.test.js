@@ -97,3 +97,9 @@ test('bestGuessRest even empties rest if args is undefined', () => {
 
   expect(args._).toStrictEqual([])
 })
+
+test('bestGuessRest even empties rest if input is undefined', () => {
+  const {args} = bestGuessRest()
+
+  expect(args._).toStrictEqual([])
+})
