@@ -42,3 +42,17 @@ test('bestGuessRest does not override existing keys', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('bestGuessRest does not interpret short options that are too long', () => {
+  const obj = {
+    args: {
+      _: ['-name', 'Logan']
+    }
+  }
+
+  const {args} = bestGuessRest(obj)
+
+  const exp = obj.args
+
+  expect(args).toStrictEqual(exp)
+})
