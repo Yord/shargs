@@ -64,6 +64,12 @@ const invalidTypesInArgument = ({types, option}) =>({
   info: {types, option}
 })
 
+const invalidValues = ({values, option}) => ({
+  code: 'Invalid values',
+  msg:  "An option's values field has an invalid type.",
+  info: {values, option}
+})
+
 const noArgumentsProvidedInOption = ({option}) => ({
   code: 'No arguments provided in option',
   msg:  "Please provide at least one argument (e.g. [{args: ['--foo'], ...}])",
@@ -136,6 +142,7 @@ module.exports = {
   invalidArity,
   invalidOptionsListInCombine,
   invalidTypesInArgument,
+  invalidValues,
   noKeyProvidedInOption,
   noArgumentsProvidedInOption,
   nonMatchingArgumentTypes,
