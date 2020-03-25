@@ -724,6 +724,74 @@ Result:
 </tr>
 <tr>
 <td><code>opts</code></td>
+<td><code>suggestOptions({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+If an <code>argv</code> is misspelled (e.g. <code>--aeg</code> instead of <code>--age</code>), shargs still keeps in as an unknown option (e.g. <code>{values: ['--aeg']}</code>).
+The <code>suggestOptions</code> stage collects all unknown options and suggests similar defined args.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  number('age', ['-a', '--age']),
+  {values: ['--aeg']}
+]
+
+suggestOptions({opts})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'Did you mean',
+      msg:  'An unknown command-line argument...',
+      info: {
+        argv: '--aeg',
+        options: [
+          [],
+          [],
+          [{'--age': number('age', ['-a', '--age'])}],
+          [{'-a': number('age', ['-a', '--age'])}]
+        ]
+      }
+    }
+  ]
+}
+```
+
+The <code>options</code> array looks a little bit strange, so an explanation is in order.
+The array's index is the cost necessary to transform the unknown option in the arguments, represented as keys.
+Because of this, you can conveniently work with the results, e.g.:
+
+```js
+'Did you mean: ' + (
+  options
+  .slice(0, 4)
+  .reduce((a, b) => a.concat(b))
+  .flatMap(Object.keys)
+  .join(', ')
+)
+```
+
+Results in:
+
+```bash
+'--age, -a'
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>opts</code></td>
 <td><code>verifyOpts(rules)({errs, opts})</code></td>
 <td>
 <details>

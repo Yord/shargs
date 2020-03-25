@@ -22,6 +22,12 @@ const commandRequired = ({options}) => ({
   info: {options}
 })
 
+const didYouMean = ({argv, options}) => ({
+  code: 'Did you mean',
+  msg:  'An unknown command-line argument was passed. Did you mean any of the following options?',
+  info: {argv, options}
+})
+
 const falseArgsRules = ({rules, args}) => ({
   code: 'False args rules',
   msg:  'Your args rules returned false. Please abide to the rules defined in verifyArgs.',
@@ -135,6 +141,7 @@ module.exports = {
   argumentIsNotANumber,
   argumentValueRestrictionsViolated,
   commandRequired,
+  didYouMean,
   falseArgsRules,
   falseArgvRules,
   falseOptsRules,
