@@ -1,5 +1,5 @@
 const verifyArgv = require('./verifyArgv')
-const {falseArgvRules} = require('../../errors')
+const {falseArgvRules, wrongArgvRulesType} = require('../../errors')
 
 test('verifyArgv README example works', () => {
   const rules = argv => (
@@ -13,6 +13,20 @@ test('verifyArgv README example works', () => {
 
   const exp = [
     falseArgvRules({rules, argv})
+  ]
+
+  expect(errs).toStrictEqual(exp)
+})
+
+test('verifyArgv README example works', () => {
+  const rules = 42
+
+  const argv = ['-f', 'Logan']
+
+  const {errs} = verifyArgv(rules)({argv})
+
+  const exp = [
+    wrongArgvRulesType({type: 'number', argv})
   ]
 
   expect(errs).toStrictEqual(exp)
