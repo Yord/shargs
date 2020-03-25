@@ -95,3 +95,11 @@ test('flattenArgs works if input is undefined', () => {
 
   expect(args).toStrictEqual({})
 })
+
+test('flattenArgs passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = flattenArgs()({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
