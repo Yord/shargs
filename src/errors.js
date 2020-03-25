@@ -22,6 +22,12 @@ const falseArgsRules = ({rules, args}) => ({
   info: {rules, args}
 })
 
+const falseArgvRules = ({rules, argv}) => ({
+  code: 'False argv rules',
+  msg:  'Your argv rules returned false. Please abide to the rules defined in verifyArgv.',
+  info: {rules, argv}
+})
+
 const falseOptsRules = ({rules, options}) => ({
   code: 'False opts rules',
   msg:  'Your opts rules returned false. Please abide to the rules defined in verifyOpts.',
@@ -99,6 +105,7 @@ module.exports = {
   argumentIsNotANumber,
   argumentValueRestrictionsViolated,
   falseArgsRules,
+  falseArgvRules,
   falseOptsRules,
   falseRules,
   invalidOptionsListInCombine,
