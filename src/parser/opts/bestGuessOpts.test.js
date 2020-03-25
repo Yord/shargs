@@ -99,3 +99,11 @@ test('bestGuessOpts works if input is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('bestGuessOpts passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = bestGuessOpts({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
