@@ -1053,15 +1053,16 @@ Allowed <code>fs</code> Fields:
 
 ```js
 const fs = {
-  undefined: ({key, val, errs, args}) => ({errs, args}),
-  null:      ({key, val, errs, args}) => ({errs, args}),
-  boolean:   ({key, val, errs, args}) => ({errs, args}),
-  number:    ({key, val, errs, args}) => ({errs, args}),
-  string:    ({key, val, errs, args}) => ({errs, args}),
   array:     ({key, val, errs, args}) => ({errs, args}),
+  boolean:   ({key, val, errs, args}) => ({errs, args}),
   flag:      ({key, val, errs, args}) => ({errs, args}),
   function:  ({key, val, errs, args}) => ({errs, args}),
-  otherwise: ({key, val, errs, args}) => ({errs, args})
+  null:      ({key, val, errs, args}) => ({errs, args}),
+  number:    ({key, val, errs, args}) => ({errs, args}),
+  otherwise: ({key, val, errs, args}) => ({errs, args}),
+  object:    ({key, val, errs, args}) => ({errs, args}),
+  string:    ({key, val, errs, args}) => ({errs, args}),
+  undefined: ({key, val, errs, args}) => ({errs, args})
 }
 ```
 
