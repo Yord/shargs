@@ -45,3 +45,11 @@ test('verifyArgv works if input is undefined', () => {
 
   expect(argv).toStrictEqual([])
 })
+
+test('verifyArgv passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = verifyArgv()({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
