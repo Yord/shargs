@@ -56,3 +56,17 @@ test('bestGuessRest does not interpret short options that are too long', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('bestGuessRest does not touch other arrays than _', () => {
+  const obj = {
+    args: {
+      names: ['--name', 'Logan']
+    }
+  }
+
+  const {args} = bestGuessRest(obj)
+
+  const exp = obj.args
+
+  expect(args).toStrictEqual(exp)
+})
