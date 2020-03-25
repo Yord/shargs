@@ -99,3 +99,11 @@ test('suggestOptions works if input is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('suggestOptions passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = suggestOptions({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
