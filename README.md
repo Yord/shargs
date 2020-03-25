@@ -453,7 +453,7 @@ Result:
 <td>
 <details>
 <summary>
-Tries its best to interpret unparsed strings (e.g. <code>{values: ['--foo']}</code>) as additional parameters.
+Tries its best to interpret unparsed strings as additional parameters (e.g. <code>{values: ['--foo']}</code> as a flag).
 Supports only strings and flags and requires options to follow a pattern:
 A single minus and a single character for short options or exactly two minusses with any more characters for long options.
 </summary>
