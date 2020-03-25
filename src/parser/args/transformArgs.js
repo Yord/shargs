@@ -10,15 +10,16 @@ const isFlag = ({type, count}) => type === 'flag' && typeof count === 'number'
 module.exports = function transformArgs (fs = {}) {
   return ({errs = [], args = {}} = {}) => {
     const {
-      undefined: undefinedF = id,
-      null:      nullF      = id,
-      boolean:   booleanF   = id,
-      number:    numberF    = id,
-      string:    stringF    = id,
       array:     arrayF     = id,
+      boolean:   booleanF   = id,
       flag:      flagF      = id,
       function:  functionF  = rm,
-      otherwise: otherwiseF = rm
+      null:      nullF      = id,
+      number:    numberF    = id,
+      otherwise: otherwiseF = rm,
+      object:    objectF    = null,
+      string:    stringF    = id,
+      undefined: undefinedF = id
     } = fs
   
     return Object.keys(args).reduce(
@@ -32,10 +33,14 @@ module.exports = function transformArgs (fs = {}) {
         else if (Array.isArray(val))                     return arrayF({key: arg, val, errs: errs2, args: args2})
         else if (typeof val === 'object' && isFlag(val)) return flagF({key: arg, val, errs: errs2, args: args2})
         else if (typeof val === 'object') {
-          const {errs: errs3, args: args3} = transformArgs(fs)({args: val})
-          return {
-            errs: errs2.concat(errs3),
-            args: {...args2, [arg]: args3}
+          if (objectF === null) {
+            const {errs: errs3, args: args3} = transformArgs(fs)({args: val})
+            return {
+              errs: errs2.concat(errs3),
+              args: {...args2, [arg]: args3}
+            }
+          } else {
+            return objectF({key: arg, val, errs: errs2, args: args2})
           }
         }
         else if (typeof val === 'function')              return functionF({key: arg, val, errs: errs2, args: args2})
