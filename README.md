@@ -611,8 +611,8 @@ Example:
 const implies = (p, q) => !p || q
 
 const rules = opts => implies(
-  opts.some(({key, values}) => key === 'firstName' && values !== null),
-  opts.some(({key, values}) => key === 'lastName' && values !== null)
+  opts.some(_ => _.key === 'firstName' && _.values !== null),
+  opts.some(_ => _.key === 'lastName' && _.values !== null)
 )
 
 const opts = [
@@ -630,7 +630,7 @@ Result:
   errs: [
     {
       code: 'False opts rules',
-      msg:  'Your opts rules returned false. Please abide to the rules defined in verifyOpts.',
+      msg:  'Your opts rules returned false...',
       info: {...}
     }
   ]
@@ -692,7 +692,7 @@ Result:
 <td>
 <details>
 <summary>
-Removes all entries from the <code>_</code> key.
+Removes all entries from each <code>_</code> key.
 </summary>
 
 <br />
