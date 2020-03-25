@@ -39,3 +39,9 @@ test('verifyArgv works if opts is undefined', () => {
 
   expect(argv).toStrictEqual([])
 })
+
+test('verifyArgv works if input is undefined', () => {
+  const {argv} = verifyArgv()()
+
+  expect(argv).toStrictEqual([])
+})
