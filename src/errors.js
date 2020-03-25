@@ -58,8 +58,8 @@ const invalidOptionsListInCombine = ({options, arg, argument}) => ({
   info: {options, arg, argument}
 })
 
-const invalidTypesInArgument = ({types, option}) =>({
-  code: 'Invalid types in argument',
+const invalidTypes = ({types, option}) => ({
+  code: 'Invalid types',
   msg:  'Each argument must have a types key that must be null or an array',
   info: {types, option}
 })
@@ -141,7 +141,7 @@ module.exports = {
   falseRules,
   invalidArity,
   invalidOptionsListInCombine,
-  invalidTypesInArgument,
+  invalidTypes,
   invalidValues,
   noKeyProvidedInOption,
   noArgumentsProvidedInOption,
