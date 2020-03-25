@@ -16,6 +16,12 @@ const argumentValueRestrictionsViolated = ({value, only, option}) => ({
   info: {value, only, option}
 })
 
+const commandRequired = ({options}) => ({
+  code: 'Command required',
+  msg:  'No command found. Please use at least one command!',
+  info: {options}
+})
+
 const falseArgsRules = ({rules, args}) => ({
   code: 'False args rules',
   msg:  'Your args rules returned false. Please abide to the rules defined in verifyArgs.',
@@ -116,6 +122,7 @@ module.exports = {
   argumentIsNotABool,
   argumentIsNotANumber,
   argumentValueRestrictionsViolated,
+  commandRequired,
   falseArgsRules,
   falseArgvRules,
   falseOptsRules,

@@ -449,6 +449,49 @@ Result:
 </tr>
 <tr>
 <td><code>opts</code></td>
+<td><code>bestGuessOpts({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Tries its best to interpret unparsed strings as additional parameters (e.g. <code>{values: ['--foo']}</code> as a flag).
+Supports only strings and flags and requires options to follow a pattern:
+A single minus and a single character for short options or exactly two minusses with any more characters for long options.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  string('age', ['--age'], {values: ['unknown']}),
+  {values: ['--angry']},
+  {values: ['--name']},
+  {values: ['Logan']},
+  {values: ['foo']}
+]
+
+bestGuessOpts({opts})
+```
+
+Result:
+
+```js
+{
+  opts: [
+    string('age', ['--age'], {values: ['unknown']}),
+    flag('angry', [], {values: [1]}),
+    string('name', [], {values: ['Logan']}),
+    {values: ['foo']}
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>opts</code></td>
 <td><code>cast({errs, opts})</code></td>
 <td>
 <details>
@@ -484,6 +527,48 @@ Result:
     command('help', ['-h', '--help'], {values: ['foo --bar']}),
     bool('verbose', ['--verbose'], {values: [false]}),
     flag('version', ['--version'], {values: [true]})
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>opts</code></td>
+<td><code>demandACommand({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Checks if <code>opts</code> includes at least one command and records an exception if no command is found.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  string('title', ['--title'], {values: ["The Hitchhiker's Guide to the Galaxy"]}),
+  numberBool('numBool', ['-n', '--nb'], {values: ['23', 'true']}),
+  number('answer', ['-a', '--answer'], {values: ['42']}),
+  bool('verbose', ['--verbose'], {values: ['false']}),
+  flag('version', ['--version'], {values: [1]})
+]
+
+demandACommand({opts})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'Command required',
+      msg:  'No command found. Please use at least one command!',
+      info: {...}
+    }
   ]
 }
 ```
