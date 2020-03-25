@@ -931,6 +931,49 @@ const fs = {
 </details>
 </td>
 </tr>
+<tr>
+<td><code>args</code></td>
+<td><code>verifyArgs(rules)({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Checks, whether the <code>args</code> adher to a given <code>rules</code> predicate.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const rules = args => (
+  typeof args.firstName !== 'undefined' &&
+  typeof args.lastName  !== 'undefined'
+)
+
+const args = {
+  firstName: 'Logan'
+}
+
+verifyArgs(rules)({args})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'False args rules',
+      msg:  'Your args rules returned false...',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
 </table>
 
 ### Usage Documentation
