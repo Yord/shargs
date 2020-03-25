@@ -16,6 +16,18 @@ const argumentValueRestrictionsViolated = ({value, only, option}) => ({
   info: {value, only, option}
 })
 
+const falseArgsRules = ({rules, args}) => ({
+  code: 'False args rules',
+  msg:  'Your args rules returned false. Please abide to the rules defined in verifyArgs.',
+  info: {rules, args}
+})
+
+const falseArgvRules = ({rules, argv}) => ({
+  code: 'False argv rules',
+  msg:  'Your argv rules returned false. Please abide to the rules defined in verifyArgv.',
+  info: {rules, argv}
+})
+
 const falseOptsRules = ({rules, options}) => ({
   code: 'False opts rules',
   msg:  'Your opts rules returned false. Please abide to the rules defined in verifyOpts.',
@@ -76,6 +88,18 @@ const unexpectedArgument = ({argument}) => ({
   info: {argument}
 })
 
+const wrongArgsRulesType = ({type, args}) => ({
+  code: 'Wrong args rules type',
+  msg:  'The args rules are of a wrong type, please provide a predicate with the following signature: (args) => boolean',
+  info: {type, args}
+})
+
+const wrongArgvRulesType = ({type, argv}) => ({
+  code: 'Wrong argv rules type',
+  msg:  'The argv rules are of a wrong type, please provide a predicate with the following signature: (argv) => boolean',
+  info: {type, argv}
+})
+
 const wrongOptsRulesType = ({type, options}) => ({
   code: 'Wrong opts rules type',
   msg:  'The opts rules are of a wrong type, please provide a predicate with the following signature: (options) => boolean',
@@ -92,6 +116,8 @@ module.exports = {
   argumentIsNotABool,
   argumentIsNotANumber,
   argumentValueRestrictionsViolated,
+  falseArgsRules,
+  falseArgvRules,
   falseOptsRules,
   falseRules,
   invalidOptionsListInCombine,
@@ -102,6 +128,8 @@ module.exports = {
   requiredOptionFormat,
   requiredOptionMissing,
   unexpectedArgument,
+  wrongArgsRulesType,
+  wrongArgvRulesType,
   wrongOptsRulesType,
   wrongRulesType
 }

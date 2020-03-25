@@ -407,6 +407,47 @@ Result:
 </td>
 </tr>
 <tr>
+<td><code>argv</code></td>
+<td><code>verifyArgv(rules)({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const rules = argv => (
+  argv.some(_ => _ === '-f') &&
+  argv.some(_ => _ === '-l')
+)
+
+const argv = ['-f', 'Logan']
+
+verifyArgv(rules)({argv})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'False argv rules',
+      msg:  'Your argv rules returned false...',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
 <td><code>opts</code></td>
 <td><code>cast({errs, opts})</code></td>
 <td>
@@ -611,8 +652,8 @@ Example:
 const implies = (p, q) => !p || q
 
 const rules = opts => implies(
-  opts.some(({key, values}) => key === 'firstName' && values !== null),
-  opts.some(({key, values}) => key === 'lastName' && values !== null)
+  opts.some(_ => _.key === 'firstName' && _.values !== null),
+  opts.some(_ => _.key === 'lastName' && _.values !== null)
 )
 
 const opts = [
@@ -630,7 +671,7 @@ Result:
   errs: [
     {
       code: 'False opts rules',
-      msg:  'Your opts rules returned false. Please abide to the rules defined in verifyOpts.',
+      msg:  'Your opts rules returned false...',
       info: {...}
     }
   ]
@@ -692,7 +733,7 @@ Result:
 <td>
 <details>
 <summary>
-Removes all entries from the <code>_</code> key.
+Removes all entries from each <code>_</code> key.
 </summary>
 
 <br />
@@ -884,6 +925,49 @@ const fs = {
   flag:      ({key, val, errs, args}) => ({errs, args}),
   function:  ({key, val, errs, args}) => ({errs, args}),
   otherwise: ({key, val, errs, args}) => ({errs, args})
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td><code>verifyArgs(rules)({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Checks, whether the <code>args</code> adher to a given <code>rules</code> predicate.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const rules = args => (
+  typeof args.firstName !== 'undefined' &&
+  typeof args.lastName  !== 'undefined'
+)
+
+const args = {
+  firstName: 'Logan'
+}
+
+verifyArgs(rules)({args})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'False args rules',
+      msg:  'Your args rules returned false...',
+      info: {...}
+    }
+  ]
 }
 ```
 
