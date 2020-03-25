@@ -147,3 +147,11 @@ test('verifyValuesArity throws invalidTypes error for incorrect values for strin
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('verifyValuesArity works if opts is undefined', () => {
+  const obj = {}
+
+  const {opts} = verifyValuesArity(obj)
+
+  expect(opts).toStrictEqual([])
+})
