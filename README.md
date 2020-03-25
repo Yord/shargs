@@ -571,7 +571,8 @@ Result:
 <td>
 <details>
 <summary>
-Reverses the value of a <code>bool</code>. Works on string (e.g. <code>['false']</code>) and boolean (e.g. <code>[false]</code>) values.
+Reverses the value of all <code>bool</code> options annotated with <code>{reverse: true}</code>.
+Works on strings (e.g. <code>['false']</code>) and booleans (e.g. <code>[false]</code>) values.
 </summary>
 
 <br />
@@ -607,7 +608,8 @@ Result:
 <td>
 <details>
 <summary>
-Reverses the value of a flag. This may be useful if the presence of a flag should imply <code>false</code>.
+Reverses the value of all flag options annotated with <code>{reverse: true}</code>.
+This may be useful if the presence of a flag should imply <code>false</code>.
 </summary>
 
 <br />
