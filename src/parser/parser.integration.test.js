@@ -302,3 +302,34 @@ test('parser with only suggestOptions works as expected', () => {
   expect(args).toStrictEqual(expArgs)
   expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
 })
+
+test('parser with only verifyOpts works as expected', () => {
+  const rules = opts => (
+    !opts.some(_ => _.key === 'genre') ||
+    opts.every(_ => _.key !== 'genre' || _.values)
+  )
+
+  const stages = {
+    opts: [verifyOpts(rules)]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: [],
+      stars: '8'
+    },
+    query: 'Supersize Me'
+  }
+
+  const expErrs = [
+    falseOptsRules({})
+  ]
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+})
