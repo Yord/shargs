@@ -41,7 +41,7 @@ module.exports = ({errs = [], opts: OPTS = []} = {}) => {
         }
       }
 
-      opts.push({...option, values})
+      opts.push({...option, ...(values.length === 0 ? {} : {values})})
     }
   }
 

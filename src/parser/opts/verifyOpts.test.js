@@ -6,8 +6,8 @@ test('verifyOpts README example works', () => {
   const implies = (p, q) => !p || q
 
   const rules = opts => implies(
-    opts.some(({key, values}) => key === 'firstName' && values !== null),
-    opts.some(({key, values}) => key === 'lastName' && values !== null)
+    opts.some(({key, values}) => key === 'firstName' && values),
+    opts.some(({key, values}) => key === 'lastName' && values)
   )
 
   const opts = [

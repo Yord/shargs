@@ -1,8 +1,6 @@
 const addUnusedOpts = require('./addUnusedOpts')
 const {number} = require('../../options')
 
-const noArgs = ({args, ...rest}) => rest
-
 test('addUnusedOpts works as expected', () => {
   const answer   = number('answer', ['-a', '--answer'], {values: [42]})
   const question = number('question', ['-q', '--question'])
@@ -11,7 +9,7 @@ test('addUnusedOpts works as expected', () => {
 
   const {opts: opts2} = addUnusedOpts(opts)({})
 
-  const exp = opts.map(noArgs)
+  const exp = opts
 
   expect(opts2).toStrictEqual(exp)
 })
@@ -27,7 +25,7 @@ test('addUnusedOpts does not set default values if the option is present', () =>
     opts: [answer23]
   })
 
-  const exp = [answer23, question].map(noArgs)
+  const exp = [answer23, question]
 
   expect(opts2).toStrictEqual(exp)
 })
@@ -39,7 +37,7 @@ test('addUnusedOpts works if obj is undefined', () => {
 
   const {opts: opts2} = addUnusedOpts(opts)(obj)
 
-  const exp = opts.map(noArgs)
+  const exp = opts
 
   expect(opts2).toStrictEqual(exp)
 })
@@ -47,7 +45,7 @@ test('addUnusedOpts works if obj is undefined', () => {
 test('addUnusedOpts works if opts is undefined', () => {
   const answer = number('answer', ['-a', '--answer'], {values: [42]})
 
-  const opts = [noArgs(answer)]
+  const opts = [answer]
 
   const obj = {opts}
 
@@ -63,7 +61,7 @@ test('addUnusedOpts works if obj is undefined', () => {
 
   const {opts: opts2} = addUnusedOpts(opts)()
 
-  const exp = opts.map(noArgs)
+  const exp = opts
 
   expect(opts2).toStrictEqual(exp)
 })

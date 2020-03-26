@@ -22,7 +22,7 @@ module.exports = (opt = {}) => {
       const arg  = ARGS[i]
       if (typeof args[arg] === 'undefined') args[arg] = []
 
-      const {args: _1, __proto__: _2, ...rest} = opt
+      const {__proto__: _2, ...rest} = opt
       args[arg].push(rest)
     }
   }

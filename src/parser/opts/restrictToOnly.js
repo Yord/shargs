@@ -1,4 +1,4 @@
-const {argumentValueRestrictionsViolated} = require('../../errors')
+const {valueRestrictionsViolated} = require('../../errors')
 
 module.exports = ({errs = [], opts: OPTS = []} = {}) => {
   const opts = []
@@ -17,7 +17,7 @@ module.exports = ({errs = [], opts: OPTS = []} = {}) => {
         if (only.indexOf(value) > -1) {
           correct++
         } else {
-          errs.push(argumentValueRestrictionsViolated({value, only, option}))
+          errs.push(valueRestrictionsViolated({value, only, option}))
         }
       }
 

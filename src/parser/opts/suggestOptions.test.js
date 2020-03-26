@@ -1,6 +1,6 @@
 const suggestOptions = require('./suggestOptions')
 const {didYouMean} = require('../../errors')
-const {bool, number, string} = require('../../options')
+const {bool, command, number, string} = require('../../options')
 
 test('suggestOptions README example works', () => {
   const age = number('age', ['-a', '--age'])
@@ -79,6 +79,49 @@ test('suggestOptions works as expected', () => {
         [{'--age': age}],
         [{'-b': beef}],
         [{'-t': title}, {'--title': title}, {'-a': age}]
+      ]
+    })
+  ]
+
+  expect(errs).toStrictEqual(exp)
+})
+
+test('suggestOptions also works on commands', () => {
+  const __titel = '--titel'
+  const __aeg = '--aeg'
+  const title = string('title', ['-t', '--title'])
+  const age   = number('age', ['--age', '-a'])
+  const cmd   = command('cmd', ['cmd'], {opts: [age, {values: [__aeg]}]})
+
+  const opts = [
+    {values: [__titel]},
+    title,
+    cmd
+  ]
+
+  const {errs} = suggestOptions({opts})
+
+  const exp = [
+    didYouMean({
+      argv: __titel,
+      options: [
+        [],
+        [],
+        [{'--title': title}],
+        [],
+        [],
+        [{'-t': title}],
+        [],
+        [{'cmd': cmd}]
+      ]
+    }),
+    didYouMean({
+      argv: __aeg,
+      options: [
+        [],
+        [],
+        [{'--age': age}],
+        [{'-a': age}]
       ]
     })
   ]

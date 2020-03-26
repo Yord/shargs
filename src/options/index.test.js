@@ -22,13 +22,13 @@ test('options types are correctly assembled', () => {
                             key,
                             types,
                             args,
-                            desc:     typeof options !== 'undefined' && typeof desc     !== 'undefined' ? desc     : '',
-                            only:     typeof options !== 'undefined' && typeof only     !== 'undefined' ? only     : null,
-                            opts:     typeof options !== 'undefined' && typeof opts     !== 'undefined' ? opts     : null,
-                            values:   typeof options !== 'undefined' && typeof values   !== 'undefined' ? values   : null,
-                            required: typeof options !== 'undefined' && typeof required !== 'undefined' ? required : false,
-                            reverse:  typeof options !== 'undefined' && typeof reverse  !== 'undefined' ? reverse  : false,
-                            rules:    typeof options !== 'undefined' && typeof rules    !== 'undefined' ? rules    : null
+                            ...(typeof options !== 'undefined' ? {desc}     : {}),
+                            ...(typeof options !== 'undefined' ? {only}     : {}),
+                            ...(typeof options !== 'undefined' ? {opts}     : {}),
+                            ...(typeof options !== 'undefined' ? {values}   : {}),
+                            ...(typeof options !== 'undefined' ? {required} : {}),
+                            ...(typeof options !== 'undefined' ? {reverse}  : {}),
+                            ...(typeof options !== 'undefined' ? {rules}    : {})
                           }
                         })
                       )
@@ -62,22 +62,15 @@ test('options does not allow __proto__ field', () => {
   )
 })
 
-test('options allows any user defined field except __proto__', () => {
-  const answer = array(['number'])('answer', ['-a'], {foo: 'bar', baz: 42, __proto__: 42})
+test('options allows any user defined field except __proto__, key, args, and types', () => {
+  const answer = array(['number'])('answer', ['-a'], {foo: 'bar', baz: 42, __proto__: 42, key: 42, args: 42, types: 42})
 
   const exp = {
-    foo: 'bar',
-    baz: 42,
     key: 'answer',
     types: ['number'],
     args: ['-a'],
-    desc: '',
-    only: null,
-    opts: null,
-    required: false,
-    reverse: false,
-    rules: null,
-    values: null
+    foo: 'bar',
+    baz: 42
   }
 
   expect(answer).toStrictEqual(exp)
