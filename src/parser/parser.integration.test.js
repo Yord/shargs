@@ -333,3 +333,29 @@ test('parser with only verifyOpts works as expected', () => {
   expect(args).toStrictEqual(expArgs)
   expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
 })
+
+test('parser with only verifyRules works as expected', () => {
+  const stages = {
+    opts: [verifyRules]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: [],
+      stars: '8'
+    },
+    query: 'Supersize Me'
+  }
+
+  const expErrs = [
+    falseRules({})
+  ]
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+})
