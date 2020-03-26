@@ -1,5 +1,5 @@
 const restrictToOnly = require('./restrictToOnly')
-const {argumentValueRestrictionsViolated} = require('../../errors')
+const {valueRestrictionsViolated} = require('../../errors')
 const {array, bool, command, flag, number, string} = require('../../options')
 
 const numberBool = array(['number', 'bool'])
@@ -102,7 +102,7 @@ test('restrictToOnly fails if a value is not allowed', () => {
 
   const {errs} = restrictToOnly(obj)
 
-  const exp = obj.opts.map(option => argumentValueRestrictionsViolated({
+  const exp = obj.opts.map(option => valueRestrictionsViolated({
     value: option.values[0],
     only: option.only,
     option
@@ -120,7 +120,7 @@ test('restrictToOnly fails on the first value of an array', () => {
   const {errs} = restrictToOnly(obj)
 
   const exp = [
-    argumentValueRestrictionsViolated({
+    valueRestrictionsViolated({
       value: 23,
       only,
       option
@@ -139,7 +139,7 @@ test('restrictToOnly fails on the second value of an array', () => {
   const {errs} = restrictToOnly(obj)
 
   const exp = [
-    argumentValueRestrictionsViolated({
+    valueRestrictionsViolated({
       value: true,
       only,
       option

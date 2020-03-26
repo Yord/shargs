@@ -10,12 +10,6 @@ const argumentIsNotANumber = ({option, value}) => ({
   info: {value, option}
 })
 
-const argumentValueRestrictionsViolated = ({value, only, option}) => ({
-  code: 'Argument value restrictions violated',
-  msg:  'The argument is not in the allowed set of values',
-  info: {value, only, option}
-})
-
 const commandRequired = ({options}) => ({
   code: 'Command required',
   msg:  'No command found. Please use at least one command!',
@@ -112,6 +106,12 @@ const unexpectedArgument = ({argument}) => ({
   info: {argument}
 })
 
+const valueRestrictionsViolated = ({value, only, option}) => ({
+  code: 'Value restriction violated',
+  msg:  'A value lies outside the allowed values of an option.',
+  info: {value, only, option}
+})
+
 const wrongArgsRulesType = ({type, args}) => ({
   code: 'Wrong args rules type',
   msg:  'The args rules are of a wrong type, please provide a predicate with the following signature: (args) => boolean',
@@ -139,7 +139,6 @@ const wrongRulesType = ({type, options}) => ({
 module.exports = {
   argumentIsNotABool,
   argumentIsNotANumber,
-  argumentValueRestrictionsViolated,
   commandRequired,
   didYouMean,
   falseArgsRules,
@@ -156,6 +155,7 @@ module.exports = {
   requiredOptionFormat,
   requiredOptionMissing,
   unexpectedArgument,
+  valueRestrictionsViolated,
   wrongArgsRulesType,
   wrongArgvRulesType,
   wrongOptsRulesType,
