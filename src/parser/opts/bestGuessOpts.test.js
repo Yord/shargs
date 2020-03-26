@@ -6,7 +6,7 @@ const noArgs = ({args, ...rest}) => rest
 test('bestGuessOpts README example works', () => {
   const obj = {
     opts: [
-      noArgs(string('age', ['--age'], {values: ['unknown']})),
+      noArgs(string('age', [], {values: ['unknown']})),
       {values: ['--angry']},
       {values: ['--name']},
       {values: ['Logan']},
@@ -17,7 +17,7 @@ test('bestGuessOpts README example works', () => {
   const {opts} = bestGuessOpts(obj)
 
   const exp = [
-    noArgs(string('age', ['--age'], {values: ['unknown']})),
+    noArgs(string('age', [], {values: ['unknown']})),
     noArgs(flag('angry', [], {values: [1]})),
     noArgs(string('name', [], {values: ['Logan']})),
     {values: ['foo']}
@@ -29,7 +29,7 @@ test('bestGuessOpts README example works', () => {
 test('bestGuessOpts does not override existing keys', () => {
   const obj = {
     opts: [
-      noArgs(string('name', ['--name'], {values: ['Charles']})),
+      noArgs(string('name', [], {values: ['Charles']})),
       {values: ['--name']},
       {values: ['Logan']}
     ]
@@ -45,7 +45,7 @@ test('bestGuessOpts does not override existing keys', () => {
 test('bestGuessOpts does not interpret short options that are too long', () => {
   const obj = {
     opts: [
-      noArgs(string('name', ['--name'], {values: ['Charles']})),
+      noArgs(string('name', [], {values: ['Charles']})),
       {values: ['-name']},
       {values: ['Logan']}
     ]
@@ -61,7 +61,7 @@ test('bestGuessOpts does not interpret short options that are too long', () => {
 test('bestGuessOpts does work despite getting nonsensical input', () => {
   const obj = {
     opts: [
-      noArgs(string('name', ['--name'], {values: ['Charles']})),
+      noArgs(string('name', [], {values: ['Charles']})),
       {values: ['--foo']},
       {values: [42]},
       {values: ['-f']},
@@ -74,7 +74,7 @@ test('bestGuessOpts does work despite getting nonsensical input', () => {
   const {opts} = bestGuessOpts(obj)
 
   const exp = [
-    noArgs(string('name', ['--name'], {values: ['Charles']})),
+    noArgs(string('name', [], {values: ['Charles']})),
     noArgs(flag('foo', [], {values: [1]})),
     {values: [42]},
     noArgs(flag('f', [], {values: [1]})),
