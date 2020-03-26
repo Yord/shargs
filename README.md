@@ -728,8 +728,9 @@ Result:
 <td>
 <details>
 <summary>
-If an <code>argv</code> is misspelled (e.g. <code>--aeg</code> instead of <code>--age</code>), shargs still keeps in as an unknown option (e.g. <code>{values: ['--aeg']}</code>).
-The <code>suggestOptions</code> stage collects all unknown options and suggests similar defined args.
+Even if an <code>argv</code> is misspelled (e.g. <code>--aeg</code> instead of <code>--age</code>),
+shargs still keeps it as an unknown option (e.g. <code>{values: ['--aeg']}</code>).
+The <code>suggestOptions</code> stage collects all unknown options and suggests similar args defined in <code>opts</code>.
 </summary>
 
 <br />
