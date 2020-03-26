@@ -143,8 +143,6 @@ test('combine fails with an error if two options with different types lengths ar
   const optionA = {key: 'A', args: ['-a'], types: ['string'], desc: '', only: null, opts: null, values: null}
   const optionB = {key: 'B', args: ['-a'], types: ['string', 'number'], desc: '', only: null, opts: null, values: null}
 
-  const noArgs = ({args, ...rest}) => rest
-
   const opts = [
     optionA,
     optionB
@@ -153,13 +151,13 @@ test('combine fails with an error if two options with different types lengths ar
   const {errs, args} = combine(...opts.map(require('./option')))
 
   const exp = [
-    nonMatchingArgumentTypes({arg: '-a', ref: noArgs(optionA), option: noArgs(optionB)})
+    nonMatchingArgumentTypes({arg: '-a', ref: optionA, option: optionB})
   ]
 
   expect(errs).toStrictEqual(exp)
 
   expect(args).toStrictEqual({
-    '-a': [noArgs(optionA)]
+    '-a': [optionA]
   })
 })
 
@@ -167,8 +165,6 @@ test('combine fails with an error if two options are grouped in the same argumen
   const optionA = {key: 'A', args: ['-a'], types: ['string'], desc: '', only: null, opts: null, values: null}
   const optionB = {key: 'B', args: ['-a'], types: 42, desc: '', only: null, opts: null, values: null}
 
-  const noArgs = ({args, ...rest}) => rest
-
   const opts = [
     optionA,
     optionB
@@ -177,13 +173,13 @@ test('combine fails with an error if two options are grouped in the same argumen
   const {errs, args} = combine(...opts.map(require('./option')))
 
   const exp = [
-    invalidTypes({types: 42, option: noArgs(optionB)})
+    invalidTypes({types: 42, option: optionB})
   ]
 
   expect(errs).toStrictEqual(exp)
 
   expect(args).toStrictEqual({
-    '-a': [noArgs(optionA)]
+    '-a': [optionA]
   })
 })
 
@@ -211,14 +207,12 @@ test('combine also takes several options at the same time', () => {
   const optionA = {key: 'A', args: ['-a'], types: ['string'], desc: '', only: null, opts: null}
   const optionB = {key: 'B', args: ['-a'], types: ['number'], desc: '', only: null, opts: null}
 
-  const noArgs = ({args, ...rest}) => rest
-
   const {args} = combine({
-    args: {'-a': [noArgs(optionA), noArgs(optionB)]}
+    args: {'-a': [optionA, optionB]}
   })
 
   expect(args).toStrictEqual({
-    '-a': [noArgs(optionA), noArgs(optionB)]
+    '-a': [optionA, optionB]
   })
 })
 

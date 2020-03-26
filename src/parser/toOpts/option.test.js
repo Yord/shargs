@@ -14,6 +14,7 @@ test('option transforms arguments DSL into options DSL', () => {
                 const options = {
                   key,
                   types:  typeof types  !== 'undefined' ? types  : null,
+                  args:   typeof args   !== 'undefined' ? args   : null,
                   only:   typeof only   !== 'undefined' ? only   : null,
                   desc:   typeof desc   !== 'undefined' ? desc   : '',
                   opts:   typeof opts   !== 'undefined' ? opts   : null,
@@ -166,6 +167,7 @@ test('option removes args and __proto__ fields', () => {
       {
         key: 'answer',
         types: ['number'],
+        args: ['-a'],
         foo: 'bar',
         baz: 42
       }
