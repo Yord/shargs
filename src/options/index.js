@@ -1,28 +1,11 @@
 const array   = types => (key, args = [], fields = {}) => {
-  const {
-    desc     = '',
-    only     = null,
-    opts     = null,
-    required = false,
-    reverse  = false,
-    rules    = null,
-    values   = null
-  } = fields
-
-  const {__proto__, ...rest} = fields
+  const {__proto__, key: _1, types: _2, args: _3, ...rest} = fields
 
   return {
-    ...rest,
     key,
     types,
     args,
-    desc,
-    only,
-    opts,
-    required,
-    reverse,
-    rules,
-    values
+    ...rest
   }
 }
 

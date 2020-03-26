@@ -5,7 +5,7 @@ const {string} = require('../../options')
 test('verifyRules README example works', () => {
   const rules = firstName => opts => (
     firstName.values[0] === 'Logan' ||
-    opts.some(({key, values}) => key === 'lastName' && values !== null)
+    opts.some(({key, values}) => key === 'lastName' && values)
   )
 
   const firstName = string('firstName', ['-f'], {rules, values: ['Charles']})

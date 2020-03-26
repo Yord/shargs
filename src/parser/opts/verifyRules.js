@@ -7,7 +7,7 @@ module.exports = ({errs = [], opts = []} = {}) => {
     const opt = opts[i]
     const {rules} = opt
 
-    if (rules !== null) {
+    if (typeof rules !== 'undefined') {
       if (typeof rules === 'function') {
         if (rules(opt)(opts) === false) {
           errs2.push(falseRules({rules, option: opt}))

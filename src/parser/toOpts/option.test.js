@@ -164,17 +164,10 @@ test('option removes args and __proto__ fields', () => {
   const exp = {
     '-a': [
       {
-        foo: 'bar',
-        baz: 42,
         key: 'answer',
         types: ['number'],
-        desc: '',
-        only: null,
-        opts: null,
-        required: false,
-        reverse: false,
-        rules: null,
-        values: null
+        foo: 'bar',
+        baz: 42
       }
     ]
   }
