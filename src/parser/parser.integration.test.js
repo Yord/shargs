@@ -126,3 +126,29 @@ test('parser with only bestGuessOpts works as expected', () => {
   expect(args).toStrictEqual(expArgs)
   expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
 })
+
+test('parser with only cast works as expected', () => {
+  const stages = {
+    opts: [cast]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: true,
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: [],
+      stars: 8
+    },
+    query: 'Supersize Me'
+  }
+
+  const expErrs = [
+    argumentIsNotANumber({})
+  ]
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+})
