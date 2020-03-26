@@ -1,7 +1,7 @@
 const {didYouMean} = require('../../errors')
 
-module.exports = ({errs = [], opts = []} = {}) => {
-  const errs2 = []
+module.exports = function suggestOptions ({errs = [], opts = []} = {}) {
+  let errs2 = []
   
   for (let i = 0; i < opts.length; i++) {
     const opt = opts[i]
@@ -11,6 +11,9 @@ module.exports = ({errs = [], opts = []} = {}) => {
       const options = distanceList(argv, opts)
 
       errs2.push(didYouMean({argv, options}))
+    } else if (isCommandWithOpts(opt)) {
+      const {errs: errs3} = suggestOptions({opts: opt.opts})
+      errs2 = errs2.concat(errs3)
     }
   }
 
@@ -24,6 +27,10 @@ function isUnparsed ({types, values}) {
     values.length === 1 &&
     typeof values[0] === 'string'
   )
+}
+
+function isCommandWithOpts ({types, opts}) {
+  return types === null && Array.isArray(opts) && opts.length > 0
 }
 
 function distanceList (str, opts) {
