@@ -423,14 +423,13 @@ Each stage takes an array of parser functions, that are applied from left to rig
 <tr name="splitShortOptions">
 <td><code>splitShortOptions({errs, argv})</code></td>
 <td>
+Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
 <details>
 <summary>
-Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
+<a href="#splitShortOptions">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const argv = ['-ab']
@@ -452,14 +451,13 @@ Result:
 <tr name="verifyArgv">
 <td><code>verifyArgv(rules)({errs, argv})</code></td>
 <td>
+Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate.
 <details>
 <summary>
-Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate.
+<a href="#verifyArgv">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const rules = argv => (
@@ -501,16 +499,15 @@ Result:
 <tr name="bestGuessOpts">
 <td><code>bestGuessOpts({errs, opts})</code></td>
 <td>
-<details>
-<summary>
 Tries its best to interpret unparsed strings as additional parameters (e.g. <code>{values: ['--foo']}</code> as a flag).
 Supports only strings and flags and requires options to follow a pattern:
 A single minus and a single character for short options or exactly two minusses with any more characters for long options.
+<details>
+<summary>
+<a href="#bestGuessOpts">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const opts = [
@@ -543,14 +540,13 @@ Result:
 <tr name="cast">
 <td><code>cast({errs, opts})</code></td>
 <td>
+Casts all <a href="#values"><code>values</code></a> according to the options' types.
 <details>
 <summary>
-Casts all <a href="#values"><code>values</code></a> according to the options' types.
+<a href="#cast">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const opts = [
@@ -586,14 +582,13 @@ Result:
 <tr name="demandACommand">
 <td><code>demandACommand({errs, opts})</code></td>
 <td>
+Checks if <code>opts</code> includes at least one command and records an exception if no command is found.
 <details>
 <summary>
-Checks if <code>opts</code> includes at least one command and records an exception if no command is found.
+<a href="#demandACommand">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const opts = [
@@ -627,15 +622,14 @@ Result:
 <tr name="requireOptions">
 <td><code>requireOptions({errs, opts})</code></td>
 <td>
-<details>
-<summary>
 Controls, if options marked with <a href="#required"><code>{required: true}</code></a> have valid <a href="#values"><code>values</code></a>.
 If a required option is not present, an error message is recorded.
+<details>
+<summary>
+<a href="#requireOptions">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 
@@ -666,14 +660,13 @@ Result:
 <tr name="restrictToOnly">
 <td><code>restrictToOnly({errs, opts})</code></td>
 <td>
+Records an error if the <a href="#values"><code>values</code></a> are not contained in the <a href="#only"><code>only</code></a> list.
 <details>
 <summary>
-Records an error if the <a href="#values"><code>values</code></a> are not contained in the <a href="#only"><code>only</code></a> list.
+<a href="#restrictToOnly">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const opts = [
@@ -703,15 +696,14 @@ Result:
 <tr name="reverseBools">
 <td><code>reverseBools({errs, opts})</code></td>
 <td>
-<details>
-<summary>
 Reverses the value of all <code>bool</code> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
 Works on strings (e.g. <code>['false']</code>) and booleans (e.g. <code>[false]</code>) values.
+<details>
+<summary>
+<a href="#reverseBools">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const opts = [
@@ -739,15 +731,14 @@ Result:
 <tr name="reverseFlags">
 <td><code>reverseFlags({errs, opts})</code></td>
 <td>
-<details>
-<summary>
 Reverses the value of all flag options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
 This may be useful if the presence of a flag should imply <code>false</code>.
+<details>
+<summary>
+<a href="#reverseFlags">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const opts = [
@@ -773,16 +764,15 @@ Result:
 <tr name="suggestOptions">
 <td><code>suggestOptions({errs, opts})</code></td>
 <td>
-<details>
-<summary>
 Even if an <code>argv</code> is misspelled (e.g. <code>--aeg</code> instead of <code>--age</code>),
 shargs still keeps it as an unknown option (e.g. <code>{values: ['--aeg']}</code>).
 The <code>suggestOptions</code> stage collects all unknown options and suggests similar args defined in <code>opts</code>.
+<details>
+<summary>
+<a href="#suggestOptions">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const opts = [
@@ -841,14 +831,13 @@ Results in:
 <tr name="verifyOpts">
 <td><code>verifyOpts(rules)({errs, opts})</code></td>
 <td>
+Checks, whether the <code>opts</code> adher to a given <code>rules</code> predicate.
 <details>
 <summary>
-Checks, whether the <code>opts</code> adher to a given <code>rules</code> predicate.
+<a href="#verifyOpts">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const implies = (p, q) => !p || q
@@ -886,14 +875,13 @@ Result:
 <tr name="verifyRules">
 <td><code>verifyRules({errs, opts})</code></td>
 <td>
+Checks, whether the <a href="#rules"><code>rules</code></a> field holds for an option in relation to all options.
 <details>
 <summary>
-Checks, whether the <a href="#rules"><code>rules</code></a> field holds for an option in relation to all options.
+<a href="#verifyRules">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const rules = firstName => opts => (
@@ -929,14 +917,13 @@ Result:
 <tr name="verifyValuesArity">
 <td><code>verifyValuesArity({errs, opts})</code></td>
 <td>
+Checks, whether the <a href="#values"><code>values</code></a> of an option fits its <a href="#types"><code>types</code></a>.
 <details>
 <summary>
-Checks, whether the <a href="#values"><code>values</code></a> of an option fits its <a href="#types"><code>types</code></a>.
+<a href="#verifyValuesArity">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const opts = [
@@ -975,16 +962,15 @@ Result:
 <tr name="bestGuessRest">
 <td><code>bestGuessRest({errs, args})</code></td>
 <td>
-<details>
-<summary>
 Tries its best to interpret strings in the <code>_</code> key as additional parameters.
 Supports only strings and flags and requires options to follow a pattern:
 A single minus and a single character for short options or exactly two minusses with any more characters for long options.
+<details>
+<summary>
+<a href="#bestGuessRest">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const obj = {
@@ -1024,14 +1010,13 @@ Result:
 <tr name="clearRest">
 <td><code>clearRest({errs, args})</code></td>
 <td>
+Removes all entries from each <code>_</code> key.
 <details>
 <summary>
-Removes all entries from each <code>_</code> key.
+<a href="#clearRest">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const args = {_: ['foo']}
@@ -1053,14 +1038,13 @@ Result:
 <tr name="failRest">
 <td><code>failRest({errs, args})</code></td>
 <td>
+Records an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
 <details>
 <summary>
-Records an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
+<a href="#failRest">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const args = {
@@ -1094,14 +1078,13 @@ Result:
 <tr name="flagsAsBools">
 <td><code>flagsAsBools({errs, args})</code></td>
 <td>
+Transforms all count-based <code>flag</code> options into booleans, that are <code>true</code> if the count is greater than <code>0</code>.
 <details>
 <summary>
-Transforms all count-based <code>flag</code> options into booleans, that are <code>true</code> if the count is greater than <code>0</code>.
+<a href="#flagsAsBools">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const args = {
@@ -1127,14 +1110,13 @@ Result:
 <tr name="flagsAsNumbers">
 <td><code>flagsAsNumbers({errs, args})</code></td>
 <td>
+Transforms all count-based <code>flag</code> options into numbers, that correspond to the count.
 <details>
 <summary>
-Transforms all count-based <code>flag</code> options into numbers, that correspond to the count.
+<a href="#flagsAsNumbers">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const args = {
@@ -1160,16 +1142,15 @@ Result:
 <tr name="mergeArgs">
 <td><code>mergeArgs(merge)({errs, args})</code></td>
 <td>
-<details>
-<summary>
 Recursively merges args objects of commands into their partent args objects.
 Results into a flat object, where no key is an object.
 Other <code>merge</code> functions can be given to the function.
+<details>
+<summary>
+<a href="#mergeArgs">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const args = {
@@ -1210,15 +1191,14 @@ Result:
 <tr name="transformArgs">
 <td><code>transformArgs(fs)({errs, args})</code></td>
 <td>
-<details>
-<summary>
 Transforms an args object into a new args object by applying functions <code>fs</code> based on the value type.
 All fields of an object are updated independently and previous updates in the same run do not influence later updates.
+<details>
+<summary>
+<a href="#transformArgs">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const args = {
@@ -1274,14 +1254,13 @@ const fs = {
 <tr name="verifyArgs">
 <td><code>verifyArgs(rules)({errs, args})</code></td>
 <td>
+Checks, whether the <code>args</code> adher to a given <code>rules</code> predicate.
 <details>
 <summary>
-Checks, whether the <code>args</code> adher to a given <code>rules</code> predicate.
+<a href="#verifyArgs">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const rules = args => (
