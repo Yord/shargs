@@ -375,7 +375,7 @@ Each stage takes an array of parser functions, that are applied from left to rig
 <th>Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
-<tr>
+<tr name="splitShortOptions">
 <td><code>splitShortOptions({errs, argv})</code></td>
 <td>
 <details>
@@ -404,7 +404,7 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="verifyArgv">
 <td><code>verifyArgv(rules)({errs, argv})</code></td>
 <td>
 <details>
@@ -453,7 +453,7 @@ Result:
 <th>Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
-<tr>
+<tr name="bestGuessOpts">
 <td><code>bestGuessOpts({errs, opts})</code></td>
 <td>
 <details>
@@ -495,7 +495,7 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="cast">
 <td><code>cast({errs, opts})</code></td>
 <td>
 <details>
@@ -538,7 +538,7 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="demandACommand">
 <td><code>demandACommand({errs, opts})</code></td>
 <td>
 <details>
@@ -579,7 +579,7 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="requireOptions">
 <td><code>requireOptions({errs, opts})</code></td>
 <td>
 <details>
@@ -618,7 +618,7 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="restrictToOnly">
 <td><code>restrictToOnly({errs, opts})</code></td>
 <td>
 <details>
@@ -655,7 +655,7 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="reverseBools">
 <td><code>reverseBools({errs, opts})</code></td>
 <td>
 <details>
@@ -691,7 +691,7 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="reverseFlags">
 <td><code>reverseFlags({errs, opts})</code></td>
 <td>
 <details>
@@ -725,7 +725,7 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="suggestOptions">
 <td><code>suggestOptions({errs, opts})</code></td>
 <td>
 <details>
@@ -793,7 +793,7 @@ Results in:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="verifyOpts">
 <td><code>verifyOpts(rules)({errs, opts})</code></td>
 <td>
 <details>
@@ -838,7 +838,7 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="verifyRules">
 <td><code>verifyRules({errs, opts})</code></td>
 <td>
 <details>
@@ -881,7 +881,7 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="verifyValuesArity">
 <td><code>verifyValuesArity({errs, opts})</code></td>
 <td>
 <details>
@@ -927,7 +927,7 @@ Result:
 <th>Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
-<tr>
+<tr name="bestGuessRest">
 <td><code>bestGuessRest({errs, args})</code></td>
 <td>
 <details>
@@ -976,7 +976,7 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="clearRest">
 <td><code>clearRest({errs, args})</code></td>
 <td>
 <details>
@@ -1005,7 +1005,7 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="failRest">
 <td><code>failRest({errs, args})</code></td>
 <td>
 <details>
@@ -1046,7 +1046,7 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="flagsAsBools">
 <td><code>flagsAsBools({errs, args})</code></td>
 <td>
 <details>
@@ -1079,7 +1079,7 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="flagsAsNumbers">
 <td><code>flagsAsNumbers({errs, args})</code></td>
 <td>
 <details>
@@ -1112,7 +1112,7 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="mergeArgs">
 <td><code>mergeArgs(merge)({errs, args})</code></td>
 <td>
 <details>
@@ -1162,7 +1162,7 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
+<tr name="transformArgs">
 <td><code>transformArgs(fs)({errs, args})</code></td>
 <td>
 <details>
@@ -1226,7 +1226,7 @@ const fs = {
 </details>
 </td>
 </tr>
-<tr>
+<tr name="verifyArgs">
 <td><code>verifyArgs(rules)({errs, args})</code></td>
 <td>
 <details>
