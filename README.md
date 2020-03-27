@@ -1857,7 +1857,8 @@ const style = {
 ```
 
 It defines style objects for two ids: `line` and `cols`.
-These two ids are used internally by the layout functions to decide, how lines and columns should be printed.
+These two ids are the default used by the layout functions to define, how lines and columns should be printed.
+However, any valid key may be used as an id, if it is passed as a string to the `id` parameter of any `*From` function.
 A style object may have the following parameters:
 
 <table>
@@ -1882,10 +1883,6 @@ A style object may have the following parameters:
 <td>Defines the length of a line before a line break is introduced.</td>
 </tr>
 </table>
-
-While `line` and `cols` are the default ids, any valid key may be used as an id.
-In order to connect layout functions to a different id than the default,
-pass it as a string to the `id` parameter of any `*From` function.
 
 #### Usage Documentation DSL
 
