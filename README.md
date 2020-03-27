@@ -641,8 +641,12 @@ Result:
 
 ```js
 {
-  opts: [
-    number('answer', ['-a', '--answer'], {only: [42], values: [42]})
+  errs: [
+    {
+      code: 'Value restriction violated',
+      msg:  'A value lies outside the allowed values...',
+      info: {...}
+    }
   ]
 }
 ```
