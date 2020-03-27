@@ -48,6 +48,82 @@ const opts = [
 
 const argv = ['--query', 'Supersize Me', '--colors', '-l', '--no-hobbits', 'true', '-vv', 'rate', '--stars', '8', 'help']
 
+test('parser with all stages works as expected', () => {
+  const argvRules = argv => argv.some(_ => _ === '--fancy')
+
+  const optsRules = opts => (
+    !opts.some(_ => _.key === 'genre') ||
+    opts.every(_ => _.key !== 'genre' || _.values)
+  )
+
+  const argsRules = args => !args.query || args.query.indexOf('Terminator') > -1
+
+  const fs = {
+    flag: ({key, val, errs, args}) => ({
+      errs,
+      args: {...args, [key]: key === 'verbose' ? val.count : val.count > 0}
+    })
+  }
+
+  const stages = {
+    argv: [
+      splitShortOptions,
+      verifyArgv(argvRules)
+    ],
+    opts: [
+      demandACommand,
+      suggestOptions,
+      bestGuessOpts,
+      cast,
+      requireOptions,
+      restrictToOnly,
+      reverseBools,
+      reverseFlags,
+      verifyOpts(optsRules),
+      verifyRules,
+      verifyValuesArity
+    ],
+    args: [
+      bestGuessRest,
+      failRest,
+      mergeArgs(),
+      transformArgs(fs),
+      verifyArgs(argsRules),
+      clearRest
+    ]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: [],
+    colors: true,
+    fantasy: false,
+    popcorn: false,
+    query: 'Supersize Me',
+    verbose: 2
+  }
+
+  const expErrs = [
+    falseArgvRules({}),
+    didYouMean({}),
+    argumentIsNotANumber({}),
+    requiredOptionMissing({}),
+    falseOptsRules({}),
+    falseRules({}),
+    invalidValues({}),
+    falseArgvRules({}),
+    commandRequired({}),
+    didYouMean({}),
+    valueRestrictionsViolated({}),
+    unexpectedArgument({}),
+    falseArgsRules({})
+  ]
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+})
+
 test('parser with only splitShortOptions works as expected', () => {
   const stages = {
     argv: [splitShortOptions]
