@@ -308,27 +308,27 @@ The following type functions are available:
 <th>Description</th>
 </tr>
 <tr name="array">
-<td><code><a href="array">array</a>(types)(key, args, fields)</code></td>
+<td><code><a href="#array">array</a>(types)(key, args, fields)</code></td>
 <td>An array of known length. The types parameter holds the types for each individual entry.</td>
 </tr>
 <tr name="bool">
-<td><code><a href="bool">bool</a>(key, args, fields)</code></td>
+<td><code><a href="#bool">bool</a>(key, args, fields)</code></td>
 <td>An explicitly defined boolean value. May be <code>true</code> or <code>false</code>.</td>
 </tr>
 <tr name="command">
-<td><code><a href="command">command</a>(key, args, fields)</code></td>
+<td><code><a href="#command">command</a>(key, args, fields)</code></td>
 <td>An array of unknown length. If <code>fields</code> contains an <code>opts</code> field, it turns into a command.</td>
 </tr>
 <tr name="flag">
-<td><code><a href="flag">flag</a>(key, args, fields)</code></td>
+<td><code><a href="#flag">flag</a>(key, args, fields)</code></td>
 <td>A type describing a self-sufficient command-line option. Like e.g. <code>--help</code>.</td>
 </tr>
 <tr name="number">
-<td><code><a href="number">number</a>(key, args, fields)</code></td>
+<td><code><a href="#number">number</a>(key, args, fields)</code></td>
 <td>An option that takes exactly one value that is meant to represent a number.</td>
 </tr>
 <tr name="string">
-<td><code><a href="string">string</a>(key, args, fields)</code></td>
+<td><code><a href="#string">string</a>(key, args, fields)</code></td>
 <td>An option that takes exactly one string.</td>
 </tr>
 </table>
@@ -358,52 +358,52 @@ The following fields are available:
 <th>Description</th>
 </tr>
 <tr name="key">
-<td><code><a href="key">key</a></code>*</td>
+<td><code><a href="#key">key</a></code>*</td>
 <td>string</td>
 <td><code>key</code> is the name of the variable the parser uses to store the command-line option's value. It should be a unique identifier or otherwise risks to be overridden by other command-line options.</td>
 </tr>
 <tr name="args">
-<td><code><a href="args">args</a></code>*</td>
+<td><code><a href="#args">args</a></code>*</td>
 <td>array of strings</td>
 <td><code>args</code> is an array of strings that may be used to define a command-line option. E.g. <code>['--help', '-h']</code> could be used for a help <a href="#flag"><code>flag</code></a> or <code>['-f', '--file']</code> could be used in a <a href="#string"><code>string</code></a> option that parses a file path.</td>
 </tr>
 <tr name="types">
-<td><code><a href="types">types</a></code>*</td>
+<td><code><a href="#types">types</a></code>*</td>
 <td>array of type strings or `null`</td>
 <td><code>types</code> is an array of strings that represents the command-line option's type. <code>null</code> describes a <a href="#command"><code>command</code></a>, <code>[]</code> describes a <a href="#flag"><code>flag</code></a>, arrays with one element either describe a <a href="#number"><code>number</code></a> (<code>['number']</code>), a <a href="#string"><code>string</code></a> (<code>['string']</code>), or a <a href="#bool"><code>bool</code></a> (<code>['bool']</code>), and arrays with more than one element describe an <a href="#array"><code>array</code></a> of known size (e.g. <code>['string','number','bool']</code> is an array of size 3).</td>
 </tr>
 <tr name="desc">
-<td><code><a href="desc">desc</a></code></td>
+<td><code><a href="#desc">desc</a></code></td>
 <td>string</td>
 <td><code>desc</code> is the user-facing description of a command-line option that is used by the automatic usage documentation generation.</td>
 </tr>
 <tr name="only">
-<td><code><a href="only">only</a></code></td>
+<td><code><a href="#only">only</a></code></td>
 <td>array of values</td>
 <td><code>only</code> is used by the <a href="#restrictToOnly"><code>restrictToOnly</code></a> parser stage to validate user input. It takes a non-empty array of values.</td>
 </tr>
 <tr name="opts">
-<td><code><a href="opts">opts</a></code></td>
+<td><code><a href="#opts">opts</a></code></td>
 <td>array of command-line options</td>
 <td><code>opts</code> can be set if the command-line option is a <a href="#command"><code>command</code></a> (if <a href="#types"><code>types</code></a> is <code>null</code>) to describe the command's options. It uses the same syntax as regular command-line options.</td>
 </tr>
 <tr name="required">
-<td><code><a href="required">required</a></code></td>
+<td><code><a href="#required">required</a></code></td>
 <td>boolean</td>
 <td><code>required</code> is used by the <a href="#requireOption"><code>requireOption</code></a> parser stage to control if an option is set. If a required option is not set, <a href="#requireOption"><code>requireOption</code></a> records an error.</td>
 </tr>
 <tr name="reverse">
-<td><code><a href="reverse">reverse</a></code></td>
+<td><code><a href="#reverse">reverse</a></code></td>
 <td>boolean</td>
 <td><code>reverse</code> is used by the <a href="#reverseBools"><code>reverseBools</code></a> and <a href="#reverseFlags"><code>reverseFlags</code></a> parser stages and indicates, if a <a href="#bool"><code>bool</code></a> or <a href="#flag"><code>flag</code></a> should be treated as its reverse.</td>
 </tr>
 <tr name="rules">
-<td><code><a href="rules">rules</a></code></td>
+<td><code><a href="#rules">rules</a></code></td>
 <td>predicate</td>
 <td><code>rules</code> is a predicate applied by <a href="#verifyRules"><code>verifyRules</code></a> to check if parsed <code>opts</code> are correct.</td>
 </tr>
 <tr name="values">
-<td><code><a href="values">values</a></code></td>
+<td><code><a href="#values">values</a></code></td>
 <td>array with default value(s)</td>
 <td><code>values</code> is used by the <code>toOpts</code> parser stage to set default values for command-line options, that are not explicitly given. It takes an array of values that should have the same types as defined by the <a href="#types"><code>types</code></a> field. The user is responsible for ensuring the correct types are used.</td>
 </tr>
