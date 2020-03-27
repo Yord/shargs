@@ -365,12 +365,12 @@ The following fields are available:
 <tr name="args">
 <td><code>args</code>*</td>
 <td>array of strings</td>
-<td><code>args</code> is an array of strings that may be used to define a command-line option. E.g. <code>['--help', '-h']</code> could be used for a help <code>flag</code> or <code>['-f', '--file']</code> could be used in a <code>string</code> option that parses a file path.</td>
+<td><code>args</code> is an array of strings that may be used to define a command-line option. E.g. <code>['--help', '-h']</code> could be used for a help <a href="#flag"><code>flag</code></a> or <code>['-f', '--file']</code> could be used in a <a href="#string"><code>string</code></a> option that parses a file path.</td>
 </tr>
 <tr name="types">
 <td><code>types</code>*</td>
 <td>array of type strings or `null`</td>
-<td><code>types</code> is an array of strings that represents the command-line option's type. <code>null</code> describes a command, <code>[]</code> describes a flag, arrays with one element either describe a number (<code>['number']</code>), a string (<code>['string']</code>), or a boolean (<code>['bool']</code>), and arrays with more than one element describe an array of known size (e.g. <code>['string','number','bool']</code> is an array of size 3).</td>
+<td><code>types</code> is an array of strings that represents the command-line option's type. <code>null</code> describes a <a href="#command"><code>command</code></a>, <code>[]</code> describes a <a href="#flag"><code>flag</code></a>, arrays with one element either describe a <a href="#number"><code>number</code></a> (<code>['number']</code>), a <a href="#string"><code>string</code></a> (<code>['string']</code>), or a <a href="#bool"><code>bool</code></a> (<code>['bool']</code>), and arrays with more than one element describe an <a href="#array"><code>array</code></a> of known size (e.g. <code>['string','number','bool']</code> is an array of size 3).</td>
 </tr>
 <tr name="desc">
 <td><code>desc</code></td>
@@ -380,12 +380,12 @@ The following fields are available:
 <tr name="only">
 <td><code>only</code></td>
 <td>array of values</td>
-<td><code>only</code> is used by the <a href="#restrictToOnly"><code>restrictToOnly</code></a> parser stage to validate user input. It takes a non-empty array of values. If <code>only</code> is set to <code>null</code>, the <a href="#restrictToOnly"><code>restrictToOnly</code></a> parser stage skips validation.</td>
+<td><code>only</code> is used by the <a href="#restrictToOnly"><code>restrictToOnly</code></a> parser stage to validate user input. It takes a non-empty array of values.</td>
 </tr>
 <tr name="opts">
 <td><code>opts</code></td>
 <td>array of command-line options</td>
-<td><code>opts</code> can be set if the command-line option is a command (if <code>types</code> is <code>null</code>) to describe the command's options. It uses the same syntax as regular command-line options.</td>
+<td><code>opts</code> can be set if the command-line option is a <a href="#command"><code>command</code></a> (if <a href="#types"><code>types</code></a> is <code>null</code>) to describe the command's options. It uses the same syntax as regular command-line options.</td>
 </tr>
 <tr name="required">
 <td><code>required</code></td>
@@ -395,7 +395,7 @@ The following fields are available:
 <tr name="reverse">
 <td><code>reverse</code></td>
 <td>boolean</td>
-<td><code>reverse</code> is used by the <a href="#reverseBools"><code>reverseBools</code></a> and <a href="#reverseFlags"><code>reverseFlags</code></a> parser stages and indicates, if a boolean or flag should be treated as its reverse.</td>
+<td><code>reverse</code> is used by the <a href="#reverseBools"><code>reverseBools</code></a> and <a href="#reverseFlags"><code>reverseFlags</code></a> parser stages and indicates, if a <a href="#bool"><code>bool</code></a> or <a href="#flag"><code>flag</code></a> should be treated as its reverse.</td>
 </tr>
 <tr name="rules">
 <td><code>rules</code></td>
@@ -405,7 +405,7 @@ The following fields are available:
 <tr name="values">
 <td><code>values</code></td>
 <td>array with default value(s)</td>
-<td><code>values</code> is used by the <code>toOpts</code> parser stage to set default values for command-line options, that are not explicitly given. It takes an array of values that should have the same types as defined by the <code>types</code> field. The user is responsible for ensuring the correct types are used.</td>
+<td><code>values</code> is used by the <code>toOpts</code> parser stage to set default values for command-line options, that are not explicitly given. It takes an array of values that should have the same types as defined by the <a href="#types"><code>types</code></a> field. The user is responsible for ensuring the correct types are used.</td>
 </tr>
 </table>
 
