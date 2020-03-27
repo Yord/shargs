@@ -522,7 +522,7 @@ Result:
 <td><code>bestGuessOpts({errs, opts})</code></td>
 <td>
 Tries its best to interpret unparsed strings as additional parameters (e.g. <code>{values: ['--foo']}</code> as a flag).
-Supports only strings and flags and requires options to follow a pattern:
+Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><code>flag</code></a> and requires options to follow a pattern:
 A single minus and a single character for short options or exactly two minusses with any more characters for long options.
 <details>
 <summary>
@@ -718,8 +718,8 @@ Result:
 <tr name="reverseBools">
 <td><code>reverseBools({errs, opts})</code></td>
 <td>
-Reverses the value of all <code>bool</code> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
-Works on strings (e.g. <code>['false']</code>) and booleans (e.g. <code>[false]</code>) values.
+Reverses the value of all <a href="#bool"><code>bool</code></a> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
+Works on string (e.g. <code>['false']</code>) and boolean (e.g. <code>[false]</code>) values.
 <details>
 <summary>
 <a href="#reverseBools">Example...</a>
@@ -753,7 +753,7 @@ Result:
 <tr name="reverseFlags">
 <td><code>reverseFlags({errs, opts})</code></td>
 <td>
-Reverses the value of all flag options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
+Reverses the value of all <a href="#flag"><code>flag</code></a> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
 This may be useful if the presence of a flag should imply <code>false</code>.
 <details>
 <summary>
@@ -985,7 +985,7 @@ Result:
 <td><code>bestGuessRest({errs, args})</code></td>
 <td>
 Tries its best to interpret strings in the <code>_</code> key as additional parameters.
-Supports only strings and flags and requires options to follow a pattern:
+Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><code>flag</code></a> and requires options to follow a pattern:
 A single minus and a single character for short options or exactly two minusses with any more characters for long options.
 <details>
 <summary>
@@ -1100,7 +1100,7 @@ Result:
 <tr name="flagsAsBools">
 <td><code>flagsAsBools({errs, args})</code></td>
 <td>
-Transforms all count-based <code>flag</code> options into booleans, that are <code>true</code> if the count is greater than <code>0</code>.
+Transforms all count-based <a href="#flag"><code>flag</code></a> options into booleans, that are <code>true</code> if the count is greater than <code>0</code>.
 <details>
 <summary>
 <a href="#flagsAsBools">Example...</a>
@@ -1132,7 +1132,7 @@ Result:
 <tr name="flagsAsNumbers">
 <td><code>flagsAsNumbers({errs, args})</code></td>
 <td>
-Transforms all count-based <code>flag</code> options into numbers, that correspond to the count.
+Transforms all count-based <a href="#flag"><code>flag</code></a> options into numbers, that correspond to the count.
 <details>
 <summary>
 <a href="#flagsAsNumbers">Example...</a>
