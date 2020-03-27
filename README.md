@@ -545,7 +545,7 @@ Result:
 <td>
 <details>
 <summary>
-Casts all <code>values</code> according to the options' types.
+Casts all <a href="#values"><code>values</code></a> according to the options' types.
 </summary>
 
 <br />
@@ -629,7 +629,7 @@ Result:
 <td>
 <details>
 <summary>
-Controls, if options marked with <code>{required: true}</code> have valid <code>values</code>.
+Controls, if options marked with <a href="#required"><code>{required: true}</code></a> have valid <a href="#values"><code>values</code></a>.
 If a required option is not present, an error message is recorded.
 </summary>
 
@@ -668,7 +668,7 @@ Result:
 <td>
 <details>
 <summary>
-Records an error if the <code>values</code> are not contained in the <code>only</code> list.
+Records an error if the <a href="#values"><code>values</code></a> are not contained in the <a href="#only"><code>only</code></a> list.
 </summary>
 
 <br />
@@ -705,7 +705,7 @@ Result:
 <td>
 <details>
 <summary>
-Reverses the value of all <code>bool</code> options annotated with <code>{reverse: true}</code>.
+Reverses the value of all <code>bool</code> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
 Works on strings (e.g. <code>['false']</code>) and booleans (e.g. <code>[false]</code>) values.
 </summary>
 
@@ -741,7 +741,7 @@ Result:
 <td>
 <details>
 <summary>
-Reverses the value of all flag options annotated with <code>{reverse: true}</code>.
+Reverses the value of all flag options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
 This may be useful if the presence of a flag should imply <code>false</code>.
 </summary>
 
@@ -888,7 +888,7 @@ Result:
 <td>
 <details>
 <summary>
-Checks, whether the <code>rules</code> predicate holds for an option in relation to all options.
+Checks, whether the <a href="#rules"><code>rules</code></a> field holds for an option in relation to all options.
 </summary>
 
 <br />
@@ -931,7 +931,7 @@ Result:
 <td>
 <details>
 <summary>
-Checks, whether the <code>values</code> of an option fits its <code>types</code>.
+Checks, whether the <a href="#values"><code>values</code></a> of an option fits its <a href="#types"><code>types</code></a>.
 </summary>
 
 <br />
@@ -1164,7 +1164,7 @@ Result:
 <summary>
 Recursively merges args objects of commands into their partent args objects.
 Results into a flat object, where no key is an object.
-Other merge functions can be given to the function.
+Other <code>merge</code> functions can be given to the function.
 </summary>
 
 <br />
