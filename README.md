@@ -302,14 +302,36 @@ const opts = [
 The DSL lets you define options based on their types.
 The following type functions are available:
 
-| Type&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
-|-----------------------------------|--------------------------------------------------------------------------------------------|
-| `array(types)(key, args, fields)` | An array of known length. The types parameter holds the types for each individual entry.   |
-| `bool(key, args, fields)`         | An explicitly defined boolean value. May be `true` or `false`.                             |
-| `command(key, args, fields)`      | An array of unknown length. If `fields` contains an `opts` field, it turns into a command. |
-| `flag(key, args, fields)`         | A type describing a self-sufficient command-line option. Like e.g. `--help`.               |
-| `number(key, args, fields)`       | An option that takes exactly one value that is meant to represent a number.                |
-| `string(key, args, fields)`       | An option that takes exactly one string.                                                   |
+<table>
+<tr>
+<th>Type&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="array">
+<td><code><a href="#array">array</a>(types)(key, args, fields)</code></td>
+<td>An array of known length. The types parameter holds the types for each individual entry.</td>
+</tr>
+<tr name="bool">
+<td><code><a href="#bool">bool</a>(key, args, fields)</code></td>
+<td>An explicitly defined boolean value. May be <code>true</code> or <code>false</code>.</td>
+</tr>
+<tr name="command">
+<td><code><a href="#command">command</a>(key, args, fields)</code></td>
+<td>An array of unknown length. If <code>fields</code> contains an <code>opts</code> field, it turns into a command.</td>
+</tr>
+<tr name="flag">
+<td><code><a href="#flag">flag</a>(key, args, fields)</code></td>
+<td>A type describing a self-sufficient command-line option. Like e.g. <code>--help</code>.</td>
+</tr>
+<tr name="number">
+<td><code><a href="#number">number</a>(key, args, fields)</code></td>
+<td>An option that takes exactly one value that is meant to represent a number.</td>
+</tr>
+<tr name="string">
+<td><code><a href="#string">string</a>(key, args, fields)</code></td>
+<td>An option that takes exactly one string.</td>
+</tr>
+</table>
 
 Type functions do two things:
 They combine all their arguments in an object, and they set sensibe defaults for missing `fields`.
@@ -329,18 +351,63 @@ Fields with a \* are required and have their own parameters in the type function
 All fields without a \* are set in the type functions' `fields` parameter.
 The following fields are available:
 
-| Field      | Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
-|------------|---------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `key`\*    | string                          | `key` is the name of the variable the parser uses to store the command-line option's value. It should be a unique identifier or otherwise risks to be overridden by other command-line options.                                                                                                                                                                                         |
-| `args`\*   | array of strings                | `args` is an array of strings that may be used to define a command-line option. E.g. `['--help', '-h']` could be used for a help `flag` or `['-f', '--file']` could be used in a `string` option that parses a file path.                                                                                                                                                               |
-| `types`\*  | array of type strings or `null` | `types` is an array of strings that represents the command-line option's type. `null` describes a command, `[]` describes a flag, arrays with one element either describe a number (`['number']`), a string (`['string']`), or a boolean (`['bool']`), and arrays with more than one element describe an array of known size (e.g. `['string','number','bool']` is an array of size 3). |
-| `desc`     | string                          | `desc` is the user-facing description of a command-line option that is used by the automatic usage documentation generation.                                                                                                                                                                                                                                                            |
-| `only`     | array of values                 | `only` is used by the `restrictToOnly` parser stage to validate user input. It takes a non-empty array of values. If `only` is set to `null`, the `restrictToOnly` parser stage skips validation.                                                                                                                                                                                       |
-| `opts`     | array of command-line options   | `opts` can be set if the command-line option is a command (if `types` is `null`) to describe the command's options. It uses the same syntax as regular command-line options.                                                                                                                                                                                                            |
-| `required` | boolean                         | `required` is used by the `requireOption` parser stage to control if an option is set. If a required option is not set, `requireOption` records an error.                                                                                                                                                                                                                               |
-| `reverse`  | boolean                         | `reverse` is used by the `reverseBools` and `reverseFlags` parser stages and indicates, if a boolean or flag should be treated as its reverse.                                                                                                                                                                                                                                          |
-| `rules`    | predicate                       | `rules` is a predicate applied by `verifyRules` to check if parsed `opts` are correct.                                                                                                                                                                                                                                                                                                  |
-| `values`   | array of default values         | `values` is used by the `toOpts` parser stage to set default values for command-line options, that are not explicitly given. It takes an array of values that should have the same types as defined by the `types` field. The user is responsible for ensuring the correct types are used.                                                                                              |
+<table>
+<tr>
+<th>Field</th>
+<th>Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="key">
+<td><code><a href="#key">key</a></code>*</td>
+<td>string</td>
+<td><code>key</code> is the name of the variable the parser uses to store the command-line option's value. It should be a unique identifier or otherwise risks to be overridden by other command-line options.</td>
+</tr>
+<tr name="args">
+<td><code><a href="#args">args</a></code>*</td>
+<td>array of strings</td>
+<td><code>args</code> is an array of strings that may be used to define a command-line option. E.g. <code>['--help', '-h']</code> could be used for a help <a href="#flag"><code>flag</code></a> or <code>['-f', '--file']</code> could be used in a <a href="#string"><code>string</code></a> option that parses a file path.</td>
+</tr>
+<tr name="types">
+<td><code><a href="#types">types</a></code>*</td>
+<td>array of type strings or `null`</td>
+<td><code>types</code> is an array of strings that represents the command-line option's type. <code>null</code> describes a <a href="#command"><code>command</code></a>, <code>[]</code> describes a <a href="#flag"><code>flag</code></a>, arrays with one element either describe a <a href="#number"><code>number</code></a> (<code>['number']</code>), a <a href="#string"><code>string</code></a> (<code>['string']</code>), or a <a href="#bool"><code>bool</code></a> (<code>['bool']</code>), and arrays with more than one element describe an <a href="#array"><code>array</code></a> of known size (e.g. <code>['string','number','bool']</code> is an array of size 3).</td>
+</tr>
+<tr name="desc">
+<td><code><a href="#desc">desc</a></code></td>
+<td>string</td>
+<td><code>desc</code> is the user-facing description of a command-line option that is used by the automatic usage documentation generation.</td>
+</tr>
+<tr name="only">
+<td><code><a href="#only">only</a></code></td>
+<td>array of values</td>
+<td><code>only</code> is used by the <a href="#restrictToOnly"><code>restrictToOnly</code></a> parser stage to validate user input. It takes a non-empty array of values.</td>
+</tr>
+<tr name="opts">
+<td><code><a href="#opts">opts</a></code></td>
+<td>array of command-line options</td>
+<td><code>opts</code> can be set if the command-line option is a <a href="#command"><code>command</code></a> (if <a href="#types"><code>types</code></a> is <code>null</code>) to describe the command's options. It uses the same syntax as regular command-line options.</td>
+</tr>
+<tr name="required">
+<td><code><a href="#required">required</a></code></td>
+<td>boolean</td>
+<td><code>required</code> is used by the <a href="#requireOptions"><code>requireOptions</code></a> parser stage to control if an option is set. If a required option is not set, <a href="#requireOptions"><code>requireOptions</code></a> records an error.</td>
+</tr>
+<tr name="reverse">
+<td><code><a href="#reverse">reverse</a></code></td>
+<td>boolean</td>
+<td><code>reverse</code> is used by the <a href="#reverseBools"><code>reverseBools</code></a> and <a href="#reverseFlags"><code>reverseFlags</code></a> parser stages and indicates, if a <a href="#bool"><code>bool</code></a> or <a href="#flag"><code>flag</code></a> should be treated as its reverse.</td>
+</tr>
+<tr name="rules">
+<td><code><a href="#rules">rules</a></code></td>
+<td>predicate</td>
+<td><code>rules</code> is a predicate applied by <a href="#verifyRules"><code>verifyRules</code></a> to check if parsed <code>opts</code> are correct.</td>
+</tr>
+<tr name="values">
+<td><code><a href="#values">values</a></code></td>
+<td>array with default value(s)</td>
+<td><code>values</code> is used by the <code>toOpts</code> parser stage to set default values for command-line options, that are not explicitly given. It takes an array of values that should have the same types as defined by the <a href="#types"><code>types</code></a> field. The user is responsible for ensuring the correct types are used.</td>
+</tr>
+</table>
 
 ### Command-Line Parsers
 
@@ -354,10 +421,8 @@ const deepThought = parser({
 })
 ```
 
-`parser` takes an object with three keys: `argv`, `opts`, and `args`.
-Each key is the name of a shargs parsing stage.
-
-Shargs has five stages:
+`parser` takes an object with up to five keys.
+Each key is the name of a shargs parsing stage:
 
 1.  `argv` functions modify arrays of command-line arguments.
 2.  `toOpts` transforms `argv` arrays into the command-line options DSL.
@@ -375,17 +440,16 @@ Each stage takes an array of parser functions, that are applied from left to rig
 <th>Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
-<tr>
-<td><code>splitShortOptions({errs, argv})</code></td>
+<tr name="splitShortOptions">
+<td><code><a href="#splitShortOptions">splitShortOptions</a>({errs, argv})</code></td>
 <td>
+Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
 <details>
 <summary>
-Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
+<a href="#splitShortOptions">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const argv = ['-ab']
@@ -404,17 +468,16 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>verifyArgv(rules)({errs, argv})</code></td>
+<tr name="verifyArgv">
+<td><code><a href="#verifyArgv">verifyArgv</a>(rules)({errs, argv})</code></td>
 <td>
+Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate.
 <details>
 <summary>
-Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate.
+<a href="#verifyArgv">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const rules = argv => (
@@ -453,19 +516,18 @@ Result:
 <th>Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
-<tr>
-<td><code>bestGuessOpts({errs, opts})</code></td>
+<tr name="bestGuessOpts">
+<td><code><a href="#bestGuessOpts">bestGuessOpts</a>({errs, opts})</code></td>
 <td>
+Tries its best to interpret unparsed strings as additional parameters (e.g. <code>{values: ['--foo']}</code> as a flag).
+Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><code>flag</code></a> and requires options to follow a pattern:
+A single minus and a single character for short options or exactly two minusses with any more characters for long options.
 <details>
 <summary>
-Tries its best to interpret unparsed strings as additional parameters (e.g. <code>{values: ['--foo']}</code> as a flag).
-Supports only strings and flags and requires options to follow a pattern:
-A single minus and a single character for short options or exactly two minusses with any more characters for long options.
+<a href="#bestGuessOpts">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const opts = [
@@ -495,17 +557,16 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>cast({errs, opts})</code></td>
+<tr name="cast">
+<td><code><a href="#cast">cast</a>({errs, opts})</code></td>
 <td>
+Casts all <a href="#values"><code>values</code></a> according to the options' types.
 <details>
 <summary>
-Casts all <code>values</code> according to the options' types.
+<a href="#cast">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const opts = [
@@ -538,17 +599,16 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>demandACommand({errs, opts})</code></td>
+<tr name="demandACommand">
+<td><code><a href="#demandACommand">demandACommand</a>({errs, opts})</code></td>
 <td>
+Checks if <code>opts</code> includes at least one command and records an exception if no command is found.
 <details>
 <summary>
-Checks if <code>opts</code> includes at least one command and records an exception if no command is found.
+<a href="#demandACommand">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const opts = [
@@ -579,18 +639,17 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>requireOptions({errs, opts})</code></td>
+<tr name="requireOptions">
+<td><code><a href="#requireOptions">requireOptions</a>({errs, opts})</code></td>
 <td>
+Controls, if options marked with <a href="#required"><code>{required: true}</code></a> have valid <a href="#values"><code>values</code></a>.
+If a required option is not present, an error message is recorded.
 <details>
 <summary>
-Controls, if options marked with <code>{required: true}</code> have valid <code>values</code>.
-If a required option is not present, an error message is recorded.
+<a href="#requireOptions">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 
@@ -618,17 +677,16 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>restrictToOnly({errs, opts})</code></td>
+<tr name="restrictToOnly">
+<td><code><a href="#restrictToOnly">restrictToOnly</a>({errs, opts})</code></td>
 <td>
+Records an error if the <a href="#values"><code>values</code></a> are not contained in the <a href="#only"><code>only</code></a> list.
 <details>
 <summary>
-Records an error if the <code>values</code> are not contained in the <code>only</code> list.
+<a href="#restrictToOnly">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const opts = [
@@ -655,18 +713,17 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>reverseBools({errs, opts})</code></td>
+<tr name="reverseBools">
+<td><code><a href="#reverseBools">reverseBools</a>({errs, opts})</code></td>
 <td>
+Reverses the value of all <a href="#bool"><code>bool</code></a> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
+Works on string (e.g. <code>['false']</code>) and boolean (e.g. <code>[false]</code>) values.
 <details>
 <summary>
-Reverses the value of all <code>bool</code> options annotated with <code>{reverse: true}</code>.
-Works on strings (e.g. <code>['false']</code>) and booleans (e.g. <code>[false]</code>) values.
+<a href="#reverseBools">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const opts = [
@@ -691,18 +748,17 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>reverseFlags({errs, opts})</code></td>
+<tr name="reverseFlags">
+<td><code><a href="#reverseFlags">reverseFlags</a>({errs, opts})</code></td>
 <td>
+Reverses the value of all <a href="#flag"><code>flag</code></a> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
+This may be useful if the presence of a flag should imply <code>false</code>.
 <details>
 <summary>
-Reverses the value of all flag options annotated with <code>{reverse: true}</code>.
-This may be useful if the presence of a flag should imply <code>false</code>.
+<a href="#reverseFlags">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const opts = [
@@ -725,19 +781,18 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>suggestOptions({errs, opts})</code></td>
+<tr name="suggestOptions">
+<td><code><a href="#suggestOptions">suggestOptions</a>({errs, opts})</code></td>
 <td>
-<details>
-<summary>
 Even if an <code>argv</code> is misspelled (e.g. <code>--aeg</code> instead of <code>--age</code>),
 shargs still keeps it as an unknown option (e.g. <code>{values: ['--aeg']}</code>).
 The <code>suggestOptions</code> stage collects all unknown options and suggests similar args defined in <code>opts</code>.
+<details>
+<summary>
+<a href="#suggestOptions">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const opts = [
@@ -793,17 +848,16 @@ Results in:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>verifyOpts(rules)({errs, opts})</code></td>
+<tr name="verifyOpts">
+<td><code><a href="#verifyOpts">verifyOpts</a>(rules)({errs, opts})</code></td>
 <td>
+Checks, whether the <code>opts</code> adher to a given <code>rules</code> predicate.
 <details>
 <summary>
-Checks, whether the <code>opts</code> adher to a given <code>rules</code> predicate.
+<a href="#verifyOpts">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const implies = (p, q) => !p || q
@@ -838,17 +892,16 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>verifyRules({errs, opts})</code></td>
+<tr name="verifyRules">
+<td><code><a href="#verifyRules">verifyRules</a>({errs, opts})</code></td>
 <td>
+Checks, whether the <a href="#rules"><code>rules</code></a> field holds for an option in relation to all options.
 <details>
 <summary>
-Checks, whether the <code>rules</code> predicate holds for an option in relation to all options.
+<a href="#verifyRules">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const rules = firstName => opts => (
@@ -881,17 +934,16 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>verifyValuesArity({errs, opts})</code></td>
+<tr name="verifyValuesArity">
+<td><code><a href="#verifyValuesArity">verifyValuesArity</a>({errs, opts})</code></td>
 <td>
+Checks, whether the <a href="#values"><code>values</code></a> of an option fits its <a href="#types"><code>types</code></a>.
 <details>
 <summary>
-Checks, whether the <code>values</code> of an option fits its <code>types</code>.
+<a href="#verifyValuesArity">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const opts = [
@@ -927,19 +979,18 @@ Result:
 <th>Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
-<tr>
-<td><code>bestGuessRest({errs, args})</code></td>
+<tr name="bestGuessRest">
+<td><code><a href="#bestGuessRest">bestGuessRest</a>({errs, args})</code></td>
 <td>
+Tries its best to interpret strings in the <code>_</code> key as additional parameters.
+Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><code>flag</code></a> and requires options to follow a pattern:
+A single minus and a single character for short options or exactly two minusses with any more characters for long options.
 <details>
 <summary>
-Tries its best to interpret strings in the <code>_</code> key as additional parameters.
-Supports only strings and flags and requires options to follow a pattern:
-A single minus and a single character for short options or exactly two minusses with any more characters for long options.
+<a href="#bestGuessRest">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const obj = {
@@ -976,17 +1027,16 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>clearRest({errs, args})</code></td>
+<tr name="clearRest">
+<td><code><a href="#clearRest">clearRest</a>({errs, args})</code></td>
 <td>
+Removes all entries from each <code>_</code> key.
 <details>
 <summary>
-Removes all entries from each <code>_</code> key.
+<a href="#clearRest">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const args = {_: ['foo']}
@@ -1005,17 +1055,16 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>failRest({errs, args})</code></td>
+<tr name="failRest">
+<td><code><a href="#failRest">failRest</a>({errs, args})</code></td>
 <td>
+Records an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
 <details>
 <summary>
-Records an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
+<a href="#failRest">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const args = {
@@ -1046,17 +1095,16 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>flagsAsBools({errs, args})</code></td>
+<tr name="flagsAsBools">
+<td><code><a href="#flagsAsBools">flagsAsBools</a>({errs, args})</code></td>
 <td>
+Transforms all count-based <a href="#flag"><code>flag</code></a> options into booleans, that are <code>true</code> if the count is greater than <code>0</code>.
 <details>
 <summary>
-Transforms all count-based <code>flag</code> options into booleans, that are <code>true</code> if the count is greater than <code>0</code>.
+<a href="#flagsAsBools">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const args = {
@@ -1079,17 +1127,16 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>flagsAsNumbers({errs, args})</code></td>
+<tr name="flagsAsNumbers">
+<td><code><a href="#flagsAsNumbers">flagsAsNumbers</a>({errs, args})</code></td>
 <td>
+Transforms all count-based <a href="#flag"><code>flag</code></a> options into numbers, that correspond to the count.
 <details>
 <summary>
-Transforms all count-based <code>flag</code> options into numbers, that correspond to the count.
+<a href="#flagsAsNumbers">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const args = {
@@ -1112,19 +1159,18 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>mergeArgs(merge)({errs, args})</code></td>
+<tr name="mergeArgs">
+<td><code><a href="#mergeArgs">mergeArgs</a>(merge)({errs, args})</code></td>
 <td>
-<details>
-<summary>
 Recursively merges args objects of commands into their partent args objects.
 Results into a flat object, where no key is an object.
-Other merge functions can be given to the function.
+Other <code>merge</code> functions can be given to the function.
+<details>
+<summary>
+<a href="#mergeArgs">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const args = {
@@ -1162,18 +1208,17 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>transformArgs(fs)({errs, args})</code></td>
+<tr name="transformArgs">
+<td><code><a href="#transformArgs">transformArgs</a>(fs)({errs, args})</code></td>
 <td>
-<details>
-<summary>
 Transforms an args object into a new args object by applying functions <code>fs</code> based on the value type.
 All fields of an object are updated independently and previous updates in the same run do not influence later updates.
+<details>
+<summary>
+<a href="#transformArgs">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const args = {
@@ -1226,17 +1271,16 @@ const fs = {
 </details>
 </td>
 </tr>
-<tr>
-<td><code>verifyArgs(rules)({errs, args})</code></td>
+<tr name="verifyArgs">
+<td><code><a href="#verifyArgs">verifyArgs</a>(rules)({errs, args})</code></td>
 <td>
+Checks, whether the <code>args</code> adher to a given <code>rules</code> predicate.
 <details>
 <summary>
-Checks, whether the <code>args</code> adher to a given <code>rules</code> predicate.
+<a href="#verifyArgs">Example...</a>
 </summary>
 
 <br />
-
-Example:
 
 ```js
 const rules = args => (
