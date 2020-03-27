@@ -15,5 +15,5 @@ const fs = merge => ({
 module.exports = (merge = mergeLeft) => transformArgs(fs(merge))
 
 function mergeLeft (obj1, obj2) {
-  return {...obj2, ...obj1}
+  return {...obj2, ...obj1, _: [...(obj1._ || []), ...(obj2._ || [])]}
 }

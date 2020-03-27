@@ -3,6 +3,35 @@ const mergeArgs = require('./mergeArgs')
 test('mergeArgs README example works', () => {
   const obj = {
     args: {
+      _: ['--help'],
+      version: {type: 'flag', count: 2},
+      name: 'Logan',
+      command: {
+        _: ['-v'],
+        version: {type: 'flag', count: 1},
+        name: 'Charles',
+        help: true
+      },
+      verbose: true
+    }
+  }
+
+  const {args} = mergeArgs()(obj)
+
+  const exp = {
+    _: ['--help', '-v'],
+    version: {type: 'flag', count: 2},
+    name: 'Logan',
+    help: true,
+    verbose: true
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
+test('mergeArgs works if rest fields are missing', () => {
+  const obj = {
+    args: {
       version: {type: 'flag', count: 2},
       name: 'Logan',
       command: {
@@ -17,6 +46,7 @@ test('mergeArgs README example works', () => {
   const {args} = mergeArgs()(obj)
 
   const exp = {
+    _: [],
     version: {type: 'flag', count: 2},
     name: 'Logan',
     help: true,

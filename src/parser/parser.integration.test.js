@@ -46,7 +46,83 @@ const opts = [
   })
 ]
 
-const argv = ['--query', 'Supersize Me', '--colors', '-l', '--no-hobbits', 'true', '-vv', 'rate', '--stars', '8']
+const argv = ['--query', 'Supersize Me', '--colors', '-l', '--no-hobbits', 'true', '-vv', 'rate', '--stars', '8', 'help']
+
+test('parser with all stages works as expected', () => {
+  const argvRules = argv => argv.some(_ => _ === '--fancy')
+
+  const optsRules = opts => (
+    !opts.some(_ => _.key === 'genre') ||
+    opts.every(_ => _.key !== 'genre' || _.values)
+  )
+
+  const argsRules = args => !args.query || args.query.indexOf('Terminator') > -1
+
+  const fs = {
+    flag: ({key, val, errs, args}) => ({
+      errs,
+      args: {...args, [key]: key === 'verbose' ? val.count : val.count > 0}
+    })
+  }
+
+  const stages = {
+    argv: [
+      splitShortOptions,
+      verifyArgv(argvRules)
+    ],
+    opts: [
+      demandACommand,
+      suggestOptions,
+      bestGuessOpts,
+      cast,
+      requireOptions,
+      restrictToOnly,
+      reverseBools,
+      reverseFlags,
+      verifyOpts(optsRules),
+      verifyRules,
+      verifyValuesArity
+    ],
+    args: [
+      bestGuessRest,
+      failRest,
+      mergeArgs(),
+      transformArgs(fs),
+      verifyArgs(argsRules),
+      clearRest
+    ]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: [],
+    colors: true,
+    fantasy: false,
+    popcorn: false,
+    query: 'Supersize Me',
+    verbose: 2
+  }
+
+  const expErrs = [
+    falseArgvRules({}),
+    didYouMean({}),
+    argumentIsNotANumber({}),
+    requiredOptionMissing({}),
+    falseOptsRules({}),
+    falseRules({}),
+    invalidValues({}),
+    falseArgvRules({}),
+    commandRequired({}),
+    didYouMean({}),
+    valueRestrictionsViolated({}),
+    unexpectedArgument({}),
+    falseArgsRules({})
+  ]
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+})
 
 test('parser with only splitShortOptions works as expected', () => {
   const stages = {
@@ -60,7 +136,7 @@ test('parser with only splitShortOptions works as expected', () => {
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: [],
+      _: ['help'],
       stars: '8'
     },
     query: 'Supersize Me',
@@ -87,7 +163,7 @@ test('parser with only verifyArgv works as expected', () => {
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: [],
+      _: ['help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -114,7 +190,7 @@ test('parser with only bestGuessOpts works as expected', () => {
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: [],
+      _: ['help'],
       stars: '8'
     },
     query: 'Supersize Me',
@@ -139,7 +215,7 @@ test('parser with only cast works as expected', () => {
     fantasy: true,
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: [],
+      _: ['help'],
       stars: 8
     },
     query: 'Supersize Me'
@@ -163,7 +239,7 @@ test('parser with only demandACommand works as expected', () => {
   const {errs, args} = parser(stages)(opts2)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv', 'rate', '--stars', '8'],
+    _: ['--colors', '-vv', 'rate', '--stars', '8', 'help'],
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
     query: 'Supersize Me'
@@ -189,7 +265,7 @@ test('parser with only requireOptions works as expected', () => {
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: [],
+      _: ['help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -215,7 +291,7 @@ test('parser with only restrictToOnly works as expected', () => {
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: []
+      _: ['help']
     },
     query: 'Supersize Me'
   }
@@ -240,7 +316,7 @@ test('parser with only reverseBools works as expected', () => {
     fantasy: 'false',
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: [],
+      _: ['help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -264,7 +340,7 @@ test('parser with only reverseFlags works as expected', () => {
     fantasy: 'true',
     popcorn: {type: 'flag', count: -1},
     rate: {
-      _: [],
+      _: ['help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -288,13 +364,14 @@ test('parser with only suggestOptions works as expected', () => {
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: [],
+      _: ['help'],
       stars: '8'
     },
     query: 'Supersize Me'
   }
 
   const expErrs = [
+    didYouMean({}),
     didYouMean({}),
     didYouMean({})
   ]
@@ -320,7 +397,7 @@ test('parser with only verifyOpts works as expected', () => {
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: [],
+      _: ['help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -346,7 +423,7 @@ test('parser with only verifyRules works as expected', () => {
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: [],
+      _: ['help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -372,7 +449,7 @@ test('parser with only verifyValuesArity works as expected', () => {
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: [],
+      _: ['help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -399,7 +476,7 @@ test('parser with only bestGuessRest works as expected', () => {
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: [],
+      _: ['help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -447,13 +524,15 @@ test('parser with only failRest works as expected', () => {
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: [],
+      _: ['help'],
       stars: '8'
     },
     query: 'Supersize Me'
   }
 
   const expErrs = [
+    unexpectedArgument({}),
+    unexpectedArgument({}),
     unexpectedArgument({}),
     unexpectedArgument({})
   ]
@@ -474,7 +553,7 @@ test('parser with only flagsAsBools works as expected', () => {
     fantasy: 'true',
     popcorn: true,
     rate: {
-      _: [],
+      _: ['help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -498,7 +577,7 @@ test('parser with only flagsAsNumbers works as expected', () => {
     fantasy: 'true',
     popcorn: 1,
     rate: {
-      _: [],
+      _: ['help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -518,7 +597,7 @@ test('parser with only mergeArgs works as expected', () => {
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', 'help'],
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
     stars: '8',
@@ -550,7 +629,7 @@ test('parser with only transformArgs works as expected', () => {
     fantasy: 'true',
     popcorn: true,
     rate: {
-      _: [],
+      _: ['help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -576,7 +655,7 @@ test('parser with only verifyArgs works as expected', () => {
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: [],
+      _: ['help'],
       stars: '8'
     },
     query: 'Supersize Me'

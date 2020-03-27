@@ -368,16 +368,14 @@ Shargs has five stages:
 `parser` applies the stages in the given order.
 Each stage takes an array of parser functions, that are applied from left to right.
 
-The following parser functions are available:
+#### `argv` Stage
 
 <table>
 <tr>
-<th>Stage</th>
 <th>Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
 <tr>
-<td><code>argv</code></td>
 <td><code>splitShortOptions({errs, argv})</code></td>
 <td>
 <details>
@@ -407,7 +405,6 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>argv</code></td>
 <td><code>verifyArgv(rules)({errs, argv})</code></td>
 <td>
 <details>
@@ -447,8 +444,16 @@ Result:
 </details>
 </td>
 </tr>
+</table>
+
+#### `opts` Stage
+
+<table>
 <tr>
-<td><code>opts</code></td>
+<th>Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr>
 <td><code>bestGuessOpts({errs, opts})</code></td>
 <td>
 <details>
@@ -491,7 +496,6 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>opts</code></td>
 <td><code>cast({errs, opts})</code></td>
 <td>
 <details>
@@ -505,8 +509,8 @@ Example:
 
 ```js
 const opts = [
-  string('title', ['--title'], {values: ["The Hitchhiker's Guide to the Galaxy"]}),
-  numberBool('numBool', ['-n', '--nb'], {values: ['23', 'true']}),
+  string('title', ['--title'], {values: ["Hitchhiker Guide"]}),
+  numberBool('numBool', ['--nb'], {values: ['23', 'true']}),
   number('answer', ['-a', '--answer'], {values: ['42']}),
   command('help', ['-h', '--help'], {values: ['foo --bar']}),
   bool('verbose', ['--verbose'], {values: ['false']}),
@@ -521,8 +525,8 @@ Result:
 ```js
 {
   opts: [
-    string('title', ['--title'], {values: ["The Hitchhiker's Guide to the Galaxy"]}),
-    numberBool('numBool', ['-n', '--nb'], {values: [23, true]}),
+    string('title', ['--title'], {values: ["Hitchhiker Guide"]}),
+    numberBool('numBool', ['--nb'], {values: [23, true]}),
     number('answer', ['-a', '--answer'], {values: [42]}),
     command('help', ['-h', '--help'], {values: ['foo --bar']}),
     bool('verbose', ['--verbose'], {values: [false]}),
@@ -535,7 +539,6 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>opts</code></td>
 <td><code>demandACommand({errs, opts})</code></td>
 <td>
 <details>
@@ -549,7 +552,7 @@ Example:
 
 ```js
 const opts = [
-  string('title', ['--title'], {values: ["The Hitchhiker's Guide to the Galaxy"]}),
+  string('title', ['--title'], {values: ["Hitchhiker Guide"]}),
   numberBool('numBool', ['-n', '--nb'], {values: ['23', 'true']}),
   number('answer', ['-a', '--answer'], {values: ['42']}),
   bool('verbose', ['--verbose'], {values: ['false']}),
@@ -577,7 +580,6 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>opts</code></td>
 <td><code>requireOptions({errs, opts})</code></td>
 <td>
 <details>
@@ -606,7 +608,7 @@ Result:
   errs: [
     {
       code: 'Required option is missing',
-      msg:  'An option that is marked as required has not been provided.',
+      msg:  'A required option has not been provided.',
       info: {...}
     }
   ]
@@ -617,7 +619,6 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>opts</code></td>
 <td><code>restrictToOnly({errs, opts})</code></td>
 <td>
 <details>
@@ -631,7 +632,7 @@ Example:
 
 ```js
 const opts = [
-  number('answer', ['-a', '--answer'], {only: [42], values: [42]})
+  number('answer', ['--answer'], {only: [42], values: [23]})
 ]
 
 restrictToOnly({opts})
@@ -641,8 +642,12 @@ Result:
 
 ```js
 {
-  opts: [
-    number('answer', ['-a', '--answer'], {only: [42], values: [42]})
+  errs: [
+    {
+      code: 'Value restriction violated',
+      msg:  'A value lies outside the allowed values...',
+      info: {...}
+    }
   ]
 }
 ```
@@ -651,7 +656,6 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>opts</code></td>
 <td><code>reverseBools({errs, opts})</code></td>
 <td>
 <details>
@@ -688,7 +692,6 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>opts</code></td>
 <td><code>reverseFlags({errs, opts})</code></td>
 <td>
 <details>
@@ -723,7 +726,6 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>opts</code></td>
 <td><code>suggestOptions({errs, opts})</code></td>
 <td>
 <details>
@@ -792,7 +794,6 @@ Results in:
 </td>
 </tr>
 <tr>
-<td><code>opts</code></td>
 <td><code>verifyOpts(rules)({errs, opts})</code></td>
 <td>
 <details>
@@ -838,7 +839,6 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>opts</code></td>
 <td><code>verifyRules({errs, opts})</code></td>
 <td>
 <details>
@@ -882,7 +882,6 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>opts</code></td>
 <td><code>verifyValuesArity({errs, opts})</code></td>
 <td>
 <details>
@@ -909,7 +908,7 @@ Result:
   errs: [
     {
       code: 'Invalid arity',
-      msg:  "An option's types arity does not match its values arity.",
+      msg:  "An option's types arity does not match...",
       info: {...}
     }
   ]
@@ -919,8 +918,16 @@ Result:
 </details>
 </td>
 </tr>
+</table>
+
+#### `args` Stage
+
+<table>
 <tr>
-<td><code>args</code></td>
+<th>Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr>
 <td><code>bestGuessRest({errs, args})</code></td>
 <td>
 <details>
@@ -970,7 +977,6 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>args</code></td>
 <td><code>clearRest({errs, args})</code></td>
 <td>
 <details>
@@ -1000,7 +1006,6 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>args</code></td>
 <td><code>failRest({errs, args})</code></td>
 <td>
 <details>
@@ -1031,7 +1036,7 @@ Result:
   errs: [
     {
       code: 'Unexpected argument',
-      msg:  'An unexpected argument was used that has no option defined.',
+      msg:  'An unexpected argument was used...',
       info: {...}
     }
   ]
@@ -1042,7 +1047,6 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>args</code></td>
 <td><code>flagsAsBools({errs, args})</code></td>
 <td>
 <details>
@@ -1076,7 +1080,6 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>args</code></td>
 <td><code>flagsAsNumbers({errs, args})</code></td>
 <td>
 <details>
@@ -1110,7 +1113,6 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>args</code></td>
 <td><code>mergeArgs(merge)({errs, args})</code></td>
 <td>
 <details>
@@ -1126,9 +1128,11 @@ Example:
 
 ```js
 const args = {
+  _: ['--help'],
   version: {type: 'flag', count: 2},
   name: 'Logan',
   command: {
+    _: ['-v'],
     version: {type: 'flag', count: 1},
     name: 'Charles',
     help: true
@@ -1146,6 +1150,7 @@ Result:
 ```js
 {
   args: {
+    _: ['--help', '-v'],
     version: {type: 'flag', count: 2},
     name: 'Logan',
     help: true,
@@ -1158,7 +1163,6 @@ Result:
 </td>
 </tr>
 <tr>
-<td><code>args</code></td>
 <td><code>transformArgs(fs)({errs, args})</code></td>
 <td>
 <details>
@@ -1223,7 +1227,6 @@ const fs = {
 </td>
 </tr>
 <tr>
-<td><code>args</code></td>
 <td><code>verifyArgs(rules)({errs, args})</code></td>
 <td>
 <details>
