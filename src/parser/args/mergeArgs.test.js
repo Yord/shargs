@@ -29,6 +29,33 @@ test('mergeArgs README example works', () => {
   expect(args).toStrictEqual(exp)
 })
 
+test('mergeArgs works if rest fields are missing', () => {
+  const obj = {
+    args: {
+      version: {type: 'flag', count: 2},
+      name: 'Logan',
+      command: {
+        version: {type: 'flag', count: 1},
+        name: 'Charles',
+        help: true
+      },
+      verbose: true
+    }
+  }
+
+  const {args} = mergeArgs()(obj)
+
+  const exp = {
+    _: [],
+    version: {type: 'flag', count: 2},
+    name: 'Logan',
+    help: true,
+    verbose: true
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
 test('mergeArgs takes custom merge functions 1/2', () => {
   const obj = {
     args: {
