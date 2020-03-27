@@ -390,7 +390,7 @@ The following fields are available:
 <tr name="required">
 <td><code><a href="#required">required</a></code></td>
 <td>boolean</td>
-<td><code>required</code> is used by the <a href="#requireOption"><code>requireOption</code></a> parser stage to control if an option is set. If a required option is not set, <a href="#requireOption"><code>requireOption</code></a> records an error.</td>
+<td><code>required</code> is used by the <a href="#requireOptions"><code>requireOptions</code></a> parser stage to control if an option is set. If a required option is not set, <a href="#requireOptions"><code>requireOptions</code></a> records an error.</td>
 </tr>
 <tr name="reverse">
 <td><code><a href="#reverse">reverse</a></code></td>
