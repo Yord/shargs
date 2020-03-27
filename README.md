@@ -12,10 +12,8 @@
 
 ## Installation
 
-Installation with [`npm`][npm-install]:
-
 ```bash
-$ npm i --save shargs
+$ npm install --save shargs
 ```
 
 ## Features
@@ -2637,7 +2635,6 @@ Shargs is [MIT licensed][license].
 [issues]: https://github.com/Yord/shargs/issues
 [license]: https://github.com/Yord/shargs/blob/master/LICENSE
 [node]: https://nodejs.org/
-[npm-install]: https://docs.npmjs.com/downloading-and-installing-packages-globally
 [npm-package]: https://www.npmjs.com/package/shargs
 [pxi]: https://github.com/Yord/pxi
 [shield-license]: https://img.shields.io/npm/l/shargs?color=yellow&labelColor=313A42
