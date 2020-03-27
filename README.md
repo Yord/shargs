@@ -308,27 +308,27 @@ The following type functions are available:
 <th>Description</th>
 </tr>
 <tr name="array">
-<td><code>array(types)(key, args, fields)</code></td>
+<td><code><a href="array">array</a>(types)(key, args, fields)</code></td>
 <td>An array of known length. The types parameter holds the types for each individual entry.</td>
 </tr>
 <tr name="bool">
-<td><code>bool(key, args, fields)</code></td>
+<td><code><a href="bool">bool</a>(key, args, fields)</code></td>
 <td>An explicitly defined boolean value. May be <code>true</code> or <code>false</code>.</td>
 </tr>
 <tr name="command">
-<td><code>command(key, args, fields)</code></td>
+<td><code><a href="command">command</a>(key, args, fields)</code></td>
 <td>An array of unknown length. If <code>fields</code> contains an <code>opts</code> field, it turns into a command.</td>
 </tr>
 <tr name="flag">
-<td><code>flag(key, args, fields)</code></td>
+<td><code><a href="flag">flag</a>(key, args, fields)</code></td>
 <td>A type describing a self-sufficient command-line option. Like e.g. <code>--help</code>.</td>
 </tr>
 <tr name="number">
-<td><code>number(key, args, fields)</code></td>
+<td><code><a href="number">number</a>(key, args, fields)</code></td>
 <td>An option that takes exactly one value that is meant to represent a number.</td>
 </tr>
 <tr name="string">
-<td><code>string(key, args, fields)</code></td>
+<td><code><a href="string">string</a>(key, args, fields)</code></td>
 <td>An option that takes exactly one string.</td>
 </tr>
 </table>
@@ -358,52 +358,52 @@ The following fields are available:
 <th>Description</th>
 </tr>
 <tr name="key">
-<td><code>key</code>*</td>
+<td><code><a href="key">key</a></code>*</td>
 <td>string</td>
 <td><code>key</code> is the name of the variable the parser uses to store the command-line option's value. It should be a unique identifier or otherwise risks to be overridden by other command-line options.</td>
 </tr>
 <tr name="args">
-<td><code>args</code>*</td>
+<td><code><a href="args">args</a></code>*</td>
 <td>array of strings</td>
 <td><code>args</code> is an array of strings that may be used to define a command-line option. E.g. <code>['--help', '-h']</code> could be used for a help <a href="#flag"><code>flag</code></a> or <code>['-f', '--file']</code> could be used in a <a href="#string"><code>string</code></a> option that parses a file path.</td>
 </tr>
 <tr name="types">
-<td><code>types</code>*</td>
+<td><code><a href="types">types</a></code>*</td>
 <td>array of type strings or `null`</td>
 <td><code>types</code> is an array of strings that represents the command-line option's type. <code>null</code> describes a <a href="#command"><code>command</code></a>, <code>[]</code> describes a <a href="#flag"><code>flag</code></a>, arrays with one element either describe a <a href="#number"><code>number</code></a> (<code>['number']</code>), a <a href="#string"><code>string</code></a> (<code>['string']</code>), or a <a href="#bool"><code>bool</code></a> (<code>['bool']</code>), and arrays with more than one element describe an <a href="#array"><code>array</code></a> of known size (e.g. <code>['string','number','bool']</code> is an array of size 3).</td>
 </tr>
 <tr name="desc">
-<td><code>desc</code></td>
+<td><code><a href="desc">desc</a></code></td>
 <td>string</td>
 <td><code>desc</code> is the user-facing description of a command-line option that is used by the automatic usage documentation generation.</td>
 </tr>
 <tr name="only">
-<td><code>only</code></td>
+<td><code><a href="only">only</a></code></td>
 <td>array of values</td>
 <td><code>only</code> is used by the <a href="#restrictToOnly"><code>restrictToOnly</code></a> parser stage to validate user input. It takes a non-empty array of values.</td>
 </tr>
 <tr name="opts">
-<td><code>opts</code></td>
+<td><code><a href="opts">opts</a></code></td>
 <td>array of command-line options</td>
 <td><code>opts</code> can be set if the command-line option is a <a href="#command"><code>command</code></a> (if <a href="#types"><code>types</code></a> is <code>null</code>) to describe the command's options. It uses the same syntax as regular command-line options.</td>
 </tr>
 <tr name="required">
-<td><code>required</code></td>
+<td><code><a href="required">required</a></code></td>
 <td>boolean</td>
 <td><code>required</code> is used by the <a href="#requireOption"><code>requireOption</code></a> parser stage to control if an option is set. If a required option is not set, <a href="#requireOption"><code>requireOption</code></a> records an error.</td>
 </tr>
 <tr name="reverse">
-<td><code>reverse</code></td>
+<td><code><a href="reverse">reverse</a></code></td>
 <td>boolean</td>
 <td><code>reverse</code> is used by the <a href="#reverseBools"><code>reverseBools</code></a> and <a href="#reverseFlags"><code>reverseFlags</code></a> parser stages and indicates, if a <a href="#bool"><code>bool</code></a> or <a href="#flag"><code>flag</code></a> should be treated as its reverse.</td>
 </tr>
 <tr name="rules">
-<td><code>rules</code></td>
+<td><code><a href="rules">rules</a></code></td>
 <td>predicate</td>
 <td><code>rules</code> is a predicate applied by <a href="#verifyRules"><code>verifyRules</code></a> to check if parsed <code>opts</code> are correct.</td>
 </tr>
 <tr name="values">
-<td><code>values</code></td>
+<td><code><a href="values">values</a></code></td>
 <td>array with default value(s)</td>
 <td><code>values</code> is used by the <code>toOpts</code> parser stage to set default values for command-line options, that are not explicitly given. It takes an array of values that should have the same types as defined by the <a href="#types"><code>types</code></a> field. The user is responsible for ensuring the correct types are used.</td>
 </tr>
@@ -441,7 +441,7 @@ Each stage takes an array of parser functions, that are applied from left to rig
 <th>Description</th>
 </tr>
 <tr name="splitShortOptions">
-<td><code>splitShortOptions({errs, argv})</code></td>
+<td><code><a href="#splitShortOptions">splitShortOptions</a>({errs, argv})</code></td>
 <td>
 Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
 <details>
@@ -469,7 +469,7 @@ Result:
 </td>
 </tr>
 <tr name="verifyArgv">
-<td><code>verifyArgv(rules)({errs, argv})</code></td>
+<td><code><a href="#verifyArgv">verifyArgv</a>(rules)({errs, argv})</code></td>
 <td>
 Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate.
 <details>
@@ -517,7 +517,7 @@ Result:
 <th>Description</th>
 </tr>
 <tr name="bestGuessOpts">
-<td><code>bestGuessOpts({errs, opts})</code></td>
+<td><code><a href="#bestGuessOpts">bestGuessOpts</a>({errs, opts})</code></td>
 <td>
 Tries its best to interpret unparsed strings as additional parameters (e.g. <code>{values: ['--foo']}</code> as a flag).
 Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><code>flag</code></a> and requires options to follow a pattern:
@@ -558,7 +558,7 @@ Result:
 </td>
 </tr>
 <tr name="cast">
-<td><code>cast({errs, opts})</code></td>
+<td><code><a href="#cast">cast</a>({errs, opts})</code></td>
 <td>
 Casts all <a href="#values"><code>values</code></a> according to the options' types.
 <details>
@@ -600,7 +600,7 @@ Result:
 </td>
 </tr>
 <tr name="demandACommand">
-<td><code>demandACommand({errs, opts})</code></td>
+<td><code><a href="#demandACommand">demandACommand</a>({errs, opts})</code></td>
 <td>
 Checks if <code>opts</code> includes at least one command and records an exception if no command is found.
 <details>
@@ -640,7 +640,7 @@ Result:
 </td>
 </tr>
 <tr name="requireOptions">
-<td><code>requireOptions({errs, opts})</code></td>
+<td><code><a href="#requireOptions">requireOptions</a>({errs, opts})</code></td>
 <td>
 Controls, if options marked with <a href="#required"><code>{required: true}</code></a> have valid <a href="#values"><code>values</code></a>.
 If a required option is not present, an error message is recorded.
@@ -678,7 +678,7 @@ Result:
 </td>
 </tr>
 <tr name="restrictToOnly">
-<td><code>restrictToOnly({errs, opts})</code></td>
+<td><code><a href="#restrictToOnly">restrictToOnly</a>({errs, opts})</code></td>
 <td>
 Records an error if the <a href="#values"><code>values</code></a> are not contained in the <a href="#only"><code>only</code></a> list.
 <details>
@@ -714,7 +714,7 @@ Result:
 </td>
 </tr>
 <tr name="reverseBools">
-<td><code>reverseBools({errs, opts})</code></td>
+<td><code><a href="#reverseBools">reverseBools</a>({errs, opts})</code></td>
 <td>
 Reverses the value of all <a href="#bool"><code>bool</code></a> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
 Works on string (e.g. <code>['false']</code>) and boolean (e.g. <code>[false]</code>) values.
@@ -749,7 +749,7 @@ Result:
 </td>
 </tr>
 <tr name="reverseFlags">
-<td><code>reverseFlags({errs, opts})</code></td>
+<td><code><a href="#reverseFlags">reverseFlags</a>({errs, opts})</code></td>
 <td>
 Reverses the value of all <a href="#flag"><code>flag</code></a> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
 This may be useful if the presence of a flag should imply <code>false</code>.
@@ -782,7 +782,7 @@ Result:
 </td>
 </tr>
 <tr name="suggestOptions">
-<td><code>suggestOptions({errs, opts})</code></td>
+<td><code><a href="#suggestOptions">suggestOptions</a>({errs, opts})</code></td>
 <td>
 Even if an <code>argv</code> is misspelled (e.g. <code>--aeg</code> instead of <code>--age</code>),
 shargs still keeps it as an unknown option (e.g. <code>{values: ['--aeg']}</code>).
@@ -849,7 +849,7 @@ Results in:
 </td>
 </tr>
 <tr name="verifyOpts">
-<td><code>verifyOpts(rules)({errs, opts})</code></td>
+<td><code><a href="#verifyOpts">verifyOpts</a>(rules)({errs, opts})</code></td>
 <td>
 Checks, whether the <code>opts</code> adher to a given <code>rules</code> predicate.
 <details>
@@ -893,7 +893,7 @@ Result:
 </td>
 </tr>
 <tr name="verifyRules">
-<td><code>verifyRules({errs, opts})</code></td>
+<td><code><a href="#verifyRules">verifyRules</a>({errs, opts})</code></td>
 <td>
 Checks, whether the <a href="#rules"><code>rules</code></a> field holds for an option in relation to all options.
 <details>
@@ -935,7 +935,7 @@ Result:
 </td>
 </tr>
 <tr name="verifyValuesArity">
-<td><code>verifyValuesArity({errs, opts})</code></td>
+<td><code><a href="#verifyValuesArity">verifyValuesArity</a>({errs, opts})</code></td>
 <td>
 Checks, whether the <a href="#values"><code>values</code></a> of an option fits its <a href="#types"><code>types</code></a>.
 <details>
@@ -980,7 +980,7 @@ Result:
 <th>Description</th>
 </tr>
 <tr name="bestGuessRest">
-<td><code>bestGuessRest({errs, args})</code></td>
+<td><code><a href="#bestGuessRest">bestGuessRest</a>({errs, args})</code></td>
 <td>
 Tries its best to interpret strings in the <code>_</code> key as additional parameters.
 Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><code>flag</code></a> and requires options to follow a pattern:
@@ -1028,7 +1028,7 @@ Result:
 </td>
 </tr>
 <tr name="clearRest">
-<td><code>clearRest({errs, args})</code></td>
+<td><code><a href="#clearRest">clearRest</a>({errs, args})</code></td>
 <td>
 Removes all entries from each <code>_</code> key.
 <details>
@@ -1056,7 +1056,7 @@ Result:
 </td>
 </tr>
 <tr name="failRest">
-<td><code>failRest({errs, args})</code></td>
+<td><code><a href="#failRest">failRest</a>({errs, args})</code></td>
 <td>
 Records an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
 <details>
@@ -1096,7 +1096,7 @@ Result:
 </td>
 </tr>
 <tr name="flagsAsBools">
-<td><code>flagsAsBools({errs, args})</code></td>
+<td><code><a href="#flagsAsBools">flagsAsBools</a>({errs, args})</code></td>
 <td>
 Transforms all count-based <a href="#flag"><code>flag</code></a> options into booleans, that are <code>true</code> if the count is greater than <code>0</code>.
 <details>
@@ -1128,7 +1128,7 @@ Result:
 </td>
 </tr>
 <tr name="flagsAsNumbers">
-<td><code>flagsAsNumbers({errs, args})</code></td>
+<td><code><a href="#flagsAsNumbers">flagsAsNumbers</a>({errs, args})</code></td>
 <td>
 Transforms all count-based <a href="#flag"><code>flag</code></a> options into numbers, that correspond to the count.
 <details>
@@ -1160,7 +1160,7 @@ Result:
 </td>
 </tr>
 <tr name="mergeArgs">
-<td><code>mergeArgs(merge)({errs, args})</code></td>
+<td><code><a href="#mergeArgs">mergeArgs</a>(merge)({errs, args})</code></td>
 <td>
 Recursively merges args objects of commands into their partent args objects.
 Results into a flat object, where no key is an object.
@@ -1209,7 +1209,7 @@ Result:
 </td>
 </tr>
 <tr name="transformArgs">
-<td><code>transformArgs(fs)({errs, args})</code></td>
+<td><code><a href="#transformArgs">transformArgs</a>(fs)({errs, args})</code></td>
 <td>
 Transforms an args object into a new args object by applying functions <code>fs</code> based on the value type.
 All fields of an object are updated independently and previous updates in the same run do not influence later updates.
@@ -1272,7 +1272,7 @@ const fs = {
 </td>
 </tr>
 <tr name="verifyArgs">
-<td><code>verifyArgs(rules)({errs, args})</code></td>
+<td><code><a href="#verifyArgs">verifyArgs</a>(rules)({errs, args})</code></td>
 <td>
 Checks, whether the <code>args</code> adher to a given <code>rules</code> predicate.
 <details>
