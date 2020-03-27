@@ -1128,9 +1128,11 @@ Example:
 
 ```js
 const args = {
+  _: ['--help'],
   version: {type: 'flag', count: 2},
   name: 'Logan',
   command: {
+    _: ['-v'],
     version: {type: 'flag', count: 1},
     name: 'Charles',
     help: true
@@ -1148,6 +1150,7 @@ Result:
 ```js
 {
   args: {
+    _: ['--help', '-v'],
     version: {type: 'flag', count: 2},
     name: 'Logan',
     help: true,

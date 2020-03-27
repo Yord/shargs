@@ -3,9 +3,11 @@ const mergeArgs = require('./mergeArgs')
 test('mergeArgs README example works', () => {
   const obj = {
     args: {
+      _: ['--help'],
       version: {type: 'flag', count: 2},
       name: 'Logan',
       command: {
+        _: ['-v'],
         version: {type: 'flag', count: 1},
         name: 'Charles',
         help: true
@@ -17,6 +19,7 @@ test('mergeArgs README example works', () => {
   const {args} = mergeArgs()(obj)
 
   const exp = {
+    _: ['--help', '-v'],
     version: {type: 'flag', count: 2},
     name: 'Logan',
     help: true,
