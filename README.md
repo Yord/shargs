@@ -329,18 +329,63 @@ Fields with a \* are required and have their own parameters in the type function
 All fields without a \* are set in the type functions' `fields` parameter.
 The following fields are available:
 
-| Field      | Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
-|------------|---------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `key`\*    | string                          | `key` is the name of the variable the parser uses to store the command-line option's value. It should be a unique identifier or otherwise risks to be overridden by other command-line options.                                                                                                                                                                                         |
-| `args`\*   | array of strings                | `args` is an array of strings that may be used to define a command-line option. E.g. `['--help', '-h']` could be used for a help `flag` or `['-f', '--file']` could be used in a `string` option that parses a file path.                                                                                                                                                               |
-| `types`\*  | array of type strings or `null` | `types` is an array of strings that represents the command-line option's type. `null` describes a command, `[]` describes a flag, arrays with one element either describe a number (`['number']`), a string (`['string']`), or a boolean (`['bool']`), and arrays with more than one element describe an array of known size (e.g. `['string','number','bool']` is an array of size 3). |
-| `desc`     | string                          | `desc` is the user-facing description of a command-line option that is used by the automatic usage documentation generation.                                                                                                                                                                                                                                                            |
-| `only`     | array of values                 | `only` is used by the `restrictToOnly` parser stage to validate user input. It takes a non-empty array of values. If `only` is set to `null`, the `restrictToOnly` parser stage skips validation.                                                                                                                                                                                       |
-| `opts`     | array of command-line options   | `opts` can be set if the command-line option is a command (if `types` is `null`) to describe the command's options. It uses the same syntax as regular command-line options.                                                                                                                                                                                                            |
-| `required` | boolean                         | `required` is used by the `requireOption` parser stage to control if an option is set. If a required option is not set, `requireOption` records an error.                                                                                                                                                                                                                               |
-| `reverse`  | boolean                         | `reverse` is used by the `reverseBools` and `reverseFlags` parser stages and indicates, if a boolean or flag should be treated as its reverse.                                                                                                                                                                                                                                          |
-| `rules`    | predicate                       | `rules` is a predicate applied by `verifyRules` to check if parsed `opts` are correct.                                                                                                                                                                                                                                                                                                  |
-| `values`   | array of default values         | `values` is used by the `toOpts` parser stage to set default values for command-line options, that are not explicitly given. It takes an array of values that should have the same types as defined by the `types` field. The user is responsible for ensuring the correct types are used.                                                                                              |
+<table>
+<tr>
+<th>Field</th>
+<th>Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="key">
+<td><code>key</code>*</td>
+<td>string</td>
+<td><code>key</code> is the name of the variable the parser uses to store the command-line option's value. It should be a unique identifier or otherwise risks to be overridden by other command-line options.</td>
+</tr>
+<tr name="args">
+<td><code>args</code>*</td>
+<td>array of strings</td>
+<td><code>args</code> is an array of strings that may be used to define a command-line option. E.g. <code>['--help', '-h']</code> could be used for a help <code>flag</code> or <code>['-f', '--file']</code> could be used in a <code>string</code> option that parses a file path.</td>
+</tr>
+<tr name="types">
+<td><code>types</code>*</td>
+<td>array of type strings or `null`</td>
+<td><code>types</code> is an array of strings that represents the command-line option's type. <code>null</code> describes a command, <code>[]</code> describes a flag, arrays with one element either describe a number (<code>['number']</code>), a string (<code>['string']</code>), or a boolean (<code>['bool']</code>), and arrays with more than one element describe an array of known size (e.g. <code>['string','number','bool']</code> is an array of size 3).</td>
+</tr>
+<tr name="desc">
+<td><code>desc</code></td>
+<td>string</td>
+<td><code>desc</code> is the user-facing description of a command-line option that is used by the automatic usage documentation generation.</td>
+</tr>
+<tr name="only">
+<td><code>only</code></td>
+<td>array of values</td>
+<td><code>only</code> is used by the <a href="#restrictToOnly"><code>restrictToOnly</code></a> parser stage to validate user input. It takes a non-empty array of values. If <code>only</code> is set to <code>null</code>, the <a href="#restrictToOnly"><code>restrictToOnly</code></a> parser stage skips validation.</td>
+</tr>
+<tr name="opts">
+<td><code>opts</code></td>
+<td>array of command-line options</td>
+<td><code>opts</code> can be set if the command-line option is a command (if <code>types</code> is <code>null</code>) to describe the command's options. It uses the same syntax as regular command-line options.</td>
+</tr>
+<tr name="required">
+<td><code>required</code></td>
+<td>boolean</td>
+<td><code>required</code> is used by the <a href="#requireOption"><code>requireOption</code></a> parser stage to control if an option is set. If a required option is not set, <a href="#requireOption"><code>requireOption</code></a> records an error.</td>
+</tr>
+<tr name="reverse">
+<td><code>reverse</code></td>
+<td>boolean</td>
+<td><code>reverse</code> is used by the <a href="#reverseBools"><code>reverseBools</code></a> and <a href="#reverseFlags"><code>reverseFlags</code></a> parser stages and indicates, if a boolean or flag should be treated as its reverse.</td>
+</tr>
+<tr name="rules">
+<td><code>rules</code></td>
+<td>predicate</td>
+<td><code>rules</code> is a predicate applied by <a href="#verifyRules"><code>verifyRules</code></a> to check if parsed <code>opts</code> are correct.</td>
+</tr>
+<tr name="values">
+<td><code>values</code></td>
+<td>array with default value(s)</td>
+<td><code>values</code> is used by the <code>toOpts</code> parser stage to set default values for command-line options, that are not explicitly given. It takes an array of values that should have the same types as defined by the <code>types</code> field. The user is responsible for ensuring the correct types are used.</td>
+</tr>
+</table>
 
 ### Command-Line Parsers
 
