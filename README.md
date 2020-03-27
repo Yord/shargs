@@ -1361,8 +1361,8 @@ Shargs includes the following layout functions:
 <th>Layout&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description (and Example)</th>
 </tr>
-<tr>
-<td><code>br(style)</code><br /><code>brFrom(id)(style)</code></td>
+<tr name="br">
+<td><code name="brFrom"><a href="#br">br</a>(style)</code><br /><code><a href="#brFrom">brFrom</a>(id)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1400,8 +1400,8 @@ Last line
 </details>
 </td>
 </tr>
-<tr>
-<td><code>brs(length)(style)</code><br /><code>brsFrom(id)(length)(style)</code></td>
+<tr name="brs">
+<td><code name="brsFrom"><a href="#brs">brs</a>(length)(style)</code><br /><code><a href="#brsFrom">brsFrom</a>(id)(length)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1440,8 +1440,8 @@ Last line
 </details>
 </td>
 </tr>
-<tr>
-<td><code>cols(columns)(style)</code><br /><code>colsFrom(id)(columns)(style)</code></td>
+<tr name="cols">
+<td><code name="colsFrom"><a href="#cols">cols</a>(columns)(style)</code><br /><code><a href="#colsFrom">colsFrom</a>(id)(columns)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1489,8 +1489,8 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>defs(rowsList)(style)</code><br /><code>defsFrom(id1, id2)(rowsList)(style)</code></td>
+<tr name="defs">
+<td><code name="defsFrom"><a href="#defs">defs</a>(rowsList)(style)</code><br /><code><a href="#defsFrom">defsFrom</a>(id1, id2)(rowsList)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1538,8 +1538,8 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>line(string)(style)</code><br /><code>lineFrom(id)(string)(style)</code></td>
+<tr name="line">
+<td><code name="lineFrom"><a href="#line">line</a>(string)(style)</code><br /><code><a href="#lineFrom">lineFrom</a>(id)(string)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1573,8 +1573,8 @@ A line
 </details>
 </td>
 </tr>
-<tr>
-<td><code>lines(strings)(style)</code><br /><code>linesFrom(id)(strings)(style)</code></td>
+<tr name="lines">
+<td><code name="linesFrom"><a href="#lines">lines</a>(strings)(style)</code><br /><code><a href="#linesFrom">linesFrom</a>(id)(strings)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1610,8 +1610,8 @@ Last line
 </details>
 </td>
 </tr>
-<tr>
-<td><code>table(rowsList)(style)</code><br /><code>tableFrom(id)(rowsList)(style)</code></td>
+<tr name="table">
+<td><code name="tableFrom"><a href="#table">table</a>(rowsList)(style)</code><br /><code><a href="#tableFrom">tableFrom</a>(id)(rowsList)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1660,8 +1660,8 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>text(string)(style)</code><br /><code>textFrom(id)(string)(style)</code></td>
+<tr name="text">
+<td><code name="textFrom"><a href="#text">text</a>(string)(style)</code><br /><code><a href="#textFrom">textFrom</a>(id)(string)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1697,8 +1697,8 @@ the Answer.
 </details>
 </td>
 </tr>
-<tr>
-<td><code>texts(strings)(style)</code><br /><code>textsFrom(id)(strings)(style)</code></td>
+<tr name="texts">
+<td><code name="textsFrom"><a href="#texts">texts</a>(strings)(style)</code><br /><code><a href="#textsFrom">textsFrom</a>(id)(strings)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1744,8 +1744,8 @@ Layout functions can be combined with the following layout combinators:
 <th>Layout&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description (and Example)</th>
 </tr>
-<tr>
-<td><code>layout(functions)(style)</code></td>
+<tr name="layout">
+<td><code><a href="#layout">layout</a>(functions)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1777,8 +1777,8 @@ Last line
 </details>
 </td>
 </tr>
-<tr>
-<td><code>layoutMap(f)(itemsList)(style)</code></td>
+<tr name="layoutMap">
+<td><code><a href="#layoutMap">layoutMap</a>(f)(itemsList)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1862,11 +1862,28 @@ It defines style objects for two ids: `line` and `cols`.
 These two ids are used internally by the layout functions to decide, how lines and columns should be printed.
 A style object may have the following parameters:
 
-| Parameter  | Type   | Description                                                     |
-|------------|--------|-----------------------------------------------------------------|
-| `padEnd`   | number | Defines a padding to the right of a line.                       |
-| `padStart` | number | Defines a padding to the left of a line.                        |
-| `width`    | number | Defines the length of a line before a line break is introduced. |
+<table>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr name="padEnd">
+<td><code><a href="#padEnd">padEnd</a></code></td>
+<td>number</td>
+<td>Defines a padding to the right of a line.</td>
+</tr>
+<tr name="padStart">
+<td><code><a href="#padStart">padStart</a></code></td>
+<td>number</td>
+<td>Defines a padding to the left of a line.</td>
+</tr>
+<tr name="width">
+<td><code><a href="#width">width</a></code></td>
+<td>number</td>
+<td>Defines the length of a line before a line break is introduced.</td>
+</tr>
+</table>
 
 While `line` and `cols` are the default ids, any valid key may be used as an id.
 In order to connect layout functions to a different id than the default,
@@ -1899,8 +1916,8 @@ Shargs includes the following usage functions:
 <th>Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description (and Example)</th>
 </tr>
-<tr>
-<td><code>note(string)(opts)(style)</code><br /><code>noteFrom(id)(string)(opts)(style)</code></td>
+<tr name="note">
+<td><code name="noteFrom"><a href="#note">note</a>(string)(opts)(style)</code><br /><code><a href="#noteFrom">noteFrom</a>(id)(string)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1937,8 +1954,8 @@ the Answer.
 </details>
 </td>
 </tr>
-<tr>
-<td><code>notes(strings)(opts)(style)</code><br /><code>notesFrom(id)(strings)(opts)(style)</code></td>
+<tr name="notes">
+<td><code name="notesFrom"><a href="#notes">notes</a>(strings)(opts)(style)</code><br /><code><a href="#notesFrom">notesFrom</a>(id)(strings)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -1976,8 +1993,8 @@ The Ultimate Question.
 </details>
 </td>
 </tr>
-<tr>
-<td><code>optsDefs(opts)(style)</code><br /><code>optsDefsFrom(id1, id2)(opts)(style)</code></td>
+<tr name="optsDefs">
+<td><code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>(opts)(style)</code><br /><code><a href="#optsDefsFrom">optsDefsFrom</a>(id1, id2)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -2024,8 +2041,8 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>optsList(opts)(style)</code><br /><code>optsListFrom(id)(opts)(style)</code></td>
+<tr name="optsList">
+<td><code name="optsListFrom"><a href="#optsList">optsList</a>(opts)(style)</code><br /><code><a href="#optsListFrom">optsListFrom</a>(id)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -2071,8 +2088,8 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>space(opts)(style)</code><br /><code>spaceFrom(id)(opts)(style)</code></td>
+<tr name="space">
+<td><code name="spaceFrom"><a href="#space">space</a>(opts)(style)</code><br /><code><a href="#spaceFrom">spaceFrom</a>(id)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -2112,8 +2129,8 @@ The Ultimate Question.
 </details>
 </td>
 </tr>
-<tr>
-<td><code>spaces(length)(opts)(style)</code><br /><code>spacesFrom(id)(length)(opts)(style)</code></td>
+<tr name="spaces">
+<td><code name="spacesFrom"><a href="#spaces">spaces</a>(length)(opts)(style)</code><br /><code><a href="#spacesFrom">spacesFrom</a>(id)(length)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -2154,8 +2171,8 @@ The Ultimate Question.
 </details>
 </td>
 </tr>
-<tr>
-<td><code>synopsis(start, end)(opts)(style)</code><br /><code>synopsisFrom(id)(start, end)(opts)(style)</code></td>
+<tr name="synopsis">
+<td><code name="synopsisFrom"><a href="#synopsis">synopsis</a>(start, end)(opts)(style)</code><br /><code><a href="#synopsisFrom">synopsisFrom</a>(id)(start, end)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -2205,8 +2222,8 @@ Usage functions can be combined with the following usage combinators:
 <th>Usage&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description (and Example)</th>
 </tr>
-<tr>
-<td><code>usage(functions)(opts)(style)</code></td>
+<tr name="usage">
+<td><code><a href="#usage">usage</a>(functions)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -2259,8 +2276,8 @@ the Answer.
 </details>
 </td>
 </tr>
-<tr>
-<td><code>usageMap(f)(opts)(style)</code></td>
+<tr name="usageMap">
+<td><code><a href="#usageMap">usageMap</a>(f)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -2335,9 +2352,8 @@ Shargs includes the following usage decorators:
 <th>Usage&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
-<tr>
-<tr>
-<td><code>justArgs(array)(usageFunction)(opts)</code></td>
+<tr name="justArgs">
+<td><code><a href="#justArgs">justArgs</a>(array)(usageFunction)(opts)</code></td>
 <td>
 <details>
 <summary>
@@ -2373,8 +2389,8 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>noCommands(usageFunction)(opts)</code></td>
+<tr name="noCommands">
+<td><code><a href="#noCommands">noCommands</a>(usageFunction)(opts)</code></td>
 <td>
 <details>
 <summary>
@@ -2410,8 +2426,8 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>onlyCommands(usageFunction)(opts)</code></td>
+<tr name="onlyCommands">
+<td><code><a href="#onlyCommands">onlyCommands</a>(usageFunction)(opts)</code></td>
 <td>
 <details>
 <summary>
@@ -2445,8 +2461,8 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>onlyFirstArg(usageFunction)(opts)</code></td>
+<tr name="onlyFirstArg">
+<td><code><a href="#onlyFirstArg">onlyFirstArg</a>(usageFunction)(opts)</code></td>
 <td>
 <details>
 <summary>
@@ -2482,8 +2498,8 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>optsFilter(p)(usageFunction)(opts)</code></td>
+<tr name="optsFilter">
+<td><code><a href="#optsFilter">optsFilter</a>(p)(usageFunction)(opts)</code></td>
 <td>
 <details>
 <summary>
@@ -2521,8 +2537,8 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<td><code>optsMap(f)(usageFunction)(opts)</code></td>
+<tr name="optsMap">
+<td><code><a href="#optsMap">optsMap</a>(f)(usageFunction)(opts)</code></td>
 <td>
 <details>
 <summary>
@@ -2564,9 +2580,16 @@ Result:
 
 Usage decorator functions can be combined with the following usage decorator combinators:
 
-| Usage&nbsp;Decorator&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
-|---------------------------------------------|-----------------------------------------------------|
-| `decorate(decorators)(usageFunction)(opts)` | Combines several usage decorators to one decorator. |
+<table>
+<tr>
+<th>Usage&nbsp;Decorator&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="decorate">
+<td><code><a href="#decorate">decorate</a>(decorators)(usageFunction)(opts)</code></td>
+<td>Combines several usage decorators to one decorator.</td>
+</tr>
+</table>
 
 ### Combining Options, Parser, and Usage Documentation
 
