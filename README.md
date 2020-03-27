@@ -421,10 +421,8 @@ const deepThought = parser({
 })
 ```
 
-`parser` takes an object with three keys: `argv`, `opts`, and `args`.
-Each key is the name of a shargs parsing stage.
-
-Shargs has five stages:
+`parser` takes an object with up to five keys.
+Each key is the name of a shargs parsing stage:
 
 1.  `argv` functions modify arrays of command-line arguments.
 2.  `toOpts` transforms `argv` arrays into the command-line options DSL.
