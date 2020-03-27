@@ -302,14 +302,36 @@ const opts = [
 The DSL lets you define options based on their types.
 The following type functions are available:
 
-| Type&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
-|-----------------------------------|--------------------------------------------------------------------------------------------|
-| `array(types)(key, args, fields)` | An array of known length. The types parameter holds the types for each individual entry.   |
-| `bool(key, args, fields)`         | An explicitly defined boolean value. May be `true` or `false`.                             |
-| `command(key, args, fields)`      | An array of unknown length. If `fields` contains an `opts` field, it turns into a command. |
-| `flag(key, args, fields)`         | A type describing a self-sufficient command-line option. Like e.g. `--help`.               |
-| `number(key, args, fields)`       | An option that takes exactly one value that is meant to represent a number.                |
-| `string(key, args, fields)`       | An option that takes exactly one string.                                                   |
+<table>
+<tr>
+<th>Type&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="array">
+<td><code>array(types)(key, args, fields)</code></td>
+<td>An array of known length. The types parameter holds the types for each individual entry.</td>
+</tr>
+<tr name="bool">
+<td><code>bool(key, args, fields)</code></td>
+<td>An explicitly defined boolean value. May be <code>true</code> or <code>false</code>.</td>
+</tr>
+<tr name="command">
+<td><code>command(key, args, fields)</code></td>
+<td>An array of unknown length. If <code>fields</code> contains an <code>opts</code> field, it turns into a command.</td>
+</tr>
+<tr name="flag">
+<td><code>flag(key, args, fields)</code></td>
+<td>A type describing a self-sufficient command-line option. Like e.g. <code>--help</code>.</td>
+</tr>
+<tr name="number">
+<td><code>number(key, args, fields)</code></td>
+<td>An option that takes exactly one value that is meant to represent a number.</td>
+</tr>
+<tr name="string">
+<td><code>string(key, args, fields)</code></td>
+<td>An option that takes exactly one string.</td>
+</tr>
+</table>
 
 Type functions do two things:
 They combine all their arguments in an object, and they set sensibe defaults for missing `fields`.
