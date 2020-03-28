@@ -239,3 +239,32 @@ test('parser with only demandACommand works as expected if no command is present
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
 })
+
+test('parser with only demandACommand works as expected if a command is present', () => {
+  const stages = {
+    opts: [demandACommand]
+  }
+
+  const parsers = {_: parser({})}
+
+  const {errs, args} = parser(stages, parsers)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me'
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
