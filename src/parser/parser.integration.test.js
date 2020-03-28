@@ -154,3 +154,31 @@ test('parser with only verifyArgv works as expected', () => {
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
 })
+
+test('parser with only bestGuessOpts works as expected', () => {
+  const stages = {
+    opts: [bestGuessOpts]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['-vv'],
+    fantasy: 'true',
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: [],
+      help: {type: 'flag', count: 1},
+      stars: '8'
+    },
+    query: 'Supersize Me',
+    colors: {type: 'flag', count: 1}
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
