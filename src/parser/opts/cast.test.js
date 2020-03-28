@@ -110,6 +110,22 @@ test('cast casts bools', () => {
   expect(opts).toStrictEqual(exp)
 })
 
+test('cast casts bools twice', () => {
+  const obj = {
+    opts: [
+      {...bool('verbose', ['--verbose']), values: ['false']}
+    ]
+  }
+
+  const {opts} = cast(cast(obj))
+
+  const exp = [
+    {...bool('verbose', ['--verbose']), values: [false]}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
+
 test('cast does not change flags', () => {
   const version = {...flag('version', ['--version']), values: [1]}
 
