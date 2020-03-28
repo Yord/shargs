@@ -268,3 +268,34 @@ test('parser with only demandACommand works as expected if a command is present'
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
 })
+
+test('parser with only requireOptions works as expected', () => {
+  const stages = {
+    opts: [requireOptions]
+  }
+
+  const parsers = {_: parser({})}
+
+  const {errs, args} = parser(stages, parsers)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me'
+  }
+
+  const expErrs = [
+    requiredOptionMissing({key: 'genre', args: ['-g', '--genre']})
+  ]
+
+  const errs2 = filterErrs(['option'])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
