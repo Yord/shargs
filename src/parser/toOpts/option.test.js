@@ -1,7 +1,6 @@
 const {anything, array, assert, base64, property} = require('fast-check')
 const option = require('./option')
 const {array: arrayType} = require('../../options')
-const {noArgumentsProvidedInOption, noKeyProvidedInOption} = require('../../errors')
 
 test('option transforms arguments DSL into options DSL', () => {
   const optionsArguments = base64().chain(key =>
@@ -52,7 +51,7 @@ test('option transforms arguments DSL into options DSL', () => {
   )
 })
 
-test('option fails if no key is given', () => {
+test('option does not fail if no key is given', () => {
   const optionsArguments = array(base64(), 1, 20).chain(args =>
     anything().chain(types =>
       anything().chain(desc =>
@@ -69,9 +68,7 @@ test('option fails if no key is given', () => {
               return {
                 options: {...options, args},
                 _arguments: {
-                  errs: [
-                    noKeyProvidedInOption({option: {...options, args}})
-                  ],
+                  errs: [],
                   args: {}
                 }
               }
@@ -93,7 +90,7 @@ test('option fails if no key is given', () => {
   )
 })
 
-test('option fails if no args are given', () => {
+test('option does not fail if no args are given', () => {
   const optionsArguments = base64().chain(key =>
     anything().chain(types =>
       anything().chain(desc =>
@@ -111,9 +108,7 @@ test('option fails if no args are given', () => {
               return {
                 options,
                 _arguments: {
-                  errs: [
-                    noArgumentsProvidedInOption({option: options})
-                  ],
+                  errs: [],
                   args: {}
                 }
               }
@@ -135,12 +130,9 @@ test('option fails if no args are given', () => {
   )
 })
 
-test('option fails if passed undefined', () => {
+test('option does nothing if passed undefined', () => {
   const _arguments = {
-    errs: [
-      noKeyProvidedInOption({option: {}}),
-      noArgumentsProvidedInOption({option: {}})
-    ],
+    errs: [],
     args: {}
   }
 
