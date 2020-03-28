@@ -16,8 +16,8 @@ module.exports = ({errs = [], opts = []} = {}) => {
 
         if (keyIsNotDefined(key, opts)) {
           const opt2 = opts[at + 1]
-        
-          if (isRest(opt2)) {
+
+          if (opt2 && isRest(opt2)) {
             if (isString(opt2)) {
               const str = string(key, [], {values: opt2.values})
               opts2.push(noArgs(str))
