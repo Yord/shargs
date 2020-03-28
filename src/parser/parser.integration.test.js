@@ -676,3 +676,37 @@ test('parser with only mergeArgs works as expected', () => {
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
 })
+
+test('parser with only transformArgs works as expected', () => {
+  const stages = {
+    args: [
+      transformArgs({
+        flag: ({key, errs, args}) => ({
+          errs,
+          args: key !== 'popcorn' ? args : {...args, popcorn: true}
+        })
+      })
+    ]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: true,
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me'
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
