@@ -413,3 +413,39 @@ test('parser with only suggestOptions works as expected', () => {
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
 })
+
+test('parser with only verifyOpts works as expected', () => {
+  const rules = opts => (
+    !opts.some(_ => _.key === 'genre') ||
+    opts.every(_ => _.key !== 'genre' || _.values)
+  )
+
+  const stages = {
+    opts: [verifyOpts(rules)]
+  }
+
+  const parsers = {_: parser({})}
+
+  const {errs, args} = parser(stages, parsers)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me'
+  }
+
+  const expErrs = [
+    falseOptsRules({})
+  ]
+
+  const errs2 = filterErrs(['options', 'rules'])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
