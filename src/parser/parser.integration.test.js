@@ -625,3 +625,30 @@ test('parser with only flagsAsBools works as expected', () => {
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
 })
+
+test('parser with only flagsAsNumbers works as expected', () => {
+  const stages = {
+    args: [flagsAsNumbers]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: 1,
+    popcorn: 1,
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me'
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
