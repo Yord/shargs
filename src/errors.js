@@ -94,10 +94,10 @@ const unexpectedArgument = ({argument}) => ({
   info: {argument}
 })
 
-const valueRestrictionsViolated = ({value, only, option}) => ({
+const valueRestrictionsViolated = ({key, values, index, only, option}) => ({
   code: 'Value restriction violated',
   msg:  'A value lies outside the allowed values of an option.',
-  info: {value, only, option}
+  info: {key, values, index, only, option}
 })
 
 const wrongArgsRulesType = ({type, args}) => ({
