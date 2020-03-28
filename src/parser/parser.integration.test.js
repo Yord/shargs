@@ -121,3 +121,36 @@ test('parser with only splitShortOptions works as expected', () => {
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
 })
+
+test('parser with only verifyArgv works as expected', () => {
+  const rules = argv => argv.some(_ => _ === '--fancy')
+
+  const stages = {
+    argv: [verifyArgv(rules)]
+  }
+
+  const parsers = {_: parser({})}
+
+  const {errs, args} = parser(stages, parsers)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me'
+  }
+
+  const expErrs = [
+    falseArgvRules({argv})
+  ]
+
+  const errs2 = filterErrs(['rules'])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
