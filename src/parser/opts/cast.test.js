@@ -62,6 +62,22 @@ test('cast casts numbers', () => {
   expect(opts).toStrictEqual(exp)
 })
 
+test('cast casts numbers twice', () => {
+  const obj = {
+    opts: [
+      {...number('answer', ['-a', '--answer']), values: ['42']}
+    ]
+  }
+
+  const {opts} = cast(cast(obj))
+
+  const exp = [
+    {...number('answer', ['-a', '--answer']), values: [42]}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
+
 test('cast does not change commands', () => {
   const obj = {
     opts: [
