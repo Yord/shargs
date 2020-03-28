@@ -5,15 +5,15 @@ module.exports = ({errs = [], opts = []} = {}) => {
 
   for (let i = 0; i < opts.length; i++) {
     const opt = opts[i]
-    const {rules} = opt
+    const {key, rules} = opt
 
     if (typeof rules !== 'undefined') {
       if (typeof rules === 'function') {
         if (rules(opt)(opts) === false) {
-          errs2.push(falseRules({rules, option: opt}))
+          errs2.push(falseRules({key, rules, option: opt}))
         }
       } else {
-        errs2.push(wrongRulesType({type: typeof rules, option: opt}))
+        errs2.push(wrongRulesType({key, type: typeof rules, option: opt}))
       }
     }
   }

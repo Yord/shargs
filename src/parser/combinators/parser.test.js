@@ -35,7 +35,7 @@ test('parser transforms argv to args', () => {
   const {args} = parser(stages)(opts)(argv)
 
   const exp = {
-    _: ['foo', 'bar'],
+    _: ['foo', 'bar', 'foo'],
     title: "The Hitchhiker's Guide to the Galaxy",
     numBool: ['23', 'true'],
     answer: '42',
@@ -65,7 +65,7 @@ test('parser works even if stages are undefined', () => {
   const {args} = parser()(opts)(argv)
 
   const exp = {
-    _: ['foo', 'bar'],
+    _: ['foo', 'bar', 'foo'],
     title: "The Hitchhiker's Guide to the Galaxy",
     numBool: ['23', 'true'],
     answer: '42',
@@ -228,26 +228,4 @@ test('parser uses a custom toArgs function', () => {
   }
 
   expect(args).toStrictEqual(exp)
-})
-
-test('parser accumulates errors', () => {
-  const option = string(undefined, ['--title'])
-
-  const opts = [
-    option
-  ]
-  
-  const argv = []
-
-  const stages = {
-    toArgs: toArgs()
-  }
-
-  const {errs} = parser(stages)(opts)(argv)
-
-  const exp = [
-    noKeyProvidedInOption({option})
-  ]
-
-  expect(errs).toStrictEqual(exp)
 })

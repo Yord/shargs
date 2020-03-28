@@ -4,7 +4,7 @@ const {array, bool, command, flag, number, string} = require('../../options')
 const numberBool = array(['number', 'bool'])
 
 const discard = () => () => ({
-  args: {discarded: true}
+  args: {_: []}
 })
 
 test('toArgs transforms opts into args', () => {
@@ -21,14 +21,14 @@ test('toArgs transforms opts into args', () => {
     ]
   }
 
-  const {args} = toArgs(discard)(obj)
+  const {args} = toArgs({_: discard})(obj)
 
   const exp = {
     _: ['foo', 'bar'],
     title: "The Hitchhiker's Guide to the Galaxy",
     numBool: [23, true],
     answer: 42,
-    help: {discarded: true},
+    help: {_: []},
     verbose: false,
     version: {type: 'flag', count: 1}
   }

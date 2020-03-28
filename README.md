@@ -12,10 +12,8 @@
 
 ## Installation
 
-Installation with [`npm`][npm-install]:
-
 ```bash
-$ npm i --save shargs
+$ npm install --save shargs
 ```
 
 ## Features
@@ -1859,7 +1857,8 @@ const style = {
 ```
 
 It defines style objects for two ids: `line` and `cols`.
-These two ids are used internally by the layout functions to decide, how lines and columns should be printed.
+These two ids are the default used by the layout functions to define, how lines and columns should be printed.
+However, any valid key may be used as an id, if it is passed as a string to the `id` parameter of any `*From` function.
 A style object may have the following parameters:
 
 <table>
@@ -1884,10 +1883,6 @@ A style object may have the following parameters:
 <td>Defines the length of a line before a line break is introduced.</td>
 </tr>
 </table>
-
-While `line` and `cols` are the default ids, any valid key may be used as an id.
-In order to connect layout functions to a different id than the default,
-pass it as a string to the `id` parameter of any `*From` function.
 
 #### Usage Documentation DSL
 
@@ -2637,7 +2632,6 @@ Shargs is [MIT licensed][license].
 [issues]: https://github.com/Yord/shargs/issues
 [license]: https://github.com/Yord/shargs/blob/master/LICENSE
 [node]: https://nodejs.org/
-[npm-install]: https://docs.npmjs.com/downloading-and-installing-packages-globally
 [npm-package]: https://www.npmjs.com/package/shargs
 [pxi]: https://github.com/Yord/pxi
 [shield-license]: https://img.shields.io/npm/l/shargs?color=yellow&labelColor=313A42

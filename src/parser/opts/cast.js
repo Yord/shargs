@@ -27,12 +27,12 @@ module.exports = ({errs = [], opts: OPTS = []} = {}) => {
             case 'number':
               const float = parseFloat(value)
               if (!Number.isNaN(float)) values.push(float)
-              else errs.push(argumentIsNotANumber({value, option}))
+              else errs.push(argumentIsNotANumber({values: VALUES, index: j, option}))
               break
             case 'bool':
-              if (value === 'true')       values.push(true)
-              else if (value === 'false') values.push(false)
-              else errs.push(argumentIsNotABool({value, option}))
+              if (value === 'true' || value === true)        values.push(true)
+              else if (value === 'false' || value === false) values.push(false)
+              else errs.push(argumentIsNotABool({values: VALUES, index: j, option}))
               break
             default:
               values.push(value)

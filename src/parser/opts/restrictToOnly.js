@@ -5,19 +5,19 @@ module.exports = ({errs = [], opts: OPTS = []} = {}) => {
 
   for (let i = 0; i < OPTS.length; i++) {
     const option = OPTS[i]
-    const {values, only} = option
+    const {key, values, only} = option
 
     if (only === null || values === null || typeof only === 'undefined' || typeof values === 'undefined') {
       opts.push(option)
     } else {
       let correct = 0
 
-      for (let i = 0; i < values.length; i++) {
-        const value = values[i]
+      for (let j = 0; j < values.length; j++) {
+        const value = values[j]
         if (only.indexOf(value) > -1) {
           correct++
         } else {
-          errs.push(valueRestrictionsViolated({value, only, option}))
+          errs.push(valueRestrictionsViolated({key, values, index: j, only, option}))
         }
       }
 

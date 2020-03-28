@@ -27,9 +27,21 @@ const {argumentIsNotANumber, commandRequired, didYouMean, falseArgsRules, falseA
 
 const noCommands = opts => opts.filter(({types}) => types !== null)
 
-const noInfo = ({info, ...rest}) => rest
+const filterErrs = keys => errs => errs.map(
+  ({info, ...rest}) => Object.keys(info).reduce(
+    (acc, key) => ({
+      ...acc,
+      info: {
+        ...acc.info,
+        ...(keys.indexOf(key) === -1 ? {[key]: info[key]} : {[key]: undefined})
+      }
+    }),
+    {info: {}, ...rest}
+  )
+)
 
 const opts = [
+  flag('help', ['--help']),
   flag('verbose', ['-v', '--verbose']),
   flag('popcorn', ['-l', '--low-fat'], {reverse: true}),
   bool('fantasy', ['-E', '--no-hobbits'], {reverse: true}),
@@ -46,82 +58,40 @@ const opts = [
   })
 ]
 
-const argv = ['--query', 'Supersize Me', '--colors', '-l', '--no-hobbits', 'true', '-vv', 'rate', '--stars', '8', 'help']
+const argv = [
+  '--query', 'Supersize Me',
+  '--colors',
+  '-l',
+  '--no-hobbits', 'true',
+  '-vv',
+  'rate',
+    '--stars', '8',
+    '--help'
+]
 
-test('parser with all stages works as expected', () => {
-  const argvRules = argv => argv.some(_ => _ === '--fancy')
-
-  const optsRules = opts => (
-    !opts.some(_ => _.key === 'genre') ||
-    opts.every(_ => _.key !== 'genre' || _.values)
-  )
-
-  const argsRules = args => !args.query || args.query.indexOf('Terminator') > -1
-
-  const fs = {
-    flag: ({key, val, errs, args}) => ({
-      errs,
-      args: {...args, [key]: key === 'verbose' ? val.count : val.count > 0}
-    })
-  }
-
-  const stages = {
-    argv: [
-      splitShortOptions,
-      verifyArgv(argvRules)
-    ],
-    opts: [
-      demandACommand,
-      suggestOptions,
-      bestGuessOpts,
-      cast,
-      requireOptions,
-      restrictToOnly,
-      reverseBools,
-      reverseFlags,
-      verifyOpts(optsRules),
-      verifyRules,
-      verifyValuesArity
-    ],
-    args: [
-      bestGuessRest,
-      failRest,
-      mergeArgs(),
-      transformArgs(fs),
-      verifyArgs(argsRules),
-      clearRest
-    ]
-  }
+test('parser without stages works as expected', () => {
+  const stages = {}
 
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: [],
-    colors: true,
-    fantasy: false,
-    popcorn: false,
-    query: 'Supersize Me',
-    verbose: 2
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me'
   }
 
-  const expErrs = [
-    falseArgvRules({}),
-    didYouMean({}),
-    argumentIsNotANumber({}),
-    requiredOptionMissing({}),
-    falseOptsRules({}),
-    falseRules({}),
-    invalidValues({}),
-    falseArgvRules({}),
-    commandRequired({}),
-    didYouMean({}),
-    valueRestrictionsViolated({}),
-    unexpectedArgument({}),
-    falseArgsRules({})
-  ]
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
 
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only splitShortOptions works as expected', () => {
@@ -134,9 +104,10 @@ test('parser with only splitShortOptions works as expected', () => {
   const expArgs = {
     _: ['--colors'],
     fantasy: 'true',
+    help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: ['help'],
+      _: ['--help'],
       stars: '8'
     },
     query: 'Supersize Me',
@@ -145,8 +116,10 @@ test('parser with only splitShortOptions works as expected', () => {
 
   const expErrs = []
 
+  const errs2 = filterErrs([])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only verifyArgv works as expected', () => {
@@ -156,26 +129,30 @@ test('parser with only verifyArgv works as expected', () => {
     argv: [verifyArgv(rules)]
   }
 
-  const {errs, args} = parser(stages)(opts)(argv)
+  const parsers = {_: parser({})}
+
+  const {errs, args} = parser(stages, parsers)(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
     fantasy: 'true',
+    help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: ['help'],
+      _: ['--help'],
       stars: '8'
     },
     query: 'Supersize Me'
   }
 
   const expErrs = [
-    falseArgvRules({}),
-    falseArgvRules({})
+    falseArgvRules({argv})
   ]
 
+  const errs2 = filterErrs(['rules'])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only bestGuessOpts works as expected', () => {
@@ -190,7 +167,8 @@ test('parser with only bestGuessOpts works as expected', () => {
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: ['help'],
+      _: [],
+      help: {type: 'flag', count: 1},
       stars: '8'
     },
     query: 'Supersize Me',
@@ -199,8 +177,10 @@ test('parser with only bestGuessOpts works as expected', () => {
 
   const expErrs = []
 
+  const errs2 = filterErrs([])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only cast works as expected', () => {
@@ -213,23 +193,27 @@ test('parser with only cast works as expected', () => {
   const expArgs = {
     _: ['--colors', '-vv'],
     fantasy: true,
+    help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: ['help'],
+      _: ['--help'],
       stars: 8
     },
     query: 'Supersize Me'
   }
 
   const expErrs = [
-    argumentIsNotANumber({})
+    argumentIsNotANumber({values: 2, index: 0}),
+    argumentIsNotANumber({values: 2, index: 0})
   ]
 
+  const errs2 = filterErrs(['option'])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
-test('parser with only demandACommand works as expected', () => {
+test('parser with only demandACommand works as expected if no command is present', () => {
   const stages = {
     opts: [demandACommand]
   }
@@ -239,8 +223,9 @@ test('parser with only demandACommand works as expected', () => {
   const {errs, args} = parser(stages)(opts2)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv', 'rate', '--stars', '8', 'help'],
+    _: ['--colors', '-vv', 'rate', '--stars', '8'],
     fantasy: 'true',
+    help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
     query: 'Supersize Me'
   }
@@ -249,8 +234,39 @@ test('parser with only demandACommand works as expected', () => {
     commandRequired({})
   ]
 
+  const errs2 = filterErrs(['options'])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
+})
+
+test('parser with only demandACommand works as expected if a command is present', () => {
+  const stages = {
+    opts: [demandACommand]
+  }
+
+  const parsers = {_: parser({})}
+
+  const {errs, args} = parser(stages, parsers)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me'
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only requireOptions works as expected', () => {
@@ -258,25 +274,30 @@ test('parser with only requireOptions works as expected', () => {
     opts: [requireOptions]
   }
 
-  const {errs, args} = parser(stages)(opts)(argv)
+  const parsers = {_: parser({})}
+
+  const {errs, args} = parser(stages, parsers)(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
     fantasy: 'true',
+    help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: ['help'],
+      _: ['--help'],
       stars: '8'
     },
     query: 'Supersize Me'
   }
 
   const expErrs = [
-    requiredOptionMissing({})
+    requiredOptionMissing({key: 'genre', args: ['-g', '--genre']})
   ]
 
+  const errs2 = filterErrs(['option'])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only restrictToOnly works as expected', () => {
@@ -289,19 +310,22 @@ test('parser with only restrictToOnly works as expected', () => {
   const expArgs = {
     _: ['--colors', '-vv'],
     fantasy: 'true',
+    help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: ['help']
+      _: ['--help']
     },
     query: 'Supersize Me'
   }
 
   const expErrs = [
-    valueRestrictionsViolated({})
+    valueRestrictionsViolated({key: 'stars', values: ['8'], index: 0, only: ['1', '2', '3', '4', '5']})
   ]
 
+  const errs2 = filterErrs(['option'])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only reverseBools works as expected', () => {
@@ -314,9 +338,10 @@ test('parser with only reverseBools works as expected', () => {
   const expArgs = {
     _: ['--colors', '-vv'],
     fantasy: 'false',
+    help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: ['help'],
+      _: ['--help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -324,8 +349,10 @@ test('parser with only reverseBools works as expected', () => {
 
   const expErrs = []
 
+  const errs2 = filterErrs([])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only reverseFlags works as expected', () => {
@@ -338,9 +365,10 @@ test('parser with only reverseFlags works as expected', () => {
   const expArgs = {
     _: ['--colors', '-vv'],
     fantasy: 'true',
+    help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: -1},
     rate: {
-      _: ['help'],
+      _: ['--help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -348,8 +376,10 @@ test('parser with only reverseFlags works as expected', () => {
 
   const expErrs = []
 
+  const errs2 = filterErrs([])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only suggestOptions works as expected', () => {
@@ -357,27 +387,31 @@ test('parser with only suggestOptions works as expected', () => {
     opts: [suggestOptions]
   }
 
-  const {errs, args} = parser(stages)(opts)(argv)
+  const parsers = {_: parser({})}
+
+  const {errs, args} = parser(stages, parsers)(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
     fantasy: 'true',
+    help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: ['help'],
+      _: ['--help'],
       stars: '8'
     },
     query: 'Supersize Me'
   }
 
   const expErrs = [
-    didYouMean({}),
-    didYouMean({}),
-    didYouMean({})
+    didYouMean({argv: '--colors'}),
+    didYouMean({argv: '-vv'})
   ]
 
+  const errs2 = filterErrs(['options'])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only verifyOpts works as expected', () => {
@@ -390,14 +424,17 @@ test('parser with only verifyOpts works as expected', () => {
     opts: [verifyOpts(rules)]
   }
 
-  const {errs, args} = parser(stages)(opts)(argv)
+  const parsers = {_: parser({})}
+
+  const {errs, args} = parser(stages, parsers)(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
     fantasy: 'true',
+    help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: ['help'],
+      _: ['--help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -407,8 +444,10 @@ test('parser with only verifyOpts works as expected', () => {
     falseOptsRules({})
   ]
 
+  const errs2 = filterErrs(['options', 'rules'])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only verifyRules works as expected', () => {
@@ -416,25 +455,30 @@ test('parser with only verifyRules works as expected', () => {
     opts: [verifyRules]
   }
 
-  const {errs, args} = parser(stages)(opts)(argv)
+  const parsers = {_: parser({})}
+
+  const {errs, args} = parser(stages, parsers)(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
     fantasy: 'true',
+    help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: ['help'],
+      _: ['--help'],
       stars: '8'
     },
     query: 'Supersize Me'
   }
 
   const expErrs = [
-    falseRules({})
+    falseRules({key: 'query'})
   ]
 
+  const errs2 = filterErrs(['rules', 'option'])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only verifyValuesArity works as expected', () => {
@@ -442,25 +486,30 @@ test('parser with only verifyValuesArity works as expected', () => {
     opts: [verifyValuesArity]
   }
 
-  const {errs, args} = parser(stages)(opts)(argv)
+  const parsers = {_: parser({})}
+
+  const {errs, args} = parser(stages, parsers)(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
     fantasy: 'true',
+    help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: ['help'],
+      _: ['--help'],
       stars: '8'
     },
     query: 'Supersize Me'
   }
 
   const expErrs = [
-    invalidValues({})
+    invalidValues({values: 2})
   ]
 
+  const errs2 = filterErrs(['option'])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only bestGuessRest works as expected', () => {
@@ -476,7 +525,8 @@ test('parser with only bestGuessRest works as expected', () => {
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: ['help'],
+      _: [],
+      help: {type: 'flag', count: 1},
       stars: '8'
     },
     query: 'Supersize Me'
@@ -484,8 +534,10 @@ test('parser with only bestGuessRest works as expected', () => {
 
   const expErrs = []
 
+  const errs2 = filterErrs([])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only clearRest works as expected', () => {
@@ -508,8 +560,10 @@ test('parser with only clearRest works as expected', () => {
 
   const expErrs = []
 
+  const errs2 = filterErrs([])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only failRest works as expected', () => {
@@ -517,28 +571,32 @@ test('parser with only failRest works as expected', () => {
     args: [failRest]
   }
 
-  const {errs, args} = parser(stages)(opts)(argv)
+  const parsers = {_: parser({})}
+
+  const {errs, args} = parser(stages, parsers)(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
     fantasy: 'true',
+    help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: ['help'],
+      _: ['--help'],
       stars: '8'
     },
     query: 'Supersize Me'
   }
 
   const expErrs = [
-    unexpectedArgument({}),
-    unexpectedArgument({}),
-    unexpectedArgument({}),
-    unexpectedArgument({})
+    unexpectedArgument({argument: '--colors'}),
+    unexpectedArgument({argument: '-vv'}),
+    unexpectedArgument({argument: '--help'})
   ]
 
+  const errs2 = filterErrs([])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only flagsAsBools works as expected', () => {
@@ -551,9 +609,10 @@ test('parser with only flagsAsBools works as expected', () => {
   const expArgs = {
     _: ['--colors', '-vv'],
     fantasy: 'true',
+    help: true,
     popcorn: true,
     rate: {
-      _: ['help'],
+      _: ['--help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -561,8 +620,10 @@ test('parser with only flagsAsBools works as expected', () => {
 
   const expErrs = []
 
+  const errs2 = filterErrs([])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only flagsAsNumbers works as expected', () => {
@@ -575,9 +636,10 @@ test('parser with only flagsAsNumbers works as expected', () => {
   const expArgs = {
     _: ['--colors', '-vv'],
     fantasy: 'true',
+    help: 1,
     popcorn: 1,
     rate: {
-      _: ['help'],
+      _: ['--help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -585,8 +647,10 @@ test('parser with only flagsAsNumbers works as expected', () => {
 
   const expErrs = []
 
+  const errs2 = filterErrs([])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only mergeArgs works as expected', () => {
@@ -597,8 +661,9 @@ test('parser with only mergeArgs works as expected', () => {
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv', 'help'],
+    _: ['--colors', '-vv', '--help'],
     fantasy: 'true',
+    help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
     stars: '8',
     query: 'Supersize Me'
@@ -606,8 +671,10 @@ test('parser with only mergeArgs works as expected', () => {
 
   const expErrs = []
 
+  const errs2 = filterErrs([])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only transformArgs works as expected', () => {
@@ -627,9 +694,10 @@ test('parser with only transformArgs works as expected', () => {
   const expArgs = {
     _: ['--colors', '-vv'],
     fantasy: 'true',
+    help: {type: 'flag', count: 1},
     popcorn: true,
     rate: {
-      _: ['help'],
+      _: ['--help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -637,8 +705,10 @@ test('parser with only transformArgs works as expected', () => {
 
   const expErrs = []
 
+  const errs2 = filterErrs([])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
 })
 
 test('parser with only verifyArgs works as expected', () => {
@@ -648,14 +718,17 @@ test('parser with only verifyArgs works as expected', () => {
     args: [verifyArgs(rules)]
   }
 
-  const {errs, args} = parser(stages)(opts)(argv)
+  const parsers = {_: parser({})}
+
+  const {errs, args} = parser(stages, parsers)(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
     fantasy: 'true',
+    help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
     rate: {
-      _: ['help'],
+      _: ['--help'],
       stars: '8'
     },
     query: 'Supersize Me'
@@ -665,6 +738,46 @@ test('parser with only verifyArgs works as expected', () => {
     falseArgsRules({})
   ]
 
+  const errs2 = filterErrs(['rules', 'args'])(errs)
+
   expect(args).toStrictEqual(expArgs)
-  expect(errs.map(noInfo)).toStrictEqual(expErrs.map(noInfo))
+  expect(errs2).toStrictEqual(expErrs)
+})
+
+test('parser with custom parser functions for the rate command works as expected', () => {
+  const rules = args => !args.query || args.query.indexOf('Terminator') > -1
+
+  const stages = {
+    args: [verifyArgs(rules)]
+  }
+
+  const parsers = {
+    _: parser({}),
+    rate: parser({
+      opts: [cast]
+    })
+  }
+
+  const {errs, args} = parser(stages, parsers)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: 8
+    },
+    query: 'Supersize Me'
+  }
+
+  const expErrs = [
+    falseArgsRules({})
+  ]
+
+  const errs2 = filterErrs(['rules', 'args'])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
 })

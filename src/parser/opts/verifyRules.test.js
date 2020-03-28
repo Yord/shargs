@@ -18,7 +18,7 @@ test('verifyRules README example works', () => {
   const {errs} = verifyRules(obj)
 
   const exp = [
-    falseRules({rules, option: firstName})
+    falseRules({key: 'firstName', rules, option: firstName})
   ]
 
   expect(errs).toStrictEqual(exp)
@@ -57,7 +57,7 @@ test('verifyRules fails on wrong type', () => {
   const {errs} = verifyRules(obj)
 
   const exp = [
-    wrongRulesType({type: 'number', option: firstName})
+    wrongRulesType({key: 'firstName', type: 'number', option: firstName})
   ]
 
   expect(errs).toStrictEqual(exp)

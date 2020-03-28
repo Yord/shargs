@@ -62,6 +62,22 @@ test('cast casts numbers', () => {
   expect(opts).toStrictEqual(exp)
 })
 
+test('cast casts numbers twice', () => {
+  const obj = {
+    opts: [
+      {...number('answer', ['-a', '--answer']), values: ['42']}
+    ]
+  }
+
+  const {opts} = cast(cast(obj))
+
+  const exp = [
+    {...number('answer', ['-a', '--answer']), values: [42]}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
+
 test('cast does not change commands', () => {
   const obj = {
     opts: [
@@ -86,6 +102,22 @@ test('cast casts bools', () => {
   }
 
   const {opts} = cast(obj)
+
+  const exp = [
+    {...bool('verbose', ['--verbose']), values: [false]}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
+
+test('cast casts bools twice', () => {
+  const obj = {
+    opts: [
+      {...bool('verbose', ['--verbose']), values: ['false']}
+    ]
+  }
+
+  const {opts} = cast(cast(obj))
 
   const exp = [
     {...bool('verbose', ['--verbose']), values: [false]}
@@ -124,6 +156,22 @@ test('cast casts arrays', () => {
   expect(opts).toStrictEqual(exp)
 })
 
+test('cast casts arrays twice', () => {
+  const obj = {
+    opts: [
+      {...numberBool('numBool', ['-n', '--nb']), values: ['23', 'true']}
+    ]
+  }
+
+  const {opts} = cast(cast(obj))
+
+  const exp = [
+    {...numberBool('numBool', ['-n', '--nb']), values: [23, true]}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
+
 test('cast reports an error on wrong bools', () => {
   const option = {...bool('verbose', ['--verbose']), values: ['foo']}
 
@@ -132,7 +180,7 @@ test('cast reports an error on wrong bools', () => {
   const {errs} = cast(obj)
 
   const exp = [
-    argumentIsNotABool({value: option.values[0], option})
+    argumentIsNotABool({values: option.values, index: 0, option})
   ]
 
   expect(errs).toStrictEqual(exp)
@@ -146,7 +194,7 @@ test('cast reports an error on wrong numbers', () => {
   const {errs} = cast(obj)
 
   const exp = [
-    argumentIsNotANumber({value: option.values[0], option})
+    argumentIsNotANumber({values: option.values, index: 0, option})
   ]
 
   expect(errs).toStrictEqual(exp)

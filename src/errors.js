@@ -1,13 +1,13 @@
-const argumentIsNotABool = ({option, value}) => ({
+const argumentIsNotABool = ({values, index, option}) => ({
   code: 'Argument is not a boolean',
   msg:  "The passed command line argument must either be 'true' or 'false'",
-  info: {value, option}
+  info: {values, index, option}
 })
 
-const argumentIsNotANumber = ({option, value}) => ({
+const argumentIsNotANumber = ({values, index, option}) => ({
   code: 'Argument is not a number',
   msg:  'The passed command line argument must be a number',
-  info: {value, option}
+  info: {values, index, option}
 })
 
 const commandRequired = ({options}) => ({
@@ -40,10 +40,10 @@ const falseOptsRules = ({rules, options}) => ({
   info: {rules, options}
 })
 
-const falseRules = ({rules, option}) => ({
+const falseRules = ({key, rules, option}) => ({
   code: 'False rules',
   msg:  "An option's rules returned false. Please check your arguments.",
-  info: {rules, option}
+  info: {key, rules, option}
 })
 
 const invalidArity = ({option}) => ({
@@ -70,18 +70,6 @@ const invalidValues = ({values, option}) => ({
   info: {values, option}
 })
 
-const noArgumentsProvidedInOption = ({option}) => ({
-  code: 'No arguments provided in option',
-  msg:  "Please provide at least one argument (e.g. [{args: ['--foo'], ...}])",
-  info: {option}
-})
-
-const noKeyProvidedInOption = ({option}) => ({
-  code: 'No key provided in option',
-  msg:  "Please provide a key (e.g. [{key: 'foo', ...}])",
-  info: {option}
-})
-
 const nonMatchingArgumentTypes = ({arg, ref, option}) => ({
   code: 'Non-matching argument types',
   msg:  'If arguments have the same arg, their types must either be equal or have the same length',
@@ -106,10 +94,10 @@ const unexpectedArgument = ({argument}) => ({
   info: {argument}
 })
 
-const valueRestrictionsViolated = ({value, only, option}) => ({
+const valueRestrictionsViolated = ({key, values, index, only, option}) => ({
   code: 'Value restriction violated',
   msg:  'A value lies outside the allowed values of an option.',
-  info: {value, only, option}
+  info: {key, values, index, only, option}
 })
 
 const wrongArgsRulesType = ({type, args}) => ({
@@ -130,10 +118,10 @@ const wrongOptsRulesType = ({type, options}) => ({
   info: {type, options}
 })
 
-const wrongRulesType = ({type, options}) => ({
+const wrongRulesType = ({key, type, options}) => ({
   code: 'Wrong rules type',
   msg:  'The rules have a wrong type, please provide a predicate with the following signature: (option) => (options) => boolean',
-  info: {type, options}
+  info: {key, type, options}
 })
 
 module.exports = {
@@ -149,8 +137,6 @@ module.exports = {
   invalidOptionsListInCombine,
   invalidTypes,
   invalidValues,
-  noKeyProvidedInOption,
-  noArgumentsProvidedInOption,
   nonMatchingArgumentTypes,
   requiredOptionFormat,
   requiredOptionMissing,

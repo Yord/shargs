@@ -15,7 +15,9 @@ test('restrictToOnly README example works', () => {
 
   const exp = [
     valueRestrictionsViolated({
-      value: answer.values[0],
+      key: answer.key,
+      values: answer.values,
+      index: 0,
       only: answer.only,
       option: answer
     })
@@ -109,7 +111,9 @@ test('restrictToOnly fails if a value is not allowed', () => {
   const {errs} = restrictToOnly(obj)
 
   const exp = obj.opts.map(option => valueRestrictionsViolated({
-    value: option.values[0],
+    key: option.key,
+    values: option.values,
+    index: 0,
     only: option.only,
     option
   }))
@@ -127,7 +131,9 @@ test('restrictToOnly fails on the first value of an array', () => {
 
   const exp = [
     valueRestrictionsViolated({
-      value: 23,
+      key: 'numBool',
+      values: [23, true],
+      index: 0,
       only,
       option
     })
@@ -146,7 +152,9 @@ test('restrictToOnly fails on the second value of an array', () => {
 
   const exp = [
     valueRestrictionsViolated({
-      value: true,
+      key: 'numBool',
+      values: [23, true],
+      index: 1,
       only,
       option
     })
