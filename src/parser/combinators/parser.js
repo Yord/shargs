@@ -8,7 +8,7 @@ module.exports = function parser (stages = {}, parsers = {}) {
     ...argv,
     toOpts(OPTS),
     ...opts,
-    toArgs || TO_ARGS({...parsers, _: parser(stages)}),
+    toArgs || TO_ARGS({_: parser(stages), ...parsers,}),
     ...args
   )({errs: ERRS, argv: ARGV})
 }
