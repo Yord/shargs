@@ -132,7 +132,7 @@ test('cast reports an error on wrong bools', () => {
   const {errs} = cast(obj)
 
   const exp = [
-    argumentIsNotABool({value: option.values[0], option})
+    argumentIsNotABool({values: option.values, index: 0, option})
   ]
 
   expect(errs).toStrictEqual(exp)
@@ -146,7 +146,7 @@ test('cast reports an error on wrong numbers', () => {
   const {errs} = cast(obj)
 
   const exp = [
-    argumentIsNotANumber({value: option.values[0], option})
+    argumentIsNotANumber({values: option.values, index: 0, option})
   ]
 
   expect(errs).toStrictEqual(exp)
