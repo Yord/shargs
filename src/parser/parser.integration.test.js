@@ -212,3 +212,30 @@ test('parser with only cast works as expected', () => {
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
 })
+
+test('parser with only demandACommand works as expected if no command is present', () => {
+  const stages = {
+    opts: [demandACommand]
+  }
+
+  const opts2 = noCommands(opts)
+
+  const {errs, args} = parser(stages)(opts2)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv', 'rate', '--stars', '8'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    query: 'Supersize Me'
+  }
+
+  const expErrs = [
+    commandRequired({})
+  ]
+
+  const errs2 = filterErrs(['options'])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
