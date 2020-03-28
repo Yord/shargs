@@ -13,6 +13,7 @@ module.exports = parser => ({errs = [], opts: OPTS = []} = {}) => {
         args[key]   = Object.assign({}, args[key], child.args)
 
         const parent = parser(noCommands(OPTS))(child.args._, [])
+        const parent = parser(freeOpts(OPTS))(child.args._, [])
         errs         = errs.concat(parent.errs || [])
         args         = {...parent.args, ...args, _: args._.concat(parent.args._)}
       } else if (Array.isArray(types) && types.length === 0) {
@@ -29,6 +30,18 @@ module.exports = parser => ({errs = [], opts: OPTS = []} = {}) => {
   return {errs, args}
 }
 
-function noCommands (opts) {
-  return opts.filter(({types}) => types !== null)
+function freeOpts (opts) {
+  return opts.filter(opt => isNoCommand(opt) && isNotRest(opt) && hasNoValues(opt))
+}
+
+function isNoCommand ({types}) {
+  return types !== null
+}
+
+function isNotRest ({types}) {
+  return typeof types !== 'undefined'
+}
+
+function hasNoValues ({values}) {
+  return typeof values === 'undefined'
 }
