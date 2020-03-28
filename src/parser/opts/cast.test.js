@@ -156,6 +156,22 @@ test('cast casts arrays', () => {
   expect(opts).toStrictEqual(exp)
 })
 
+test('cast casts arrays twice', () => {
+  const obj = {
+    opts: [
+      {...numberBool('numBool', ['-n', '--nb']), values: ['23', 'true']}
+    ]
+  }
+
+  const {opts} = cast(cast(obj))
+
+  const exp = [
+    {...numberBool('numBool', ['-n', '--nb']), values: [23, true]}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
+
 test('cast reports an error on wrong bools', () => {
   const option = {...bool('verbose', ['--verbose']), values: ['foo']}
 
