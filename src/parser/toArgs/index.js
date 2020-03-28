@@ -9,13 +9,14 @@ module.exports = parsers => ({errs = [], opts: OPTS = []} = {}) => {
       if (typeof types === 'undefined') {
         if (values.length !== 1 || values[0] !== '--') args['_'] = args['_'].concat(values)
       } else if (types === null) {
-        const parser = typeof parsers[key] === 'function' ? parsers[key] : parsers._
+        const parentParser = parsers._
+        const childParser  = typeof parsers[key] === 'function' ? parsers[key] : parentParser
 
-        const child = parser(opts || [])(values, [])
+        const child = childParser(opts || [])(values, [])
         errs2       = errs2.concat(child.errs || [])
         args[key]   = Object.assign({}, args[key], child.args)
 
-        const parent = parser(noRestOrCommands(OPTS))(child.args._, [])
+        const parent = parentParser(noRestOrCommands(OPTS))(child.args._, [])
         errs2        = errs2.concat(parent.errs || [])
         args         = {...parent.args, ...args, _: args._.concat(parent.args._)}
       } else if (Array.isArray(types) && types.length === 0) {
