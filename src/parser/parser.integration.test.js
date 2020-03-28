@@ -652,3 +652,27 @@ test('parser with only flagsAsNumbers works as expected', () => {
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
 })
+
+test('parser with only mergeArgs works as expected', () => {
+  const stages = {
+    args: [mergeArgs()]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv', '--help'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    stars: '8',
+    query: 'Supersize Me'
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
