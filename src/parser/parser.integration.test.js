@@ -743,3 +743,41 @@ test('parser with only verifyArgs works as expected', () => {
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
 })
+
+test('parser with custom parser functions for the rate command works as expected', () => {
+  const rules = args => !args.query || args.query.indexOf('Terminator') > -1
+
+  const stages = {
+    args: [verifyArgs(rules)]
+  }
+
+  const parsers = {
+    _: parser({}),
+    rate: parser({
+      opts: [cast]
+    })
+  }
+
+  const {errs, args} = parser(stages, parsers)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: 8
+    },
+    query: 'Supersize Me'
+  }
+
+  const expErrs = [
+    falseArgsRules({})
+  ]
+
+  const errs2 = filterErrs(['rules', 'args'])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
