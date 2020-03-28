@@ -40,10 +40,10 @@ const falseOptsRules = ({rules, options}) => ({
   info: {rules, options}
 })
 
-const falseRules = ({rules, option}) => ({
+const falseRules = ({key, rules, option}) => ({
   code: 'False rules',
   msg:  "An option's rules returned false. Please check your arguments.",
-  info: {rules, option}
+  info: {key, rules, option}
 })
 
 const invalidArity = ({option}) => ({
@@ -118,10 +118,10 @@ const wrongOptsRulesType = ({type, options}) => ({
   info: {type, options}
 })
 
-const wrongRulesType = ({type, options}) => ({
+const wrongRulesType = ({key, type, options}) => ({
   code: 'Wrong rules type',
   msg:  'The rules have a wrong type, please provide a predicate with the following signature: (option) => (options) => boolean',
-  info: {type, options}
+  info: {key, type, options}
 })
 
 module.exports = {
