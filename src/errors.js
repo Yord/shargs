@@ -70,18 +70,6 @@ const invalidValues = ({values, option}) => ({
   info: {values, option}
 })
 
-const noArgumentsProvidedInOption = ({option}) => ({
-  code: 'No arguments provided in option',
-  msg:  "Please provide at least one argument (e.g. [{args: ['--foo'], ...}])",
-  info: {option}
-})
-
-const noKeyProvidedInOption = ({option}) => ({
-  code: 'No key provided in option',
-  msg:  "Please provide a key (e.g. [{key: 'foo', ...}])",
-  info: {option}
-})
-
 const nonMatchingArgumentTypes = ({arg, ref, option}) => ({
   code: 'Non-matching argument types',
   msg:  'If arguments have the same arg, their types must either be equal or have the same length',
@@ -149,8 +137,6 @@ module.exports = {
   invalidOptionsListInCombine,
   invalidTypes,
   invalidValues,
-  noKeyProvidedInOption,
-  noArgumentsProvidedInOption,
   nonMatchingArgumentTypes,
   requiredOptionFormat,
   requiredOptionMissing,
