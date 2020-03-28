@@ -15,7 +15,7 @@ module.exports = parsers => ({errs = [], opts: OPTS = []} = {}) => {
         errs2       = errs2.concat(child.errs || [])
         args[key]   = Object.assign({}, args[key], child.args)
 
-        const parent = parser(freeOpts(OPTS))(child.args._, [])
+        const parent = parser(noRestOrCommands(OPTS))(child.args._, [])
         errs2        = errs2.concat(parent.errs || [])
         args         = {...parent.args, ...args, _: args._.concat(parent.args._)}
       } else if (Array.isArray(types) && types.length === 0) {
@@ -32,8 +32,8 @@ module.exports = parsers => ({errs = [], opts: OPTS = []} = {}) => {
   return {errs: errs.concat(errs2), args}
 }
 
-function freeOpts (opts) {
-  return opts.filter(opt => isNoCommand(opt) && isNotRest(opt) && hasNoValues(opt))
+function noRestOrCommands (opts) {
+  return opts.filter(opt => isNoCommand(opt) && isNotRest(opt))
 }
 
 function isNoCommand ({types}) {
@@ -42,8 +42,4 @@ function isNoCommand ({types}) {
 
 function isNotRest ({types}) {
   return typeof types !== 'undefined'
-}
-
-function hasNoValues ({values}) {
-  return typeof values === 'undefined'
 }
