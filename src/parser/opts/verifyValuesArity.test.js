@@ -72,6 +72,50 @@ test('verifyValuesArity does not throw for correct arities in values', () => {
   expect(errs).toStrictEqual(exp)
 })
 
+test('verifyValuesArity does not throw for correct arities in defaultValues', () => {
+  const undefinedTypes = setTypes(undefined)
+
+  const opts = [
+    undefinedTypes({...string('rest', []), defaultValues: ['foo']}),
+
+    {...string('string1', []), defaultValues: ['string']},
+    {...string('string2', []), defaultValues: [42]},
+    {...string('string3', []), defaultValues: null},
+    {...string('string4', []), defaultValues: undefined},
+    
+    {...numberBool('numBool1', []), defaultValues: ['23', 'true']},
+    {...numberBool('numBool2', []), defaultValues: [42, 42]},
+    {...numberBool('numBool3', []), defaultValues: null},
+    {...numberBool('numBool4', []), defaultValues: undefined},
+
+    {...number('answer1', []), defaultValues: ['42']},
+    {...number('answer2', []), defaultValues: [true]},
+    {...number('number3', []), defaultValues: null},
+    {...number('number4', []), defaultValues: undefined},
+    
+    {...bool('verbose1', []), defaultValues: ['false']},
+    {...bool('verbose2', []), defaultValues: [42]},
+    {...bool('bool3', []), defaultValues: null},
+    {...bool('bool4', []), defaultValues: undefined},
+    
+    {...flag('flag1', []), defaultValues: [1]},
+    {...flag('flag2', []), defaultValues: ['42']},
+    {...flag('flag3', []), defaultValues: null},
+    {...flag('flag4', []), defaultValues: undefined},
+
+    {...command('help1', []), defaultValues: []},
+    {...command('help2', []), defaultValues: ['foo']},
+    {...command('help3', []), defaultValues: ['foo', '--bar']},
+    {...command('help4', []), defaultValues: ['foo', 42, 'baz']}
+  ]
+
+  const {errs} = verifyValuesArity({opts})
+
+  const exp = []
+
+  expect(errs).toStrictEqual(exp)
+})
+
 test('verifyValuesArity throws invalidArity error for incorrect arities for string, number, bool, and flag in values', () => {
   const undefinedTypes = setTypes(undefined)
 
