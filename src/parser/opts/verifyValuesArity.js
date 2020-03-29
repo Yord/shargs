@@ -1,11 +1,18 @@
 const {invalidArity, invalidTypes, invalidValues} = require('../../errors')
 
 module.exports = ({errs = [], opts = []} = {}) => {
+  const errs2 = checkArity(opts, 'values')
+  const errs3 = checkArity(opts, 'defaultValues')
+
+  return {errs: errs.concat(errs2).concat(errs3), opts}
+}
+
+function checkArity (opts, key) {
   const errs2 = []
 
   for (let i = 0; i < opts.length; i++) {
     const opt = opts[i]
-    const {types, values} = opt
+    const {types, [key]: values} = opt
 
     if (Array.isArray(values)) {
       if (Array.isArray(types)) {
@@ -26,9 +33,9 @@ module.exports = ({errs = [], opts = []} = {}) => {
         errs2.push(invalidTypes({types, option: opt}))
       }
     } else if (typeof values !== 'undefined' && values !== null) {
-      errs2.push(invalidValues({values, option: opt}))
+      errs2.push(invalidValues({[key]: values, option: opt}))
     }
   }
 
-  return {errs: errs.concat(errs2), opts}
+  return errs2
 }

@@ -64,10 +64,10 @@ const invalidTypes = ({types, option}) => ({
   info: {types, option}
 })
 
-const invalidValues = ({values, option}) => ({
+const invalidValues = ({values, defaultValues, option}) => ({
   code: 'Invalid values',
   msg:  "An option's values field has an invalid type.",
-  info: {values, option}
+  info: {values, defaultValues, option}
 })
 
 const nonMatchingArgumentTypes = ({arg, ref, option}) => ({
