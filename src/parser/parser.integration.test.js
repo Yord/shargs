@@ -46,7 +46,7 @@ const opts = [
   flag('popcorn', ['-l', '--low-fat'], {reverse: true}),
   bool('fantasy', ['-E', '--no-hobbits'], {reverse: true}),
   string('genre', ['-g', '--genre'], {required: true}),
-  number('hours', ['-h', '--hours'], {values: 2}),
+  number('hours', ['-h', '--hours'], {defaultValues: 2}),
   command('rate', ['rate'], {opts: [
     number('stars', ['-s', '--stars'], {only: ['1', '2', '3', '4', '5']})
   ]}),
@@ -203,8 +203,8 @@ test('parser with only cast works as expected', () => {
   }
 
   const expErrs = [
-    argumentIsNotANumber({values: 2, index: 0}),
-    argumentIsNotANumber({values: 2, index: 0})
+    argumentIsNotANumber({defaultValues: 2, index: 0}),
+    argumentIsNotANumber({defaultValues: 2, index: 0})
   ]
 
   const errs2 = filterErrs(['option'])(errs)
@@ -503,7 +503,7 @@ test('parser with only verifyValuesArity works as expected', () => {
   }
 
   const expErrs = [
-    invalidValues({values: 2})
+    invalidValues({defaultValues: 2})
   ]
 
   const errs2 = filterErrs(['option'])(errs)
