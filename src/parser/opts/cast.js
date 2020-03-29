@@ -31,7 +31,7 @@ function transformOption (option, key) {
     if (typeof types === 'undefined' || types === null) {
       values = VALUES
     } else if (Array.isArray(types) && types.length === 0) {
-      values = [1]
+      values = VALUES
     } else {
       for (let j = 0; j < types.length; j++) {
         const type = types[j]
