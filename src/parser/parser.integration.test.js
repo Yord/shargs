@@ -128,13 +128,13 @@ test('parser with only splitShortOptions works as expected', () => {
 test('parser with only verifyArgv works as expected', () => {
   const argvRules = argv => argv.some(_ => _ === '--fancy')
 
-  const stages = {
+  const checks = {
     argv: [verifyArgv(argvRules)]
   }
 
-  const parsers = {_: parser({})}
+  const stages = {}
 
-  const {errs, args} = parser(stages, parsers)(opts)(argv)
+  const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
@@ -248,13 +248,13 @@ test('parser with only demandACommand works as expected if no command is present
 })
 
 test('parser with only demandACommand works as expected if a command is present', () => {
-  const stages = {
+  const checks = {
     opts: [demandACommand]
   }
 
-  const parsers = {_: parser({})}
+  const stages = {}
 
-  const {errs, args} = parser(stages, parsers)(opts)(argv)
+  const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
@@ -278,13 +278,13 @@ test('parser with only demandACommand works as expected if a command is present'
 })
 
 test('parser with only requireOptions works as expected', () => {
-  const stages = {
+  const checks = {
     opts: [requireOptions]
   }
 
-  const parsers = {_: parser({})}
+  const stages = {}
 
-  const {errs, args} = parser(stages, parsers)(opts)(argv)
+  const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
@@ -395,13 +395,13 @@ test('parser with only reverseFlags works as expected', () => {
 })
 
 test('parser with only suggestOptions works as expected', () => {
-  const stages = {
+  const checks = {
     opts: [suggestOptions]
   }
 
-  const parsers = {_: parser({})}
+  const stages = {}
 
-  const {errs, args} = parser(stages, parsers)(opts)(argv)
+  const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
@@ -433,13 +433,13 @@ test('parser with only verifyOpts works as expected', () => {
     opts.every(_ => _.key !== 'genre' || _.values)
   )
 
-  const stages = {
+  const checks = {
     opts: [verifyOpts(optsRules)]
   }
 
-  const parsers = {_: parser({})}
+  const stages = {}
 
-  const {errs, args} = parser(stages, parsers)(opts)(argv)
+  const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
@@ -465,13 +465,13 @@ test('parser with only verifyOpts works as expected', () => {
 })
 
 test('parser with only verifyRules works as expected', () => {
-  const stages = {
+  const checks = {
     opts: [verifyRules]
   }
 
-  const parsers = {_: parser({})}
+  const stages = {}
 
-  const {errs, args} = parser(stages, parsers)(opts)(argv)
+  const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
@@ -497,13 +497,13 @@ test('parser with only verifyRules works as expected', () => {
 })
 
 test('parser with only verifyValuesArity works as expected', () => {
-  const stages = {
+  const checks = {
     opts: [verifyValuesArity]
   }
 
-  const parsers = {_: parser({})}
+  const stages = {}
 
-  const {errs, args} = parser(stages, parsers)(opts)(argv)
+  const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
@@ -585,13 +585,13 @@ test('parser with only clearRest works as expected', () => {
 })
 
 test('parser with only failRest works as expected', () => {
-  const stages = {
+  const checks = {
     args: [failRest]
   }
 
-  const parsers = {_: parser({})}
+  const stages = {}
 
-  const {errs, args} = parser(stages, parsers)(opts)(argv)
+  const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
@@ -737,13 +737,13 @@ test('parser with only transformArgs works as expected', () => {
 test('parser with only verifyArgs works as expected', () => {
   const argsRules = args => !args.query || args.query.indexOf('Terminator') > -1
 
-  const stages = {
+  const checks = {
     args: [verifyArgs(argsRules)]
   }
 
-  const parsers = {_: parser({})}
+  const stages = {}
 
-  const {errs, args} = parser(stages, parsers)(opts)(argv)
+  const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
@@ -771,18 +771,19 @@ test('parser with only verifyArgs works as expected', () => {
 test('parser with custom parser functions for the rate command works as expected', () => {
   const rules = args => !args.query || args.query.indexOf('Terminator') > -1
 
-  const stages = {
+  const checks = {
     args: [verifyArgs(rules)]
   }
 
+  const stages = {}
+
   const parsers = {
-    _: parser({}),
     rate: parser({
       opts: [cast]
     })
   }
 
-  const {errs, args} = parser(stages, parsers)(opts)(argv)
+  const {errs, args} = parser(stages, {checks, parsers})(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '-vv'],
@@ -808,12 +809,6 @@ test('parser with custom parser functions for the rate command works as expected
 })
 
 test('parser works with complex stages setup', () => {
-  const combine = (verification, stages) => ({
-    argv: [...verification.argv, ...stages.argv],
-    opts: [...verification.opts, ...stages.opts],
-    args: [...verification.args, ...stages.args]
-  })
-
   const argvRules = argv => argv.some(_ => _ === '--fancy')
 
   const optsRules = opts => (
@@ -823,7 +818,7 @@ test('parser works with complex stages setup', () => {
 
   const argsRules = args => !args.query || args.query.indexOf('Terminator') > -1
 
-  const verificationStages = {
+  const checks = {
     argv: [
       verifyArgv(argvRules)
     ],
@@ -862,13 +857,7 @@ test('parser works with complex stages setup', () => {
     ]
   }
 
-  const stagesWithVerification = combine(verificationStages, stages)
-
-  const parsers = {
-    _: parser(stages)
-  }
-
-  const {errs, args} = parser(stagesWithVerification, parsers)(opts)(argv)
+  const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '--help'],

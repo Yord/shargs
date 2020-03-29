@@ -47,16 +47,18 @@ function convertCommands (parsers) {
       const {key, values, types, opts} = OPTS[i]
   
       if (Array.isArray(values) && types === null) {
-        const parentParser = parsers._
-        const childParser  = typeof parsers[key] === 'function' ? parsers[key] : parentParser
+        const parentParser = parsers.__
+        const childParser  = typeof parsers[key] === 'function' ? parsers[key] : parsers._
   
         const child = childParser(opts || [])(values, [])
         errs2       = errs2.concat(child.errs || [])
         args[key]   = Object.assign({}, args[key], child.args)
   
-        const parent = parentParser(filter(OPTS))(child.args._, [])
-        errs2        = errs2.concat(parent.errs || [])
-        args         = {...parent.args, ...args, _: args._.concat(parent.args._)}
+        if (typeof parentParser === 'function') {
+          const parent = parentParser(filter(OPTS))(child.args._, [])
+          errs2        = errs2.concat(parent.errs || [])
+          args         = {...parent.args, ...args, _: args._.concat(parent.args._)}
+        }
       }
     }
   

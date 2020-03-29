@@ -6,11 +6,19 @@ const cast              = require('../src/parser/opts/cast')
 const restrictToOnly    = require('../src/parser/opts/restrictToOnly')
 const clearRest         = require('../src/parser/args/clearRest')
 
-const fooParser = parser({
+const checks = {
+  argv: [],
+  opts: [restrictToOnly],
+  args: []
+}
+
+const stages = {
   argv: [splitShortOptions],
-  opts: [cast, restrictToOnly],
+  opts: [cast],
   args: [clearRest]
-})
+}
+
+const fooParser = parser(stages, {checks})
 
 const {array, number, string, bool, flag, command} = require('../src/options')
 const numStr  = array(['number', 'string'])
@@ -776,7 +784,7 @@ console.log('exD1  === exD2',  exD1  === exD2)
   const deepThought = parser({
     argv: [log('A'), splitShortOptions, log('B')],
     toOpts,
-    opts: [log('C'), cast, restrictToOnly, log('D')],
+    opts: [log('C'), restrictToOnly, cast, log('D')],
     toArgs: toArgs(),
     args: [log('E'), clearRest, log('F')]
   })
@@ -824,7 +832,7 @@ console.log('exD1  === exD2',  exD1  === exD2)
 
   const deepThought = parser({
     argv: [splitShortOptions],
-    opts: [cast, restrictToOnly],
+    opts: [restrictToOnly, cast],
     args: [clearRest]
   })
 
