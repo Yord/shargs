@@ -153,6 +153,43 @@ test('verifyValuesArity throws invalidArity error for incorrect arities for stri
   expect(errs).toStrictEqual(exp)
 })
 
+test('verifyValuesArity throws invalidArity error for incorrect arities for string, number, bool, and flag in defaultValues', () => {
+  const undefinedTypes = setTypes(undefined)
+
+  const string1 = {...string('string1', []), defaultValues: []}
+  const string2 = {...string('string2', []), defaultValues: ['foo', 'bar']}
+  const string3 = undefinedTypes({...string('string3', []), defaultValues: []})
+  const string4 = undefinedTypes({...string('string4', []), defaultValues: ['foo', 'bar']})
+
+  const number1 = {...number('number1', []), defaultValues: []}
+  const number2 = {...number('number2', []), defaultValues: ['foo', 'bar']}
+  const number3 = undefinedTypes({...number('number3', []), defaultValues: []})
+  const number4 = undefinedTypes({...number('number4', []), defaultValues: ['foo', 'bar']})
+
+  const bool1 = {...bool('bool1', []), defaultValues: []}
+  const bool2 = {...bool('bool2', []), defaultValues: ['foo', 'bar']}
+  const bool3 = undefinedTypes({...bool('bool3', []), defaultValues: []})
+  const bool4 = undefinedTypes({...bool('bool4', []), defaultValues: ['foo', 'bar']})
+
+  const flag1 = {...flag('flag1', []), defaultValues: []}
+  const flag2 = {...flag('flag2', []), defaultValues: ['foo', 'bar']}
+  const flag3 = undefinedTypes({...flag('flag3', []), defaultValues: []})
+  const flag4 = undefinedTypes({...flag('flag4', []), defaultValues: ['foo', 'bar']})
+
+  const opts = [
+    string1, string2, string3, string4,
+    number1, number2, number3, number4,
+    bool1, bool2, bool3, bool4,
+    flag1, flag2, flag3, flag4
+  ]
+
+  const {errs} = verifyValuesArity({opts})
+
+  const exp = opts.map(option => invalidArity({option}))
+
+  expect(errs).toStrictEqual(exp)
+})
+
 test('verifyValuesArity throws invalidValues error for incorrect values for string, number, bool, and flag in values', () => {
   const string1 = {...string('string1', []), values: 42}
   const string2 = {...string('string2', []), values: {foo: 42}}
