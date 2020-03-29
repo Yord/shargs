@@ -428,13 +428,13 @@ test('parser with only suggestOptions works as expected', () => {
 })
 
 test('parser with only verifyOpts works as expected', () => {
-  const rules = opts => (
+  const optsRules = opts => (
     !opts.some(_ => _.key === 'genre') ||
     opts.every(_ => _.key !== 'genre' || _.values)
   )
 
   const stages = {
-    opts: [verifyOpts(rules)]
+    opts: [verifyOpts(optsRules)]
   }
 
   const parsers = {_: parser({})}
