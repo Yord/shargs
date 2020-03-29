@@ -735,10 +735,10 @@ test('parser with only transformArgs works as expected', () => {
 })
 
 test('parser with only verifyArgs works as expected', () => {
-  const rules = args => !args.query || args.query.indexOf('Terminator') > -1
+  const argsRules = args => !args.query || args.query.indexOf('Terminator') > -1
 
   const stages = {
-    args: [verifyArgs(rules)]
+    args: [verifyArgs(argsRules)]
   }
 
   const parsers = {_: parser({})}
