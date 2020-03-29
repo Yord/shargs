@@ -22,7 +22,7 @@ test('verifyValuesArity README example works', () => {
   expect(errs).toStrictEqual(exp)
 })
 
-test('verifyValuesArity does not throw for correct arities', () => {
+test('verifyValuesArity does not throw for correct arities in values', () => {
   const undefinedTypes = setTypes(undefined)
 
   const opts = [
@@ -72,7 +72,7 @@ test('verifyValuesArity does not throw for correct arities', () => {
   expect(errs).toStrictEqual(exp)
 })
 
-test('verifyValuesArity throws invalidArity error for incorrect arities for string, number, bool, and flag', () => {
+test('verifyValuesArity throws invalidArity error for incorrect arities for string, number, bool, and flag in values', () => {
   const undefinedTypes = setTypes(undefined)
 
   const string1 = {...string('string1', []), values: []}
@@ -109,7 +109,7 @@ test('verifyValuesArity throws invalidArity error for incorrect arities for stri
   expect(errs).toStrictEqual(exp)
 })
 
-test('verifyValuesArity throws invalidValues error for incorrect values for string, number, bool, and flag', () => {
+test('verifyValuesArity throws invalidValues error for incorrect values for string, number, bool, and flag in values', () => {
   const string1 = {...string('string1', []), values: 42}
   const string2 = {...string('string2', []), values: {foo: 42}}
 
@@ -131,7 +131,7 @@ test('verifyValuesArity throws invalidValues error for incorrect values for stri
   expect(errs).toStrictEqual(exp)
 })
 
-test('verifyValuesArity throws invalidTypes error for incorrect values for string, number, bool, and flag', () => {
+test('verifyValuesArity throws invalidTypes error for incorrect values for string, number, bool, and flag in values', () => {
   const otherTypes = setTypes(42)
   
   const string0 = otherTypes({...string('string', []), values: ['foo']})
