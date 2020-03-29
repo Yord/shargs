@@ -806,3 +806,110 @@ test('parser with custom parser functions for the rate command works as expected
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
 })
+
+test('parser works with complex stages setup', () => {
+  const combine = (before, stages, after) => ({
+    argv: [...before.argv, ...stages.argv, ...after.argv],
+    opts: [...before.opts, ...stages.opts, ...after.opts],
+    args: [...before.args, ...stages.args, ...after.args]
+  })
+
+  const argvRules = argv => argv.some(_ => _ === '--fancy')
+
+  const optsRules = opts => (
+    !opts.some(_ => _.key === 'genre') ||
+    opts.every(_ => _.key !== 'genre' || _.values)
+  )
+
+  const argsRules = args => !args.query || args.query.indexOf('Terminator') > -1
+
+  const stagesBefore = {
+    argv: [
+      verifyArgv(argvRules)
+    ],
+    opts: [
+      demandACommand,
+      requireOptions,
+      verifyOpts(optsRules),
+      verifyRules,
+      verifyValuesArity
+    ],
+    args: [
+      failRest,
+      verifyArgs(argsRules)
+    ]
+  }
+
+  const stages = {
+    argv: [
+      splitShortOptions
+    ],
+    opts: [
+      restrictToOnly,
+      reverseBools,
+      reverseFlags,
+      suggestOptions,
+      cast
+    ],
+    args: [
+      mergeArgs(),
+      transformArgs({
+        flag: ({key, val: {count}, errs, args}) => ({
+          errs,
+          args: {...args, [key]: key === 'verbose' ? count : count > 0}
+        })
+      })
+    ]
+  }
+
+  const stagesAfter = {
+    argv: [],
+    opts: [],
+    args: []
+  }
+
+  const stagesCombined = combine(stagesBefore, stages, stagesAfter)
+
+  const parsers = {
+    _: parser(stages)
+  }
+
+  const {errs, args} = parser(stagesCombined, parsers)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '--help'],
+    fantasy: false,
+    help: true,
+    popcorn: false,
+    query: 'Supersize Me',
+    smile: true,
+    verbose: 2
+  }
+
+  const expErrs = [
+    falseArgvRules({argv}),
+    requiredOptionMissing({key: 'genre'}),
+    falseOptsRules({}),
+    falseRules({key: 'query'}),
+    invalidValues({defaultValues: 2}),
+    didYouMean({argv: '--colors'}),
+    argumentIsNotANumber({defaultValues: 2, index: 0}),
+    valueRestrictionsViolated({key: 'stars', values: ['8'], index: 0, only: ['1', '2', '3', '4', '5']}),
+    didYouMean({argv: '--help'}),
+    argumentIsNotANumber({defaultValues: 2, index: 0}),
+    unexpectedArgument({argument: '--colors'}),
+    unexpectedArgument({argument: '--help'}),
+    falseArgsRules({})
+  ]
+
+  const errs2 = filterErrs(['args', 'options', 'option', 'rules'])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
+
+// bestGuessOpts
+// bestGuessRest
+// clearRest
+// flagsAsBools
+// flagsAsNumbers
