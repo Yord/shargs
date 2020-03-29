@@ -126,10 +126,10 @@ test('parser with only splitShortOptions works as expected', () => {
 })
 
 test('parser with only verifyArgv works as expected', () => {
-  const rules = argv => argv.some(_ => _ === '--fancy')
+  const argvRules = argv => argv.some(_ => _ === '--fancy')
 
   const stages = {
-    argv: [verifyArgv(rules)]
+    argv: [verifyArgv(argvRules)]
   }
 
   const parsers = {_: parser({})}
