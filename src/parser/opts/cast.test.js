@@ -250,6 +250,20 @@ test('cast does not change flags in defaultValues', () => {
   expect(opts).toStrictEqual(exp)
 })
 
+test('cast does not change negative flags in values', () => {
+  const version = {...flag('version', ['--version']), values: [-1]}
+
+  const obj = {
+    opts: [version]
+  }
+
+  const {opts} = cast(obj)
+
+  const exp = [version]
+
+  expect(opts).toStrictEqual(exp)
+})
+
 test('cast casts arrays in values', () => {
   const obj = {
     opts: [
