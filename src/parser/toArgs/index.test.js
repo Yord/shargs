@@ -21,7 +21,7 @@ test('toArgs transforms opts into args', () => {
     ]
   }
 
-  const {args} = toArgs({_: discard})(obj)
+  const {args} = toArgs({_: discard, __: discard})(obj)
 
   const exp = {
     _: ['foo', 'bar'],
