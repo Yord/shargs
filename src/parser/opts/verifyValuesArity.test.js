@@ -251,6 +251,23 @@ test('verifyValuesArity throws invalidTypes error for incorrect values for strin
   expect(errs).toStrictEqual(exp)
 })
 
+test('verifyValuesArity throws invalidTypes error for incorrect values for string, number, bool, and flag in defaultValues', () => {
+  const otherTypes = setTypes(42)
+  
+  const string0 = otherTypes({...string('string', []), defaultValues: ['foo']})
+  const number0 = otherTypes({...number('number', []), defaultValues: ['42']})
+  const bool0 = otherTypes({...bool('bool', []), defaultValues: ['true']})
+  const flag0 = otherTypes({...flag('flag', []), defaultValues: [1]})
+
+  const opts = [string0, number0, bool0, flag0]
+
+  const {errs} = verifyValuesArity({opts})
+
+  const exp = opts.map(option => invalidTypes({types: option.types, option}))
+
+  expect(errs).toStrictEqual(exp)
+})
+
 test('verifyValuesArity works if opts is undefined', () => {
   const obj = {}
 
