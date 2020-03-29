@@ -1,12 +1,10 @@
 const bestGuessOpts = require('./bestGuessOpts')
 const {flag, string} = require('../../options')
 
-const noArgs = ({args, ...rest}) => rest
-
 test('bestGuessOpts README example works', () => {
   const obj = {
     opts: [
-      noArgs(string('age', [], {values: ['unknown']})),
+      {...string('age', []), values: ['unknown']},
       {values: ['--angry']},
       {values: ['--name']},
       {values: ['Logan']},
@@ -17,9 +15,9 @@ test('bestGuessOpts README example works', () => {
   const {opts} = bestGuessOpts(obj)
 
   const exp = [
-    noArgs(string('age', [], {values: ['unknown']})),
-    noArgs(flag('angry', [], {values: [1]})),
-    noArgs(string('name', [], {values: ['Logan']})),
+    {...string('age', []), values: ['unknown']},
+    {...flag('angry', []), values: [1]},
+    {...string('name', []), values: ['Logan']},
     {values: ['foo']}
   ]
 
@@ -29,7 +27,7 @@ test('bestGuessOpts README example works', () => {
 test('bestGuessOpts does not override existing keys', () => {
   const obj = {
     opts: [
-      noArgs(string('name', [], {values: ['Charles']})),
+      {...string('name', []), values: ['Charles']},
       {values: ['--name']},
       {values: ['Logan']}
     ]
@@ -45,7 +43,7 @@ test('bestGuessOpts does not override existing keys', () => {
 test('bestGuessOpts does not interpret short options that are too long', () => {
   const obj = {
     opts: [
-      noArgs(string('name', [], {values: ['Charles']})),
+      {...string('name', []), values: ['Charles']},
       {values: ['-name']},
       {values: ['Logan']}
     ]
@@ -61,7 +59,7 @@ test('bestGuessOpts does not interpret short options that are too long', () => {
 test('bestGuessOpts does work despite getting nonsensical input', () => {
   const obj = {
     opts: [
-      noArgs(string('name', [], {values: ['Charles']})),
+      {...string('name', []), values: ['Charles']},
       {values: ['--foo']},
       {values: [42]},
       {values: ['-f']},
@@ -74,12 +72,12 @@ test('bestGuessOpts does work despite getting nonsensical input', () => {
   const {opts} = bestGuessOpts(obj)
 
   const exp = [
-    noArgs(string('name', [], {values: ['Charles']})),
-    noArgs(flag('foo', [], {values: [1]})),
+    {...string('name', []), values: ['Charles']},
+    {...flag('foo', []), values: [1]},
     {values: [42]},
-    noArgs(flag('f', [], {values: [1]})),
+    {...flag('f', []), values: [1]},
     {values: [1]},
-    noArgs(flag('h', [], {values: [1]})),
+    {...flag('h', []), values: [1]},
     {values: [{foo: 42}]}
   ]
 

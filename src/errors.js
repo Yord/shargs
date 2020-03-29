@@ -1,13 +1,13 @@
-const argumentIsNotABool = ({values, index, option}) => ({
+const argumentIsNotABool = ({values, defaultValues, index, option}) => ({
   code: 'Argument is not a boolean',
   msg:  "The passed command line argument must either be 'true' or 'false'",
-  info: {values, index, option}
+  info: {values, defaultValues, index, option}
 })
 
-const argumentIsNotANumber = ({values, index, option}) => ({
+const argumentIsNotANumber = ({values, defaultValues, index, option}) => ({
   code: 'Argument is not a number',
   msg:  'The passed command line argument must be a number',
-  info: {values, index, option}
+  info: {values, defaultValues, index, option}
 })
 
 const commandRequired = ({options}) => ({
@@ -64,10 +64,10 @@ const invalidTypes = ({types, option}) => ({
   info: {types, option}
 })
 
-const invalidValues = ({values, option}) => ({
+const invalidValues = ({values, defaultValues, option}) => ({
   code: 'Invalid values',
   msg:  "An option's values field has an invalid type.",
-  info: {values, option}
+  info: {values, defaultValues, option}
 })
 
 const nonMatchingArgumentTypes = ({arg, ref, option}) => ({

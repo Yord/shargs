@@ -11,8 +11,8 @@ test('options types are correctly assembled', () => {
               oneof(constant(undefined), anything()).chain(opts =>
                 oneof(constant(false), constant(true)).chain(required =>
                   oneof(constant(false), constant(true)).chain(reverse =>
-                    oneof(constant(undefined), anything()).chain(values =>
-                      oneof(constant(undefined), constant({desc, rules, only, opts, required, reverse, values})).map(options =>
+                    oneof(constant(undefined), anything()).chain(defaultValues =>
+                      oneof(constant(undefined), constant({desc, rules, only, opts, required, reverse, defaultValues})).map(options =>
                         ({
                           types,
                           key,
@@ -22,13 +22,13 @@ test('options types are correctly assembled', () => {
                             key,
                             types,
                             args,
-                            ...(typeof options !== 'undefined' ? {desc}     : {}),
-                            ...(typeof options !== 'undefined' ? {only}     : {}),
-                            ...(typeof options !== 'undefined' ? {opts}     : {}),
-                            ...(typeof options !== 'undefined' ? {values}   : {}),
-                            ...(typeof options !== 'undefined' ? {required} : {}),
-                            ...(typeof options !== 'undefined' ? {reverse}  : {}),
-                            ...(typeof options !== 'undefined' ? {rules}    : {})
+                            ...(typeof options !== 'undefined' ? {desc}          : {}),
+                            ...(typeof options !== 'undefined' ? {only}          : {}),
+                            ...(typeof options !== 'undefined' ? {opts}          : {}),
+                            ...(typeof options !== 'undefined' ? {defaultValues} : {}),
+                            ...(typeof options !== 'undefined' ? {required}      : {}),
+                            ...(typeof options !== 'undefined' ? {reverse}       : {}),
+                            ...(typeof options !== 'undefined' ? {rules}         : {})
                           }
                         })
                       )

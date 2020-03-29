@@ -11,7 +11,7 @@ test('verifyOpts README example works', () => {
   )
 
   const opts = [
-    string('firstName', ['-f'], {values: ['Logan']}),
+    {...string('firstName', ['-f']), values: ['Logan']},
     string('lastName', ['-l'])
   ]
 
@@ -28,7 +28,7 @@ test('verifyOpts fails on wrong type', () => {
   const rules = 42
 
   const opts = [
-    string('firstName', ['-f'], {values: ['Logan']}),
+    {...string('firstName', ['-f']), values: ['Logan']},
     string('lastName', ['-l'])
   ]
 

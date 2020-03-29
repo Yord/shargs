@@ -1,7 +1,5 @@
 const {flag, string} = require('../../options')
 
-const noArgs = ({args, ...rest}) => rest
-
 module.exports = ({errs = [], opts = []} = {}) => {
   const errs2 = []
   const opts2 = []
@@ -19,16 +17,16 @@ module.exports = ({errs = [], opts = []} = {}) => {
 
           if (opt2 && isRest(opt2)) {
             if (isString(opt2)) {
-              const str = string(key, [], {values: opt2.values})
-              opts2.push(noArgs(str))
+              const str = {...string(key, []), values: opt2.values}
+              opts2.push(str)
               at += 1
             } else {
-              const flg = flag(key, [], {values: [1]})
-              opts2.push(noArgs(flg))
+              const flg = {...flag(key, []), values: [1]}
+              opts2.push(flg)
             }
           } else {
-            const flg = flag(key, [], {values: [1]})
-            opts2.push(noArgs(flg))
+            const flg = {...flag(key, []), values: [1]}
+            opts2.push(flg)
           }
         } else opts2.push(opt)
       } else opts2.push(opt)
