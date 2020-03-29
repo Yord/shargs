@@ -808,10 +808,10 @@ test('parser with custom parser functions for the rate command works as expected
 })
 
 test('parser works with complex stages setup', () => {
-  const combine = (before, stages, after) => ({
-    argv: [...before.argv, ...stages.argv, ...after.argv],
-    opts: [...before.opts, ...stages.opts, ...after.opts],
-    args: [...before.args, ...stages.args, ...after.args]
+  const combine = (verification, stages) => ({
+    argv: [...verification.argv, ...stages.argv],
+    opts: [...verification.opts, ...stages.opts],
+    args: [...verification.args, ...stages.args]
   })
 
   const argvRules = argv => argv.some(_ => _ === '--fancy')
@@ -823,7 +823,7 @@ test('parser works with complex stages setup', () => {
 
   const argsRules = args => !args.query || args.query.indexOf('Terminator') > -1
 
-  const stagesBefore = {
+  const verificationStages = {
     argv: [
       verifyArgv(argvRules)
     ],
@@ -862,19 +862,13 @@ test('parser works with complex stages setup', () => {
     ]
   }
 
-  const stagesAfter = {
-    argv: [],
-    opts: [],
-    args: []
-  }
-
-  const stagesCombined = combine(stagesBefore, stages, stagesAfter)
+  const stagesWithVerification = combine(verificationStages, stages)
 
   const parsers = {
     _: parser(stages)
   }
 
-  const {errs, args} = parser(stagesCombined, parsers)(opts)(argv)
+  const {errs, args} = parser(stagesWithVerification, parsers)(opts)(argv)
 
   const expArgs = {
     _: ['--colors', '--help'],
