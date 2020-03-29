@@ -370,6 +370,11 @@ The following fields are available:
 <td>array of type strings or `null`</td>
 <td><code>types</code> is an array of strings that represents the command-line option's type. <code>null</code> describes a <a href="#command"><code>command</code></a>, <code>[]</code> describes a <a href="#flag"><code>flag</code></a>, arrays with one element either describe a <a href="#number"><code>number</code></a> (<code>['number']</code>), a <a href="#string"><code>string</code></a> (<code>['string']</code>), or a <a href="#bool"><code>bool</code></a> (<code>['bool']</code>), and arrays with more than one element describe an <a href="#array"><code>array</code></a> of known size (e.g. <code>['string','number','bool']</code> is an array of size 3).</td>
 </tr>
+<tr name="defaultValues">
+<td><code><a href="#defaultValues">defaultValues</a></code></td>
+<td>array of strings</td>
+<td><code>defaultValues</code> is used by the <a href="#toArgs"><code>toArgs</code></a> parser stage to set default <a href="#values"><code>values</code></a> for command-line options without supplied command-line arguments. It takes an array of strings whose arity must match the <a href="#types"><code>types</code></a> arity.</td>
+</tr>
 <tr name="desc">
 <td><code><a href="#desc">desc</a></code></td>
 <td>string</td>
@@ -403,7 +408,7 @@ The following fields are available:
 <tr name="values">
 <td><code><a href="#values">values</a></code></td>
 <td>array with default value(s)</td>
-<td><code>values</code> is used by the <code>toOpts</code> parser stage to set default values for command-line options, that are not explicitly given. It takes an array of values that should have the same types as defined by the <a href="#types"><code>types</code></a> field. The user is responsible for ensuring the correct types are used.</td>
+<td><code>values</code> is used by the <a href="#toOpts"><code>toOpts</code></a> parser stage to store command-line arguments. This field should not be used by the user. If you need to set default values, use the <a href="#defaultValues"><code>defaultValues</code></a> field, instead.</td>
 </tr>
 </table>
 
