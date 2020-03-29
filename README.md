@@ -1100,7 +1100,7 @@ Result:
 </tr>
 </table>
 
-#### `args` Stage
+#### `args` Stages
 
 <table>
 <tr>
