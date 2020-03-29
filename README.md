@@ -417,14 +417,24 @@ The following fields are available:
 Shargs lets you define command-line parsers with the `parser` function:
 
 ```js
-const deepThought = parser({
+const stages = {
   argv: [splitShortOptions],
-  opts: [cast, restrictToOnly],
+  opts: [restrictToOnly, cast],
   args: [clearRest]
-})
+}
+
+const checks = {
+  argv: [],
+  opts: [demandACommand],
+  args: []
+}
+
+const parsers = {}
+
+const deepThought = parser(stages, {checks, parsers})
 ```
 
-`parser` takes an object with up to five keys.
+`parser` takes a `stages` object with up to five keys.
 Each key is the name of a shargs parsing stage:
 
 1.  `argv` functions modify arrays of command-line arguments.
@@ -433,48 +443,27 @@ Each key is the name of a shargs parsing stage:
 4.  `toArgs` transforms `opts` into an object holding the parsed arguments.
 5.  `args` functions modify `args` objects.
 
-`parser` applies the stages in the given order.
-Each stage takes an array of parser functions, that are applied from left to right.
+As a second parameter, it takes an object with two possible keys:
+A `checks` key with `argv`, `opts`, and `args` arrays.
+Checks are parser stages that record errors if rules are violated.
 
-#### `argv` Stage
+In addition to that, `parser` takes a `parsers` field that allows you to specify a different parser for each command.
+See the [Command-specific Parsers](#command-specific-parsers) section to learn more.
+
+`parser` applies the stages in the given order.
+For each stage, the checks are applied first, followed by the other stages.
+
+#### `argv` Checks
 
 <table>
 <tr>
-<th>Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
-</tr>
-<tr name="splitShortOptions">
-<td><code><a href="#splitShortOptions">splitShortOptions</a>({errs, argv})</code></td>
-<td>
-Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
-<details>
-<summary>
-<a href="#splitShortOptions">Example...</a>
-</summary>
-
-<br />
-
-```js
-const argv = ['-ab']
-
-splitShortOptions({argv})
-```
-
-Result:
-
-```js
-{
-  argv: ['-a', '-b']
-}
-```
-
-</details>
-</td>
 </tr>
 <tr name="verifyArgv">
 <td><code><a href="#verifyArgv">verifyArgv</a>(rules)({errs, argv})</code></td>
 <td>
-Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate.
+Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate. Records an error if the predicate returns false.
 <details>
 <summary>
 <a href="#verifyArgv">Example...</a>
@@ -512,11 +501,257 @@ Result:
 </tr>
 </table>
 
-#### `opts` Stage
+#### `argv` Stages
 
 <table>
 <tr>
-<th>Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="splitShortOptions">
+<td><code><a href="#splitShortOptions">splitShortOptions</a>({errs, argv})</code></td>
+<td>
+Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
+<details>
+<summary>
+<a href="#splitShortOptions">Example...</a>
+</summary>
+
+<br />
+
+```js
+const argv = ['-ab']
+
+splitShortOptions({argv})
+```
+
+Result:
+
+```js
+{
+  argv: ['-a', '-b']
+}
+```
+
+</details>
+</td>
+</tr>
+</table>
+
+#### `opts` Checks
+
+<table>
+<tr>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="demandACommand">
+<td><code><a href="#demandACommand">demandACommand</a>({errs, opts})</code></td>
+<td>
+Checks if <code>opts</code> includes at least one command and records an exception if no command is found.
+<details>
+<summary>
+<a href="#demandACommand">Example...</a>
+</summary>
+
+<br />
+
+```js
+const opts = [
+  string('title', ['--title'], {values: ["Hitchhiker Guide"]}),
+  numberBool('numBool', ['-n', '--nb'], {values: ['23', 'true']}),
+  number('answer', ['-a', '--answer'], {values: ['42']}),
+  bool('verbose', ['--verbose'], {values: ['false']}),
+  flag('version', ['--version'], {values: [1]})
+]
+
+demandACommand({opts})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'Command required',
+      msg:  'No command found. Please use at least one command!',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr name="requireOptions">
+<td><code><a href="#requireOptions">requireOptions</a>({errs, opts})</code></td>
+<td>
+Controls, if options marked with <a href="#required"><code>{required: true}</code></a> have valid <a href="#values"><code>values</code></a>.
+If a required option is not present, an error message is recorded.
+<details>
+<summary>
+<a href="#requireOptions">Example...</a>
+</summary>
+
+<br />
+
+```js
+
+const opts = [
+  number('answer', ['-a', '--answer'], {required: true})
+]
+
+requireOptions({opts})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'Required option is missing',
+      msg:  'A required option has not been provided.',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr name="verifyOpts">
+<td><code><a href="#verifyOpts">verifyOpts</a>(rules)({errs, opts})</code></td>
+<td>
+Checks, whether the <code>opts</code> adher to a given <code>rules</code> predicate.
+<details>
+<summary>
+<a href="#verifyOpts">Example...</a>
+</summary>
+
+<br />
+
+```js
+const implies = (p, q) => !p || q
+
+const rules = opts => implies(
+  opts.some(_ => _.key === 'firstName' && _.values),
+  opts.some(_ => _.key === 'lastName' && _.values)
+)
+
+const opts = [
+  string('firstName', ['-f'], {values: ['Charles']}),
+  string('lastName', ['-l'])
+]
+
+verifyOpts(rules)({opts})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'False opts rules',
+      msg:  'Your opts rules returned false...',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr name="verifyRules">
+<td><code><a href="#verifyRules">verifyRules</a>({errs, opts})</code></td>
+<td>
+Checks, whether the <a href="#rules"><code>rules</code></a> field holds for an option in relation to all options.
+<details>
+<summary>
+<a href="#verifyRules">Example...</a>
+</summary>
+
+<br />
+
+```js
+const rules = firstName => opts => (
+  firstName.values[0] === 'Logan' ||
+  opts.some(_ => _.key === 'lastName' && _.values)
+)
+
+const opts = [
+  string('firstName', ['-f'], {rules, values: ['Charles']}),
+  string('lastName', ['-l'])
+]
+
+verifyRules(obj)
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'False rules',
+      msg:  "An option's rules returned false...",
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr name="verifyValuesArity">
+<td><code><a href="#verifyValuesArity">verifyValuesArity</a>({errs, opts})</code></td>
+<td>
+Checks, whether the <a href="#values"><code>values</code></a> of an option fits its <a href="#types"><code>types</code></a>.
+<details>
+<summary>
+<a href="#verifyValuesArity">Example...</a>
+</summary>
+
+<br />
+
+```js
+const opts = [
+  string('name', ['--name'], {values: ['Charles', 'Francis']})
+]
+
+verifyValuesArity({opts})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'Invalid arity',
+      msg:  "An option's types arity does not match...",
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+</table>
+
+#### `opts` Stages
+
+<table>
+<tr>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
 <tr name="bestGuessOpts">
@@ -595,84 +830,6 @@ Result:
     command('help', ['-h', '--help'], {values: ['foo --bar']}),
     bool('verbose', ['--verbose'], {values: [false]}),
     flag('version', ['--version'], {values: [true]})
-  ]
-}
-```
-
-</details>
-</td>
-</tr>
-<tr name="demandACommand">
-<td><code><a href="#demandACommand">demandACommand</a>({errs, opts})</code></td>
-<td>
-Checks if <code>opts</code> includes at least one command and records an exception if no command is found.
-<details>
-<summary>
-<a href="#demandACommand">Example...</a>
-</summary>
-
-<br />
-
-```js
-const opts = [
-  string('title', ['--title'], {values: ["Hitchhiker Guide"]}),
-  numberBool('numBool', ['-n', '--nb'], {values: ['23', 'true']}),
-  number('answer', ['-a', '--answer'], {values: ['42']}),
-  bool('verbose', ['--verbose'], {values: ['false']}),
-  flag('version', ['--version'], {values: [1]})
-]
-
-demandACommand({opts})
-```
-
-Result:
-
-```js
-{
-  errs: [
-    {
-      code: 'Command required',
-      msg:  'No command found. Please use at least one command!',
-      info: {...}
-    }
-  ]
-}
-```
-
-</details>
-</td>
-</tr>
-<tr name="requireOptions">
-<td><code><a href="#requireOptions">requireOptions</a>({errs, opts})</code></td>
-<td>
-Controls, if options marked with <a href="#required"><code>{required: true}</code></a> have valid <a href="#values"><code>values</code></a>.
-If a required option is not present, an error message is recorded.
-<details>
-<summary>
-<a href="#requireOptions">Example...</a>
-</summary>
-
-<br />
-
-```js
-
-const opts = [
-  number('answer', ['-a', '--answer'], {required: true})
-]
-
-requireOptions({opts})
-```
-
-Result:
-
-```js
-{
-  errs: [
-    {
-      code: 'Required option is missing',
-      msg:  'A required option has not been provided.',
-      info: {...}
-    }
   ]
 }
 ```
@@ -851,31 +1008,36 @@ Results in:
 </details>
 </td>
 </tr>
-<tr name="verifyOpts">
-<td><code><a href="#verifyOpts">verifyOpts</a>(rules)({errs, opts})</code></td>
+</table>
+
+#### `args` Checks
+
+<table>
+<tr>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="failRest">
+<td><code><a href="#failRest">failRest</a>({errs, args})</code></td>
 <td>
-Checks, whether the <code>opts</code> adher to a given <code>rules</code> predicate.
+Records an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
 <details>
 <summary>
-<a href="#verifyOpts">Example...</a>
+<a href="#failRest">Example...</a>
 </summary>
 
 <br />
 
 ```js
-const implies = (p, q) => !p || q
+const args = {
+  _: ['foo'],
+  command: {
+    _: ['bar'],
+    foo: [42, 'foo']
+  }
+}
 
-const rules = opts => implies(
-  opts.some(_ => _.key === 'firstName' && _.values),
-  opts.some(_ => _.key === 'lastName' && _.values)
-)
-
-const opts = [
-  string('firstName', ['-f'], {values: ['Charles']}),
-  string('lastName', ['-l'])
-]
-
-verifyOpts(rules)({opts})
+failRest({args})
 ```
 
 Result:
@@ -884,8 +1046,8 @@ Result:
 {
   errs: [
     {
-      code: 'False opts rules',
-      msg:  'Your opts rules returned false...',
+      code: 'Unexpected argument',
+      msg:  'An unexpected argument was used...',
       info: {...}
     }
   ]
@@ -895,65 +1057,28 @@ Result:
 </details>
 </td>
 </tr>
-<tr name="verifyRules">
-<td><code><a href="#verifyRules">verifyRules</a>({errs, opts})</code></td>
+<tr name="verifyArgs">
+<td><code><a href="#verifyArgs">verifyArgs</a>(rules)({errs, args})</code></td>
 <td>
-Checks, whether the <a href="#rules"><code>rules</code></a> field holds for an option in relation to all options.
+Checks, whether the <code>args</code> adher to a given <code>rules</code> predicate.
 <details>
 <summary>
-<a href="#verifyRules">Example...</a>
+<a href="#verifyArgs">Example...</a>
 </summary>
 
 <br />
 
 ```js
-const rules = firstName => opts => (
-  firstName.values[0] === 'Logan' ||
-  opts.some(_ => _.key === 'lastName' && _.values)
+const rules = args => (
+  typeof args.firstName !== 'undefined' &&
+  typeof args.lastName  !== 'undefined'
 )
 
-const opts = [
-  string('firstName', ['-f'], {rules, values: ['Charles']}),
-  string('lastName', ['-l'])
-]
-
-verifyRules(obj)
-```
-
-Result:
-
-```js
-{
-  errs: [
-    {
-      code: 'False rules',
-      msg:  "An option's rules returned false...",
-      info: {...}
-    }
-  ]
+const args = {
+  firstName: 'Logan'
 }
-```
 
-</details>
-</td>
-</tr>
-<tr name="verifyValuesArity">
-<td><code><a href="#verifyValuesArity">verifyValuesArity</a>({errs, opts})</code></td>
-<td>
-Checks, whether the <a href="#values"><code>values</code></a> of an option fits its <a href="#types"><code>types</code></a>.
-<details>
-<summary>
-<a href="#verifyValuesArity">Example...</a>
-</summary>
-
-<br />
-
-```js
-const opts = [
-  string('name', ['--name'], {values: ['Charles', 'Francis']})
-]
-
-verifyValuesArity({opts})
+verifyArgs(rules)({args})
 ```
 
 Result:
@@ -962,8 +1087,8 @@ Result:
 {
   errs: [
     {
-      code: 'Invalid arity',
-      msg:  "An option's types arity does not match...",
+      code: 'False args rules',
+      msg:  'Your args rules returned false...',
       info: {...}
     }
   ]
@@ -979,7 +1104,7 @@ Result:
 
 <table>
 <tr>
-<th>Parser&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
 <tr name="bestGuessRest">
@@ -1052,46 +1177,6 @@ Result:
 ```js
 {
   args: {_: []}
-}
-```
-
-</details>
-</td>
-</tr>
-<tr name="failRest">
-<td><code><a href="#failRest">failRest</a>({errs, args})</code></td>
-<td>
-Records an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
-<details>
-<summary>
-<a href="#failRest">Example...</a>
-</summary>
-
-<br />
-
-```js
-const args = {
-  _: ['foo'],
-  command: {
-    _: ['bar'],
-    foo: [42, 'foo']
-  }
-}
-
-failRest({args})
-```
-
-Result:
-
-```js
-{
-  errs: [
-    {
-      code: 'Unexpected argument',
-      msg:  'An unexpected argument was used...',
-      info: {...}
-    }
-  ]
 }
 ```
 
@@ -1274,48 +1359,11 @@ const fs = {
 </details>
 </td>
 </tr>
-<tr name="verifyArgs">
-<td><code><a href="#verifyArgs">verifyArgs</a>(rules)({errs, args})</code></td>
-<td>
-Checks, whether the <code>args</code> adher to a given <code>rules</code> predicate.
-<details>
-<summary>
-<a href="#verifyArgs">Example...</a>
-</summary>
-
-<br />
-
-```js
-const rules = args => (
-  typeof args.firstName !== 'undefined' &&
-  typeof args.lastName  !== 'undefined'
-)
-
-const args = {
-  firstName: 'Logan'
-}
-
-verifyArgs(rules)({args})
-```
-
-Result:
-
-```js
-{
-  errs: [
-    {
-      code: 'False args rules',
-      msg:  'Your args rules returned false...',
-      info: {...}
-    }
-  ]
-}
-```
-
-</details>
-</td>
-</tr>
 </table>
+
+#### Command-specific Parsers
+
+TODO
 
 ### Usage Documentation
 
