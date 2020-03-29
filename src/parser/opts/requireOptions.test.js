@@ -22,7 +22,7 @@ test('requireOptions README example works', () => {
 
 test('requireOptions keeps all options in opts', () => {
   const answer = number('answer', ['-a', '--answer'], {required: true})
-  const question = number('question', ['-q', '--question'], {required: true, values: ['Are default values fine?']})
+  const question = {...number('question', ['-q', '--question'], {required: true}), values: ['Are values fine?']}
 
   const obj = {
     opts: [answer, question]
@@ -96,7 +96,7 @@ test('requireOptions works if required is undefined', () => {
 })
 
 test('requireOptions works only with valid values', () => {
-  const answer = number('answer', ['-a', '--answer'], {required: true, values: 42})
+  const answer = {...number('answer', ['-a', '--answer'], {required: true}), values: 42}
 
   const obj = {
     opts: [answer]
