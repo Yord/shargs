@@ -69,7 +69,7 @@ Declare a parser:
 ```js
 const deepThought = parser({
   argv: [splitShortOptions],
-  opts: [cast, restrictToOnly],
+  opts: [restrictToOnly, cast],
   args: [clearRest]
 })
 ```
