@@ -466,10 +466,12 @@ For each stage, the checks are applied first, followed by the other stages.
 Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate. Records an error if the predicate returns false.
 <details>
 <summary>
-<a href="#verifyArgv">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const rules = argv => (
@@ -514,10 +516,12 @@ Result:
 Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
 <details>
 <summary>
-<a href="#splitShortOptions">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const argv = ['-ab']
@@ -551,10 +555,12 @@ Result:
 Checks if <code>opts</code> includes at least one command and records an exception if no command is found.
 <details>
 <summary>
-<a href="#demandACommand">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const opts = [
@@ -592,10 +598,12 @@ Controls, if options marked with <a href="#required"><code>{required: true}</cod
 If a required option is not present, an error message is recorded.
 <details>
 <summary>
-<a href="#requireOptions">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 
@@ -629,10 +637,12 @@ Result:
 Checks, whether the <code>opts</code> adher to a given <code>rules</code> predicate.
 <details>
 <summary>
-<a href="#verifyOpts">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const implies = (p, q) => !p || q
@@ -673,10 +683,12 @@ Result:
 Checks, whether the <a href="#rules"><code>rules</code></a> field holds for an option in relation to all options.
 <details>
 <summary>
-<a href="#verifyRules">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const rules = firstName => opts => (
@@ -715,10 +727,12 @@ Result:
 Checks, whether the <a href="#values"><code>values</code></a> of an option fits its <a href="#types"><code>types</code></a>.
 <details>
 <summary>
-<a href="#verifyValuesArity">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const opts = [
@@ -762,10 +776,12 @@ Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><cod
 A single minus and a single character for short options or exactly two minusses with any more characters for long options.
 <details>
 <summary>
-<a href="#bestGuessOpts">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const opts = [
@@ -801,10 +817,12 @@ Result:
 Casts all <a href="#values"><code>values</code></a> according to the options' types.
 <details>
 <summary>
-<a href="#cast">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const opts = [
@@ -843,10 +861,12 @@ Result:
 Records an error if the <a href="#values"><code>values</code></a> are not contained in the <a href="#only"><code>only</code></a> list.
 <details>
 <summary>
-<a href="#restrictToOnly">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const opts = [
@@ -880,10 +900,12 @@ Reverses the value of all <a href="#bool"><code>bool</code></a> options annotate
 Works on string (e.g. <code>['false']</code>) and boolean (e.g. <code>[false]</code>) values.
 <details>
 <summary>
-<a href="#reverseBools">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const opts = [
@@ -915,10 +937,12 @@ Reverses the value of all <a href="#flag"><code>flag</code></a> options annotate
 This may be useful if the presence of a flag should imply <code>false</code>.
 <details>
 <summary>
-<a href="#reverseFlags">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const opts = [
@@ -949,10 +973,12 @@ shargs still keeps it as an unknown option (e.g. <code>{values: ['--aeg']}</code
 The <code>suggestOptions</code> stage collects all unknown options and suggests similar args defined in <code>opts</code>.
 <details>
 <summary>
-<a href="#suggestOptions">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const opts = [
@@ -1023,10 +1049,12 @@ Results in:
 Records an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
 <details>
 <summary>
-<a href="#failRest">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const args = {
@@ -1063,10 +1091,12 @@ Result:
 Checks, whether the <code>args</code> adher to a given <code>rules</code> predicate.
 <details>
 <summary>
-<a href="#verifyArgs">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const rules = args => (
@@ -1115,10 +1145,12 @@ Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><cod
 A single minus and a single character for short options or exactly two minusses with any more characters for long options.
 <details>
 <summary>
-<a href="#bestGuessRest">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const obj = {
@@ -1161,10 +1193,12 @@ Result:
 Removes all entries from each <code>_</code> key.
 <details>
 <summary>
-<a href="#clearRest">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const args = {_: ['foo']}
@@ -1189,10 +1223,12 @@ Result:
 Transforms all count-based <a href="#flag"><code>flag</code></a> options into booleans, that are <code>true</code> if the count is greater than <code>0</code>.
 <details>
 <summary>
-<a href="#flagsAsBools">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const args = {
@@ -1221,10 +1257,12 @@ Result:
 Transforms all count-based <a href="#flag"><code>flag</code></a> options into numbers, that correspond to the count.
 <details>
 <summary>
-<a href="#flagsAsNumbers">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const args = {
@@ -1255,10 +1293,12 @@ Results into a flat object, where no key is an object.
 Other <code>merge</code> functions can be given to the function.
 <details>
 <summary>
-<a href="#mergeArgs">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const args = {
@@ -1303,10 +1343,12 @@ Transforms an args object into a new args object by applying functions <code>fs<
 All fields of an object are updated independently and previous updates in the same run do not influence later updates.
 <details>
 <summary>
-<a href="#transformArgs">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const args = {
