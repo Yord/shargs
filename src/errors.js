@@ -1,13 +1,13 @@
-const argumentIsNotABool = ({values, index, option}) => ({
+const argumentIsNotABool = ({values, defaultValues, index, option}) => ({
   code: 'Argument is not a boolean',
   msg:  "The passed command line argument must either be 'true' or 'false'",
-  info: {values, index, option}
+  info: {values, defaultValues, index, option}
 })
 
-const argumentIsNotANumber = ({values, index, option}) => ({
+const argumentIsNotANumber = ({values, defaultValues, index, option}) => ({
   code: 'Argument is not a number',
   msg:  'The passed command line argument must be a number',
-  info: {values, index, option}
+  info: {values, defaultValues, index, option}
 })
 
 const commandRequired = ({options}) => ({
