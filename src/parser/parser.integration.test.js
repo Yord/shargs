@@ -6,6 +6,7 @@ const bestGuessOpts     = require('./opts/bestGuessOpts')
 const cast              = require('./opts/cast')
 const contradictOpts    = require('./opts/contradictOpts')
 const demandACommand    = require('./opts/demandACommand')
+const implyOpts         = require('./opts/implyOpts')
 const requireOptions    = require('./opts/requireOptions')
 const restrictToOnly    = require('./opts/restrictToOnly')
 const reverseBools      = require('./opts/reverseBools')
@@ -311,6 +312,39 @@ test('parser with only demandACommand works as expected if a command is present'
   const expErrs = []
 
   const errs2 = filterErrs([])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
+
+test('parser with only implyOpts works as expected', () => {
+  const checks = {
+    opts: [implyOpts]
+  }
+
+  const stages = {}
+
+  const {errs, args} = parser(stages, {checks})(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    hours: 2,
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me',
+    smile: 'true'
+  }
+
+  const expErrs = [
+    implicationViolated({key: 'fantasy', implies: ['genre']})
+  ]
+
+  const errs2 = filterErrs(['option'])(errs)
 
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
