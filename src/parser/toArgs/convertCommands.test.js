@@ -74,3 +74,9 @@ test('convertCommands works if opts is undefined', () => {
 
   expect(args).toStrictEqual({_: []})
 })
+
+test('convertCommands works if input is undefined', () => {
+  const {args} = convertCommands(parsers)()
+
+  expect(args).toStrictEqual({_: []})
+})
