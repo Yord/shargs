@@ -50,3 +50,20 @@ test('implyOpts does not change anything if it passes', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('implyOpts fails on wrong type', () => {
+  const age      = {...number('age', ['-a'], {implies: 'birthday'}), values: ['27']}
+  const birthday = {...string('birthday', ['-b'], {implies: ['age']}), values: ['27.7.1927']}
+
+  const obj = {
+    opts: [age, birthday]
+  }
+
+  const {errs} = implyOpts(obj)
+
+  const exp = [
+    wrongImpliesType({key: 'age', type: 'string', option: age})
+  ]
+
+  expect(errs).toStrictEqual(exp)
+})
