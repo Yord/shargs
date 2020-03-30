@@ -28,3 +28,9 @@ test('convertNonCommands works if opts is undefined', () => {
 
   expect(args).toStrictEqual({_: []})
 })
+
+test('convertNonCommands works if input is undefined', () => {
+  const {args} = convertNonCommands()
+
+  expect(args).toStrictEqual({_: []})
+})
