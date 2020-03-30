@@ -44,27 +44,6 @@ test('toOpts transforms argv into opts', () => {
   expect(opts).toStrictEqual(exp)
 })
 
-test('toOpts sets default values', () => {
-  const obj = {
-    argv: [
-      'foo'
-    ]
-  }
-
-  const testDefault = string('testDefault', ['-d'], {values: ['This is a default value']})
-  const OPTS2 = [testDefault, ...OPTS]
-
-  const {opts} = toOpts(OPTS2)(obj)
-
-  const exp = [
-    {values: ['foo']},
-    testDefault,
-    ...without(['testDefault'], OPTS)
-  ]
-
-  expect(opts).toStrictEqual(exp)
-})
-
 test('toOpts keeps unrecognized strings', () => {
   const obj = {
     argv: [
