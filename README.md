@@ -1403,6 +1403,14 @@ const fs = {
 </tr>
 </table>
 
+#### `toOpts` Stage
+
+TODO
+
+#### `toArgs` Stage
+
+TODO
+
 #### Command-specific Parsers
 
 TODO
