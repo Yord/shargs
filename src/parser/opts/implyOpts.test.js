@@ -75,3 +75,9 @@ test('implyOpts works if opts is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('implyOpts works if input is undefined', () => {
+  const {opts} = implyOpts()
+
+  expect(opts).toStrictEqual([])
+})
