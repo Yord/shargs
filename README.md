@@ -1405,7 +1405,27 @@ const fs = {
 
 #### `toOpts` Stage
 
-TODO
+The `toOpts` stage consists only of the <code><a href="#toOpts-stage">toOpts</a>(opts)({errs, argv})</code> function.
+It transforms `argv` arrays into the command-line options DSL
+by matching the `argv` array with the `args` and `types` defined by the options.
+The order of the command-line options is important here, since `toOpts` works from left to right.
+
+While transforming, `toOpts` encounters the following cases:
+
+1.  **A string matches no `args` value:**\
+    In this case, `toOpts` returns an unmatched value (e.g. `{values: 'foo'}` if `foo` is the string).
+2.  **A string matches an `args` value of exactly one option:**\
+    Here, `toOpts` checks the `types` arity and reads a matching number of `argv`.
+    If too few `argv` are available, it returns an unmatched value.
+    If enough `argv` are available, it returns the matching option together with a `values` field holding the `argv`.
+3.  **A string matches an `args` value in several options:**\
+    If this happens, `toOpts` proceeds as in case 2 for each option, with one addition:
+    It checks if all options have the same arity as the first option.
+    All options with the same arities return the matching option with a `values` field.
+    For all other options, an error is recorded.
+
+The `stages` field of `parsers` lets users override the described behavior with their own functions.
+Actually doing this is not recommended, as it may break defined parser checks and stages.
 
 #### `toArgs` Stage
 
