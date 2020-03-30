@@ -37,3 +37,18 @@ test('contradictOpts works on default values', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('contradictOpts does not change anything if it passes', () => {
+  const age      = {...number('age', ['-a'], {contradicts: ['birthday']}), values: ['27']}
+  const birthday = string('birthday', ['-b'], {contradicts: ['age']})
+
+  const obj = {
+    opts: [age, birthday]
+  }
+
+  const {opts} = contradictOpts(obj)
+
+  const exp = obj.opts
+
+  expect(opts).toStrictEqual(exp)
+})
