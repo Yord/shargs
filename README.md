@@ -372,7 +372,7 @@ The following fields are available:
 </tr>
 <tr name="defaultValues">
 <td><code><a href="#defaultValues">defaultValues</a></code></td>
-<td>any value</td>
+<td>any</td>
 <td><code>defaultValues</code> is used by the <a href="#toArgs"><code>toArgs</code></a> parser stage to set default values for command-line options without supplied command-line arguments. It takes any value, so it is up to the user to supply sensible defaults.</td>
 </tr>
 <tr name="desc">
