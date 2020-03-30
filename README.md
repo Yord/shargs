@@ -558,6 +558,56 @@ Result:
 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
+<tr name="contradictOpts">
+<td><code><a href="#contradictOpts">contradictOpts</a>({errs, opts})</code></td>
+<td>
+Checks if no option in <code>opts</code> has <a href="#values"><code>values</code></a> if this option has <code>values</code>.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  number('age', ['-a'], {
+    contradicts: ['birthday'],
+    defaultValues: 27
+  }),
+  string('birthday', ['-b'], {
+    contradicts: ['age'],
+    defaultValues: '27.7.1927'
+  })
+]
+
+contradictOpts({opts})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'Contradiction detected',
+      msg:  'Some given keys contradict each other.',
+      info: {...}
+    },
+    {
+      code: 'Contradiction detected',
+      msg:  'Some given keys contradict each other.',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="demandACommand">
 <td><code><a href="#demandACommand">demandACommand</a>({errs, opts})</code></td>
 <td>
