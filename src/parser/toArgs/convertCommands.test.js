@@ -80,3 +80,11 @@ test('convertCommands works if input is undefined', () => {
 
   expect(args).toStrictEqual({_: []})
 })
+
+test('convertCommands passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = convertCommands(parsers)({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
