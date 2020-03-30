@@ -650,6 +650,48 @@ Result:
 </details>
 </td>
 </tr>
+<tr name="implyOpts">
+<td><code><a href="#implyOpts">implyOpts</a>({errs, opts})</code></td>
+<td>
+Checks if all options in <code>opts</code> also have <a href="#values"><code>values</code></a>, if this option has <code>values</code>.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  number('age', ['-a'], {
+    implies: ['birthday'],
+    defaultValues: 27
+  }),
+  string('birthday', ['-b'], {implies: ['age']})
+]
+
+implyOpts({opts})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'Implication violated',
+      msg:  'Some given keys that imply each other...',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="requireOptions">
 <td><code><a href="#requireOptions">requireOptions</a>({errs, opts})</code></td>
 <td>
