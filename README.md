@@ -385,6 +385,11 @@ The following fields are available:
 <td>string</td>
 <td><code>desc</code> is the user-facing description of a command-line option that is used by the automatic usage documentation generation.</td>
 </tr>
+<tr name="implies">
+<td><code><a href="#implies">implies</a></code></td>
+<td>array of keys</td>
+<td><code>implies</code> is used by the <a href="#implyOpts"><code>implyOpts</code></a> stage to specify an array of command-line options identified by their <a href="#key"><code>key</code></a> that must have <a href="#values"><code>values</code></a>, if this command-line option has <code>values</code>.</td>
+</tr>
 <tr name="only">
 <td><code><a href="#only">only</a></code></td>
 <td>array of values</td>
