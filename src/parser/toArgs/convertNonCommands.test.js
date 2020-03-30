@@ -34,3 +34,11 @@ test('convertNonCommands works if input is undefined', () => {
 
   expect(args).toStrictEqual({_: []})
 })
+
+test('convertNonCommands passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = convertNonCommands({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
