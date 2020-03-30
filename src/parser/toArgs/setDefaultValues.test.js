@@ -39,3 +39,11 @@ test('setDefaultValues works if input is undefined', () => {
 
   expect(args).toStrictEqual({_: []})
 })
+
+test('setDefaultValues passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = setDefaultValues({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
