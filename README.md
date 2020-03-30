@@ -358,7 +358,7 @@ The following fields are available:
 <tr name="key">
 <td><code><a href="#key">key</a></code>*</td>
 <td>string</td>
-<td><code>key</code> is the name of the variable the parser uses to store the command-line option's value. It should be a unique identifier or otherwise risks to be overridden by other command-line options.</td>
+<td><code>key</code> is the name of the variable the parser uses to store the command-line option's value. It should be a unique identifier or otherwise risks to be overridden by other command-line options. A key must not be named <code>_</code>, as it is a reserved field for collecting unmatched <code>argv</code>.</td>
 </tr>
 <tr name="args">
 <td><code><a href="#args">args</a></code>*</td>
