@@ -58,6 +58,12 @@ const illegalKeyName = ({key, option}) => ({
   info: {key, option}
 })
 
+const implicationViolated = ({key, implies, option}) => ({
+  code: 'Implication violated',
+  msg:  'Some given keys that imply each other are not all defined.',
+  info: {key, implies, option}
+})
+
 const invalidArity = ({option}) => ({
   code: 'Invalid arity',
   msg:  "An option's types arity does not match its values arity.",
@@ -147,6 +153,7 @@ module.exports = {
   falseOptsRules,
   falseRules,
   illegalKeyName,
+  implicationViolated,
   invalidArity,
   invalidOptionsListInCombine,
   invalidTypes,
