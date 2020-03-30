@@ -4,6 +4,7 @@ const splitShortOptions = require('./argv/splitShortOptions')
 const verifyArgv        = require('./argv/verifyArgv')
 const bestGuessOpts     = require('./opts/bestGuessOpts')
 const cast              = require('./opts/cast')
+const contradictOpts    = require('./opts/contradictOpts')
 const demandACommand    = require('./opts/demandACommand')
 const requireOptions    = require('./opts/requireOptions')
 const restrictToOnly    = require('./opts/restrictToOnly')
@@ -23,7 +24,7 @@ const transformArgs     = require('./args/transformArgs')
 const verifyArgs        = require('./args/verifyArgs')
 
 const {bool, command, flag, number, string} = require('../options')
-const {argumentIsNotANumber, commandRequired, didYouMean, falseArgsRules, falseArgvRules, falseOptsRules, falseRules, invalidValues, requiredOptionMissing, unexpectedArgument, valueRestrictionsViolated} = require('../errors')
+const {argumentIsNotANumber, commandRequired, contradictionDetected, didYouMean, falseArgsRules, falseArgvRules, falseOptsRules, falseRules, implicationViolated, invalidValues, requiredOptionMissing, unexpectedArgument, valueRestrictionsViolated} = require('../errors')
 
 const noCommands = opts => opts.filter(({types}) => types !== null)
 
@@ -44,7 +45,7 @@ const opts = [
   flag('help', ['--help']),
   flag('verbose', ['-v', '--verbose']),
   flag('popcorn', ['-l', '--low-fat'], {reverse: true}),
-  bool('fantasy', ['-E', '--no-hobbits'], {reverse: true}),
+  bool('fantasy', ['-E', '--no-hobbits'], {reverse: true, implies: ['genre'], contradicts: ['popcorn']}),
   string('genre', ['-g', '--genre'], {required: true}),
   number('hours', ['-h', '--hours'], {defaultValues: 2}),
   bool('smile', ['--smile'], {defaultValues: ['true']}),
@@ -216,6 +217,37 @@ test('parser with only cast works as expected', () => {
   const expErrs = [
     argumentIsNotANumber({defaultValues: 2, index: 0}),
     argumentIsNotANumber({defaultValues: 2, index: 0})
+  ]
+
+  const errs2 = filterErrs(['option'])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
+
+test('parser with only contradictOpts works as expected', () => {
+  const stages = {
+    opts: [contradictOpts]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    hours: 2,
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me',
+    smile: 'true'
+  }
+
+  const expErrs = [
+    contradictionDetected({key: 'fantasy', contradicts: ['popcorn']})
   ]
 
   const errs2 = filterErrs(['option'])(errs)
