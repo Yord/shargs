@@ -52,3 +52,20 @@ test('contradictOpts does not change anything if it passes', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('contradictOpts fails on wrong type', () => {
+  const age      = {...number('age', ['-a'], {contradicts: 'birthday'}), values: ['27']}
+  const birthday = string('birthday', ['-b'], {contradicts: ['age']})
+
+  const obj = {
+    opts: [age, birthday]
+  }
+
+  const {errs} = contradictOpts(obj)
+
+  const exp = [
+    wrongContradictsType({key: 'age', type: 'string', option: age})
+  ]
+
+  expect(errs).toStrictEqual(exp)
+})
