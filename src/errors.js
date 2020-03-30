@@ -16,6 +16,12 @@ const commandRequired = ({options}) => ({
   info: {options}
 })
 
+const contradictionDetected = ({key, contradicts, option}) => ({
+  code: 'Contradiction detected',
+  msg:  'Some given keys contradict each other.',
+  info: {key, contradicts, option}
+})
+
 const didYouMean = ({argv, options}) => ({
   code: 'Did you mean',
   msg:  'An unknown command-line argument was passed. Did you mean any of the following options?',
@@ -44,6 +50,18 @@ const falseRules = ({key, rules, option}) => ({
   code: 'False rules',
   msg:  "An option's rules returned false. Please check your arguments.",
   info: {key, rules, option}
+})
+
+const illegalKeyName = ({key, option}) => ({
+  code: 'Illegal key name',
+  msg:  'An option key had an illegal name.',
+  info: {key, option}
+})
+
+const implicationViolated = ({key, implies, option}) => ({
+  code: 'Implication violated',
+  msg:  'Some given keys that imply each other are not all defined.',
+  info: {key, implies, option}
 })
 
 const invalidArity = ({option}) => ({
@@ -112,6 +130,18 @@ const wrongArgvRulesType = ({type, argv}) => ({
   info: {type, argv}
 })
 
+const wrongContradictsType = ({key, type, options}) => ({
+  code: 'Wrong contradicts type',
+  msg:  'The contradicts field has the wrong type, please provide an array of command-line option keys.',
+  info: {key, type, options}
+})
+
+const wrongImpliesType = ({key, type, options}) => ({
+  code: 'Wrong implies type',
+  msg:  'The implies field has the wrong type, please provide an array of command-line option keys.',
+  info: {key, type, options}
+})
+
 const wrongOptsRulesType = ({type, options}) => ({
   code: 'Wrong opts rules type',
   msg:  'The opts rules are of a wrong type, please provide a predicate with the following signature: (options) => boolean',
@@ -128,11 +158,14 @@ module.exports = {
   argumentIsNotABool,
   argumentIsNotANumber,
   commandRequired,
+  contradictionDetected,
   didYouMean,
   falseArgsRules,
   falseArgvRules,
   falseOptsRules,
   falseRules,
+  illegalKeyName,
+  implicationViolated,
   invalidArity,
   invalidOptionsListInCombine,
   invalidTypes,
@@ -144,6 +177,8 @@ module.exports = {
   valueRestrictionsViolated,
   wrongArgsRulesType,
   wrongArgvRulesType,
+  wrongContradictsType,
+  wrongImpliesType,
   wrongOptsRulesType,
   wrongRulesType
 }

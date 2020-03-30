@@ -358,7 +358,7 @@ The following fields are available:
 <tr name="key">
 <td><code><a href="#key">key</a></code>*</td>
 <td>string</td>
-<td><code>key</code> is the name of the variable the parser uses to store the command-line option's value. It should be a unique identifier or otherwise risks to be overridden by other command-line options.</td>
+<td><code>key</code> is the name of the variable the parser uses to store the command-line option's value. It should be a unique identifier or otherwise risks to be overridden by other command-line options. A key must not be named <code>_</code>, as it is a reserved field for collecting unmatched <code>argv</code>.</td>
 </tr>
 <tr name="args">
 <td><code><a href="#args">args</a></code>*</td>
@@ -370,15 +370,25 @@ The following fields are available:
 <td>array of type strings or `null`</td>
 <td><code>types</code> is an array of strings that represents the command-line option's type. <code>null</code> describes a <a href="#command"><code>command</code></a>, <code>[]</code> describes a <a href="#flag"><code>flag</code></a>, arrays with one element either describe a <a href="#number"><code>number</code></a> (<code>['number']</code>), a <a href="#string"><code>string</code></a> (<code>['string']</code>), or a <a href="#bool"><code>bool</code></a> (<code>['bool']</code>), and arrays with more than one element describe an <a href="#array"><code>array</code></a> of known size (e.g. <code>['string','number','bool']</code> is an array of size 3).</td>
 </tr>
+<tr name="contradicts">
+<td><code><a href="#contradicts">contradicts</a></code></td>
+<td>array of keys</td>
+<td><code>contradicts</code> is used by the <a href="#contradictOpts"><code>contradictOpts</code></a> stage to specify an array of command-line options identified by their <a href="#key"><code>key</code></a> that are incompatible with this command-line option.</td>
+</tr>
 <tr name="defaultValues">
 <td><code><a href="#defaultValues">defaultValues</a></code></td>
-<td>any value</td>
+<td>any</td>
 <td><code>defaultValues</code> is used by the <a href="#toArgs"><code>toArgs</code></a> parser stage to set default values for command-line options without supplied command-line arguments. It takes any value, so it is up to the user to supply sensible defaults.</td>
 </tr>
 <tr name="desc">
 <td><code><a href="#desc">desc</a></code></td>
 <td>string</td>
 <td><code>desc</code> is the user-facing description of a command-line option that is used by the automatic usage documentation generation.</td>
+</tr>
+<tr name="implies">
+<td><code><a href="#implies">implies</a></code></td>
+<td>array of keys</td>
+<td><code>implies</code> is used by the <a href="#implyOpts"><code>implyOpts</code></a> stage to specify an array of command-line options identified by their <a href="#key"><code>key</code></a> that must have <a href="#values"><code>values</code></a>, if this command-line option has <code>values</code>.</td>
 </tr>
 <tr name="only">
 <td><code><a href="#only">only</a></code></td>
@@ -407,7 +417,7 @@ The following fields are available:
 </tr>
 <tr name="values">
 <td><code><a href="#values">values</a></code></td>
-<td>array with default value(s)</td>
+<td>array with value(s)</td>
 <td><code>values</code> is used by the <a href="#toOpts"><code>toOpts</code></a> parser stage to store command-line arguments. This field should not be used by the user. If you need to set default values, use the <a href="#defaultValues"><code>defaultValues</code></a> field, instead.</td>
 </tr>
 </table>
@@ -444,10 +454,9 @@ Each key is the name of a shargs parsing stage:
 5.  [`args`](#args-checks) functions modify arguments objects.
 
 As a second parameter, it takes an object with two possible keys:
-A `checks` key with `argv`, `opts`, and `args` arrays.
+A `checks` key with `argv`, `opts`, and `args` arrays, and a `parsers` key.
 Checks are parser stages that record errors if rules are violated.
-
-In addition to that, `parser` takes a `parsers` field that allows you to specify a different parser for each command.
+`parsers` allows you to specify a different parser for each command.
 See the [Command-specific Parsers](#command-specific-parsers) section to learn more.
 
 `parser` applies the stages in the given order.
@@ -549,6 +558,56 @@ Result:
 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
+<tr name="contradictOpts">
+<td><code><a href="#contradictOpts">contradictOpts</a>({errs, opts})</code></td>
+<td>
+Checks if no option in <code>opts</code> has <a href="#values"><code>values</code></a> if this option has <code>values</code>.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  number('age', ['-a'], {
+    contradicts: ['birthday'],
+    defaultValues: 27
+  }),
+  string('birthday', ['-b'], {
+    contradicts: ['age'],
+    defaultValues: '27.7.1927'
+  })
+]
+
+contradictOpts({opts})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'Contradiction detected',
+      msg:  'Some given keys contradict each other.',
+      info: {...}
+    },
+    {
+      code: 'Contradiction detected',
+      msg:  'Some given keys contradict each other.',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="demandACommand">
 <td><code><a href="#demandACommand">demandACommand</a>({errs, opts})</code></td>
 <td>
@@ -582,6 +641,48 @@ Result:
     {
       code: 'Command required',
       msg:  'No command found. Please use at least one command!',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr name="implyOpts">
+<td><code><a href="#implyOpts">implyOpts</a>({errs, opts})</code></td>
+<td>
+Checks if all options in <code>opts</code> also have <a href="#values"><code>values</code></a>, if this option has <code>values</code>.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  number('age', ['-a'], {
+    implies: ['birthday'],
+    defaultValues: 27
+  }),
+  string('birthday', ['-b'], {implies: ['age']})
+]
+
+implyOpts({opts})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'Implication violated',
+      msg:  'Some given keys that imply each other...',
       info: {...}
     }
   ]
@@ -1465,7 +1566,13 @@ Actually doing this is not recommended, as it may break defined parser checks an
 
 #### Command-specific Parsers
 
-TODO
+Shargs' [`parser`](#command-line-parsers) function may use the `parsers` object
+to define a different parser for each [`command`](#command) option.
+If `parsers` contains a key that matches a `command`'s key, the value is used as a parser for that command.
+
+If a `command` does not have its own parser, it uses the default parser defined at the `_` field.
+The `_` field can be overridden by the user to define a custom default parser.
+If left unchanged, it defaults to the parent parser.
 
 ### Usage Documentation
 

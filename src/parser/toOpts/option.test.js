@@ -1,6 +1,7 @@
 const {anything, array, assert, base64, property} = require('fast-check')
 const option = require('./option')
 const {array: arrayType} = require('../../options')
+const {illegalKeyName} = require('../../errors')
 
 test('option transforms arguments DSL into options DSL', () => {
   const optionsArguments = base64().chain(key =>
@@ -167,4 +168,16 @@ test('option removes args and __proto__ fields', () => {
   }
 
   expect(args).toStrictEqual(exp)
+})
+
+test('option reports an illegal key error if the key is an underscore', () => {
+  const answer = arrayType(['number'])('_', ['-a'], {foo: 'bar', baz: 42, __proto__: 42})
+
+  const {errs} = option(answer)
+
+  const exp = [
+    illegalKeyName({key: '_', option: answer})
+  ]
+
+  expect(errs).toStrictEqual(exp)
 })
