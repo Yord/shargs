@@ -35,3 +35,18 @@ test('implyOpts works on default values', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('implyOpts does not change anything if it passes', () => {
+  const age      = {...number('age', ['-a'], {contradicts: ['birthday']}), values: ['27']}
+  const birthday = {...string('birthday', ['-b'], {contradicts: ['age']}), values: ['27.7.1927']}
+
+  const obj = {
+    opts: [age, birthday]
+  }
+
+  const {opts} = implyOpts(obj)
+
+  const exp = obj.opts
+
+  expect(opts).toStrictEqual(exp)
+})
