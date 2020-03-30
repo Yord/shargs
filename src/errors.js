@@ -46,6 +46,12 @@ const falseRules = ({key, rules, option}) => ({
   info: {key, rules, option}
 })
 
+const illegalKeyName = ({key, option}) => ({
+  code: 'Illegal key name',
+  msg:  'An option key had an illegal name.',
+  info: {key, option}
+})
+
 const invalidArity = ({option}) => ({
   code: 'Invalid arity',
   msg:  "An option's types arity does not match its values arity.",
@@ -133,6 +139,7 @@ module.exports = {
   falseArgvRules,
   falseOptsRules,
   falseRules,
+  illegalKeyName,
   invalidArity,
   invalidOptionsListInCombine,
   invalidTypes,
