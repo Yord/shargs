@@ -372,8 +372,8 @@ The following fields are available:
 </tr>
 <tr name="defaultValues">
 <td><code><a href="#defaultValues">defaultValues</a></code></td>
-<td>array of strings</td>
-<td><code>defaultValues</code> is used by the <a href="#toArgs"><code>toArgs</code></a> parser stage to set default <a href="#values"><code>values</code></a> for command-line options without supplied command-line arguments. It takes an array of strings whose arity must match the <a href="#types"><code>types</code></a> arity.</td>
+<td>any value</td>
+<td><code>defaultValues</code> is used by the <a href="#toArgs"><code>toArgs</code></a> parser stage to set default values for command-line options without supplied command-line arguments. It takes any value, so it is up to the user to supply sensible defaults.</td>
 </tr>
 <tr name="desc">
 <td><code><a href="#desc">desc</a></code></td>
