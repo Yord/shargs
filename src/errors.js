@@ -16,6 +16,12 @@ const commandRequired = ({options}) => ({
   info: {options}
 })
 
+const contradictionDetected = ({key, contradicts, option}) => ({
+  code: 'Contradiction detected',
+  msg:  'Some given keys contradict each other.',
+  info: {key, contradicts, option}
+})
+
 const didYouMean = ({argv, options}) => ({
   code: 'Did you mean',
   msg:  'An unknown command-line argument was passed. Did you mean any of the following options?',
@@ -134,6 +140,7 @@ module.exports = {
   argumentIsNotABool,
   argumentIsNotANumber,
   commandRequired,
+  contradictionDetected,
   didYouMean,
   falseArgsRules,
   falseArgvRules,
