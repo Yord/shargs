@@ -241,8 +241,16 @@ Note, that `help` is `true`.
 Other command-line argument parsers would now display usage documentation for you.
 Shargs leaves that to the user, giving him more control.
 
-Our program reads:
-If `args` contains a `help` field, the `help` text is printed:
+And since our program reads:
+If `args` contains a `help` field, the `help` text is printed...
+
+</details>
+
+<details>
+<summary>
+And the following text is printed:
+
+<p>
 
 ```bash
 deepThought [-q|--question] [-a|--answer] [-h|--help]                           
@@ -255,7 +263,10 @@ Deep Thought was created to come up with the Answer to The Ultimate Question of
 Life, the Universe, and Everything.
 ```
 
-Otherwise, the answer is printed.
+</p>
+</summary>
+
+If `help` would not have been `true`, the answer would have been printed.
 
 </details>
 
