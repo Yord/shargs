@@ -136,6 +136,12 @@ const wrongContradictsType = ({key, type, options}) => ({
   info: {key, type, options}
 })
 
+const wrongImpliesType = ({key, type, options}) => ({
+  code: 'Wrong implies type',
+  msg:  'The implies field has the wrong type, please provide an array of command-line option keys.',
+  info: {key, type, options}
+})
+
 const wrongOptsRulesType = ({type, options}) => ({
   code: 'Wrong opts rules type',
   msg:  'The opts rules are of a wrong type, please provide a predicate with the following signature: (options) => boolean',
@@ -172,6 +178,7 @@ module.exports = {
   wrongArgsRulesType,
   wrongArgvRulesType,
   wrongContradictsType,
+  wrongImpliesType,
   wrongOptsRulesType,
   wrongRulesType
 }
