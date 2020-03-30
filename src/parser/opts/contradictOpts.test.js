@@ -69,3 +69,11 @@ test('contradictOpts fails on wrong type', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('contradictOpts works if opts is undefined', () => {
+  const obj = {}
+
+  const {opts} = contradictOpts(obj)
+
+  expect(opts).toStrictEqual([])
+})
