@@ -77,3 +77,9 @@ test('contradictOpts works if opts is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('contradictOpts works if input is undefined', () => {
+  const {opts} = contradictOpts()
+
+  expect(opts).toStrictEqual([])
+})
