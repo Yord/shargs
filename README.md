@@ -267,7 +267,7 @@ It turns command-line arguments parsing inside out and gives you fine-grained co
 
 ### Shargs' Philosophy
 
-Shargs' philosophy is to give the user as much control over parsing as possible.
+Shargs' philosophy is to **give the user as much control over parsing as possible**.
 The advantages of this approach are:
 
 +   You get exactly the parser you need, without unnecessary features.
@@ -372,8 +372,8 @@ The following fields are available:
 </tr>
 <tr name="defaultValues">
 <td><code><a href="#defaultValues">defaultValues</a></code></td>
-<td>array of strings</td>
-<td><code>defaultValues</code> is used by the <a href="#toArgs"><code>toArgs</code></a> parser stage to set default <a href="#values"><code>values</code></a> for command-line options without supplied command-line arguments. It takes an array of strings whose arity must match the <a href="#types"><code>types</code></a> arity.</td>
+<td>any value</td>
+<td><code>defaultValues</code> is used by the <a href="#toArgs"><code>toArgs</code></a> parser stage to set default values for command-line options without supplied command-line arguments. It takes any value, so it is up to the user to supply sensible defaults.</td>
 </tr>
 <tr name="desc">
 <td><code><a href="#desc">desc</a></code></td>
@@ -437,11 +437,11 @@ const deepThought = parser(stages, {checks, parsers})
 `parser` takes a `stages` object with up to five keys.
 Each key is the name of a shargs parsing stage:
 
-1.  `argv` functions modify arrays of command-line arguments.
-2.  `toOpts` transforms `argv` arrays into the command-line options DSL.
-3.  `opts` functions modify command-line options.
-4.  `toArgs` transforms `opts` into an object holding the parsed arguments.
-5.  `args` functions modify `args` objects.
+1.  [`argv`](#argv-checks) functions modify arrays of command-line arguments.
+2.  [`toOpts`](#toOpts-stage) transforms `argv` arrays into the command-line options DSL.
+3.  [`opts`](#opts-checks) functions modify command-line options.
+4.  [`toArgs`](#toArgs-stage) transforms `opts` into an object holding the parsed arguments.
+5.  [`args`](#args-checks) functions modify arguments objects.
 
 As a second parameter, it takes an object with two possible keys:
 A `checks` key with `argv`, `opts`, and `args` arrays.
@@ -466,10 +466,12 @@ For each stage, the checks are applied first, followed by the other stages.
 Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate. Records an error if the predicate returns false.
 <details>
 <summary>
-<a href="#verifyArgv">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const rules = argv => (
@@ -514,10 +516,12 @@ Result:
 Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
 <details>
 <summary>
-<a href="#splitShortOptions">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const argv = ['-ab']
@@ -551,10 +555,12 @@ Result:
 Checks if <code>opts</code> includes at least one command and records an exception if no command is found.
 <details>
 <summary>
-<a href="#demandACommand">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const opts = [
@@ -592,10 +598,12 @@ Controls, if options marked with <a href="#required"><code>{required: true}</cod
 If a required option is not present, an error message is recorded.
 <details>
 <summary>
-<a href="#requireOptions">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 
@@ -629,10 +637,12 @@ Result:
 Checks, whether the <code>opts</code> adher to a given <code>rules</code> predicate.
 <details>
 <summary>
-<a href="#verifyOpts">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const implies = (p, q) => !p || q
@@ -673,10 +683,12 @@ Result:
 Checks, whether the <a href="#rules"><code>rules</code></a> field holds for an option in relation to all options.
 <details>
 <summary>
-<a href="#verifyRules">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const rules = firstName => opts => (
@@ -715,10 +727,12 @@ Result:
 Checks, whether the <a href="#values"><code>values</code></a> of an option fits its <a href="#types"><code>types</code></a>.
 <details>
 <summary>
-<a href="#verifyValuesArity">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const opts = [
@@ -762,10 +776,12 @@ Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><cod
 A single minus and a single character for short options or exactly two minusses with any more characters for long options.
 <details>
 <summary>
-<a href="#bestGuessOpts">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const opts = [
@@ -801,10 +817,12 @@ Result:
 Casts all <a href="#values"><code>values</code></a> according to the options' types.
 <details>
 <summary>
-<a href="#cast">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const opts = [
@@ -843,10 +861,12 @@ Result:
 Records an error if the <a href="#values"><code>values</code></a> are not contained in the <a href="#only"><code>only</code></a> list.
 <details>
 <summary>
-<a href="#restrictToOnly">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const opts = [
@@ -880,10 +900,12 @@ Reverses the value of all <a href="#bool"><code>bool</code></a> options annotate
 Works on string (e.g. <code>['false']</code>) and boolean (e.g. <code>[false]</code>) values.
 <details>
 <summary>
-<a href="#reverseBools">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const opts = [
@@ -915,10 +937,12 @@ Reverses the value of all <a href="#flag"><code>flag</code></a> options annotate
 This may be useful if the presence of a flag should imply <code>false</code>.
 <details>
 <summary>
-<a href="#reverseFlags">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const opts = [
@@ -949,10 +973,12 @@ shargs still keeps it as an unknown option (e.g. <code>{values: ['--aeg']}</code
 The <code>suggestOptions</code> stage collects all unknown options and suggests similar args defined in <code>opts</code>.
 <details>
 <summary>
-<a href="#suggestOptions">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const opts = [
@@ -1023,10 +1049,12 @@ Results in:
 Records an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
 <details>
 <summary>
-<a href="#failRest">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const args = {
@@ -1063,10 +1091,12 @@ Result:
 Checks, whether the <code>args</code> adher to a given <code>rules</code> predicate.
 <details>
 <summary>
-<a href="#verifyArgs">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const rules = args => (
@@ -1100,7 +1130,7 @@ Result:
 </tr>
 </table>
 
-#### `args` Stage
+#### `args` Stages
 
 <table>
 <tr>
@@ -1115,10 +1145,12 @@ Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><cod
 A single minus and a single character for short options or exactly two minusses with any more characters for long options.
 <details>
 <summary>
-<a href="#bestGuessRest">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const obj = {
@@ -1161,10 +1193,12 @@ Result:
 Removes all entries from each <code>_</code> key.
 <details>
 <summary>
-<a href="#clearRest">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const args = {_: ['foo']}
@@ -1189,10 +1223,12 @@ Result:
 Transforms all count-based <a href="#flag"><code>flag</code></a> options into booleans, that are <code>true</code> if the count is greater than <code>0</code>.
 <details>
 <summary>
-<a href="#flagsAsBools">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const args = {
@@ -1221,10 +1257,12 @@ Result:
 Transforms all count-based <a href="#flag"><code>flag</code></a> options into numbers, that correspond to the count.
 <details>
 <summary>
-<a href="#flagsAsNumbers">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const args = {
@@ -1255,10 +1293,12 @@ Results into a flat object, where no key is an object.
 Other <code>merge</code> functions can be given to the function.
 <details>
 <summary>
-<a href="#mergeArgs">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const args = {
@@ -1303,10 +1343,12 @@ Transforms an args object into a new args object by applying functions <code>fs<
 All fields of an object are updated independently and previous updates in the same run do not influence later updates.
 <details>
 <summary>
-<a href="#transformArgs">Example...</a>
+Read on...
 </summary>
 
 <br />
+
+Example:
 
 ```js
 const args = {
@@ -1360,6 +1402,66 @@ const fs = {
 </td>
 </tr>
 </table>
+
+#### `toOpts` Stage
+
+The `toOpts` stage consists only of the <code><a href="#toOpts-stage">toOpts</a>(opts)({errs, argv})</code> function.
+It transforms `argv` arrays into the command-line options DSL
+by matching the `argv` array with the `args` and `types` defined by the options.
+The order of the command-line options is important here, since `toOpts` works from left to right.
+
+While transforming, `toOpts` encounters the following cases:
+
+1.  **A string matches no `args` value:**\
+    In this case, `toOpts` returns an unmatched value (e.g. `{values: 'foo'}` if `foo` is the string).
+2.  **A string matches an `args` value of exactly one option:**\
+    Here, `toOpts` checks the `types` arity and reads a matching number of `argv`.
+    If too few `argv` are available, it returns an unmatched value.
+    If enough `argv` are available, it returns the matching option together with a `values` field holding the `argv`.
+3.  **A string matches an `args` value in several options:**\
+    If this happens, `toOpts` proceeds as in case 2 for each option, with one addition:
+    It checks if all options have the same arity as the first option.
+    All options with the same arities return the matching option with a `values` field.
+    For all other options, an error is recorded.
+
+The `stages` field of `parsers` lets users override the described behavior with their own functions.
+Actually doing this is not recommended, as it may break defined parser checks and stages.
+
+#### `toArgs` Stage
+
+Similar to `toOpts`, the `toArgs` stage is just one function: <code><a href="#toArgs-stage">toArgs</a>(parsers)({errs, opts})</code>.
+It transforms `opts` arrays into an object holding the parsed arguments
+by applying three different stages in order:
+
+1.  **Convert Non-commands:**\
+    It converts all options that are not commands, resulting in an object of key-values-pairs.
+    The keys and values are taken from the option fields of the same name: [`key`](#key) and [`values`](#values).
+    If an option does not have a `values` field, it is not considered, here.
+    All unmatched values (e.g. `{values: '--help'}`) are collected in the rest key `_` (e.g. `{_: ['--help']}`).
+2.  **Convert Commands:**\
+    Next, it converts all [`command`](#command) options.
+    In the following, we refer to the parser of this `toArgs` stage as the *parent parser*
+    and the command's parser as the *child parser*.
+
+    At this point, the commands' [`values`](#values) fields still holds `argv` arrays
+    that need to be processed at least by `toOpts` first, before `toArgs` can handle it.
+    Thus, `toArgs` recursively calls a child parser for each command to get `args` objects.
+
+    The `args` objects may have non-empty rest keys (e.g. `{_: ['--help']}`).
+    These unmatched arguments may have mistakenly assigned to the child command,
+    although they actually belong to the parent.
+    Therefore, non-empty rest keys are additionally parsed with the parent parser.
+    
+    The results of the child parsers and the results of the parent parser run are combined into a shared `args` object.
+3.  **Set Default Values:**\
+    Up to this point, only options with [`values`](#values) were processed.
+    However, options without `values` fields may have [`defaultValues`](#defaultValues).
+    This stage sets `values` to those `defaultValues`.
+
+The resulting `args` objects of the three stages are then merged together.
+
+The `stages` field of `parsers` lets users override the described behavior with their own functions.
+Actually doing this is not recommended, as it may break defined parser checks and stages.
 
 #### Command-specific Parsers
 

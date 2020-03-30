@@ -44,22 +44,20 @@ test('toOpts transforms argv into opts', () => {
   expect(opts).toStrictEqual(exp)
 })
 
-test('toOpts sets default values', () => {
+test('toOpts returns an unmatched value if an option has too few argvs', () => {
   const obj = {
     argv: [
-      'foo'
+      '--name'
     ]
   }
 
-  const testDefault = string('testDefault', ['-d'], {values: ['This is a default value']})
-  const OPTS2 = [testDefault, ...OPTS]
+  const testDefault = string('name', ['-n'])
 
-  const {opts} = toOpts(OPTS2)(obj)
+  const {opts} = toOpts([testDefault])(obj)
 
   const exp = [
-    {values: ['foo']},
-    testDefault,
-    ...without(['testDefault'], OPTS)
+    {values: ['--name']},
+    testDefault
   ]
 
   expect(opts).toStrictEqual(exp)

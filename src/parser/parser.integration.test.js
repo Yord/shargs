@@ -79,6 +79,7 @@ test('parser without stages works as expected', () => {
     _: ['--colors', '-vv'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: ['--help'],
@@ -107,6 +108,7 @@ test('parser with only splitShortOptions works as expected', () => {
     _: ['--colors'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: ['--help'],
@@ -140,6 +142,7 @@ test('parser with only verifyArgv works as expected', () => {
     _: ['--colors', '-vv'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: ['--help'],
@@ -170,6 +173,7 @@ test('parser with only bestGuessOpts works as expected', () => {
     _: ['-vv'],
     fantasy: 'true',
     popcorn: {type: 'flag', count: 1},
+    hours: 2,
     rate: {
       _: [],
       help: {type: 'flag', count: 1},
@@ -199,6 +203,7 @@ test('parser with only cast works as expected', () => {
     _: ['--colors', '-vv'],
     fantasy: true,
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: ['--help'],
@@ -232,6 +237,7 @@ test('parser with only demandACommand works as expected if no command is present
     _: ['--colors', '-vv', 'rate', '--stars', '8'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     query: 'Supersize Me',
     smile: 'true'
@@ -260,6 +266,7 @@ test('parser with only demandACommand works as expected if a command is present'
     _: ['--colors', '-vv'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: ['--help'],
@@ -290,6 +297,7 @@ test('parser with only requireOptions works as expected', () => {
     _: ['--colors', '-vv'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: ['--help'],
@@ -320,6 +328,7 @@ test('parser with only restrictToOnly works as expected', () => {
     _: ['--colors', '-vv'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: ['--help']
@@ -349,6 +358,7 @@ test('parser with only reverseBools works as expected', () => {
     _: ['--colors', '-vv'],
     fantasy: 'false',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: ['--help'],
@@ -377,6 +387,7 @@ test('parser with only reverseFlags works as expected', () => {
     _: ['--colors', '-vv'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: -1},
     rate: {
       _: ['--help'],
@@ -407,6 +418,7 @@ test('parser with only suggestOptions works as expected', () => {
     _: ['--colors', '-vv'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: ['--help'],
@@ -445,6 +457,7 @@ test('parser with only verifyOpts works as expected', () => {
     _: ['--colors', '-vv'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: ['--help'],
@@ -477,6 +490,7 @@ test('parser with only verifyRules works as expected', () => {
     _: ['--colors', '-vv'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: ['--help'],
@@ -509,6 +523,7 @@ test('parser with only verifyValuesArity works as expected', () => {
     _: ['--colors', '-vv'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: ['--help'],
@@ -539,6 +554,7 @@ test('parser with only bestGuessRest works as expected', () => {
     _: ['-vv'],
     colors: {type: 'flag', count: 1},
     fantasy: 'true',
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: [],
@@ -567,6 +583,7 @@ test('parser with only clearRest works as expected', () => {
   const expArgs = {
     _: [],
     fantasy: 'true',
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: [],
@@ -597,6 +614,7 @@ test('parser with only failRest works as expected', () => {
     _: ['--colors', '-vv'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: ['--help'],
@@ -629,6 +647,7 @@ test('parser with only flagsAsBools works as expected', () => {
     _: ['--colors', '-vv'],
     fantasy: 'true',
     help: true,
+    hours: 2,
     popcorn: true,
     rate: {
       _: ['--help'],
@@ -657,6 +676,7 @@ test('parser with only flagsAsNumbers works as expected', () => {
     _: ['--colors', '-vv'],
     fantasy: 'true',
     help: 1,
+    hours: 2,
     popcorn: 1,
     rate: {
       _: ['--help'],
@@ -685,6 +705,7 @@ test('parser with only mergeArgs works as expected', () => {
     _: ['--colors', '-vv', '--help'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     stars: '8',
     query: 'Supersize Me',
@@ -717,6 +738,7 @@ test('parser with only transformArgs works as expected', () => {
     _: ['--colors', '-vv'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: true,
     rate: {
       _: ['--help'],
@@ -749,6 +771,7 @@ test('parser with only verifyArgs works as expected', () => {
     _: ['--colors', '-vv'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: ['--help'],
@@ -789,6 +812,7 @@ test('parser with custom parser functions for the rate command works as expected
     _: ['--colors', '-vv'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
+    hours: 2,
     popcorn: {type: 'flag', count: 1},
     rate: {
       _: ['--help'],
@@ -863,6 +887,7 @@ test('parser works with complex stages setup', () => {
     _: ['--colors', '--help'],
     fantasy: false,
     help: true,
+    hours: 2,
     popcorn: false,
     query: 'Supersize Me',
     smile: true,
