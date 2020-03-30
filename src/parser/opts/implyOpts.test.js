@@ -67,3 +67,11 @@ test('implyOpts fails on wrong type', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('implyOpts works if opts is undefined', () => {
+  const obj = {}
+
+  const {opts} = implyOpts(obj)
+
+  expect(opts).toStrictEqual([])
+})
