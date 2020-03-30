@@ -1429,7 +1429,39 @@ Actually doing this is not recommended, as it may break defined parser checks an
 
 #### `toArgs` Stage
 
-TODO
+Similar to `toOpts`, the `toArgs` stage is just one function: <code><a href="#toArgs-stage">toArgs</a>(parsers)({errs, opts})</code>.
+It transforms `opts` arrays into an object holding the parsed arguments
+by applying three different stages in order:
+
+1.  **Convert Non-commands:**\
+    It converts all options that are not commands, resulting in an object of key-values-pairs.
+    The keys and values are taken from the option fields of the same name: [`key`](#key) and [`values`](#values).
+    If an option does not have a `values` field, it is not considered, here.
+    All unmatched values (e.g. `{values: '--help'}`) are collected in the rest key `_` (e.g. `{_: ['--help']}`).
+2.  **Convert Commands:**\
+    Next, it converts all [`command`](#command) options.
+    In the following, we refer to the parser of this `toArgs` stage as the *parent parser*
+    and the command's parser as the *child parser*.
+
+    At this point, the commands' [`values`](#values) fields still holds `argv` arrays
+    that need to be processed at least by `toOpts` first, before `toArgs` can handle it.
+    Thus, `toArgs` recursively calls a child parser for each command to get `args` objects.
+
+    The `args` objects may have non-empty rest keys (e.g. `{_: ['--help']}`).
+    These unmatched arguments may have mistakenly assigned to the child command,
+    although they actually belong to the parent.
+    Therefore, non-empty rest keys are additionally parsed with the parent parser.
+    
+    The results of the child parsers and the results of the parent parser run are combined into a shared `args` object.
+3.  **Set Default Values:**\
+    Up to this point, only options with [`values`](#values) were processed.
+    However, options without `values` fields may have [`defaultValues`](#defaultValues).
+    This stage sets `values` to those `defaultValues`.
+
+The resulting `args` objects of the three stages are then merged together.
+
+The `stages` field of `parsers` lets users override the described behavior with their own functions.
+Actually doing this is not recommended, as it may break defined parser checks and stages.
 
 #### Command-specific Parsers
 
