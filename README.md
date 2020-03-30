@@ -1464,7 +1464,13 @@ Actually doing this is not recommended, as it may break defined parser checks an
 
 #### Command-specific Parsers
 
-TODO
+Shargs' [`parser`](#command-line-parsers) function may use the `parsers` object
+to define a different parser for each [`command`](#command) option.
+If `parsers` contains a key that matches a `command`'s key, the value is used as a parser for that command.
+
+If a `command` does not have its own parser, it uses the default parser defined at the `_` field.
+The `_` field can be overridden by the user to define a custom default parser.
+If left unchanged, it defaults to the parent parser.
 
 ### Usage Documentation
 
