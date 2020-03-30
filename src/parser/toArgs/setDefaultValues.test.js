@@ -25,3 +25,11 @@ test('setDefaultValues works as expected', () => {
   expect(args).toStrictEqual(expArgs)
   expect(errs).toStrictEqual(expErrs)
 })
+
+test('setDefaultValues works if opts is undefined', () => {
+  const obj = {}
+
+  const {args} = setDefaultValues(obj)
+
+  expect(args).toStrictEqual({_: []})
+})
