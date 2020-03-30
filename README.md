@@ -407,7 +407,7 @@ The following fields are available:
 </tr>
 <tr name="values">
 <td><code><a href="#values">values</a></code></td>
-<td>array with default value(s)</td>
+<td>array with value(s)</td>
 <td><code>values</code> is used by the <a href="#toOpts"><code>toOpts</code></a> parser stage to store command-line arguments. This field should not be used by the user. If you need to set default values, use the <a href="#defaultValues"><code>defaultValues</code></a> field, instead.</td>
 </tr>
 </table>
