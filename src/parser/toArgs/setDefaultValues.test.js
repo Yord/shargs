@@ -33,3 +33,9 @@ test('setDefaultValues works if opts is undefined', () => {
 
   expect(args).toStrictEqual({_: []})
 })
+
+test('setDefaultValues works if input is undefined', () => {
+  const {args} = setDefaultValues()
+
+  expect(args).toStrictEqual({_: []})
+})
