@@ -120,7 +120,7 @@ const docs = usage([
 Every command-line tool benefits from a well-formatted usage documentation.
 Shargs brings its own DSL for defining one that can easily be extended with user functions.
 The DSL is declarative, which means it describes the desired structure without concerning itself with the details.
-Try changing `optsList` to `optsDefs` later to experience of what this means:
+Try changing `optsList` to `optsDefs` later to see what that entails:
 
 ```js
 const docs = usage([
@@ -248,7 +248,7 @@ If `args` contains a `help` field, the `help` text is printed...
 
 <details>
 <summary>
-And the following text is printed:
+The following text is printed:
 
 <p>
 
@@ -269,6 +269,8 @@ Life, the Universe, and Everything.
 If `help` would not have been `true`, the answer would have been printed.
 
 </details>
+
+Shargs is less a command-line parser than a library to conveniently build command-line parsers.
 
 ## 🦈 Shargs
 
