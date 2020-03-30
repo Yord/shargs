@@ -19,3 +19,21 @@ test('contradictOpts README example works', () => {
 
   expect(errs).toStrictEqual(exp)
 })
+
+test('contradictOpts works on default values', () => {
+  const age      = number('age', ['-a'], {contradicts: ['birthday'], defaultValues: ['27']})
+  const birthday = string('birthday', ['-b'], {contradicts: ['age'], defaultValues: ['27.7.1927']})
+
+  const obj = {
+    opts: [age, birthday]
+  }
+
+  const {errs} = contradictOpts(obj)
+
+  const exp = [
+    contradictionDetected({key: 'age', contradicts: ['birthday'], option: age}),
+    contradictionDetected({key: 'birthday', contradicts: ['age'], option: birthday})
+  ]
+
+  expect(errs).toStrictEqual(exp)
+})
