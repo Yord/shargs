@@ -81,3 +81,11 @@ test('implyOpts works if input is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('implyOpts passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = implyOpts({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
