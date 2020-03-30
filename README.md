@@ -267,7 +267,7 @@ It turns command-line arguments parsing inside out and gives you fine-grained co
 
 ### Shargs' Philosophy
 
-Shargs' philosophy is to give the user as much control over parsing as possible.
+Shargs' philosophy is to **give the user as much control over parsing as possible**.
 The advantages of this approach are:
 
 +   You get exactly the parser you need, without unnecessary features.
