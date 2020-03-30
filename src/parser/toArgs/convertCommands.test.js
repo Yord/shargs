@@ -66,3 +66,11 @@ test('convertCommands works as expected if parent parser is not set', () => {
   expect(args).toStrictEqual(expArgs)
   expect(errs).toStrictEqual(expErrs)
 })
+
+test('convertCommands works if opts is undefined', () => {
+  const obj = {}
+
+  const {args} = convertCommands(parsers)(obj)
+
+  expect(args).toStrictEqual({_: []})
+})
