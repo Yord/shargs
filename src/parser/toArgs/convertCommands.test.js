@@ -67,6 +67,45 @@ test('convertCommands works as expected if parent parser is not set', () => {
   expect(errs).toStrictEqual(expErrs)
 })
 
+test('convertCommands works with command-specific parsers', () => {
+  const opts = [
+    string('name', ['--name']),
+    {...command('other', ['other']), values: []},
+    {
+      ...command('ask', ['ask'], {
+        opts: [
+          string('question', ['-q']),
+          flag('jokingly', ['-j'], {defaultValue: [1]})
+        ]
+      }),
+      values: ['-q', "What's your lastname?", '--name', 'Logan']
+    }
+  ]
+
+  const parsers = {
+    __: parser(),
+    ask: () => () => ({args: {test: 'ask parser!'}}),
+    _: () => () => ({args: {test: 'default parser!'}})
+  }
+
+  const {errs, args} = convertCommands(parsers)({opts})
+
+  const expArgs = {
+    _: [],
+    ask: {
+      test: 'ask parser!'
+    },
+    other: {
+      test: 'default parser!'
+    }
+  }
+
+  const expErrs = []
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs).toStrictEqual(expErrs)
+})
+
 test('convertCommands works if opts is undefined', () => {
   const obj = {}
 
