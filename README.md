@@ -444,10 +444,9 @@ Each key is the name of a shargs parsing stage:
 5.  [`args`](#args-checks) functions modify arguments objects.
 
 As a second parameter, it takes an object with two possible keys:
-A `checks` key with `argv`, `opts`, and `args` arrays.
+A `checks` key with `argv`, `opts`, and `args` arrays, and a `parsers` key.
 Checks are parser stages that record errors if rules are violated.
-
-In addition to that, `parser` takes a `parsers` field that allows you to specify a different parser for each command.
+`parsers` allows you to specify a different parser for each command.
 See the [Command-specific Parsers](#command-specific-parsers) section to learn more.
 
 `parser` applies the stages in the given order.
