@@ -72,20 +72,20 @@ test('reverseBools does not change flags', () => {
 test('reverseBools does not change bool options with invalid values', () => {
   const obj = {
     opts: [
-      bool('bool1', ['--b1'], {reverse: true, values: [42]}),
-      bool('bool2', ['--b2'], {reverse: true, values: ['42']}),
-      bool('bool2', ['--b2'], {reverse: true, values: [undefined]}),
-      bool('bool2', ['--b2'], {reverse: true, values: [null]})
+      bool('bool1', ['-b'], {reverse: true, values: [42]}),
+      bool('bool2', ['-b'], {reverse: true, values: ['42']}),
+      bool('bool2', ['-b'], {reverse: true, values: [undefined]}),
+      bool('bool2', ['-b'], {reverse: true, values: [null]})
     ]
   }
 
   const {opts} = reverseBools(obj)
 
   const exp = [
-    bool('bool1', ['--b1'], {reverse: true, values: [42]}),
-    bool('bool2', ['--b2'], {reverse: true, values: ['42']}),
-    bool('bool2', ['--b2'], {reverse: true, values: [undefined]}),
-    bool('bool2', ['--b2'], {reverse: true, values: [null]})
+    bool('bool1', ['-b'], {reverse: true, values: [42]}),
+    bool('bool2', ['-b'], {reverse: true, values: ['42']}),
+    bool('bool2', ['-b'], {reverse: true, values: [undefined]}),
+    bool('bool2', ['-b'], {reverse: true, values: [null]})
   ]
 
   expect(opts).toStrictEqual(exp)
