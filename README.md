@@ -588,11 +588,11 @@ Example:
 const opts = [
   number('age', ['-a'], {
     contradicts: ['birthday'],
-    defaultValues: 27
+    defaultValues: [27]
   }),
   string('birthday', ['-b'], {
     contradicts: ['age'],
-    defaultValues: '27.7.1927'
+    defaultValues: ['27.7.1927']
   })
 ]
 
@@ -680,7 +680,7 @@ Example:
 const opts = [
   number('age', ['-a'], {
     implies: ['birthday'],
-    defaultValues: 27
+    defaultValues: [27]
   }),
   string('birthday', ['-b'], {implies: ['age']})
 ]
