@@ -70,6 +70,18 @@ const invalidArity = ({option}) => ({
   info: {option}
 })
 
+const invalidBoolMapping = ({key, alt}) => ({
+  code: 'Invalid bool mapping',
+  msg:  "The mapping provided to broadenBools must only map from 'true' or 'false' to a list of alternatives.",
+  info: {key, alt}
+})
+
+const invalidDefaultValues = ({defaultValues, option}) => ({
+  code: 'Invalid default values',
+  msg:  "An option's defaultValues field has an invalid type. It must be an array with any values in it.",
+  info: {defaultValues, option}
+})
+
 const invalidOptionsListInCombine = ({options, arg, argument}) => ({
   code: 'Invalid options list in combine',
   msg:  'Options list in combine was undefined, null or empty',
@@ -167,6 +179,8 @@ module.exports = {
   illegalKeyName,
   implicationViolated,
   invalidArity,
+  invalidBoolMapping,
+  invalidDefaultValues,
   invalidOptionsListInCombine,
   invalidTypes,
   invalidValues,

@@ -120,7 +120,7 @@ const docs = usage([
 Every command-line tool benefits from a well-formatted usage documentation.
 Shargs brings its own DSL for defining one that can easily be extended with user functions.
 The DSL is declarative, which means it describes the desired structure without concerning itself with the details.
-Try changing `optsList` to `optsDefs` later to experience of what this means:
+Try changing `optsList` to `optsDefs` later to see what that entails:
 
 ```js
 const docs = usage([
@@ -241,8 +241,16 @@ Note, that `help` is `true`.
 Other command-line argument parsers would now display usage documentation for you.
 Shargs leaves that to the user, giving him more control.
 
-Our program reads:
-If `args` contains a `help` field, the `help` text is printed:
+And since our program reads:
+If `args` contains a `help` field, the `help` text is printed...
+
+</details>
+
+<details>
+<summary>
+The following text is printed:
+
+<p>
 
 ```bash
 deepThought [-q|--question] [-a|--answer] [-h|--help]                           
@@ -255,9 +263,14 @@ Deep Thought was created to come up with the Answer to The Ultimate Question of
 Life, the Universe, and Everything.
 ```
 
-Otherwise, the answer is printed.
+</p>
+</summary>
+
+If `help` would not have been `true`, the answer would have been printed.
 
 </details>
+
+Shargs is less a command-line parser than a library to conveniently build command-line parsers.
 
 ## 🦈 Shargs
 
@@ -377,8 +390,8 @@ The following fields are available:
 </tr>
 <tr name="defaultValues">
 <td><code><a href="#defaultValues">defaultValues</a></code></td>
-<td>any</td>
-<td><code>defaultValues</code> is used by the <a href="#toArgs"><code>toArgs</code></a> parser stage to set default values for command-line options without supplied command-line arguments. It takes any value, so it is up to the user to supply sensible defaults.</td>
+<td>array of values</td>
+<td><code>defaultValues</code> is used by the <a href="#toArgs"><code>toArgs</code></a> parser stage to set default values for command-line options without supplied command-line arguments. For non-<a href="#command"><code>command</code></a> options, it takes an array of values, <code>command</code> options may take any value.</td>
 </tr>
 <tr name="desc">
 <td><code><a href="#desc">desc</a></code></td>
@@ -575,11 +588,11 @@ Example:
 const opts = [
   number('age', ['-a'], {
     contradicts: ['birthday'],
-    defaultValues: 27
+    defaultValues: [27]
   }),
   string('birthday', ['-b'], {
     contradicts: ['age'],
-    defaultValues: '27.7.1927'
+    defaultValues: ['27.7.1927']
   })
 ]
 
@@ -667,7 +680,7 @@ Example:
 const opts = [
   number('age', ['-a'], {
     implies: ['birthday'],
-    defaultValues: 27
+    defaultValues: [27]
   }),
   string('birthday', ['-b'], {implies: ['age']})
 ]
