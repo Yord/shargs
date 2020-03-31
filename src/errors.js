@@ -70,6 +70,12 @@ const invalidArity = ({option}) => ({
   info: {option}
 })
 
+const invalidDefaultValues = ({defaultValues, option}) => ({
+  code: 'Invalid default values',
+  msg:  "An option's defaultValues field has an invalid type. It must be an array with any values in it.",
+  info: {defaultValues, option}
+})
+
 const invalidOptionsListInCombine = ({options, arg, argument}) => ({
   code: 'Invalid options list in combine',
   msg:  'Options list in combine was undefined, null or empty',
@@ -167,6 +173,7 @@ module.exports = {
   illegalKeyName,
   implicationViolated,
   invalidArity,
+  invalidDefaultValues,
   invalidOptionsListInCombine,
   invalidTypes,
   invalidValues,
