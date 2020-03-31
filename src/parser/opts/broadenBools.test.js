@@ -174,3 +174,11 @@ test('broadenBools reports error on broken alt object', () => {
   expect(opts).toStrictEqual(expOpts)
   expect(errs).toStrictEqual(expErrs)
 })
+
+test('broadenBools works if alt is undefined', () => {
+  const obj = {}
+
+  const {opts} = broadenBools()(obj)
+
+  expect(opts).toStrictEqual([])
+})
