@@ -182,3 +182,13 @@ test('broadenBools works if alt is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('broadenBools works if opts is undefined', () => {
+  const obj = {}
+
+  const alt = {}
+
+  const {opts} = broadenBools(alt)(obj)
+
+  expect(opts).toStrictEqual([])
+})
