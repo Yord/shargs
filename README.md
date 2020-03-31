@@ -1587,13 +1587,15 @@ If a `command` does not have its own parser, it uses the default parser defined 
 The `_` field can be overridden by the user to define a custom default parser.
 If left unchanged, it defaults to the parent parser.
 
-#### Writing Your Own Stages
+#### Custom Checks and Stages
 
 Shargs makes writing and using custom checks and stages very simple.
-The only thing you have to do is using the correct function signatures for your check or stage.
-In fact, checks and stages have the same signatures.
+The only thing you have to do is following the correct function signatures for your check or stage.
+In fact, checks and stages of the same kind have the same signatures.
 The following code snippets showcase very simple examples with the correct signatures.
-Always remember to pass on errors!
+
+Regardless whether you implement a check or a stage, the most important thing to remember is:
+Always pass on errors!
 
 Custom `argv` stage example:
 
