@@ -1587,6 +1587,63 @@ If a `command` does not have its own parser, it uses the default parser defined 
 The `_` field can be overridden by the user to define a custom default parser.
 If left unchanged, it defaults to the parent parser.
 
+#### Writing Your Own Stages
+
+Shargs makes writing and using custom checks and stages very simple.
+The only thing you have to do is using the correct function signatures for your check or stage.
+In fact, checks and stages have the same signatures.
+The following code snippets showcase very simple examples with the correct signatures.
+Always remember to pass on errors!
+
+Custom `argv` stage example:
+
+```js
+function splitShortOptions ({errs = [], argv = []} = {}) {
+  const argv2 = argv.flatMap(arg =>
+    arg.length > 2 && arg[0] === '-' && arg[1] !== '-'
+      ? arg.slice(1).split('').map(c => '-' + c)
+      : arg
+  )
+
+  return {errs, argv: argv2}
+}
+```
+
+Custom `opts` stage example:
+
+```js
+function demandACommand ({errs = [], opts = []} = {}) {
+  const errs2 = []
+
+  const aCommand = opts.some(
+    ({types, values}) => types === null && typeof values !== 'undefined'
+  )
+
+  if (!aCommand) {
+    errs2.push(commandRequired({options: opts}))
+  }
+
+  return {errs: errs.concat(errs2), opts}
+}
+```
+
+Custom `args` stage example:
+
+```js
+function flagsAsBools ({errs = [], args = {}} = {}) {
+  const fs = {
+    flag: ({key, val, errs, args}) => ({
+      errs,
+      args: {...args, [key]: val.count > 0}
+    })
+  }
+
+  const {errs: errs2, args: args2} = transformArgs(fs)({args})
+
+  return {errs: errs.concat(errs2), args: args2}
+}
+```
+
 ### Usage Documentation
 
 Every decent command-line tools has a usage documentation.
