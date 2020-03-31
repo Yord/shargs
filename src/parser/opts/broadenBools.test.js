@@ -200,3 +200,13 @@ test('broadenBools works if input is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('broadenBools passes on errors', () => {
+  const ERRS = ['foo']
+
+  const alt = {}
+
+  const {errs} = broadenBools(alt)({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
