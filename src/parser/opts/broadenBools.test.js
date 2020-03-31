@@ -1,4 +1,5 @@
 const broadenBools = require('./broadenBools')
+const {invalidBoolMapping} = require('../../errors')
 const {array, bool, number} = require('../../options')
 
 const numberBool = array(['number', 'bool'])
@@ -82,4 +83,34 @@ test('broadenBools README example works for both, values and defaultValues toget
   ]
 
   expect(opts).toStrictEqual(exp)
+})
+
+test('broadenBools reports error on unknown bool value', () => {
+  const obj = {
+    opts: [
+      {...numberBool('numBool', ['-n', '--nb']), values: ['23', 't']},
+      {...bool('verbose', ['--verbose']), values: ['no']},
+      {...bool('verbose', ['--verbose']), values: ['f']}
+    ]
+  }
+
+  const alt = {
+    true: ['yes'],
+    false: ['no', 'f']
+  }
+
+  const {errs, opts} = broadenBools(alt)(obj)
+
+  const expOpts = [
+    {...numberBool('numBool', ['-n', '--nb']), values: ['23', 't']},
+    {...bool('verbose', ['--verbose']), values: ['false']},
+    {...bool('verbose', ['--verbose']), values: ['false']}
+  ]
+
+  const expErrs = [
+    invalidBoolMapping({key: 't', alt})
+  ]
+
+  expect(opts).toStrictEqual(expOpts)
+  expect(errs).toStrictEqual(expErrs)
 })
