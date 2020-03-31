@@ -114,3 +114,33 @@ test('broadenBools reports error on unknown bool value', () => {
   expect(opts).toStrictEqual(expOpts)
   expect(errs).toStrictEqual(expErrs)
 })
+
+test('broadenBools reports error on unknown bool defaultValue', () => {
+  const obj = {
+    opts: [
+      numberBool('numBool', ['-n', '--nb'], {defaultValues: ['23', 't']}),
+      bool('verbose', ['--verbose'], {defaultValues: ['no']}),
+      bool('verbose', ['--verbose'], {defaultValues: ['f']})
+    ]
+  }
+
+  const alt = {
+    true: ['yes'],
+    false: ['no', 'f']
+  }
+
+  const {errs, opts} = broadenBools(alt)(obj)
+
+  const expOpts = [
+    numberBool('numBool', ['-n', '--nb'], {defaultValues: ['23', 't']}),
+    bool('verbose', ['--verbose'], {defaultValues: ['false']}),
+    bool('verbose', ['--verbose'], {defaultValues: ['false']})
+  ]
+
+  const expErrs = [
+    invalidBoolMapping({key: 't', alt})
+  ]
+
+  expect(opts).toStrictEqual(expOpts)
+  expect(errs).toStrictEqual(expErrs)
+})
