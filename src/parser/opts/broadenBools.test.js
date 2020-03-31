@@ -29,3 +29,30 @@ test('broadenBools README example works', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('broadenBools README example works for defaultValues', () => {
+  const obj = {
+    opts: [
+      number('answer', ['-a', '--answer'], {defaultValues: ['42']}),
+      numberBool('numBool', ['-n', '--nb'], {defaultValues: ['23', 'yes']}),
+      bool('verbose', ['--verbose'], {defaultValues: ['no']}),
+      bool('verbose', ['--verbose'], {defaultValues: ['f']})
+    ]
+  }
+
+  const alt = {
+    true: ['yes'],
+    false: ['no', 'f']
+  }
+
+  const {opts} = broadenBools(alt)(obj)
+
+  const exp = [
+    number('answer', ['-a', '--answer'], {defaultValues: ['42']}),
+    numberBool('numBool', ['-n', '--nb'], {defaultValues: ['23', 'true']}),
+    bool('verbose', ['--verbose'], {defaultValues: ['false']}),
+    bool('verbose', ['--verbose'], {defaultValues: ['false']})
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
