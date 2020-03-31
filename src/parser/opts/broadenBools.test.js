@@ -56,3 +56,30 @@ test('broadenBools README example works for defaultValues', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('broadenBools README example works for both, values and defaultValues together', () => {
+  const obj = {
+    opts: [
+      number('answer', ['-a', '--answer'], {defaultValues: ['42']}),
+      {...numberBool('numBool', ['-n', '--nb'], {defaultValues: ['23', 'yes']}), values: ['42', 'no']},
+      {...bool('verbose', ['--verbose'], {defaultValues: ['no']}), values: ['yes']},
+      {...bool('verbose', ['--verbose'], {defaultValues: ['f']}), values: ['t']}
+    ]
+  }
+
+  const alt = {
+    true: ['yes', 't'],
+    false: ['no', 'f']
+  }
+
+  const {opts} = broadenBools(alt)(obj)
+
+  const exp = [
+    number('answer', ['-a', '--answer'], {defaultValues: ['42']}),
+    {...numberBool('numBool', ['-n', '--nb'], {defaultValues: ['23', 'true']}), values: ['42', 'false']},
+    {...bool('verbose', ['--verbose'], {defaultValues: ['false']}), values: ['true']},
+    {...bool('verbose', ['--verbose'], {defaultValues: ['false']}), values: ['true']}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
