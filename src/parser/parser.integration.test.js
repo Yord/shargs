@@ -1058,6 +1058,12 @@ test('parser works with complex stages setup', () => {
   expect(errs2).toStrictEqual(expErrs)
 })
 
+// bestGuessOpts
+// bestGuessRest
+// clearRest
+// flagsAsBools
+// flagsAsNumbers
+
 test('parser works with complement', () => {
   const tired     = bool('tired', ['-t', '--tired'], {defaultValues: ['true']})
   const notTired  = complement('--not-')(tired)
@@ -1094,8 +1100,3 @@ test('parser works with complement', () => {
   expect(errs).toStrictEqual(expErrs)
 })
 
-// bestGuessOpts
-// bestGuessRest
-// clearRest
-// flagsAsBools
-// flagsAsNumbers
