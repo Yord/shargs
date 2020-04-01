@@ -1,5 +1,3 @@
-![shargs teaser][teaser]
-
 🦈 shargs (**sh**ell **args**) is a highly customizable command-line arguments parser and usage documentation generator.
 
 [![node version][shield-node]][node]
@@ -3028,4 +3026,3 @@ Shargs is [MIT licensed][license].
 [shield-unit-tests-linux]: https://github.com/Yord/shargs/workflows/linux/badge.svg?branch=master
 [shield-unit-tests-macos]: https://github.com/Yord/shargs/workflows/macos/badge.svg?branch=master
 [shield-unit-tests-windows]: https://github.com/Yord/shargs/workflows/windows/badge.svg?branch=master
-[teaser]: https://github.com/Yord/pxi/blob/master/teaser.gif?raw=true
