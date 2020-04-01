@@ -1100,3 +1100,35 @@ test('parser works with complement', () => {
   expect(errs).toStrictEqual(expErrs)
 })
 
+test('parser uses the first option if options are defined several times 1/3', () => {
+  const tired = bool('tired', ['-t', '--tired'])
+  const help  = command('help', ['help'])
+
+  const opts = [
+    tired,
+    help
+  ]
+
+  const stages = {
+    opts: [reverseBools]
+  }
+
+  const parse = parser(stages)(opts)
+
+  const argv = ['--tired', 'true', '--tired', 'false', 'help']
+
+  const {errs, args} = parse(argv)
+
+  const expErrs = []
+
+  const expArgs = {
+    _: [],
+    tired: 'true',
+    help: {
+      _: []
+    }
+  }
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs).toStrictEqual(expErrs)
+})
