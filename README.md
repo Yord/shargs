@@ -276,7 +276,7 @@ Shargs is less a command-line parser than a library to conveniently build comman
 
 Other command-line parsers are often black boxes that offer very limited control over parsing.
 Shargs is a very different beast:
-It turns command-line arguments parsing inside out and gives you fine-grained control over parser functions and usage docs.
+It turns command-line arguments parsing inside out and gives you fine-grained control over parser stages and usage docs.
 
 ### Shargs' Philosophy
 
