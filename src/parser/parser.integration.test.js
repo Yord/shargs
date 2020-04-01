@@ -899,11 +899,14 @@ test('parser with custom parser functions for the rate command works as expected
 })
 
 test('parser with custom stages works as expected', () => {
+  const flatMap = (f, arr) => arr.reduce((acc, value) => [...acc, ...f(value)], [])
+
   function splitShortOptions ({errs = [], argv = []} = {}) {
-    const argv2 = argv.flatMap(arg =>
-      arg.length > 2 && arg[0] === '-' && arg[1] !== '-'
+    const argv2 = flatMap(
+      arg => arg.length > 2 && arg[0] === '-' && arg[1] !== '-'
         ? arg.slice(1).split('').map(c => '-' + c)
-        : arg
+        : [arg],
+      argv
     )
 
     return {errs, argv: argv2}
