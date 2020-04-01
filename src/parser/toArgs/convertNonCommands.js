@@ -13,7 +13,7 @@ module.exports = ({errs = [], opts: OPTS = []} = {}) => {
           type: 'flag',
           count: values.length === 0 ? 1 : typeof args[key] === 'undefined' ? values[0] : args[key].count + values[0]
         }
-      } else {
+      } else if (typeof args[key] === 'undefined') {
         args[key] = types.length === 1 ? values[0] : values
       }
     }
