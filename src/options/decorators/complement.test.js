@@ -26,3 +26,11 @@ test('complement README example works', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('complement works if opts is undefined', () => {
+  const opt = complement()()
+
+  const exp = {reverse: true, args: []}
+
+  expect(opt).toStrictEqual(exp)
+})
