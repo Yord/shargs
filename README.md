@@ -2955,13 +2955,6 @@ E.g. It lets you mix in custom parser and usage functions.
 <th><code><a href="https://www.npmjs.com/package/minimist">minimist</a></code></th>
 </tr>
 <tr>
-<td><b>First Commit</b></td>
-<td>14. Jan 2020</td>
-<td>10. Sep 2010</td>
-<td>14. Aug 2011</td>
-<td>25. Jun 2013</td>
-</tr>
-<tr>
 <td><b>Self-description</b></td>
 <td>Shargs turns command-line arguments parsing inside out and gives you fine-grained control over parser stages and usage docs.</td>
 <td>Yargs helps you build interactive command line tools, by parsing arguments and generating an elegant user interface.</td>
@@ -2980,6 +2973,13 @@ E.g. It lets you mix in custom parser and usage functions.
 <td><a href="https://github.com/yargs/yargs/blob/master/LICENSE">MIT</a></td>
 <td><a href="https://github.com/tj/commander.js/blob/master/LICENSE">MIT</a></td>
 <td><a href="https://github.com/substack/minimist/blob/master/LICENSE">MIT</a></td>
+</tr>
+<tr>
+<td><b>First Commit</b></td>
+<td>14. Jan 2020</td>
+<td>10. Sep 2010</td>
+<td>14. Aug 2011</td>
+<td>25. Jun 2013</td>
 </tr>
 <tr>
 <td><b>Customize Parsing</b></td>
