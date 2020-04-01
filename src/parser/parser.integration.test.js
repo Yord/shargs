@@ -26,7 +26,8 @@ const transformArgs     = require('./args/transformArgs')
 const verifyArgs        = require('./args/verifyArgs')
 
 const {bool, command, flag, number, string} = require('../options')
-const {argumentIsNotABool, argumentIsNotANumber, commandRequired, contradictionDetected, didYouMean, falseArgsRules, falseArgvRules, falseOptsRules, falseRules, implicationViolated, invalidDefaultValues, invalidValues, requiredOptionMissing, unexpectedArgument, valueRestrictionsViolated} = require('../errors')
+const complement = require('../options/decorators/complement')
+const {argumentIsNotABool, commandRequired, contradictionDetected, didYouMean, falseArgsRules, falseArgvRules, falseOptsRules, falseRules, implicationViolated, invalidDefaultValues, invalidValues, requiredOptionMissing, unexpectedArgument, valueRestrictionsViolated} = require('../errors')
 
 const noCommands = opts => opts.filter(({types}) => types !== null)
 
@@ -991,7 +992,9 @@ test('parser works with complex stages setup', () => {
       requireOptions,
       verifyOpts(optsRules),
       verifyRules,
-      verifyValuesArity
+      verifyValuesArity,
+      implyOpts,
+      contradictOpts
     ],
     args: [
       failRest,
@@ -1039,6 +1042,8 @@ test('parser works with complex stages setup', () => {
     requiredOptionMissing({key: 'genre'}),
     falseOptsRules({}),
     falseRules({key: 'query'}),
+    implicationViolated({key: 'fantasy', implies: ['genre']}),
+    contradictionDetected({key: 'fantasy', contradicts: ['popcorn']}),
     didYouMean({argv: '--colors'}),
     valueRestrictionsViolated({key: 'stars', values: ['8'], index: 0, only: ['1', '2', '3', '4', '5']}),
     didYouMean({argv: '--help'}),
@@ -1053,10 +1058,44 @@ test('parser works with complex stages setup', () => {
   expect(errs2).toStrictEqual(expErrs)
 })
 
+test('parser works with complement', () => {
+  const tired     = bool('tired', ['-t', '--tired'], {defaultValues: ['true']})
+  const notTired  = complement('--not-')(tired)
+  const badLuck   = flag('badLuck', ['--luck'], {reverse: true})
+  const noBadLuck = complement('--no-')(badLuck)
+
+  const opts = [
+    tired,
+    notTired,
+    badLuck,
+    noBadLuck
+  ]
+
+  const stages = {
+    opts: [reverseBools, reverseFlags, cast],
+    args: [flagsAsBools]
+  }
+
+  const parse = parser(stages)(opts)
+
+  const argv = ['--not-tired', 'true', '--no-luck']
+
+  const {errs, args} = parse(argv)
+
+  const expErrs = []
+
+  const expArgs = {
+    _: [],
+    badLuck: true,
+    tired: false
+  }
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs).toStrictEqual(expErrs)
+})
+
 // bestGuessOpts
 // bestGuessRest
 // clearRest
-// contradictOpts
 // flagsAsBools
 // flagsAsNumbers
-// implyOpts

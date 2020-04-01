@@ -429,7 +429,44 @@ The following fields are available:
 <tr name="values">
 <td><code><a href="#values">values</a></code></td>
 <td>array with value(s)</td>
-<td><code>values</code> is used by the <a href="#toOpts"><code>toOpts</code></a> parser stage to store command-line arguments. This field should not be used by the user. If you need to set default values, use the <a href="#defaultValues"><code>defaultValues</code></a> field, instead.</td>
+<td><code>values</code> is used by the <a href="#toOpts"><code>toOpts</code></a> parser stage to store command-line arguments. This field should not be set by the user. If you need to set default values, use the <a href="#defaultValues"><code>defaultValues</code></a> field, instead.</td>
+</tr>
+</table>
+
+A command-line option may be decorated with one or many of the following decorators, which change its values:
+
+<table>
+<tr>
+<th>Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="complement">
+<td><code><a href="#complement">complement</a>(prefix)(opt)</code></td>
+<td>
+Transforms a <a href="#bool"><code>bool</code></a> or <a href="#flag"><code>flag</code></a> option into a complementary option prefixed with a given string (e.g. <code>--no-</code>). The complementary option has the same key as the original option, but reverts the value. Using <code>complement</code> assumes, either the <code>reverseBools</code> or <code>reverseFlags</code>, or both parser stages are used in the parser.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const fun = bool('fun', ['-f', '--fun'], {defaultValues: ['false']})
+const notFun = complement('--not-')(fun)
+```
+
+Is the same as:
+
+```js
+const fun = bool('fun', ['-f', '--fun'], {defaultValues: ['false']})
+const notFun = bool('fun', ['--not-f', '--not-fun'], {reverse: true})
+```
+
+</details>
+</td>
 </tr>
 </table>
 
@@ -2955,13 +2992,6 @@ E.g. It lets you mix in custom parser and usage functions.
 <th><code><a href="https://www.npmjs.com/package/minimist">minimist</a></code></th>
 </tr>
 <tr>
-<td><b>First Commit</b></td>
-<td>14. Jan 2020</td>
-<td>10. Sep 2010</td>
-<td>14. Aug 2011</td>
-<td>25. Jun 2013</td>
-</tr>
-<tr>
 <td><b>Self-description</b></td>
 <td>Shargs turns command-line arguments parsing inside out and gives you fine-grained control over parser stages and usage docs.</td>
 <td>Yargs helps you build interactive command line tools, by parsing arguments and generating an elegant user interface.</td>
@@ -2980,6 +3010,13 @@ E.g. It lets you mix in custom parser and usage functions.
 <td><a href="https://github.com/yargs/yargs/blob/master/LICENSE">MIT</a></td>
 <td><a href="https://github.com/tj/commander.js/blob/master/LICENSE">MIT</a></td>
 <td><a href="https://github.com/substack/minimist/blob/master/LICENSE">MIT</a></td>
+</tr>
+<tr>
+<td><b>First Commit</b></td>
+<td>14. Jan 2020</td>
+<td>10. Sep 2010</td>
+<td>14. Aug 2011</td>
+<td>25. Jun 2013</td>
 </tr>
 <tr>
 <td><b>Customize Parsing</b></td>
