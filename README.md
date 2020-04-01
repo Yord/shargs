@@ -433,6 +433,43 @@ The following fields are available:
 </tr>
 </table>
 
+A command-line option may be decorated with one or many of the following decorators, which change its values:
+
+<table>
+<tr>
+<th>Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="complement">
+<td><code><a href="#complement">complement</a>(prefix)(opt)</code></td>
+<td>
+Transforms a <a href="#bool"><code>bool</code></a> or <a href="#flag"><code>flag</code></a> option into a complementary option prefixed with a given string (e.g. <code>--no-</code>). The complementary option has the same key as the original option, but reverts the value. Using <code>complement</code> assumes, either the <code>reverseBools</code> or <code>reverseFlags</code>, or both parser stages are used in the parser.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const fun = bool('fun', ['-f', '--fun'], {defaultValues: ['false']})
+const notFun = complement('--not-')(fun)
+```
+
+Is the same as:
+
+```js
+const fun = bool('fun', ['-f', '--fun'], {defaultValues: ['false']})
+const notFun = bool('fun', ['--not-f', '--not-fun'], {reverse: true})
+```
+
+</details>
+</td>
+</tr>
+</table>
+
 ### Command-Line Parsers
 
 Shargs lets you define command-line parsers with the `parser` function:
