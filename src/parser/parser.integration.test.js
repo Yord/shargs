@@ -898,6 +898,77 @@ test('parser with custom parser functions for the rate command works as expected
   expect(errs2).toStrictEqual(expErrs)
 })
 
+test('parser with custom stages works as expected', () => {
+  function splitShortOptions ({errs = [], argv = []} = {}) {
+    const argv2 = argv.flatMap(arg =>
+      arg.length > 2 && arg[0] === '-' && arg[1] !== '-'
+        ? arg.slice(1).split('').map(c => '-' + c)
+        : arg
+    )
+
+    return {errs, argv: argv2}
+  }
+
+  function demandACommand ({errs = [], opts = []} = {}) {
+    const errs2 = []
+
+    const aCommand = opts.some(
+      ({types, values}) => types === null && typeof values !== 'undefined'
+    )
+
+    if (!aCommand) {
+      errs2.push(commandRequired({options: opts}))
+    }
+
+    return {errs: errs.concat(errs2), opts}
+  }
+
+  function flagsAsBools ({errs = [], args = {}} = {}) {
+    const fs = {
+      flag: ({key, val, errs, args}) => ({
+        errs,
+        args: {...args, [key]: val.count > 0}
+      })
+    }
+
+    const {errs: errs2, args: args2} = transformArgs(fs)({args})
+
+    return {errs: errs.concat(errs2), args: args2}
+  }
+
+  const checks = {
+    opts: [demandACommand]
+  }
+
+  const stages = {
+    argv: [splitShortOptions],
+    args: [flagsAsBools]
+  }
+
+  const {errs, args} = parser(stages, {checks})(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors'],
+    fantasy: 'true',
+    help: true,
+    popcorn: true,
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me',
+    smile: 'yes',
+    verbose: true
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
+
 test('parser works with complex stages setup', () => {
   const argvRules = argv => argv.some(_ => _ === '--fancy')
 
