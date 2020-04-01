@@ -2946,6 +2946,59 @@ Shargs lets you define the three parts individually.
 This gives you a lot of flexibility:
 E.g. It lets you mix in custom parser and usage functions.
 
+## Comparison to Related Libraries
+
+<table>
+<tr>
+<th>&nbsp;</th>
+<th><code><a href="https://www.npmjs.com/package/shargs">shargs</a></code></th>
+<th><code><a href="https://www.npmjs.com/package/yargs">yargs</a></code></th>
+<th><code><a href="https://www.npmjs.com/package/commander">commander.js</a></code></th>
+<th><code><a href="https://www.npmjs.com/package/minimist">minimist</a></code></th>
+</tr>
+<tr>
+<td><b>First Commit</b></td>
+<td>14. Jan 2020</td>
+<td>10. Sep 2010</td>
+<td>14. Aug 2011</td>
+<td>25. Jun 2013</td>
+</tr>
+<tr>
+<td><b>Self-description</b></td>
+<td>Shargs turns command-line arguments parsing inside out and gives you fine-grained control over parser stages and usage docs.</td>
+<td>Yargs helps you build interactive command line tools, by parsing arguments and generating an elegant user interface.</td>
+<td>The complete solution for node.js command-line interfaces, inspired by Ruby's commander.</td>
+<td>Minimist is the guts of optimist's argument parser without all the fanciful decoration.</td>
+</tr>
+<tr>
+<td><b>Focus</b></td>
+<td>A command-line parser toolkit with a focus on enabling developers to easily and quickly build their own parsers of just the right size.</td>
+<td>A large parser with lots of features with a focus on providing a developer with all the options out of the box.</td>
+<td>A medium parser with a strong focus on a textual DSL that makes it easy to define options.</td>
+<td>A tiny parser, mostly without an options schema, with a strong focus on optimistic parsing.</td>
+</tr>
+<td><b>License</b></td>
+<td><a href="https://github.com/Yord/shargs/blob/master/LICENSE">MIT</a></td>
+<td><a href="https://github.com/yargs/yargs/blob/master/LICENSE">MIT</a></td>
+<td><a href="https://github.com/tj/commander.js/blob/master/LICENSE">MIT</a></td>
+<td><a href="https://github.com/substack/minimist/blob/master/LICENSE">MIT</a></td>
+</tr>
+<tr>
+<td><b>Customize Parsing</b></td>
+<td>Pick and choose your <a href="#command-line-parsers">parser checks and stages</a>, write and use <a href="#custom-checks-and-stages">custom checks and stages</a>, and optionally define <a href="#command-specific-parsers">command-specific parsers</a>.</td>
+<td>You can <a href="https://github.com/yargs/yargs/blob/master/docs/advanced.md#customizing-yargs-parser">turn on and off</a> some of yargs' parsing features, and use a kind of <a href="https://github.com/yargs/yargs/blob/master/docs/advanced.md#middleware">middleware</a> similar to shargs' <code>args</code> stages.</td>
+<td>You may specify a function to do <a href="https://github.com/tj/commander.js#custom-option-processing">custom processing of option values</a>.</td>
+<td>None that I am aware of.</td>
+</tr>
+<tr>
+<td><b>Customize Usage Docs</b></td>
+<td>Use a DSL with many options to build <a href="#usage-documentation">custom usage documentation layouts</a> with fine-grained control over <a href="#style-dsl">styles</a>.</td>
+<td>Allows specifying the <a href="https://github.com/yargs/yargs/blob/master/docs/api.md#scriptname0">scriptName</a>, a <a href="https://github.com/yargs/yargs/blob/master/docs/api.md#usagemessagecommand-desc-builder-handler">usage</a> string, an <a href="https://github.com/yargs/yargs/blob/master/docs/api.md#epiloguestr">epilogue</a>, <a href="https://github.com/yargs/yargs/blob/master/docs/api.md#examplecmd-desc">examples</a> as strings, and the number of columns after which to <a href="https://github.com/yargs/yargs/blob/master/docs/api.md#wrapcolumns">wrap</a>.</td>
+<td>Display extra information by <a href="https://github.com/tj/commander.js#custom-help">listening to the <code>--help</code> event</a>, customize <a href="https://github.com/tj/commander.js#usage-and-name">program name and usage description</a>, and <a href="https://github.com/tj/commander.js#addhelpcommand">add custom description text</a>.</td>
+<td>None that I am aware of.</td>
+</tr>
+</table>
+
 ## Reporting Issues
 
 Please report issues [in the tracker][issues]!
