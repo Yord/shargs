@@ -1564,16 +1564,16 @@ While transforming, `toOpts` encounters the following cases:
 1.  **A string matches no `args` value:**\
     In this case, `toOpts` returns an unmatched value (e.g. `{values: 'foo'}` if `foo` is the string).
 2.  **A string matches an `args` value of exactly one option:**\
-    Here, `toOpts` checks the `types` arity and reads a matching number of `argv`.
+    Here, `toOpts` checks the [`types`](#types) arity and reads a matching number of `argv`.
     If too few `argv` are available, it returns an unmatched value.
-    If enough `argv` are available, it returns the matching option together with a `values` field holding the `argv`.
+    If enough `argv` are available, it returns the matching option together with a [`values`](#values) field holding the `argv`.
 3.  **A string matches an `args` value in several options:**\
     If this happens, `toOpts` proceeds as in case 2 for each option, with one addition:
     It checks if all options have the same arity as the first option.
-    All options with the same arities return the matching option with a `values` field.
+    All options with the same arities return the matching option with a [`values`](#values) field.
     For all other options, an error is recorded.
 
-The `stages` field of `parsers` lets users override the described behavior with their own functions.
+The `toOpts` key of the `stages` field of [`parser`](#command-line-parsers) lets users override the described behavior with their own functions.
 Actually doing this is not recommended, as it may break defined parser checks and stages.
 
 #### `toArgs` Stage
@@ -1609,7 +1609,7 @@ by applying three different stages in order:
 
 The resulting `args` objects of the three stages are then merged together.
 
-The `stages` field of `parsers` lets users override the described behavior with their own functions.
+The `toArgs` key of the `stages` field of [`parser`](#command-line-parsers) lets users override the described behavior with their own functions.
 Actually doing this is not recommended, as it may break defined parser checks and stages.
 
 #### Command-specific Parsers
