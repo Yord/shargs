@@ -991,7 +991,9 @@ test('parser works with complex stages setup', () => {
       requireOptions,
       verifyOpts(optsRules),
       verifyRules,
-      verifyValuesArity
+      verifyValuesArity,
+      implyOpts,
+      contradictOpts
     ],
     args: [
       failRest,
@@ -1039,6 +1041,8 @@ test('parser works with complex stages setup', () => {
     requiredOptionMissing({key: 'genre'}),
     falseOptsRules({}),
     falseRules({key: 'query'}),
+    implicationViolated({key: 'fantasy', implies: ['genre']}),
+    contradictionDetected({key: 'fantasy', contradicts: ['popcorn']}),
     didYouMean({argv: '--colors'}),
     valueRestrictionsViolated({key: 'stars', values: ['8'], index: 0, only: ['1', '2', '3', '4', '5']}),
     didYouMean({argv: '--help'}),
@@ -1056,7 +1060,5 @@ test('parser works with complex stages setup', () => {
 // bestGuessOpts
 // bestGuessRest
 // clearRest
-// contradictOpts
 // flagsAsBools
 // flagsAsNumbers
-// implyOpts
