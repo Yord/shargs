@@ -59,3 +59,11 @@ test('bestGuessCast even empties rest if input is undefined', () => {
 
   expect(args._).toStrictEqual([])
 })
+
+test('bestGuessCast passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = bestGuessCast({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
