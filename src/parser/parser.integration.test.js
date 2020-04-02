@@ -1042,7 +1042,8 @@ test('parser works with complex stages setup', () => {
       reverseBools,
       reverseFlags,
       suggestOptions,
-      cast
+      cast,
+      arrayOnRepeat
     ],
     args: [
       mergeArgs(),
@@ -1062,7 +1063,7 @@ test('parser works with complex stages setup', () => {
     fantasy: false,
     help: true,
     popcorn: false,
-    query: 'Supersize Me',
+    query: ['Supersize Me', 'The Hobbit'],
     smile: true,
     verbose: 2
   }
