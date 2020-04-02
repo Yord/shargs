@@ -63,3 +63,11 @@ test('arrayOnRepeat does not change options without values', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('arrayOnRepeat works if opts is undefined', () => {
+  const obj = {}
+
+  const {opts} = arrayOnRepeat(obj)
+
+  expect(opts).toStrictEqual([])
+})
