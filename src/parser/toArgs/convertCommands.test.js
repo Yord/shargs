@@ -387,6 +387,49 @@ test('convertCommands takes first positional argument if two positional argument
   expect(errs).toStrictEqual(expErrs)
 })
 
+test('convertCommands reports missing required variadic positional arguments', () => {
+  const question = {key: 'question', types: ['string'], required: true}
+  const audience = {key: 'audience', types: null, required: true, variadic: true}
+
+  const opts = [
+    {
+      ...command('ask', ['ask'], {
+        opts: [
+          flag('jokingly', ['-j'], {defaultValue: [1]})
+        ],
+        posArgs: [
+          question,
+          audience
+        ]
+      }),
+      values: ["What's your lastname?", '-j']
+    }
+  ]
+
+  const parsers = {
+    __: parser(),
+    _: parser()
+  }
+
+  const {errs, args} = convertCommands(parsers)({opts})
+
+  const expArgs = {
+    _: [],
+    ask: {
+      _: [],
+      jokingly: {type: 'flag', count: 1},
+      question: "What's your lastname?"
+    }
+  }
+
+  const expErrs = [
+    requiredPositionalArgumentMissing({key: audience.key, positionalArgument: audience})
+  ]
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs).toStrictEqual(expErrs)
+})
+
 test('convertCommands works if opts is undefined', () => {
   const obj = {}
 
