@@ -3128,10 +3128,10 @@ E.g. It lets you mix in custom parser and usage functions.
 </tr>
 <tr>
 <td><b>First Commit</b></td>
-<td>14. Jan 2020</td>
-<td>10. Sep 2010</td>
-<td>14. Aug 2011</td>
-<td>25. Jun 2013</td>
+<td>January 14th 2020</td>
+<td>September 10th 2010</td>
+<td>August 14th 2011</td>
+<td>June 25th 2013</td>
 </tr>
 <tr>
 <td><b>Customize Parsing</b></td>
