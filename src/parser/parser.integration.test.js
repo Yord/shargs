@@ -18,6 +18,7 @@ const verifyOpts        = require('./opts/verifyOpts')
 const verifyRules       = require('./opts/verifyRules')
 const verifyValuesArity = require('./opts/verifyValuesArity')
 const bestGuessArgs     = require('./args/bestGuessArgs')
+const bestGuessCast     = require('./args/bestGuessCast')
 const clearRest         = require('./args/clearRest')
 const failRest          = require('./args/failRest')
 const flagsAsBools      = require('./args/flagsAsBools')
@@ -678,6 +679,34 @@ test('parser with only bestGuessArgs works as expected', () => {
   expect(errs2).toStrictEqual(expErrs)
 })
 
+test('parser with only bestGuessCast works as expected', () => {
+  const stages = {
+    args: [bestGuessCast]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: true,
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: 8
+    },
+    query: 'Supersize Me',
+    smile: 'yes'
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
+
 test('parser with only clearRest works as expected', () => {
   const stages = {
     args: [clearRest]
@@ -1091,6 +1120,7 @@ test('parser works with complex stages setup', () => {
 
 // bestGuessOpts
 // bestGuessArgs
+// bestGuessCast
 // clearRest
 // flagsAsBools
 // flagsAsNumbers
