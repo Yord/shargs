@@ -1374,6 +1374,70 @@ Result:
 </details>
 </td>
 </tr>
+<tr name="bestGuessCast">
+<td><code><a href="#bestGuessCast">bestGuessCast</a>({errs, args})</code></td>
+<td>
+<code>bestGuessCast</code> tries its best to transform strings into other types.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const args = {
+  _: ['--name', 'Logan'],
+  str1: 'yay',
+  num1: '42.3',
+  num2: '123e-1',
+  num3: '0x11',
+  num4: '0b11',
+  bool1: 'true',
+  arr1: ['-42', 'true', 'yay'],
+  obj: {
+    num5: '0o11',
+    num6: '-Infinity',
+    num7: '',
+    num8: null,
+    bool2: 'false',
+    bool3: undefined
+  }
+}
+
+bestGuessCast({args})
+```
+
+Result:
+
+```js
+{
+  args: {
+    _: ['--name', 'Logan'],
+    str1: 'yay',
+    num1: 42.3,
+    num2: 12.3,
+    num3: 17,
+    num4: 3,
+    bool1: true,
+    arr1: [-42, true, 'yay'],
+    obj: {
+      num5: 9,
+      num6: -Infinity,
+      num7: '',
+      num8: null,
+      bool2: false,
+      bool3: undefined
+    }
+  }
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="clearRest">
 <td><code><a href="#clearRest">clearRest</a>({errs, args})</code></td>
 <td>
