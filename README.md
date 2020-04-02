@@ -917,6 +917,44 @@ Result:
 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
+<tr name="arrayOnRepeat">
+<td><code><a href="#arrayOnRepeat">arrayOnRepeat</a>({errs, opts})</code></td>
+<td>
+<code>arrayOnRepeat</code> changes how repeated calls of command-line arguments are handled by the parser.
+Instead of only keeping only the first argument, repeated arguments are assembled in an array.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const obj = {
+  opts: [
+    {key: 'age', types: ['string'], values: ['42']},
+    {key: 'age', types: ['number'], values: [42]}
+  ]
+}
+
+arrayOnRepeat(obj)
+```
+
+Result:
+
+```js
+{
+  opts: [
+    {key: 'age', types: ['string', 'number'], values: ['42', 42]}
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="bestGuessOpts">
 <td><code><a href="#bestGuessOpts">bestGuessOpts</a>({errs, opts})</code></td>
 <td>
@@ -1286,8 +1324,8 @@ Result:
 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
-<tr name="bestGuessRest">
-<td><code><a href="#bestGuessRest">bestGuessRest</a>({errs, args})</code></td>
+<tr name="bestGuessArgs">
+<td><code><a href="#bestGuessArgs">bestGuessArgs</a>({errs, args})</code></td>
 <td>
 Tries its best to interpret strings in the <code>_</code> key as additional parameters.
 Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><code>flag</code></a> and requires options to follow a pattern:
@@ -1312,7 +1350,7 @@ const obj = {
   }
 }
 
-bestGuessRest(obj)
+bestGuessArgs(obj)
 ```
 
 Result:
@@ -1328,6 +1366,70 @@ Result:
       _: ['bar'],
       h: {type: 'flag', count: 2},
       age: 'unknown'
+    }
+  }
+}
+```
+
+</details>
+</td>
+</tr>
+<tr name="bestGuessCast">
+<td><code><a href="#bestGuessCast">bestGuessCast</a>({errs, args})</code></td>
+<td>
+<code>bestGuessCast</code> tries its best to transform strings into other types.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const args = {
+  _: ['--name', 'Logan'],
+  str1: 'yay',
+  num1: '42.3',
+  num2: '123e-1',
+  num3: '0x11',
+  num4: '0b11',
+  bool1: 'true',
+  arr1: ['-42', 'true', 'yay'],
+  obj: {
+    num5: '0o11',
+    num6: '-Infinity',
+    num7: '',
+    num8: null,
+    bool2: 'false',
+    bool3: undefined
+  }
+}
+
+bestGuessCast({args})
+```
+
+Result:
+
+```js
+{
+  args: {
+    _: ['--name', 'Logan'],
+    str1: 'yay',
+    num1: 42.3,
+    num2: 12.3,
+    num3: 17,
+    num4: 3,
+    bool1: true,
+    arr1: [-42, true, 'yay'],
+    obj: {
+      num5: 9,
+      num6: -Infinity,
+      num7: '',
+      num8: null,
+      bool2: false,
+      bool3: undefined
     }
   }
 }
@@ -1564,16 +1666,16 @@ While transforming, `toOpts` encounters the following cases:
 1.  **A string matches no `args` value:**\
     In this case, `toOpts` returns an unmatched value (e.g. `{values: 'foo'}` if `foo` is the string).
 2.  **A string matches an `args` value of exactly one option:**\
-    Here, `toOpts` checks the `types` arity and reads a matching number of `argv`.
+    Here, `toOpts` checks the [`types`](#types) arity and reads a matching number of `argv`.
     If too few `argv` are available, it returns an unmatched value.
-    If enough `argv` are available, it returns the matching option together with a `values` field holding the `argv`.
+    If enough `argv` are available, it returns the matching option together with a [`values`](#values) field holding the `argv`.
 3.  **A string matches an `args` value in several options:**\
     If this happens, `toOpts` proceeds as in case 2 for each option, with one addition:
     It checks if all options have the same arity as the first option.
-    All options with the same arities return the matching option with a `values` field.
+    All options with the same arities return the matching option with a [`values`](#values) field.
     For all other options, an error is recorded.
 
-The `stages` field of `parsers` lets users override the described behavior with their own functions.
+The `toOpts` key of the `stages` field of [`parser`](#command-line-parsers) lets users override the described behavior with their own functions.
 Actually doing this is not recommended, as it may break defined parser checks and stages.
 
 #### `toArgs` Stage
@@ -1609,7 +1711,7 @@ by applying three different stages in order:
 
 The resulting `args` objects of the three stages are then merged together.
 
-The `stages` field of `parsers` lets users override the described behavior with their own functions.
+The `toArgs` key of the `stages` field of [`parser`](#command-line-parsers) lets users override the described behavior with their own functions.
 Actually doing this is not recommended, as it may break defined parser checks and stages.
 
 #### Command-specific Parsers

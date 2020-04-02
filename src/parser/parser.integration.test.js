@@ -2,6 +2,7 @@ const parser            = require('./combinators/parser')
 
 const splitShortOptions = require('./argv/splitShortOptions')
 const verifyArgv        = require('./argv/verifyArgv')
+const arrayOnRepeat     = require('./opts/arrayOnRepeat')
 const bestGuessOpts     = require('./opts/bestGuessOpts')
 const broadenBools      = require('./opts/broadenBools')
 const cast              = require('./opts/cast')
@@ -16,7 +17,8 @@ const suggestOptions    = require('./opts/suggestOptions')
 const verifyOpts        = require('./opts/verifyOpts')
 const verifyRules       = require('./opts/verifyRules')
 const verifyValuesArity = require('./opts/verifyValuesArity')
-const bestGuessRest     = require('./args/bestGuessRest')
+const bestGuessArgs     = require('./args/bestGuessArgs')
+const bestGuessCast     = require('./args/bestGuessCast')
 const clearRest         = require('./args/clearRest')
 const failRest          = require('./args/failRest')
 const flagsAsBools      = require('./args/flagsAsBools')
@@ -64,6 +66,7 @@ const opts = [
 
 const argv = [
   '--query', 'Supersize Me',
+  '--query', 'The Hobbit',
   '--colors',
   '-l',
   '--no-hobbits', 'true',
@@ -157,6 +160,34 @@ test('parser with only verifyArgv works as expected', () => {
   ]
 
   const errs2 = filterErrs(['rules'])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
+
+test('parser with only arrayOnRepeat works as expected', () => {
+  const stages = {
+    opts: [arrayOnRepeat]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: ['Supersize Me', 'The Hobbit'],
+    smile: 'yes'
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
 
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
@@ -619,9 +650,9 @@ test('parser with only verifyValuesArity works as expected', () => {
   expect(errs2).toStrictEqual(expErrs)
 })
 
-test('parser with only bestGuessRest works as expected', () => {
+test('parser with only bestGuessArgs works as expected', () => {
   const stages = {
-    args: [bestGuessRest]
+    args: [bestGuessArgs]
   }
 
   const {errs, args} = parser(stages)(opts)(argv)
@@ -635,6 +666,34 @@ test('parser with only bestGuessRest works as expected', () => {
       _: [],
       help: {type: 'flag', count: 1},
       stars: '8'
+    },
+    query: 'Supersize Me',
+    smile: 'yes'
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
+
+test('parser with only bestGuessCast works as expected', () => {
+  const stages = {
+    args: [bestGuessCast]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: true,
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: 8
     },
     query: 'Supersize Me',
     smile: 'yes'
@@ -1012,7 +1071,8 @@ test('parser works with complex stages setup', () => {
       reverseBools,
       reverseFlags,
       suggestOptions,
-      cast
+      cast,
+      arrayOnRepeat
     ],
     args: [
       mergeArgs(),
@@ -1032,7 +1092,7 @@ test('parser works with complex stages setup', () => {
     fantasy: false,
     help: true,
     popcorn: false,
-    query: 'Supersize Me',
+    query: ['Supersize Me', 'The Hobbit'],
     smile: true,
     verbose: 2
   }
@@ -1057,6 +1117,13 @@ test('parser works with complex stages setup', () => {
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
 })
+
+// bestGuessOpts
+// bestGuessArgs
+// bestGuessCast
+// clearRest
+// flagsAsBools
+// flagsAsNumbers
 
 test('parser works with complement', () => {
   const tired     = bool('tired', ['-t', '--tired'], {defaultValues: ['true']})
@@ -1094,8 +1161,101 @@ test('parser works with complement', () => {
   expect(errs).toStrictEqual(expErrs)
 })
 
-// bestGuessOpts
-// bestGuessRest
-// clearRest
-// flagsAsBools
-// flagsAsNumbers
+test('parser uses the first option if options are defined several times 1/3', () => {
+  const tired = bool('tired', ['-t', '--tired'])
+  const help  = command('help', ['help'])
+
+  const opts = [
+    tired,
+    help
+  ]
+
+  const stages = {
+    opts: [reverseBools]
+  }
+
+  const parse = parser(stages)(opts)
+
+  const argv = ['--tired', 'true', '--tired', 'false', 'help']
+
+  const {errs, args} = parse(argv)
+
+  const expErrs = []
+
+  const expArgs = {
+    _: [],
+    tired: 'true',
+    help: {
+      _: []
+    }
+  }
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs).toStrictEqual(expErrs)
+})
+
+test('parser uses the first option if options are defined several times 2/3', () => {
+  const tired = bool('tired', ['-t', '--tired'])
+  const help  = command('help', ['help'])
+
+  const opts = [
+    tired,
+    help
+  ]
+
+  const stages = {
+    opts: [reverseBools]
+  }
+
+  const parse = parser(stages)(opts)
+
+  const argv = ['--tired', 'true', 'help', '--tired', 'false']
+
+  const {errs, args} = parse(argv)
+
+  const expErrs = []
+
+  const expArgs = {
+    _: ['--tired', 'false'],
+    help: {
+      _: ['--tired', 'false']
+    },
+    tired: 'true'
+  }
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs).toStrictEqual(expErrs)
+})
+
+test('parser uses the first option if options are defined several times 3/3', () => {
+  const tired = bool('tired', ['-t', '--tired'])
+  const help  = command('help', ['help'])
+
+  const opts = [
+    tired,
+    help
+  ]
+
+  const stages = {
+    opts: [reverseBools]
+  }
+
+  const parse = parser(stages)(opts)
+
+  const argv = ['help', '--tired', 'true', '--tired', 'false']
+
+  const {errs, args} = parse(argv)
+
+  const expErrs = []
+
+  const expArgs = {
+    _: [],
+    help: {
+      _: ['--tired', 'true', '--tired', 'false']
+    },
+    tired: 'true'
+  }
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs).toStrictEqual(expErrs)
+})
