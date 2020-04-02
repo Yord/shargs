@@ -378,7 +378,7 @@ The following fields are available:
 </tr>
 <tr name="types">
 <td><code><a href="#types">types</a></code>*</td>
-<td>array of type strings or `null`</td>
+<td>array of type strings or <code>null</code></td>
 <td><code>types</code> is an array of strings that represents the command-line option's type. <code>null</code> describes a <a href="#command"><code>command</code></a>, <code>[]</code> describes a <a href="#flag"><code>flag</code></a>, arrays with one element either describe a <a href="#number"><code>number</code></a> (<code>['number']</code>), a <a href="#string"><code>string</code></a> (<code>['string']</code>), or a <a href="#bool"><code>bool</code></a> (<code>['bool']</code>), and arrays with more than one element describe an <a href="#array"><code>array</code></a> of known size (e.g. <code>['string','number','bool']</code> is an array of size 3).</td>
 </tr>
 <tr name="contradicts">
@@ -411,10 +411,15 @@ The following fields are available:
 <td>array of command-line options</td>
 <td><code>opts</code> can be set if the command-line option is a <a href="#command"><code>command</code></a> (if <a href="#types"><code>types</code></a> is <code>null</code>) to describe the command's options. It uses the same syntax as regular command-line options.</td>
 </tr>
+<tr name="posArgs">
+<td><code><a href="#posArgs">posArgs</a></code></td>
+<td>array of positional arguments</td>
+<td><code>posArgs</code> is used by the <a href="#toArgs"><code>toArgs</code></a> parser stage. It is only interpreted if the command-line option is a <a href="#command"><code>command</code></a> (if <a href="#types"><code>types</code></a> is <code>null</code>) to describe the command's positional arguments. A positional argument is a special kind of option with the <a href="#key"><code>key</code></a> and <a href="#types"><code>types</code></a> (both must be given), <a href="#required"><code>required</code></a>, and <a href="#variadic"><code>variadic</code></a> fields (e.g. <code>{key: 'file', types: ['number'], required: true, variadic: false}</code>). Only the last positional argument may be <code>variadic: true</code> and if an argument is not <code>required: true</code>, all prior arguments must be <code>required: true</code>.</td>
+</tr>
 <tr name="required">
 <td><code><a href="#required">required</a></code></td>
 <td>boolean</td>
-<td><code>required</code> is used by the <a href="#requireOptions"><code>requireOptions</code></a> parser stage to control if an option is set. If a required option is not set, <a href="#requireOptions"><code>requireOptions</code></a> records an error.</td>
+<td><code>required</code> is used by <a href="#posArgs"><code>posArgs</code></a> and by the <a href="#requireOptions"><code>requireOptions</code></a> parser stage to demand an option is set. In case of <a href="#requireOptions"><code>requireOptions</code></a>, if a required option has no <a href="#values"><code>values</code></a> or <a href="#defaultValues"><code>defaultValues</code></a> an error is recorded. In case of <a href="#posArgs"><code>posArgs</code></a>, if a required positional argument is not found in <code>_</code>, an error is recorded.</td>
 </tr>
 <tr name="reverse">
 <td><code><a href="#reverse">reverse</a></code></td>
@@ -430,6 +435,11 @@ The following fields are available:
 <td><code><a href="#values">values</a></code></td>
 <td>array with value(s)</td>
 <td><code>values</code> is used by the <a href="#toOpts"><code>toOpts</code></a> parser stage to store command-line arguments. This field should not be set by the user. If you need to set default values, use the <a href="#defaultValues"><code>defaultValues</code></a> field, instead.</td>
+</tr>
+<tr name="variadic">
+<td><code><a href="#variadic">variadic</a></code></td>
+<td>boolean</td>
+<td><code>variadic</code> is used in positional arguments (see <a href="#posArgs"><code>posArgs</code></a>) to define, whether an argument takes any number of values. If <code>variadic</code> is <code>true</code>, the positional argument's <a href="#types"><code>types</code></a> must be <code>null</code>.</td>
 </tr>
 </table>
 
