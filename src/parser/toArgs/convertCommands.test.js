@@ -1,6 +1,7 @@
 const convertCommands         = require('./convertCommands')
 const {command, flag, string} = require('../../options')
 const parser                  = require('../combinators/parser')
+const {invalidRequiredPositionalArgument, invalidVariadicPositionalArgument, requiredPositionalArgumentMissing} = require('../../errors')
 
 const parsers = {__: parser(), _: parser()}
 
@@ -123,6 +124,45 @@ test('convertCommands only sets a command once and does not set it again if the 
     _: ['foo'],
     other: {
       _: ['foo']
+    }
+  }
+
+  const expErrs = []
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs).toStrictEqual(expErrs)
+})
+
+test('convertCommands works with positional arguments', () => {
+  const opts = [
+    {
+      ...command('ask', ['ask'], {
+        opts: [
+          flag('jokingly', ['-j'], {defaultValue: [1]})
+        ],
+        posArgs: [
+          {key: 'question', types: ['string'], required: true},
+          {key: 'audience', types: null, variadic: true}
+        ]
+      }),
+      values: ["What's your lastname?", '-j', 'Logan', 'Charles']
+    }
+  ]
+
+  const parsers = {
+    __: parser(),
+    _: parser()
+  }
+
+  const {errs, args} = convertCommands(parsers)({opts})
+
+  const expArgs = {
+    _: [],
+    ask: {
+      _: [],
+      jokingly: {type: 'flag', count: 1},
+      question: "What's your lastname?",
+      audience: ['Logan', 'Charles']
     }
   }
 
