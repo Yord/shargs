@@ -346,6 +346,47 @@ test('convertCommands reports invalid required positional arguments 2/2', () => 
   expect(errs).toStrictEqual(expErrs)
 })
 
+test('convertCommands takes first positional argument if two positional arguments have the same key', () => {
+  const audience1 = {key: 'audience', types: ['string']}
+  const audience2 = {key: 'audience', types: ['string']}
+
+  const opts = [
+    {
+      ...command('ask', ['ask'], {
+        opts: [
+          flag('jokingly', ['-j'], {defaultValue: [1]})
+        ],
+        posArgs: [
+          audience1,
+          audience2
+        ]
+      }),
+      values: ['-j', 'Logan', 'Charles']
+    }
+  ]
+
+  const parsers = {
+    __: parser(),
+    _: parser()
+  }
+
+  const {errs, args} = convertCommands(parsers)({opts})
+
+  const expArgs = {
+    _: [],
+    ask: {
+      _: [],
+      audience: 'Logan',
+      jokingly: {type: 'flag', count: 1}
+    }
+  }
+
+  const expErrs = []
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs).toStrictEqual(expErrs)
+})
+
 test('convertCommands works if opts is undefined', () => {
   const obj = {}
 
