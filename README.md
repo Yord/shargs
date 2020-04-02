@@ -917,6 +917,44 @@ Result:
 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
+<tr name="arrayOnRepeat">
+<td><code><a href="#arrayOnRepeat">arrayOnRepeat</a>({errs, opts})</code></td>
+<td>
+<code>arrayOnRepeat</code> changes how repeated calls of command-line arguments are handled by the parser.
+Instead of only keeping only the first argument, repeated arguments are assembled in an array.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const obj = {
+  opts: [
+    {key: 'age', types: ['string'], values: ['42']},
+    {key: 'age', types: ['number'], values: [42]}
+  ]
+}
+
+arrayOnRepeat(obj)
+```
+
+Result:
+
+```js
+{
+  opts: [
+    {key: 'age', types: ['string', 'number'], values: ['42', 42]}
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="bestGuessOpts">
 <td><code><a href="#bestGuessOpts">bestGuessOpts</a>({errs, opts})</code></td>
 <td>
