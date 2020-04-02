@@ -45,3 +45,11 @@ test('bestGuessCast README example works', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('bestGuessCast even empties rest if args is undefined', () => {
+  const obj = {}
+
+  const {args} = bestGuessCast(obj)
+
+  expect(args._).toStrictEqual([])
+})
