@@ -2,6 +2,7 @@ const parser            = require('./combinators/parser')
 
 const splitShortOptions = require('./argv/splitShortOptions')
 const verifyArgv        = require('./argv/verifyArgv')
+const arrayOnRepeat     = require('./opts/arrayOnRepeat')
 const bestGuessOpts     = require('./opts/bestGuessOpts')
 const broadenBools      = require('./opts/broadenBools')
 const cast              = require('./opts/cast')
@@ -64,6 +65,7 @@ const opts = [
 
 const argv = [
   '--query', 'Supersize Me',
+  '--query', 'The Hobbit',
   '--colors',
   '-l',
   '--no-hobbits', 'true',
@@ -157,6 +159,34 @@ test('parser with only verifyArgv works as expected', () => {
   ]
 
   const errs2 = filterErrs(['rules'])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
+
+test('parser with only arrayOnRepeat works as expected', () => {
+  const stages = {
+    opts: [arrayOnRepeat]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: ['Supersize Me', 'The Hobbit'],
+    smile: 'yes'
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
 
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
