@@ -16,3 +16,20 @@ test('arrayOnRepeat README example works', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('arrayOnRepeat works with arrays', () => {
+  const obj = {
+    opts: [
+      {key: 'numBool', types: ['number', 'bool'], values: ['42', 'true']},
+      {key: 'numBool', types: ['number', 'bool'], values: ['23', 'false']}
+    ]
+  }
+
+  const {opts} = arrayOnRepeat(obj)
+
+  const exp = [
+    {key: 'numBool', types: ['number', 'bool', 'number', 'bool'], values: ['42', 'true', '23', 'false']},
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
