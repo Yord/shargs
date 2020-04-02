@@ -106,6 +106,12 @@ const invalidValues = ({values, defaultValues, option}) => ({
   info: {values, defaultValues, option}
 })
 
+const invalidVariadicPositionalArgument = ({positionalArguments}) => ({
+  code: 'Invalid variadic positional argument',
+  msg:  'Only the last positional argument may be variadic. The variadic field must either be undefined, true or false.',
+  info: {positionalArguments}
+})
+
 const nonMatchingArgumentTypes = ({arg, ref, option}) => ({
   code: 'Non-matching argument types',
   msg:  'If arguments have the same arg, their types must either be equal or have the same length',
@@ -191,6 +197,7 @@ module.exports = {
   invalidRequiredPositionalArgument,
   invalidTypes,
   invalidValues,
+  invalidVariadicPositionalArgument,
   nonMatchingArgumentTypes,
   requiredOptionFormat,
   requiredOptionMissing,
