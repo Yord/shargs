@@ -436,6 +436,11 @@ The following fields are available:
 <td>array with value(s)</td>
 <td><code>values</code> is used by the <a href="#toOpts"><code>toOpts</code></a> parser stage to store command-line arguments. This field should not be set by the user. If you need to set default values, use the <a href="#defaultValues"><code>defaultValues</code></a> field, instead.</td>
 </tr>
+<tr name="variadic">
+<td><code><a href="#variadic">variadic</a></code></td>
+<td>boolean</td>
+<td><code>variadic</code> is used in positional arguments (see <a href="#posArgs"><code>posArgs</code></a>) to define, whether an argument takes any number of values. If <code>variadic</code> is <code>true</code>, the positional argument's <a href="#types"><code>types</code></a> must be <code>null</code>.</td>
+</tr>
 </table>
 
 A command-line option may be decorated with one or many of the following decorators, which change its values:
