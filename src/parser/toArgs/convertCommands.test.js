@@ -106,6 +106,32 @@ test('convertCommands works with command-specific parsers', () => {
   expect(errs).toStrictEqual(expErrs)
 })
 
+test('convertCommands only sets a command once and does not set it again if the same command is specified several times', () => {
+  const opts = [
+    {...command('other', ['other']), values: ['foo']},
+    {...command('other', ['other']), values: ['bar']}
+  ]
+
+  const parsers = {
+    __: parser(),
+    _: parser()
+  }
+
+  const {errs, args} = convertCommands(parsers)({opts})
+
+  const expArgs = {
+    _: ['foo'],
+    other: {
+      _: ['foo']
+    }
+  }
+
+  const expErrs = []
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs).toStrictEqual(expErrs)
+})
+
 test('convertCommands works if opts is undefined', () => {
   const obj = {}
 
