@@ -172,6 +172,48 @@ test('convertCommands works with positional arguments', () => {
   expect(errs).toStrictEqual(expErrs)
 })
 
+test('convertCommands reports missing required positional arguments', () => {
+  const question = {key: 'question', types: ['string'], required: true}
+
+  const opts = [
+    {
+      ...command('ask', ['ask'], {
+        opts: [
+          flag('jokingly', ['-j'], {defaultValue: [1]})
+        ],
+        posArgs: [
+          question,
+          {key: 'audience', types: null, variadic: true}
+        ]
+      }),
+      values: ['-j']
+    }
+  ]
+
+  const parsers = {
+    __: parser(),
+    _: parser()
+  }
+
+  const {errs, args} = convertCommands(parsers)({opts})
+
+  const expArgs = {
+    _: [],
+    ask: {
+      _: [],
+      audience: [],
+      jokingly: {type: 'flag', count: 1}
+    }
+  }
+
+  const expErrs = [
+    requiredPositionalArgumentMissing({key: question.key, positionalArgument: question})
+  ]
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs).toStrictEqual(expErrs)
+})
+
 test('convertCommands works if opts is undefined', () => {
   const obj = {}
 
