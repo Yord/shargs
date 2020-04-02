@@ -1708,7 +1708,10 @@ by applying three different stages in order:
     that need to be processed at least by `toOpts` first, before `toArgs` can handle it.
     Thus, `toArgs` recursively calls a child parser for each command to get `args` objects.
 
-    The `args` objects may have non-empty rest keys (e.g. `{_: ['--help']}`).
+    Now, non-empty rest keys (e.g. `{_: ['/tmp']}`) are parsed for positional arguments.
+    For a more detailed description of positional arguments, see the [`posArgs`](#posArgs) options field.
+
+    The `args` objects may still have non-empty rest keys (e.g. `{_: ['--help']}`).
     These unmatched arguments may have mistakenly assigned to the child command,
     although they actually belong to the parent.
     Therefore, non-empty rest keys are additionally parsed with the parent parser.
