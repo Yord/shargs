@@ -33,3 +33,18 @@ test('arrayOnRepeat works with arrays', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('arrayOnRepeat does not change non-repeated options', () => {
+  const obj = {
+    opts: [
+      {key: 'age', types: ['string'], values: ['42']},
+      {key: 'numBool', types: ['number', 'bool'], values: ['42', 'true']}
+    ]
+  }
+
+  const {opts} = arrayOnRepeat(obj)
+
+  const exp = obj.opts
+
+  expect(opts).toStrictEqual(exp)
+})
