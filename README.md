@@ -1324,8 +1324,8 @@ Result:
 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
-<tr name="bestGuessRest">
-<td><code><a href="#bestGuessRest">bestGuessRest</a>({errs, args})</code></td>
+<tr name="bestGuessArgs">
+<td><code><a href="#bestGuessArgs">bestGuessArgs</a>({errs, args})</code></td>
 <td>
 Tries its best to interpret strings in the <code>_</code> key as additional parameters.
 Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><code>flag</code></a> and requires options to follow a pattern:
@@ -1350,7 +1350,7 @@ const obj = {
   }
 }
 
-bestGuessRest(obj)
+bestGuessArgs(obj)
 ```
 
 Result:

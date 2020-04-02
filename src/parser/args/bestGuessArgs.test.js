@@ -1,6 +1,6 @@
-const bestGuessRest = require('./bestGuessRest')
+const bestGuessArgs = require('./bestGuessArgs')
 
-test('bestGuessRest README example works', () => {
+test('bestGuessArgs README example works', () => {
   const obj = {
     args: {
       _: ['--name', 'Logan', 'foo', '-v'],
@@ -11,7 +11,7 @@ test('bestGuessRest README example works', () => {
     }
   }
 
-  const {args} = bestGuessRest(obj)
+  const {args} = bestGuessArgs(obj)
 
   const exp = {
     _: ['foo'],
@@ -28,7 +28,7 @@ test('bestGuessRest README example works', () => {
   expect(args).toStrictEqual(exp)
 })
 
-test('bestGuessRest does not override existing keys', () => {
+test('bestGuessArgs does not override existing keys', () => {
   const obj = {
     args: {
       _: ['--name', 'Logan'],
@@ -36,49 +36,49 @@ test('bestGuessRest does not override existing keys', () => {
     }
   }
 
-  const {args} = bestGuessRest(obj)
+  const {args} = bestGuessArgs(obj)
 
   const exp = obj.args
 
   expect(args).toStrictEqual(exp)
 })
 
-test('bestGuessRest does not interpret short options that are too long', () => {
+test('bestGuessArgs does not interpret short options that are too long', () => {
   const obj = {
     args: {
       _: ['-name', 'Logan']
     }
   }
 
-  const {args} = bestGuessRest(obj)
+  const {args} = bestGuessArgs(obj)
 
   const exp = obj.args
 
   expect(args).toStrictEqual(exp)
 })
 
-test('bestGuessRest does not touch other arrays than _', () => {
+test('bestGuessArgs does not touch other arrays than _', () => {
   const obj = {
     args: {
       names: ['--name', 'Logan']
     }
   }
 
-  const {args} = bestGuessRest(obj)
+  const {args} = bestGuessArgs(obj)
 
   const exp = obj.args
 
   expect(args).toStrictEqual(exp)
 })
 
-test('bestGuessRest does work despite getting nonsensical input', () => {
+test('bestGuessArgs does work despite getting nonsensical input', () => {
   const obj = {
     args: {
       _: ['--name', 42, '-f', [1], '-h', {foo: 42}]
     }
   }
 
-  const {args} = bestGuessRest(obj)
+  const {args} = bestGuessArgs(obj)
 
   const exp = {
     _: [42, [1], {foo: 42}],
@@ -90,24 +90,24 @@ test('bestGuessRest does work despite getting nonsensical input', () => {
   expect(args).toStrictEqual(exp)
 })
 
-test('bestGuessRest even empties rest if args is undefined', () => {
+test('bestGuessArgs even empties rest if args is undefined', () => {
   const obj = {}
 
-  const {args} = bestGuessRest(obj)
+  const {args} = bestGuessArgs(obj)
 
   expect(args._).toStrictEqual([])
 })
 
-test('bestGuessRest even empties rest if input is undefined', () => {
-  const {args} = bestGuessRest()
+test('bestGuessArgs even empties rest if input is undefined', () => {
+  const {args} = bestGuessArgs()
 
   expect(args._).toStrictEqual([])
 })
 
-test('bestGuessRest passes on errors', () => {
+test('bestGuessArgs passes on errors', () => {
   const ERRS = ['foo']
 
-  const {errs} = bestGuessRest({errs: ERRS})
+  const {errs} = bestGuessArgs({errs: ERRS})
 
   expect(errs).toStrictEqual(ERRS)
 })
