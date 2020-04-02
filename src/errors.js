@@ -130,6 +130,12 @@ const requiredOptionMissing = ({key, args, option}) => ({
   info: {key, args, option}
 })
 
+const requiredPositionalArgumentMissing = ({key, positionalArgument}) => ({
+  code: 'Required positional argument missing',
+  msg:  'A required positional argument has not been provided.',
+  info: {key, positionalArgument}
+})
+
 const unexpectedArgument = ({argument}) => ({
   code: 'Unexpected argument',
   msg:  'An unexpected argument was used that has no option defined.',
@@ -201,6 +207,7 @@ module.exports = {
   nonMatchingArgumentTypes,
   requiredOptionFormat,
   requiredOptionMissing,
+  requiredPositionalArgumentMissing,
   unexpectedArgument,
   valueRestrictionsViolated,
   wrongArgsRulesType,
