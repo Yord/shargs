@@ -378,7 +378,7 @@ The following fields are available:
 </tr>
 <tr name="types">
 <td><code><a href="#types">types</a></code>*</td>
-<td>array of type strings or `null`</td>
+<td>array of type strings or <code>null</code></td>
 <td><code>types</code> is an array of strings that represents the command-line option's type. <code>null</code> describes a <a href="#command"><code>command</code></a>, <code>[]</code> describes a <a href="#flag"><code>flag</code></a>, arrays with one element either describe a <a href="#number"><code>number</code></a> (<code>['number']</code>), a <a href="#string"><code>string</code></a> (<code>['string']</code>), or a <a href="#bool"><code>bool</code></a> (<code>['bool']</code>), and arrays with more than one element describe an <a href="#array"><code>array</code></a> of known size (e.g. <code>['string','number','bool']</code> is an array of size 3).</td>
 </tr>
 <tr name="contradicts">
