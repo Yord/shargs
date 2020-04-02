@@ -71,3 +71,9 @@ test('arrayOnRepeat works if opts is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('arrayOnRepeat works if input is undefined', () => {
+  const {opts} = arrayOnRepeat()
+
+  expect(opts).toStrictEqual([])
+})
