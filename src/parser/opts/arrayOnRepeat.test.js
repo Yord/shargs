@@ -77,3 +77,11 @@ test('arrayOnRepeat works if input is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('arrayOnRepeat passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = arrayOnRepeat({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
