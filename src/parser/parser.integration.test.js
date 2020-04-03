@@ -106,6 +106,34 @@ test('parser without stages works as expected', () => {
   expect(errs2).toStrictEqual(expErrs)
 })
 
+test('parser only equalsSignAsSpace works as expected', () => {
+  const stages = {
+    argv: [equalsSignAsSpace]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me',
+    smile: 'no'
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
+
 test('parser with only splitShortOptions works as expected', () => {
   const stages = {
     argv: [splitShortOptions]
