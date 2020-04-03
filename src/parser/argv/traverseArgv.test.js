@@ -29,3 +29,25 @@ test('traverseArgv README example works', () => {
   expect(argv).toStrictEqual(expArgv)
   expect(errs).toStrictEqual(expErrs)
 })
+
+test('traverseArgv does not apply function if predicate is undefined', () => {
+  const obj = {
+    argv: [
+      '--age=42',
+      '--help'
+    ]
+  }
+
+  const recordError = _ => ({
+    errs: ['Error']
+  })
+
+  const {errs, argv} = traverseArgv()(recordError)(obj)
+
+  const expArgv = obj.argv
+
+  const expErrs = []
+
+  expect(argv).toStrictEqual(expArgv)
+  expect(errs).toStrictEqual(expErrs)
+})
