@@ -3,6 +3,8 @@ const and = require('./and')
 
 const pred = () => func(boolean())
 
+const T = () => true
+
 test('and is associative', () => {
   const p = pred()
   const q = pred()
@@ -14,6 +16,20 @@ test('and is associative', () => {
         and(p, and(q, r))(a)
       ).toStrictEqual(
         and(and(p, q), r)(a)
+      )
+    })
+  )
+})
+
+test('and follows right identity', () => {
+  const p = pred()
+  const a = anything()
+  assert(
+    property(p, a, (p, a) => {
+      expect(
+        and(p, T)(a)
+      ).toStrictEqual(
+        p(a)
       )
     })
   )
