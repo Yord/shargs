@@ -71,3 +71,11 @@ test('traverseArgv applies identity function if function is undefined', () => {
   expect(argv).toStrictEqual(expArgv)
   expect(errs).toStrictEqual(expErrs)
 })
+
+test('traverseArgv works if argv is undefined', () => {
+  const obj = {}
+
+  const {argv} = traverseArgv(tautology)()(obj)
+
+  expect(argv).toStrictEqual([])
+})
