@@ -608,6 +608,37 @@ Result:
 </details>
 </td>
 </tr>
+<tr name="shortOptsNoSpace">
+<td><code><a href="#shortOptsNoSpace">shortOptsNoSpace</a>({errs, argv})</code></td>
+<td>
+<code>shortOptsNoSpace</code> allows arguments like <code>-nLogan</code> to be interpreted as <code>-n Logan</code>.
+You may either use <code>shortOptsNoSpace</code>, or <a href="#splitShortOptions"><code>splitShortOptions</code></a>, but not both at the same time.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const argv = ['-nLogan']
+
+shortOptsNoSpace({argv})
+```
+
+Result:
+
+```js
+{
+  argv: ['-n', 'Logan']
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="splitShortOptions">
 <td><code><a href="#splitShortOptions">splitShortOptions</a>({errs, argv})</code></td>
 <td>
