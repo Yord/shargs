@@ -85,3 +85,11 @@ test('traverseArgv works if input is undefined', () => {
 
   expect(argv).toStrictEqual([])
 })
+
+test('traverseArgv passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = traverseArgv(tautology)()({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
