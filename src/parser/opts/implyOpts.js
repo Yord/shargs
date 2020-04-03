@@ -1,24 +1,24 @@
+const transformOpts = require('./transformOpts')
 const {implicationViolated, wrongImpliesType} = require('../../errors')
 
-module.exports = ({errs = [], opts = []} = {}) => {
-  const errs2 = []
+module.exports = transformOpts(opt => doesImply(opt) && willHaveValues(opt))((opt, _, opts) => {
+  const errs = []
 
-  for (let i = 0; i < opts.length; i++) {
-    const opt = opts[i]
-    const {key, implies: keys} = opt
+  const {key, implies: keys} = opt
 
-    if (typeof keys !== 'undefined' && willHaveValues(opt)) {
-      if (Array.isArray(keys)) {
-        if (!opts.every(opt2 => keys.indexOf(opt2.key) === -1 || willHaveValues(opt2))) {
-          errs2.push(implicationViolated({key, implies: keys, option: opt}))
-        }
-      } else {
-        errs2.push(wrongImpliesType({key, type: typeof keys, option: opt}))
-      }
+  if (Array.isArray(keys)) {
+    if (!opts.every(opt2 => keys.indexOf(opt2.key) === -1 || willHaveValues(opt2))) {
+      errs.push(implicationViolated({key, implies: keys, option: opt}))
     }
+  } else {
+    errs.push(wrongImpliesType({key, type: typeof keys, option: opt}))
   }
 
-  return {errs: errs.concat(errs2), opts}
+  return {errs}
+})
+
+function doesImply ({implies}) {
+  return typeof implies !== 'undefined'
 }
 
 function willHaveValues ({values, defaultValues}) {

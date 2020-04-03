@@ -3,7 +3,7 @@ const {falseOptsRules, wrongOptsRulesType} = require('../../errors')
 module.exports = (rules = () => true) => ({errs = [], opts = []} = {}) => {
   const errs2 = []
 
-  if (typeof rules === 'function') {
+  if (validRules(rules)) {
     if (rules(opts) === false) {
       errs2.push(falseOptsRules({rules, options: opts}))
     }
@@ -12,4 +12,8 @@ module.exports = (rules = () => true) => ({errs = [], opts = []} = {}) => {
   }
 
   return {errs: errs.concat(errs2), opts}
+}
+
+function validRules (rules) {
+  return typeof rules === 'function'
 }

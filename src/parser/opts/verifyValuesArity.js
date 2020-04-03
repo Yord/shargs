@@ -1,41 +1,44 @@
+const transformOpts = require('./transformOpts')
 const {invalidArity, invalidTypes, invalidValues} = require('../../errors')
+const pipe = require('../combinators/pipe')
 
-module.exports = ({errs = [], opts = []} = {}) => {
-  const errs2 = checkArity(opts, 'values')
-  const errs3 = checkArity(opts, 'defaultValues')
+module.exports = pipe(
+  checkArity('values'),
+  checkArity('defaultValues')
+)
 
-  return {errs: errs.concat(errs2).concat(errs3), opts}
-}
+function checkArity (key) {
+  return transformOpts(hasValues(key))(opt => {
+    const errs = []
 
-function checkArity (opts, key) {
-  const errs2 = []
-
-  for (let i = 0; i < opts.length; i++) {
-    const opt = opts[i]
     const {types, [key]: values} = opt
 
     if (Array.isArray(values)) {
       if (Array.isArray(types)) {
         if (types.length === 0) {
           if (values.length !== 1) {
-            errs2.push(invalidArity({option: opt}))
+            errs.push(invalidArity({option: opt}))
           }
         } else {
           if(types.length !== values.length) {
-            errs2.push(invalidArity({option: opt}))
+            errs.push(invalidArity({option: opt}))
           }
         }
       } else if (typeof types === 'undefined') {
         if (values.length !== 1) {
-          errs2.push(invalidArity({option: opt}))
+          errs.push(invalidArity({option: opt}))
         }
       } else if (types !== null) {
-        errs2.push(invalidTypes({types, option: opt}))
+        errs.push(invalidTypes({types, option: opt}))
       }
-    } else if (typeof values !== 'undefined' && values !== null) {
-      errs2.push(invalidValues({[key]: values, option: opt}))
+    } else {
+      errs.push(invalidValues({[key]: values, option: opt}))
     }
-  }
 
-  return errs2
+    return {errs}
+  })
+}
+
+function hasValues (key) {
+  return ({[key]: values}) => typeof values !== 'undefined' && values !== null
 }

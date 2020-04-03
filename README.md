@@ -414,7 +414,7 @@ The following fields are available:
 <tr name="posArgs">
 <td><code><a href="#posArgs">posArgs</a></code></td>
 <td>array of positional arguments</td>
-<td><code>posArgs</code> is used by the <a href="#toArgs"><code>toArgs</code></a> parser stage. It is only interpreted if the command-line option is a <a href="#command"><code>command</code></a> (if <a href="#types"><code>types</code></a> is <code>null</code>) to describe the command's positional arguments. A positional argument is a special kind of option with the <a href="#key"><code>key</code></a> and <a href="#types"><code>types</code></a> (both must be given), <a href="#required"><code>required</code></a>, and <a href="#variadic"><code>variadic</code></a> fields (e.g. <code>{key: 'file', types: ['number'], required: true, variadic: false}</code>). Only the last positional argument may be <code>variadic: true</code> and if an argument is not <code>required: true</code>, all prior arguments must be <code>required: true</code>.</td>
+<td><code>posArgs</code> is used by the <a href="#toArgs"><code>toArgs</code></a> parser stage. It is only interpreted if the command-line option is a <a href="#command"><code>command</code></a> (if <a href="#types"><code>types</code></a> is <code>null</code>) to describe the command's positional arguments. A positional argument is a special kind of option with the <a href="#key"><code>key</code></a> and <a href="#types"><code>types</code></a> (both must be given), <a href="#required"><code>required</code></a>, and <a href="#variadic"><code>variadic</code></a> fields (e.g. <code>{key: 'file', types: ['number'], required: true, variadic: false}</code>). Only the last positional argument may be <code>variadic: true</code> and if an argument is <code>required: true</code>, all prior arguments must be <code>required: true</code> as well.</td>
 </tr>
 <tr name="required">
 <td><code><a href="#required">required</a></code></td>
@@ -1231,6 +1231,57 @@ Results in:
 </details>
 </td>
 </tr>
+<tr name="transformOpts">
+<td><code><a href="#transformOpts">transformOpts</a>(p)(f)({errs, opts})</code></td>
+<td>
+<code>transformOpts</code> applies a function <code>f</code> to each option that satisfies a predicate <code>p</code>.
+By doing so, it does not change the order of options.
+<code>p</code> takes a command-line option and returns a boolean.
+<code>f</code> takes three arguments, a command-line option, an index of the option, and the opts array,
+and returns an <code>{errs = [], opts = []}</code> object.
+Most of the other <code>opts</code> checks and stages are defined in terms of <code>transformOpts</code>.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  {key: 'age', types: ['number'], values: ['42']},
+  {key: 'verbose', types: [], values: [1]},
+  {key: 'help', types: [], values: [1]}
+]
+
+const isFlag = ({types}) => Array.isArray(types) && types.length === 0
+
+const reverseFlags = opt => ({
+  opts: [
+    {...opt, values: [-opt.values[0]]}
+  ]
+})
+
+transformOpts(isFlag)(reverseFlags)({opts})
+```
+
+Result:
+
+```js
+{
+  opts: [
+    {key: 'age', types: ['number'], values: ['42']},
+    {key: 'verbose', types: [], values: [-1]},
+    {key: 'help', types: [], values: [-1]}
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
 </table>
 
 #### `args` Checks
@@ -1602,6 +1653,7 @@ Result:
 <td>
 Transforms an args object into a new args object by applying functions <code>fs</code> based on the value type.
 All fields of an object are updated independently and previous updates in the same run do not influence later updates.
+Many <code>args</code> checks and stages are implemented in terms of <code>transformArgs</code>.
 <details>
 <summary>
 Read on...
@@ -1708,7 +1760,10 @@ by applying three different stages in order:
     that need to be processed at least by `toOpts` first, before `toArgs` can handle it.
     Thus, `toArgs` recursively calls a child parser for each command to get `args` objects.
 
-    The `args` objects may have non-empty rest keys (e.g. `{_: ['--help']}`).
+    Now, non-empty rest keys (e.g. `{_: ['/tmp']}`) are parsed for positional arguments.
+    For a more detailed description of positional arguments, see the [`posArgs`](#posArgs) options field.
+
+    The `args` objects may still have non-empty rest keys (e.g. `{_: ['--help']}`).
     These unmatched arguments may have mistakenly assigned to the child command,
     although they actually belong to the parent.
     Therefore, non-empty rest keys are additionally parsed with the parent parser.
@@ -1776,6 +1831,8 @@ function demandACommand ({errs = [], opts = []} = {}) {
 }
 ```
 
+If writing a custom `opts` stage, have a look at [`transformOpts`](#transformOpts) that does some heavy lifting for you.
+
 Custom `args` stage example:
 
 ```js
@@ -1792,6 +1849,8 @@ function flagsAsBools ({errs = [], args = {}} = {}) {
   return {errs: errs.concat(errs2), args: args2}
 }
 ```
+
+If writing a custom `args` stage, have a look at [`transformArgs`](#transformArgs) that simplifies the process.
 
 ### Usage Documentation
 
@@ -3125,10 +3184,10 @@ E.g. It lets you mix in custom parser and usage functions.
 </tr>
 <tr>
 <td><b>First Commit</b></td>
-<td>14. Jan 2020</td>
-<td>10. Sep 2010</td>
-<td>14. Aug 2011</td>
-<td>25. Jun 2013</td>
+<td>January 14th 2020</td>
+<td>September 10th 2010</td>
+<td>August 14th 2011</td>
+<td>June 25th 2013</td>
 </tr>
 <tr>
 <td><b>Customize Parsing</b></td>

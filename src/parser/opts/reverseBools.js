@@ -1,23 +1,14 @@
-module.exports = ({errs = [], opts = []} = {}) => {
-  const opts2 = []
+const transformOpts = require('./transformOpts')
 
-  for (let i = 0; i < opts.length; i++) {
-    const opt = opts[i]
-    const {reverse, values} = opt
+module.exports = transformOpts(opt => hasReverse(opt) && isBool(opt) && hasValidValues(opt))(opt => {
+  const val   = opt.values[0]
+  const value = val === 'false' ? 'true' : val === 'true' ? 'false' : typeof val === 'boolean' ? !val : val
 
-    if (reverse === true && isBool(opt) && hasValidValues(opt)) {
-      const val = values[0]
-      let res   = val
-      if (val === 'false')               res = 'true'
-      else if (val === 'true')           res = 'false'
-      else if (typeof val === 'boolean') res = !val
-      opts2.push({...opt, values: [res]})
-    } else {
-      opts2.push(opt)
-    }
-  }
+  return {opts: [{...opt, values: [value]}]}
+})
 
-  return {errs, opts: opts2}
+function hasReverse ({reverse}) {
+  return reverse === true
 }
 
 function isBool ({types}) {

@@ -1,22 +1,26 @@
+const transformOpts = require('./transformOpts')
 const {falseRules, wrongRulesType} = require('../../errors')
 
-module.exports = ({errs = [], opts = []} = {}) => {
-  const errs2 = []
+module.exports = transformOpts(hasRules)((opt, _, opts) => {
+  const errs = []
 
-  for (let i = 0; i < opts.length; i++) {
-    const opt = opts[i]
-    const {key, rules} = opt
+  const {key, rules} = opt
 
-    if (typeof rules !== 'undefined') {
-      if (typeof rules === 'function') {
-        if (rules(opt)(opts) === false) {
-          errs2.push(falseRules({key, rules, option: opt}))
-        }
-      } else {
-        errs2.push(wrongRulesType({key, type: typeof rules, option: opt}))
-      }
+  if (validRules(opt)) {
+    if (rules(opt)(opts) === false) {
+      errs.push(falseRules({key, rules, option: opt}))
     }
+  } else {
+    errs.push(wrongRulesType({key, type: typeof rules, option: opt}))
   }
 
-  return {errs: errs.concat(errs2), opts}
+  return {errs}
+})
+
+function hasRules ({rules}) {
+  return typeof rules !== 'undefined'
+}
+
+function validRules ({rules}) {
+  return typeof rules === 'function'
 }

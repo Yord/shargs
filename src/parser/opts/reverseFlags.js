@@ -1,17 +1,13 @@
-module.exports = ({errs = [], opts = []} = {}) => {
-  const opts2 = []
+const transformOpts = require('./transformOpts')
 
-  for (let i = 0; i < opts.length; i++) {
-    const opt = opts[i]
+module.exports = transformOpts(opt => hasReverse(opt) && isFlag(opt) && hasValidValues(opt))(opt => ({
+  opts: [
+    {...opt, values: [-opt.values[0]]}
+  ]
+}))
 
-    if (opt.reverse === true && isFlag(opt) && hasValidValues(opt)) {
-      opts2.push({...opt, values: [-opt.values[0]]})
-    } else {
-      opts2.push(opt)
-    }
-  }
-
-  return {errs, opts: opts2}
+function hasReverse ({reverse}) {
+  return reverse === true
 }
 
 function isFlag ({types}) {
