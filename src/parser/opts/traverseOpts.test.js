@@ -1,8 +1,8 @@
-const transformOpts = require('./transformOpts')
+const traverseOpts = require('./traverseOpts')
 
 const tautology = _ => true
 
-test('transformOpts README example works', () => {
+test('traverseOpts README example works', () => {
   const obj = {
     opts: [
       {key: 'age', types: ['number'], values: ['42']},
@@ -19,7 +19,7 @@ test('transformOpts README example works', () => {
     ]
   })
 
-  const {errs, opts} = transformOpts(isFlag)(reverseFlags)(obj)
+  const {errs, opts} = traverseOpts(isFlag)(reverseFlags)(obj)
 
   const expOpts = [
     {key: 'age', types: ['number'], values: ['42']},
@@ -33,7 +33,7 @@ test('transformOpts README example works', () => {
   expect(errs).toStrictEqual(expErrs)
 })
 
-test('transformOpts does not apply function if predicate is undefined', () => {
+test('traverseOpts does not apply function if predicate is undefined', () => {
   const obj = {
     opts: [
       {key: 'age', types: ['number'], values: ['42']},
@@ -46,7 +46,7 @@ test('transformOpts does not apply function if predicate is undefined', () => {
     errs: ['Error']
   })
 
-  const {errs, opts} = transformOpts()(recordError)(obj)
+  const {errs, opts} = traverseOpts()(recordError)(obj)
 
   const expOpts = obj.opts
 
@@ -56,7 +56,7 @@ test('transformOpts does not apply function if predicate is undefined', () => {
   expect(errs).toStrictEqual(expErrs)
 })
 
-test('transformOpts applies identity function if function is undefined', () => {
+test('traverseOpts applies identity function if function is undefined', () => {
   const obj = {
     opts: [
       {key: 'age', types: ['number'], values: ['42']},
@@ -65,7 +65,7 @@ test('transformOpts applies identity function if function is undefined', () => {
     ]
   }
 
-  const {errs, opts} = transformOpts(tautology)()(obj)
+  const {errs, opts} = traverseOpts(tautology)()(obj)
 
   const expOpts = obj.opts
 
@@ -75,24 +75,24 @@ test('transformOpts applies identity function if function is undefined', () => {
   expect(errs).toStrictEqual(expErrs)
 })
 
-test('transformOpts works if opts is undefined', () => {
+test('traverseOpts works if opts is undefined', () => {
   const obj = {}
 
-  const {opts} = transformOpts(tautology)()(obj)
+  const {opts} = traverseOpts(tautology)()(obj)
 
   expect(opts).toStrictEqual([])
 })
 
-test('transformOpts works if input is undefined', () => {
-  const {opts} = transformOpts(tautology)()()
+test('traverseOpts works if input is undefined', () => {
+  const {opts} = traverseOpts(tautology)()()
 
   expect(opts).toStrictEqual([])
 })
 
-test('transformOpts passes on errors', () => {
+test('traverseOpts passes on errors', () => {
   const ERRS = ['foo']
 
-  const {errs} = transformOpts(tautology)()({errs: ERRS})
+  const {errs} = traverseOpts(tautology)()({errs: ERRS})
 
   expect(errs).toStrictEqual(ERRS)
 })

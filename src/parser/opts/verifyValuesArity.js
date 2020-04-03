@@ -1,4 +1,4 @@
-const transformOpts = require('./transformOpts')
+const traverseOpts = require('./traverseOpts')
 const {invalidArity, invalidTypes, invalidValues} = require('../../errors')
 const pipe = require('../combinators/pipe')
 
@@ -8,7 +8,7 @@ module.exports = pipe(
 )
 
 function checkArity (key) {
-  return transformOpts(hasValues(key))(opt => {
+  return traverseOpts(hasValues(key))(opt => {
     const errs = []
 
     const {types, [key]: values} = opt

@@ -1231,15 +1231,15 @@ Results in:
 </details>
 </td>
 </tr>
-<tr name="transformOpts">
-<td><code><a href="#transformOpts">transformOpts</a>(p)(f)({errs, opts})</code></td>
+<tr name="traverseOpts">
+<td><code><a href="#traverseOpts">traverseOpts</a>(p)(f)({errs,opts})</code></td>
 <td>
-<code>transformOpts</code> applies a function <code>f</code> to each option that satisfies a predicate <code>p</code>.
+<code>traverseOpts</code> applies a function <code>f</code> to each option that satisfies a predicate <code>p</code>.
 By doing so, it does not change the order of options.
 <code>p</code> takes a command-line option and returns a boolean.
 <code>f</code> takes three arguments, a command-line option, an index of the option, and the opts array,
 and returns an <code>{errs = [], opts = []}</code> object.
-Most of the other <code>opts</code> checks and stages are defined in terms of <code>transformOpts</code>.
+Most of the other <code>opts</code> checks and stages are defined in terms of <code>traverseOpts</code>.
 <details>
 <summary>
 Read on...
@@ -1256,7 +1256,7 @@ const opts = [
   {key: 'help', types: [], values: [1]}
 ]
 
-const isFlag = ({types}) => Array.isArray(types) && types.length === 0
+const isFlag = _ => Array.isArray(_.types) && _.types.length === 0
 
 const reverseFlags = opt => ({
   opts: [
@@ -1264,7 +1264,7 @@ const reverseFlags = opt => ({
   ]
 })
 
-transformOpts(isFlag)(reverseFlags)({opts})
+traverseOpts(isFlag)(reverseFlags)({opts})
 ```
 
 Result:
@@ -1831,7 +1831,7 @@ function demandACommand ({errs = [], opts = []} = {}) {
 }
 ```
 
-If writing a custom `opts` stage, have a look at [`transformOpts`](#transformOpts) that does some heavy lifting for you.
+If writing a custom `opts` stage, have a look at [`traverseOpts`](#traverseOpts) that does some heavy lifting for you.
 
 Custom `args` stage example:
 

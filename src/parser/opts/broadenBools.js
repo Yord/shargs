@@ -1,4 +1,4 @@
-const transformOpts = require('./transformOpts')
+const traverseOpts = require('./traverseOpts')
 const {invalidBoolMapping} = require('../../errors')
 const pipe = require('../combinators/pipe')
 
@@ -12,7 +12,7 @@ module.exports = (alt = {}) => {
 }
 
 function broadenValues (key, altToBool, alt) {
-  return transformOpts(opt => hasBool(opt) && validValues(key)(opt))(opt => {
+  return traverseOpts(opt => hasBool(opt) && validValues(key)(opt))(opt => {
     let errs   = []
 
     const {types, [key]: values} = opt

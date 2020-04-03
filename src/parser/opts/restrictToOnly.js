@@ -1,7 +1,7 @@
-const transformOpts = require('./transformOpts')
+const traverseOpts = require('./traverseOpts')
 const {valueRestrictionsViolated} = require('../../errors')
 
-module.exports = transformOpts(opt => hasOnly(opt) && hasValues(opt))(opt => {
+module.exports = traverseOpts(opt => hasOnly(opt) && hasValues(opt))(opt => {
   const errs = []
   const opts = []
 
