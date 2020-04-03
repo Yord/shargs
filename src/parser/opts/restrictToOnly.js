@@ -1,31 +1,34 @@
+const transformOpts = require('./transformOpts')
 const {valueRestrictionsViolated} = require('../../errors')
 
-module.exports = ({errs = [], opts: OPTS = []} = {}) => {
+module.exports = transformOpts(opt => hasOnly(opt) && hasValues(opt))(opt => {
+  const errs = []
   const opts = []
 
-  for (let i = 0; i < OPTS.length; i++) {
-    const option = OPTS[i]
-    const {key, values, only} = option
+  const {key, values, only} = opt
 
-    if (only === null || values === null || typeof only === 'undefined' || typeof values === 'undefined') {
-      opts.push(option)
+  let correct = 0
+
+  for (let i = 0; i < values.length; i++) {
+    const value = values[i]
+    if (only.indexOf(value) > -1) {
+      correct++
     } else {
-      let correct = 0
-
-      for (let j = 0; j < values.length; j++) {
-        const value = values[j]
-        if (only.indexOf(value) > -1) {
-          correct++
-        } else {
-          errs.push(valueRestrictionsViolated({key, values, index: j, only, option}))
-        }
-      }
-
-      if (values.length === correct) {
-        opts.push(option)
-      }
+      errs.push(valueRestrictionsViolated({key, values, index: i, only, option: opt}))
     }
   }
 
+  if (values.length === correct) {
+    opts.push(opt)
+  }
+
   return {errs, opts}
+})
+
+function hasOnly ({only}) {
+  return only !== null && typeof only !== 'undefined'
+}
+
+function hasValues ({values}) {
+  return values !== null && typeof values !== 'undefined'
 }
