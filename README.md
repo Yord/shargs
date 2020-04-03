@@ -1653,6 +1653,7 @@ Result:
 <td>
 Transforms an args object into a new args object by applying functions <code>fs</code> based on the value type.
 All fields of an object are updated independently and previous updates in the same run do not influence later updates.
+Many <code>args</code> checks and stages are implemented in terms of <code>transformArgs</code>.
 <details>
 <summary>
 Read on...
