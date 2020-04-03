@@ -1,7 +1,8 @@
 const traverseOpts = require('./traverseOpts')
 const {contradictionDetected, wrongContradictsType} = require('../../errors')
+const and = require('../combinators/and')
 
-module.exports = traverseOpts(opt => doesContradict(opt) && willHaveValues(opt))((opt, _, opts) => {
+module.exports = traverseOpts(and(doesContradict, willHaveValues))((opt, _, opts) => {
   const errs = []
 
   const {key, contradicts: keys} = opt
