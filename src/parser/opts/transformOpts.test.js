@@ -88,3 +88,11 @@ test('transformOpts works if input is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('transformOpts passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = transformOpts(tautology)()({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
