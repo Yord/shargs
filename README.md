@@ -1831,6 +1831,8 @@ function demandACommand ({errs = [], opts = []} = {}) {
 }
 ```
 
+If writing a custom `opts` stage, have a look at [`transformOpts`](#transformOpts) that does some heavy lifting for you.
+
 Custom `args` stage example:
 
 ```js
@@ -1847,6 +1849,8 @@ function flagsAsBools ({errs = [], args = {}} = {}) {
   return {errs: errs.concat(errs2), args: args2}
 }
 ```
+
+If writing a custom `args` stage, have a look at [`transformArgs`](#transformArgs) that simplifies the process.
 
 ### Usage Documentation
 
