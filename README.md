@@ -16,11 +16,12 @@ $ npm install --save shargs
 
 ## Features
 
-+   **Declarative:** Describe command-line options using a declarative DSL and derive parsers and usage from that.
-+   **Predefined Parsers:** Choose between many predefined parsers.
-+   **Modular Parsers:** Compose your own parsers by combining predefined parser functions with your own functions.
-+   **Predefined Usage Texts:** Choose between many predefined usage documentation templates.
-+   **Modular Usage Texts:** Build your own usage documentation template using a high-level DSL.
++   **Choose Predefined Parsers:** Choose between a great variety of different hand-picked parser configurations!
++   **Command-line Parser Library:** Build your own command-line parser from a huge reservoir of functions!
++   **Easily Customize Parsers:** Mix in your own custom functions to get exactly the command-line parser you deserve!
++   **Predefined Usage Documentations:** Pick from a plethora of predefined usage styles to spice up your help pages!
++   **Usage Documentation Templates:** Specify exactly how your usage documentation should look like with a declarative DSL!
++   **Shargs Keeps out of your Way:** Focus on your core business logic, shargs keeps to the sideline and out of your way!
 
 ## Getting Started
 
