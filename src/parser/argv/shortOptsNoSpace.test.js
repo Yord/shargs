@@ -19,3 +19,11 @@ test('shortOptsNoSpace does not touch options without single minus sign', () => 
 
   expect(argv).toStrictEqual(exp)
 })
+
+test('shortOptsNoSpace works if argv is undefined', () => {
+  const obj = {}
+
+  const {argv} = shortOptsNoSpace(obj)
+
+  expect(argv._).toStrictEqual(undefined)
+})
