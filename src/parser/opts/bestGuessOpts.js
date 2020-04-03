@@ -8,27 +8,25 @@ module.exports = ({errs = [], opts = []} = {}) => {
   let opt = opts[at]
 
   while (opt) {
-    if (isRest(opt)) {
-      if (isOption(opt)) {
-        const key = opt.values[0].slice(isShortOption(opt) ? 1 : 2)
+    if (isRest(opt) && isOption(opt)) {
+      const key = opt.values[0].slice(isShortOption(opt) ? 1 : 2)
 
-        if (keyIsNotDefined(key, opts)) {
-          const opt2 = opts[at + 1]
+      if (keyIsNotDefined(key, opts)) {
+        const opt2 = opts[at + 1]
 
-          if (opt2 && isRest(opt2)) {
-            if (isString(opt2)) {
-              const str = {...string(key, []), values: opt2.values}
-              opts2.push(str)
-              at += 1
-            } else {
-              const flg = {...flag(key, []), values: [1]}
-              opts2.push(flg)
-            }
+        if (opt2 && isRest(opt2)) {
+          if (isString(opt2)) {
+            const str = {...string(key, []), values: opt2.values}
+            opts2.push(str)
+            at += 1
           } else {
             const flg = {...flag(key, []), values: [1]}
             opts2.push(flg)
           }
-        } else opts2.push(opt)
+        } else {
+          const flg = {...flag(key, []), values: [1]}
+          opts2.push(flg)
+        }
       } else opts2.push(opt)
     } else opts2.push(opt)
 
