@@ -1,6 +1,7 @@
 const traverseOpts = require('./traverseOpts')
 const {invalidBoolMapping} = require('../../errors')
 const pipe = require('../combinators/pipe')
+const and  = require('../combinators/and')
 
 module.exports = (alt = {}) => {
   const altToBool = reverse(alt)
@@ -12,7 +13,7 @@ module.exports = (alt = {}) => {
 }
 
 function broadenValues (key, altToBool, alt) {
-  return traverseOpts(opt => hasBool(opt) && validValues(key)(opt))(opt => {
+  return traverseOpts(and(hasBool, validValues(key)))(opt => {
     let errs   = []
 
     const {types, [key]: values} = opt
