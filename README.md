@@ -577,6 +577,37 @@ Result:
 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
+<tr name="equalsSignAsSpace">
+<td><code><a href="#equalsSignAsSpace">equalsSignAsSpace</a>({errs, argv})</code></td>
+<td>
+<code>equalsSignAsSpace</code> treats arguments of the form <code>--name=Logan</code> as if they were <code>--name Logan</code>.
+It only removes the first equals sign in the argument, so <code>--name=Logan=Charles</code> becomes <code>--name Logan=Charles</code>.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const argv = ['--name=Logan']
+
+equalsSignAsSpace({argv})
+```
+
+Result:
+
+```js
+{
+  argv: ['--name', 'Logan']
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="splitShortOptions">
 <td><code><a href="#splitShortOptions">splitShortOptions</a>({errs, argv})</code></td>
 <td>
