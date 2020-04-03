@@ -1,6 +1,6 @@
-const transformArgs = require('./transformArgs')
+const traverseArgs = require('./traverseArgs')
 
-module.exports = transformArgs({
+module.exports = traverseArgs({
   flag: ({key, val, errs, args}) => ({
     errs,
     args: {...args, [key]: val.count > 0}

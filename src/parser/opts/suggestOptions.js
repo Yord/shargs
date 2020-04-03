@@ -1,36 +1,24 @@
+const traverseOpts = require('./traverseOpts')
 const {didYouMean} = require('../../errors')
+const and = require('../combinators/and')
 
-module.exports = function suggestOptions ({errs = [], opts = []} = {}) {
-  let errs2 = []
-  
-  for (let i = 0; i < opts.length; i++) {
-    const opt = opts[i]
+module.exports = traverseOpts(and(hasTypes, validValues, stringValue))((opt, _, opts) => {
+  const argv    = opt.values[0]
+  const options = distanceList(argv, opts)
 
-    if (isUnparsed(opt)) {
-      const argv    = opt.values[0]
-      const options = distanceList(argv, opts)
+  return {errs: [didYouMean({argv, options})]}
+})
 
-      errs2.push(didYouMean({argv, options}))
-    } else if (isCommandWithOpts(opt)) {
-      const {errs: errs3} = suggestOptions({opts: opt.opts})
-      errs2 = errs2.concat(errs3)
-    }
-  }
-
-  return {errs: errs.concat(errs2), opts}
+function hasTypes ({types}) {
+  return typeof types === 'undefined'
 }
 
-function isUnparsed ({types, values}) {
-  return (
-    typeof types === 'undefined' &&
-    Array.isArray(values) &&
-    values.length === 1 &&
-    typeof values[0] === 'string'
-  )
+function validValues ({values}) {
+  return Array.isArray(values) && values.length === 1
 }
 
-function isCommandWithOpts ({types, opts}) {
-  return types === null && Array.isArray(opts) && opts.length > 0
+function stringValue ({values}) {
+  return typeof values[0] === 'string'
 }
 
 function distanceList (str, opts) {

@@ -1,6 +1,9 @@
 const parser            = require('./combinators/parser')
 
+const equalsSignAsSpace = require('./argv/equalsSignAsSpace')
+const shortOptsNoSpace  = require('./argv/shortOptsNoSpace')
 const splitShortOptions = require('./argv/splitShortOptions')
+const traverseArgv      = require('./argv/traverseArgv')
 const verifyArgv        = require('./argv/verifyArgv')
 const arrayOnRepeat     = require('./opts/arrayOnRepeat')
 const bestGuessOpts     = require('./opts/bestGuessOpts')
@@ -14,6 +17,7 @@ const restrictToOnly    = require('./opts/restrictToOnly')
 const reverseBools      = require('./opts/reverseBools')
 const reverseFlags      = require('./opts/reverseFlags')
 const suggestOptions    = require('./opts/suggestOptions')
+const traverseOpts      = require('./opts/traverseOpts')
 const verifyOpts        = require('./opts/verifyOpts')
 const verifyRules       = require('./opts/verifyRules')
 const verifyValuesArity = require('./opts/verifyValuesArity')
@@ -24,7 +28,7 @@ const failRest          = require('./args/failRest')
 const flagsAsBools      = require('./args/flagsAsBools')
 const flagsAsNumbers    = require('./args/flagsAsNumbers')
 const mergeArgs         = require('./args/mergeArgs')
-const transformArgs     = require('./args/transformArgs')
+const traverseArgs      = require('./args/traverseArgs')
 const verifyArgs        = require('./args/verifyArgs')
 
 const {bool, command, flag, number, string} = require('../options')
@@ -71,6 +75,7 @@ const argv = [
   '-l',
   '--no-hobbits', 'true',
   '-vv',
+  '--smile=no',
   'rate',
     '--stars', '8',
     '--help'
@@ -82,7 +87,7 @@ test('parser without stages works as expected', () => {
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -102,6 +107,63 @@ test('parser without stages works as expected', () => {
   expect(errs2).toStrictEqual(expErrs)
 })
 
+test('parser only equalsSignAsSpace works as expected', () => {
+  const stages = {
+    argv: [equalsSignAsSpace]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me',
+    smile: 'no'
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
+
+test('parser with shortOptsNoSpace works as expected', () => {
+  const stages = {
+    argv: [shortOptsNoSpace]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', 'v', '--smile=no'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me',
+    smile: 'yes',
+    verbose: {type: 'flag', count: 1}
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
+
 test('parser with only splitShortOptions works as expected', () => {
   const stages = {
     argv: [splitShortOptions]
@@ -110,7 +172,7 @@ test('parser with only splitShortOptions works as expected', () => {
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: ['--colors'],
+    _: ['--colors', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -121,6 +183,41 @@ test('parser with only splitShortOptions works as expected', () => {
     query: 'Supersize Me',
     smile: 'yes',
     verbose: {type: 'flag', count: 2}
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
+
+test('parser with only traverseArgv works as expected', () => {
+  const isArgvGroup = arg => arg.length > 2 && arg[0] === '-' && arg[1] !== '-'
+
+  const splitArgvGroup = arg => ({
+    argv: arg.split('').slice(1).map(c => '-' + c)
+  })
+
+  const stages = {
+    argv: [traverseArgv(isArgvGroup)(splitArgvGroup)]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '--smile=no'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me',
+    smile: 'yes',
+    verbose: {type: 'flag', count: 2},
   }
 
   const expErrs = []
@@ -143,7 +240,7 @@ test('parser with only verifyArgv works as expected', () => {
   const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -173,7 +270,7 @@ test('parser with only arrayOnRepeat works as expected', () => {
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -211,6 +308,7 @@ test('parser with only bestGuessOpts works as expected', () => {
     },
     query: 'Supersize Me',
     smile: 'yes',
+    'smile=no': {type: 'flag', count: 1},
     colors: {type: 'flag', count: 1}
   }
 
@@ -230,7 +328,7 @@ test('parser with only broadenBools works as expected', () => {
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -258,7 +356,7 @@ test('parser with only cast works as expected', () => {
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: true,
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -289,7 +387,7 @@ test('parser with only contradictOpts works as expected', () => {
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -321,7 +419,7 @@ test('parser with only demandACommand works as expected if no command is present
   const {errs, args} = parser(stages)(opts2)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv', 'rate', '--stars', '8'],
+    _: ['--colors', '-vv', '--smile=no', 'rate', '--stars', '8'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -349,7 +447,7 @@ test('parser with only demandACommand works as expected if a command is present'
   const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -379,7 +477,7 @@ test('parser with only implyOpts works as expected', () => {
   const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -411,7 +509,7 @@ test('parser with only requireOptions works as expected', () => {
   const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -441,7 +539,7 @@ test('parser with only restrictToOnly works as expected', () => {
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -470,7 +568,7 @@ test('parser with only reverseBools works as expected', () => {
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'false',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -498,7 +596,7 @@ test('parser with only reverseFlags works as expected', () => {
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: -1},
@@ -528,7 +626,7 @@ test('parser with only suggestOptions works as expected', () => {
   const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -542,10 +640,51 @@ test('parser with only suggestOptions works as expected', () => {
 
   const expErrs = [
     didYouMean({argv: '--colors'}),
-    didYouMean({argv: '-vv'})
+    didYouMean({argv: '-vv'}),
+    didYouMean({argv: '--smile=no'})
   ]
 
   const errs2 = filterErrs(['options'])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
+
+test('parser with only traverseOpts works as expected', () => {
+  const isFlag = ({types}) => Array.isArray(types) && types.length === 0
+
+  const hasValidValues = ({values}) => Array.isArray(values) && values.length === 1
+
+  const reverseFlags = opt => ({
+    opts: [
+      {...opt, values: [-opt.values[0]]}
+    ]
+  })
+
+  const stages = {
+    opts: [
+      traverseOpts(opt => isFlag(opt) && hasValidValues(opt))(reverseFlags)
+    ]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv', '--smile=no'],
+    fantasy: 'true',
+    help: {type: 'flag', count: -1},
+    popcorn: {type: 'flag', count: -1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me',
+    smile: 'yes'
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
 
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
@@ -566,7 +705,7 @@ test('parser with only verifyOpts works as expected', () => {
   const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -598,7 +737,7 @@ test('parser with only verifyRules works as expected', () => {
   const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -630,7 +769,7 @@ test('parser with only verifyValuesArity works as expected', () => {
   const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -668,7 +807,8 @@ test('parser with only bestGuessArgs works as expected', () => {
       stars: '8'
     },
     query: 'Supersize Me',
-    smile: 'yes'
+    smile: 'yes',
+    'smile=no': {type: 'flag', count: 1},
   }
 
   const expErrs = []
@@ -687,7 +827,7 @@ test('parser with only bestGuessCast works as expected', () => {
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: true,
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -744,7 +884,7 @@ test('parser with only failRest works as expected', () => {
   const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -759,6 +899,7 @@ test('parser with only failRest works as expected', () => {
   const expErrs = [
     unexpectedArgument({argument: '--colors'}),
     unexpectedArgument({argument: '-vv'}),
+    unexpectedArgument({argument: '--smile=no'}),
     unexpectedArgument({argument: '--help'})
   ]
 
@@ -776,7 +917,7 @@ test('parser with only flagsAsBools works as expected', () => {
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: true,
     popcorn: true,
@@ -804,7 +945,7 @@ test('parser with only flagsAsNumbers works as expected', () => {
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: 1,
     popcorn: 1,
@@ -832,7 +973,7 @@ test('parser with only mergeArgs works as expected', () => {
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv', '--help'],
+    _: ['--colors', '-vv', '--smile=no', '--help'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -849,10 +990,10 @@ test('parser with only mergeArgs works as expected', () => {
   expect(errs2).toStrictEqual(expErrs)
 })
 
-test('parser with only transformArgs works as expected', () => {
+test('parser with only traverseArgs works as expected', () => {
   const stages = {
     args: [
-      transformArgs({
+      traverseArgs({
         flag: ({key, errs, args}) => ({
           errs,
           args: key !== 'popcorn' ? args : {...args, popcorn: true}
@@ -864,7 +1005,7 @@ test('parser with only transformArgs works as expected', () => {
   const {errs, args} = parser(stages)(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: true,
@@ -896,7 +1037,7 @@ test('parser with only verifyArgs works as expected', () => {
   const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -936,7 +1077,7 @@ test('parser with custom parser functions for the rate command works as expected
   const {errs, args} = parser(stages, {checks, parsers})(opts)(argv)
 
   const expArgs = {
-    _: ['--colors', '-vv'],
+    _: ['--colors', '-vv', '--smile=no'],
     fantasy: 'true',
     help: {type: 'flag', count: 1},
     popcorn: {type: 'flag', count: 1},
@@ -994,7 +1135,7 @@ test('parser with custom stages works as expected', () => {
       })
     }
 
-    const {errs: errs2, args: args2} = transformArgs(fs)({args})
+    const {errs: errs2, args: args2} = traverseArgs(fs)({args})
 
     return {errs: errs.concat(errs2), args: args2}
   }
@@ -1011,7 +1152,7 @@ test('parser with custom stages works as expected', () => {
   const {errs, args} = parser(stages, {checks})(opts)(argv)
 
   const expArgs = {
-    _: ['--colors'],
+    _: ['--colors', '--smile=no'],
     fantasy: 'true',
     help: true,
     popcorn: true,
@@ -1063,11 +1204,12 @@ test('parser works with complex stages setup', () => {
 
   const stages = {
     argv: [
+      equalsSignAsSpace,
       splitShortOptions
     ],
     opts: [
       restrictToOnly,
-      broadenBools({true: ['yes']}),
+      broadenBools({true: ['yes'], false: ['no']}),
       reverseBools,
       reverseFlags,
       suggestOptions,
@@ -1076,7 +1218,7 @@ test('parser works with complex stages setup', () => {
     ],
     args: [
       mergeArgs(),
-      transformArgs({
+      traverseArgs({
         flag: ({key, val: {count}, errs, args}) => ({
           errs,
           args: {...args, [key]: key === 'verbose' ? count : count > 0}
@@ -1093,7 +1235,7 @@ test('parser works with complex stages setup', () => {
     help: true,
     popcorn: false,
     query: ['Supersize Me', 'The Hobbit'],
-    smile: true,
+    smile: false,
     verbose: 2
   }
 
@@ -1118,6 +1260,7 @@ test('parser works with complex stages setup', () => {
   expect(errs2).toStrictEqual(expErrs)
 })
 
+// shortOptsNoSpace
 // bestGuessOpts
 // bestGuessArgs
 // bestGuessCast

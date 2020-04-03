@@ -1,8 +1,8 @@
-const transformArgs = require('./transformArgs')
+const traverseArgs = require('./traverseArgs')
 
 const constant = c => ({key, errs, args}) => ({errs, args: {...args, [key]: c}})
 
-test('transformArgs README example works', () => {
+test('traverseArgs README example works', () => {
   const obj = {
     args: {
       version: {type: 'flag', count: 2},
@@ -21,7 +21,7 @@ test('transformArgs README example works', () => {
     })
   }
 
-  const {args} = transformArgs(fs)(obj)
+  const {args} = traverseArgs(fs)(obj)
 
   const exp = {
     version: 2,
@@ -31,7 +31,7 @@ test('transformArgs README example works', () => {
   expect(args).toStrictEqual(exp)
 })
 
-test('transformArgs works as expected', () => {
+test('traverseArgs works as expected', () => {
   const obj = {
     args: {
       title: "The Hitchhiker's Guide to the Galaxy",
@@ -61,7 +61,7 @@ test('transformArgs works as expected', () => {
     otherwise: constant('otherwise')
   }
 
-  const {args} = transformArgs(fs)(obj)
+  const {args} = traverseArgs(fs)(obj)
 
   const exp = {
     title: 'string',
@@ -81,7 +81,7 @@ test('transformArgs works as expected', () => {
   expect(args).toStrictEqual(exp)
 })
 
-test('transformArgs README example works even if fs is undefined', () => {
+test('traverseArgs README example works even if fs is undefined', () => {
   const obj = {
     args: {
       title: "The Hitchhiker's Guide to the Galaxy",
@@ -99,7 +99,7 @@ test('transformArgs README example works even if fs is undefined', () => {
     }
   }
 
-  const {args} = transformArgs()(obj)
+  const {args} = traverseArgs()(obj)
 
   const exp = {
     title: "The Hitchhiker's Guide to the Galaxy",
@@ -117,7 +117,7 @@ test('transformArgs README example works even if fs is undefined', () => {
   expect(args).toStrictEqual(exp)
 })
 
-test('transformArgs allows custom recursion with a custom object function', () => {
+test('traverseArgs allows custom recursion with a custom object function', () => {
   const obj = {
     args: {
       title: "The Hitchhiker's Guide to the Galaxy",
@@ -136,7 +136,7 @@ test('transformArgs allows custom recursion with a custom object function', () =
 
   const fs = {
     object: ({key, val, errs, args}) => {
-      const {errs: errs2, args: args2} = transformArgs(fs)({args: val})
+      const {errs: errs2, args: args2} = traverseArgs(fs)({args: val})
       const {[key]: _, ...rest} = args
 
       return {
@@ -157,12 +157,12 @@ test('transformArgs allows custom recursion with a custom object function', () =
     nono: null
   }
 
-  const {args} = transformArgs(fs)(obj)
+  const {args} = traverseArgs(fs)(obj)
 
   expect(args).toStrictEqual(exp)
 })
 
-test('transformArgs works if args are undefined', () => {
+test('traverseArgs works if args are undefined', () => {
   const obj = {}
 
   const fs = {
@@ -177,12 +177,12 @@ test('transformArgs works if args are undefined', () => {
     otherwise: constant('otherwise')
   }
 
-  const {args} = transformArgs(fs)(obj)
+  const {args} = traverseArgs(fs)(obj)
 
   expect(args).toStrictEqual({})
 })
 
-test('transformArgs works if input is undefined', () => {
+test('traverseArgs works if input is undefined', () => {
   const fs = {
     undefined: constant('undefined'),
     null:      constant('null'),
@@ -195,12 +195,12 @@ test('transformArgs works if input is undefined', () => {
     otherwise: constant('otherwise')
   }
 
-  const {args} = transformArgs(fs)()
+  const {args} = traverseArgs(fs)()
 
   expect(args).toStrictEqual({})
 })
 
-test('transformArgs passes on errors', () => {
+test('traverseArgs passes on errors', () => {
   const ERRS = ['foo']
 
   const fs = {
@@ -215,7 +215,7 @@ test('transformArgs passes on errors', () => {
     otherwise: constant('otherwise')
   }
   
-  const {errs} = transformArgs(fs)({errs: ERRS})
+  const {errs} = traverseArgs(fs)({errs: ERRS})
 
   expect(errs).toStrictEqual(ERRS)
 })

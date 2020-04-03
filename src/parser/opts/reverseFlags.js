@@ -1,6 +1,7 @@
-const transformOpts = require('./transformOpts')
+const traverseOpts = require('./traverseOpts')
+const and = require('../combinators/and')
 
-module.exports = transformOpts(opt => hasReverse(opt) && isFlag(opt) && hasValidValues(opt))(opt => ({
+module.exports = traverseOpts(and(hasReverse, isFlag, hasValidValues))(opt => ({
   opts: [
     {...opt, values: [-opt.values[0]]}
   ]

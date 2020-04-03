@@ -1,7 +1,7 @@
-const transformArgs = require('./transformArgs')
+const traverseArgs = require('./traverseArgs')
 
 module.exports = ({errs = [], args = {_: []}} = {}) => (
-  transformArgs({
+  traverseArgs({
     array: ({key, val: argv, errs, args}) => {
       const errs2 = []
       const args2 = {}

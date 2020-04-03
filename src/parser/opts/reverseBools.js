@@ -1,6 +1,7 @@
-const transformOpts = require('./transformOpts')
+const traverseOpts = require('./traverseOpts')
+const and = require('../combinators/and')
 
-module.exports = transformOpts(opt => hasReverse(opt) && isBool(opt) && hasValidValues(opt))(opt => {
+module.exports = traverseOpts(and(hasReverse, isBool, hasValidValues))(opt => {
   const val   = opt.values[0]
   const value = val === 'false' ? 'true' : val === 'true' ? 'false' : typeof val === 'boolean' ? !val : val
 

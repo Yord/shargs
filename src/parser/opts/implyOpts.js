@@ -1,7 +1,8 @@
-const transformOpts = require('./transformOpts')
+const traverseOpts = require('./traverseOpts')
 const {implicationViolated, wrongImpliesType} = require('../../errors')
+const and = require('../combinators/and')
 
-module.exports = transformOpts(opt => doesImply(opt) && willHaveValues(opt))((opt, _, opts) => {
+module.exports = traverseOpts(and(doesImply, willHaveValues))((opt, _, opts) => {
   const errs = []
 
   const {key, implies: keys} = opt

@@ -1,6 +1,7 @@
-const transformOpts = require('./transformOpts')
+const traverseOpts = require('./traverseOpts')
 const {argumentIsNotABool, argumentIsNotANumber} = require('../../errors')
 const pipe = require('../combinators/pipe')
+const and  = require('../combinators/and')
 
 module.exports = pipe(
   cast('values'),
@@ -8,7 +9,7 @@ module.exports = pipe(
 )
 
 function cast (key) {
-  return transformOpts(opt => hasValues(key)(opt) && hasTypes(opt) && !isCommand(opt) && !isFlag(opt))(castKey(key))
+  return traverseOpts(and(hasValues(key), hasTypes, isNotCommand, isNotFlag))(castKey(key))
 }
 
 function castKey (key) {
@@ -52,12 +53,12 @@ function hasTypes ({types}) {
   return typeof types !== 'undefined'
 }
 
-function isCommand ({types}) {
-  return types === null
+function isNotCommand ({types}) {
+  return types !== null
 }
 
-function isFlag ({types}) {
-  return Array.isArray(types) && types.length === 0
+function isNotFlag ({types}) {
+  return !(Array.isArray(types) && types.length === 0)
 }
 
 function hasValues (key) {

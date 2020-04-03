@@ -577,10 +577,73 @@ Result:
 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
+<tr name="equalsSignAsSpace">
+<td><code><a href="#equalsSignAsSpace">equalsSignAsSpace</a>({errs, argv})</code></td>
+<td>
+<code>equalsSignAsSpace</code> treats arguments of the form <code>--name=Logan</code> as if they were <code>--name Logan</code>.
+It only removes the first equals sign in the argument, so <code>--name=Logan=Charles</code> becomes <code>--name Logan=Charles</code>.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const argv = ['--name=Logan']
+
+equalsSignAsSpace({argv})
+```
+
+Result:
+
+```js
+{
+  argv: ['--name', 'Logan']
+}
+```
+
+</details>
+</td>
+</tr>
+<tr name="shortOptsNoSpace">
+<td><code><a href="#shortOptsNoSpace">shortOptsNoSpace</a>({errs, argv})</code></td>
+<td>
+<code>shortOptsNoSpace</code> allows arguments like <code>-nLogan</code> to be interpreted as <code>-n Logan</code>.
+You may either use <code>shortOptsNoSpace</code>, or <a href="#splitShortOptions"><code>splitShortOptions</code></a>, but not both at the same time.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const argv = ['-nLogan']
+
+shortOptsNoSpace({argv})
+```
+
+Result:
+
+```js
+{
+  argv: ['-n', 'Logan']
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="splitShortOptions">
 <td><code><a href="#splitShortOptions">splitShortOptions</a>({errs, argv})</code></td>
 <td>
 Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
+You may either use <code>splitShortOptions</code>, or <a href="#shortOptsNoSpace"><code>shortOptsNoSpace</code></a>, but not both at the same time.
 <details>
 <summary>
 Read on...
@@ -601,6 +664,56 @@ Result:
 ```js
 {
   argv: ['-a', '-b']
+}
+```
+
+</details>
+</td>
+</tr>
+<tr name="traverseArgv">
+<td><code><a href="#traverseArgv">traverseArgv</a>(p)(f)({errs,opts})</code></td>
+<td>
+<code>traverseArgv</code> applies a function <code>f</code> to each arg that satisfies a predicate <code>p</code>.
+By doing so, it does not change the order of <code>argv</code>.
+<code>p</code> takes an arg string and returns a boolean.
+<code>f</code> takes three arguments, an arg string, an index of the arg, and the argv array,
+and returns an <code>{errs = [], argv = []}</code> object.
+Most of the other <code>argv</code> checks and stages are defined in terms of <code>traverseArgv</code>.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const argv = [
+  '--age=42',
+  '--help'
+]
+
+const hasEqualsSign = arg => arg.indexOf('=') > -1
+
+const replaceFirstEqualsSign = arg => ({
+  argv: [
+    arg.slice(0, arg.indexOf('=')),
+    arg.slice(arg.indexOf('=') + 1)
+  ]
+})
+
+traverseArgv(hasEqualsSign)(replaceFirstEqualsSign)({argv})
+```
+
+Result:
+
+```js
+{
+  argv: [
+    '--age', '42',
+    '--help'
+  ]
 }
 ```
 
@@ -1231,15 +1344,15 @@ Results in:
 </details>
 </td>
 </tr>
-<tr name="transformOpts">
-<td><code><a href="#transformOpts">transformOpts</a>(p)(f)({errs, opts})</code></td>
+<tr name="traverseOpts">
+<td><code><a href="#traverseOpts">traverseOpts</a>(p)(f)({errs,opts})</code></td>
 <td>
-<code>transformOpts</code> applies a function <code>f</code> to each option that satisfies a predicate <code>p</code>.
+<code>traverseOpts</code> applies a function <code>f</code> to each option that satisfies a predicate <code>p</code>.
 By doing so, it does not change the order of options.
 <code>p</code> takes a command-line option and returns a boolean.
 <code>f</code> takes three arguments, a command-line option, an index of the option, and the opts array,
 and returns an <code>{errs = [], opts = []}</code> object.
-Most of the other <code>opts</code> checks and stages are defined in terms of <code>transformOpts</code>.
+Most of the other <code>opts</code> checks and stages are defined in terms of <code>traverseOpts</code>.
 <details>
 <summary>
 Read on...
@@ -1256,7 +1369,7 @@ const opts = [
   {key: 'help', types: [], values: [1]}
 ]
 
-const isFlag = ({types}) => Array.isArray(types) && types.length === 0
+const isFlag = _ => Array.isArray(_.types) && _.types.length === 0
 
 const reverseFlags = opt => ({
   opts: [
@@ -1264,7 +1377,7 @@ const reverseFlags = opt => ({
   ]
 })
 
-transformOpts(isFlag)(reverseFlags)({opts})
+traverseOpts(isFlag)(reverseFlags)({opts})
 ```
 
 Result:
@@ -1648,12 +1761,12 @@ Result:
 </details>
 </td>
 </tr>
-<tr name="transformArgs">
-<td><code><a href="#transformArgs">transformArgs</a>(fs)({errs, args})</code></td>
+<tr name="traverseArgs">
+<td><code><a href="#traverseArgs">traverseArgs</a>(fs)({errs, args})</code></td>
 <td>
 Transforms an args object into a new args object by applying functions <code>fs</code> based on the value type.
 All fields of an object are updated independently and previous updates in the same run do not influence later updates.
-Many <code>args</code> checks and stages are implemented in terms of <code>transformArgs</code>.
+Many <code>args</code> checks and stages are implemented in terms of <code>traverseArgs</code>.
 <details>
 <summary>
 Read on...
@@ -1680,7 +1793,7 @@ const fs = {
   })
 }
 
-transformArgs(fs)({args})
+traverseArgs(fs)({args})
 ```
 
 Result:
@@ -1831,7 +1944,7 @@ function demandACommand ({errs = [], opts = []} = {}) {
 }
 ```
 
-If writing a custom `opts` stage, have a look at [`transformOpts`](#transformOpts) that does some heavy lifting for you.
+If writing a custom `opts` stage, have a look at [`traverseOpts`](#traverseOpts) that does some heavy lifting for you.
 
 Custom `args` stage example:
 
@@ -1844,13 +1957,13 @@ function flagsAsBools ({errs = [], args = {}} = {}) {
     })
   }
 
-  const {errs: errs2, args: args2} = transformArgs(fs)({args})
+  const {errs: errs2, args: args2} = traverseArgs(fs)({args})
 
   return {errs: errs.concat(errs2), args: args2}
 }
 ```
 
-If writing a custom `args` stage, have a look at [`transformArgs`](#transformArgs) that simplifies the process.
+If writing a custom `args` stage, have a look at [`traverseArgs`](#traverseArgs) that simplifies the process.
 
 ### Usage Documentation
 

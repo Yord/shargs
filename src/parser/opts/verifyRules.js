@@ -1,7 +1,7 @@
-const transformOpts = require('./transformOpts')
+const traverseOpts = require('./traverseOpts')
 const {falseRules, wrongRulesType} = require('../../errors')
 
-module.exports = transformOpts(hasRules)((opt, _, opts) => {
+module.exports = traverseOpts(hasRules)((opt, _, opts) => {
   const errs = []
 
   const {key, rules} = opt
