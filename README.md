@@ -607,6 +607,56 @@ Result:
 </details>
 </td>
 </tr>
+<tr name="traverseArgv">
+<td><code><a href="#traverseArgv">traverseArgv</a>(p)(f)({errs,opts})</code></td>
+<td>
+<code>traverseArgv</code> applies a function <code>f</code> to each arg that satisfies a predicate <code>p</code>.
+By doing so, it does not change the order of <code>argv</code>.
+<code>p</code> takes an arg string and returns a boolean.
+<code>f</code> takes three arguments, an arg string, an index of the arg, and the argv array,
+and returns an <code>{errs = [], argv = []}</code> object.
+Most of the other <code>argv</code> checks and stages are defined in terms of <code>traverseArgv</code>.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const argv = [
+  '--age=42',
+  '--help'
+]
+
+const hasEqualsSign = arg => arg.indexOf('=') > -1
+
+const replaceFirstEqualsSign = arg => ({
+  argv: [
+    arg.slice(0, arg.indexOf('=')),
+    arg.slice(arg.indexOf('=') + 1)
+  ]
+})
+
+traverseArgv(hasEqualsSign)(replaceFirstEqualsSign)({argv})
+```
+
+Result:
+
+```js
+{
+  argv: [
+    '--age', '42',
+    '--help'
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
 </table>
 
 #### `opts` Checks
