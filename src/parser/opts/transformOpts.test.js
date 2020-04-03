@@ -82,3 +82,9 @@ test('transformOpts works if opts is undefined', () => {
 
   expect(opts).toStrictEqual([])
 })
+
+test('transformOpts works if input is undefined', () => {
+  const {opts} = transformOpts(tautology)()()
+
+  expect(opts).toStrictEqual([])
+})
