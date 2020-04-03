@@ -1231,6 +1231,57 @@ Results in:
 </details>
 </td>
 </tr>
+<tr name="transformOpts">
+<td><code><a href="#transformOpts">transformOpts</a>(p)(f)({errs, opts})</code></td>
+<td>
+<code>transformOpts</code> applies a function <code>f</code> to each option that satisfies a predicate <code>p</code>.
+By doing so, it does not change the order of options.
+<code>p</code> takes a command-line option and returns a boolean.
+<code>f</code> takes three arguments, a command-line option, an index of the option, and the opts array,
+and returns an <code>{errs = [], opts = []}</code> object.
+Most of the other <code>opts</code> checks and stages are defined in terms of <code>transformOpts</code>.
+<details>
+<summary>
+Read on...
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  {key: 'age', types: ['number'], values: ['42']},
+  {key: 'verbose', types: [], values: [1]},
+  {key: 'help', types: [], values: [1]}
+]
+
+const isFlag = ({types}) => Array.isArray(types) && types.length === 0
+
+const reverseFlags = opt => ({
+  opts: [
+    {...opt, values: [-opt.values[0]]}
+  ]
+})
+
+transformOpts(isFlag)(reverseFlags)({opts})
+```
+
+Result:
+
+```js
+{
+  opts: [
+    {key: 'age', types: ['number'], values: ['42']},
+    {key: 'verbose', types: [], values: [-1]},
+    {key: 'help', types: [], values: [-1]}
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
 </table>
 
 #### `args` Checks
