@@ -5,11 +5,6 @@ module.exports = (p = arg => false) => (f = (arg, index, argv) => ({})) => ({err
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i]
 
-    if (arg === '-vv') {
-      console.log('p(arg)', p(arg))
-      console.log('f(arg, i, argv)', f(arg, i, argv))
-    }
-
     const {errs: errs3 = [], argv: argv3 = [arg]} = p(arg) ? f(arg, i, argv) : {errs: [], argv: [arg]}
 
     errs2 = errs2.concat(errs3)
