@@ -1,6 +1,7 @@
 const parser            = require('./combinators/parser')
 
 const splitShortOptions = require('./argv/splitShortOptions')
+const traverseArgv      = require('./argv/traverseArgv')
 const verifyArgv        = require('./argv/verifyArgv')
 const arrayOnRepeat     = require('./opts/arrayOnRepeat')
 const bestGuessOpts     = require('./opts/bestGuessOpts')
@@ -122,6 +123,41 @@ test('parser with only splitShortOptions works as expected', () => {
     query: 'Supersize Me',
     smile: 'yes',
     verbose: {type: 'flag', count: 2}
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
+
+test('parser with only traverseArgv works as expected', () => {
+  const isArgvGroup = arg => arg.length > 2 && arg[0] === '-' && arg[1] !== '-'
+
+  const splitArgvGroup = arg => ({
+    argv: arg.split('').slice(1).map(c => '-' + c)
+  })
+
+  const stages = {
+    argv: [traverseArgv(isArgvGroup)(splitArgvGroup)]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me',
+    smile: 'yes',
+    verbose: {type: 'flag', count: 2},
   }
 
   const expErrs = []
