@@ -19,3 +19,13 @@ test('equalsSignAsSpace only replaces first equals sign', () => {
 
   expect(argv).toStrictEqual(exp)
 })
+
+test('equalsSignAsSpace does not touch options without equals sign', () => {
+  const obj = {argv: ['ab']}
+
+  const {argv} = equalsSignAsSpace(obj)
+
+  const exp = ['ab']
+
+  expect(argv).toStrictEqual(exp)
+})
