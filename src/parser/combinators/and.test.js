@@ -34,3 +34,17 @@ test('and follows right identity', () => {
     })
   )
 })
+
+test('and follows left identity', () => {
+  const p = pred()
+  const a = anything()
+  assert(
+    property(p, a, (p, a) => {
+      expect(
+        and(T, p)(a)
+      ).toStrictEqual(
+        p(a)
+      )
+    })
+  )
+})
