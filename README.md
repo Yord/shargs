@@ -643,6 +643,7 @@ Result:
 <td><code><a href="#splitShortOptions">splitShortOptions</a>({errs, argv})</code></td>
 <td>
 Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
+You may either use <code>splitShortOptions</code>, or <a href="#shortOptsNoSpace"><code>shortOptsNoSpace</code></a>, but not both at the same time.
 <details>
 <summary>
 Read on...
