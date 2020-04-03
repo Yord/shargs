@@ -1,5 +1,7 @@
 const transformOpts = require('./transformOpts')
 
+const tautology = _ => true
+
 test('transformOpts README example works', () => {
   const obj = {
     opts: [
@@ -45,6 +47,25 @@ test('transformOpts does not apply function if predicate is undefined', () => {
   })
 
   const {errs, opts} = transformOpts()(recordError)(obj)
+
+  const expOpts = obj.opts
+
+  const expErrs = []
+
+  expect(opts).toStrictEqual(expOpts)
+  expect(errs).toStrictEqual(expErrs)
+})
+
+test('transformOpts applies identity function if function is undefined', () => {
+  const obj = {
+    opts: [
+      {key: 'age', types: ['number'], values: ['42']},
+      {key: 'verbose', types: [], values: [1]},
+      {key: 'help', types: [], values: [1]}
+    ]
+  }
+
+  const {errs, opts} = transformOpts(tautology)()(obj)
 
   const expOpts = obj.opts
 
