@@ -14,6 +14,7 @@ const restrictToOnly    = require('./opts/restrictToOnly')
 const reverseBools      = require('./opts/reverseBools')
 const reverseFlags      = require('./opts/reverseFlags')
 const suggestOptions    = require('./opts/suggestOptions')
+const traverseOpts      = require('./opts/traverseOpts')
 const verifyOpts        = require('./opts/verifyOpts')
 const verifyRules       = require('./opts/verifyRules')
 const verifyValuesArity = require('./opts/verifyValuesArity')
@@ -546,6 +547,46 @@ test('parser with only suggestOptions works as expected', () => {
   ]
 
   const errs2 = filterErrs(['options'])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
+
+test('parser with only traverseOpts works as expected', () => {
+  const isFlag = ({types}) => Array.isArray(types) && types.length === 0
+
+  const hasValidValues = ({values}) => Array.isArray(values) && values.length === 1
+
+  const reverseFlags = opt => ({
+    opts: [
+      {...opt, values: [-opt.values[0]]}
+    ]
+  })
+
+  const stages = {
+    opts: [
+      traverseOpts(opt => isFlag(opt) && hasValidValues(opt))(reverseFlags)
+    ]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', '-vv'],
+    fantasy: 'true',
+    help: {type: 'flag', count: -1},
+    popcorn: {type: 'flag', count: -1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me',
+    smile: 'yes'
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
 
   expect(args).toStrictEqual(expArgs)
   expect(errs2).toStrictEqual(expErrs)
