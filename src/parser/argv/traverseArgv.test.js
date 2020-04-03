@@ -1,5 +1,7 @@
 const traverseArgv = require('./traverseArgv')
 
+const tautology = _ => true
+
 test('traverseArgv README example works', () => {
   const obj = {
     argv: [
@@ -43,6 +45,24 @@ test('traverseArgv does not apply function if predicate is undefined', () => {
   })
 
   const {errs, argv} = traverseArgv()(recordError)(obj)
+
+  const expArgv = obj.argv
+
+  const expErrs = []
+
+  expect(argv).toStrictEqual(expArgv)
+  expect(errs).toStrictEqual(expErrs)
+})
+
+test('traverseArgv applies identity function if function is undefined', () => {
+  const obj = {
+    argv: [
+      '--age=42',
+      '--help'
+    ]
+  }
+
+  const {errs, argv} = traverseArgv(tautology)()(obj)
 
   const expArgv = obj.argv
 
