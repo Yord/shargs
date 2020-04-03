@@ -74,3 +74,11 @@ test('transformOpts applies identity function if function is undefined', () => {
   expect(opts).toStrictEqual(expOpts)
   expect(errs).toStrictEqual(expErrs)
 })
+
+test('transformOpts works if opts is undefined', () => {
+  const obj = {}
+
+  const {opts} = transformOpts(tautology)()(obj)
+
+  expect(opts).toStrictEqual([])
+})
