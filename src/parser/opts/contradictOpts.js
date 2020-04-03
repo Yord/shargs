@@ -1,24 +1,24 @@
+const transformOpts = require('./transformOpts')
 const {contradictionDetected, wrongContradictsType} = require('../../errors')
 
-module.exports = ({errs = [], opts = []} = {}) => {
-  const errs2 = []
+module.exports = transformOpts(opt => doesContradict(opt) && willHaveValues(opt))((opt, _, opts) => {
+  const errs = []
 
-  for (let i = 0; i < opts.length; i++) {
-    const opt = opts[i]
-    const {key, contradicts: keys} = opt
+  const {key, contradicts: keys} = opt
 
-    if (typeof keys !== 'undefined' && willHaveValues(opt)) {
-      if (Array.isArray(keys)) {
-        if (opts.some(opt2 => keys.indexOf(opt2.key) > -1 && willHaveValues(opt2))) {
-          errs2.push(contradictionDetected({key, contradicts: keys, option: opt}))
-        }
-      } else {
-        errs2.push(wrongContradictsType({key, type: typeof keys, option: opt}))
-      }
+  if (Array.isArray(keys)) {
+    if (opts.some(opt2 => keys.indexOf(opt2.key) > -1 && willHaveValues(opt2))) {
+      errs.push(contradictionDetected({key, contradicts: keys, option: opt}))
     }
+  } else {
+    errs.push(wrongContradictsType({key, type: typeof keys, option: opt}))
   }
 
-  return {errs: errs.concat(errs2), opts}
+  return {errs}
+})
+
+function doesContradict ({contradicts}) {
+  return typeof contradicts !== 'undefined'
 }
 
 function willHaveValues ({values, defaultValues}) {
