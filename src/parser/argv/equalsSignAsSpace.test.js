@@ -29,3 +29,11 @@ test('equalsSignAsSpace does not touch options without equals sign', () => {
 
   expect(argv).toStrictEqual(exp)
 })
+
+test('equalsSignAsSpace works if argv is undefined', () => {
+  const obj = {}
+
+  const {argv} = equalsSignAsSpace(obj)
+
+  expect(argv._).toStrictEqual(undefined)
+})
