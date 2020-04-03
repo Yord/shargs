@@ -24,7 +24,7 @@ const failRest          = require('./args/failRest')
 const flagsAsBools      = require('./args/flagsAsBools')
 const flagsAsNumbers    = require('./args/flagsAsNumbers')
 const mergeArgs         = require('./args/mergeArgs')
-const transformArgs     = require('./args/transformArgs')
+const traverseArgs      = require('./args/traverseArgs')
 const verifyArgs        = require('./args/verifyArgs')
 
 const {bool, command, flag, number, string} = require('../options')
@@ -849,10 +849,10 @@ test('parser with only mergeArgs works as expected', () => {
   expect(errs2).toStrictEqual(expErrs)
 })
 
-test('parser with only transformArgs works as expected', () => {
+test('parser with only traverseArgs works as expected', () => {
   const stages = {
     args: [
-      transformArgs({
+      traverseArgs({
         flag: ({key, errs, args}) => ({
           errs,
           args: key !== 'popcorn' ? args : {...args, popcorn: true}
@@ -994,7 +994,7 @@ test('parser with custom stages works as expected', () => {
       })
     }
 
-    const {errs: errs2, args: args2} = transformArgs(fs)({args})
+    const {errs: errs2, args: args2} = traverseArgs(fs)({args})
 
     return {errs: errs.concat(errs2), args: args2}
   }
@@ -1076,7 +1076,7 @@ test('parser works with complex stages setup', () => {
     ],
     args: [
       mergeArgs(),
-      transformArgs({
+      traverseArgs({
         flag: ({key, val: {count}, errs, args}) => ({
           errs,
           args: {...args, [key]: key === 'verbose' ? count : count > 0}

@@ -1648,12 +1648,12 @@ Result:
 </details>
 </td>
 </tr>
-<tr name="transformArgs">
-<td><code><a href="#transformArgs">transformArgs</a>(fs)({errs, args})</code></td>
+<tr name="traverseArgs">
+<td><code><a href="#traverseArgs">traverseArgs</a>(fs)({errs, args})</code></td>
 <td>
 Transforms an args object into a new args object by applying functions <code>fs</code> based on the value type.
 All fields of an object are updated independently and previous updates in the same run do not influence later updates.
-Many <code>args</code> checks and stages are implemented in terms of <code>transformArgs</code>.
+Many <code>args</code> checks and stages are implemented in terms of <code>traverseArgs</code>.
 <details>
 <summary>
 Read on...
@@ -1680,7 +1680,7 @@ const fs = {
   })
 }
 
-transformArgs(fs)({args})
+traverseArgs(fs)({args})
 ```
 
 Result:
@@ -1844,13 +1844,13 @@ function flagsAsBools ({errs = [], args = {}} = {}) {
     })
   }
 
-  const {errs: errs2, args: args2} = transformArgs(fs)({args})
+  const {errs: errs2, args: args2} = traverseArgs(fs)({args})
 
   return {errs: errs.concat(errs2), args: args2}
 }
 ```
 
-If writing a custom `args` stage, have a look at [`transformArgs`](#transformArgs) that simplifies the process.
+If writing a custom `args` stage, have a look at [`traverseArgs`](#traverseArgs) that simplifies the process.
 
 ### Usage Documentation
 
