@@ -1,7 +1,8 @@
 const traverseOpts = require('./traverseOpts')
 const {valueRestrictionsViolated} = require('../../errors')
+const and = require('../combinators/and')
 
-module.exports = traverseOpts(opt => hasOnly(opt) && hasValues(opt))(opt => {
+module.exports = traverseOpts(and(hasOnly, hasValues))(opt => {
   const errs = []
   const opts = []
 
