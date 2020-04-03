@@ -30,3 +30,26 @@ test('transformOpts README example works', () => {
   expect(opts).toStrictEqual(expOpts)
   expect(errs).toStrictEqual(expErrs)
 })
+
+test('transformOpts does not apply function if predicate is undefined', () => {
+  const obj = {
+    opts: [
+      {key: 'age', types: ['number'], values: ['42']},
+      {key: 'verbose', types: [], values: [1]},
+      {key: 'help', types: [], values: [1]}
+    ]
+  }
+
+  const recordError = _ => ({
+    errs: ['Error']
+  })
+
+  const {errs, opts} = transformOpts()(recordError)(obj)
+
+  const expOpts = obj.opts
+
+  const expErrs = []
+
+  expect(opts).toStrictEqual(expOpts)
+  expect(errs).toStrictEqual(expErrs)
+})
