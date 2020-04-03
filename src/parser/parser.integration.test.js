@@ -1,6 +1,7 @@
 const parser            = require('./combinators/parser')
 
 const equalsSignAsSpace = require('./argv/equalsSignAsSpace')
+const shortOptsNoSpace  = require('./argv/shortOptsNoSpace')
 const splitShortOptions = require('./argv/splitShortOptions')
 const traverseArgv      = require('./argv/traverseArgv')
 const verifyArgv        = require('./argv/verifyArgv')
@@ -124,6 +125,35 @@ test('parser only equalsSignAsSpace works as expected', () => {
     },
     query: 'Supersize Me',
     smile: 'no'
+  }
+
+  const expErrs = []
+
+  const errs2 = filterErrs([])(errs)
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs2).toStrictEqual(expErrs)
+})
+
+test('parser with shortOptsNoSpace works as expected', () => {
+  const stages = {
+    argv: [shortOptsNoSpace]
+  }
+
+  const {errs, args} = parser(stages)(opts)(argv)
+
+  const expArgs = {
+    _: ['--colors', 'v', '--smile=no'],
+    fantasy: 'true',
+    help: {type: 'flag', count: 1},
+    popcorn: {type: 'flag', count: 1},
+    rate: {
+      _: ['--help'],
+      stars: '8'
+    },
+    query: 'Supersize Me',
+    smile: 'yes',
+    verbose: {type: 'flag', count: 1}
   }
 
   const expErrs = []
@@ -1230,6 +1260,7 @@ test('parser works with complex stages setup', () => {
   expect(errs2).toStrictEqual(expErrs)
 })
 
+// shortOptsNoSpace
 // bestGuessOpts
 // bestGuessArgs
 // bestGuessCast
