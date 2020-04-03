@@ -43,3 +43,11 @@ test('equalsSignAsSpace works if input is undefined', () => {
 
   expect(argv._).toStrictEqual(undefined)
 })
+
+test('equalsSignAsSpace passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = equalsSignAsSpace({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
