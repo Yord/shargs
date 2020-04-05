@@ -76,6 +76,31 @@ test('table does not print a column when its width is 0 1/2', () => {
   expect(res).toStrictEqual(txt)
 })
 
+test('table does not print a column when its width is 0 2/2', () => {
+  const style = {
+    cols: [
+      {width: 40},
+      {width: 0}
+    ]
+  }
+  
+  const res = table([
+    [
+      '-h, --help',
+      'Prints the help.'
+    ],
+    [
+      '-v, --version',
+      'Prints the version.'
+    ]
+  ])(style)
+
+  const txt = '-h, --help                              \n' +
+              '-v, --version                           \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
 test('table keeps whitespaces if there are several', () => {
   const style = {
     cols: [
