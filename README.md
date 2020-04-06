@@ -16,12 +16,21 @@ $ npm install --save shargs
 
 ## Features
 
-+   **Command-line Parser Library:** Build your own command-line parser from a huge reservoir of functions.
-+   **Choose Predefined Parsers:** Choose between a great variety of different hand-picked parser configurations.
-+   **Easily Customize Parsers:** Mix in your own custom functions to get exactly the command-line parser you need.
-+   **Predefined Usage Documentations:** Pick from a plethora of predefined usage styles to spice up your help pages.
-+   **Usage Documentation Templates:** Specify exactly how your usage documentation should look like with a declarative DSL.
-+   **Shargs Keeps out of your Way:** Focus on your core business logic, shargs keeps to the sideline and out of your way.
+Shargs **gives developers as much control over parsing as possible**.
+The advantages are:
+
++   You get exactly the parser you need, without unnecessary features.
++   You are able to mix in your own problem-specific parser functions.
++   There is no magic going on in the background, everything is explicit.
+
+Following the same approach, shargs offers automatic usage documentation generation.
+The advantages are:
+
++   You get exactly the usage documentation you need, no unnecessary extras.
++   You have fine-grained control over the documentation layout if you need that.
++   You can write your own layout functions and combine them with existing ones.
+
+Its extensibility and inversion of control is what sets shargs apart from other command-line parsers.
 
 ## Getting Started
 
@@ -276,24 +285,6 @@ Shargs is less a command-line parser than a library to conveniently build comman
 Other command-line parsers are often black boxes that offer very limited control over parsing.
 Shargs is a very different beast:
 It turns command-line arguments parsing inside out and gives you fine-grained control over parser stages and usage docs.
-
-### Shargs' Philosophy
-
-Shargs' philosophy is to **give the user as much control over parsing as possible**.
-The advantages of this approach are:
-
-+   You get exactly the parser you need, without unnecessary features.
-+   You are able to mix in your own problem-specific parser functions.
-+   There is no magic going on in the background, everything is explicit.
-
-With the same philosophy, shargs offers automatic usage documentation generation.
-The advantages for the user are:
-
-+   You get exactly the usage documentation you need, no unnecessary extras.
-+   You have fine-grained control over the documentation layout if you need that.
-+   You can write your own layout functions and combine them with existing ones.
-
-Its extensibility and inversion of control is what sets shargs apart from other command-line parsers.
 
 ### Command-Line Options
 
