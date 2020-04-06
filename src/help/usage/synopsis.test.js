@@ -139,3 +139,15 @@ test('synopsis ignores values without a key or without args', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('synopsis prints only programName if opts is undefined', () => {
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = synopsis('deepThought')()(style)
+
+  const txt = 'deepThought                             \n'
+
+  expect(res).toStrictEqual(txt)
+})
