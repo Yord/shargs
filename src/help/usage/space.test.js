@@ -1,4 +1,26 @@
+const usage              = require('./combinators/usage')
+const {note}             = require('./note')
 const {space, spaceFrom} = require('./space')
+
+test('space README example works as expected', () => {
+  const opts = []
+
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = usage([
+    note('Deep Thought answered'),
+    space,
+    note('The Ultimate Question.')
+  ])(opts)(style)
+
+  const txt = 'Deep Thought answered                   \n'+
+              '                                        \n' +
+              'The Ultimate Question.                  \n'
+  
+  expect(res).toStrictEqual(txt)
+})
 
 test('space generates expected string', () => {
   const opts = []
