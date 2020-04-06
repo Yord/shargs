@@ -16,7 +16,7 @@ $ npm install --save shargs
 
 ## Features
 
-Shargs **gives developers as much control over parsing as possible**.
+Shargs **gives developers as much control over command-line parsing as possible**.
 The advantages are:
 
 +   You get exactly the parser you need, without unnecessary features.
@@ -30,7 +30,7 @@ The advantages are:
 +   You have fine-grained control over the documentation layout if you need that.
 +   You can write your own layout functions and combine them with existing ones.
 
-Its extensibility and inversion of control is what sets shargs apart from other command-line parsers.
+Shargs' extensibility and release of control to the developer sets it apart from other command-line parsers.
 
 ## Getting Started
 
