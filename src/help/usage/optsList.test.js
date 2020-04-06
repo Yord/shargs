@@ -149,3 +149,26 @@ test('optsList does not print different defaultValues format', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsList collects args from the same key', () => {
+  const opts = [
+    {key: 'a', types: [], args: ['-a'], desc: 'An a.', implies: ['b']},
+    {key: 'b', types: [], args: ['-b'], desc: 'A b.'},
+    {key: 'b', types: [], args: ['--no-b'], desc: 'Not a b.'}
+  ]
+
+  const style = {
+    cols: [
+      {width: 10},
+      {width: 65}
+    ]
+  }
+
+  const res = optsList(opts)(style)
+
+  const txt = '-a        An a. [implies: -b, --no-b]                                      \n' +
+              '-b        A b.                                                             \n' +
+              '--no-b    Not a b.                                                         \n'
+
+  expect(res).toStrictEqual(txt)
+})
