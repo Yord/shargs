@@ -151,3 +151,27 @@ test('optsDefs does ot print different defaultValues format', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsDefs collects args from the same key', () => {
+  const opts = [
+    {key: 'a', types: [], args: ['-a'], desc: 'An a.', implies: ['b']},
+    {key: 'b', types: [], args: ['-b'], desc: 'A b.'},
+    {key: 'b', types: [], args: ['--no-b'], desc: 'Not a b.'}
+  ]
+
+  const style = {
+    line: {width: 80},
+    desc: {padStart: 4, width: 76}
+  }
+
+  const res = optsDefs(opts)(style)
+
+  const txt = '-a [implies: -b, --no-b]                                                        \n' +
+              '    An a.                                                                       \n' +
+              '-b                                                                              \n' +
+              '    A b.                                                                        \n' +
+              '--no-b                                                                          \n' +
+              '    Not a b.                                                                    \n'
+
+  expect(res).toStrictEqual(txt)
+})
