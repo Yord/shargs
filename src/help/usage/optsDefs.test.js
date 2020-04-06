@@ -93,3 +93,16 @@ test('optsDefs prints an empty string if opts has undefined entries', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsDefs prints an empty string if opts are undefined', () => {
+  const style = {
+    line: {width: 42},
+    desc: {padStart: 4, width: 38}
+  }
+  
+  const res = optsDefs()(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
