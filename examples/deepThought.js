@@ -38,7 +38,7 @@ const style = {
   cols: [{width: 25}, {width: 55}]
 }
 
-const argv = ['-hq', 'What is the answer?', '-a', '5']
+const argv = process.argv.slice(2)
 
 const {args} = deepThought(opts)(argv)
 
