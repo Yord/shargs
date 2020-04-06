@@ -207,7 +207,7 @@ test('optsDefs uses default style if style is undefined', () => {
   expect(res).toStrictEqual(txt)
 })
 
-test('optsDefsFrom correctly passes on first id', () => {
+test('optsDefs correctly passes on first id', () => {
   const opts = [
     {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.', required: true}
   ]
@@ -221,6 +221,24 @@ test('optsDefsFrom correctly passes on first id', () => {
 
   const txt = '-a, --answer=<number> [required]        \n' +
               '    The answer.                                             \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
+test('optsDefsFrom correctly passes on second id', () => {
+  const opts = [
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.', required: true}
+  ]
+
+  const style = {
+    line: {width: 60},
+    desc2: {padStart: 4, width: 36}
+  }
+
+  const res = optsDefsFrom(undefined, 'desc2')(opts)(style)
+
+  const txt = '-a, --answer=<number> [required]                            \n' +
+              '    The answer.                         \n'
 
   expect(res).toStrictEqual(txt)
 })
