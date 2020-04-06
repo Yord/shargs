@@ -106,3 +106,27 @@ test('optsDefs prints an empty string if opts are undefined', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsDefs prints contradics, default, implies and required, in this order', () => {
+  const opts = [
+    {key: 'a', types: [], args: ['-a'], desc: 'An a.', required: false, defaultValues: ['a'], contradicts: ['b'], implies: ['c']},
+    {key: 'b', types: [], args: ['-b'], desc: 'A b.'},
+    {key: 'c', types: [], args: ['-c'], desc: 'A c.'}
+  ]
+
+  const style = {
+    line: {width: 80},
+    desc: {padStart: 4, width: 76}
+  }
+
+  const res = optsDefs(opts)(style)
+
+  const txt = '-a [contradicts: -b] [default: a] [implies: -c] [not required]                  \n' +
+              '    An a.                                                                       \n' +
+              '-b                                                                              \n' +
+              '    A b.                                                                        \n' +
+              '-c                                                                              \n' +
+              '    A c.                                                                        \n'
+
+  expect(res).toStrictEqual(txt)
+})
