@@ -10,20 +10,17 @@ test('usage generates expected string', () => {
   ]
 
   const style = {
-    cols: [
-      {width: 10, padEnd: 2},
-      {width: 28}
-    ]
+    cols: [{width: 18, padEnd: 2}, {width: 20}]
   }
 
   const res = usage([
     optsList
   ])(opts)(style)
 
-  const txt = '-a,         The answer. [number]        \n' +
-              '--answer                                \n' +
-              '-h, --help  Prints help.                \n' +
-              '--version   Prints version. [flag]      \n'
+  const txt = '-a,                 The answer.         \n' +
+              '--answer=<number>                       \n' +
+              '-h, --help          Prints help.        \n' +
+              '--version           Prints version.     \n'
 
   expect(res).toStrictEqual(txt)
 })
@@ -75,9 +72,9 @@ test('usage uses default style if style is undefined', () => {
     optsList
   ])(opts)()
 
-  const txt = '-a, --answer             The answer. [number]                                   \n' +
+  const txt = '-a, --answer=<number>    The answer.                                            \n' +
               '-h, --help               Prints help.                                           \n' +
-              '--version                Prints version. [flag]                                 \n'
+              '--version                Prints version.                                        \n'
 
   expect(res).toStrictEqual(txt)
 })
