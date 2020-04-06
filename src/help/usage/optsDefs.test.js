@@ -175,3 +175,34 @@ test('optsDefs collects args from the same key', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsDefs uses default style if style is undefined', () => {
+  const opts = [
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.', required: true},
+    {key: 'foo', types: ['string'], args: ['-f', '--foo'], desc: 'Foo.', only: ['foo', 'bar'], required: false},
+    {key: 'baz', types: ['bool'], args: ['-b', '--baz'], desc: 'Baz.', descArg: 'baz', defaultValues: [42], implies: ['foo']},
+    {key: 'help', types: [], args: ['--help', 'help', '-h'], desc: 'Prints help.', defaultValues: [false]},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.', contradicts: ['help']},
+    {key: 'question', types: ['string'], required: true, desc: 'The question.'},
+    {key: 'politePhrase', types: null, variadic: true, desc: 'Polite phrases.'}
+  ]
+
+  const res = optsDefs(opts)()
+
+  const txt = '-a, --answer=<number> [required]                                                \n' +
+              '    The answer.                                                                 \n' +
+              '-f, --foo=<foo|bar> [not required]                                              \n' +
+              '    Foo.                                                                        \n' +
+              '-b, --baz=<baz> [default: 42] [implies: -f, --foo]                              \n' +
+              '    Baz.                                                                        \n' +
+              '-h, help, --help [default: false]                                               \n' +
+              '    Prints help.                                                                \n' +
+              '--version [contradicts: --help, help, -h]                                       \n' +
+              '    Prints version.                                                             \n' +
+              '<question> [required]                                                           \n' +
+              '    The question.                                                               \n' +
+              '<politePhrase>...                                                               \n' +
+              '    Polite phrases.                                                             \n'
+
+  expect(res).toStrictEqual(txt)
+})
