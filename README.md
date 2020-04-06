@@ -397,6 +397,11 @@ The following fields are available:
 <td>string</td>
 <td><code>desc</code> is the user-facing description of a command-line option that is used by the automatic usage documentation generation.</td>
 </tr>
+<tr name="descArg">
+<td><code><a href="#descArg">descArg</a></code></td>
+<td>string</td>
+<td><code>descArg</code> is the user-facing description of an argument value that is used by the automatic usage documentation generation.</td>
+</tr>
 <tr name="implies">
 <td><code><a href="#implies">implies</a></code></td>
 <td>array of keys</td>
