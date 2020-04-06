@@ -119,3 +119,23 @@ test('synopsis ignores undefined values', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('synopsis ignores values without a key or without args', () => {
+  const opts = [
+    {values: ['unrecognized']},
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], required: true},
+    {something: 'completely', different: true},
+    {key: 'help', types: [], args: ['-h', '--help']},
+    {key: undefined, args: undefined}
+  ]
+
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = synopsis('deepThought')(opts)(style)
+
+  const txt = 'deepThought (-a|--answer) [-h|--help]   \n'
+
+  expect(res).toStrictEqual(txt)
+})
