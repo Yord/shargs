@@ -99,3 +99,23 @@ test('synopsis prints only programName if opts contains only undefined values', 
 
   expect(res).toStrictEqual(txt)
 })
+
+test('synopsis ignores undefined values', () => {
+  const opts = [
+    undefined,
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], required: true},
+    undefined,
+    {key: 'help', types: [], args: ['-h', '--help']},
+    undefined
+  ]
+
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = synopsis('deepThought')(opts)(style)
+
+  const txt = 'deepThought (-a|--answer) [-h|--help]   \n'
+
+  expect(res).toStrictEqual(txt)
+})
