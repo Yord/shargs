@@ -1,4 +1,4 @@
-const {optsList} = require('./optsList')
+const {optsList, optsListFrom} = require('./optsList')
 
 test('optsList README example works as expected', () => {
   const opts = [
@@ -193,6 +193,25 @@ test('optsList uses default style if style is undefined', () => {
               '--version                Prints version. [contradicts: --help, help, -h]        \n' +
               '<question>               The question. [required]                               \n' +
               '<politePhrase>...        Polite phrases.                                        \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
+test('optsListFrom correctly passes on id', () => {
+  const opts = [
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.', required: true}
+  ]
+
+  const style = {
+    cols2: [
+      {width: 40},
+      {width: 40}
+    ]
+  }
+
+  const res = optsListFrom('cols2')(opts)(style)
+
+  const txt = '-a, --answer=<number>                   The answer. [required]                  \n'
 
   expect(res).toStrictEqual(txt)
 })
