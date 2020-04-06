@@ -19,10 +19,8 @@ test('defs generates expected string', () => {
 
   const txt = '-h, --help                              \n' +
               '    Prints the help.                    \n' +
-              '                                        \n' +
               '-v, --version                           \n' +
-              '    Prints the version.                 \n' +
-              '                                        \n'
+              '    Prints the version.                 \n'
 
   expect(res).toStrictEqual(txt)
 })
@@ -41,10 +39,8 @@ test('defs generates string with default style if style is undefined', () => {
 
   const txt = '-h, --help                                                                      \n' +
               '    Prints the help.                                                            \n' +
-              '                                                                                \n' +
               '-v, --version                                                                   \n' +
-              '    Prints the version.                                                         \n' +
-              '                                                                                \n'
+              '    Prints the version.                                                         \n'
 
   expect(res).toStrictEqual(txt)
 })
@@ -67,10 +63,8 @@ test('defs uses empty strings if columns are shorter than two elements', () => {
 
   const txt = '-h, --help                              \n' +
               '                                        \n' +
-              '                                        \n' +
               '-v, --version                           \n' +
-              '    Prints the version.                 \n' +
-              '                                        \n'
+              '    Prints the version.                 \n'
 
   expect(res).toStrictEqual(txt)
 })
@@ -110,11 +104,8 @@ test('defs prints empty lines for each undefined columns entry', () => {
               '    Prints the help.                    \n' +
               '                                        \n' +
               '                                        \n' +
-              '                                        \n' +
-              '                                        \n' +
               '-v, --version                           \n' +
-              '    Prints the version.                 \n' +
-              '                                        \n'
+              '    Prints the version.                 \n'
 
   expect(res).toStrictEqual(txt)
 })
@@ -141,10 +132,8 @@ test('defsFrom correctly passes on first id', () => {
 
   const txt = '-h, --help          \n' +
               '    Prints the help.                    \n' +
-              '                                        \n' +
               '-v, --version       \n' +
-              '    Prints the version.                 \n' +
-              '                                        \n'
+              '    Prints the version.                 \n'
 
   expect(res).toStrictEqual(txt)
 })
@@ -171,10 +160,8 @@ test('defsFrom correctly passes on second id', () => {
 
   const txt = '-h, --help                              \n' +
               '    Prints the help.          \n' +
-              '                                        \n' +
               '-v, --version                           \n' +
-              '    Prints the version.       \n' +
-              '                                        \n'
+              '    Prints the version.       \n'
 
   expect(res).toStrictEqual(txt)
 })
