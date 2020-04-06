@@ -1,5 +1,26 @@
 const {note, noteFrom} = require('./note')
 
+test('note README example works as expected', () => {
+  const opts = [
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.', required: true},
+    {key: 'help', types: [], args: ['-h', '--help'], desc: 'Prints help.', defaultValue: [false]},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.', contradicts: ['help']}
+  ]
+  
+  const style = {
+    line: {width: 40}
+  }
+  
+  const res = note(
+    'Deep Thought was created to come up with the Answer.'
+  )(opts)(style)
+
+  const txt = 'Deep Thought was created to come up with\n'+
+              'the Answer.                             \n'
+  
+  expect(res).toStrictEqual(txt)
+})
+
 test('note generates expected string', () => {
   const opts = []
 
