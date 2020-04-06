@@ -85,3 +85,17 @@ test('synopsis prints only programName if opts are empty', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('synopsis prints only programName if opts contains only undefined values', () => {
+  const opts = [undefined, undefined]
+
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = synopsis('deepThought')(opts)(style)
+
+  const txt = 'deepThought                             \n'
+
+  expect(res).toStrictEqual(txt)
+})
