@@ -131,7 +131,7 @@ test('optsDefs prints contradics, default, implies and required, in this order',
   expect(res).toStrictEqual(txt)
 })
 
-test('optsDefs does ot print different defaultValues format', () => {
+test('optsDefs does not print different defaultValues format', () => {
   const opts = [
     {key: 'a', types: [], args: ['-a'], desc: 'An a.', defaultValues: 'wrong format'},
     {key: 'b', types: [], args: ['-b'], desc: 'A b.', defaultValues: [1, 2]}
