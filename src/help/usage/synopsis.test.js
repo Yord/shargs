@@ -195,3 +195,20 @@ test('synopsis uses default line style if style is undefined', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('synopsis cuts programName if it is too long', () => {
+  const opts = [
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], required: true},
+    {key: 'help', types: [], args: ['-h', '--help']}
+  ]
+
+  const style = {
+    line: {width: 10}
+  }
+
+  const res = synopsis('deepThought')(opts)(style)
+
+  const txt = 'deepThough\n'
+
+  expect(res).toStrictEqual(txt)
+})
