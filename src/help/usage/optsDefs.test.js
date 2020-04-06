@@ -1,4 +1,4 @@
-const {optsDefs} = require('./optsDefs')
+const {optsDefs, optsDefsFrom} = require('./optsDefs')
 
 test('optsDefs README example works as expected', () => {
   const opts = [
@@ -203,6 +203,24 @@ test('optsDefs uses default style if style is undefined', () => {
               '    The question.                                                               \n' +
               '<politePhrase>...                                                               \n' +
               '    Polite phrases.                                                             \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
+test('optsDefsFrom correctly passes on first id', () => {
+  const opts = [
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.', required: true}
+  ]
+
+  const style = {
+    line2: {width: 40},
+    desc: {padStart: 4, width: 56}
+  }
+
+  const res = optsDefsFrom('line2')(opts)(style)
+
+  const txt = '-a, --answer=<number> [required]        \n' +
+              '    The answer.                                             \n'
 
   expect(res).toStrictEqual(txt)
 })
