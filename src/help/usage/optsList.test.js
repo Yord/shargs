@@ -128,3 +128,24 @@ test('optsList prints contradics, default, implies and required, in this order',
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsList does not print different defaultValues format', () => {
+  const opts = [
+    {key: 'a', types: [], args: ['-a'], desc: 'An a.', defaultValues: 'wrong format'},
+    {key: 'b', types: [], args: ['-b'], desc: 'A b.', defaultValues: [1, 2]}
+  ]
+
+  const style = {
+    cols: [
+      {width: 5},
+      {width: 70}
+    ]
+  }
+
+  const res = optsList(opts)(style)
+
+  const txt = '-a   An a.                                                                 \n' +
+              '-b   A b. [default: 1, 2]                                                  \n'
+
+  expect(res).toStrictEqual(txt)
+})
