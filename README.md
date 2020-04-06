@@ -222,7 +222,7 @@ Use the parser and the usage documentation in your program:
 <p>
 
 ```js
-const argv = ['-hq', 'What is the answer?', '-a', '5']
+const argv = process.argv.slice(2)
 
 const {errs, args} = deepThought(opts)(argv)
 
@@ -255,7 +255,7 @@ If `args` contains a `help` field, the `help` text is printed...
 
 <details>
 <summary>
-Run the program with <code>node deepThought.js -hq "What is the answer?" -a 5</code> and the following text is printed:
+Run the [program](https://github.com/Yord/shargs/blob/master/examples/deepThought.js) with <code>node deepThought.js -hq "What is the answer?" -a 5</code> and the following text is printed:
 
 <p>
 
