@@ -29,8 +29,8 @@ test('table generates expected string', () => {
 test('table does not print a column where all values are empty', () => {
   const style = {
     cols: [
-      {width: 0},
-      {width: 40}
+      {width: 10},
+      {width: 30}
     ]
   }
   
@@ -45,8 +45,58 @@ test('table does not print a column where all values are empty', () => {
     ]
   ])(style)
 
+  const txt = '          Prints the help.              \n' +
+              '          Prints the version.           \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
+test('table does not print a column when its width is 0 1/2', () => {
+  const style = {
+    cols: [
+      {width: 0},
+      {width: 40}
+    ]
+  }
+  
+  const res = table([
+    [
+      '-h, --help',
+      'Prints the help.'
+    ],
+    [
+      '-v, --version',
+      'Prints the version.'
+    ]
+  ])(style)
+
   const txt = 'Prints the help.                        \n' +
               'Prints the version.                     \n'
+
+  expect(res).toStrictEqual(txt)
+})
+
+test('table does not print a column when its width is 0 2/2', () => {
+  const style = {
+    cols: [
+      {width: 40},
+      {width: 0}
+    ]
+  }
+  
+  const res = table([
+    [
+      '-h, --help',
+      'Prints the help.'
+    ],
+    [
+      '-v, --version',
+      'Prints the version.'
+    ]
+  ])(style)
+
+  const txt = '-h, --help                              \n' +
+              '-v, --version                           \n'
 
   expect(res).toStrictEqual(txt)
 })

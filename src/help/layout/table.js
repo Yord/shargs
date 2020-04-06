@@ -18,7 +18,7 @@ const tableFrom = id => (itemsList = []) => (
       let rows = indexes.map(() => '')
 
       while (indexes.reduce((bool, index) => bool || ks[index] < (wordsList[index] || []).length, false)) {
-        const words = indexes.map(index => (wordsList[index] || [])[ks[index]] || '')
+        const words = indexes.map(index => ((wordsList[index] || [])[ks[index]] || '').slice(0, colWidths[index]))
 
         const fulls = indexes.map(index =>
           ks[index] >= (wordsList[index] || []).length || (rows[index] + words[index]).length > colWidths[index]

@@ -6,7 +6,7 @@ const id = opts => opts
 
 test('justArgs README example works', () => {
   const style = {
-    cols: [{width: 10, padEnd: 2}, {width: 28}]
+    cols: [{width: 18, padEnd: 2}, {width: 20}]
   }
   
   const opts = [
@@ -17,9 +17,9 @@ test('justArgs README example works', () => {
   
   const res = justArgs(['-a', '-h'])(optsList)(opts)(style)
 
-  const exp = '-a,         The answer. [number]        \n' +
-              '--answer                                \n' +
-              '-h, --help  Prints help.                \n'
+  const exp = '-a,                 The answer.         \n' +
+              '--answer=<number>                       \n' +
+              '-h, --help          Prints help.        \n'
 
   expect(res).toStrictEqual(exp)
 })

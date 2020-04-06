@@ -6,7 +6,7 @@ const id = opts => opts
 
 test('optsFilter README example works', () => {
   const style = {
-    cols: [{width: 10, padEnd: 2}, {width: 28}]
+    cols: [{width: 18, padEnd: 2}, {width: 20}]
   }
   
   const opts = [
@@ -17,9 +17,9 @@ test('optsFilter README example works', () => {
   
   const res = optsFilter(({types}) => types !== null)(optsList)(opts)(style)
 
-  const exp = '-a,         The answer. [number]        \n' +
-              '--answer                                \n' +
-              '--version   Prints version. [flag]      \n'
+  const exp = '-a,                 The answer.         \n' +
+              '--answer=<number>                       \n' +
+              '--version           Prints version.     \n'
 
   expect(res).toStrictEqual(exp)
 })

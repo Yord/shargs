@@ -145,7 +145,7 @@ Style the usage documentation:
 ```js
 const style = {
   line: {width: 80},
-  cols: [{width: 20}, {width: 60}]
+  cols: [{width: 25}, {width: 55}]
 }
 ```
 
@@ -164,9 +164,9 @@ With the current style, the following is rendered:
 ```bash
 deepThought [-q|--question] [-a|--answer] [-h|--help]                           
                                                                                 
--q, --question      A question. [string]                                        
--a, --answer        The (default) answer. [number]                              
--h, --help          Print this help message and exit. [flag]                    
+-q, --question=<string>  A question.                                            
+-a, --answer=<number>    The (default) answer.                                  
+-h, --help               Print this help message and exit.                      
                                                                                 
 Deep Thought was created to come up with the Answer to The Ultimate Question of 
 Life, the Universe, and Everything.
@@ -178,7 +178,7 @@ E.g. you may want to change the style to the following:
 ```js
 const style = {
   line: {width: 40},
-  cols: [{width: 10, padEnd: 2}, {width: 28}]
+  cols: [{width: 20}, {width: 20}]
 }
 
 const help = docs(opts)(style)
@@ -187,15 +187,15 @@ const help = docs(opts)(style)
 `help` now reads:
 
 ```bash
-deepThought [-q|--question]
-            [-a|--answer] [-h|--help]
-
--q,         A question. [string]
---question
--a,         The (default) answer.
---answer    [number]
--h, --help  Print this help message and
-            exit. [flag]
+deepThought [-q|--question]             
+            [-a|--answer] [-h|--help]   
+                                        
+-q,                 A question.         
+--question=<string>                     
+-a,                 The (default)       
+--answer=<number>   answer.             
+-h, --help          Print this help     
+                    message and exit.   
 
 Deep Thought was created to come up with
 the Answer to The Ultimate Question of
@@ -396,6 +396,11 @@ The following fields are available:
 <td><code><a href="#desc">desc</a></code></td>
 <td>string</td>
 <td><code>desc</code> is the user-facing description of a command-line option that is used by the automatic usage documentation generation.</td>
+</tr>
+<tr name="descArg">
+<td><code><a href="#descArg">descArg</a></code></td>
+<td>string</td>
+<td><code>descArg</code> is the user-facing description of an argument value that is used by the automatic usage documentation generation.</td>
 </tr>
 <tr name="implies">
 <td><code><a href="#implies">implies</a></code></td>
@@ -2677,13 +2682,11 @@ optsDefs(opts)(style)
 Result:
 
 ```bash
--a, --answer [number]                   
+-a, --answer=<number>                   
     The answer.                         
-
--h, --help [flag]                       
+-h, --help                              
     Prints help.                        
-
---version [flag]                        
+--version                               
     Prints version.                     
 ```
 
@@ -2717,8 +2720,8 @@ const opts = [
 
 const style = {
   cols: [
-    {width: 10, padEnd: 2},
-    {width: 28}
+    {width: 30},
+    {width: 25}
   ]
 }
 
@@ -2728,10 +2731,9 @@ optsList(opts)(style)
 Result:
 
 ```bash
--a,         The answer. [number]        
---answer                                
--h, --help  Prints help. [flag]         
---version   Prints version. [flag]      
+-a, --answer=<number>         The answer.              
+-h, --help                    Prints help.             
+--version                     Prints version.          
 ```
 
 </details>
@@ -2892,10 +2894,7 @@ const opts = [
 
 const style = {
   line: {width: 40},
-  cols: [
-    {width: 10, padEnd: 2},
-    {width: 28}
-  ]
+  cols: [{width: 20}, {width: 20}]
 }
 
 usage([
@@ -2913,10 +2912,10 @@ Result:
 deepThought [-a|--answer] [-h|--help]   
             [--version]                 
                                         
--a,         The answer. [number]        
---answer                                
--h, --help  Prints help. [flag]         
---version   Prints version. [flag]      
+-a,                 The answer.         
+--answer=<number>                       
+-h, --help          Prints help.        
+--version           Prints version.     
                                         
 Deep Thought was created to come up with
 the Answer.                             
@@ -3015,7 +3014,7 @@ Example:
 
 ```js
 const style = {
-  cols: [{width: 10, padEnd: 2}, {width: 28}]
+  cols: [{width: 20}, {width: 20}]
 }
 
 const opts = [
@@ -3030,9 +3029,9 @@ justArgs(['-a', '-h'])(optsList)(opts)(style)
 Result:
 
 ```bash
--a,         The answer [number]         
---answer                                
--h, --help  Prints help                 
+-a,                 The answer          
+--answer=<number>                       
+-h, --help          Prints help         
 ```
 
 </details>
@@ -3052,7 +3051,7 @@ Example:
 
 ```js
 const style = {
-  cols: [{width: 10, padEnd: 2}, {width: 28}]
+  cols: [{width: 20}, {width: 20}]
 }
 
 const opts = [
@@ -3067,9 +3066,9 @@ noCommands(optsList)(opts)(style)
 Result:
 
 ```bash
--a,         The answer [number]         
---answer                                
---version   Prints version [flag]       
+-a,                 The answer          
+--answer=<number>                       
+--version           Prints version      
 ```
 
 </details>
@@ -3139,9 +3138,9 @@ onlyFirstArg(optsList)(opts)(style)
 Result:
 
 ```bash
--a          The answer [number]         
+-a=<number> The answer                  
 -h          Prints help                 
---version   Prints version [flag]       
+--version   Prints version              
 ```
 
 </details>
@@ -3161,7 +3160,7 @@ Example:
 
 ```js
 const style = {
-  cols: [{width: 10, padEnd: 2}, {width: 28}]
+  cols: [{width: 20}, {width: 20}]
 }
 
 const opts = [
@@ -3178,9 +3177,9 @@ optsFilter(
 Result:
 
 ```bash
--a,         The answer [number]         
---answer                                
---version   Prints version [flag]       
+-a,                 The answer          
+--answer=<number>                       
+--version           Prints version      
 ```
 
 </details>
@@ -3217,9 +3216,9 @@ optsMap(
 Result:
 
 ```bash
--a          The answer [number]         
+-a=<number> The answer                  
 -h          Prints help                 
---version   Prints version [flag]       
+--version   Prints version              
 ```
 
 </details>

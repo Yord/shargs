@@ -1,61 +1,69 @@
 const {optsList, optsListFrom} = require('./optsList')
-const {command, flag, number} = require('../../options')
 
-test('optsList generates expected string', () => {
+test('optsList README example works as expected', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: [], args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.'}
   ]
-
+  
   const style = {
     cols: [
-      {width: 10, padEnd: 2},
-      {width: 28}
+      {width: 30},
+      {width: 25}
     ]
   }
   
   const res = optsList(opts)(style)
 
-  const txt = '-a,         The answer. [number]        \n' +
-              '--answer                                \n' +
-              '-h, --help  Prints help.                \n' +
-              '--version   Prints version. [flag]      \n'
-
+  const txt = '-a, --answer=<number>         The answer.              \n' +
+              '-h, --help                    Prints help.             \n' +
+              '--version                     Prints version.          \n'
+  
   expect(res).toStrictEqual(txt)
 })
 
-test('optsList keeps whitespaces if there are several', () => {
+test('optsList works as expected', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The  answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: null, args: ['answer'], desc: 'The answer.', required: true},
+    {key: 'foo', types: ['string'], args: ['-f', '--foo'], desc: 'Foo.', only: ['foo', 'bar'], required: false},
+    {key: 'baz', types: ['bool'], args: ['-b', '--baz'], desc: 'Baz.', descArg: 'baz', defaultValues: [42], implies: ['foo']},
+    {key: 'help', types: [], args: ['--help', 'help', '-h'], desc: 'Prints help.', defaultValues: [false]},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.', contradicts: ['help']},
+    {key: 'position', types: ['number', 'number'], args: ['--pos'], desc: 'The position.'},
+    {key: 'question', types: ['string'], required: true, desc: 'The question.'},
+    {key: 'politePhrase', types: null, variadic: true, desc: 'Polite phrases.'},
+    {now: 'something', completely: 'different'}
   ]
 
   const style = {
     cols: [
-      {width: 10, padEnd: 2},
-      {width: 28}
+      {width: 25},
+      {width: 50}
     ]
   }
-  
+
   const res = optsList(opts)(style)
 
-  const txt = '-a,         The  answer. [number]       \n' +
-              '--answer                                \n' +
-              '-h, --help  Prints help.                \n' +
-              '--version   Prints version. [flag]      \n'
+  const txt = 'answer                   The answer. [required]                            \n' +
+              '-f, --foo=<foo|bar>      Foo. [not required]                               \n' +
+              '-b, --baz=<baz>          Baz. [default: 42] [implies: -f, --foo]           \n' +
+              '-h, help, --help         Prints help. [default: false]                     \n' +
+              '--version                Prints version. [contradicts: --help, help, -h]   \n' +
+              '--pos=<number number>    The position.                                     \n' +
+              '<question>               The question. [required]                          \n' +
+              '<politePhrase>...        Polite phrases.                                   \n'
 
   expect(res).toStrictEqual(txt)
 })
 
-test('optsList prints the empty string if opts are empty', () => {
+test('optsList prints an empty string if opts are empty', () => {
   const opts = []
 
   const style = {
     cols: [
-      {width: 10, padEnd: 2},
-      {width: 28}
+      {width: 25},
+      {width: 50}
     ]
   }
   
@@ -66,11 +74,28 @@ test('optsList prints the empty string if opts are empty', () => {
   expect(res).toStrictEqual(txt)
 })
 
-test('optsList prints the empty string if opts is undefined', () => {
+test('optsList prints an empty string if opts has undefined entries', () => {
+  const opts = [undefined, undefined]
+
   const style = {
     cols: [
-      {width: 10, padEnd: 2},
-      {width: 28}
+      {width: 25},
+      {width: 50}
+    ]
+  }
+  
+  const res = optsList(opts)(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
+
+test('optsList prints an empty string if opts are undefined', () => {
+  const style = {
+    cols: [
+      {width: 25},
+      {width: 55}
     ]
   }
   
@@ -81,218 +106,131 @@ test('optsList prints the empty string if opts is undefined', () => {
   expect(res).toStrictEqual(txt)
 })
 
-test('optsList prints an empty line if opts has undefined entries', () => {
-  const opts = [undefined]
-
-  const style = {
-    cols: [
-      {width: 10, padEnd: 2},
-      {width: 28}
-    ]
-  }
-  
-  const res = optsList(opts)(style)
-
-  const txt = '                                        \n'
-
-  expect(res).toStrictEqual(txt)
-})
-
-test('optsList assumes an empty array if no args are given', () => {
+test('optsList prints contradics, default, implies and required, in this order', () => {
   const opts = [
-    number('answer', undefined, {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'a', types: [], args: ['-a'], desc: 'An a.', required: false, defaultValues: ['a'], contradicts: ['b'], implies: ['c']},
+    {key: 'b', types: [], args: ['-b'], desc: 'A b.'},
+    {key: 'c', types: [], args: ['-c'], desc: 'A c.'}
   ]
 
   const style = {
     cols: [
-      {width: 10, padEnd: 2},
-      {width: 28}
+      {width: 5},
+      {width: 70}
     ]
   }
-  
+
   const res = optsList(opts)(style)
 
-  const txt = '            The answer. [number]        \n' +
-              '-h, --help  Prints help.                \n' +
-              '--version   Prints version. [flag]      \n'
+  const txt = '-a   An a. [contradicts: -b] [default: a] [implies: -c] [not required]     \n' +
+              '-b   A b.                                                                  \n' +
+              '-c   A c.                                                                  \n'
 
   expect(res).toStrictEqual(txt)
 })
 
-test('optsList prints only the type if no desc is given', () => {
+test('optsList does not print different defaultValues format', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'a', types: [], args: ['-a'], desc: 'An a.', defaultValues: 'wrong format'},
+    {key: 'b', types: [], args: ['-b'], desc: 'A b.', defaultValues: [1, 2]}
   ]
 
   const style = {
     cols: [
-      {width: 10, padEnd: 2},
-      {width: 28}
+      {width: 5},
+      {width: 70}
     ]
   }
-  
+
   const res = optsList(opts)(style)
 
-  const txt = '-a,         [number]                    \n' +
-              '--answer                                \n' +
-              '-h, --help  Prints help.                \n' +
-              '--version   Prints version. [flag]      \n'
+  const txt = '-a   An a.                                                                 \n' +
+              '-b   A b. [default: 1, 2]                                                  \n'
 
   expect(res).toStrictEqual(txt)
 })
 
-test('optsList drops all input that have no cols in style', () => {
+test('optsList collects args from the same key', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The  answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'a', types: [], args: ['-a'], desc: 'An a.', implies: ['b']},
+    {key: 'b', types: [], args: ['-b'], desc: 'A b.'},
+    {key: 'b', types: [], args: ['--no-b'], desc: 'Not a b.'}
   ]
 
   const style = {
     cols: [
-      {width: 10, padEnd: 2},
+      {width: 10},
+      {width: 65}
     ]
   }
-  
+
   const res = optsList(opts)(style)
 
-  const txt = '-a,         \n' +
-              '--answer    \n' +
-              '-h, --help  \n' +
-              '--version   \n'
+  const txt = '-a        An a. [implies: -b, --no-b]                                      \n' +
+              '-b        A b.                                                             \n' +
+              '--no-b    Not a b.                                                         \n'
 
   expect(res).toStrictEqual(txt)
 })
 
-test('optsList prints the empty strings if style cols are empty', () => {
+test('optsList uses default style if style is undefined', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The  answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
-  ]
-
-  const style = {
-    cols: []
-  }
-  
-  const res = optsList(opts)(style)
-
-  const txt = ''
-
-  expect(res).toStrictEqual(txt)
-})
-
-test('optsList uses default cols if style cols are undefined', () => {
-  const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
-  ]
-
-  const style = {}
-  
-  const res = optsList(opts)(style)
-
-  const txt = '-a, --answer             The answer. [number]                                   \n' +
-              '-h, --help               Prints help.                                           \n' +
-              '--version                Prints version. [flag]                                 \n'
-
-  expect(res).toStrictEqual(txt)
-})
-
-test('optsList uses default cols if style is undefined', () => {
-  const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.', required: true},
+    {key: 'foo', types: ['string'], args: ['-f', '--foo'], desc: 'Foo.', only: ['foo', 'bar'], required: false},
+    {key: 'baz', types: ['bool'], args: ['-b', '--baz'], desc: 'Baz.', descArg: 'baz', defaultValues: [42], implies: ['foo']},
+    {key: 'help', types: [], args: ['--help', 'help', '-h'], desc: 'Prints help.', defaultValues: [false]},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.', contradicts: ['help']},
+    {key: 'question', types: ['string'], required: true, desc: 'The question.'},
+    {key: 'politePhrase', types: null, variadic: true, desc: 'Polite phrases.'}
   ]
 
   const res = optsList(opts)()
 
-  const txt = '-a, --answer             The answer. [number]                                   \n' +
-              '-h, --help               Prints help.                                           \n' +
-              '--version                Prints version. [flag]                                 \n'
-
-  expect(res).toStrictEqual(txt)
-})
-
-test('optsList prints extra lines in col even of no input is given', () => {
-  const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
-  ]
-
-  const style = {
-    cols: [
-      {width: 10, padEnd: 2},
-      {width: 23},
-      {width: 5}
-    ]
-  }
-  
-  const res = optsList(opts)(style)
-
-  const txt = '-a,         The answer. [number]        \n' +
-              '--answer                                \n' +
-              '-h, --help  Prints help.                \n' +
-              '--version   Prints version. [flag]      \n'
+  const txt = '-a, --answer=<number>    The answer. [required]                                 \n' +
+              '-f, --foo=<foo|bar>      Foo. [not required]                                    \n' +
+              '-b, --baz=<baz>          Baz. [default: 42] [implies: -f, --foo]                \n' +
+              '-h, help, --help         Prints help. [default: false]                          \n' +
+              '--version                Prints version. [contradicts: --help, help, -h]        \n' +
+              '<question>               The question. [required]                               \n' +
+              '<politePhrase>...        Polite phrases.                                        \n'
 
   expect(res).toStrictEqual(txt)
 })
 
 test('optsListFrom correctly passes on id', () => {
-  const id = 'test'
-  
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.', required: true}
   ]
 
   const style = {
-    [id]: [
-      {width: 10, padEnd: 2},
-      {width: 28}
+    cols2: [
+      {width: 40},
+      {width: 40}
     ]
   }
 
-  const res = optsListFrom(id)(opts)(style)
+  const res = optsListFrom('cols2')(opts)(style)
 
-  const txt = '-a,         The answer. [number]        \n' +
-              '--answer                                \n' +
-              '-h, --help  Prints help.                \n' +
-              '--version   Prints version. [flag]      \n'
+  const txt = '-a, --answer=<number>                   The answer. [required]                  \n'
 
   expect(res).toStrictEqual(txt)
 })
 
-test('optsListFrom with wrong id uses default style', () => {
-  const id1 = 'test'
-  const id2 = 'wrong'
-  
+test('optsListFrom uses cols if no id is defined', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.', required: true}
   ]
 
   const style = {
-    [id1]: [
-      {width: 10, padEnd: 2},
-      {width: 28}
+    cols: [
+      {width: 40},
+      {width: 40}
     ]
   }
 
-  const res = optsListFrom(id2)(opts)(style)
+  const res = optsListFrom()(opts)(style)
 
-  const txt = '-a, --answer             The answer. [number]                                   \n' +
-              '-h, --help               Prints help.                                           \n' +
-              '--version                Prints version. [flag]                                 \n'
+  const txt = '-a, --answer=<number>                   The answer. [required]                  \n'
 
   expect(res).toStrictEqual(txt)
 })

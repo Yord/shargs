@@ -6,7 +6,7 @@ const id = opts => opts
 
 test('optsMap README example works', () => {
   const style = {
-    cols: [{width: 10, padEnd: 2}, {width: 28}]
+    cols: [{width: 18, padEnd: 2}, {width: 20}]
   }
   
   const opts = [
@@ -17,9 +17,9 @@ test('optsMap README example works', () => {
   
   const res = optsMap(opt => ({...opt, args: opt.args.slice(0, 1)}))(optsList)(opts)(style)
 
-  const exp = '-a          The answer. [number]        \n' +
-              '-h          Prints help.                \n' +
-              '--version   Prints version. [flag]      \n'
+  const exp = '-a=<number>         The answer.         \n' +
+              '-h                  Prints help.        \n' +
+              '--version           Prints version.     \n'
 
   expect(res).toStrictEqual(exp)
 })
