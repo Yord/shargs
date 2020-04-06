@@ -42,8 +42,8 @@ Describe command-line options:
 
 ```js
 const opts = [
-  string('question', ['-q', '--question'], {desc: 'A question.'}),
-  number('answer', ['-a', '--answer'], {desc: 'The (default) answer.', only: [42]}),
+  string('question', ['-q', '--question'], {desc: 'A question.', required: true}),
+  number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: [42]}),
   flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
 ]
 ```
@@ -60,8 +60,8 @@ In fact, `opts` could have also been written as:
 
 ```js
 const opts = [
-  {key: 'question', types: ['string'], args: ['-q', '--question'], desc: 'A question.'},
-  {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The (default) answer.', only: [42]},
+  {key: 'question', types: ['string'], args: ['-q', '--question'], desc: 'A question.', required: true},
+  {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.', defaultValues: [42]},
   {key: 'help', types: [], args: ['-h', '--help'], desc: 'Print this help message and exit.'}
 ]
 ```
@@ -77,8 +77,8 @@ Declare a parser:
 ```js
 const deepThought = parser({
   argv: [splitShortOptions],
-  opts: [restrictToOnly, cast],
-  args: [clearRest]
+  opts: [requireOptions, cast],
+  args: [flagsAsBools]
 })
 ```
 
@@ -86,20 +86,20 @@ const deepThought = parser({
 </summary>
 
 Parsers have three different stages:
-`argv`, `opts`, and `args`.
+[`argv`](#argv-checks), [`opts`](#opts-checks), and [`args`](#args-checks).
 Each stage takes several parser functions that are used to transform input in the order they are defined.
 Two special stages transform data between the three stages:
-`toOpts` and `toArgs`.
+[`toOpts`](#toOpts) and [`toArgs`](#toArgs).
 These two stages take exactly one parser function that comes predefined, but can also be passed by the user.
 
 The `deepThought` parser consists of six parser functions that are applied in the following order:
 
-1.  `splitShortOptions`
-2.  `toOpts` (is called after `argv` and before `opts`)
-3.  `cast`
-4.  `restrictToOnly`
-5.  `toArgs` (is called after `opts` and before `args`)
-6.  `removeRest`
+1.  [`splitShortOptions`](#splitShortOptions)
+2.  [`toOpts`](#toOpts) (is called after `argv` and before `opts`)
+3.  [`requireOptions`](#requireOptions)
+4.  [`cast`](#cast)
+5.  [`toArgs`](#toArgs) (is called after `opts` and before `args`)
+6.  [`flagsAsBools`](#flagsAsBools)
 
 </details>
 
@@ -171,10 +171,10 @@ The style defines how the help is layouted.
 With the current style, the following is rendered:
 
 ```bash
-deepThought [-q|--question] [-a|--answer] [-h|--help]                           
+deepThought (-q|--question) [-a|--answer] [-h|--help]                           
                                                                                 
--q, --question=<string>  A question.                                            
--a, --answer=<number>    The (default) answer.                                  
+-q, --question=<string>  A question. [required]                                 
+-a, --answer=<number>    The answer. [default: 42]                              
 -h, --help               Print this help message and exit.                      
                                                                                 
 Deep Thought was created to come up with the Answer to The Ultimate Question of 
@@ -196,19 +196,19 @@ const help = docs(opts)(style)
 `help` now reads:
 
 ```bash
-deepThought [-q|--question]             
+deepThought (-q|--question)             
             [-a|--answer] [-h|--help]   
                                         
 -q,                 A question.         
---question=<string>                     
--a,                 The (default)       
---answer=<number>   answer.             
+--question=<string> [required]          
+-a,                 The answer.         
+--answer=<number>   [default: 42]       
 -h, --help          Print this help     
                     message and exit.   
-
+                                        
 Deep Thought was created to come up with
-the Answer to The Ultimate Question of
-Life, the Universe, and Everything.
+the Answer to The Ultimate Question of  
+Life, the Universe, and Everything.     
 ```
 
 Note, how shargs automatically takes care of line breaks and other formatting for you.
@@ -222,8 +222,7 @@ Use the parser and the usage documentation in your program:
 <p>
 
 ```js
-// node index.js --unknown -ha 42
-const argv = ['--unknown', '-ha', '42']
+const argv = ['-hq', 'What is the answer?', '-a', '5']
 
 const {errs, args} = deepThought(opts)(argv)
 
@@ -242,7 +241,7 @@ if (args.help) {
 Parsing `argv` returned the following `args`:
 
 ```json
-{"help": true, "answer": 42, "_": []}
+{"_": [], "help": true, "question": "What is the answer?", "answer": 5}
 ```
 
 Note, that `help` is `true`.
@@ -256,19 +255,19 @@ If `args` contains a `help` field, the `help` text is printed...
 
 <details>
 <summary>
-The following text is printed:
+Run the program with <code>node deepThought.js -hq "What is the answer?" -a 5</code> and the following text is printed:
 
 <p>
 
 ```bash
-deepThought [-q|--question] [-a|--answer] [-h|--help]                           
+deepThought (-q|--question) [-a|--answer] [-h|--help]                           
                                                                                 
--q, --question      A question. [string]                                        
--a, --answer        The (default) answer. [number]                              
--h, --help          Print this help message and exit. [flag]                    
+-q, --question=<string>  A question. [required]                                 
+-a, --answer=<number>    The answer. [default: 42]                              
+-h, --help               Print this help message and exit.                      
                                                                                 
 Deep Thought was created to come up with the Answer to The Ultimate Question of 
-Life, the Universe, and Everything.
+Life, the Universe, and Everything.                                             
 ```
 
 </p>
