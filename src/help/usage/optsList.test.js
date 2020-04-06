@@ -56,3 +56,20 @@ test('optsList works as expected', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsList prints an empty string if opts are empty', () => {
+  const opts = []
+
+  const style = {
+    cols: [
+      {width: 25},
+      {width: 50}
+    ]
+  }
+  
+  const res = optsList(opts)(style)
+
+  const txt = ''
+
+  expect(res).toStrictEqual(txt)
+})
