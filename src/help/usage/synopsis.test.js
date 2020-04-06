@@ -71,3 +71,17 @@ test('synopsis works without programName', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('synopsis prints only programName if opts are empty', () => {
+  const opts = []
+
+  const style = {
+    line: {width: 40}
+  }
+
+  const res = synopsis('deepThought')(opts)(style)
+
+  const txt = 'deepThought                             \n'
+
+  expect(res).toStrictEqual(txt)
+})
