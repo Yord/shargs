@@ -2682,13 +2682,11 @@ optsDefs(opts)(style)
 Result:
 
 ```bash
--a, --answer [number]                   
+-a, --answer=<number>                   
     The answer.                         
-
--h, --help [flag]                       
+-h, --help                              
     Prints help.                        
-
---version [flag]                        
+--version                               
     Prints version.                     
 ```
 
