@@ -215,3 +215,22 @@ test('optsListFrom correctly passes on id', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('optsListFrom uses cols if no id is defined', () => {
+  const opts = [
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.', required: true}
+  ]
+
+  const style = {
+    cols: [
+      {width: 40},
+      {width: 40}
+    ]
+  }
+
+  const res = optsListFrom()(opts)(style)
+
+  const txt = '-a, --answer=<number>                   The answer. [required]                  \n'
+
+  expect(res).toStrictEqual(txt)
+})
