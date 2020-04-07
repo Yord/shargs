@@ -1,7 +1,4 @@
 const toArgs = require('./index')
-const {array, bool, command, flag, number, string} = require('../../options')
-
-const numberBool = array(['number', 'bool'])
 
 const discard = () => () => ({
   args: {_: []}
@@ -11,12 +8,12 @@ test('toArgs transforms opts into args', () => {
   const obj = {
     opts: [
       {values: ['foo']},
-      {...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]},
-      {...numberBool('numBool', ['-n', '--nb']), values: [23, true]},
-      {...number('answer', ['-a', '--answer']), values: [42]},
-      {...command('help', ['-h', '--help']), values: ['foo', '--bar']},
-      {...bool('verbose', ['--verbose']), values: [false]},
-      {...flag('version', ['--version']), values: [1]},
+      {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]},
+      {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: [23, true]},
+      {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: [42]},
+      {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
+      {key: 'verbose', types: ['bool'], args: ['--verbose'], values: [false]},
+      {key: 'version', types: [], args: ['--version'], values: [1]},
       {values: ['bar']}
     ]
   }
@@ -55,7 +52,7 @@ test('toArgs removes double minus', () => {
 test('toArgs represents flags as counts', () => {
   const obj = {
     opts: [
-      {...flag('verbose', ['-v']), values: [1]}
+      {key: 'verbose', types: [], args: ['-v'], values: [1]}
     ]
   }
 
@@ -72,7 +69,7 @@ test('toArgs represents flags as counts', () => {
 test('toArgs represents flags as counts and uses 1 if the values are empty', () => {
   const obj = {
     opts: [
-      {...flag('verbose', ['-v']), values: []}
+      {key: 'verbose', types: [], args: ['-v'], values: []}
     ]
   }
 
@@ -89,9 +86,9 @@ test('toArgs represents flags as counts and uses 1 if the values are empty', () 
 test('toArgs counts the occurrences of flags', () => {
   const obj = {
     opts: [
-      {...flag('verbose', ['-v']), values: [1]},
-      {...flag('verbose', ['-v']), values: [1]},
-      {...flag('verbose', ['-v']), values: [2]}
+      {key: 'verbose', types: [], args: ['-v'], values: [1]},
+      {key: 'verbose', types: [], args: ['-v'], values: [1]},
+      {key: 'verbose', types: [], args: ['-v'], values: [2]}
     ]
   }
 
@@ -108,9 +105,9 @@ test('toArgs counts the occurrences of flags', () => {
 test('toArgs counts the occurrences of flags and has a negative count if the flag was reversed', () => {
   const obj = {
     opts: [
-      {...flag('verbose', ['-v']), values: [-1]},
-      {...flag('verbose', ['-v']), values: [-1]},
-      {...flag('verbose', ['-v']), values: [-1]}
+      {key: 'verbose', types: [], args: ['-v'], values: [-1]},
+      {key: 'verbose', types: [], args: ['-v'], values: [-1]},
+      {key: 'verbose', types: [], args: ['-v'], values: [-1]}
     ]
   }
 
