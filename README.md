@@ -1969,8 +1969,8 @@ The `deepThought` tool is no exception and should e.g. show the following text i
 ```bash
 deepThought ask [-q|--question] [-h|--help]                                     
                                                                                 
--q, --question      A question. [string]                                        
--h, --help          Print this help message and exit. [flag]                    
+-q, --question=<string>  A question.                                            
+-h, --help               Print this help message and exit.                      
                                                                                 
 Deep Thought was created to come up with the Answer to The Ultimate Question of 
 Life, the Universe, and Everything. 
@@ -1987,11 +1987,11 @@ The `deepThought ask` documentation could be written as follows in layout syntax
 
 ```js
 const askDocs = layout([
-  text('deepThought ask [-q|--question] [-h|--help]'),
+  text('deepThought ask (-q|--question) [-h|--help]'),
   br,
   table([
-    ['-q, --question', 'A question. [string]'],
-    ['-h, --help', 'Print this help message and exit. [flag]']
+    ['-q, --question=<string>', 'A question.'],
+    ['-h, --help', 'Print this help message and exit.']
   ]),
   br,
   text(
