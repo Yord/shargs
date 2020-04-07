@@ -1,6 +1,5 @@
 const verifyOpts = require('./verifyOpts')
 const {falseOptsRules, wrongOptsRulesType} = require('../../errors')
-const {string} = require('../../options')
 
 test('verifyOpts README example works', () => {
   const implies = (p, q) => !p || q
@@ -11,8 +10,8 @@ test('verifyOpts README example works', () => {
   )
 
   const opts = [
-    {...string('firstName', ['-f']), values: ['Logan']},
-    string('lastName', ['-l'])
+    {key: 'firstName', types: ['string'], args: ['-f'], values: ['Logan']},
+    {key: 'lastName', types: ['string'], args: ['-l']}
   ]
 
   const {errs} = verifyOpts(rules)({opts})
@@ -28,8 +27,8 @@ test('verifyOpts fails on wrong type', () => {
   const rules = 42
 
   const opts = [
-    {...string('firstName', ['-f']), values: ['Logan']},
-    string('lastName', ['-l'])
+    {key: 'firstName', types: ['string'], args: ['-f'], values: ['Logan']},
+    {key: 'lastName', types: ['string'], args: ['-l']}
   ]
 
   const {errs} = verifyOpts(rules)({opts})
