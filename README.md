@@ -499,6 +499,7 @@ const deepThought = parser(stages, {checks, parsers})
 ```
 
 `parser` takes a `stages` object with up to five keys.
+Stages are functions that change the parser tree and report errors.
 Each key is the name of a shargs parsing stage:
 
 1.  [`argv`](#argv-checks) functions modify arrays of command-line arguments.
@@ -509,7 +510,7 @@ Each key is the name of a shargs parsing stage:
 
 As a second parameter, it takes an object with two possible keys:
 A `checks` key with `argv`, `opts`, and `args` arrays, and a `parsers` key.
-Checks are parser stages that record errors if rules are violated.
+Checks are parser stages that report errors if rules are violated, but do never change the parser tree.
 `parsers` allows you to specify a different parser for each command.
 See the [Command-specific Parsers](#command-specific-parsers) section to learn more.
 
