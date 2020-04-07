@@ -1,5 +1,5 @@
 const failRest = require('./failRest')
-const {unexpectedArgument} = require('../../errors')
+const {unexpectedArgument} = require('../errors')
 
 test('failRest README example works', () => {
   const obj = {

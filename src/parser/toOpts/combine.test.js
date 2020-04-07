@@ -1,6 +1,6 @@
 const {anything, array, assert, base64, constant, integer, oneof, property} = require('fast-check')
 const combine = require('./combine')
-const {invalidTypes, nonMatchingArgumentTypes, invalidOptionsListInCombine} = require('../../errors')
+const {invalidTypes, nonMatchingArgumentTypes, invalidOptionsListInCombine} = require('../errors')
 
 test('combine combines all options and appends options if they have the same argument', () => {
   const optionsCombined = array(option(), 2, 20).map(opts => {

@@ -1,5 +1,5 @@
 const contradictOpts = require('./contradictOpts')
-const {contradictionDetected, wrongContradictsType} = require('../../errors')
+const {contradictionDetected, wrongContradictsType} = require('../errors')
 
 test('contradictOpts README example works', () => {
   const age      = {key: 'age', types: ['number'], args: ['-a'], contradicts: ['birthday'], values: ['27']}

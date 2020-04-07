@@ -1,4 +1,4 @@
-const {illegalKeyName} = require('../../errors')
+const {illegalKeyName} = require('../errors')
 
 module.exports = (opt = {}) => {
   const errs = []

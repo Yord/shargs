@@ -1,5 +1,5 @@
 const traverseOpts = require('./traverseOpts')
-const {didYouMean} = require('../../errors')
+const {didYouMean} = require('../errors')
 const and = require('../combinators/and')
 
 module.exports = traverseOpts(and(hasTypes, validValues, stringValue))((opt, _, opts) => {

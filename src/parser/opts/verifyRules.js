@@ -1,5 +1,5 @@
 const traverseOpts = require('./traverseOpts')
-const {falseRules, wrongRulesType} = require('../../errors')
+const {falseRules, wrongRulesType} = require('../errors')
 
 module.exports = traverseOpts(hasRules)((opt, _, opts) => {
   const errs = []

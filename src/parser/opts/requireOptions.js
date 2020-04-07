@@ -1,5 +1,5 @@
 const traverseOpts = require('./traverseOpts')
-const {requiredOptionFormat, requiredOptionMissing} = require('../../errors')
+const {requiredOptionFormat, requiredOptionMissing} = require('../errors')
 
 module.exports = traverseOpts(isRequired)(opt => {
   const errs = []

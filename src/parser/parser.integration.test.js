@@ -32,7 +32,7 @@ const traverseArgs      = require('./args/traverseArgs')
 const verifyArgs        = require('./args/verifyArgs')
 
 const complement = require('../options/decorators/complement')
-const {argumentIsNotABool, commandRequired, contradictionDetected, didYouMean, falseArgsRules, falseArgvRules, falseOptsRules, falseRules, implicationViolated, invalidDefaultValues, invalidValues, requiredOptionMissing, unexpectedArgument, valueRestrictionsViolated} = require('../errors')
+const {argumentIsNotABool, commandRequired, contradictionDetected, didYouMean, falseArgsRules, falseArgvRules, falseOptsRules, falseRules, implicationViolated, invalidDefaultValues, invalidValues, requiredOptionMissing, unexpectedArgument, valueRestrictionsViolated} = require('./errors')
 
 const noCommands = opts => opts.filter(({types}) => types !== null)
 

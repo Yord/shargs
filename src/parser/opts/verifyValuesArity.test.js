@@ -1,5 +1,5 @@
 const verifyValuesArity = require('./verifyValuesArity')
-const {invalidArity, invalidTypes, invalidValues} = require('../../errors')
+const {invalidArity, invalidTypes, invalidValues} = require('../errors')
 
 test('verifyValuesArity README example works', () => {
   const name = {key: 'name', types: ['string'], args: ['--name'], values: ['Charles', 'Francis']}

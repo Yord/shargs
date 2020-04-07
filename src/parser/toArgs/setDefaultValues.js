@@ -1,4 +1,4 @@
-const {invalidDefaultValues} = require('../../errors')
+const {invalidDefaultValues} = require('../errors')
 
 module.exports = ({errs = [], opts: OPTS = []} = {}) => {
   let args  = {_: []}

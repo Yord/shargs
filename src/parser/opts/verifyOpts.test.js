@@ -1,5 +1,5 @@
 const verifyOpts = require('./verifyOpts')
-const {falseOptsRules, wrongOptsRulesType} = require('../../errors')
+const {falseOptsRules, wrongOptsRulesType} = require('../errors')
 
 test('verifyOpts README example works', () => {
   const implies = (p, q) => !p || q

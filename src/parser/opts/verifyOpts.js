@@ -1,4 +1,4 @@
-const {falseOptsRules, wrongOptsRulesType} = require('../../errors')
+const {falseOptsRules, wrongOptsRulesType} = require('../errors')
 
 module.exports = (rules = () => true) => ({errs = [], opts = []} = {}) => {
   const errs2 = []

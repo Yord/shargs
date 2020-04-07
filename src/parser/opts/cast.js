@@ -1,5 +1,5 @@
 const traverseOpts = require('./traverseOpts')
-const {argumentIsNotABool, argumentIsNotANumber} = require('../../errors')
+const {argumentIsNotABool, argumentIsNotANumber} = require('../errors')
 const pipe = require('../combinators/pipe')
 const and  = require('../combinators/and')
 

@@ -1,5 +1,5 @@
 const setDefaultValues       = require('./setDefaultValues')
-const {invalidDefaultValues} = require('../../errors')
+const {invalidDefaultValues} = require('../errors')
 
 test('setDefaultValues works as expected', () => {
   const opts = [
