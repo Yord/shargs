@@ -1,5 +1,4 @@
 const optsMap = require('./optsMap')
-const {command, flag, number} = require('../../../options')
 const {optsList} = require('../optsList')
 
 const id = opts => opts
@@ -10,9 +9,9 @@ test('optsMap README example works', () => {
   }
   
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: null, args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.'}
   ]
   
   const res = optsMap(opt => ({...opt, args: opt.args.slice(0, 1)}))(optsList)(opts)(style)
@@ -26,9 +25,9 @@ test('optsMap README example works', () => {
 
 test('optsMap transforms opts', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    command('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: [], args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: null, args: ['--version'], desc: 'Prints version.'}
   ]
 
   const res = optsMap(
@@ -36,9 +35,9 @@ test('optsMap transforms opts', () => {
   )(id)(opts)
 
   const exp = [
-    number('answer', ['-a'], {desc: 'The answer.'}),
-    flag('help', ['-h'], {desc: 'Prints help.'}),
-    command('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a'], desc: 'The answer.'},
+    {key: 'help', types: [], args: ['-h'], desc: 'Prints help.'},
+    {key: 'version', types: null, args: ['--version'], desc: 'Prints version.'}
   ]
 
   expect(res).toStrictEqual(exp)
@@ -46,9 +45,9 @@ test('optsMap transforms opts', () => {
 
 test('optsMap does not transforms if function is undefined', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    command('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: [], args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: null, args: ['--version'], desc: 'Prints version.'}
   ]
 
   const res = optsMap()(id)(opts)
