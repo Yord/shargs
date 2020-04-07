@@ -4,18 +4,14 @@ const cast              = require('../opts/cast')
 const clearRest         = require('../args/clearRest')
 const toOpts            = require('../toOpts')
 const toArgs            = require('../toArgs')
-const {noKeyProvidedInOption} = require('../../errors')
-const {array, bool, command, flag, number, string} = require('../../options')
-
-const numberBool = array(['number', 'bool'])
 
 const opts = [
-  string('title', ['--title']),
-  numberBool('numBool', ['-n', '--nb']),
-  number('answer', ['-a', '--answer']),
-  command('help', ['-h', '--help'], {opts: [flag('bar', ['--bar'])]}),
-  bool('verbose', ['--verbose']),
-  flag('version', ['--version', '-V'])
+  {key: 'title', types: ['string'], args: ['--title']},
+  {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb']},
+  {key: 'answer', types: ['number'], args: ['-a', '--answer']},
+  {key: 'help', types: null, args: ['-h', '--help'], opts: [{key: 'bar', types: [], args: ['--bar']}]},
+  {key: 'verbose', types: ['bool'], args: ['--verbose']},
+  {key: 'version', types: [], args: ['--version', '-V']}
 ]
 
 test('parser transforms argv to args', () => {

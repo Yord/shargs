@@ -1,11 +1,8 @@
 const restrictToOnly = require('./restrictToOnly')
 const {valueRestrictionsViolated} = require('../../errors')
-const {array, bool, command, flag, number, string} = require('../../options')
-
-const numberBool = array(['number', 'bool'])
 
 test('restrictToOnly README example works', () => {
-  const answer = {...number('answer', ['-a', '--answer'], {only: [42]}), values: [23]}
+  const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], only: [42], values: [23]}
 
   const obj = {
     opts: [answer]
@@ -29,12 +26,12 @@ test('restrictToOnly README example works', () => {
 test('restrictToOnly works as expected on all types', () => {
   const obj = {
     opts: [
-      {...string('title', ['--title'], {only: ["The Hitchhiker's Guide to the Galaxy"]}), values: ["The Hitchhiker's Guide to the Galaxy"]},
-      {...numberBool('numBool', ['-n', '--nb'], {only: [23, true]}), values: [23, true]},
-      {...number('answer', ['-a', '--answer'], {only: [42]}), values: [42]},
-      {...command('help', ['-h', '--help'], {only: ['foo --bar']}), values: ['foo --bar']},
-      {...bool('verbose', ['--verbose'], {only: [false]}), values: [false]},
-      {...flag('version', ['--version'], {only: [1]}), values: [1]}
+      {key: 'title', types: ['string'], args: ['--title'], only: ["The Hitchhiker's Guide to the Galaxy"], values: ["The Hitchhiker's Guide to the Galaxy"]},
+      {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], only: [23, true], values: [23, true]},
+      {key: 'answer', types: ['number'], args: ['-a', '--answer'], only: [42], values: [42]},
+      {key: 'help', types: null, args: ['-h', '--help'], only: ['foo --bar'], values: ['foo --bar']},
+      {key: 'verbose', types: ['bool'], args: ['--verbose'], only: [false], values: [false]},
+      {key: 'version', types: [], args: ['--version'], only: [1], values: [1]}
     ]
   }
 
@@ -48,18 +45,18 @@ test('restrictToOnly works as expected on all types', () => {
 test('restrictToOnly does nothing if the only attribute is undefined or null', () => {
   const obj = {
     opts: [
-      {...string('title', ['--title'], {only: null}), values: ["The Hitchhiker's Guide to the Galaxy"]},
-      {...numberBool('numBool', ['-n', '--nb'], {only: null}), values: [23, true]},
-      {...number('answer', ['-a', '--answer'], {only: null}), values: [42]},
-      {...command('help', ['-h', '--help'], {only: null}), values: ['foo --bar']},
-      {...bool('verbose', ['--verbose'], {only: null}), values: [false]},
-      {...flag('version', ['--version'], {only: null}), values: [1]},
-      {...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]},
-      {...numberBool('numBool', ['-n', '--nb']), values: [23, true]},
-      {...number('answer', ['-a', '--answer']), values: [42]},
-      {...command('help', ['-h', '--help']), values: ['foo --bar']},
-      {...bool('verbose', ['--verbose']), values: [false]},
-      {...flag('version', ['--version']), values: [1]}
+      {key: 'title', types: ['string'], args: ['--title'], only: null, values: ["The Hitchhiker's Guide to the Galaxy"]},
+      {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], only: null, values: [23, true]},
+      {key: 'answer', types: ['number'], args: ['-a', '--answer'], only: null, values: [42]},
+      {key: 'help', types: [], args: ['-h', '--help'], only: null, values: ['foo --bar']},
+      {key: 'verbose', types: ['bool'], args: ['--verbose'], only: null, values: [false]},
+      {key: 'version', types: [], args: ['--version'], only: null, values: [1]},
+      {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]},
+      {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: [23, true]},
+      {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: [42]},
+      {key: 'help', types: null, args: ['-h', '--help'], values: ['foo --bar']},
+      {key: 'verbose', types: ['bool'], args: ['--verbose'], values: [false]},
+      {key: 'version', types: [], args: ['--version'], values: [1]}
     ]
   }
 
@@ -71,7 +68,7 @@ test('restrictToOnly does nothing if the only attribute is undefined or null', (
 })
 
 test('restrictToOnly works if values are undefined', () => {
-  const answer = number('answer', ['-a', '--answer'], {only: [42]})
+  const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], only: [42]}
 
   const obj = {
     opts: [answer]
@@ -85,7 +82,7 @@ test('restrictToOnly works if values are undefined', () => {
 })
 
 test('restrictToOnly works if values are null', () => {
-  const answer = {...number('answer', ['-a', '--answer'], {only: [42]}), values: null}
+  const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], only: [42], values: null}
   
   const obj = {
     opts: [answer]
@@ -101,10 +98,10 @@ test('restrictToOnly works if values are null', () => {
 test('restrictToOnly fails if a value is not allowed', () => {
   const obj = {
     opts: [
-      {...string('title', ['--title'], {only: ["Dirk Gently"]}), values: ["The Hitchhiker's Guide to the Galaxy"]},
-      {...number('answer', ['-a', '--answer'], {only: [23]}), values: [42]},
-      {...command('help', ['-h', '--help'], {only: ['--foo bar']}), values: ['foo --bar']},
-      {...bool('verbose', ['--verbose'], {only: [true]}), values: [false]}
+      {key: 'title', types: ['string'], args: ['--title'], only: ["Dirk Gently"], values: ["The Hitchhiker's Guide to the Galaxy"]},
+      {key: 'answer', types: ['number'], args: ['-a', '--answer'], only: [23], values: [42]},
+      {key: 'help', types: null, args: ['-h', '--help'], only: ['--foo bar'], values: ['foo --bar']},
+      {key: 'verbose', types: ['bool'], args: ['--verbose'], only: [true], values: [false]}
     ]
   }
 
@@ -123,7 +120,7 @@ test('restrictToOnly fails if a value is not allowed', () => {
 
 test('restrictToOnly fails on the first value of an array', () => {
   const only   = [42, true]
-  const option = {...numberBool('numBool', ['-n', '--nb'], {only}), values: [23, true]}
+  const option = {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], only, values: [23, true]}
 
   const obj = {opts: [option]}
 
@@ -144,7 +141,7 @@ test('restrictToOnly fails on the first value of an array', () => {
 
 test('restrictToOnly fails on the second value of an array', () => {
   const only   = [23, false]
-  const option = {...numberBool('numBool', ['-n', '--nb'], {only}), values: [23, true]}
+  const option = {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], only, values: [23, true]}
 
   const obj = {opts: [option]}
 

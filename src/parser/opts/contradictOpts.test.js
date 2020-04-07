@@ -1,10 +1,9 @@
 const contradictOpts = require('./contradictOpts')
 const {contradictionDetected, wrongContradictsType} = require('../../errors')
-const {number, string} = require('../../options')
 
 test('contradictOpts README example works', () => {
-  const age      = {...number('age', ['-a'], {contradicts: ['birthday']}), values: ['27']}
-  const birthday = {...string('birthday', ['-b'], {contradicts: ['age']}), values: ['27.7.1927']}
+  const age      = {key: 'age', types: ['number'], args: ['-a'], contradicts: ['birthday'], values: ['27']}
+  const birthday = {key: 'birthday', types: ['string'], args: ['-b'], contradicts: ['age'], values: ['27.7.1927']}
 
   const obj = {
     opts: [age, birthday]
@@ -21,8 +20,8 @@ test('contradictOpts README example works', () => {
 })
 
 test('contradictOpts works on default values', () => {
-  const age      = number('age', ['-a'], {contradicts: ['birthday'], defaultValues: ['27']})
-  const birthday = string('birthday', ['-b'], {contradicts: ['age'], defaultValues: ['27.7.1927']})
+  const age      = {key: 'age', types: ['number'], args: ['-a'], contradicts: ['birthday'], values: ['27']}
+  const birthday = {key: 'birthday', types: ['string'], args: ['-b'], contradicts: ['age'], values: ['27.7.1927']}
 
   const obj = {
     opts: [age, birthday]
@@ -39,8 +38,8 @@ test('contradictOpts works on default values', () => {
 })
 
 test('contradictOpts does not change anything if it passes', () => {
-  const age      = {...number('age', ['-a'], {contradicts: ['birthday']}), values: ['27']}
-  const birthday = string('birthday', ['-b'], {contradicts: ['age']})
+  const age      = {key: 'age', types: ['number'], args: ['-a'], contradicts: ['birthday'], values: ['27']}
+  const birthday = {key: 'birthday', types: ['string'], args: ['-b'], contradicts: ['age']}
 
   const obj = {
     opts: [age, birthday]
@@ -54,8 +53,8 @@ test('contradictOpts does not change anything if it passes', () => {
 })
 
 test('contradictOpts fails on wrong type', () => {
-  const age      = {...number('age', ['-a'], {contradicts: 'birthday'}), values: ['27']}
-  const birthday = string('birthday', ['-b'], {contradicts: ['age']})
+  const age      = {key: 'age', types: ['number'], args: ['-a'], contradicts: 'birthday', values: ['27']}
+  const birthday = {key: 'birthday', types: ['string'], args: ['-b'], contradicts: ['age']}
 
   const obj = {
     opts: [age, birthday]

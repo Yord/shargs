@@ -31,7 +31,6 @@ const mergeArgs         = require('./args/mergeArgs')
 const traverseArgs      = require('./args/traverseArgs')
 const verifyArgs        = require('./args/verifyArgs')
 
-const {bool, command, flag, number, string} = require('../options')
 const complement = require('../options/decorators/complement')
 const {argumentIsNotABool, commandRequired, contradictionDetected, didYouMean, falseArgsRules, falseArgvRules, falseOptsRules, falseRules, implicationViolated, invalidDefaultValues, invalidValues, requiredOptionMissing, unexpectedArgument, valueRestrictionsViolated} = require('../errors')
 
@@ -51,21 +50,29 @@ const filterErrs = keys => errs => errs.map(
 )
 
 const opts = [
-  flag('help', ['--help']),
-  flag('verbose', ['-v', '--verbose']),
-  flag('popcorn', ['-l', '--low-fat'], {reverse: true}),
-  bool('fantasy', ['-E', '--no-hobbits'], {reverse: true, implies: ['genre'], contradicts: ['popcorn']}),
-  string('genre', ['-g', '--genre'], {required: true}),
-  bool('smile', ['--smile'], {defaultValues: ['yes']}),
-  command('rate', ['rate'], {opts: [
-    number('stars', ['-s', '--stars'], {only: ['1', '2', '3', '4', '5']})
-  ]}),
-  string('query', ['-q', '--query'], {
+  {key: 'help', types: [], args: ['--help']},
+  {key: 'verbose', types: [], args: ['-v', '--verbose']},
+  {key: 'popcorn', types: [], args: ['-l', '--low-fat'], reverse: true},
+  {key: 'fantasy', types: ['bool'], args: ['-E', '--no-hobbits'], reverse: true, implies: ['genre'], contradicts: ['popcorn']},
+  {key: 'genre', types: ['string'], args: ['-g', '--genre'], required: true},
+  {key: 'smile', types: ['bool'], args: ['--smile'], defaultValues: ['yes']},
+  {
+    key: 'rate',
+    types: null,
+    args: ['rate'],
+    opts: [
+      {key: 'stars', types: ['number'], args: ['-s', '--stars'], only: ['1', '2', '3', '4', '5']}
+    ]
+  },
+  {
+    key: 'query',
+    types: ['string'],
+    args: ['-q', '--query'],
     rules: title => opts => (
       !title.values[0].includes('Supersize Me') ||
       opts.some(_ => _.key === 'popcorn' && _.values.count === 0)
     )
-  })
+  }
 ]
 
 const argv = [
@@ -1269,9 +1276,9 @@ test('parser works with complex stages setup', () => {
 // flagsAsNumbers
 
 test('parser works with complement', () => {
-  const tired     = bool('tired', ['-t', '--tired'], {defaultValues: ['true']})
+  const tired     = {key: 'tired', types: ['bool'], args: ['-t', '--tired'], defaultValues: ['true']}
   const notTired  = complement('--not-')(tired)
-  const badLuck   = flag('badLuck', ['--luck'], {reverse: true})
+  const badLuck   = {key: 'badLuck', types: [], args: ['--luck'], reverse: true}
   const noBadLuck = complement('--no-')(badLuck)
 
   const opts = [
@@ -1305,8 +1312,8 @@ test('parser works with complement', () => {
 })
 
 test('parser uses the first option if options are defined several times 1/3', () => {
-  const tired = bool('tired', ['-t', '--tired'])
-  const help  = command('help', ['help'])
+  const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
+  const help  = {key: 'help', types: null, args: ['help']}
 
   const opts = [
     tired,
@@ -1338,8 +1345,8 @@ test('parser uses the first option if options are defined several times 1/3', ()
 })
 
 test('parser uses the first option if options are defined several times 2/3', () => {
-  const tired = bool('tired', ['-t', '--tired'])
-  const help  = command('help', ['help'])
+  const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
+  const help  = {key: 'help', types: null, args: ['help']}
 
   const opts = [
     tired,
@@ -1371,8 +1378,8 @@ test('parser uses the first option if options are defined several times 2/3', ()
 })
 
 test('parser uses the first option if options are defined several times 3/3', () => {
-  const tired = bool('tired', ['-t', '--tired'])
-  const help  = command('help', ['help'])
+  const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
+  const help  = {key: 'help', types: null, args: ['help']}
 
   const opts = [
     tired,

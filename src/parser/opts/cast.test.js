@@ -1,30 +1,27 @@
 const cast = require('./cast')
 const {argumentIsNotABool, argumentIsNotANumber} = require('../../errors')
-const {array, bool, command, flag, number, string} = require('../../options')
-
-const numberBool = array(['number', 'bool'])
 
 test('cast README example works', () => {
   const obj = {
     opts: [
-      {...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]},
-      {...numberBool('numBool', ['-n', '--nb']), values: ['23', 'true']},
-      {...number('answer', ['-a', '--answer']), values: ['42']},
-      {...command('help', ['-h', '--help']), values: ['foo --bar']},
-      {...bool('verbose', ['--verbose']), values: ['false']},
-      {...flag('version', ['--version']), values: [1]}
+      {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]},
+      {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: ['23', 'true']},
+      {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']},
+      {key: 'help', types: null, args: ['-h', '--help'], values: ['foo --bar']},
+      {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['false']},
+      {key: 'version', types: [], args: ['--version'], values: [1]}
     ]
   }
 
   const {opts} = cast(obj)
 
   const exp = [
-    {...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]},
-    {...numberBool('numBool', ['-n', '--nb']), values: [23, true]},
-    {...number('answer', ['-a', '--answer']), values: [42]},
-    {...command('help', ['-h', '--help']), values: ['foo --bar']},
-    {...bool('verbose', ['--verbose']), values: [false]},
-    {...flag('version', ['--version']), values: [1]}
+    {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]},
+      {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: [23, true]},
+      {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: [42]},
+      {key: 'help', types: null, args: ['-h', '--help'], values: ['foo --bar']},
+      {key: 'verbose', types: ['bool'], args: ['--verbose'], values: [false]},
+      {key: 'version', types: [], args: ['--version'], values: [1]}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -33,14 +30,14 @@ test('cast README example works', () => {
 test('cast does not cast strings in values', () => {
   const obj = {
     opts: [
-      {...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]}
+      {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]}
     ]
   }
 
   const {opts} = cast(obj)
 
   const exp = [
-    {...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]}
+    {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -49,14 +46,14 @@ test('cast does not cast strings in values', () => {
 test('cast does not cast strings in defaultValues', () => {
   const obj = {
     opts: [
-      string('title', ['--title'], {defaultValues: ["The Hitchhiker's Guide to the Galaxy"]})
+      {key: 'title', types: ['string'], args: ['--title'], defaultValues: ["The Hitchhiker's Guide to the Galaxy"]}
     ]
   }
 
   const {opts} = cast(obj)
 
   const exp = [
-    string('title', ['--title'], {defaultValues: ["The Hitchhiker's Guide to the Galaxy"]})
+    {key: 'title', types: ['string'], args: ['--title'], defaultValues: ["The Hitchhiker's Guide to the Galaxy"]}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -65,14 +62,14 @@ test('cast does not cast strings in defaultValues', () => {
 test('cast casts numbers in values', () => {
   const obj = {
     opts: [
-      {...number('answer', ['-a', '--answer']), values: ['42']}
+      {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']}
     ]
   }
 
   const {opts} = cast(obj)
 
   const exp = [
-    {...number('answer', ['-a', '--answer']), values: [42]}
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: [42]}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -81,14 +78,14 @@ test('cast casts numbers in values', () => {
 test('cast casts numbers in defaultValues', () => {
   const obj = {
     opts: [
-      number('answer', ['-a', '--answer'], {defaultValues: ['42']})
+      {key: 'answer', types: ['number'], args: ['-a', '--answer'], defaultValues: ['42']}
     ]
   }
 
   const {opts} = cast(obj)
 
   const exp = [
-    number('answer', ['-a', '--answer'], {defaultValues: [42]})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], defaultValues: [42]}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -97,14 +94,14 @@ test('cast casts numbers in defaultValues', () => {
 test('cast casts numbers twice in values', () => {
   const obj = {
     opts: [
-      {...number('answer', ['-a', '--answer']), values: ['42']}
+      {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']}
     ]
   }
 
   const {opts} = cast(cast(obj))
 
   const exp = [
-    {...number('answer', ['-a', '--answer']), values: [42]}
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: [42]}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -113,14 +110,14 @@ test('cast casts numbers twice in values', () => {
 test('cast casts numbers twice in defaultValues', () => {
   const obj = {
     opts: [
-      number('answer', ['-a', '--answer'], {defaultValues: ['42']})
+      {key: 'answer', types: ['number'], args: ['-a', '--answer'], defaultValues: ['42']}
     ]
   }
 
   const {opts} = cast(cast(obj))
 
   const exp = [
-    number('answer', ['-a', '--answer'], {defaultValues: [42]})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], defaultValues: [42]}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -129,14 +126,14 @@ test('cast casts numbers twice in defaultValues', () => {
 test('cast does not change commands in values', () => {
   const obj = {
     opts: [
-      {...command('help', ['-h', '--help']), values: ['foo --bar']}
+      {key: 'help', types: null, args: ['-h', '--help'], values: ['foo --bar']}
     ]
   }
 
   const {opts} = cast(obj)
 
   const exp = [
-    {...command('help', ['-h', '--help']), values: ['foo --bar']}
+    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo --bar']}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -145,14 +142,14 @@ test('cast does not change commands in values', () => {
 test('cast does not change commands in defaultValues', () => {
   const obj = {
     opts: [
-      command('help', ['-h', '--help'], {defaultValues: ['foo --bar']})
+      {key: 'help', types: null, args: ['-h', '--help'], defaultValues: ['foo --bar']}
     ]
   }
 
   const {opts} = cast(obj)
 
   const exp = [
-    command('help', ['-h', '--help'], {defaultValues: ['foo --bar']})
+    {key: 'help', types: null, args: ['-h', '--help'], defaultValues: ['foo --bar']}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -161,14 +158,14 @@ test('cast does not change commands in defaultValues', () => {
 test('cast casts bools in values', () => {
   const obj = {
     opts: [
-      {...bool('verbose', ['--verbose']), values: ['false']}
+      {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['false']}
     ]
   }
 
   const {opts} = cast(obj)
 
   const exp = [
-    {...bool('verbose', ['--verbose']), values: [false]}
+    {key: 'verbose', types: ['bool'], args: ['--verbose'], values: [false]}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -177,14 +174,14 @@ test('cast casts bools in values', () => {
 test('cast casts bools in defaultValues', () => {
   const obj = {
     opts: [
-      bool('verbose', ['--verbose'], {defaultValues: ['false']})
+      {key: 'verbose', types: ['bool'], args: ['--verbose'], defaultValues: ['false']}
     ]
   }
 
   const {opts} = cast(obj)
 
   const exp = [
-    bool('verbose', ['--verbose'], {defaultValues: [false]})
+    {key: 'verbose', types: ['bool'], args: ['--verbose'], defaultValues: [false]}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -193,14 +190,14 @@ test('cast casts bools in defaultValues', () => {
 test('cast casts bools twice in values', () => {
   const obj = {
     opts: [
-      {...bool('verbose', ['--verbose']), values: ['false']}
+      {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['false']}
     ]
   }
 
   const {opts} = cast(cast(obj))
 
   const exp = [
-    {...bool('verbose', ['--verbose']), values: [false]}
+    {key: 'verbose', types: ['bool'], args: ['--verbose'], values: [false]}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -209,21 +206,21 @@ test('cast casts bools twice in values', () => {
 test('cast casts bools twice in defaultValues', () => {
   const obj = {
     opts: [
-      bool('verbose', ['--verbose'], {defaultValues: ['false']})
+      {key: 'verbose', types: ['bool'], args: ['--verbose'], defaultValues: ['false']}
     ]
   }
 
   const {opts} = cast(cast(obj))
 
   const exp = [
-    bool('verbose', ['--verbose'], {defaultValues: [false]})
+    {key: 'verbose', types: ['bool'], args: ['--verbose'], defaultValues: [false]}
   ]
 
   expect(opts).toStrictEqual(exp)
 })
 
 test('cast does not change flags in values', () => {
-  const version = {...flag('version', ['--version']), values: [1]}
+  const version = {key: 'version', types: [], args: ['--version'], values: [1]}
 
   const obj = {
     opts: [version]
@@ -237,7 +234,7 @@ test('cast does not change flags in values', () => {
 })
 
 test('cast does not change flags in defaultValues', () => {
-  const version = flag('version', ['--version'], {defaultValues: [1]})
+  const version = {key: 'version', types: [], args: ['--version'], defaultValues: [1]}
 
   const obj = {
     opts: [version]
@@ -251,7 +248,7 @@ test('cast does not change flags in defaultValues', () => {
 })
 
 test('cast does not change negative flags in values', () => {
-  const version = {...flag('version', ['--version']), values: [-1]}
+  const version = {key: 'version', types: [], args: ['--version'], values: [-1]}
 
   const obj = {
     opts: [version]
@@ -265,7 +262,7 @@ test('cast does not change negative flags in values', () => {
 })
 
 test('cast does not change negative flags in defaultValues', () => {
-  const version = flag('version', ['--version'], {defaultValues: [-1]})
+  const version = {key: 'version', types: [], args: ['--version'], defaultValues: [-1]}
 
   const obj = {
     opts: [version]
@@ -281,14 +278,14 @@ test('cast does not change negative flags in defaultValues', () => {
 test('cast casts arrays in values', () => {
   const obj = {
     opts: [
-      {...numberBool('numBool', ['-n', '--nb']), values: ['23', 'true']}
+      {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: ['23', 'true']}
     ]
   }
 
   const {opts} = cast(obj)
 
   const exp = [
-    {...numberBool('numBool', ['-n', '--nb']), values: [23, true]}
+    {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: [23, true]}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -297,14 +294,14 @@ test('cast casts arrays in values', () => {
 test('cast casts arrays in defaultValues', () => {
   const obj = {
     opts: [
-      numberBool('numBool', ['-n', '--nb'], {defaultValues: ['23', 'true']})
+      {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], defaultValues: ['23', 'true']}
     ]
   }
 
   const {opts} = cast(obj)
 
   const exp = [
-    numberBool('numBool', ['-n', '--nb'], {defaultValues: [23, true]})
+    {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], defaultValues: [23, true]}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -313,14 +310,14 @@ test('cast casts arrays in defaultValues', () => {
 test('cast casts arrays twice in values', () => {
   const obj = {
     opts: [
-      {...numberBool('numBool', ['-n', '--nb']), values: ['23', 'true']}
+      {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: ['23', 'true']}
     ]
   }
 
   const {opts} = cast(cast(obj))
 
   const exp = [
-    {...numberBool('numBool', ['-n', '--nb']), values: [23, true]}
+    {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: [23, true]}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -329,21 +326,21 @@ test('cast casts arrays twice in values', () => {
 test('cast casts arrays twice in defaultValues', () => {
   const obj = {
     opts: [
-      numberBool('numBool', ['-n', '--nb'], {defaultValues: ['23', 'true']})
+      {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], defaultValues: ['23', 'true']}
     ]
   }
 
   const {opts} = cast(cast(obj))
 
   const exp = [
-    numberBool('numBool', ['-n', '--nb'], {defaultValues: [23, true]})
+    {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], defaultValues: [23, true]}
   ]
 
   expect(opts).toStrictEqual(exp)
 })
 
 test('cast reports an error on wrong bools in values', () => {
-  const option = {...bool('verbose', ['--verbose']), values: ['foo']}
+  const option = {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['foo']}
 
   const obj = {opts: [option]}
 
@@ -357,7 +354,7 @@ test('cast reports an error on wrong bools in values', () => {
 })
 
 test('cast reports an error on wrong bools in defaultValues', () => {
-  const option = bool('verbose', ['--verbose'], {defaultValues: ['foo']})
+  const option = {key: 'verbose', types: ['bool'], args: ['--verbose'], defaultValues: ['foo']}
 
   const obj = {opts: [option]}
 
@@ -371,7 +368,7 @@ test('cast reports an error on wrong bools in defaultValues', () => {
 })
 
 test('cast reports an error on wrong numbers in values', () => {
-  const option = {...number('answer', ['-a', '--answer']), values: ['fourtytwo']}
+  const option = {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['fourtytwo']}
 
   const obj = {opts: [option]}
 
@@ -385,7 +382,7 @@ test('cast reports an error on wrong numbers in values', () => {
 })
 
 test('cast reports an error on wrong numbers in defaultValues', () => {
-  const option = number('answer', ['-a', '--answer'], {defaultValues: ['fourtytwo']})
+  const option = {key: 'answer', types: ['number'], args: ['-a', '--answer'], defaultValues: ['fourtytwo']}
 
   const obj = {opts: [option]}
 
@@ -413,21 +410,21 @@ test('cast ignores all options with types it does not know', () => {
 test('cast works if values is undefined', () => {
   const obj = {
     opts: [
-      number('answer', ['-a', '--answer'])
+      {key: 'answer', types: ['number'], args: ['-a', '--answer']}
     ]
   }
 
   const {opts} = cast(obj)
 
   const exp = [
-    number('answer', ['-a', '--answer'])
+    {key: 'answer', types: ['number'], args: ['-a', '--answer']}
   ]
 
   expect(opts).toStrictEqual(exp)
 })
 
 test('cast works if values is null', () => {
-  const answer = {...number('answer', ['-a', '--answer']), values: null}
+  const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: null}
 
   const obj = {
     opts: [answer]

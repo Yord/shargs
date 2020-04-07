@@ -1,17 +1,17 @@
-const setDefaultValues   = require('./setDefaultValues')
-const {array, command, flag, string} = require('../../options')
+const setDefaultValues       = require('./setDefaultValues')
 const {invalidDefaultValues} = require('../../errors')
-
-const numStr = array(['number', 'string'])
 
 test('setDefaultValues works as expected', () => {
   const opts = [
-    string('name', ['--name'], {defaultValues: ['Logan']}),
-    numStr('numStr', ['--ns'], {defaultValues: ['42', 'string']}),
-    command('ask', ['ask'], {
-      opts: [string('question', ['-q']), flag('jokingly', ['-j'], {defaultValues: [1]})],
+    {key: 'name', types: ['string'], args: ['--name'], defaultValues: ['Logan']},
+    {key: 'numStr', types: ['number', 'string'], args: ['--ns'], defaultValues: ['42', 'string']},
+    {
+      key: 'ask',
+      types: null,
+      args: ['ask'],
+      opts: [{key: 'question', types: ['string'], args: ['-q']}, {key: 'jokingly', types: [], args: ['-j'], defaultValues: [1]}],
       defaultValues: {jokingly: true}
-    })
+    }
   ]
 
   const {errs, args} = setDefaultValues({opts})
@@ -32,16 +32,19 @@ test('setDefaultValues works as expected', () => {
 })
 
 test('setDefaultValues reports an error if it has the wrong format', () => {
-  const name     = string('name', ['--name'], {defaultValues: []})
-  const birthday = string('birthday', ['-b'], {defaultValues: 'unknown'})
+  const name     = {key: 'name', types: ['string'], args: ['--name'], defaultValues: []}
+  const birthday = {key: 'birthday', types: ['string'], args: ['-b'], defaultValues: 'unknown'}
 
   const opts = [
     name,
     birthday,
-    command('ask', ['ask'], {
-      opts: [string('question', ['-q']), flag('jokingly', ['-j'], {defaultValues: [1]})],
+    {
+      key: 'ask',
+      types: null,
+      args: ['ask'],
+      opts: [{key: 'question', types: ['string'], args: ['-q']}, {key: 'jokingly', types: [], args: ['-j'], defaultValues: [1]}],
       defaultValues: {jokingly: true}
-    })
+    }
   ]
 
   const {errs, args} = setDefaultValues({opts})

@@ -1,5 +1,4 @@
 const optsFilter = require('./optsFilter')
-const {command, flag, number} = require('../../../options')
 const {optsList} = require('../optsList')
 
 const id = opts => opts
@@ -10,9 +9,9 @@ test('optsFilter README example works', () => {
   }
   
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: null, args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.'}
   ]
   
   const res = optsFilter(({types}) => types !== null)(optsList)(opts)(style)
@@ -26,9 +25,9 @@ test('optsFilter README example works', () => {
 
 test('optsFilter filters opts', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    command('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: [], args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: null, args: ['--version'], desc: 'Prints version.'}
   ]
 
   const res = optsFilter(({args}) => args.length > 1)(id)(opts)
@@ -40,9 +39,9 @@ test('optsFilter filters opts', () => {
 
 test('optsFilter does not filter if predicate is undefined', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    command('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: [], args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: null, args: ['--version'], desc: 'Prints version.'}
   ]
 
   const res = optsFilter()(id)(opts)

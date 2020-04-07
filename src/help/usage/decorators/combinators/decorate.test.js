@@ -1,15 +1,14 @@
 const decorate   = require('./decorate')
 const justArgs   = require('../justArgs')
 const noCommands = require('../noCommands')
-const {command, flag, number} = require('../../../../options')
 
 const id = opts => opts
 
 test('decorate combines decorators', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: null, args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.'}
   ]
 
   const res = decorate(

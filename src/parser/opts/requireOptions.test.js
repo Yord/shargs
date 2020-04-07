@@ -1,11 +1,8 @@
 const requireOptions = require('./requireOptions')
 const {requiredOptionFormat, requiredOptionMissing} = require('../../errors')
-const {array, bool, command, flag, number, string} = require('../../options')
-
-const numberBool = array(['number', 'bool'])
 
 test('requireOptions README example works', () => {
-  const answer = number('answer', ['-a', '--answer'], {required: true})
+  const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], required: true}
 
   const obj = {
     opts: [answer]
@@ -21,8 +18,8 @@ test('requireOptions README example works', () => {
 })
 
 test('requireOptions keeps all options in opts', () => {
-  const answer = number('answer', ['-a', '--answer'], {required: true})
-  const question = {...number('question', ['-q', '--question'], {required: true}), values: ['Are values fine?']}
+  const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], required: true}
+  const question = {key: 'question', types: ['number'], args: ['-q', '--question'], required: true, values: ['Are values fine?']}
 
   const obj = {
     opts: [answer, question]
@@ -43,12 +40,12 @@ test('requireOptions keeps all options in opts', () => {
 test('requireOptions works as expected on all types', () => {
   const obj = {
     opts: [
-      string('title', ['--title'], {required: true}),
-      numberBool('numBool', ['-n', '--nb'], {required: true}),
-      number('answer', ['-a', '--answer'], {required: true}),
-      command('help', ['-h', '--help'], {required: true}),
-      bool('verbose', ['--verbose'], {required: true}),
-      flag('version', ['--version'], {required: true})
+      {key: 'title', types: ['string'], args: ['--title'], required: true},
+      {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], required: true},
+      {key: 'answer', types: ['number'], args: ['-a', '--answer'], required: true},
+      {key: 'help', types: null, args: ['-h', '--help'], required: true},
+      {key: 'verbose', types: ['bool'], args: ['--verbose'], required: true},
+      {key: 'version', types: [], args: ['--version'], required: true}
     ]
   }
 
@@ -62,7 +59,7 @@ test('requireOptions works as expected on all types', () => {
 })
 
 test('requireOptions works if required is false', () => {
-  const answer = number('answer', ['-a', '--answer'], {required: false})
+  const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], required: false}
 
   const obj = {
     opts: [answer]
@@ -79,7 +76,7 @@ test('requireOptions works if required is false', () => {
 })
 
 test('requireOptions works if required is undefined', () => {
-  const answer = number('answer', ['-a', '--answer'])
+  const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer']}
 
   const obj = {
     opts: [answer]
@@ -96,7 +93,7 @@ test('requireOptions works if required is undefined', () => {
 })
 
 test('requireOptions works only with valid values', () => {
-  const answer = {...number('answer', ['-a', '--answer'], {required: true}), values: 42}
+  const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], required: true, values: 42}
 
   const obj = {
     opts: [answer]
