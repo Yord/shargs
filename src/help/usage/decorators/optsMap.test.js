@@ -17,7 +17,7 @@ test('optsMap README example works', () => {
   
   const res = optsMap(opt => ({...opt, args: opt.args.slice(0, 1)}))(optsList)(opts)(style)
 
-  const exp = '-a=<number>         The answer.         \n' +
+  const exp = '-a <number>         The answer.         \n' +
               '-h                  Prints help.        \n' +
               '--version           Prints version.     \n'
 

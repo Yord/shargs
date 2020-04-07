@@ -17,7 +17,7 @@ test('onlyFirstArg README example works', () => {
   
   const res = onlyFirstArg(optsList)(opts)(style)
 
-  const exp = '-a=<number>         The answer.         \n' +
+  const exp = '-a <number>         The answer.         \n' +
               '-h                  Prints help.        \n' +
               '--version           Prints version.     \n'
 

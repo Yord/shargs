@@ -24,10 +24,12 @@ function posArg ({key, variadic = false}) {
 }
 
 function listArgs (opt) {
-  return sortArgs(opt.args).join(', ') + valuesLabel(opt)
+  const {singleDash, others, doubleDash} = sortArgs(opt.args)
+  const commaList = [...singleDash, ...others, ...doubleDash].join(', ')
+  return commaList + valuesLabel(opt, doubleDash.length > 0)
 }
 
-function valuesLabel ({descArg = '', types, only = []}) {
+function valuesLabel ({descArg = '', types, only = []}, equalsSign) {
   const value = (
     Array.isArray(only) && only.length > 0        ? only.join('|') :
     typeof descArg === 'string' && descArg !== '' ? descArg :
@@ -38,7 +40,7 @@ function valuesLabel ({descArg = '', types, only = []}) {
                                                   : ''
   )
 
-  return value === '' ? '' : '=<' + value + '>'
+  return value === '' ? '' : (equalsSign ? '=' : ' ') + '<' + value + '>'
 }
 
 function descOpt (argsByKey) {
@@ -84,7 +86,7 @@ function sortArgs (args) {
     else                          others.push(arg)
   }
 
-  return [...singleDash, ...others, ...doubleDash]
+  return {singleDash, others, doubleDash}
 }
 
 function flatMap (f) {
