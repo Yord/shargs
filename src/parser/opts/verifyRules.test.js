@@ -1,5 +1,5 @@
 const verifyRules = require('./verifyRules')
-const {falseRules, wrongRulesType} = require('../../errors')
+const {falseRules, wrongRulesType} = require('../errors')
 
 test('verifyRules README example works', () => {
   const rules = firstName => opts => (

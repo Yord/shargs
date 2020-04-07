@@ -1,4 +1,4 @@
-const {commandRequired} = require('../../errors')
+const {commandRequired} = require('../errors')
 
 module.exports = ({errs = [], opts = []} = {}) => {
   const errs2 = []

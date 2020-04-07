@@ -1,4 +1,4 @@
-const {invalidRequiredPositionalArgument, invalidVariadicPositionalArgument, requiredPositionalArgumentMissing} = require('../../errors')
+const {invalidRequiredPositionalArgument, invalidVariadicPositionalArgument, requiredPositionalArgumentMissing} = require('../errors')
 
 module.exports = parsers => ({errs = [], opts: OPTS = []} = {}) => {
   let args  = {_: []}

@@ -1,5 +1,5 @@
 const traverseOpts = require('./traverseOpts')
-const {implicationViolated, wrongImpliesType} = require('../../errors')
+const {implicationViolated, wrongImpliesType} = require('../errors')
 const and = require('../combinators/and')
 
 module.exports = traverseOpts(and(doesImply, willHaveValues))((opt, _, opts) => {

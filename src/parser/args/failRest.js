@@ -1,5 +1,5 @@
 const traverseArgs = require('./traverseArgs')
-const {unexpectedArgument} = require('../../errors')
+const {unexpectedArgument} = require('../errors')
 
 module.exports = traverseArgs({
   array: ({key, val: array, errs, args}) => {

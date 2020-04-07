@@ -1,5 +1,5 @@
 const verifyArgv = require('./verifyArgv')
-const {falseArgvRules, wrongArgvRulesType} = require('../../errors')
+const {falseArgvRules, wrongArgvRulesType} = require('../errors')
 
 test('verifyArgv README example works', () => {
   const rules = argv => (

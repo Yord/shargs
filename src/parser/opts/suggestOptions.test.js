@@ -1,5 +1,5 @@
 const suggestOptions = require('./suggestOptions')
-const {didYouMean} = require('../../errors')
+const {didYouMean} = require('../errors')
 
 test('suggestOptions README example works', () => {
   const age = {key: 'age', types: ['number'], args: ['-a', '--age']}

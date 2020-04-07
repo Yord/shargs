@@ -1,5 +1,5 @@
 const traverseOpts = require('./traverseOpts')
-const {invalidBoolMapping} = require('../../errors')
+const {invalidBoolMapping} = require('../errors')
 const pipe = require('../combinators/pipe')
 const and  = require('../combinators/and')
 

@@ -1,5 +1,5 @@
 const restrictToOnly = require('./restrictToOnly')
-const {valueRestrictionsViolated} = require('../../errors')
+const {valueRestrictionsViolated} = require('../errors')
 
 test('restrictToOnly README example works', () => {
   const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], only: [42], values: [23]}

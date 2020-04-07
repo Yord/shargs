@@ -1,5 +1,5 @@
 const traverseOpts = require('./traverseOpts')
-const {invalidArity, invalidTypes, invalidValues} = require('../../errors')
+const {invalidArity, invalidTypes, invalidValues} = require('../errors')
 const pipe = require('../combinators/pipe')
 
 module.exports = pipe(

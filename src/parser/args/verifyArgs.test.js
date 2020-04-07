@@ -1,5 +1,5 @@
 const verifyArgs = require('./verifyArgs')
-const {falseArgsRules, wrongArgsRulesType} = require('../../errors')
+const {falseArgsRules, wrongArgsRulesType} = require('../errors')
 
 test('verifyArgs README example works', () => {
   const rules = args => (

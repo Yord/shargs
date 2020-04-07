@@ -1,4 +1,4 @@
-const {invalidTypes, nonMatchingArgumentTypes, invalidOptionsListInCombine} = require('../../errors')
+const {invalidTypes, nonMatchingArgumentTypes, invalidOptionsListInCombine} = require('../errors')
 
 module.exports = (...ARGUMENTS) => {
   let errs   = []

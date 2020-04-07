@@ -1,5 +1,5 @@
 const requireOptions = require('./requireOptions')
-const {requiredOptionFormat, requiredOptionMissing} = require('../../errors')
+const {requiredOptionFormat, requiredOptionMissing} = require('../errors')
 
 test('requireOptions README example works', () => {
   const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], required: true}

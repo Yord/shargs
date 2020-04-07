@@ -1,5 +1,5 @@
 const cast = require('./cast')
-const {argumentIsNotABool, argumentIsNotANumber} = require('../../errors')
+const {argumentIsNotABool, argumentIsNotANumber} = require('../errors')
 
 test('cast README example works', () => {
   const obj = {

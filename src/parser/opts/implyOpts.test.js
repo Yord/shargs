@@ -1,5 +1,5 @@
 const implyOpts = require('./implyOpts')
-const {implicationViolated, wrongImpliesType} = require('../../errors')
+const {implicationViolated, wrongImpliesType} = require('../errors')
 
 test('implyOpts README example works', () => {
   const age      = {key: 'age', types: ['number'], args: ['-a'], implies: ['birthday'], values: ['27']}
