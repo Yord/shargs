@@ -2000,28 +2000,730 @@ Repeated `parser` calls only occur in the presence of `command` options.
 This means, if you do not use `command` options, you do not need to separate checks and stages.
 In such cases, you may simply add your checks to `parser`'s stages parameter and get the same results.
 
-### Usage Documentation
+### Automatic Usage Documentation Generation
 
-Every decent command-line tools has a usage documentation.
-The `deepThought` tool is no exception and should e.g. show the following text if the `--help` flag is present:
+Shargs offers a highly configurable variant of automatic usage documentation generation,
+with the goal to **give developers as much control over the layout as possible**.
+This means:
 
-```bash
-deepThought ask [-q|--question] [-h|--help]                                     
-                                                                                
--q, --question=<string>  A question.                                            
--h, --help               Print this help message and exit.                      
-                                                                                
-Deep Thought was created to come up with the Answer to The Ultimate Question of 
-Life, the Universe, and Everything. 
++   You may define your own usage documentation layout using shargs' usage and layout funtions.
++   You may provide your own styles and control the number of columns on a component basis.
++   You are able to easily mix in your own functions into shargs' layout functions.
++   You may decide to completely opt-out of shargs' approach and roll your own usage documentation.
+
+Defining your own usage documentation layout is as simple as:
+
+```js
+const docs = usage([
+  synopsis('deepThought'),
+  space,
+  optsList,
+  space,
+  note(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+])
 ```
 
-Writing the usage documentation yourself is not a good idea,
-because you would have to update it every time a command-line option is added or changed.
-This is why shargs takes care for generating usage documentation for you.
+Here, `docs` is a declarative description of a usage documentation using shargs usage functions.
+The `synopsis` gives a high level overview over all possible arguments
+and the `optsList` lists all options with more details.
+Shargs provides the following declarative usage functions:
 
-#### Layout Documentation DSL
+<table>
+<tr>
+<th>Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description (and Example)</th>
+</tr>
+<tr name="note">
+<td><code name="noteFrom"><a href="#note">note</a>(string)(opts)(style)</code><br /><code><a href="#noteFrom">noteFrom</a>(id)(string)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints the string with a line break at the end. Takes the line width from style and pads with spaces at the end. If the string is too long to fit the line's width, it is broken up into words, and all remaining words are put into the following line.
+</summary>
 
-Shargs uses its own markup language for formatting text in the terminal called layout functions DSL.
+<br />
+
+```js
+const note = noteFrom('line')
+```
+
+Example:
+
+```js
+const opts = []
+
+const style = {
+  line: {width: 40}
+}
+
+note(
+  'Deep Thought was created to come up with the Answer.'
+)(opts)(style)
+```
+
+Result:
+
+```bash
+Deep Thought was created to come up with
+the Answer.                             
+```
+
+</details>
+</td>
+</tr>
+<tr name="notes">
+<td><code name="notesFrom"><a href="#notes">notes</a>(strings)(opts)(style)</code><br /><code><a href="#notesFrom">notesFrom</a>(id)(strings)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints several strings using the <code>note</code> function for each.
+</summary>
+
+<br />
+
+```js
+const notes = notesFrom('line')
+```
+
+Example:
+
+```js
+const opts = []
+
+const style = {
+  line: {width: 40}
+}
+
+notes([
+  'Deep Thought answered',
+  'The Ultimate Question.'
+])(opts)(style)
+```
+
+Result:
+
+```bash
+Deep Thought answered                   
+The Ultimate Question.                  
+```
+
+</details>
+</td>
+</tr>
+<tr name="optsDefs">
+<td><code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>(opts)(style)</code><br /><code><a href="#optsDefsFrom">optsDefsFrom</a>(id1, id2)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints a definition list, with the command-line option <code>args</code> as title
+and the <code>desc</code> key as text.
+</summary>
+
+<br />
+
+```js
+const optsDefs = optsDefsFrom('line', 'desc')
+```
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  line: {width: 40},
+  desc: {padStart: 4, width: 36}
+}
+
+optsDefs(opts)(style)
+```
+
+Result:
+
+```bash
+-a, --answer=<number>                   
+    The answer.                         
+-h, --help                              
+    Prints help.                        
+--version                               
+    Prints version.                     
+```
+
+</details>
+</td>
+</tr>
+<tr name="optsList">
+<td><code name="optsListFrom"><a href="#optsList">optsList</a>(opts)(style)</code><br /><code><a href="#optsListFrom">optsListFrom</a>(id)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints a table with two columns:
+The command-line option's <code>args</code> in the left,
+and the <code>desc</code> key in the right column.
+</summary>
+
+<br />
+
+```js
+const optsList = optsListFrom('cols')
+```
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  cols: [
+    {width: 30},
+    {width: 25}
+  ]
+}
+
+optsList(opts)(style)
+```
+
+Result:
+
+```bash
+-a, --answer=<number>         The answer.              
+-h, --help                    Prints help.             
+--version                     Prints version.          
+```
+
+</details>
+</td>
+</tr>
+<tr name="space">
+<td><code name="spaceFrom"><a href="#space">space</a>(opts)(style)</code><br /><code><a href="#spaceFrom">spaceFrom</a>(id)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Introduces a single blank line.
+</summary>
+
+<br />
+
+```js
+const space = spaceFrom('line')
+```
+
+Example:
+
+```js
+const opts = []
+
+const style = {
+  line: {width: 40}
+}
+
+usage([
+  note('Deep Thought answered'),
+  space,
+  note('The Ultimate Question.')
+])(opts)(style)
+```
+
+Result:
+
+```bash
+Deep Thought answered                   
+                                        
+The Ultimate Question.                  
+```
+
+</details>
+</td>
+</tr>
+<tr name="spaces">
+<td><code name="spacesFrom"><a href="#spaces">spaces</a>(length)(opts)(style)</code><br /><code><a href="#spacesFrom">spacesFrom</a>(id)(length)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Introduces several blank lines with the number defined by the length parameter.
+</summary>
+
+<br />
+
+```js
+const spaces = spacesFrom('line')
+```
+
+Example:
+
+```js
+const opts = []
+
+const style = {
+  line: {width: 40}
+}
+
+usage([
+  note('Deep Thought answered'),
+  spaces(2),
+  note('The Ultimate Question.')
+])(opts)(style)
+```
+
+Result:
+
+```bash
+Deep Thought answered                   
+                                        
+                                        
+The Ultimate Question.                  
+```
+
+</details>
+</td>
+</tr>
+<tr name="synopsis">
+<td><code name="synopsisFrom"><a href="#synopsis">synopsis</a>(start, end)(opts)(style)</code><br /><code><a href="#synopsisFrom">synopsisFrom</a>(id)(start, end)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints a command's synopsis:
+The <code>start</code> string is printed first, the command-line option's <code>args</code> next,
+followed by the <code>end</code> string.
+</summary>
+
+<br />
+
+```js
+const synopsis = synopsisFrom('cols')
+```
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  line: {width: 40}
+}
+
+synopsis('deepThought')(opts)(style)
+```
+
+Result:
+
+```bash
+deepThought [-a|--answer] [-h|--help]   
+            [--version]                 
+```
+
+</details>
+</td>
+</tr>
+</table>
+
+#### Usage Combinators
+
+Several usage functions may be combined to form a new usage function.
+Combinators let you build more complex components from simple components, like e.g.:
+
+```js
+const simpleOptsDesc = usageMap(
+  opt => layout([
+    text(opt.args.join(', ')),
+    text(opt.desc)
+  ])
+)
+```
+
+`simpleOptsDesc` prints a `text` with a comma-separated list of [`args`](#args) followed by the [`desc`](#desc) for each option in `opts`.
+The [`layout`](#layout) and [`text`](#text) functions are introduced below in the section on [layout functions](#layout-functions).
+The following usage combinators are available:
+
+<table>
+<tr>
+<th>Usage&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description (and Example)</th>
+</tr>
+<tr name="usage">
+<td><code><a href="#usage">usage</a>(functions)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Groups several usage DSL functions together.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  line: {width: 40},
+  cols: [{width: 20}, {width: 20}]
+}
+
+usage([
+  synopsis('deepThought'),
+  space,
+  optsList,
+  space,
+  note('Deep Thought was created to come up with the Answer.')
+])(opts)(style)
+```
+
+Result:
+
+```bash
+deepThought [-a|--answer] [-h|--help]   
+            [--version]                 
+                                        
+-a,                 The answer.         
+--answer=<number>                       
+-h, --help          Prints help.        
+--version           Prints version.     
+                                        
+Deep Thought was created to come up with
+the Answer.                             
+```
+
+</details>
+</td>
+</tr>
+<tr name="usageMap">
+<td><code><a href="#usageMap">usageMap</a>(f)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes an options list and a function <code>f</code>,
+which is applied to each option and is expected to return a layout function.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  line: {width: 40},
+  desc: {padStart: 3, width: 37}
+}
+
+usageMap(({args, desc}) => layout([
+  text(args.join(', ')),
+  textFrom('desc')(desc)
+]))(opts)(style)
+```
+
+Result:
+
+```bash
+-a, --answer                            
+   The answer.                          
+-h, --help                              
+   Prints help.                         
+--version                               
+   Prints version.                      
+```
+
+</details>
+</td>
+</tr>
+</table>
+
+#### Usage Decorators
+
+Sometimes you want to pass only a portion of the command-line options to a usage function.
+Shargs has usage decorators for that:
+
+```js
+const decoratedDocs = usage([
+  decorate(noCommands, onlyFirstArg)(synopsis('deepThought')),
+  space,
+  onlyCommands(optsDefs),
+  space,
+  noCommands(optsList),
+  space,
+  note(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+])
+```
+
+`decoratedDocs` displays [`commands`](#commands) in a separate component than other command-line options
+by using the `onlyCommands` and `noCommands` decorators to filter relevant options.
+Shargs provides the following usage decorators:
+
+<table>
+<tr>
+<th>Usage&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="justArgs">
+<td><code><a href="#justArgs">justArgs</a>(array)(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Takes an array of args and keeps only those <code>opts</code> that have an arg in the args <code>array</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 20}, {width: 20}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+justArgs(['-a', '-h'])(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-a,                 The answer          
+--answer=<number>                       
+-h, --help          Prints help         
+```
+
+</details>
+</td>
+</tr>
+<tr name="noCommands">
+<td><code><a href="#noCommands">noCommands</a>(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Filters out all commands from <code>opts</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 20}, {width: 20}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+noCommands(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-a,                 The answer          
+--answer=<number>                       
+--version           Prints version      
+```
+
+</details>
+</td>
+</tr>
+<tr name="onlyCommands">
+<td><code><a href="#onlyCommands">onlyCommands</a>(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Keeps only commands in <code>opts</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 10, padEnd: 2}, {width: 28}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+onlyCommands(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-h, --help  Prints help                 
+```
+
+</details>
+</td>
+</tr>
+<tr name="onlyFirstArg">
+<td><code><a href="#onlyFirstArg">onlyFirstArg</a>(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Keeps only the first arg from each opt.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 10, padEnd: 2}, {width: 28}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+onlyFirstArg(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-a=<number> The answer                  
+-h          Prints help                 
+--version   Prints version              
+```
+
+</details>
+</td>
+</tr>
+<tr name="optsFilter">
+<td><code><a href="#optsFilter">optsFilter</a>(p)(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Applies <code>filter</code> to the <code>opts</code> array using a predicate <code>p</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 20}, {width: 20}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+optsFilter(
+  ({types}) => types !== null
+)(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-a,                 The answer          
+--answer=<number>                       
+--version           Prints version      
+```
+
+</details>
+</td>
+</tr>
+<tr name="optsMap">
+<td><code><a href="#optsMap">optsMap</a>(f)(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Applies <code>map</code> to the <code>opts</code> array using a function <code>f</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 10, padEnd: 2}, {width: 28}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+optsMap(
+  opt => ({...opt, args: opt.args.slice(0, 1)})
+)(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-a=<number> The answer                  
+-h          Prints help                 
+--version   Prints version              
+```
+
+</details>
+</td>
+</tr>
+</table>
+
+Usage decorator functions can be combined with the following usage decorator combinators:
+
+<table>
+<tr>
+<th>Usage&nbsp;Decorator&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="decorate">
+<td><code><a href="#decorate">decorate</a>(decorators)(usageFunction)(opts)</code></td>
+<td>Combines several usage decorators to one decorator.</td>
+</tr>
+</table>
+
+#### Layout Functions
+
+Usage functions are written in a lower level markup language for formatting text in the terminal called layout functions.
 The `deepThought ask` documentation could be written as follows in layout syntax:
 
 ```js
@@ -2040,7 +2742,9 @@ const askDocs = layout([
 ])
 ```
 
-Shargs includes the following layout functions:
+If you just want to define a usage documentation, you do not need to know about layout functions.
+They only come into play, if you want to write your own usage functions.
+Shargs provides the following layout functions:
 
 <table>
 <tr>
@@ -2423,7 +3127,16 @@ To The Ultimate Question.
 </tr>
 </table>
 
-Layout functions can be combined with the following layout combinators:
+#### Layout Combinators
+
+Like usage functions, several layout functions may be combined into more complex layout functions using layout combinators.
+`textsFrom` is a good example:
+
+```js
+const textsFrom = id => layoutMap(textFrom(id))
+```
+
+Shargs provides the following layout combinators:
 
 <table>
 <tr>
@@ -2532,10 +3245,11 @@ Prints the help.
 </tr>
 </table>
 
-#### Style DSL
+#### Style
 
-Note how all DSL functions take a style argument as last parameter.
-The following is a minimum definition of `style` for `deepThought`:
+Usage styles are applied to usage and layout functions to format the generated text snippets.
+Styles may define the [`width`](#width), [`padStart`](#padStart), and [`padEnd`](#padEnd) of the different parts of your usage documentation.
+A minimum definition of `style` for `deepThought` may be:
 
 ```js
 const style = {
@@ -2544,7 +3258,7 @@ const style = {
 }
 ```
 
-It defines style objects for two ids: `line` and `cols`.
+`style` defines style objects for two ids: `line` and `cols`.
 These two ids are the default used by the layout functions to define, how lines and columns should be printed.
 However, any valid key may be used as an id, if it is passed as a string to the `id` parameter of any `*From` function.
 A style object may have the following parameters:
@@ -2569,702 +3283,6 @@ A style object may have the following parameters:
 <td><code><a href="#width">width</a></code></td>
 <td>number</td>
 <td>Defines the length of a line before a line break is introduced.</td>
-</tr>
-</table>
-
-#### Usage Documentation DSL
-
-The usage DSL extends the layout DSL by providing functions that have access to command-line options.
-Using this DSL makes defining usage documentation for command-line options very declarative:
-
-```js
-const docs = usage([
-  synopsis('deepThought'),
-  space,
-  optsList,
-  space,
-  note(
-    'Deep Thought was created to come up with the Answer to ' +
-    'The Ultimate Question of Life, the Universe, and Everything.'
-  )
-])
-```
-
-Note how the usage DSL needs notably less code than the layout DSL,
-since its functions have access to the command-line options.
-Shargs includes the following usage functions:
-
-<table>
-<tr>
-<th>Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description (and Example)</th>
-</tr>
-<tr name="note">
-<td><code name="noteFrom"><a href="#note">note</a>(string)(opts)(style)</code><br /><code><a href="#noteFrom">noteFrom</a>(id)(string)(opts)(style)</code></td>
-<td>
-<details>
-<summary>
-Prints the string with a line break at the end. Takes the line width from style and pads with spaces at the end. If the string is too long to fit the line's width, it is broken up into words, and all remaining words are put into the following line.
-</summary>
-
-<br />
-
-```js
-const note = noteFrom('line')
-```
-
-Example:
-
-```js
-const opts = []
-
-const style = {
-  line: {width: 40}
-}
-
-note(
-  'Deep Thought was created to come up with the Answer.'
-)(opts)(style)
-```
-
-Result:
-
-```bash
-Deep Thought was created to come up with
-the Answer.                             
-```
-
-</details>
-</td>
-</tr>
-<tr name="notes">
-<td><code name="notesFrom"><a href="#notes">notes</a>(strings)(opts)(style)</code><br /><code><a href="#notesFrom">notesFrom</a>(id)(strings)(opts)(style)</code></td>
-<td>
-<details>
-<summary>
-Prints several strings using the <code>note</code> function for each.
-</summary>
-
-<br />
-
-```js
-const notes = notesFrom('line')
-```
-
-Example:
-
-```js
-const opts = []
-
-const style = {
-  line: {width: 40}
-}
-
-notes([
-  'Deep Thought answered',
-  'The Ultimate Question.'
-])(opts)(style)
-```
-
-Result:
-
-```bash
-Deep Thought answered                   
-The Ultimate Question.                  
-```
-
-</details>
-</td>
-</tr>
-<tr name="optsDefs">
-<td><code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>(opts)(style)</code><br /><code><a href="#optsDefsFrom">optsDefsFrom</a>(id1, id2)(opts)(style)</code></td>
-<td>
-<details>
-<summary>
-Prints a definition list, with the command-line option <code>args</code> as title
-and the <code>desc</code> key as text.
-</summary>
-
-<br />
-
-```js
-const optsDefs = optsDefsFrom('line', 'desc')
-```
-
-Example:
-
-```js
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
-
-const style = {
-  line: {width: 40},
-  desc: {padStart: 4, width: 36}
-}
-
-optsDefs(opts)(style)
-```
-
-Result:
-
-```bash
--a, --answer=<number>                   
-    The answer.                         
--h, --help                              
-    Prints help.                        
---version                               
-    Prints version.                     
-```
-
-</details>
-</td>
-</tr>
-<tr name="optsList">
-<td><code name="optsListFrom"><a href="#optsList">optsList</a>(opts)(style)</code><br /><code><a href="#optsListFrom">optsListFrom</a>(id)(opts)(style)</code></td>
-<td>
-<details>
-<summary>
-Prints a table with two columns:
-The command-line option's <code>args</code> in the left,
-and the <code>desc</code> key in the right column.
-</summary>
-
-<br />
-
-```js
-const optsList = optsListFrom('cols')
-```
-
-Example:
-
-```js
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
-
-const style = {
-  cols: [
-    {width: 30},
-    {width: 25}
-  ]
-}
-
-optsList(opts)(style)
-```
-
-Result:
-
-```bash
--a, --answer=<number>         The answer.              
--h, --help                    Prints help.             
---version                     Prints version.          
-```
-
-</details>
-</td>
-</tr>
-<tr name="space">
-<td><code name="spaceFrom"><a href="#space">space</a>(opts)(style)</code><br /><code><a href="#spaceFrom">spaceFrom</a>(id)(opts)(style)</code></td>
-<td>
-<details>
-<summary>
-Introduces a single blank line.
-</summary>
-
-<br />
-
-```js
-const space = spaceFrom('line')
-```
-
-Example:
-
-```js
-const opts = []
-
-const style = {
-  line: {width: 40}
-}
-
-usage([
-  note('Deep Thought answered'),
-  space,
-  note('The Ultimate Question.')
-])(opts)(style)
-```
-
-Result:
-
-```bash
-Deep Thought answered                   
-                                        
-The Ultimate Question.                  
-```
-
-</details>
-</td>
-</tr>
-<tr name="spaces">
-<td><code name="spacesFrom"><a href="#spaces">spaces</a>(length)(opts)(style)</code><br /><code><a href="#spacesFrom">spacesFrom</a>(id)(length)(opts)(style)</code></td>
-<td>
-<details>
-<summary>
-Introduces several blank lines with the number defined by the length parameter.
-</summary>
-
-<br />
-
-```js
-const spaces = spacesFrom('line')
-```
-
-Example:
-
-```js
-const opts = []
-
-const style = {
-  line: {width: 40}
-}
-
-usage([
-  note('Deep Thought answered'),
-  spaces(2),
-  note('The Ultimate Question.')
-])(opts)(style)
-```
-
-Result:
-
-```bash
-Deep Thought answered                   
-                                        
-                                        
-The Ultimate Question.                  
-```
-
-</details>
-</td>
-</tr>
-<tr name="synopsis">
-<td><code name="synopsisFrom"><a href="#synopsis">synopsis</a>(start, end)(opts)(style)</code><br /><code><a href="#synopsisFrom">synopsisFrom</a>(id)(start, end)(opts)(style)</code></td>
-<td>
-<details>
-<summary>
-Prints a command's synopsis:
-The <code>start</code> string is printed first, the command-line option's <code>args</code> next,
-followed by the <code>end</code> string.
-</summary>
-
-<br />
-
-```js
-const synopsis = synopsisFrom('cols')
-```
-
-Example:
-
-```js
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
-
-const style = {
-  line: {width: 40}
-}
-
-synopsis('deepThought')(opts)(style)
-```
-
-Result:
-
-```bash
-deepThought [-a|--answer] [-h|--help]   
-            [--version]                 
-```
-
-</details>
-</td>
-</tr>
-</table>
-
-Usage functions can be combined with the following usage combinators:
-
-<table>
-<tr>
-<th>Usage&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description (and Example)</th>
-</tr>
-<tr name="usage">
-<td><code><a href="#usage">usage</a>(functions)(opts)(style)</code></td>
-<td>
-<details>
-<summary>
-Groups several usage DSL functions together.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
-
-const style = {
-  line: {width: 40},
-  cols: [{width: 20}, {width: 20}]
-}
-
-usage([
-  synopsis('deepThought'),
-  space,
-  optsList,
-  space,
-  note('Deep Thought was created to come up with the Answer.')
-])(opts)(style)
-```
-
-Result:
-
-```bash
-deepThought [-a|--answer] [-h|--help]   
-            [--version]                 
-                                        
--a,                 The answer.         
---answer=<number>                       
--h, --help          Prints help.        
---version           Prints version.     
-                                        
-Deep Thought was created to come up with
-the Answer.                             
-```
-
-</details>
-</td>
-</tr>
-<tr name="usageMap">
-<td><code><a href="#usageMap">usageMap</a>(f)(opts)(style)</code></td>
-<td>
-<details>
-<summary>
-Takes an options list and a function <code>f</code>,
-which is applied to each option and is expected to return a layout function.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
-
-const style = {
-  line: {width: 40},
-  desc: {padStart: 3, width: 37}
-}
-
-usageMap(({args, desc}) => layout([
-  text(args.join(', ')),
-  textFrom('desc')(desc)
-]))(opts)(style)
-```
-
-Result:
-
-```bash
--a, --answer                            
-   The answer.                          
--h, --help                              
-   Prints help.                         
---version                               
-   Prints version.                      
-```
-
-</details>
-</td>
-</tr>
-</table>
-
-#### Usage Decorators DSL
-
-Sometimes you want to pass only a portion of the command-line options to a usage function.
-Shargs has usage decorators for that:
-
-```js
-const decoratedDocs = usage([
-  decorate(noCommands, onlyFirstArg)(synopsis('deepThought')),
-  space,
-  onlyCommands(optsDefs),
-  space,
-  noCommands(optsList),
-  space,
-  note(
-    'Deep Thought was created to come up with the Answer to ' +
-    'The Ultimate Question of Life, the Universe, and Everything.'
-  )
-])
-```
-
-`decoratedDocs` displays commands and other command-line options in separate text blocks
-by using the `onlyCommands` and `noCommands` decorators to filter relevant options.
-Shargs includes the following usage decorators:
-
-<table>
-<tr>
-<th>Usage&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description</th>
-</tr>
-<tr name="justArgs">
-<td><code><a href="#justArgs">justArgs</a>(array)(usageFunction)(opts)</code></td>
-<td>
-<details>
-<summary>
-Takes an array of args and keeps only those <code>opts</code> that have an arg in the args <code>array</code>.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const style = {
-  cols: [{width: 20}, {width: 20}]
-}
-
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
-
-justArgs(['-a', '-h'])(optsList)(opts)(style)
-```
-
-Result:
-
-```bash
--a,                 The answer          
---answer=<number>                       
--h, --help          Prints help         
-```
-
-</details>
-</td>
-</tr>
-<tr name="noCommands">
-<td><code><a href="#noCommands">noCommands</a>(usageFunction)(opts)</code></td>
-<td>
-<details>
-<summary>
-Filters out all commands from <code>opts</code>.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const style = {
-  cols: [{width: 20}, {width: 20}]
-}
-
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
-
-noCommands(optsList)(opts)(style)
-```
-
-Result:
-
-```bash
--a,                 The answer          
---answer=<number>                       
---version           Prints version      
-```
-
-</details>
-</td>
-</tr>
-<tr name="onlyCommands">
-<td><code><a href="#onlyCommands">onlyCommands</a>(usageFunction)(opts)</code></td>
-<td>
-<details>
-<summary>
-Keeps only commands in <code>opts</code>.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const style = {
-  cols: [{width: 10, padEnd: 2}, {width: 28}]
-}
-
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
-
-onlyCommands(optsList)(opts)(style)
-```
-
-Result:
-
-```bash
--h, --help  Prints help                 
-```
-
-</details>
-</td>
-</tr>
-<tr name="onlyFirstArg">
-<td><code><a href="#onlyFirstArg">onlyFirstArg</a>(usageFunction)(opts)</code></td>
-<td>
-<details>
-<summary>
-Keeps only the first arg from each opt.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const style = {
-  cols: [{width: 10, padEnd: 2}, {width: 28}]
-}
-
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
-
-onlyFirstArg(optsList)(opts)(style)
-```
-
-Result:
-
-```bash
--a=<number> The answer                  
--h          Prints help                 
---version   Prints version              
-```
-
-</details>
-</td>
-</tr>
-<tr name="optsFilter">
-<td><code><a href="#optsFilter">optsFilter</a>(p)(usageFunction)(opts)</code></td>
-<td>
-<details>
-<summary>
-Applies <code>filter</code> to the <code>opts</code> array using a predicate <code>p</code>.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const style = {
-  cols: [{width: 20}, {width: 20}]
-}
-
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
-
-optsFilter(
-  ({types}) => types !== null
-)(optsList)(opts)(style)
-```
-
-Result:
-
-```bash
--a,                 The answer          
---answer=<number>                       
---version           Prints version      
-```
-
-</details>
-</td>
-</tr>
-<tr name="optsMap">
-<td><code><a href="#optsMap">optsMap</a>(f)(usageFunction)(opts)</code></td>
-<td>
-<details>
-<summary>
-Applies <code>map</code> to the <code>opts</code> array using a function <code>f</code>.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const style = {
-  cols: [{width: 10, padEnd: 2}, {width: 28}]
-}
-
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
-
-optsMap(
-  opt => ({...opt, args: opt.args.slice(0, 1)})
-)(optsList)(opts)(style)
-```
-
-Result:
-
-```bash
--a=<number> The answer                  
--h          Prints help                 
---version   Prints version              
-```
-
-</details>
-</td>
-</tr>
-</table>
-
-Usage decorator functions can be combined with the following usage decorator combinators:
-
-<table>
-<tr>
-<th>Usage&nbsp;Decorator&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description</th>
-</tr>
-<tr name="decorate">
-<td><code><a href="#decorate">decorate</a>(decorators)(usageFunction)(opts)</code></td>
-<td>Combines several usage decorators to one decorator.</td>
 </tr>
 </table>
 
@@ -3340,7 +3358,7 @@ E.g. It lets you mix in custom parser and usage functions.
 </tr>
 <tr>
 <td><b>Customize Usage Docs</b></td>
-<td>Use a DSL with many options to build <a href="#usage-documentation">custom usage documentation layouts</a> with fine-grained control over <a href="#style-dsl">styles</a>.</td>
+<td>Use a DSL with many options to build <a href="#automatic-usage-documentation-generation">custom usage documentation layouts</a> with fine-grained control over <a href="#style-dsl">styles</a>.</td>
 <td>Allows specifying the <a href="https://github.com/yargs/yargs/blob/master/docs/api.md#scriptname0">scriptName</a>, a <a href="https://github.com/yargs/yargs/blob/master/docs/api.md#usagemessagecommand-desc-builder-handler">usage</a> string, an <a href="https://github.com/yargs/yargs/blob/master/docs/api.md#epiloguestr">epilogue</a>, <a href="https://github.com/yargs/yargs/blob/master/docs/api.md#examplecmd-desc">examples</a> as strings, and the number of columns after which to <a href="https://github.com/yargs/yargs/blob/master/docs/api.md#wrapcolumns">wrap</a>.</td>
 <td>Display extra information by <a href="https://github.com/tj/commander.js#custom-help">listening to the <code>--help</code> event</a>, customize <a href="https://github.com/tj/commander.js#usage-and-name">program name and usage description</a>, and <a href="https://github.com/tj/commander.js#addhelpcommand">add custom description text</a>.</td>
 <td>None that I am aware of.</td>
