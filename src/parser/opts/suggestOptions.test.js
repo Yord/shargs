@@ -1,9 +1,8 @@
 const suggestOptions = require('./suggestOptions')
 const {didYouMean} = require('../../errors')
-const {bool, number, string} = require('../../options')
 
 test('suggestOptions README example works', () => {
-  const age = number('age', ['-a', '--age'])
+  const age = {key: 'age', types: ['number'], args: ['-a', '--age']}
 
   const opts = [
     age,
@@ -31,9 +30,9 @@ test('suggestOptions works as expected', () => {
   const argv1 = '--titel'
   const argv2 = '--titl'
   const argv3 = '--beer'
-  const title = string('title', ['-t', '--title'])
-  const age   = number('age', ['--age', '-a'])
-  const beef  = bool('age', ['--beef', '-b'])
+  const title = {key: 'title', types: ['string'], args: ['-t', '--title']}
+  const age   = {key: 'age', types: ['number'], args: ['--age', '-a']}
+  const beef  = {key: 'age', types: ['bool'], args: ['--beef', '-b']}
 
   const opts = [
     beef,
