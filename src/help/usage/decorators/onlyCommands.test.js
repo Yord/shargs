@@ -1,5 +1,4 @@
 const onlyCommands = require('./onlyCommands')
-const {command, flag, number} = require('../../../options')
 const {optsList} = require('../optsList')
 
 const id = opts => opts
@@ -10,9 +9,9 @@ test('onlyCommands README example works', () => {
   }
   
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: null, args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.'}
   ]
   
   const res = onlyCommands(optsList)(opts)(style)
@@ -24,9 +23,9 @@ test('onlyCommands README example works', () => {
 
 test('onlyCommands filters one opt', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    command('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: [], args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: null, args: ['--version'], desc: 'Prints version.'}
   ]
 
   const res = onlyCommands(id)(opts)
@@ -36,9 +35,9 @@ test('onlyCommands filters one opt', () => {
 
 test('onlyCommands filters more than one opt', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    command('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: null, args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: null, args: ['--version'], desc: 'Prints version.'}
   ]
 
   const res = onlyCommands(id)(opts)
