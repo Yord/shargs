@@ -1,17 +1,14 @@
 const toOpts  = require('./index')
-const {array, bool, command, flag, number, string} = require('../../options')
 
 const without = (keys = [], opts = []) => opts.filter(({key}) => keys.indexOf(key) === -1)
 
-const numberBool = array(['number', 'bool'])
-
 const OPTS = [
-  string('title', ['--title']),
-  numberBool('numBool', ['-n', '--nb']),
-  number('answer', ['-a', '--answer']),
-  command('help', ['-h', '--help']),
-  bool('verbose', ['--verbose']),
-  flag('version', ['--version'])
+  {key: 'title', types: ['string'], args: ['--title']},
+  {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb']},
+  {key: 'answer', types: ['number'], args: ['-a', '--answer']},
+  {key: 'help', types: null, args: ['-h', '--help']},
+  {key: 'verbose', types: ['bool'], args: ['--verbose']},
+  {key: 'version', types: [], args: ['--version']}
 ]
 
 test('toOpts transforms argv into opts', () => {
@@ -32,13 +29,13 @@ test('toOpts transforms argv into opts', () => {
 
   const exp = [
     {values: ['foo']},
-    {...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]},
-    {...numberBool('numBool', ['-n', '--nb']), values: ['23', 'true']},
-    {...number('answer', ['-a', '--answer']), values: ['42']},
-    {...bool('verbose', ['--verbose']), values: ['false']},
-    {...flag('version', ['--version']), values: [1]},
+    {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]},
+    {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: ['23', 'true']},
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']},
+    {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['false']},
+    {key: 'version', types: [], args: ['--version'], values: [1]},
     {values: ['bar']},
-    {...command('help', ['-h', '--help']), values: ['foo', '--bar']}
+    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -51,7 +48,7 @@ test('toOpts returns an unmatched value if an option has too few argvs', () => {
     ]
   }
 
-  const testDefault = string('name', ['-n'])
+  const testDefault = {key: 'name', types: ['string'], args: ['-n']}
 
   const {opts} = toOpts([testDefault])(obj)
 
@@ -92,7 +89,7 @@ test('toOpts transforms unary options', () => {
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    {...string('title', ['--title']), values: ["The Hitchhiker's Guide to the Galaxy"]},
+    {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]},
     ...without(['title'], OPTS)
   ]
 
@@ -109,7 +106,7 @@ test('toOpts transforms command opts at the end of the line', () => {
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    {...command('help', ['-h', '--help']), values: ['foo', '--bar']},
+    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
     ...without(['help'], OPTS)
   ]
 
@@ -129,7 +126,7 @@ test('toOpts transforms command opts at the end of the line with double minusses
 
   const exp = [
     {values: ['foo']},
-    {...command('help', ['-h', '--help']), values: ['foo', '--bar']},
+    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
     {values: ['--']},
     ...without(['help'], OPTS)
   ]
@@ -149,7 +146,7 @@ test('toOpts transforms command opts at the start of the line with double minuss
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    {...command('help', ['-h', '--help']), values: ['foo', '--bar']},
+    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
     {values: ['--']},
     {values: ['foo']},
     ...without(['help'], OPTS)
@@ -172,7 +169,7 @@ test('toOpts transforms command opts in the middle of the line with double minus
 
   const exp = [
     {values: ['foo']},
-    {...command('help', ['-h', '--help']), values: ['foo', '--bar']},
+    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
     {values: ['--']},
     {values: ['foo']},
     ...without(['help'], OPTS)
@@ -191,7 +188,7 @@ test('toOpts works with commands that have no argv', () => {
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    {...command('help', ['-h', '--help']), values: []},
+    {key: 'help', types: null, args: ['-h', '--help'], values: []},
     ...without(['help'], OPTS)
   ]
 
