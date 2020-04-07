@@ -3318,7 +3318,6 @@ A style object may have the following parameters:
 You may now use the command-line options, the parser, and the usage documentation in your program:
 
 ```js
-// ./deepThought -a 42 ask -q 'What is the answer to everything?'
 const argv = ['-a', '42', 'ask', '-q', 'What is the answer to everything?']
 
 const {errs, args} = deepThought(opts)(argv)
