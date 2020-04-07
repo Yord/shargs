@@ -1,5 +1,4 @@
 const justArgs = require('./justArgs')
-const {command, flag, number} = require('../../../options')
 const {optsList} = require('../optsList')
 
 const id = opts => opts
@@ -10,9 +9,9 @@ test('justArgs README example works', () => {
   }
   
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: null, args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.'}
   ]
   
   const res = justArgs(['-a', '-h'])(optsList)(opts)(style)
@@ -26,9 +25,9 @@ test('justArgs README example works', () => {
 
 test('justArgs filters more than one opt', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: null, args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.'}
   ]
 
   const res = justArgs(['-a', '-h'])(id)(opts)
@@ -38,9 +37,9 @@ test('justArgs filters more than one opt', () => {
 
 test('justArgs filters exactly one opt', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: null, args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.'}
   ]
 
   const res = justArgs(['--version'])(id)(opts)
@@ -50,9 +49,9 @@ test('justArgs filters exactly one opt', () => {
 
 test('justArgs filters all opts', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: null, args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.'}
   ]
 
   const res = justArgs(['-a', '-h', '--version'])(id)(opts)
@@ -62,9 +61,9 @@ test('justArgs filters all opts', () => {
 
 test('justArgs filters no opt if no opt has elements', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: null, args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.'}
   ]
 
   const res = justArgs(['--foo'])(id)(opts)
@@ -74,9 +73,9 @@ test('justArgs filters no opt if no opt has elements', () => {
 
 test('justArgs filters no opt if list is empty', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: null, args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.'}
   ]
 
   const res = justArgs([])(id)(opts)
@@ -86,9 +85,9 @@ test('justArgs filters no opt if list is empty', () => {
 
 test('justArgs filters no opt if list is undefined', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: null, args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.'}
   ]
 
   const res = justArgs()(id)(opts)
