@@ -415,7 +415,7 @@ The following fields are available:
 <tr name="required">
 <td><code><a href="#required">required</a></code></td>
 <td>boolean</td>
-<td><code>required</code> is used by <a href="#posArgs"><code>posArgs</code></a> and by the <a href="#requireOptions"><code>requireOptions</code></a> parser stage to demand an option is set. In case of <a href="#requireOptions"><code>requireOptions</code></a>, if a required option has no <a href="#values"><code>values</code></a> or <a href="#defaultValues"><code>defaultValues</code></a> an error is recorded. In case of <a href="#posArgs"><code>posArgs</code></a>, if a required positional argument is not found in <code>_</code>, an error is recorded.</td>
+<td><code>required</code> is used by <a href="#posArgs"><code>posArgs</code></a> and by the <a href="#requireOptions"><code>requireOptions</code></a> parser stage to demand an option is set. In case of <a href="#requireOptions"><code>requireOptions</code></a>, if a required option has no <a href="#values"><code>values</code></a> or <a href="#defaultValues"><code>defaultValues</code></a> an error is reported. In case of <a href="#posArgs"><code>posArgs</code></a>, if a required positional argument is not found in <code>_</code>, an error is reported.</td>
 </tr>
 <tr name="reverse">
 <td><code><a href="#reverse">reverse</a></code></td>
@@ -527,7 +527,7 @@ For each stage, the checks are applied first, followed by the other stages.
 <tr name="verifyArgv">
 <td><code><a href="#verifyArgv">verifyArgv</a>(rules)({errs, argv})</code></td>
 <td>
-Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate. Records an error if the predicate returns false.
+Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate. Reports an error if the predicate returns false.
 <details>
 <summary>
 Read on...
@@ -779,7 +779,7 @@ Result:
 <tr name="demandACommand">
 <td><code><a href="#demandACommand">demandACommand</a>({errs, opts})</code></td>
 <td>
-Checks if <code>opts</code> includes at least one command and records an exception if no command is found.
+Checks if <code>opts</code> includes at least one command and reports an exception if no command is found.
 <details>
 <summary>
 Read on...
@@ -864,7 +864,7 @@ Result:
 <td><code><a href="#requireOptions">requireOptions</a>({errs, opts})</code></td>
 <td>
 Controls, if options marked with <a href="#required"><code>{required: true}</code></a> have valid <a href="#values"><code>values</code></a>.
-If a required option is not present, an error message is recorded.
+If a required option is not present, an error message is reported.
 <details>
 <summary>
 Read on...
@@ -1165,7 +1165,7 @@ Result:
 <tr name="restrictToOnly">
 <td><code><a href="#restrictToOnly">restrictToOnly</a>({errs, opts})</code></td>
 <td>
-Records an error if the <a href="#values"><code>values</code></a> are not contained in the <a href="#only"><code>only</code></a> list.
+Reports an error if the <a href="#values"><code>values</code></a> are not contained in the <a href="#only"><code>only</code></a> list.
 <details>
 <summary>
 Read on...
@@ -1404,7 +1404,7 @@ Result:
 <tr name="failRest">
 <td><code><a href="#failRest">failRest</a>({errs, args})</code></td>
 <td>
-Records an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
+Reports an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
 <details>
 <summary>
 Read on...
@@ -1845,7 +1845,7 @@ While transforming, `toOpts` encounters the following cases:
     If this happens, `toOpts` proceeds as in case 2 for each option, with one addition:
     It checks if all options have the same arity as the first option.
     All options with the same arities return the matching option with a [`values`](#values) field.
-    For all other options, an error is recorded.
+    For all other options, an error is reported.
 
 The `toOpts` key of the `stages` field of [`parser`](#command-line-parsers) lets users override the described behavior with their own functions.
 Actually doing this is not recommended, as it may break defined parser checks and stages.
