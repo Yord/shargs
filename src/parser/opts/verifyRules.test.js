@@ -1,6 +1,5 @@
 const verifyRules = require('./verifyRules')
 const {falseRules, wrongRulesType} = require('../../errors')
-const {string} = require('../../options')
 
 test('verifyRules README example works', () => {
   const rules = firstName => opts => (
@@ -8,8 +7,8 @@ test('verifyRules README example works', () => {
     opts.some(({key, values}) => key === 'lastName' && values)
   )
 
-  const firstName = {...string('firstName', ['-f'], {rules}), values: ['Charles']}
-  const lastName  = string('lastName', ['-l'])
+  const firstName = {key: 'firstName', types: ['string'], args: ['-f'], rules, values: ['Charles']}
+  const lastName  = {key: 'lastName', types: ['string'], args: ['-l']}
 
   const obj = {
     opts: [firstName, lastName]
@@ -30,8 +29,8 @@ test('verifyRules does not change anything if it passes', () => {
     opts.some(({key, values}) => key === 'lastName' && values !== null)
   )
 
-  const firstName = {...string('firstName', ['-f'], {rules}), values: ['Logan']}
-  const lastName  = string('lastName', ['-l'])
+  const firstName = {key: 'firstName', types: ['string'], args: ['-f'], rules, values: ['Logan']}
+  const lastName  = {key: 'lastName', types: ['string'], args: ['-l']}
 
   const obj = {
     opts: [firstName, lastName]
@@ -47,8 +46,8 @@ test('verifyRules does not change anything if it passes', () => {
 test('verifyRules fails on wrong type', () => {
   const rules = 42
 
-  const firstName = {...string('firstName', ['-f'], {rules}), values: ['Charles']}
-  const lastName  = string('lastName', ['-l'])
+  const firstName = {key: 'firstName', types: ['string'], args: ['-f'], rules, values: ['Charles']}
+  const lastName  = {key: 'lastName', types: ['string'], args: ['-l']}
 
   const obj = {
     opts: [firstName, lastName]
