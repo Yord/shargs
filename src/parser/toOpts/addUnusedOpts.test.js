@@ -1,9 +1,8 @@
 const addUnusedOpts = require('./addUnusedOpts')
-const {number} = require('../../options')
 
 test('addUnusedOpts works as expected', () => {
-  const answer   = number('answer', ['-a', '--answer'], {values: [42]})
-  const question = number('question', ['-q', '--question'])
+  const answer   = {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: [42]}
+  const question = {key: 'question', types: ['number'], args: ['-q', '--question']}
 
   const opts = [answer, question]
 
@@ -15,9 +14,9 @@ test('addUnusedOpts works as expected', () => {
 })
 
 test('addUnusedOpts does not set default values if the option is present', () => {
-  const answer42 = number('answer', ['-a', '--answer'], {values: [42]})
-  const answer23 = number('answer', ['-a', '--answer'], {values: [23]})
-  const question = number('question', ['-q', '--question'])
+  const answer42 = {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: [42]}
+  const answer23 = {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: [23]}
+  const question = {key: 'question', types: ['number'], args: ['-q', '--question']}
 
   const opts = [answer42, question]
 
@@ -31,7 +30,7 @@ test('addUnusedOpts does not set default values if the option is present', () =>
 })
 
 test('addUnusedOpts works if obj is undefined', () => {
-  const opts = [number('answer', ['-a', '--answer'], {values: [42]})]
+  const opts = [{key: 'answer', types: ['number'], args: ['-a', '--answer'], values: [42]}]
 
   const obj = {}
 
@@ -43,7 +42,7 @@ test('addUnusedOpts works if obj is undefined', () => {
 })
 
 test('addUnusedOpts works if opts is undefined', () => {
-  const answer = number('answer', ['-a', '--answer'], {values: [42]})
+  const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: [42]}
 
   const opts = [answer]
 
@@ -57,7 +56,7 @@ test('addUnusedOpts works if opts is undefined', () => {
 })
 
 test('addUnusedOpts works if obj is undefined', () => {
-  const opts = [number('answer', ['-a', '--answer'], {values: [42]})]
+  const opts = [{key: 'answer', types: ['number'], args: ['-a', '--answer'], values: [42]}]
 
   const {opts: opts2} = addUnusedOpts(opts)()
 
@@ -67,7 +66,7 @@ test('addUnusedOpts works if obj is undefined', () => {
 })
 
 test('addUnusedOpts passes on errors', () => {
-  const opts = [number('answer', ['-a', '--answer'], {values: [42]})]
+  const opts = [{key: 'answer', types: ['number'], args: ['-a', '--answer'], values: [42]}]
 
   const ERRS = ['foo']
 
