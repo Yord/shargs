@@ -255,7 +255,7 @@ If `args` contains a `help` field, the `help` text is printed...
 
 <details>
 <summary>
-Run the <a href="https://github.com/Yord/shargs/blob/master/examples/deepThought.js">program</a> with <code>node deepThought.js -hq "What is the answer?" -a 5</code> and the following text is printed:
+Run the <a href="https://github.com/Yord/shargs/blob/master/examples/deepThought.js">program</a> with <code>node deepThought -hq "What is the answer?" -a 5</code> and the following text is printed:
 
 <p>
 
