@@ -1,5 +1,4 @@
 const convertCommands         = require('./convertCommands')
-const {command, flag, string} = require('../../options')
 const parser                  = require('../combinators/parser')
 const {invalidRequiredPositionalArgument, invalidVariadicPositionalArgument, requiredPositionalArgumentMissing} = require('../../errors')
 
@@ -7,14 +6,15 @@ const parsers = {__: parser(), _: parser()}
 
 test('convertCommands works as expected', () => {
   const opts = [
-    string('name', ['--name']),
+    {key: 'name', types: ['string'], args: ['--name']},
     {
-      ...command('ask', ['ask'], {
-        opts: [
-          string('question', ['-q']),
-          flag('jokingly', ['-j'], {defaultValue: [1]})
-        ]
-      }),
+      key: 'ask',
+      types: null,
+      args: ['ask'],
+      opts: [
+        {key: 'question', types: ['string'], args: ['-q']},
+        {key: 'jokingly', types: [], args: ['-j'], defaultValue: [1]}
+      ],
       values: ['-q', "What's your lastname?", '--name', 'Logan']
     }
   ]
@@ -38,14 +38,15 @@ test('convertCommands works as expected', () => {
 
 test('convertCommands works as expected if parent parser is not set', () => {
   const opts = [
-    string('name', ['--name']),
+    {key: 'name', types: ['string'], args: ['--name']},
     {
-      ...command('ask', ['ask'], {
-        opts: [
-          string('question', ['-q']),
-          flag('jokingly', ['-j'], {defaultValue: [1]})
-        ]
-      }),
+      key: 'ask',
+      types: null,
+      args: ['ask'],
+      opts: [
+        {key: 'question', types: ['string'], args: ['-q']},
+        {key: 'jokingly', types: [], args: ['-j'], defaultValue: [1]}
+      ],
       values: ['-q', "What's your lastname?", '--name', 'Logan']
     }
   ]
@@ -70,15 +71,16 @@ test('convertCommands works as expected if parent parser is not set', () => {
 
 test('convertCommands works with command-specific parsers', () => {
   const opts = [
-    string('name', ['--name']),
-    {...command('other', ['other']), values: []},
+    {key: 'name', types: ['string'], args: ['--name']},
+    {key: 'other', types: null, args: ['other'], values: []},
     {
-      ...command('ask', ['ask'], {
-        opts: [
-          string('question', ['-q']),
-          flag('jokingly', ['-j'], {defaultValue: [1]})
-        ]
-      }),
+      key: 'ask',
+      types: null,
+      args: ['ask'],
+      opts: [
+        {key: 'question', types: ['string'], args: ['-q']},
+        {key: 'jokingly', types: [], args: ['-j'], defaultValue: [1]}
+      ],
       values: ['-q', "What's your lastname?", '--name', 'Logan']
     }
   ]
@@ -109,8 +111,8 @@ test('convertCommands works with command-specific parsers', () => {
 
 test('convertCommands only sets a command once and does not set it again if the same command is specified several times', () => {
   const opts = [
-    {...command('other', ['other']), values: ['foo']},
-    {...command('other', ['other']), values: ['bar']}
+    {key: 'other', types: null, args: ['other'], values: ['foo']},
+    {key: 'other', types: null, args: ['other'], values: ['bar']}
   ]
 
   const parsers = {
@@ -136,15 +138,16 @@ test('convertCommands only sets a command once and does not set it again if the 
 test('convertCommands works with positional arguments', () => {
   const opts = [
     {
-      ...command('ask', ['ask'], {
-        opts: [
-          flag('jokingly', ['-j'], {defaultValue: [1]})
-        ],
-        posArgs: [
-          {key: 'question', types: ['string'], required: true},
-          {key: 'audience', types: null, variadic: true}
-        ]
-      }),
+      key: 'ask',
+      types: null,
+      args: ['ask'],
+      opts: [
+        {key: 'jokingly', types: [], args: ['-j'], defaultValue: [1]}
+      ],
+      posArgs: [
+        {key: 'question', types: ['string'], required: true},
+        {key: 'audience', types: null, variadic: true}
+      ],
       values: ["What's your lastname?", '-j', 'Logan', 'Charles']
     }
   ]
@@ -177,15 +180,16 @@ test('convertCommands reports missing required positional arguments', () => {
 
   const opts = [
     {
-      ...command('ask', ['ask'], {
-        opts: [
-          flag('jokingly', ['-j'], {defaultValue: [1]})
-        ],
-        posArgs: [
-          question,
-          {key: 'audience', types: null, variadic: true}
-        ]
-      }),
+      key: 'ask',
+      types: null,
+      args: ['ask'],
+      opts: [
+        {key: 'jokingly', types: [], args: ['-j'], defaultValue: [1]}
+      ],
+      posArgs: [
+        question,
+        {key: 'audience', types: null, variadic: true}
+      ],
       values: ['-j']
     }
   ]
@@ -220,15 +224,16 @@ test('convertCommands reports invalid variadic positional arguments', () => {
 
   const opts = [
     {
-      ...command('ask', ['ask'], {
-        opts: [
-          flag('jokingly', ['-j'], {defaultValue: [1]})
-        ],
-        posArgs: [
-          audience,
-          question
-        ]
-      }),
+      key: 'ask',
+      types: null,
+      args: ['ask'],
+      opts: [
+        {key: 'jokingly', types: [], args: ['-j'], defaultValue: [1]}
+      ],
+      posArgs: [
+        audience,
+        question
+      ],
       values: ["What's your lastname?", '-j', 'Logan', 'Charles']
     }
   ]
@@ -264,15 +269,16 @@ test('convertCommands reports invalid required positional arguments 1/2', () => 
 
   const opts = [
     {
-      ...command('ask', ['ask'], {
-        opts: [
-          flag('jokingly', ['-j'], {defaultValue: [1]})
-        ],
-        posArgs: [
-          question,
-          audience
-        ]
-      }),
+      key: 'ask',
+      types: null,
+      args: ['ask'],
+      opts: [
+        {key: 'jokingly', types: [], args: ['-j'], defaultValue: [1]}
+      ],
+      posArgs: [
+        question,
+        audience
+      ],
       values: ["What's your lastname?", '-j', 'Logan', 'Charles']
     }
   ]
@@ -308,15 +314,16 @@ test('convertCommands reports invalid required positional arguments 2/2', () => 
 
   const opts = [
     {
-      ...command('ask', ['ask'], {
-        opts: [
-          flag('jokingly', ['-j'], {defaultValue: [1]})
-        ],
-        posArgs: [
-          question,
-          audience
-        ]
-      }),
+      key: 'ask',
+      types: null,
+      args: ['ask'],
+      opts: [
+        {key: 'jokingly', types: [], args: ['-j'], defaultValue: [1]}
+      ],
+      posArgs: [
+        question,
+        audience
+      ],
       values: ["What's your lastname?", '-j', 'Logan', 'Charles']
     }
   ]
@@ -352,15 +359,16 @@ test('convertCommands takes first positional argument if two positional argument
 
   const opts = [
     {
-      ...command('ask', ['ask'], {
-        opts: [
-          flag('jokingly', ['-j'], {defaultValue: [1]})
-        ],
-        posArgs: [
-          audience1,
-          audience2
-        ]
-      }),
+      key: 'ask',
+      types: null,
+      args: ['ask'],
+      opts: [
+        {key: 'jokingly', types: [], args: ['-j'], defaultValue: [1]}
+      ],
+      posArgs: [
+        audience1,
+        audience2
+      ],
       values: ['-j', 'Logan', 'Charles']
     }
   ]
@@ -393,15 +401,16 @@ test('convertCommands reports missing required variadic positional arguments', (
 
   const opts = [
     {
-      ...command('ask', ['ask'], {
-        opts: [
-          flag('jokingly', ['-j'], {defaultValue: [1]})
-        ],
-        posArgs: [
-          question,
-          audience
-        ]
-      }),
+      key: 'ask',
+      types: null,
+      args: ['ask'],
+      opts: [
+        {key: 'jokingly', types: [], args: ['-j'], defaultValue: [1]}
+      ],
+      posArgs: [
+        question,
+        audience
+      ],
       values: ["What's your lastname?", '-j']
     }
   ]
