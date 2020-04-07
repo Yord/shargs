@@ -2034,14 +2034,17 @@ Shargs provides the following declarative usage functions:
 <table>
 <tr>
 <th>Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description (and Example)</th>
+<th>Description</th>
 </tr>
 <tr name="note">
 <td><code name="noteFrom"><a href="#note">note</a>(string)(opts)(style)</code><br /><code><a href="#noteFrom">noteFrom</a>(id)(string)(opts)(style)</code></td>
 <td>
+Prints the <code>string</code> as a <a href="#line"><code>line</code></a>.
+Takes the line width from <a href="#style">style</a> and pads with spaces at the end.
+If the string is too long to fit the <code>line</code>'s width, it is broken up into words, and all remaining words are put into another <code>line</code>.
 <details>
 <summary>
-Prints the string with a line break at the end. Takes the line width from style and pads with spaces at the end. If the string is too long to fit the line's width, it is broken up into words, and all remaining words are put into the following line.
+Read on...
 </summary>
 
 <br />
@@ -2077,9 +2080,10 @@ the Answer.
 <tr name="notes">
 <td><code name="notesFrom"><a href="#notes">notes</a>(strings)(opts)(style)</code><br /><code><a href="#notesFrom">notesFrom</a>(id)(strings)(opts)(style)</code></td>
 <td>
+Prints several strings using <a href="#note"><code>note</code></a> for each.
 <details>
 <summary>
-Prints several strings using the <code>note</code> function for each.
+Read on...
 </summary>
 
 <br />
@@ -2116,10 +2120,11 @@ The Ultimate Question.
 <tr name="optsDefs">
 <td><code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>(opts)(style)</code><br /><code><a href="#optsDefsFrom">optsDefsFrom</a>(id1, id2)(opts)(style)</code></td>
 <td>
+Prints a <a href="#def"><code>def</code></a> (definition) list,
+with the command-line option <a href="#args"><code>args</code></a> as title and the <a href="#desc"><code>desc</code></a> field as text.
 <details>
 <summary>
-Prints a definition list, with the command-line option <code>args</code> as title
-and the <code>desc</code> key as text.
+Read on...
 </summary>
 
 <br />
@@ -2162,11 +2167,12 @@ Result:
 <tr name="optsList">
 <td><code name="optsListFrom"><a href="#optsList">optsList</a>(opts)(style)</code><br /><code><a href="#optsListFrom">optsListFrom</a>(id)(opts)(style)</code></td>
 <td>
+Prints a <a href="#table"><code>table</code></a> with two columns:
+The command-line option's <a href="#args"><code>args</code></a> in the left,
+and the <a href="#desc"><code>desc</code></a> field in the right column.
 <details>
 <summary>
-Prints a table with two columns:
-The command-line option's <code>args</code> in the left,
-and the <code>desc</code> key in the right column.
+Read on...
 </summary>
 
 <br />
@@ -2208,9 +2214,10 @@ Result:
 <tr name="space">
 <td><code name="spaceFrom"><a href="#space">space</a>(opts)(style)</code><br /><code><a href="#spaceFrom">spaceFrom</a>(id)(opts)(style)</code></td>
 <td>
+Introduces a single blank <a href="#line"><code>line</code></a>.
 <details>
 <summary>
-Introduces a single blank line.
+Read on...
 </summary>
 
 <br />
@@ -2249,9 +2256,10 @@ The Ultimate Question.
 <tr name="spaces">
 <td><code name="spacesFrom"><a href="#spaces">spaces</a>(length)(opts)(style)</code><br /><code><a href="#spacesFrom">spacesFrom</a>(id)(length)(opts)(style)</code></td>
 <td>
+Introduces several blank <a href="#lines"><code>lines</code></a> with the number defined by the <code>length</code> parameter.
 <details>
 <summary>
-Introduces several blank lines with the number defined by the length parameter.
+Read on...
 </summary>
 
 <br />
@@ -2289,13 +2297,13 @@ The Ultimate Question.
 </td>
 </tr>
 <tr name="synopsis">
-<td><code name="synopsisFrom"><a href="#synopsis">synopsis</a>(start, end)(opts)(style)</code><br /><code><a href="#synopsisFrom">synopsisFrom</a>(id)(start, end)(opts)(style)</code></td>
+<td><code name="synopsisFrom"><a href="#synopsis">synopsis</a>(programName)(opts)(style)</code><br /><code><a href="#synopsisFrom">synopsisFrom</a>(id)(start, end)(opts)(style)</code></td>
 <td>
+Prints a synopsis:
+The <code>programName</code> is printed first, followed by the command-line option's <a href="#args"><code>args</code></a>.
 <details>
 <summary>
-Prints a command's synopsis:
-The <code>start</code> string is printed first, the command-line option's <code>args</code> next,
-followed by the <code>end</code> string.
+Read on...
 </summary>
 
 <br />
@@ -2353,14 +2361,15 @@ The following usage combinators are available:
 <table>
 <tr>
 <th>Usage&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description (and Example)</th>
+<th>Description</th>
 </tr>
 <tr name="usage">
 <td><code><a href="#usage">usage</a>(functions)(opts)(style)</code></td>
 <td>
+Groups several usage functions together.
 <details>
 <summary>
-Groups several usage DSL functions together.
+Read on...
 </summary>
 
 <br />
@@ -2409,10 +2418,11 @@ the Answer.
 <tr name="usageMap">
 <td><code><a href="#usageMap">usageMap</a>(f)(opts)(style)</code></td>
 <td>
+Takes an <code>opts</code> (options) list and a function <code>f</code>,
+which is applied to each option and is expected to return a <a href="#layout-functions">layout function</a>.
 <details>
 <summary>
-Takes an options list and a function <code>f</code>,
-which is applied to each option and is expected to return a layout function.
+Read on...
 </summary>
 
 <br />
@@ -2485,9 +2495,10 @@ Shargs provides the following usage decorators:
 <tr name="justArgs">
 <td><code><a href="#justArgs">justArgs</a>(array)(usageFunction)(opts)</code></td>
 <td>
+Takes an array of args and keeps only those <code>opts</code> that have an arg in the args <code>array</code>.
 <details>
 <summary>
-Takes an array of args and keeps only those <code>opts</code> that have an arg in the args <code>array</code>.
+Read on...
 </summary>
 
 <br />
@@ -2522,9 +2533,10 @@ Result:
 <tr name="noCommands">
 <td><code><a href="#noCommands">noCommands</a>(usageFunction)(opts)</code></td>
 <td>
+Filters out all <a href="#command"><code>commands</code></a> from <code>opts</code>.
 <details>
 <summary>
-Filters out all commands from <code>opts</code>.
+Read on...
 </summary>
 
 <br />
@@ -2559,9 +2571,10 @@ Result:
 <tr name="onlyCommands">
 <td><code><a href="#onlyCommands">onlyCommands</a>(usageFunction)(opts)</code></td>
 <td>
+Keeps only <a href="#command"><code>commands</code></a> in <code>opts</code>.
 <details>
 <summary>
-Keeps only commands in <code>opts</code>.
+Read on...
 </summary>
 
 <br />
@@ -2594,9 +2607,10 @@ Result:
 <tr name="onlyFirstArg">
 <td><code><a href="#onlyFirstArg">onlyFirstArg</a>(usageFunction)(opts)</code></td>
 <td>
+Keeps only the first <a href="#args"><code>arg</code></a> from each opt.
 <details>
 <summary>
-Keeps only the first arg from each opt.
+Read on...
 </summary>
 
 <br />
@@ -2631,9 +2645,10 @@ Result:
 <tr name="optsFilter">
 <td><code><a href="#optsFilter">optsFilter</a>(p)(usageFunction)(opts)</code></td>
 <td>
+Applies array's filter method to the <code>opts</code> array using a predicate <code>p</code>.
 <details>
 <summary>
-Applies <code>filter</code> to the <code>opts</code> array using a predicate <code>p</code>.
+Read on...
 </summary>
 
 <br />
@@ -2670,9 +2685,10 @@ Result:
 <tr name="optsMap">
 <td><code><a href="#optsMap">optsMap</a>(f)(usageFunction)(opts)</code></td>
 <td>
+Applies array's map method to the <code>opts</code> array using a function <code>f</code>.
 <details>
 <summary>
-Applies <code>map</code> to the <code>opts</code> array using a function <code>f</code>.
+Read on...
 </summary>
 
 <br />
@@ -2749,14 +2765,15 @@ Shargs provides the following layout functions:
 <table>
 <tr>
 <th>Layout&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description (and Example)</th>
+<th>Description</th>
 </tr>
 <tr name="br">
 <td><code name="brFrom"><a href="#br">br</a>(style)</code><br /><code><a href="#brFrom">brFrom</a>(id)(style)</code></td>
 <td>
+Introduces a single blank line.
 <details>
 <summary>
-Introduces a single blank line.
+Read on...
 </summary>
 
 <br />
@@ -2793,9 +2810,10 @@ Last line
 <tr name="brs">
 <td><code name="brsFrom"><a href="#brs">brs</a>(length)(style)</code><br /><code><a href="#brsFrom">brsFrom</a>(id)(length)(style)</code></td>
 <td>
+Introduces several blank lines with the number defined by the <code>length</code> parameter.
 <details>
 <summary>
-Introduces several blank lines with the number defined by the length parameter.
+Read on...
 </summary>
 
 <br />
@@ -2833,12 +2851,13 @@ Last line
 <tr name="cols">
 <td><code name="colsFrom"><a href="#cols">cols</a>(columns)(style)</code><br /><code><a href="#colsFrom">colsFrom</a>(id)(columns)(style)</code></td>
 <td>
+Takes a list of <code>columns</code> with each column consisting of several strings.
+Prints the first column at the left and the last column at the right.
+The <a href="#style">style</a> parameter must have a <code>cols</code> id with a number of style objects equal to the number of columns.
+If a column string is longer than a column's width, it is cut off.
 <details>
 <summary>
-Takes a list of columns with each column consisting of several strings.
-Prints the first column at the left and the last column at the right.
-The style parameter must have a <code>cols</code> id with a number of style objects equal to the number of columns.
-If a column string is longer than a column's width, it is cut off.
+Read on...
 </summary>
 
 <br />
@@ -2882,11 +2901,12 @@ Result:
 <tr name="defs">
 <td><code name="defsFrom"><a href="#defs">defs</a>(rowsList)(style)</code><br /><code><a href="#defsFrom">defsFrom</a>(id1, id2)(rowsList)(style)</code></td>
 <td>
+Takes a list of title/desc row pairs.
+Prints the title as a <a href="#text"><code>text</code></a> before printing the desc as a <code>text</code>.
+Title and text may be assigned different <a href="#style">style</a> ids.
 <details>
 <summary>
-Takes a list of title/desc row pairs.
-Prints the title as a <code>text</code> before printing the desc as a <code>text</code>.
-Title and text may be assigned different style ids.
+Read on...
 </summary>
 
 <br />
@@ -2931,11 +2951,12 @@ Result:
 <tr name="line">
 <td><code name="lineFrom"><a href="#line">line</a>(string)(style)</code><br /><code><a href="#lineFrom">lineFrom</a>(id)(string)(style)</code></td>
 <td>
+Prints the <code>string</code> with a linebreak at the end.
+Takes the line width from <a href="#style">style</a> and pads with spaces at the end.
+If the string is too long to fit the line's width, it is cut off.
 <details>
 <summary>
-Prints the string with a linebreak at the end.
-Takes the line width from style and pads with spaces at the end.
-If the string is too long to fit the line's width, it is cut off.
+Read on...
 </summary>
 
 <br />
@@ -2966,9 +2987,10 @@ A line
 <tr name="lines">
 <td><code name="linesFrom"><a href="#lines">lines</a>(strings)(style)</code><br /><code><a href="#linesFrom">linesFrom</a>(id)(strings)(style)</code></td>
 <td>
+Prints several strings using the <a href="#line"><code>line</code></a> function for each.
 <details>
 <summary>
-Prints several strings using the <code>line</code> function for each.
+Read on...
 </summary>
 
 <br />
@@ -3003,12 +3025,13 @@ Last line
 <tr name="table">
 <td><code name="tableFrom"><a href="#table">table</a>(rowsList)(style)</code><br /><code><a href="#tableFrom">tableFrom</a>(id)(rowsList)(style)</code></td>
 <td>
-<details>
-<summary>
-Takes a rows list with each row holding a number of strings equal to the number of columns.
-The style parameter must have a <code>cols</code> key with a number of style objects equal to the number of columns.
+Takes a <code>rowsList</code> with each row holding a number of strings equal to the number of table columns.
+The <a href="#style">style</a> parameter must have a <code>cols</code> key with a number of style objects equal to the number of columns.
 The strings in each row are formatted according to the defined columns.
 If a string surpasses the width of a column, its remaining words are printed in the following rows.
+<details>
+<summary>
+Read on...
 </summary>
 
 <br />
@@ -3053,10 +3076,11 @@ Result:
 <tr name="text">
 <td><code name="textFrom"><a href="#text">text</a>(string)(style)</code><br /><code><a href="#textFrom">textFrom</a>(id)(string)(style)</code></td>
 <td>
+Text acts much like <a href="#line"><code>line</code></a>, but does not cut off strings that surpass a line's width.
+Instead, it splits the string by words and adds new <a href="#line"><code>lines</code></a> with the remaining words.
 <details>
 <summary>
-Text acts much like <code>line</code>, but does not cut off strings that surpass a line's width.
-Instead, it splits the string by words and adds new lines with the remaining words.
+Read on...
 </summary>
 
 <br />
@@ -3090,9 +3114,10 @@ the Answer.
 <tr name="texts">
 <td><code name="textsFrom"><a href="#texts">texts</a>(strings)(style)</code><br /><code><a href="#textsFrom">textsFrom</a>(id)(strings)(style)</code></td>
 <td>
+Takes several <code>strings</code> and applies the <a href="#text"><code>text</code></a> function to each.
 <details>
 <summary>
-Takes several strings and applies the <code>text</code> function to each.
+Read on...
 </summary>
 
 <br />
@@ -3141,14 +3166,15 @@ Shargs provides the following layout combinators:
 <table>
 <tr>
 <th>Layout&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description (and Example)</th>
+<th>Description</th>
 </tr>
 <tr name="layout">
 <td><code><a href="#layout">layout</a>(functions)(style)</code></td>
 <td>
+Groups several <a href="#layout-functions">layout <code>functions</code></a> together.
 <details>
 <summary>
-Groups several layout DSL functions together.
+Read on...
 </summary>
 
 <br />
@@ -3179,11 +3205,12 @@ Last line
 <tr name="layoutMap">
 <td><code><a href="#layoutMap">layoutMap</a>(f)(itemsList)(style)</code></td>
 <td>
+Takes a list of strings and a function <code>f</code>,
+which is applied to each string and is expected to return a <a href="#layout-function">layout function</a>.
+The strings are then formatted according to <code>f</code>.
 <details>
 <summary>
-Takes a list of strings and a function <code>f</code>,
-which is applied to each string and is expected to return a layout function.
-The strings are then formatted according to f.
+Read on...
 </summary>
 
 <br />
