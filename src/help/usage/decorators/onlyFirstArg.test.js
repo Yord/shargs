@@ -1,5 +1,4 @@
 const onlyFirstArg = require('./onlyFirstArg')
-const {command, flag, number} = require('../../../options')
 const {optsList} = require('../optsList')
 
 const id = opts => opts
@@ -10,9 +9,9 @@ test('onlyFirstArg README example works', () => {
   }
   
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    command('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: null, args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.'}
   ]
   
   const res = onlyFirstArg(optsList)(opts)(style)
@@ -26,17 +25,17 @@ test('onlyFirstArg README example works', () => {
 
 test('onlyFirstArg filters one opt', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    command('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: [], args: ['-h', '--help'], desc: 'Prints help.'},
+    {key: 'version', types: null, args: ['--version'], desc: 'Prints version.'}
   ]
 
   const res = onlyFirstArg(id)(opts)
 
   const exp = [
-    number('answer', ['-a'], {desc: 'The answer.'}),
-    flag('help', ['-h'], {desc: 'Prints help.'}),
-    command('version', ['--version'], {desc: 'Prints version.'})
+    {key: 'answer', types: ['number'], args: ['-a'], desc: 'The answer.'},
+    {key: 'help', types: [], args: ['-h'], desc: 'Prints help.'},
+    {key: 'version', types: null, args: ['--version'], desc: 'Prints version.'}
   ]
 
   expect(res).toStrictEqual(exp)
@@ -44,16 +43,16 @@ test('onlyFirstArg filters one opt', () => {
 
 test('onlyFirstArg returns empty array if args is undefined', () => {
   const opts = [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.'},
+    {key: 'help', types: [], args: ['-h', '--help'], desc: 'Prints help.'},
     {key: 'version', args: undefined, types: null, desc: 'Prints version.'}
   ]
 
   const res = onlyFirstArg(id)(opts)
 
   const exp = [
-    number('answer', ['-a'], {desc: 'The answer.'}),
-    flag('help', ['-h'], {desc: 'Prints help.'}),
+    {key: 'answer', types: ['number'], args: ['-a'], desc: 'The answer.'},
+    {key: 'help', types: [], args: ['-h'], desc: 'Prints help.'},
     {key: 'version', args: [], types: null, desc: 'Prints version.'}
   ]
 
