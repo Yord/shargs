@@ -255,7 +255,7 @@ If `args` contains a `help` field, the `help` text is printed...
 
 <details>
 <summary>
-Run the <a href="https://github.com/Yord/shargs/blob/master/examples/deepThought.js">program</a> with <code>node deepThought.js -hq "What is the answer?" -a 5</code> and the following text is printed:
+Run the <a href="https://github.com/Yord/shargs/blob/master/examples/deepThought.js">program</a> with <code>node deepThought -hq "What is the answer?" -a 5</code> and the following text is printed:
 
 <p>
 
@@ -415,7 +415,7 @@ The following fields are available:
 <tr name="required">
 <td><code><a href="#required">required</a></code></td>
 <td>boolean</td>
-<td><code>required</code> is used by <a href="#posArgs"><code>posArgs</code></a> and by the <a href="#requireOptions"><code>requireOptions</code></a> parser stage to demand an option is set. In case of <a href="#requireOptions"><code>requireOptions</code></a>, if a required option has no <a href="#values"><code>values</code></a> or <a href="#defaultValues"><code>defaultValues</code></a> an error is recorded. In case of <a href="#posArgs"><code>posArgs</code></a>, if a required positional argument is not found in <code>_</code>, an error is recorded.</td>
+<td><code>required</code> is used by <a href="#posArgs"><code>posArgs</code></a> and by the <a href="#requireOptions"><code>requireOptions</code></a> parser stage to demand an option is set. In case of <a href="#requireOptions"><code>requireOptions</code></a>, if a required option has no <a href="#values"><code>values</code></a> or <a href="#defaultValues"><code>defaultValues</code></a> an error is reported. In case of <a href="#posArgs"><code>posArgs</code></a>, if a required positional argument is not found in <code>_</code>, an error is reported.</td>
 </tr>
 <tr name="reverse">
 <td><code><a href="#reverse">reverse</a></code></td>
@@ -499,6 +499,7 @@ const deepThought = parser(stages, {checks, parsers})
 ```
 
 `parser` takes a `stages` object with up to five keys.
+Stages are functions that change the parser tree and report errors.
 Each key is the name of a shargs parsing stage:
 
 1.  [`argv`](#argv-checks) functions modify arrays of command-line arguments.
@@ -509,7 +510,7 @@ Each key is the name of a shargs parsing stage:
 
 As a second parameter, it takes an object with two possible keys:
 A `checks` key with `argv`, `opts`, and `args` arrays, and a `parsers` key.
-Checks are parser stages that record errors if rules are violated.
+Checks are parser stages that report errors if rules are violated, but do never change the parser tree.
 `parsers` allows you to specify a different parser for each command.
 See the [Command-specific Parsers](#command-specific-parsers) section to learn more.
 
@@ -526,7 +527,7 @@ For each stage, the checks are applied first, followed by the other stages.
 <tr name="verifyArgv">
 <td><code><a href="#verifyArgv">verifyArgv</a>(rules)({errs, argv})</code></td>
 <td>
-Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate. Records an error if the predicate returns false.
+Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate. Reports an error if the predicate returns false.
 <details>
 <summary>
 Read on...
@@ -778,7 +779,7 @@ Result:
 <tr name="demandACommand">
 <td><code><a href="#demandACommand">demandACommand</a>({errs, opts})</code></td>
 <td>
-Checks if <code>opts</code> includes at least one command and records an exception if no command is found.
+Checks if <code>opts</code> includes at least one command and reports an exception if no command is found.
 <details>
 <summary>
 Read on...
@@ -863,7 +864,7 @@ Result:
 <td><code><a href="#requireOptions">requireOptions</a>({errs, opts})</code></td>
 <td>
 Controls, if options marked with <a href="#required"><code>{required: true}</code></a> have valid <a href="#values"><code>values</code></a>.
-If a required option is not present, an error message is recorded.
+If a required option is not present, an error message is reported.
 <details>
 <summary>
 Read on...
@@ -1164,7 +1165,7 @@ Result:
 <tr name="restrictToOnly">
 <td><code><a href="#restrictToOnly">restrictToOnly</a>({errs, opts})</code></td>
 <td>
-Records an error if the <a href="#values"><code>values</code></a> are not contained in the <a href="#only"><code>only</code></a> list.
+Reports an error if the <a href="#values"><code>values</code></a> are not contained in the <a href="#only"><code>only</code></a> list.
 <details>
 <summary>
 Read on...
@@ -1403,7 +1404,7 @@ Result:
 <tr name="failRest">
 <td><code><a href="#failRest">failRest</a>({errs, args})</code></td>
 <td>
-Records an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
+Reports an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
 <details>
 <summary>
 Read on...
@@ -1844,7 +1845,7 @@ While transforming, `toOpts` encounters the following cases:
     If this happens, `toOpts` proceeds as in case 2 for each option, with one addition:
     It checks if all options have the same arity as the first option.
     All options with the same arities return the matching option with a [`values`](#values) field.
-    For all other options, an error is recorded.
+    For all other options, an error is reported.
 
 The `toOpts` key of the `stages` field of [`parser`](#command-line-parsers) lets users override the described behavior with their own functions.
 Actually doing this is not recommended, as it may break defined parser checks and stages.
@@ -1961,6 +1962,44 @@ function flagsAsBools ({errs = [], args = {}} = {}) {
 
 If writing a custom `args` stage, have a look at [`traverseArgs`](#traverseArgs) that simplifies the process.
 
+#### Relation Between Checks and Stages
+
+As you may have noticed by now, checks and stages of the same kind have the same signatures.
+This is not a coincidence.
+In fact, checks and stages behave the same for most scenarios.
+This section looks at the cases where they are different.
+
+While stages change data and report errors once, checks only report errors and never change data.
+Thus, if a check is run several times in a row, it reports multiple error messages.
+Stages and checks are seldomly run several times, but there is a case in the [`toArgs`](#toargs-stage) stage, where this happens:
+
+`toArgs` takes a list of parsers as its input, including the *parent parser* `__` that is set by the [`parser`](#command-line-parsers) function.
+The parent parser's purpose is to parse any leftover argv from the commands' *child parsers*.
+This comes to pass, if arguments to a parent command are given after the arguments of a child command, e.g. `--answer` in:
+
+```bash
+node deepThought ask --question "What is the Answer?" --answer 42
+# 1:             |p|
+# 2:                 |-------------------- c -------------------|
+# 3:                                                  |---(p)---|
+```
+
+In row 1, the parent parser `p` reads the `ask` [`command`](#command) and interpretes all following argv as parameters of `ask`.
+Thus, as depicted in row 2, from `--question` onwards, `ask`'s child parser `c` is responsible for parsing up to `42`.
+However, as row 3 suggests, the `--answer 42` argv are actually a parent's option and the child parser will not recognize it.
+
+To solve situations as described above, all unrecognized argv from child parsers are again processed by their parent's parsers.
+This means, **parent parsers may run several times** and their checks are repeated.
+Since checks do not change any data, repeating them is not harmful.
+However, it may result in duplicated error messages, which is undesirable.
+
+Because of this, shargs and the [`parser`](#command-line-parsers) function distinguishes between checks and stages.
+In fact, each parent parser `__` only includes the `parser`'s stages and not its checks. 
+
+Repeated `parser` calls only occur in the presence of `command` options.
+This means, if you do not use `command` options, you do not need to separate checks and stages.
+In such cases, you may simply add your checks to `parser`'s stages parameter and get the same results.
+
 ### Usage Documentation
 
 Every decent command-line tools has a usage documentation.
@@ -1969,8 +2008,8 @@ The `deepThought` tool is no exception and should e.g. show the following text i
 ```bash
 deepThought ask [-q|--question] [-h|--help]                                     
                                                                                 
--q, --question      A question. [string]                                        
--h, --help          Print this help message and exit. [flag]                    
+-q, --question=<string>  A question.                                            
+-h, --help               Print this help message and exit.                      
                                                                                 
 Deep Thought was created to come up with the Answer to The Ultimate Question of 
 Life, the Universe, and Everything. 
@@ -1987,11 +2026,11 @@ The `deepThought ask` documentation could be written as follows in layout syntax
 
 ```js
 const askDocs = layout([
-  text('deepThought ask [-q|--question] [-h|--help]'),
+  text('deepThought ask (-q|--question) [-h|--help]'),
   br,
   table([
-    ['-q, --question', 'A question. [string]'],
-    ['-h, --help', 'Print this help message and exit. [flag]']
+    ['-q, --question=<string>', 'A question.'],
+    ['-h, --help', 'Print this help message and exit.']
   ]),
   br,
   text(

@@ -26,7 +26,7 @@ test('optsList README example works as expected', () => {
 test('optsList works as expected', () => {
   const opts = [
     {key: 'answer', types: null, args: ['answer'], desc: 'The answer.', required: true},
-    {key: 'foo', types: ['string'], args: ['-f', '--foo'], desc: 'Foo.', only: ['foo', 'bar'], required: false},
+    {key: 'foo', types: ['string'], args: ['-f'], desc: 'Foo.', only: ['foo', 'bar'], required: false},
     {key: 'baz', types: ['bool'], args: ['-b', '--baz'], desc: 'Baz.', descArg: 'baz', defaultValues: [42], implies: ['foo']},
     {key: 'help', types: [], args: ['--help', 'help', '-h'], desc: 'Prints help.', defaultValues: [false]},
     {key: 'version', types: [], args: ['--version'], desc: 'Prints version.', contradicts: ['help']},
@@ -46,8 +46,8 @@ test('optsList works as expected', () => {
   const res = optsList(opts)(style)
 
   const txt = 'answer                   The answer. [required]                            \n' +
-              '-f, --foo=<foo|bar>      Foo. [not required]                               \n' +
-              '-b, --baz=<baz>          Baz. [default: 42] [implies: -f, --foo]           \n' +
+              '-f <foo|bar>             Foo. [not required]                               \n' +
+              '-b, --baz=<baz>          Baz. [default: 42] [implies: -f]                  \n' +
               '-h, help, --help         Prints help. [default: false]                     \n' +
               '--version                Prints version. [contradicts: --help, help, -h]   \n' +
               '--pos=<number number>    The position.                                     \n' +
