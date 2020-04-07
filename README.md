@@ -16,21 +16,21 @@ $ npm install --save shargs
 
 ## Features
 
-Shargs **gives developers as much control over command-line parsing as possible**.
+Shargs **gives developers as much control over <a href="#command-line-parsers">command-line parsing</a> as possible**.
 The advantages are:
 
 +   You get exactly the parser you need, without unnecessary features.
 +   You are able to mix in your own problem-specific parser functions.
 +   There is no magic going on in the background, everything is explicit.
 
-Following the same approach, shargs offers automatic usage documentation generation.
+Following the same approach, shargs offers <a href="#automatic-usage-documentation-generation">automatic usage documentation generation</a>.
 The advantages are:
 
 +   You get exactly the usage documentation you need, no unnecessary extras.
 +   You have fine-grained control over the documentation layout if you need that.
 +   You can write your own layout functions and combine them with existing ones.
 
-Shargs' extensibility and release of control to the developer sets it apart from other command-line parsers.
+Shargs' extensibility and release of control to the developer sets it apart from <a href="#comparison-to-related-libraries">other command-line parsers</a>.
 
 ## Getting Started
 
@@ -385,12 +385,12 @@ The following fields are available:
 <tr name="desc">
 <td><code><a href="#desc">desc</a></code></td>
 <td>string</td>
-<td><code>desc</code> is the user-facing description of a command-line option that is used by the automatic usage documentation generation.</td>
+<td><code>desc</code> is the user-facing description of a command-line option that is used by the <a href="#automatic-usage-documentation-generation">automatic usage documentation generation</a>.</td>
 </tr>
 <tr name="descArg">
 <td><code><a href="#descArg">descArg</a></code></td>
 <td>string</td>
-<td><code>descArg</code> is the user-facing description of an argument value that is used by the automatic usage documentation generation.</td>
+<td><code>descArg</code> is the user-facing description of an argument value that is used by the <a href="#automatic-usage-documentation-generation">automatic usage documentation generation</a>.</td>
 </tr>
 <tr name="implies">
 <td><code><a href="#implies">implies</a></code></td>
@@ -1989,7 +1989,7 @@ Thus, as depicted in row 2, from `--question` onwards, `ask`'s child parser `c` 
 However, as row 3 suggests, the `--answer 42` argv are actually a parent's option and the child parser will not recognize it.
 
 To solve situations as described above, all unrecognized argv from child parsers are again processed by their parent's parsers.
-This means, **parent parsers may run several times** and their checks are repeated.
+This means, **parent parsers may run several times** and their checks would be repeated.
 Since checks do not change any data, repeating them is not harmful.
 However, it may result in duplicated error messages, which is undesirable.
 
