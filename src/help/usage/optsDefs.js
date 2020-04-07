@@ -1,102 +1,24 @@
+const optsF      = require('./combinators/optsF')
 const {defsFrom} = require('../layout/defs')
 
-const optsDefsFrom = (id1 = 'line', id2 = 'desc') => (opts = []) => {
-  const opts2 = opts.filter(opt => typeof opt === 'object')
-
-  const argsByKey = opts2.reduce(
-    (acc, opt) => ({
-      ...acc,
-      ...(typeof opt === 'undefined' || typeof opt.key === 'undefined'
-          ? {}
-          : {[opt.key]: [...(acc[opt.key] || []), ...(opt.args || [])]}
-      )
-    }),
-    {}
-  )
-
-  return defsFrom(id1, id2)(
+const optsDefsFrom = (id1 = 'line', id2 = 'desc') => optsF(
+  (defArgs, descOpts, opts) => defsFrom(id1, id2)(
     flatMap(opt => {
-      const {key, args, desc = ''} = opt
+      const {key, desc = ''} = opt
       if (typeof key === 'undefined') return []
       else return [[
-        (Array.isArray(args) ? argsDef(opt) : posArg(opt)) + optDesc(opt, argsByKey),
+        defArgs(opt) + descOpts(opt),
         desc
       ]]
-    })(opts2)
+    })(opts)
   )
-}
+)
 
 const optsDefs = optsDefsFrom('line', 'desc')
 
 module.exports = {
   optsDefs,
   optsDefsFrom
-}
-
-function argsDef (opt) {
-  return sortArgs(opt.args).join(', ') + valuesLabel(opt)
-}
-
-function posArg ({key, variadic = false}) {
-  return '<' + key + '>' + (variadic === true ? '...' : '')
-}
-
-function valuesLabel ({descArg = '', types, only = []}) {
-  const value = (
-    Array.isArray(only) && only.length > 0        ? only.join('|') :
-    typeof descArg === 'string' && descArg !== '' ? descArg :
-    Array.isArray(types)                          ?
-    types.length === 1                            ? types[0] :
-    types.length > 1                              ? types.join(' ')
-                                                  : ''
-                                                  : ''
-  )
-
-  return value === '' ? '' : '=<' + value + '>'
-}
-
-function optDesc ({contradicts = [], defaultValues = [], implies = [], required}, argsByKey) {
-  const labels = [
-    ...(Array.isArray(contradicts) && contradicts.length > 0
-        ? ['contradicts: ' + flatMap(_ => argsByKey[_])(contradicts).join(', ')]
-        : []
-    ),
-    ...(!Array.isArray(defaultValues)
-        ? []
-        : defaultValues.length === 0
-          ? []
-          : defaultValues.length === 1
-            ? ['default: ' + defaultValues[0]]
-            : ['default: ' + defaultValues.join(', ')]
-    ),
-    ...(Array.isArray(implies) && implies.length > 0
-        ? ['implies: ' + flatMap(_ => argsByKey[_])(implies).join(', ')]
-        : []
-    ),
-    ...(required === true
-        ? ['required']
-        : required === false
-          ? ['not required']
-          : []
-    )
-  ]
-
-  return (labels.length === 0 ? '' : ' ') + labels.map(label => '[' + label + ']').join(' ')
-}
-
-function sortArgs (args) {
-  const singleDash = []
-  const doubleDash = []
-  const others     = []
-
-  for (let i = 0; i < args.length; i++) {
-    const arg = args[i]
-    if (arg.startsWith('--'))     doubleDash.push(arg)
-    else if (arg.startsWith('-')) singleDash.push(arg)
-    else                          others.push(arg)
-  }
-
-  return [...singleDash, ...others, ...doubleDash]
 }
 
 function flatMap (f) {
