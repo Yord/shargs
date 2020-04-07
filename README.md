@@ -3315,7 +3315,7 @@ A style object may have the following parameters:
 
 ### Combining Options, Parser, and Usage Documentation
 
-The command-line options, the parser, and the usage documentation are combined to a program:
+You may now use the command-line options, the parser, and the usage documentation in your program:
 
 ```js
 // ./deepThought -a 42 ask -q 'What is the answer to everything?'
@@ -3335,9 +3335,21 @@ if (args.help) {
 }
 ```
 
-Shargs lets you define the three parts individually.
-This gives you a lot of flexibility:
-E.g. It lets you mix in custom parser and usage functions.
+If the program is executed with `node deepThought -ha 42 ask -q "What is the answer to everything?"`,
+the following text is printed to the command-line:
+
+```bash
+deepThought [-a] [-h]                                                           
+                                                                                
+ask                                                                             
+Just ask.                                                                       
+                                                                                
+-a, --answer=<42>   The (default) answer.                                       
+-h, --help          Print this help message and exit.                           
+                                                                                
+Deep Thought was created to come up with the Answer to The Ultimate Question of 
+Life, the Universe, and Everything.                                             
+```
 
 ## Comparison to Related Libraries
 
