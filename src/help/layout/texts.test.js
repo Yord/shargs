@@ -124,3 +124,29 @@ test('textsFrom with wrong id uses default style', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('descs README example works as expected', () => {
+  const descs = opts => style => {
+    const descriptions = opts.map(_ => _.desc)
+  
+    return texts(descriptions)(style)
+  }
+
+  const opts = [
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], desc: 'The answer.', required: true},
+    {key: 'help', types: [], args: ['-h', '--help'], desc: 'Prints help.', defaultValue: [false]},
+    {key: 'version', types: [], args: ['--version'], desc: 'Prints version.', contradicts: ['help']}
+  ]
+  
+  const style = {
+    line: {width: 40}
+  }
+  
+  const res = descs(opts)(style)
+
+  const txt = 'The answer.                             \n'+
+              'Prints help.                            \n' +
+              'Prints version.                         \n'
+  
+  expect(res).toStrictEqual(txt)
+})
