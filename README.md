@@ -3401,6 +3401,37 @@ In such cases, you may safely add your checks to `parser`'s stages parameter.
 The [automatic usage documentation generation](#automatic-usage-documentation-generation) section had to leave out some more advanced topics.
 These topics are covered here.
 
+#### Custom Layout Functions
+
+Using your own layout function is straightforward:
+Your function only has to have the correct signature and it is ready to be used as a layout function:
+It must take a [`style` object](#style) and return a `string`.
+
+The following example showcases the custom `table2` layout function that takes `columns` instead of `rows` as input:
+
+```js
+const table2 = (columns = []) => style => {
+  const rows = []
+
+  for (let i = 0; i < columns[0].length; i++) {
+    const row = []
+    for (let j = 0; j < columns.length; j++) {
+      row.push(columns[j][i])
+    }
+    rows.push(row)
+  }
+
+  return table(rows)(style)
+}
+```
+
+You may use `table2` as a layout function if you apply it to a `columns` array,
+since that returns a function that takes a `style` argument and returns a `string`.
+
+This is of course a very simplified example that makes many assumptions that are often not valid
+and should not be made in real projects.
+Your own function would most probably need much more validations and handling of edge cases.
+
 ## Comparison to Related Libraries
 
 <table>
