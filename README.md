@@ -2752,7 +2752,7 @@ Usage decorator functions can be combined with the following usage decorator com
 </tr>
 <tr name="decorate">
 <td><code><a href="#decorate">decorate</a>(decorators)(usageFunction)(opts)</code></td>
-<td>Combines several usage decorators to one decorator. See the example at the [begin of this section](#usage-decorators).</td>
+<td>Combines several usage decorators to one decorator. See the example at the <a href="#usage-decorators">begin of this section</a>.</td>
 </tr>
 </table>
 
