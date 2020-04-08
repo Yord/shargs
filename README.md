@@ -1838,7 +1838,7 @@ This means:
 
 +   You may define your own usage documentation layout using shargs' [usage](#automatic-usage-documentation-generation) and [layout](#layout-functions) funtions.
 +   You may provide your own [styles](#style) and control the number of columns on a component basis.
-+   You are able to easily mix in your own functions into shargs' layout functions.
++   You are able to easily mix in [your own layout](#custom-layout-functions) and [your own usage](#custom-usage-functions) functions.
 +   You may decide to not opt-in to shargs' approach and roll your own usage documentation.
 
 Defining your own usage documentation layout is as simple as:
