@@ -446,10 +446,9 @@ A command-line option may be decorated with one or many of the following decorat
 <tr name="complement">
 <td><code><a href="#complement">complement</a>(prefix)(opt)</code></td>
 <td>
-Transforms a <a href="#bool"><code>bool</code></a> or <a href="#flag"><code>flag</code></a> option into a complementary option prefixed with a given string (e.g. <code>--no-</code>). The complementary option has the same key as the original option, but reverts the value. Using <code>complement</code> assumes, either the <a href="#reverseBools"><code>reverseBools</code></a> or <a href="#reverseFlags"><code>reverseFlags</code></a>, or both parser stages are used in the parser.
 <details>
 <summary>
-Read on...
+Transforms a <a href="#bool"><code>bool</code></a> or <a href="#flag"><code>flag</code></a> option into a complementary option prefixed with a given string (e.g. <code>--no-</code>). The complementary option has the same key as the original option, but reverts the value. Using <code>complement</code> assumes, either the <a href="#reverseBools"><code>reverseBools</code></a> or <a href="#reverseFlags"><code>reverseFlags</code></a>, or both parser stages are used in the parser.
 </summary>
 
 <br />
@@ -533,10 +532,9 @@ For each stage, the checks are applied first, followed by the stages.
 <tr name="verifyArgv">
 <td><code><a href="#verifyArgv">verifyArgv</a>(rules)({errs, argv})</code></td>
 <td>
-Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate. Reports an error if the predicate returns false.
 <details>
 <summary>
-Read on...
+Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate. Reports an error if the predicate returns false.
 </summary>
 
 <br />
@@ -583,11 +581,10 @@ Result:
 <tr name="equalsSignAsSpace">
 <td><code><a href="#equalsSignAsSpace">equalsSignAsSpace</a>({errs, argv})</code></td>
 <td>
-<code>equalsSignAsSpace</code> treats arguments of the form <code>--name=Logan</code> as if they were <code>--name Logan</code>.
-It only removes the first equals sign in the argument, so <code>--name=Logan=Wolverine</code> becomes <code>--name Logan=Wolverine</code>.
 <details>
 <summary>
-Read on...
+<code>equalsSignAsSpace</code> treats arguments of the form <code>--name=Logan</code> as if they were <code>--name Logan</code>.
+It only removes the first equals sign in the argument, so <code>--name=Logan=Wolverine</code> becomes <code>--name Logan=Wolverine</code>.
 </summary>
 
 <br />
@@ -614,11 +611,10 @@ Result:
 <tr name="shortOptsNoSpace">
 <td><code><a href="#shortOptsNoSpace">shortOptsNoSpace</a>({errs, argv})</code></td>
 <td>
-<code>shortOptsNoSpace</code> allows arguments like <code>-nLogan</code> to be interpreted as <code>-n Logan</code>.
-You may either use <code>shortOptsNoSpace</code>, or <a href="#splitShortOptions"><code>splitShortOptions</code></a>, but not both at the same time.
 <details>
 <summary>
-Read on...
+<code>shortOptsNoSpace</code> allows arguments like <code>-nLogan</code> to be interpreted as <code>-n Logan</code>.
+You may either use <code>shortOptsNoSpace</code>, or <a href="#splitShortOptions"><code>splitShortOptions</code></a>, but not both at the same time.
 </summary>
 
 <br />
@@ -645,11 +641,10 @@ Result:
 <tr name="splitShortOptions">
 <td><code><a href="#splitShortOptions">splitShortOptions</a>({errs, argv})</code></td>
 <td>
-Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
-You may either use <code>splitShortOptions</code>, or <a href="#shortOptsNoSpace"><code>shortOptsNoSpace</code></a>, but not both at the same time.
 <details>
 <summary>
-Read on...
+Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
+You may either use <code>splitShortOptions</code>, or <a href="#shortOptsNoSpace"><code>shortOptsNoSpace</code></a>, but not both at the same time.
 </summary>
 
 <br />
@@ -676,15 +671,14 @@ Result:
 <tr name="traverseArgv">
 <td><code><a href="#traverseArgv">traverseArgv</a>(p)(f)({errs,opts})</code></td>
 <td>
+<details>
+<summary>
 <code>traverseArgv</code> applies a function <code>f</code> to each arg that satisfies a predicate <code>p</code>.
 It does not change the order of <code>argv</code> in the process.
 <code>p</code> takes an arg string and returns a boolean.
 <code>f</code> takes three arguments, an arg string, the index of the arg, and the argv array,
 and returns an <code>{errs = [], argv = []}</code> object.
 Most of the other <code>argv</code> checks and stages are defined in terms of <code>traverseArgv</code>.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -735,10 +729,9 @@ Result:
 <tr name="contradictOpts">
 <td><code><a href="#contradictOpts">contradictOpts</a>({errs, opts})</code></td>
 <td>
-Verifies that no option in the <a href="#contradics"><code>contradics</code></a> field of an option has <a href="#values"><code>values</code></a> if the option has <code>values</code>.
 <details>
 <summary>
-Read on...
+Verifies that no option in the <a href="#contradics"><code>contradics</code></a> field of an option has <a href="#values"><code>values</code></a> if the option has <code>values</code>.
 </summary>
 
 <br />
@@ -785,10 +778,9 @@ Result:
 <tr name="demandACommand">
 <td><code><a href="#demandACommand">demandACommand</a>({errs, opts})</code></td>
 <td>
-Checks if <code>opts</code> includes at least one <a href="#command"><code>command</code></a> and reports an exception if no command is found.
 <details>
 <summary>
-Read on...
+Checks if <code>opts</code> includes at least one <a href="#command"><code>command</code></a> and reports an exception if no command is found.
 </summary>
 
 <br />
@@ -827,10 +819,9 @@ Result:
 <tr name="implyOpts">
 <td><code><a href="#implyOpts">implyOpts</a>({errs, opts})</code></td>
 <td>
-Checks if all options in the <a href="#implies"><code>implies</code></a> of an option also have <a href="#values"><code>values</code></a>, if the option has <code>values</code>.
 <details>
 <summary>
-Read on...
+Checks if all options in the <a href="#implies"><code>implies</code></a> of an option also have <a href="#values"><code>values</code></a>, if the option has <code>values</code>.
 </summary>
 
 <br />
@@ -869,11 +860,10 @@ Result:
 <tr name="requireOptions">
 <td><code><a href="#requireOptions">requireOptions</a>({errs, opts})</code></td>
 <td>
-Controls, if options marked with <a href="#required"><code>{required: true}</code></a> have valid <a href="#values"><code>values</code></a> or <a href="#defaultValues"><code>defaultValues</code></a>.
-If a required option is not present, an error message is reported.
 <details>
 <summary>
-Read on...
+Controls, if options marked with <a href="#required"><code>{required: true}</code></a> have valid <a href="#values"><code>values</code></a> or <a href="#defaultValues"><code>defaultValues</code></a>.
+If a required option is not present, an error message is reported.
 </summary>
 
 <br />
@@ -909,10 +899,9 @@ Result:
 <tr name="verifyOpts">
 <td><code><a href="#verifyOpts">verifyOpts</a>(rules)({errs, opts})</code></td>
 <td>
-Checks, whether the <code>opts</code> adher to a given <code>rules</code> predicate.
 <details>
 <summary>
-Read on...
+Checks, whether the <code>opts</code> adher to a given <code>rules</code> predicate.
 </summary>
 
 <br />
@@ -955,10 +944,9 @@ Result:
 <tr name="verifyRules">
 <td><code><a href="#verifyRules">verifyRules</a>({errs, opts})</code></td>
 <td>
-Checks, whether the <a href="#rules"><code>rules</code></a> field of an option holds in relation to all options.
 <details>
 <summary>
-Read on...
+Checks, whether the <a href="#rules"><code>rules</code></a> field of an option holds in relation to all options.
 </summary>
 
 <br />
@@ -999,10 +987,9 @@ Result:
 <tr name="verifyValuesArity">
 <td><code><a href="#verifyValuesArity">verifyValuesArity</a>({errs, opts})</code></td>
 <td>
-Checks, whether the <a href="#values"><code>values</code></a> and <a href="#defaultValues"><code>defaultValues</code></a> of an option fits its <a href="#types"><code>types</code></a>.
 <details>
 <summary>
-Read on...
+Checks, whether the <a href="#values"><code>values</code></a> and <a href="#defaultValues"><code>defaultValues</code></a> of an option fits its <a href="#types"><code>types</code></a>.
 </summary>
 
 <br />
@@ -1046,11 +1033,10 @@ Result:
 <tr name="arrayOnRepeat">
 <td><code><a href="#arrayOnRepeat">arrayOnRepeat</a>({errs, opts})</code></td>
 <td>
-<code>arrayOnRepeat</code> changes how repeated calls of command-line arguments are handled by the parser.
-Instead of keeping only the first argument, repeated arguments are collected in an array.
 <details>
 <summary>
-Read on...
+<code>arrayOnRepeat</code> changes how repeated calls of command-line arguments are handled by the parser.
+Instead of keeping only the first argument, repeated arguments are collected in an array.
 </summary>
 
 <br />
@@ -1084,12 +1070,11 @@ Result:
 <tr name="bestGuessOpts">
 <td><code><a href="#bestGuessOpts">bestGuessOpts</a>({errs, opts})</code></td>
 <td>
+<details>
+<summary>
 Tries its best to interpret unparsed strings as additional parameters (e.g. <code>{values: ['--foo']}</code> as a flag).
 Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><code>flag</code></a> and requires options to follow a pattern:
 A single minus and a single character for short options or exactly two minusses with any more characters for long options.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -1127,10 +1112,9 @@ Result:
 <tr name="cast">
 <td><code><a href="#cast">cast</a>({errs, opts})</code></td>
 <td>
-Casts all <a href="#values"><code>values</code></a> according to the options' types.
 <details>
 <summary>
-Read on...
+Casts all <a href="#values"><code>values</code></a> according to the options' types.
 </summary>
 
 <br />
@@ -1171,10 +1155,9 @@ Result:
 <tr name="restrictToOnly">
 <td><code><a href="#restrictToOnly">restrictToOnly</a>({errs, opts})</code></td>
 <td>
-Reports an error if an option's <a href="#values"><code>values</code></a> are not contained in the <a href="#only"><code>only</code></a> list.
 <details>
 <summary>
-Read on...
+Reports an error if an option's <a href="#values"><code>values</code></a> are not contained in the <a href="#only"><code>only</code></a> list.
 </summary>
 
 <br />
@@ -1209,11 +1192,10 @@ Result:
 <tr name="reverseBools">
 <td><code><a href="#reverseBools">reverseBools</a>({errs, opts})</code></td>
 <td>
-Reverses the value of all <a href="#bool"><code>bool</code></a> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
-Works on string (e.g. <code>['false']</code>) and boolean (e.g. <code>[false]</code>) values.
 <details>
 <summary>
-Read on...
+Reverses the value of all <a href="#bool"><code>bool</code></a> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
+Works on string (e.g. <code>['false']</code>) and boolean (e.g. <code>[false]</code>) values.
 </summary>
 
 <br />
@@ -1246,11 +1228,10 @@ Result:
 <tr name="reverseFlags">
 <td><code><a href="#reverseFlags">reverseFlags</a>({errs, opts})</code></td>
 <td>
-Reverses the value of all <a href="#flag"><code>flag</code></a> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
-This may be useful if the presence of a flag should imply <code>false</code>.
 <details>
 <summary>
-Read on...
+Reverses the value of all <a href="#flag"><code>flag</code></a> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
+This may be useful if the presence of a flag should imply <code>false</code>.
 </summary>
 
 <br />
@@ -1281,12 +1262,11 @@ Result:
 <tr name="suggestOptions">
 <td><code><a href="#suggestOptions">suggestOptions</a>({errs, opts})</code></td>
 <td>
+<details>
+<summary>
 Even if an <code>argv</code> is misspelled (e.g. <code>--aeg</code> instead of <code>--age</code>),
 shargs still keeps it as an unknown option (e.g. <code>{values: ['--aeg']}</code>).
 The <code>suggestOptions</code> stage collects all unknown options and suggests similar args defined in <code>opts</code>.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -1350,15 +1330,14 @@ Did you mean: --age, -a
 <tr name="traverseOpts">
 <td><code><a href="#traverseOpts">traverseOpts</a>(p)(f)({errs,opts})</code></td>
 <td>
+<details>
+<summary>
 <code>traverseOpts</code> applies a function <code>f</code> to each option that satisfies a predicate <code>p</code>.
 It does not change the order of options in the process.
 <code>p</code> takes a command-line option and returns a boolean.
 <code>f</code> takes three arguments, a command-line option, the index of the option, and the <code>opts</code> array,
 and returns an <code>{errs = [], opts = []}</code> object.
 Most of the other <code>opts</code> checks and stages are defined in terms of <code>traverseOpts</code>.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -1410,10 +1389,9 @@ Result:
 <tr name="failRest">
 <td><code><a href="#failRest">failRest</a>({errs, args})</code></td>
 <td>
-Reports an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
 <details>
 <summary>
-Read on...
+Reports an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
 </summary>
 
 <br />
@@ -1452,10 +1430,9 @@ Result:
 <tr name="verifyArgs">
 <td><code><a href="#verifyArgs">verifyArgs</a>(rules)({errs, args})</code></td>
 <td>
-Checks, whether the <code>args</code> adher to a given <code>rules</code> predicate.
 <details>
 <summary>
-Read on...
+Checks, whether the <code>args</code> adher to a given <code>rules</code> predicate.
 </summary>
 
 <br />
@@ -1504,12 +1481,11 @@ Result:
 <tr name="bestGuessArgs">
 <td><code><a href="#bestGuessArgs">bestGuessArgs</a>({errs, args})</code></td>
 <td>
+<details>
+<summary>
 Tries its best to interpret strings in the <code>_</code> key as additional parameters.
 Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><code>flag</code></a> and requires options to follow a pattern:
 A single minus and a single character for short options or exactly two minusses with any more characters for long options.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -1554,10 +1530,9 @@ Result:
 <tr name="bestGuessCast">
 <td><code><a href="#bestGuessCast">bestGuessCast</a>({errs, args})</code></td>
 <td>
-<code>bestGuessCast</code> tries its best to transform strings into other types.
 <details>
 <summary>
-Read on...
+<code>bestGuessCast</code> tries its best to transform strings into other types.
 </summary>
 
 <br />
@@ -1618,10 +1593,9 @@ Result:
 <tr name="clearRest">
 <td><code><a href="#clearRest">clearRest</a>({errs, args})</code></td>
 <td>
-Removes all entries from each <code>_</code> key.
 <details>
 <summary>
-Read on...
+Removes all entries from each <code>_</code> key.
 </summary>
 
 <br />
@@ -1648,10 +1622,9 @@ Result:
 <tr name="flagsAsBools">
 <td><code><a href="#flagsAsBools">flagsAsBools</a>({errs, args})</code></td>
 <td>
-Transforms all count-based <a href="#flag"><code>flag</code></a> options into booleans, that are <code>true</code> if the count is greater than <code>0</code> and <code>false</code> otherwise.
 <details>
 <summary>
-Read on...
+Transforms all count-based <a href="#flag"><code>flag</code></a> options into booleans, that are <code>true</code> if the count is greater than <code>0</code> and <code>false</code> otherwise.
 </summary>
 
 <br />
@@ -1682,10 +1655,9 @@ Result:
 <tr name="flagsAsNumbers">
 <td><code><a href="#flagsAsNumbers">flagsAsNumbers</a>({errs, args})</code></td>
 <td>
-Transforms all count-based <a href="#flag"><code>flag</code></a> options into numbers, that correspond to the count.
 <details>
 <summary>
-Read on...
+Transforms all count-based <a href="#flag"><code>flag</code></a> options into numbers, that correspond to the count.
 </summary>
 
 <br />
@@ -1716,14 +1688,13 @@ Result:
 <tr name="mergeArgs">
 <td><code><a href="#mergeArgs">mergeArgs</a>(merge)({errs, args})</code></td>
 <td>
+<details>
+<summary>
 Recursively merges args objects of <a href="#command"><code>command</code></a>s into their partent args objects.
 Results into a flat object, where no key is an object.
 Other <code>merge</code> functions may be given to the function.
 If the <code>merge</code> parameter is left undefined, fields from the parent object are preferred
 and the rest field `_` is concatenated.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -1776,12 +1747,11 @@ Result:
 <tr name="traverseArgs">
 <td><code><a href="#traverseArgs">traverseArgs</a>(fs)({errs, args})</code></td>
 <td>
+<details>
+<summary>
 Transforms an args object into a new args object by applying functions <code>fs</code> based on the value type.
 All fields of an object are updated independently and previous updates in the same run do not influence later updates.
 Many <code>args</code> checks and stages are implemented in terms of <code>traverseArgs</code>.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -1840,6 +1810,1368 @@ const fs = {
 </td>
 </tr>
 </table>
+
+#### Command-specific Parsers
+
+Shargs' [`parser`](#command-line-parsers) function may use the `parsers` object
+to define a different parser for each [`command`](#command) option.
+If `parsers` contains a key that matches a `command`'s key, the value is used as a parser for that command.
+
+If a `command` does not have its own parser, it uses the default parser defined at the `_` field.
+The `_` field can be overridden by the user to define a custom default parser.
+If left unchanged, it defaults to the parent parser.
+
+#### Advanced Parsers
+
+More in-depth information regarding parsers can be found in the [advanced command-line parsers](#advanced-command-line-parsers) section:
+
++   [`toOpts` stage documentation](#toOpts-stage)
++   [`toArgs` stage documentation](#toArgs-stage)
++   [Custom checks and stages](#custom-checks-and-stages)
++   [Relation between checks and stages](#relation-between-checks-and-stages)
+
+### Automatic Usage Documentation Generation
+
+Shargs offers a highly configurable variant of automatic usage documentation generation,
+with the goal to **give developers as much control over the layout as possible**.
+This means:
+
++   You may define your own usage documentation layout using shargs' [usage](#automatic-usage-documentation-generation) and [layout](#layout-functions) funtions.
++   You may provide your own [styles](#style) and control the number of columns on a component basis.
++   You are able to easily mix in your own functions into shargs' layout functions.
++   You may decide to not opt-in to shargs' approach and roll your own usage documentation.
+
+Defining your own usage documentation layout is as simple as:
+
+```js
+const docs = usage([
+  synopsis('deepThought'),
+  space,
+  optsList,
+  space,
+  note(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+])
+```
+
+Here, `docs` is a declarative description of a usage documentation using shargs usage functions.
+The `synopsis` gives a high level overview over all possible arguments
+and the `optsList` lists all options with more details.
+
+Shargs provides the following usage functions:
+
+<table>
+<tr>
+<th>Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="note">
+<td><code name="noteFrom"><a href="#note">note</a>(string)(opts)(style)</code><br /><code><a href="#noteFrom">noteFrom</a>(id)(string)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints the <code>string</code> as a <a href="#line"><code>line</code></a>.
+Takes the line width from <a href="#style">style</a> and pads with spaces at the end.
+If the string is too long to fit the <code>line</code>'s width, it is broken up into words, and all remaining words are put into another <code>line</code>.
+</summary>
+
+<br />
+
+```js
+const note = noteFrom('line')
+```
+
+Example:
+
+```js
+const opts = []
+
+const style = {
+  line: {width: 40}
+}
+
+note(
+  'Deep Thought was created to come up with the Answer.'
+)(opts)(style)
+```
+
+Result:
+
+```bash
+Deep Thought was created to come up with
+the Answer.                             
+```
+
+</details>
+</td>
+</tr>
+<tr name="notes">
+<td><code name="notesFrom"><a href="#notes">notes</a>(strings)(opts)(style)</code><br /><code><a href="#notesFrom">notesFrom</a>(id)(strings)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints several strings using <a href="#note"><code>note</code></a> for each.
+</summary>
+
+<br />
+
+```js
+const notes = notesFrom('line')
+```
+
+Example:
+
+```js
+const opts = []
+
+const style = {
+  line: {width: 40}
+}
+
+notes([
+  'Deep Thought answered',
+  'The Ultimate Question.'
+])(opts)(style)
+```
+
+Result:
+
+```bash
+Deep Thought answered                   
+The Ultimate Question.                  
+```
+
+</details>
+</td>
+</tr>
+<tr name="optsDefs">
+<td><code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>(opts)(style)</code><br /><code><a href="#optsDefsFrom">optsDefsFrom</a>(id1, id2)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints a <a href="#def"><code>def</code></a> (definition) list,
+with the command-line option <a href="#args"><code>args</code></a> as title and the <a href="#desc"><code>desc</code></a> field as text.
+</summary>
+
+<br />
+
+```js
+const optsDefs = optsDefsFrom('line', 'desc')
+```
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  line: {width: 40},
+  desc: {padStart: 4, width: 36}
+}
+
+optsDefs(opts)(style)
+```
+
+Result:
+
+```bash
+-a, --answer=<number>                   
+    The answer.                         
+-h, --help                              
+    Prints help.                        
+--version                               
+    Prints version.                     
+```
+
+</details>
+</td>
+</tr>
+<tr name="optsList">
+<td><code name="optsListFrom"><a href="#optsList">optsList</a>(opts)(style)</code><br /><code><a href="#optsListFrom">optsListFrom</a>(id)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints a <a href="#table"><code>table</code></a> with two columns:
+The command-line option's <a href="#args"><code>args</code></a> in the left,
+and the <a href="#desc"><code>desc</code></a> field in the right column.
+</summary>
+
+<br />
+
+```js
+const optsList = optsListFrom('cols')
+```
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  cols: [
+    {width: 30},
+    {width: 25}
+  ]
+}
+
+optsList(opts)(style)
+```
+
+Result:
+
+```bash
+-a, --answer=<number>         The answer.              
+-h, --help                    Prints help.             
+--version                     Prints version.          
+```
+
+</details>
+</td>
+</tr>
+<tr name="space">
+<td><code name="spaceFrom"><a href="#space">space</a>(opts)(style)</code><br /><code><a href="#spaceFrom">spaceFrom</a>(id)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Introduces a single blank <a href="#line"><code>line</code></a>.
+</summary>
+
+<br />
+
+```js
+const space = spaceFrom('line')
+```
+
+Example:
+
+```js
+const opts = []
+
+const style = {
+  line: {width: 40}
+}
+
+usage([
+  note('Deep Thought answered'),
+  space,
+  note('The Ultimate Question.')
+])(opts)(style)
+```
+
+Result:
+
+```bash
+Deep Thought answered                   
+                                        
+The Ultimate Question.                  
+```
+
+</details>
+</td>
+</tr>
+<tr name="spaces">
+<td><code name="spacesFrom"><a href="#spaces">spaces</a>(length)(opts)(style)</code><br /><code><a href="#spacesFrom">spacesFrom</a>(id)(length)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Introduces several blank <a href="#lines"><code>lines</code></a> with the number defined by the <code>length</code> parameter.
+</summary>
+
+<br />
+
+```js
+const spaces = spacesFrom('line')
+```
+
+Example:
+
+```js
+const opts = []
+
+const style = {
+  line: {width: 40}
+}
+
+usage([
+  note('Deep Thought answered'),
+  spaces(2),
+  note('The Ultimate Question.')
+])(opts)(style)
+```
+
+Result:
+
+```bash
+Deep Thought answered                   
+                                        
+                                        
+The Ultimate Question.                  
+```
+
+</details>
+</td>
+</tr>
+<tr name="synopsis">
+<td><code name="synopsisFrom"><a href="#synopsis">synopsis</a>(programName)(opts)(style)</code><br /><code><a href="#synopsisFrom">synopsisFrom</a>(id)(start, end)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints a synopsis:
+The <code>programName</code> is printed first, followed by the command-line options' <a href="#args"><code>args</code></a>.
+</summary>
+
+<br />
+
+```js
+const synopsis = synopsisFrom('cols')
+```
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  line: {width: 40}
+}
+
+synopsis('deepThought')(opts)(style)
+```
+
+Result:
+
+```bash
+deepThought [-a|--answer] [-h|--help]   
+            [--version]                 
+```
+
+</details>
+</td>
+</tr>
+</table>
+
+#### Usage Combinators
+
+Several usage functions may be combined to form a new usage function.
+Combinators let you build more complex components from simple components, like e.g.:
+
+```js
+const simpleOptsDesc = usageMap(
+  opt => layout([
+    text(opt.args.join(', ')),
+    text(opt.desc)
+  ])
+)
+```
+
+`simpleOptsDesc` prints a `text` with a comma-separated list of [`args`](#args) followed by the [`desc`](#desc) for each option in `opts`.
+The [`layout`](#layout) and [`text`](#text) functions are introduced below in the section on [layout functions](#layout-functions).
+The following usage combinators are available:
+
+<table>
+<tr>
+<th>Usage&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="usage">
+<td><code><a href="#usage">usage</a>(functions)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Groups several usage functions together.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  line: {width: 40},
+  cols: [{width: 20}, {width: 20}]
+}
+
+usage([
+  synopsis('deepThought'),
+  space,
+  optsList,
+  space,
+  note('Deep Thought was created to come up with the Answer.')
+])(opts)(style)
+```
+
+Result:
+
+```bash
+deepThought [-a|--answer] [-h|--help]   
+            [--version]                 
+                                        
+-a,                 The answer.         
+--answer=<number>                       
+-h, --help          Prints help.        
+--version           Prints version.     
+                                        
+Deep Thought was created to come up with
+the Answer.                             
+```
+
+</details>
+</td>
+</tr>
+<tr name="usageMap">
+<td><code><a href="#usageMap">usageMap</a>(f)(opts)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes an <code>opts</code> (options) list and a function <code>f</code>,
+which is applied to each option and is expected to return a <a href="#layout-functions">layout function</a>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const style = {
+  line: {width: 40},
+  desc: {padStart: 3, width: 37}
+}
+
+usageMap(({args, desc}) => layout([
+  text(args.join(', ')),
+  textFrom('desc')(desc)
+]))(opts)(style)
+```
+
+Result:
+
+```bash
+-a, --answer                            
+   The answer.                          
+-h, --help                              
+   Prints help.                         
+--version                               
+   Prints version.                      
+```
+
+</details>
+</td>
+</tr>
+</table>
+
+#### Usage Decorators
+
+Sometimes you want to pass only a portion of the command-line options to a usage function.
+Shargs has usage decorators for that:
+
+```js
+const decoratedDocs = usage([
+  decorate(noCommands, onlyFirstArg)(synopsis('deepThought')),
+  space,
+  onlyCommands(optsDefs),
+  space,
+  noCommands(optsList),
+  space,
+  note(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+])
+```
+
+`decoratedDocs` displays [`commands`](#commands) in a separate component than other command-line options
+by using the `onlyCommands` and `noCommands` decorators to filter relevant options.
+Shargs provides the following usage decorators:
+
+<table>
+<tr>
+<th>Usage&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="justArgs">
+<td><code><a href="#justArgs">justArgs</a>(array)(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Takes an array of args and keeps only those <code>opts</code> that have an arg in the args <code>array</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 20}, {width: 20}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+justArgs(['-a', '-h'])(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-a,                 The answer          
+--answer=<number>                       
+-h, --help          Prints help         
+```
+
+</details>
+</td>
+</tr>
+<tr name="noCommands">
+<td><code><a href="#noCommands">noCommands</a>(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Filters out all <a href="#command"><code>commands</code></a> from <code>opts</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 20}, {width: 20}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+noCommands(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-a,                 The answer          
+--answer=<number>                       
+--version           Prints version      
+```
+
+</details>
+</td>
+</tr>
+<tr name="onlyCommands">
+<td><code><a href="#onlyCommands">onlyCommands</a>(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Keeps only <a href="#command"><code>commands</code></a> in <code>opts</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 10, padEnd: 2}, {width: 28}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+onlyCommands(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-h, --help  Prints help                 
+```
+
+</details>
+</td>
+</tr>
+<tr name="onlyFirstArg">
+<td><code><a href="#onlyFirstArg">onlyFirstArg</a>(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Keeps only the first <a href="#args"><code>arg</code></a> from each opt.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 10, padEnd: 2}, {width: 28}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+onlyFirstArg(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-a <number> The answer                  
+-h          Prints help                 
+--version   Prints version              
+```
+
+</details>
+</td>
+</tr>
+<tr name="optsFilter">
+<td><code><a href="#optsFilter">optsFilter</a>(p)(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Applies array's filter method to the <code>opts</code> array using a predicate <code>p</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 20}, {width: 20}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+optsFilter(
+  ({types}) => types !== null
+)(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-a,                 The answer          
+--answer=<number>                       
+--version           Prints version      
+```
+
+</details>
+</td>
+</tr>
+<tr name="optsMap">
+<td><code><a href="#optsMap">optsMap</a>(f)(usageFunction)(opts)</code></td>
+<td>
+<details>
+<summary>
+Applies array's map method to the <code>opts</code> array using a function <code>f</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  cols: [{width: 20}, {width: 20}]
+}
+
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
+  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  flag('version', ['--version'], {desc: 'Prints version'})
+]
+
+optsMap(
+  opt => ({...opt, args: opt.args.slice(0, 1)})
+)(optsList)(opts)(style)
+```
+
+Result:
+
+```bash
+-a <number>         The answer          
+-h                  Prints help         
+--version           Prints version      
+```
+
+</details>
+</td>
+</tr>
+</table>
+
+Usage decorator functions can be combined with the following usage decorator combinators:
+
+<table>
+<tr>
+<th>Usage&nbsp;Decorator&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="decorate">
+<td><code><a href="#decorate">decorate</a>(decorators)(usageFunction)(opts)</code></td>
+<td>Combines several usage decorators to one decorator. See the example at the <a href="#usage-decorators">begin of this section</a>.</td>
+</tr>
+</table>
+
+#### Layout Functions
+
+Usage functions are written in a lower level markup language for formatting text in the terminal called layout functions.
+The `deepThought ask` documentation could be written as follows in layout syntax:
+
+```js
+const askDocs = layout([
+  text('deepThought ask (-q|--question) [-h|--help]'),
+  br,
+  table([
+    ['-q, --question=<string>', 'A question. [required]'],
+    ['-h, --help', 'Print this help message and exit.']
+  ]),
+  br,
+  text(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+])
+```
+
+If you just want to define a usage documentation, you do not need to know about layout functions.
+They only come into play, if you want to write your own usage functions.
+
+Shargs provides the following layout functions:
+
+<table>
+<tr>
+<th>Layout&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="br">
+<td><code name="brFrom"><a href="#br">br</a>(style)</code><br /><code><a href="#brFrom">brFrom</a>(id)(style)</code></td>
+<td>
+<details>
+<summary>
+Introduces a single blank line.
+</summary>
+
+<br />
+
+```js
+const br = brFrom('line')
+```
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+layout([
+  line('First line'),
+  br,
+  line('Last line')
+])(style)
+```
+
+Result:
+
+```bash
+First line                              
+                                        
+Last line                               
+```
+
+</details>
+</td>
+</tr>
+<tr name="brs">
+<td><code name="brsFrom"><a href="#brs">brs</a>(length)(style)</code><br /><code><a href="#brsFrom">brsFrom</a>(id)(length)(style)</code></td>
+<td>
+<details>
+<summary>
+Introduces several blank lines with the number defined by the <code>length</code> parameter.
+</summary>
+
+<br />
+
+```js
+const brs = brsFrom('line')
+```
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+layout([
+  line('First line'),
+  brs(2),
+  line('Last line')
+])(style)
+```
+
+Result:
+
+```bash
+First line                              
+                                        
+                                        
+Last line                               
+```
+
+</details>
+</td>
+</tr>
+<tr name="cols">
+<td><code name="colsFrom"><a href="#cols">cols</a>(columns)(style)</code><br /><code><a href="#colsFrom">colsFrom</a>(id)(columns)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes a list of <code>columns</code> with each column consisting of several strings.
+Prints the first column at the left and the last column at the right.
+The <a href="#style">style</a> parameter must have a <code>cols</code> id with a number of style objects equal to the number of columns.
+If a column string is longer than a column's width, it is cut off.
+</summary>
+
+<br />
+
+```js
+const cols = colsFrom('cols')
+```
+
+Example:
+
+```js
+const style = {
+  cols: [
+    {width: 15},
+    {width: 25}
+  ]
+}
+
+cols([
+  [
+    '-h, --help',
+    '-v, --version'
+  ],
+  [
+    'Prints the help.',
+    'Prints the version.'
+  ]
+])(style)
+```
+
+Result:
+
+```bash
+-h, --help     Prints the help.         
+-v, --version  Prints the version.      
+```
+
+</details>
+</td>
+</tr>
+<tr name="defs">
+<td><code name="defsFrom"><a href="#defs">defs</a>(rowsList)(style)</code><br /><code><a href="#defsFrom">defsFrom</a>(id1, id2)(rowsList)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes a list of title/desc row pairs.
+Prints the title as a <a href="#text"><code>text</code></a> before printing the desc as a <code>text</code>.
+Title and text may be assigned different <a href="#style">style</a> ids.
+</summary>
+
+<br />
+
+```js
+const defs = defsFrom('line', 'desc')
+```
+
+Example:
+
+```js
+const style = {
+  line: {width: 40},
+  desc: {padStart: 4, width: 36}
+}
+
+defs([
+  [
+    '-h, --help',
+    'Prints the help.'
+  ],
+  [
+    '-v, --version',
+    'Prints the version.'
+  ]
+])(line)
+```
+
+Result:
+
+```bash
+-h, --help                              
+    Prints the help.                    
+
+-v, --version                           
+    Prints the version.                 
+```
+
+</details>
+</td>
+</tr>
+<tr name="line">
+<td><code name="lineFrom"><a href="#line">line</a>(string)(style)</code><br /><code><a href="#lineFrom">lineFrom</a>(id)(string)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints the <code>string</code> with a linebreak at the end.
+Takes the line width from <a href="#style">style</a> and pads with spaces at the end.
+If the string is too long to fit the line's width, it is cut off.
+</summary>
+
+<br />
+
+```js
+const line = lineFrom('line')
+```
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+line('A line')(style)
+```
+
+Result:
+
+```bash
+A line                              
+```
+
+</details>
+</td>
+</tr>
+<tr name="lines">
+<td><code name="linesFrom"><a href="#lines">lines</a>(strings)(style)</code><br /><code><a href="#linesFrom">linesFrom</a>(id)(strings)(style)</code></td>
+<td>
+<details>
+<summary>
+Prints several strings using the <a href="#line"><code>line</code></a> function for each.
+</summary>
+
+<br />
+
+```js
+const lines = linesFrom('line')
+```
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+lines([
+  'First line',
+  'Last line'
+])(style)
+```
+
+Result:
+
+```bash
+First line                              
+Last line                               
+```
+
+</details>
+</td>
+</tr>
+<tr name="table">
+<td><code name="tableFrom"><a href="#table">table</a>(rowsList)(style)</code><br /><code><a href="#tableFrom">tableFrom</a>(id)(rowsList)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes a <code>rowsList</code> with each row holding a number of strings equal to the number of table columns.
+The <a href="#style">style</a> parameter must have a <code>cols</code> key with a number of style objects equal to the number of columns.
+The strings in each row are formatted according to the defined columns.
+If a string surpasses the width of a column, its remaining words are printed in the following rows.
+</summary>
+
+<br />
+
+```js
+const table = tableFrom('cols')
+```
+
+Example:
+
+```js
+const style = {
+  cols: [
+    {width: 10, padEnd: 2},
+    {width: 28}
+  ]
+}
+
+table([
+  [
+    '-v, --version',
+    'Prints the version.'
+  ],
+  [
+    '-h, --help',
+    'Prints the help.'
+  ]
+])(style)
+```
+
+Result:
+
+```bash
+-v,         Prints the version.         
+--version                                    
+-h, --help  Prints the help.            
+```
+
+</details>
+</td>
+</tr>
+<tr name="text">
+<td><code name="textFrom"><a href="#text">text</a>(string)(style)</code><br /><code><a href="#textFrom">textFrom</a>(id)(string)(style)</code></td>
+<td>
+<details>
+<summary>
+Text acts much like <a href="#line"><code>line</code></a>, but does not cut off strings that surpass a line's width.
+Instead, it splits the string by words and adds new <a href="#line"><code>lines</code></a> with the remaining words.
+</summary>
+
+<br />
+
+```js
+const text = textFrom('line')
+```
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+text(
+  'Deep Thought was created to come up with the Answer.'
+)(style)
+```
+
+Result:
+
+```bash
+Deep Thought was created to come up with
+the Answer.                             
+```
+
+</details>
+</td>
+</tr>
+<tr name="texts">
+<td><code name="textsFrom"><a href="#texts">texts</a>(strings)(style)</code><br /><code><a href="#textsFrom">textsFrom</a>(id)(strings)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes several <code>strings</code> and applies the <a href="#text"><code>text</code></a> function to each.
+</summary>
+
+<br />
+
+```js
+const texts = textsFrom('line')
+```
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+texts([
+  'Deep Thought was created to come up with the Answer.',
+  'To The Ultimate Question.'
+])(style)
+```
+
+Result:
+
+```bash
+Deep Thought was created to come up with
+the Answer.                             
+To The Ultimate Question.
+```
+
+</details>
+</td>
+</tr>
+</table>
+
+#### Layout Combinators
+
+Like usage functions, several layout functions may be combined into more complex layout functions using layout combinators.
+`textsFrom` is a good example:
+
+```js
+const textsFrom = id => layoutMap(textFrom(id))
+```
+
+Shargs provides the following layout combinators:
+
+<table>
+<tr>
+<th>Layout&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="layout">
+<td><code><a href="#layout">layout</a>(functions)(style)</code></td>
+<td>
+<details>
+<summary>
+Groups several <a href="#layout-functions">layout <code>functions</code></a> together and lets them share one <a href="#style"><code>style</code></a> definition.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const style = {
+  line: {width: 40}
+}
+
+layout([
+  line('First line'),
+  line('Last line')
+])(style)
+```
+
+Result:
+
+```bash
+First line                              
+Last line                               
+```
+
+</details>
+</td>
+</tr>
+<tr name="layoutMap">
+<td><code><a href="#layoutMap">layoutMap</a>(f)(itemsList)(style)</code></td>
+<td>
+<details>
+<summary>
+Takes a list of values and a function <code>f</code>,
+which is applied to each string and is expected to return a <a href="#layout-function">layout function</a>.
+The strings are then formatted according to <code>f</code>.
+</summary>
+
+<br />
+
+Style:
+
+```js
+const style = {
+  line: {width: 40},
+  desc: {padStart: 4, width: 36}
+}
+```
+
+Example 1:
+
+```js
+const itemsList = [
+  ['-h, --help', 'Prints the help.'],
+  ['-v, --version', 'Prints the version.']
+]
+
+const f = ([title, desc]) => layout([
+  text(title),
+  textFrom('desc')(desc)
+])
+
+layoutMap(f)(itemsList)(style)
+```
+
+Result 1:
+
+```bash
+-h, --help                              
+    Prints the help.                    
+-v, --version                           
+    Prints the version.                 
+```
+
+Example 2:
+
+```js
+const lines = layoutMap(line)
+
+lines([
+  '-h, --help',
+  'Prints the help.'
+])(style)
+```
+
+Result 2:
+
+```bash
+-h, --help                              
+Prints the help.                        
+```
+
+</details>
+</td>
+</tr>
+</table>
+
+#### Style
+
+Usage styles are applied to [usage](#automatic-usage-documentation-generation) and [layout](#layout-functions) functions to format the generated text snippets.
+Styles may define the [`width`](#width), [`padStart`](#padStart), and [`padEnd`](#padEnd) of the different parts of your usage documentation.
+A minimum definition of `style` for `deepThought` may be:
+
+```js
+const style = {
+  line: {width: 80},
+  cols: [{width: 20}, {width: 60}]
+}
+```
+
+`style` defines style objects for two ids: `line` and `cols`.
+These two ids are the default used by the layout functions to define, how lines and columns should be printed.
+However, any valid key may be used as an id, if it is passed as a string to the `id` parameter of any `*From` function.
+A style object may have the following parameters:
+
+<table>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+<tr name="padEnd">
+<td><code><a href="#padEnd">padEnd</a></code></td>
+<td>number</td>
+<td>Defines a padding to the right of a line.</td>
+</tr>
+<tr name="padStart">
+<td><code><a href="#padStart">padStart</a></code></td>
+<td>number</td>
+<td>Defines a padding to the left of a line.</td>
+</tr>
+<tr name="width">
+<td><code><a href="#width">width</a></code></td>
+<td>number</td>
+<td>Defines the length of a line before a line break is introduced.</td>
+</tr>
+</table>
+
+#### Advanced Usage Documentation
+
+More in-depth information regarding usage documentation is available in the [advanced usage generation](#advanced-usage-generation) section:
+
++   [Custom usage functions](#custom-usage-functions)
++   [Custom layout functions](#custom-layout-functions)
+
+### Combining Options, Parser, and Usage Documentation
+
+You may now use the [command-line options](#command-line-options), the [parser](#command-line-parsers), and the [usage documentation](#automatic-usage-documentation-generation) in your program:
+
+```js
+const argv = ['-a', '42', 'ask', '-q', 'What is the answer to everything?']
+
+const {errs, args} = deepThought(opts)(argv)
+
+const help = docs(opts)(style)
+const askHelp = askDocs(style)
+
+if (args.help) {
+  console.log(help)
+} else if (args.ask && args.ask.help) {
+  console.log(askHelp)
+} else {
+  console.log('The answer is: ' + args.answer)
+}
+```
+
+If the program is executed with `node deepThought -ha 42 ask -q "What is the answer to everything?"`,
+the following text is printed to the command-line:
+
+```bash
+deepThought [-a] [-h]                                                           
+                                                                                
+ask                                                                             
+Just ask.                                                                       
+                                                                                
+-a, --answer=<42>   The (default) answer.                                       
+-h, --help          Print this help message and exit.                           
+                                                                                
+Deep Thought was created to come up with the Answer to The Ultimate Question of 
+Life, the Universe, and Everything.                                             
+```
+
+## Advanced Topics
+
+The [shargs](#shargs) section does not have enough room for going into every single detail.
+This is what advanced topics are for.
+
+### Advanced Command-line Parsers
+
+The [`parser`](#command-line-parsers) function has lots of options the [command-line parsers](#command-line-parsers) could not talk about.
+The following sections shed some light on these options.
 
 #### `toOpts` Stage
 
@@ -1904,16 +3236,6 @@ The resulting `args` objects of the three stages are then merged together.
 
 The `toArgs` key of the `stages` argument of the [`parser`](#command-line-parsers) function lets users override the described behavior with their own functions.
 Do this with caution, as it may break defined parser checks and stages.
-
-#### Command-specific Parsers
-
-Shargs' [`parser`](#command-line-parsers) function may use the `parsers` object
-to define a different parser for each [`command`](#command) option.
-If `parsers` contains a key that matches a `command`'s key, the value is used as a parser for that command.
-
-If a `command` does not have its own parser, it uses the default parser defined at the `_` field.
-The `_` field can be overridden by the user to define a custom default parser.
-If left unchanged, it defaults to the parent parser.
 
 #### Custom Checks and Stages
 
@@ -2018,1356 +3340,66 @@ Repeated `parser` calls only occur in the presence of `command` options.
 This means, if you do not use `command` options, you do not need to separate checks and stages.
 In such cases, you may safely add your checks to `parser`'s stages parameter.
 
-### Automatic Usage Documentation Generation
+### Advanced Usage Generation
 
-Shargs offers a highly configurable variant of automatic usage documentation generation,
-with the goal to **give developers as much control over the layout as possible**.
-This means:
+The [automatic usage documentation generation](#automatic-usage-documentation-generation) section had to leave out some more advanced topics.
+These topics are covered here.
 
-+   You may define your own usage documentation layout using shargs' [usage](#automatic-usage-documentation-generation) and [layout](#layout-functions) funtions.
-+   You may provide your own [styles](#style) and control the number of columns on a component basis.
-+   You are able to easily mix in your own functions into shargs' layout functions.
-+   You may decide to not opt-in to shargs' approach and roll your own usage documentation.
+#### Custom Layout Functions
 
-Defining your own usage documentation layout is as simple as:
+Using your own layout function is straightforward:
+Your function only has to have the correct signature and it is ready to be used as a layout function:
+It must take a [`style` object](#style) and return a `string`.
 
-```js
-const docs = usage([
-  synopsis('deepThought'),
-  space,
-  optsList,
-  space,
-  note(
-    'Deep Thought was created to come up with the Answer to ' +
-    'The Ultimate Question of Life, the Universe, and Everything.'
-  )
-])
-```
-
-Here, `docs` is a declarative description of a usage documentation using shargs usage functions.
-The `synopsis` gives a high level overview over all possible arguments
-and the `optsList` lists all options with more details.
-
-Shargs provides the following usage functions:
-
-<table>
-<tr>
-<th>Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description</th>
-</tr>
-<tr name="note">
-<td><code name="noteFrom"><a href="#note">note</a>(string)(opts)(style)</code><br /><code><a href="#noteFrom">noteFrom</a>(id)(string)(opts)(style)</code></td>
-<td>
-Prints the <code>string</code> as a <a href="#line"><code>line</code></a>.
-Takes the line width from <a href="#style">style</a> and pads with spaces at the end.
-If the string is too long to fit the <code>line</code>'s width, it is broken up into words, and all remaining words are put into another <code>line</code>.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
+The following example showcases the custom `table2` layout function that takes `columns` instead of `rows` as input:
 
 ```js
-const note = noteFrom('line')
-```
+const table2 = (columns = []) => style => {
+  const rows = []
 
-Example:
+  for (let i = 0; i < columns[0].length; i++) {
+    const row = []
+    for (let j = 0; j < columns.length; j++) {
+      row.push(columns[j][i])
+    }
+    rows.push(row)
+  }
 
-```js
-const opts = []
-
-const style = {
-  line: {width: 40}
+  return table(rows)(style)
 }
-
-note(
-  'Deep Thought was created to come up with the Answer.'
-)(opts)(style)
 ```
 
-Result:
+You may use `table2` as a layout function if you apply it to a `columns` array,
+since that returns a function that takes a `style` argument and returns a `string`.
 
-```bash
-Deep Thought was created to come up with
-the Answer.                             
-```
+This is of course a very simplified example that makes many assumptions that are often not valid
+and should not be made in real projects.
+Your own function would most probably need much more validations and handling of edge cases.
 
-</details>
-</td>
-</tr>
-<tr name="notes">
-<td><code name="notesFrom"><a href="#notes">notes</a>(strings)(opts)(style)</code><br /><code><a href="#notesFrom">notesFrom</a>(id)(strings)(opts)(style)</code></td>
-<td>
-Prints several strings using <a href="#note"><code>note</code></a> for each.
-<details>
-<summary>
-Read on...
-</summary>
+#### Custom Usage Functions
 
-<br />
+Writing and using custom usage functions in shargs is very simple:
+You only have to write a function with the correct signature and it can be used as a usage function.
+It must take an [`opts`](#command-line-options) array and a [`style` object](#style) and return a `string`.
+
+The following example shows the custom `descs` function that displays the options' descriptions:
 
 ```js
-const notes = notesFrom('line')
-```
+const descs = opts => style => {
+  const descriptions = opts.map(_ => _.desc)
 
-Example:
-
-```js
-const opts = []
-
-const style = {
-  line: {width: 40}
+  return texts(descriptions)(style)
 }
-
-notes([
-  'Deep Thought answered',
-  'The Ultimate Question.'
-])(opts)(style)
 ```
 
-Result:
-
-```bash
-Deep Thought answered                   
-The Ultimate Question.                  
-```
-
-</details>
-</td>
-</tr>
-<tr name="optsDefs">
-<td><code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>(opts)(style)</code><br /><code><a href="#optsDefsFrom">optsDefsFrom</a>(id1, id2)(opts)(style)</code></td>
-<td>
-Prints a <a href="#def"><code>def</code></a> (definition) list,
-with the command-line option <a href="#args"><code>args</code></a> as title and the <a href="#desc"><code>desc</code></a> field as text.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
+Using [`usageMap`](#usageMap) simplifies the process of defining your own functions:
 
 ```js
-const optsDefs = optsDefsFrom('line', 'desc')
-```
-
-Example:
-
-```js
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
-
-const style = {
-  line: {width: 40},
-  desc: {padStart: 4, width: 36}
-}
-
-optsDefs(opts)(style)
-```
-
-Result:
-
-```bash
--a, --answer=<number>                   
-    The answer.                         
--h, --help                              
-    Prints help.                        
---version                               
-    Prints version.                     
-```
-
-</details>
-</td>
-</tr>
-<tr name="optsList">
-<td><code name="optsListFrom"><a href="#optsList">optsList</a>(opts)(style)</code><br /><code><a href="#optsListFrom">optsListFrom</a>(id)(opts)(style)</code></td>
-<td>
-Prints a <a href="#table"><code>table</code></a> with two columns:
-The command-line option's <a href="#args"><code>args</code></a> in the left,
-and the <a href="#desc"><code>desc</code></a> field in the right column.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-```js
-const optsList = optsListFrom('cols')
-```
-
-Example:
-
-```js
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
-
-const style = {
-  cols: [
-    {width: 30},
-    {width: 25}
-  ]
-}
-
-optsList(opts)(style)
-```
-
-Result:
-
-```bash
--a, --answer=<number>         The answer.              
--h, --help                    Prints help.             
---version                     Prints version.          
-```
-
-</details>
-</td>
-</tr>
-<tr name="space">
-<td><code name="spaceFrom"><a href="#space">space</a>(opts)(style)</code><br /><code><a href="#spaceFrom">spaceFrom</a>(id)(opts)(style)</code></td>
-<td>
-Introduces a single blank <a href="#line"><code>line</code></a>.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-```js
-const space = spaceFrom('line')
-```
-
-Example:
-
-```js
-const opts = []
-
-const style = {
-  line: {width: 40}
-}
-
-usage([
-  note('Deep Thought answered'),
-  space,
-  note('The Ultimate Question.')
-])(opts)(style)
-```
-
-Result:
-
-```bash
-Deep Thought answered                   
-                                        
-The Ultimate Question.                  
-```
-
-</details>
-</td>
-</tr>
-<tr name="spaces">
-<td><code name="spacesFrom"><a href="#spaces">spaces</a>(length)(opts)(style)</code><br /><code><a href="#spacesFrom">spacesFrom</a>(id)(length)(opts)(style)</code></td>
-<td>
-Introduces several blank <a href="#lines"><code>lines</code></a> with the number defined by the <code>length</code> parameter.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-```js
-const spaces = spacesFrom('line')
-```
-
-Example:
-
-```js
-const opts = []
-
-const style = {
-  line: {width: 40}
-}
-
-usage([
-  note('Deep Thought answered'),
-  spaces(2),
-  note('The Ultimate Question.')
-])(opts)(style)
-```
-
-Result:
-
-```bash
-Deep Thought answered                   
-                                        
-                                        
-The Ultimate Question.                  
-```
-
-</details>
-</td>
-</tr>
-<tr name="synopsis">
-<td><code name="synopsisFrom"><a href="#synopsis">synopsis</a>(programName)(opts)(style)</code><br /><code><a href="#synopsisFrom">synopsisFrom</a>(id)(start, end)(opts)(style)</code></td>
-<td>
-Prints a synopsis:
-The <code>programName</code> is printed first, followed by the command-line options' <a href="#args"><code>args</code></a>.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-```js
-const synopsis = synopsisFrom('cols')
-```
-
-Example:
-
-```js
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
-
-const style = {
-  line: {width: 40}
-}
-
-synopsis('deepThought')(opts)(style)
-```
-
-Result:
-
-```bash
-deepThought [-a|--answer] [-h|--help]   
-            [--version]                 
-```
-
-</details>
-</td>
-</tr>
-</table>
-
-#### Usage Combinators
-
-Several usage functions may be combined to form a new usage function.
-Combinators let you build more complex components from simple components, like e.g.:
-
-```js
-const simpleOptsDesc = usageMap(
-  opt => layout([
-    text(opt.args.join(', ')),
-    text(opt.desc)
+const optsTable = usageMap(
+  ({key, args, required, desc}) => table([
+    [(required ? '*' : '') + key, args.join(', '), desc]
   ])
 )
-```
-
-`simpleOptsDesc` prints a `text` with a comma-separated list of [`args`](#args) followed by the [`desc`](#desc) for each option in `opts`.
-The [`layout`](#layout) and [`text`](#text) functions are introduced below in the section on [layout functions](#layout-functions).
-The following usage combinators are available:
-
-<table>
-<tr>
-<th>Usage&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description</th>
-</tr>
-<tr name="usage">
-<td><code><a href="#usage">usage</a>(functions)(opts)(style)</code></td>
-<td>
-Groups several usage functions together.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-Example:
-
-```js
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
-
-const style = {
-  line: {width: 40},
-  cols: [{width: 20}, {width: 20}]
-}
-
-usage([
-  synopsis('deepThought'),
-  space,
-  optsList,
-  space,
-  note('Deep Thought was created to come up with the Answer.')
-])(opts)(style)
-```
-
-Result:
-
-```bash
-deepThought [-a|--answer] [-h|--help]   
-            [--version]                 
-                                        
--a,                 The answer.         
---answer=<number>                       
--h, --help          Prints help.        
---version           Prints version.     
-                                        
-Deep Thought was created to come up with
-the Answer.                             
-```
-
-</details>
-</td>
-</tr>
-<tr name="usageMap">
-<td><code><a href="#usageMap">usageMap</a>(f)(opts)(style)</code></td>
-<td>
-Takes an <code>opts</code> (options) list and a function <code>f</code>,
-which is applied to each option and is expected to return a <a href="#layout-functions">layout function</a>.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-Example:
-
-```js
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
-
-const style = {
-  line: {width: 40},
-  desc: {padStart: 3, width: 37}
-}
-
-usageMap(({args, desc}) => layout([
-  text(args.join(', ')),
-  textFrom('desc')(desc)
-]))(opts)(style)
-```
-
-Result:
-
-```bash
--a, --answer                            
-   The answer.                          
--h, --help                              
-   Prints help.                         
---version                               
-   Prints version.                      
-```
-
-</details>
-</td>
-</tr>
-</table>
-
-#### Usage Decorators
-
-Sometimes you want to pass only a portion of the command-line options to a usage function.
-Shargs has usage decorators for that:
-
-```js
-const decoratedDocs = usage([
-  decorate(noCommands, onlyFirstArg)(synopsis('deepThought')),
-  space,
-  onlyCommands(optsDefs),
-  space,
-  noCommands(optsList),
-  space,
-  note(
-    'Deep Thought was created to come up with the Answer to ' +
-    'The Ultimate Question of Life, the Universe, and Everything.'
-  )
-])
-```
-
-`decoratedDocs` displays [`commands`](#commands) in a separate component than other command-line options
-by using the `onlyCommands` and `noCommands` decorators to filter relevant options.
-Shargs provides the following usage decorators:
-
-<table>
-<tr>
-<th>Usage&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description</th>
-</tr>
-<tr name="justArgs">
-<td><code><a href="#justArgs">justArgs</a>(array)(usageFunction)(opts)</code></td>
-<td>
-Takes an array of args and keeps only those <code>opts</code> that have an arg in the args <code>array</code>.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-Example:
-
-```js
-const style = {
-  cols: [{width: 20}, {width: 20}]
-}
-
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
-
-justArgs(['-a', '-h'])(optsList)(opts)(style)
-```
-
-Result:
-
-```bash
--a,                 The answer          
---answer=<number>                       
--h, --help          Prints help         
-```
-
-</details>
-</td>
-</tr>
-<tr name="noCommands">
-<td><code><a href="#noCommands">noCommands</a>(usageFunction)(opts)</code></td>
-<td>
-Filters out all <a href="#command"><code>commands</code></a> from <code>opts</code>.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-Example:
-
-```js
-const style = {
-  cols: [{width: 20}, {width: 20}]
-}
-
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
-
-noCommands(optsList)(opts)(style)
-```
-
-Result:
-
-```bash
--a,                 The answer          
---answer=<number>                       
---version           Prints version      
-```
-
-</details>
-</td>
-</tr>
-<tr name="onlyCommands">
-<td><code><a href="#onlyCommands">onlyCommands</a>(usageFunction)(opts)</code></td>
-<td>
-Keeps only <a href="#command"><code>commands</code></a> in <code>opts</code>.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-Example:
-
-```js
-const style = {
-  cols: [{width: 10, padEnd: 2}, {width: 28}]
-}
-
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
-
-onlyCommands(optsList)(opts)(style)
-```
-
-Result:
-
-```bash
--h, --help  Prints help                 
-```
-
-</details>
-</td>
-</tr>
-<tr name="onlyFirstArg">
-<td><code><a href="#onlyFirstArg">onlyFirstArg</a>(usageFunction)(opts)</code></td>
-<td>
-Keeps only the first <a href="#args"><code>arg</code></a> from each opt.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-Example:
-
-```js
-const style = {
-  cols: [{width: 10, padEnd: 2}, {width: 28}]
-}
-
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
-
-onlyFirstArg(optsList)(opts)(style)
-```
-
-Result:
-
-```bash
--a <number> The answer                  
--h          Prints help                 
---version   Prints version              
-```
-
-</details>
-</td>
-</tr>
-<tr name="optsFilter">
-<td><code><a href="#optsFilter">optsFilter</a>(p)(usageFunction)(opts)</code></td>
-<td>
-Applies array's filter method to the <code>opts</code> array using a predicate <code>p</code>.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-Example:
-
-```js
-const style = {
-  cols: [{width: 20}, {width: 20}]
-}
-
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
-
-optsFilter(
-  ({types}) => types !== null
-)(optsList)(opts)(style)
-```
-
-Result:
-
-```bash
--a,                 The answer          
---answer=<number>                       
---version           Prints version      
-```
-
-</details>
-</td>
-</tr>
-<tr name="optsMap">
-<td><code><a href="#optsMap">optsMap</a>(f)(usageFunction)(opts)</code></td>
-<td>
-Applies array's map method to the <code>opts</code> array using a function <code>f</code>.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-Example:
-
-```js
-const style = {
-  cols: [{width: 20}, {width: 20}]
-}
-
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
-
-optsMap(
-  opt => ({...opt, args: opt.args.slice(0, 1)})
-)(optsList)(opts)(style)
-```
-
-Result:
-
-```bash
--a <number>         The answer          
--h                  Prints help         
---version           Prints version      
-```
-
-</details>
-</td>
-</tr>
-</table>
-
-Usage decorator functions can be combined with the following usage decorator combinators:
-
-<table>
-<tr>
-<th>Usage&nbsp;Decorator&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description</th>
-</tr>
-<tr name="decorate">
-<td><code><a href="#decorate">decorate</a>(decorators)(usageFunction)(opts)</code></td>
-<td>Combines several usage decorators to one decorator. See the example at the <a href="#usage-decorators">begin of this section</a>.</td>
-</tr>
-</table>
-
-#### Layout Functions
-
-Usage functions are written in a lower level markup language for formatting text in the terminal called layout functions.
-The `deepThought ask` documentation could be written as follows in layout syntax:
-
-```js
-const askDocs = layout([
-  text('deepThought ask (-q|--question) [-h|--help]'),
-  br,
-  table([
-    ['-q, --question=<string>', 'A question. [required]'],
-    ['-h, --help', 'Print this help message and exit.']
-  ]),
-  br,
-  text(
-    'Deep Thought was created to come up with the Answer to ' +
-    'The Ultimate Question of Life, the Universe, and Everything.'
-  )
-])
-```
-
-If you just want to define a usage documentation, you do not need to know about layout functions.
-They only come into play, if you want to write your own usage functions.
-
-Shargs provides the following layout functions:
-
-<table>
-<tr>
-<th>Layout&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description</th>
-</tr>
-<tr name="br">
-<td><code name="brFrom"><a href="#br">br</a>(style)</code><br /><code><a href="#brFrom">brFrom</a>(id)(style)</code></td>
-<td>
-Introduces a single blank line.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-```js
-const br = brFrom('line')
-```
-
-Example:
-
-```js
-const style = {
-  line: {width: 40}
-}
-
-layout([
-  line('First line'),
-  br,
-  line('Last line')
-])(style)
-```
-
-Result:
-
-```bash
-First line                              
-                                        
-Last line                               
-```
-
-</details>
-</td>
-</tr>
-<tr name="brs">
-<td><code name="brsFrom"><a href="#brs">brs</a>(length)(style)</code><br /><code><a href="#brsFrom">brsFrom</a>(id)(length)(style)</code></td>
-<td>
-Introduces several blank lines with the number defined by the <code>length</code> parameter.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-```js
-const brs = brsFrom('line')
-```
-
-Example:
-
-```js
-const style = {
-  line: {width: 40}
-}
-
-layout([
-  line('First line'),
-  brs(2),
-  line('Last line')
-])(style)
-```
-
-Result:
-
-```bash
-First line                              
-                                        
-                                        
-Last line                               
-```
-
-</details>
-</td>
-</tr>
-<tr name="cols">
-<td><code name="colsFrom"><a href="#cols">cols</a>(columns)(style)</code><br /><code><a href="#colsFrom">colsFrom</a>(id)(columns)(style)</code></td>
-<td>
-Takes a list of <code>columns</code> with each column consisting of several strings.
-Prints the first column at the left and the last column at the right.
-The <a href="#style">style</a> parameter must have a <code>cols</code> id with a number of style objects equal to the number of columns.
-If a column string is longer than a column's width, it is cut off.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-```js
-const cols = colsFrom('cols')
-```
-
-Example:
-
-```js
-const style = {
-  cols: [
-    {width: 15},
-    {width: 25}
-  ]
-}
-
-cols([
-  [
-    '-h, --help',
-    '-v, --version'
-  ],
-  [
-    'Prints the help.',
-    'Prints the version.'
-  ]
-])(style)
-```
-
-Result:
-
-```bash
--h, --help     Prints the help.         
--v, --version  Prints the version.      
-```
-
-</details>
-</td>
-</tr>
-<tr name="defs">
-<td><code name="defsFrom"><a href="#defs">defs</a>(rowsList)(style)</code><br /><code><a href="#defsFrom">defsFrom</a>(id1, id2)(rowsList)(style)</code></td>
-<td>
-Takes a list of title/desc row pairs.
-Prints the title as a <a href="#text"><code>text</code></a> before printing the desc as a <code>text</code>.
-Title and text may be assigned different <a href="#style">style</a> ids.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-```js
-const defs = defsFrom('line', 'desc')
-```
-
-Example:
-
-```js
-const style = {
-  line: {width: 40},
-  desc: {padStart: 4, width: 36}
-}
-
-defs([
-  [
-    '-h, --help',
-    'Prints the help.'
-  ],
-  [
-    '-v, --version',
-    'Prints the version.'
-  ]
-])(line)
-```
-
-Result:
-
-```bash
--h, --help                              
-    Prints the help.                    
-
--v, --version                           
-    Prints the version.                 
-```
-
-</details>
-</td>
-</tr>
-<tr name="line">
-<td><code name="lineFrom"><a href="#line">line</a>(string)(style)</code><br /><code><a href="#lineFrom">lineFrom</a>(id)(string)(style)</code></td>
-<td>
-Prints the <code>string</code> with a linebreak at the end.
-Takes the line width from <a href="#style">style</a> and pads with spaces at the end.
-If the string is too long to fit the line's width, it is cut off.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-```js
-const line = lineFrom('line')
-```
-
-Example:
-
-```js
-const style = {
-  line: {width: 40}
-}
-
-line('A line')(style)
-```
-
-Result:
-
-```bash
-A line                              
-```
-
-</details>
-</td>
-</tr>
-<tr name="lines">
-<td><code name="linesFrom"><a href="#lines">lines</a>(strings)(style)</code><br /><code><a href="#linesFrom">linesFrom</a>(id)(strings)(style)</code></td>
-<td>
-Prints several strings using the <a href="#line"><code>line</code></a> function for each.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-```js
-const lines = linesFrom('line')
-```
-
-Example:
-
-```js
-const style = {
-  line: {width: 40}
-}
-
-lines([
-  'First line',
-  'Last line'
-])(style)
-```
-
-Result:
-
-```bash
-First line                              
-Last line                               
-```
-
-</details>
-</td>
-</tr>
-<tr name="table">
-<td><code name="tableFrom"><a href="#table">table</a>(rowsList)(style)</code><br /><code><a href="#tableFrom">tableFrom</a>(id)(rowsList)(style)</code></td>
-<td>
-Takes a <code>rowsList</code> with each row holding a number of strings equal to the number of table columns.
-The <a href="#style">style</a> parameter must have a <code>cols</code> key with a number of style objects equal to the number of columns.
-The strings in each row are formatted according to the defined columns.
-If a string surpasses the width of a column, its remaining words are printed in the following rows.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-```js
-const table = tableFrom('cols')
-```
-
-Example:
-
-```js
-const style = {
-  cols: [
-    {width: 10, padEnd: 2},
-    {width: 28}
-  ]
-}
-
-table([
-  [
-    '-v, --version',
-    'Prints the version.'
-  ],
-  [
-    '-h, --help',
-    'Prints the help.'
-  ]
-])(style)
-```
-
-Result:
-
-```bash
--v,         Prints the version.         
---version                                    
--h, --help  Prints the help.            
-```
-
-</details>
-</td>
-</tr>
-<tr name="text">
-<td><code name="textFrom"><a href="#text">text</a>(string)(style)</code><br /><code><a href="#textFrom">textFrom</a>(id)(string)(style)</code></td>
-<td>
-Text acts much like <a href="#line"><code>line</code></a>, but does not cut off strings that surpass a line's width.
-Instead, it splits the string by words and adds new <a href="#line"><code>lines</code></a> with the remaining words.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-```js
-const text = textFrom('line')
-```
-
-Example:
-
-```js
-const style = {
-  line: {width: 40}
-}
-
-text(
-  'Deep Thought was created to come up with the Answer.'
-)(style)
-```
-
-Result:
-
-```bash
-Deep Thought was created to come up with
-the Answer.                             
-```
-
-</details>
-</td>
-</tr>
-<tr name="texts">
-<td><code name="textsFrom"><a href="#texts">texts</a>(strings)(style)</code><br /><code><a href="#textsFrom">textsFrom</a>(id)(strings)(style)</code></td>
-<td>
-Takes several <code>strings</code> and applies the <a href="#text"><code>text</code></a> function to each.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-```js
-const texts = textsFrom('line')
-```
-
-Example:
-
-```js
-const style = {
-  line: {width: 40}
-}
-
-texts([
-  'Deep Thought was created to come up with the Answer.',
-  'To The Ultimate Question.'
-])(style)
-```
-
-Result:
-
-```bash
-Deep Thought was created to come up with
-the Answer.                             
-To The Ultimate Question.
-```
-
-</details>
-</td>
-</tr>
-</table>
-
-#### Layout Combinators
-
-Like usage functions, several layout functions may be combined into more complex layout functions using layout combinators.
-`textsFrom` is a good example:
-
-```js
-const textsFrom = id => layoutMap(textFrom(id))
-```
-
-Shargs provides the following layout combinators:
-
-<table>
-<tr>
-<th>Layout&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description</th>
-</tr>
-<tr name="layout">
-<td><code><a href="#layout">layout</a>(functions)(style)</code></td>
-<td>
-Groups several <a href="#layout-functions">layout <code>functions</code></a> together and lets them share one <a href="#style"><code>style</code></a> definition.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-Example:
-
-```js
-const style = {
-  line: {width: 40}
-}
-
-layout([
-  line('First line'),
-  line('Last line')
-])(style)
-```
-
-Result:
-
-```bash
-First line                              
-Last line                               
-```
-
-</details>
-</td>
-</tr>
-<tr name="layoutMap">
-<td><code><a href="#layoutMap">layoutMap</a>(f)(itemsList)(style)</code></td>
-<td>
-Takes a list of values and a function <code>f</code>,
-which is applied to each string and is expected to return a <a href="#layout-function">layout function</a>.
-The strings are then formatted according to <code>f</code>.
-<details>
-<summary>
-Read on...
-</summary>
-
-<br />
-
-Style:
-
-```js
-const style = {
-  line: {width: 40},
-  desc: {padStart: 4, width: 36}
-}
-```
-
-Example 1:
-
-```js
-const itemsList = [
-  ['-h, --help', 'Prints the help.'],
-  ['-v, --version', 'Prints the version.']
-]
-
-const f = ([title, desc]) => layout([
-  text(title),
-  textFrom('desc')(desc)
-])
-
-layoutMap(f)(itemsList)(style)
-```
-
-Result 1:
-
-```bash
--h, --help                              
-    Prints the help.                    
--v, --version                           
-    Prints the version.                 
-```
-
-Example 2:
-
-```js
-const lines = layoutMap(line)
-
-lines([
-  '-h, --help',
-  'Prints the help.'
-])(style)
-```
-
-Result 2:
-
-```bash
--h, --help                              
-Prints the help.                        
-```
-
-</details>
-</td>
-</tr>
-</table>
-
-#### Style
-
-Usage styles are applied to [usage](#automatic-usage-documentation-generation) and [layout](#layout-functions) functions to format the generated text snippets.
-Styles may define the [`width`](#width), [`padStart`](#padStart), and [`padEnd`](#padEnd) of the different parts of your usage documentation.
-A minimum definition of `style` for `deepThought` may be:
-
-```js
-const style = {
-  line: {width: 80},
-  cols: [{width: 20}, {width: 60}]
-}
-```
-
-`style` defines style objects for two ids: `line` and `cols`.
-These two ids are the default used by the layout functions to define, how lines and columns should be printed.
-However, any valid key may be used as an id, if it is passed as a string to the `id` parameter of any `*From` function.
-A style object may have the following parameters:
-
-<table>
-<tr>
-<th>Parameter</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-<tr name="padEnd">
-<td><code><a href="#padEnd">padEnd</a></code></td>
-<td>number</td>
-<td>Defines a padding to the right of a line.</td>
-</tr>
-<tr name="padStart">
-<td><code><a href="#padStart">padStart</a></code></td>
-<td>number</td>
-<td>Defines a padding to the left of a line.</td>
-</tr>
-<tr name="width">
-<td><code><a href="#width">width</a></code></td>
-<td>number</td>
-<td>Defines the length of a line before a line break is introduced.</td>
-</tr>
-</table>
-
-### Combining Options, Parser, and Usage Documentation
-
-You may now use the [command-line options](#command-line-options), the [parser](#command-line-parsers), and the [usage documentation](#automatic-usage-documentation-generation) in your program:
-
-```js
-const argv = ['-a', '42', 'ask', '-q', 'What is the answer to everything?']
-
-const {errs, args} = deepThought(opts)(argv)
-
-const help = docs(opts)(style)
-const askHelp = askDocs(style)
-
-if (args.help) {
-  console.log(help)
-} else if (args.ask && args.ask.help) {
-  console.log(askHelp)
-} else {
-  console.log('The answer is: ' + args.answer)
-}
-```
-
-If the program is executed with `node deepThought -ha 42 ask -q "What is the answer to everything?"`,
-the following text is printed to the command-line:
-
-```bash
-deepThought [-a] [-h]                                                           
-                                                                                
-ask                                                                             
-Just ask.                                                                       
-                                                                                
--a, --answer=<42>   The (default) answer.                                       
--h, --help          Print this help message and exit.                           
-                                                                                
-Deep Thought was created to come up with the Answer to The Ultimate Question of 
-Life, the Universe, and Everything.                                             
 ```
 
 ## Comparison to Related Libraries

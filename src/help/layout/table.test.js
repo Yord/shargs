@@ -376,3 +376,44 @@ test('tableFrom with wrong id uses default style', () => {
 
   expect(res).toStrictEqual(txt)
 })
+
+test('table2 README function works as expected', () => {
+  const table2 = (columns = []) => style => {
+    const rows = []
+  
+    for (let i = 0; i < columns[0].length; i++) {
+      const row = []
+      for (let j = 0; j < columns.length; j++) {
+        row.push(columns[j][i])
+      }
+      rows.push(row)
+    }
+  
+    return table(rows)(style)
+  }
+
+  const style = {
+    cols: [
+      {width: 12},
+      {width: 28}
+    ]
+  }
+  
+  const res1 = table([
+    [
+      '-h, --help',
+      'Prints the help.'
+    ],
+    [
+      '-v, --version',
+      'Prints the version.'
+    ]
+  ])(style)
+
+  const res2 = table2([
+    ['-h, --help', '-v, --version'],
+    ['Prints the help.', 'Prints the version.']
+  ])(style)
+
+  expect(res1).toStrictEqual(res2)
+})
