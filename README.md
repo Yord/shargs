@@ -1841,70 +1841,6 @@ const fs = {
 </tr>
 </table>
 
-#### `toOpts` Stage
-
-The `toOpts` stage consists only of the <code><a href="#toOpts-stage">toOpts</a>(opts)({errs, argv})</code> function.
-It transforms `argv` arrays into the [command-line options syntax](#command-line-options)
-by matching the `argv` array with the [`args`](#args) and [`types`](#types) defined by the options.
-The order of the command-line options plays an important role, since `toOpts` works from left to right.
-
-While transforming, `toOpts` encounters the following cases:
-
-1.  **A string matches no `args` value:**\
-    In this case, `toOpts` returns an unmatched value (e.g. `{values: 'foo'}` if `foo` is the string).
-2.  **A string matches an `args` value of exactly one option:**\
-    Here, `toOpts` checks the [`types`](#types) arity and reads a matching number of `argv`.
-    If too few `argv` are available, it returns an unmatched value like in case 1.
-    If enough `argv` are available, it returns the matching option together with a [`values`](#values) field holding the `argv`.
-3.  **A string matches an `args` value in several options:**\
-    If this happens, `toOpts` proceeds as in case 2 for each option, with one addition:
-    It checks if all options have the same arity as the first option.
-    All options with the same arities are added a [`values`](#values) field.
-    For all other options, an error is reported.
-
-The `toOpts` key of the `stages` argument of the [`parser`](#command-line-parsers) function lets users override the described behavior with their own functions.
-Do this with caution, as it may break defined parser checks and stages.
-
-#### `toArgs` Stage
-
-Similar to [`toOpts`](#toOpts), the `toArgs` stage takes just one function: <code><a href="#toArgs-stage">toArgs</a>(parsers)({errs, opts})</code>.
-It transforms `opts` arrays into an object holding the parsed arguments
-by applying three different stages in order:
-
-1.  **Convert Non-commands:**\
-    It converts all options that are not commands, resulting in an object of key-values-pairs.
-    The keys and values are taken from the option fields of the same name: [`key`](#key) and [`values`](#values).
-    If an option does not have a `values` field, it is not considered, here.
-    All unmatched values (e.g. `{values: '--help'}`) are collected in the rest key `_` (e.g. `{_: ['--help']}`).
-2.  **Convert Commands:**\
-    Next, it converts all [`command`](#command) options.
-    In the following, we refer to the parser of this `toArgs` stage as the *parent parser*
-    and the command's parser as the *child parser*.
-
-    The commands' [`values`](#values) fields still holds `argv` arrays
-    that need to be processed by a parser.
-    Thus, `toArgs` recursively calls a child parser for each command to get `args` objects.
-
-    Then, non-empty rest keys (e.g. `{_: ['/tmp']}`) are parsed for positional arguments.
-    For a more detailed description of positional arguments, see the [`posArgs`](#posArgs) options field.
-
-    At this point, the `args` objects may still have non-empty rest keys (e.g. `{_: ['--help']}`).
-    These unmatched arguments may have mistakenly assigned to the child command,
-    although they actually belong to the parent.
-    Therefore, non-empty rest keys are additionally parsed with the parent parser.
-    See the [relation between checks and stages](#relation-between-checks-and-stages) section for details.
-    
-    The results of the child parsers and the results of the parent parser run are combined into a shared `args` object.
-3.  **Set Default Values:**\
-    Up to this point, only options with [`values`](#values) were processed.
-    However, options without `values` fields may still have [`defaultValues`](#defaultValues).
-    This stage sets the `values` of options without `values` to the `defaultValues`.
-
-The resulting `args` objects of the three stages are then merged together.
-
-The `toArgs` key of the `stages` argument of the [`parser`](#command-line-parsers) function lets users override the described behavior with their own functions.
-Do this with caution, as it may break defined parser checks and stages.
-
 #### Command-specific Parsers
 
 Shargs' [`parser`](#command-line-parsers) function may use the `parsers` object
@@ -1915,108 +1851,14 @@ If a `command` does not have its own parser, it uses the default parser defined 
 The `_` field can be overridden by the user to define a custom default parser.
 If left unchanged, it defaults to the parent parser.
 
-#### Custom Checks and Stages
+#### Advanced Parsers
 
-Shargs makes writing and using custom checks and stages very simple.
-The only thing you have to do is to follow the correct function signatures for your check or stage.
-In fact, checks and stages of the same kind have the same signatures.
-The following code snippets showcase very simple examples with the correct signatures.
+More in-depth information regarding parsers can be found in the [advanced command-line parsers](#advanced-command-line-parsers) section:
 
-Regardless of whether you implement a check or a stage, the most important thing to remember is:
-Always pass on errors!
-
-Custom `argv` stage example:
-
-```js
-function splitShortOptions ({errs = [], argv = []} = {}) {
-  const argv2 = argv.flatMap(arg =>
-    arg.length > 2 && arg[0] === '-' && arg[1] !== '-'
-      ? arg.slice(1).split('').map(c => '-' + c)
-      : arg
-  )
-
-  return {errs, argv: argv2}
-}
-```
-
-If you write a custom `argv` stage, have a look at [`traverseArgv`](#traverseArgv)!
-
-Custom `opts` stage example:
-
-```js
-function demandACommand ({errs = [], opts = []} = {}) {
-  const errs2 = []
-
-  const aCommand = opts.some(
-    ({types, values}) => types === null && typeof values !== 'undefined'
-  )
-
-  if (!aCommand) {
-    errs2.push(commandRequired({options: opts}))
-  }
-
-  return {errs: errs.concat(errs2), opts}
-}
-```
-
-If you write a custom `opts` stage, have a look at [`traverseOpts`](#traverseOpts)!
-
-Custom `args` stage example:
-
-```js
-function flagsAsBools ({errs = [], args = {}} = {}) {
-  const fs = {
-    flag: ({key, val, errs, args}) => ({
-      errs,
-      args: {...args, [key]: val.count > 0}
-    })
-  }
-
-  const {errs: errs2, args: args2} = traverseArgs(fs)({args})
-
-  return {errs: errs.concat(errs2), args: args2}
-}
-```
-
-If you write a custom `args` stage, have a look at [`traverseArgs`](#traverseArgs)!
-
-#### Relation Between Checks and Stages
-
-As you may have noticed by now, checks and stages of the same kind have the same signatures.
-This is not a coincidence.
-In fact, checks and stages behave the same for most scenarios.
-This section looks at the cases where they are different.
-
-While stages change data and report errors once, checks only report errors and never change data.
-Thus, if a check is run several times in a row, it is guaranteed to report multiple error messages.
-Stages and checks are seldomly run several times, but there is a case in the [`toArgs`](#toargs-stage) stage, where this happens:
-
-`toArgs` takes a list of parsers as its input, including the *parent parser* `__` that is set by the [`parser`](#command-line-parsers) function.
-The parent parser's purpose is to parse any leftover argv from the commands' *child parsers*.
-This comes to pass, if arguments to a parent command are given after the arguments of a child command, e.g. `--answer 42` in:
-
-```bash
-node deepThought ask --question "What is the Answer?" --answer 42
-# 1:             |p|
-# 2:                 |-------------------- c -------------------|
-# 3:                                                  |---(p)---|
-```
-
-In row 1, the parent parser `p` reads the `ask` [`command`](#command) and interprets all following argv as parameters of `ask`.
-Thus, as depicted in row 2, from `--question` onwards, `ask`'s child parser `c` is responsible for parsing up to `42`.
-However, as row 3 suggests, the `--answer 42` argv are actually a parent's option and the child parser will not recognize them.
-
-To solve situations like this, all unrecognized argv from child parsers are again processed by their parent's parsers.
-This means, **parent parsers may run several times and their checks may be repeated**.
-Since checks do not change any data, repeating them is not harmful.
-However, it may result in duplicated error messages, which is undesirable.
-
-Because of this, shargs and the [`parser`](#command-line-parsers) function distinguishes between checks and stages
-and each parent parser `__` only includes the `parser`'s stages and not its checks. 
-
-Repeated `parser` calls only occur in the presence of `command` options.
-This means, if you do not use `command` options, you do not need to separate checks and stages.
-In such cases, you may safely add your checks to `parser`'s stages parameter.
++   [`toOpts` stage documentation](#toOpts-stage)
++   [`toArgs` stage documentation](#toArgs-stage)
++   [Custom checks and stages](#custom-checks-and-stages)
++   [Relation between checks and stages](#relation-between-checks-and-stages)
 
 ### Automatic Usage Documentation Generation
 
@@ -3333,6 +3175,13 @@ A style object may have the following parameters:
 </tr>
 </table>
 
+#### Advanced Usage Documentation
+
+More in-depth information regarding usage documentation is available in the [advanced usage generation](#advanced-usage-generation) section:
+
++   [Custom usage functions](#custom-usage-functions)
++   [Custom layout functions](#custom-layout-functions)
+
 ### Combining Options, Parser, and Usage Documentation
 
 You may now use the [command-line options](#command-line-options), the [parser](#command-line-parsers), and the [usage documentation](#automatic-usage-documentation-generation) in your program:
@@ -3369,6 +3218,188 @@ Just ask.
 Deep Thought was created to come up with the Answer to The Ultimate Question of 
 Life, the Universe, and Everything.                                             
 ```
+
+## Advanced Topics
+
+The [shargs](#shargs) section does not have enough room for going into every single detail.
+This is what advanced topics are for.
+
+### Advanced Command-line Parsers
+
+The [`parser`](#command-line-parsers) function has lots of options the [command-line parsers](#command-line-parsers) could not talk about.
+The following sections shed some light on these options.
+
+#### `toOpts` Stage
+
+The `toOpts` stage consists only of the <code><a href="#toOpts-stage">toOpts</a>(opts)({errs, argv})</code> function.
+It transforms `argv` arrays into the [command-line options syntax](#command-line-options)
+by matching the `argv` array with the [`args`](#args) and [`types`](#types) defined by the options.
+The order of the command-line options plays an important role, since `toOpts` works from left to right.
+
+While transforming, `toOpts` encounters the following cases:
+
+1.  **A string matches no `args` value:**\
+    In this case, `toOpts` returns an unmatched value (e.g. `{values: 'foo'}` if `foo` is the string).
+2.  **A string matches an `args` value of exactly one option:**\
+    Here, `toOpts` checks the [`types`](#types) arity and reads a matching number of `argv`.
+    If too few `argv` are available, it returns an unmatched value like in case 1.
+    If enough `argv` are available, it returns the matching option together with a [`values`](#values) field holding the `argv`.
+3.  **A string matches an `args` value in several options:**\
+    If this happens, `toOpts` proceeds as in case 2 for each option, with one addition:
+    It checks if all options have the same arity as the first option.
+    All options with the same arities are added a [`values`](#values) field.
+    For all other options, an error is reported.
+
+The `toOpts` key of the `stages` argument of the [`parser`](#command-line-parsers) function lets users override the described behavior with their own functions.
+Do this with caution, as it may break defined parser checks and stages.
+
+#### `toArgs` Stage
+
+Similar to [`toOpts`](#toOpts), the `toArgs` stage takes just one function: <code><a href="#toArgs-stage">toArgs</a>(parsers)({errs, opts})</code>.
+It transforms `opts` arrays into an object holding the parsed arguments
+by applying three different stages in order:
+
+1.  **Convert Non-commands:**\
+    It converts all options that are not commands, resulting in an object of key-values-pairs.
+    The keys and values are taken from the option fields of the same name: [`key`](#key) and [`values`](#values).
+    If an option does not have a `values` field, it is not considered, here.
+    All unmatched values (e.g. `{values: '--help'}`) are collected in the rest key `_` (e.g. `{_: ['--help']}`).
+2.  **Convert Commands:**\
+    Next, it converts all [`command`](#command) options.
+    In the following, we refer to the parser of this `toArgs` stage as the *parent parser*
+    and the command's parser as the *child parser*.
+
+    The commands' [`values`](#values) fields still holds `argv` arrays
+    that need to be processed by a parser.
+    Thus, `toArgs` recursively calls a child parser for each command to get `args` objects.
+
+    Then, non-empty rest keys (e.g. `{_: ['/tmp']}`) are parsed for positional arguments.
+    For a more detailed description of positional arguments, see the [`posArgs`](#posArgs) options field.
+
+    At this point, the `args` objects may still have non-empty rest keys (e.g. `{_: ['--help']}`).
+    These unmatched arguments may have mistakenly assigned to the child command,
+    although they actually belong to the parent.
+    Therefore, non-empty rest keys are additionally parsed with the parent parser.
+    See the [relation between checks and stages](#relation-between-checks-and-stages) section for details.
+    
+    The results of the child parsers and the results of the parent parser run are combined into a shared `args` object.
+3.  **Set Default Values:**\
+    Up to this point, only options with [`values`](#values) were processed.
+    However, options without `values` fields may still have [`defaultValues`](#defaultValues).
+    This stage sets the `values` of options without `values` to the `defaultValues`.
+
+The resulting `args` objects of the three stages are then merged together.
+
+The `toArgs` key of the `stages` argument of the [`parser`](#command-line-parsers) function lets users override the described behavior with their own functions.
+Do this with caution, as it may break defined parser checks and stages.
+
+#### Custom Checks and Stages
+
+Shargs makes writing and using custom checks and stages very simple.
+The only thing you have to do is to follow the correct function signatures for your check or stage.
+In fact, checks and stages of the same kind have the same signatures.
+The following code snippets showcase very simple examples with the correct signatures.
+
+Regardless of whether you implement a check or a stage, the most important thing to remember is:
+Always pass on errors!
+
+Custom `argv` stage example:
+
+```js
+function splitShortOptions ({errs = [], argv = []} = {}) {
+  const argv2 = argv.flatMap(arg =>
+    arg.length > 2 && arg[0] === '-' && arg[1] !== '-'
+      ? arg.slice(1).split('').map(c => '-' + c)
+      : arg
+  )
+
+  return {errs, argv: argv2}
+}
+```
+
+If you write a custom `argv` stage, have a look at [`traverseArgv`](#traverseArgv)!
+
+Custom `opts` stage example:
+
+```js
+function demandACommand ({errs = [], opts = []} = {}) {
+  const errs2 = []
+
+  const aCommand = opts.some(
+    ({types, values}) => types === null && typeof values !== 'undefined'
+  )
+
+  if (!aCommand) {
+    errs2.push(commandRequired({options: opts}))
+  }
+
+  return {errs: errs.concat(errs2), opts}
+}
+```
+
+If you write a custom `opts` stage, have a look at [`traverseOpts`](#traverseOpts)!
+
+Custom `args` stage example:
+
+```js
+function flagsAsBools ({errs = [], args = {}} = {}) {
+  const fs = {
+    flag: ({key, val, errs, args}) => ({
+      errs,
+      args: {...args, [key]: val.count > 0}
+    })
+  }
+
+  const {errs: errs2, args: args2} = traverseArgs(fs)({args})
+
+  return {errs: errs.concat(errs2), args: args2}
+}
+```
+
+If you write a custom `args` stage, have a look at [`traverseArgs`](#traverseArgs)!
+
+#### Relation Between Checks and Stages
+
+As you may have noticed by now, checks and stages of the same kind have the same signatures.
+This is not a coincidence.
+In fact, checks and stages behave the same for most scenarios.
+This section looks at the cases where they are different.
+
+While stages change data and report errors once, checks only report errors and never change data.
+Thus, if a check is run several times in a row, it is guaranteed to report multiple error messages.
+Stages and checks are seldomly run several times, but there is a case in the [`toArgs`](#toargs-stage) stage, where this happens:
+
+`toArgs` takes a list of parsers as its input, including the *parent parser* `__` that is set by the [`parser`](#command-line-parsers) function.
+The parent parser's purpose is to parse any leftover argv from the commands' *child parsers*.
+This comes to pass, if arguments to a parent command are given after the arguments of a child command, e.g. `--answer 42` in:
+
+```bash
+node deepThought ask --question "What is the Answer?" --answer 42
+# 1:             |p|
+# 2:                 |-------------------- c -------------------|
+# 3:                                                  |---(p)---|
+```
+
+In row 1, the parent parser `p` reads the `ask` [`command`](#command) and interprets all following argv as parameters of `ask`.
+Thus, as depicted in row 2, from `--question` onwards, `ask`'s child parser `c` is responsible for parsing up to `42`.
+However, as row 3 suggests, the `--answer 42` argv are actually a parent's option and the child parser will not recognize them.
+
+To solve situations like this, all unrecognized argv from child parsers are again processed by their parent's parsers.
+This means, **parent parsers may run several times and their checks may be repeated**.
+Since checks do not change any data, repeating them is not harmful.
+However, it may result in duplicated error messages, which is undesirable.
+
+Because of this, shargs and the [`parser`](#command-line-parsers) function distinguishes between checks and stages
+and each parent parser `__` only includes the `parser`'s stages and not its checks. 
+
+Repeated `parser` calls only occur in the presence of `command` options.
+This means, if you do not use `command` options, you do not need to separate checks and stages.
+In such cases, you may safely add your checks to `parser`'s stages parameter.
+
+### Advanced Usage Generation
+
+The [automatic usage documentation generation](#automatic-usage-documentation-generation) section had to leave out some more advanced topics.
+These topics are covered here.
 
 ## Comparison to Related Libraries
 
