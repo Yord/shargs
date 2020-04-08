@@ -3165,7 +3165,7 @@ Life, the Universe, and Everything.
 
 ## Advanced Topics
 
-The [shargs](#shargs) section does not have enough room for going into every single detail.
+The [shargs](#-shargs) section does not have enough room for going into every single detail.
 This is what advanced topics are for.
 
 ### Advanced Command-line Parsers
