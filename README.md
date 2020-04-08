@@ -614,7 +614,7 @@ Result:
 <details>
 <summary>
 <code>shortOptsNoSpace</code> allows arguments like <code>-nLogan</code> to be interpreted as <code>-n Logan</code>.
-You may either use <code>shortOptsNoSpace</code>, or <a href="#splitShortOptions"><code>splitShortOptions</code></a>, but not both at the same time.
+You may either use <code>shortOptsNoSpace</code>, or <code><a href="#splitShortOptions">splitShortOptions</a></code>, but not both at the same time.
 </summary>
 
 <br />
@@ -644,7 +644,7 @@ Result:
 <details>
 <summary>
 Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
-You may either use <code>splitShortOptions</code>, or <a href="#shortOptsNoSpace"><code>shortOptsNoSpace</code></a>, but not both at the same time.
+You may either use <code>splitShortOptions</code>, or <code><a href="#shortOptsNoSpace">shortOptsNoSpace</a></code>, but not both at the same time.
 </summary>
 
 <br />
@@ -731,7 +731,7 @@ Result:
 <td>
 <details>
 <summary>
-Verifies that no option in the <a href="#contradics"><code>contradics</code></a> field of an option has <a href="#values"><code>values</code></a> if the option has <code>values</code>.
+Verifies that no option in the <code><a href="#contradics">contradics</a></code> field of an option has <code><a href="#values">values</a></code> if the option has <code>values</code>.
 </summary>
 
 <br />
@@ -780,7 +780,7 @@ Result:
 <td>
 <details>
 <summary>
-Checks if <code>opts</code> includes at least one <a href="#command"><code>command</code></a> and reports an exception if no command is found.
+Checks if <code>opts</code> includes at least one <code><a href="#command">command</a></code> and reports an exception if no command is found.
 </summary>
 
 <br />
@@ -821,7 +821,7 @@ Result:
 <td>
 <details>
 <summary>
-Checks if all options in the <a href="#implies"><code>implies</code></a> of an option also have <a href="#values"><code>values</code></a>, if the option has <code>values</code>.
+Checks if all options in the <code><a href="#implies">implies</a></code> of an option also have <code><a href="#values">values</a></code>, if the option has <code>values</code>.
 </summary>
 
 <br />
@@ -862,7 +862,7 @@ Result:
 <td>
 <details>
 <summary>
-Controls, if options marked with <a href="#required"><code>{required: true}</code></a> have valid <a href="#values"><code>values</code></a> or <a href="#defaultValues"><code>defaultValues</code></a>.
+Controls, if options marked with <code><a href="#required">{required: true}</a></code> have valid <code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code>.
 If a required option is not present, an error message is reported.
 </summary>
 
@@ -946,7 +946,7 @@ Result:
 <td>
 <details>
 <summary>
-Checks, whether the <a href="#rules"><code>rules</code></a> field of an option holds in relation to all options.
+Checks, whether the <code><a href="#rules">rules</a></code> field of an option holds in relation to all options.
 </summary>
 
 <br />
@@ -989,7 +989,7 @@ Result:
 <td>
 <details>
 <summary>
-Checks, whether the <a href="#values"><code>values</code></a> and <a href="#defaultValues"><code>defaultValues</code></a> of an option fits its <a href="#types"><code>types</code></a>.
+Checks, whether the <code><a href="#values">values</a></code> and <code><a href="#defaultValues">defaultValues</a></code> of an option fits its <code><a href="#types">types</a></code>.
 </summary>
 
 <br />
@@ -1073,7 +1073,7 @@ Result:
 <details>
 <summary>
 Tries its best to interpret unparsed strings as additional parameters (e.g. <code>{values: ['--foo']}</code> as a flag).
-Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><code>flag</code></a> and requires options to follow a pattern:
+Supports only <code><a href="#string">string</a></code> and <code><a href="#flag">flag</a></code> and requires options to follow a pattern:
 A single minus and a single character for short options or exactly two minusses with any more characters for long options.
 </summary>
 
@@ -1114,7 +1114,7 @@ Result:
 <td>
 <details>
 <summary>
-Casts all <a href="#values"><code>values</code></a> according to the options' types.
+Casts all <code><a href="#values">values</a></code> according to the options' types.
 </summary>
 
 <br />
@@ -1157,7 +1157,7 @@ Result:
 <td>
 <details>
 <summary>
-Reports an error if an option's <a href="#values"><code>values</code></a> are not contained in the <a href="#only"><code>only</code></a> list.
+Reports an error if an option's <code><a href="#values">values</a></code> are not contained in the <code><a href="#only">only</a></code> list.
 </summary>
 
 <br />
@@ -1194,7 +1194,7 @@ Result:
 <td>
 <details>
 <summary>
-Reverses the value of all <a href="#bool"><code>bool</code></a> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
+Reverses the value of all <code><a href="#bool">bool</a></code> options annotated with <code><a href="#reverse">{reverse: true}</a></code>.
 Works on string (e.g. <code>['false']</code>) and boolean (e.g. <code>[false]</code>) values.
 </summary>
 
@@ -1230,7 +1230,7 @@ Result:
 <td>
 <details>
 <summary>
-Reverses the value of all <a href="#flag"><code>flag</code></a> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
+Reverses the value of all <code><a href="#flag">flag</a></code> options annotated with <code><a href="#reverse">{reverse: true}</a></code>.
 This may be useful if the presence of a flag should imply <code>false</code>.
 </summary>
 
@@ -1484,7 +1484,7 @@ Result:
 <details>
 <summary>
 Tries its best to interpret strings in the <code>_</code> key as additional parameters.
-Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><code>flag</code></a> and requires options to follow a pattern:
+Supports only <code><a href="#string">string</a></code> and <code><a href="#flag">flag</a></code> and requires options to follow a pattern:
 A single minus and a single character for short options or exactly two minusses with any more characters for long options.
 </summary>
 
@@ -1624,7 +1624,7 @@ Result:
 <td>
 <details>
 <summary>
-Transforms all count-based <a href="#flag"><code>flag</code></a> options into booleans, that are <code>true</code> if the count is greater than <code>0</code> and <code>false</code> otherwise.
+Transforms all count-based <code><a href="#flag">flag</a></code> options into booleans, that are <code>true</code> if the count is greater than <code>0</code> and <code>false</code> otherwise.
 </summary>
 
 <br />
@@ -1657,7 +1657,7 @@ Result:
 <td>
 <details>
 <summary>
-Transforms all count-based <a href="#flag"><code>flag</code></a> options into numbers, that correspond to the count.
+Transforms all count-based <code><a href="#flag">flag</a></code> options into numbers, that correspond to the count.
 </summary>
 
 <br />
@@ -1690,7 +1690,7 @@ Result:
 <td>
 <details>
 <summary>
-Recursively merges args objects of <a href="#command"><code>command</code></a>s into their partent args objects.
+Recursively merges args objects of <code><a href="#command">command</a></code>s into their partent args objects.
 Results into a flat object, where no key is an object.
 Other <code>merge</code> functions may be given to the function.
 If the <code>merge</code> parameter is left undefined, fields from the parent object are preferred
@@ -1872,7 +1872,7 @@ Shargs provides the following usage functions:
 <td>
 <details>
 <summary>
-Prints the <code>string</code> as a <a href="#line"><code>line</code></a>.
+Prints the <code>string</code> as a <code><a href="#line">line</a></code>.
 Takes the line width from <a href="#style">style</a> and pads with spaces at the end.
 If the string is too long to fit the <code>line</code>'s width, it is broken up into words, and all remaining words are put into another <code>line</code>.
 </summary>
@@ -1912,7 +1912,7 @@ the Answer.
 <td>
 <details>
 <summary>
-Prints several strings using <a href="#note"><code>note</code></a> for each.
+Prints several strings using <code><a href="#note">note</a></code> for each.
 </summary>
 
 <br />
@@ -1951,8 +1951,8 @@ The Ultimate Question.
 <td>
 <details>
 <summary>
-Prints a <a href="#def"><code>def</code></a> (definition) list,
-with the command-line option <a href="#args"><code>args</code></a> as title and the <a href="#desc"><code>desc</code></a> field as text.
+Prints a <code><a href="#def">def</a></code> (definition) list,
+with the command-line option <code><a href="#args">args</a></code> as title and the <code><a href="#desc">desc</a></code> field as text.
 </summary>
 
 <br />
@@ -1997,9 +1997,9 @@ Result:
 <td>
 <details>
 <summary>
-Prints a <a href="#table"><code>table</code></a> with two columns:
-The command-line option's <a href="#args"><code>args</code></a> in the left,
-and the <a href="#desc"><code>desc</code></a> field in the right column.
+Prints a <code><a href="#table">table</a></code> with two columns:
+The command-line option's <code><a href="#args">args</a></code> in the left,
+and the <code><a href="#desc">desc</a></code> field in the right column.
 </summary>
 
 <br />
@@ -2043,7 +2043,7 @@ Result:
 <td>
 <details>
 <summary>
-Introduces a single blank <a href="#line"><code>line</code></a>.
+Introduces a single blank <code><a href="#line">line</a></code>.
 </summary>
 
 <br />
@@ -2084,7 +2084,7 @@ The Ultimate Question.
 <td>
 <details>
 <summary>
-Introduces several blank <a href="#lines"><code>lines</code></a> with the number defined by the <code>length</code> parameter.
+Introduces several blank <code><a href="#lines">lines</a></code> with the number defined by the <code>length</code> parameter.
 </summary>
 
 <br />
@@ -2127,7 +2127,7 @@ The Ultimate Question.
 <details>
 <summary>
 Prints a synopsis:
-The <code>programName</code> is printed first, followed by the command-line options' <a href="#args"><code>args</code></a>.
+The <code>programName</code> is printed first, followed by the command-line options' <code><a href="#args">args</a></code>.
 </summary>
 
 <br />
@@ -2356,7 +2356,7 @@ Result:
 <td>
 <details>
 <summary>
-Filters out all <a href="#command"><code>commands</code></a> from <code>opts</code>.
+Filters out all <code><a href="#command">commands</a></code> from <code>opts</code>.
 </summary>
 
 <br />
@@ -2393,7 +2393,7 @@ Result:
 <td>
 <details>
 <summary>
-Keeps only <a href="#command"><code>commands</code></a> in <code>opts</code>.
+Keeps only <code><a href="#command">commands</a></code> in <code>opts</code>.
 </summary>
 
 <br />
@@ -2428,7 +2428,7 @@ Result:
 <td>
 <details>
 <summary>
-Keeps only the first <a href="#args"><code>arg</code></a> from each opt.
+Keeps only the first <code><a href="#args">arg</a></code> from each opt.
 </summary>
 
 <br />
@@ -2718,7 +2718,7 @@ Result:
 <details>
 <summary>
 Takes a list of title/desc row pairs.
-Prints the title as a <a href="#text"><code>text</code></a> before printing the desc as a <code>text</code>.
+Prints the title as a <code><a href="#text">text</a></code> before printing the desc as a <code>text</code>.
 Title and text may be assigned different <a href="#style">style</a> ids.
 </summary>
 
@@ -2801,7 +2801,7 @@ A line
 <td>
 <details>
 <summary>
-Prints several strings using the <a href="#line"><code>line</code></a> function for each.
+Prints several strings using the <code><a href="#line">line</a></code> function for each.
 </summary>
 
 <br />
@@ -2888,8 +2888,8 @@ Result:
 <td>
 <details>
 <summary>
-Text acts much like <a href="#line"><code>line</code></a>, but does not cut off strings that surpass a line's width.
-Instead, it splits the string by words and adds new <a href="#line"><code>lines</code></a> with the remaining words.
+Text acts much like <code><a href="#line">line</a></code>, but does not cut off strings that surpass a line's width.
+Instead, it splits the string by words and adds new <code><a href="#line">lines</a></code> with the remaining words.
 </summary>
 
 <br />
@@ -2925,7 +2925,7 @@ the Answer.
 <td>
 <details>
 <summary>
-Takes several <code>strings</code> and applies the <a href="#text"><code>text</code></a> function to each.
+Takes several <code>strings</code> and applies the <code><a href="#text">text</a></code> function to each.
 </summary>
 
 <br />
@@ -2981,7 +2981,7 @@ Shargs provides the following layout combinators:
 <td>
 <details>
 <summary>
-Groups several <a href="#layout-functions">layout <code>functions</code></a> together and lets them share one <a href="#style"><code>style</code></a> definition.
+Groups several <a href="#layout-functions">layout functions</a> together and lets them share one <code><a href="#style">style</a></code> definition.
 </summary>
 
 <br />
