@@ -446,10 +446,9 @@ A command-line option may be decorated with one or many of the following decorat
 <tr name="complement">
 <td><code><a href="#complement">complement</a>(prefix)(opt)</code></td>
 <td>
-Transforms a <a href="#bool"><code>bool</code></a> or <a href="#flag"><code>flag</code></a> option into a complementary option prefixed with a given string (e.g. <code>--no-</code>). The complementary option has the same key as the original option, but reverts the value. Using <code>complement</code> assumes, either the <a href="#reverseBools"><code>reverseBools</code></a> or <a href="#reverseFlags"><code>reverseFlags</code></a>, or both parser stages are used in the parser.
 <details>
 <summary>
-Read on...
+Transforms a <a href="#bool"><code>bool</code></a> or <a href="#flag"><code>flag</code></a> option into a complementary option prefixed with a given string (e.g. <code>--no-</code>). The complementary option has the same key as the original option, but reverts the value. Using <code>complement</code> assumes, either the <a href="#reverseBools"><code>reverseBools</code></a> or <a href="#reverseFlags"><code>reverseFlags</code></a>, or both parser stages are used in the parser.
 </summary>
 
 <br />
@@ -533,10 +532,9 @@ For each stage, the checks are applied first, followed by the stages.
 <tr name="verifyArgv">
 <td><code><a href="#verifyArgv">verifyArgv</a>(rules)({errs, argv})</code></td>
 <td>
-Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate. Reports an error if the predicate returns false.
 <details>
 <summary>
-Read on...
+Checks, whether the <code>argv</code> adher to a given <code>rules</code> predicate. Reports an error if the predicate returns false.
 </summary>
 
 <br />
@@ -583,11 +581,10 @@ Result:
 <tr name="equalsSignAsSpace">
 <td><code><a href="#equalsSignAsSpace">equalsSignAsSpace</a>({errs, argv})</code></td>
 <td>
-<code>equalsSignAsSpace</code> treats arguments of the form <code>--name=Logan</code> as if they were <code>--name Logan</code>.
-It only removes the first equals sign in the argument, so <code>--name=Logan=Wolverine</code> becomes <code>--name Logan=Wolverine</code>.
 <details>
 <summary>
-Read on...
+<code>equalsSignAsSpace</code> treats arguments of the form <code>--name=Logan</code> as if they were <code>--name Logan</code>.
+It only removes the first equals sign in the argument, so <code>--name=Logan=Wolverine</code> becomes <code>--name Logan=Wolverine</code>.
 </summary>
 
 <br />
@@ -614,11 +611,10 @@ Result:
 <tr name="shortOptsNoSpace">
 <td><code><a href="#shortOptsNoSpace">shortOptsNoSpace</a>({errs, argv})</code></td>
 <td>
-<code>shortOptsNoSpace</code> allows arguments like <code>-nLogan</code> to be interpreted as <code>-n Logan</code>.
-You may either use <code>shortOptsNoSpace</code>, or <a href="#splitShortOptions"><code>splitShortOptions</code></a>, but not both at the same time.
 <details>
 <summary>
-Read on...
+<code>shortOptsNoSpace</code> allows arguments like <code>-nLogan</code> to be interpreted as <code>-n Logan</code>.
+You may either use <code>shortOptsNoSpace</code>, or <a href="#splitShortOptions"><code>splitShortOptions</code></a>, but not both at the same time.
 </summary>
 
 <br />
@@ -645,11 +641,10 @@ Result:
 <tr name="splitShortOptions">
 <td><code><a href="#splitShortOptions">splitShortOptions</a>({errs, argv})</code></td>
 <td>
-Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
-You may either use <code>splitShortOptions</code>, or <a href="#shortOptsNoSpace"><code>shortOptsNoSpace</code></a>, but not both at the same time.
 <details>
 <summary>
-Read on...
+Splits argument groups of shape <code>-vs</code> to <code>-v -s</code>. Only works if argument groups are preceded by a single dash.
+You may either use <code>splitShortOptions</code>, or <a href="#shortOptsNoSpace"><code>shortOptsNoSpace</code></a>, but not both at the same time.
 </summary>
 
 <br />
@@ -676,15 +671,14 @@ Result:
 <tr name="traverseArgv">
 <td><code><a href="#traverseArgv">traverseArgv</a>(p)(f)({errs,opts})</code></td>
 <td>
+<details>
+<summary>
 <code>traverseArgv</code> applies a function <code>f</code> to each arg that satisfies a predicate <code>p</code>.
 It does not change the order of <code>argv</code> in the process.
 <code>p</code> takes an arg string and returns a boolean.
 <code>f</code> takes three arguments, an arg string, the index of the arg, and the argv array,
 and returns an <code>{errs = [], argv = []}</code> object.
 Most of the other <code>argv</code> checks and stages are defined in terms of <code>traverseArgv</code>.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -735,10 +729,9 @@ Result:
 <tr name="contradictOpts">
 <td><code><a href="#contradictOpts">contradictOpts</a>({errs, opts})</code></td>
 <td>
-Verifies that no option in the <a href="#contradics"><code>contradics</code></a> field of an option has <a href="#values"><code>values</code></a> if the option has <code>values</code>.
 <details>
 <summary>
-Read on...
+Verifies that no option in the <a href="#contradics"><code>contradics</code></a> field of an option has <a href="#values"><code>values</code></a> if the option has <code>values</code>.
 </summary>
 
 <br />
@@ -785,10 +778,9 @@ Result:
 <tr name="demandACommand">
 <td><code><a href="#demandACommand">demandACommand</a>({errs, opts})</code></td>
 <td>
-Checks if <code>opts</code> includes at least one <a href="#command"><code>command</code></a> and reports an exception if no command is found.
 <details>
 <summary>
-Read on...
+Checks if <code>opts</code> includes at least one <a href="#command"><code>command</code></a> and reports an exception if no command is found.
 </summary>
 
 <br />
@@ -827,10 +819,9 @@ Result:
 <tr name="implyOpts">
 <td><code><a href="#implyOpts">implyOpts</a>({errs, opts})</code></td>
 <td>
-Checks if all options in the <a href="#implies"><code>implies</code></a> of an option also have <a href="#values"><code>values</code></a>, if the option has <code>values</code>.
 <details>
 <summary>
-Read on...
+Checks if all options in the <a href="#implies"><code>implies</code></a> of an option also have <a href="#values"><code>values</code></a>, if the option has <code>values</code>.
 </summary>
 
 <br />
@@ -869,11 +860,10 @@ Result:
 <tr name="requireOptions">
 <td><code><a href="#requireOptions">requireOptions</a>({errs, opts})</code></td>
 <td>
-Controls, if options marked with <a href="#required"><code>{required: true}</code></a> have valid <a href="#values"><code>values</code></a> or <a href="#defaultValues"><code>defaultValues</code></a>.
-If a required option is not present, an error message is reported.
 <details>
 <summary>
-Read on...
+Controls, if options marked with <a href="#required"><code>{required: true}</code></a> have valid <a href="#values"><code>values</code></a> or <a href="#defaultValues"><code>defaultValues</code></a>.
+If a required option is not present, an error message is reported.
 </summary>
 
 <br />
@@ -909,10 +899,9 @@ Result:
 <tr name="verifyOpts">
 <td><code><a href="#verifyOpts">verifyOpts</a>(rules)({errs, opts})</code></td>
 <td>
-Checks, whether the <code>opts</code> adher to a given <code>rules</code> predicate.
 <details>
 <summary>
-Read on...
+Checks, whether the <code>opts</code> adher to a given <code>rules</code> predicate.
 </summary>
 
 <br />
@@ -955,10 +944,9 @@ Result:
 <tr name="verifyRules">
 <td><code><a href="#verifyRules">verifyRules</a>({errs, opts})</code></td>
 <td>
-Checks, whether the <a href="#rules"><code>rules</code></a> field of an option holds in relation to all options.
 <details>
 <summary>
-Read on...
+Checks, whether the <a href="#rules"><code>rules</code></a> field of an option holds in relation to all options.
 </summary>
 
 <br />
@@ -999,10 +987,9 @@ Result:
 <tr name="verifyValuesArity">
 <td><code><a href="#verifyValuesArity">verifyValuesArity</a>({errs, opts})</code></td>
 <td>
-Checks, whether the <a href="#values"><code>values</code></a> and <a href="#defaultValues"><code>defaultValues</code></a> of an option fits its <a href="#types"><code>types</code></a>.
 <details>
 <summary>
-Read on...
+Checks, whether the <a href="#values"><code>values</code></a> and <a href="#defaultValues"><code>defaultValues</code></a> of an option fits its <a href="#types"><code>types</code></a>.
 </summary>
 
 <br />
@@ -1046,11 +1033,10 @@ Result:
 <tr name="arrayOnRepeat">
 <td><code><a href="#arrayOnRepeat">arrayOnRepeat</a>({errs, opts})</code></td>
 <td>
-<code>arrayOnRepeat</code> changes how repeated calls of command-line arguments are handled by the parser.
-Instead of keeping only the first argument, repeated arguments are collected in an array.
 <details>
 <summary>
-Read on...
+<code>arrayOnRepeat</code> changes how repeated calls of command-line arguments are handled by the parser.
+Instead of keeping only the first argument, repeated arguments are collected in an array.
 </summary>
 
 <br />
@@ -1084,12 +1070,11 @@ Result:
 <tr name="bestGuessOpts">
 <td><code><a href="#bestGuessOpts">bestGuessOpts</a>({errs, opts})</code></td>
 <td>
+<details>
+<summary>
 Tries its best to interpret unparsed strings as additional parameters (e.g. <code>{values: ['--foo']}</code> as a flag).
 Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><code>flag</code></a> and requires options to follow a pattern:
 A single minus and a single character for short options or exactly two minusses with any more characters for long options.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -1127,10 +1112,9 @@ Result:
 <tr name="cast">
 <td><code><a href="#cast">cast</a>({errs, opts})</code></td>
 <td>
-Casts all <a href="#values"><code>values</code></a> according to the options' types.
 <details>
 <summary>
-Read on...
+Casts all <a href="#values"><code>values</code></a> according to the options' types.
 </summary>
 
 <br />
@@ -1171,10 +1155,9 @@ Result:
 <tr name="restrictToOnly">
 <td><code><a href="#restrictToOnly">restrictToOnly</a>({errs, opts})</code></td>
 <td>
-Reports an error if an option's <a href="#values"><code>values</code></a> are not contained in the <a href="#only"><code>only</code></a> list.
 <details>
 <summary>
-Read on...
+Reports an error if an option's <a href="#values"><code>values</code></a> are not contained in the <a href="#only"><code>only</code></a> list.
 </summary>
 
 <br />
@@ -1209,11 +1192,10 @@ Result:
 <tr name="reverseBools">
 <td><code><a href="#reverseBools">reverseBools</a>({errs, opts})</code></td>
 <td>
-Reverses the value of all <a href="#bool"><code>bool</code></a> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
-Works on string (e.g. <code>['false']</code>) and boolean (e.g. <code>[false]</code>) values.
 <details>
 <summary>
-Read on...
+Reverses the value of all <a href="#bool"><code>bool</code></a> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
+Works on string (e.g. <code>['false']</code>) and boolean (e.g. <code>[false]</code>) values.
 </summary>
 
 <br />
@@ -1246,11 +1228,10 @@ Result:
 <tr name="reverseFlags">
 <td><code><a href="#reverseFlags">reverseFlags</a>({errs, opts})</code></td>
 <td>
-Reverses the value of all <a href="#flag"><code>flag</code></a> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
-This may be useful if the presence of a flag should imply <code>false</code>.
 <details>
 <summary>
-Read on...
+Reverses the value of all <a href="#flag"><code>flag</code></a> options annotated with <a href="#reverse"><code>{reverse: true}</code></a>.
+This may be useful if the presence of a flag should imply <code>false</code>.
 </summary>
 
 <br />
@@ -1281,12 +1262,11 @@ Result:
 <tr name="suggestOptions">
 <td><code><a href="#suggestOptions">suggestOptions</a>({errs, opts})</code></td>
 <td>
+<details>
+<summary>
 Even if an <code>argv</code> is misspelled (e.g. <code>--aeg</code> instead of <code>--age</code>),
 shargs still keeps it as an unknown option (e.g. <code>{values: ['--aeg']}</code>).
 The <code>suggestOptions</code> stage collects all unknown options and suggests similar args defined in <code>opts</code>.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -1350,15 +1330,14 @@ Did you mean: --age, -a
 <tr name="traverseOpts">
 <td><code><a href="#traverseOpts">traverseOpts</a>(p)(f)({errs,opts})</code></td>
 <td>
+<details>
+<summary>
 <code>traverseOpts</code> applies a function <code>f</code> to each option that satisfies a predicate <code>p</code>.
 It does not change the order of options in the process.
 <code>p</code> takes a command-line option and returns a boolean.
 <code>f</code> takes three arguments, a command-line option, the index of the option, and the <code>opts</code> array,
 and returns an <code>{errs = [], opts = []}</code> object.
 Most of the other <code>opts</code> checks and stages are defined in terms of <code>traverseOpts</code>.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -1410,10 +1389,9 @@ Result:
 <tr name="failRest">
 <td><code><a href="#failRest">failRest</a>({errs, args})</code></td>
 <td>
-Reports an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
 <details>
 <summary>
-Read on...
+Reports an error for each argument in a rest field. E.g. <code>{_: ['foo']}</code> would add an error for <code>foo</code>.
 </summary>
 
 <br />
@@ -1452,10 +1430,9 @@ Result:
 <tr name="verifyArgs">
 <td><code><a href="#verifyArgs">verifyArgs</a>(rules)({errs, args})</code></td>
 <td>
-Checks, whether the <code>args</code> adher to a given <code>rules</code> predicate.
 <details>
 <summary>
-Read on...
+Checks, whether the <code>args</code> adher to a given <code>rules</code> predicate.
 </summary>
 
 <br />
@@ -1504,12 +1481,11 @@ Result:
 <tr name="bestGuessArgs">
 <td><code><a href="#bestGuessArgs">bestGuessArgs</a>({errs, args})</code></td>
 <td>
+<details>
+<summary>
 Tries its best to interpret strings in the <code>_</code> key as additional parameters.
 Supports only <a href="#string"><code>string</code></a> and <a href="#flag"><code>flag</code></a> and requires options to follow a pattern:
 A single minus and a single character for short options or exactly two minusses with any more characters for long options.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -1554,10 +1530,9 @@ Result:
 <tr name="bestGuessCast">
 <td><code><a href="#bestGuessCast">bestGuessCast</a>({errs, args})</code></td>
 <td>
-<code>bestGuessCast</code> tries its best to transform strings into other types.
 <details>
 <summary>
-Read on...
+<code>bestGuessCast</code> tries its best to transform strings into other types.
 </summary>
 
 <br />
@@ -1618,10 +1593,9 @@ Result:
 <tr name="clearRest">
 <td><code><a href="#clearRest">clearRest</a>({errs, args})</code></td>
 <td>
-Removes all entries from each <code>_</code> key.
 <details>
 <summary>
-Read on...
+Removes all entries from each <code>_</code> key.
 </summary>
 
 <br />
@@ -1648,10 +1622,9 @@ Result:
 <tr name="flagsAsBools">
 <td><code><a href="#flagsAsBools">flagsAsBools</a>({errs, args})</code></td>
 <td>
-Transforms all count-based <a href="#flag"><code>flag</code></a> options into booleans, that are <code>true</code> if the count is greater than <code>0</code> and <code>false</code> otherwise.
 <details>
 <summary>
-Read on...
+Transforms all count-based <a href="#flag"><code>flag</code></a> options into booleans, that are <code>true</code> if the count is greater than <code>0</code> and <code>false</code> otherwise.
 </summary>
 
 <br />
@@ -1682,10 +1655,9 @@ Result:
 <tr name="flagsAsNumbers">
 <td><code><a href="#flagsAsNumbers">flagsAsNumbers</a>({errs, args})</code></td>
 <td>
-Transforms all count-based <a href="#flag"><code>flag</code></a> options into numbers, that correspond to the count.
 <details>
 <summary>
-Read on...
+Transforms all count-based <a href="#flag"><code>flag</code></a> options into numbers, that correspond to the count.
 </summary>
 
 <br />
@@ -1716,14 +1688,13 @@ Result:
 <tr name="mergeArgs">
 <td><code><a href="#mergeArgs">mergeArgs</a>(merge)({errs, args})</code></td>
 <td>
+<details>
+<summary>
 Recursively merges args objects of <a href="#command"><code>command</code></a>s into their partent args objects.
 Results into a flat object, where no key is an object.
 Other <code>merge</code> functions may be given to the function.
 If the <code>merge</code> parameter is left undefined, fields from the parent object are preferred
 and the rest field `_` is concatenated.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -1776,12 +1747,11 @@ Result:
 <tr name="traverseArgs">
 <td><code><a href="#traverseArgs">traverseArgs</a>(fs)({errs, args})</code></td>
 <td>
+<details>
+<summary>
 Transforms an args object into a new args object by applying functions <code>fs</code> based on the value type.
 All fields of an object are updated independently and previous updates in the same run do not influence later updates.
 Many <code>args</code> checks and stages are implemented in terms of <code>traverseArgs</code>.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -1900,12 +1870,11 @@ Shargs provides the following usage functions:
 <tr name="note">
 <td><code name="noteFrom"><a href="#note">note</a>(string)(opts)(style)</code><br /><code><a href="#noteFrom">noteFrom</a>(id)(string)(opts)(style)</code></td>
 <td>
+<details>
+<summary>
 Prints the <code>string</code> as a <a href="#line"><code>line</code></a>.
 Takes the line width from <a href="#style">style</a> and pads with spaces at the end.
 If the string is too long to fit the <code>line</code>'s width, it is broken up into words, and all remaining words are put into another <code>line</code>.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -1941,10 +1910,9 @@ the Answer.
 <tr name="notes">
 <td><code name="notesFrom"><a href="#notes">notes</a>(strings)(opts)(style)</code><br /><code><a href="#notesFrom">notesFrom</a>(id)(strings)(opts)(style)</code></td>
 <td>
-Prints several strings using <a href="#note"><code>note</code></a> for each.
 <details>
 <summary>
-Read on...
+Prints several strings using <a href="#note"><code>note</code></a> for each.
 </summary>
 
 <br />
@@ -1981,11 +1949,10 @@ The Ultimate Question.
 <tr name="optsDefs">
 <td><code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>(opts)(style)</code><br /><code><a href="#optsDefsFrom">optsDefsFrom</a>(id1, id2)(opts)(style)</code></td>
 <td>
-Prints a <a href="#def"><code>def</code></a> (definition) list,
-with the command-line option <a href="#args"><code>args</code></a> as title and the <a href="#desc"><code>desc</code></a> field as text.
 <details>
 <summary>
-Read on...
+Prints a <a href="#def"><code>def</code></a> (definition) list,
+with the command-line option <a href="#args"><code>args</code></a> as title and the <a href="#desc"><code>desc</code></a> field as text.
 </summary>
 
 <br />
@@ -2028,12 +1995,11 @@ Result:
 <tr name="optsList">
 <td><code name="optsListFrom"><a href="#optsList">optsList</a>(opts)(style)</code><br /><code><a href="#optsListFrom">optsListFrom</a>(id)(opts)(style)</code></td>
 <td>
+<details>
+<summary>
 Prints a <a href="#table"><code>table</code></a> with two columns:
 The command-line option's <a href="#args"><code>args</code></a> in the left,
 and the <a href="#desc"><code>desc</code></a> field in the right column.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -2075,10 +2041,9 @@ Result:
 <tr name="space">
 <td><code name="spaceFrom"><a href="#space">space</a>(opts)(style)</code><br /><code><a href="#spaceFrom">spaceFrom</a>(id)(opts)(style)</code></td>
 <td>
-Introduces a single blank <a href="#line"><code>line</code></a>.
 <details>
 <summary>
-Read on...
+Introduces a single blank <a href="#line"><code>line</code></a>.
 </summary>
 
 <br />
@@ -2117,10 +2082,9 @@ The Ultimate Question.
 <tr name="spaces">
 <td><code name="spacesFrom"><a href="#spaces">spaces</a>(length)(opts)(style)</code><br /><code><a href="#spacesFrom">spacesFrom</a>(id)(length)(opts)(style)</code></td>
 <td>
-Introduces several blank <a href="#lines"><code>lines</code></a> with the number defined by the <code>length</code> parameter.
 <details>
 <summary>
-Read on...
+Introduces several blank <a href="#lines"><code>lines</code></a> with the number defined by the <code>length</code> parameter.
 </summary>
 
 <br />
@@ -2160,11 +2124,10 @@ The Ultimate Question.
 <tr name="synopsis">
 <td><code name="synopsisFrom"><a href="#synopsis">synopsis</a>(programName)(opts)(style)</code><br /><code><a href="#synopsisFrom">synopsisFrom</a>(id)(start, end)(opts)(style)</code></td>
 <td>
-Prints a synopsis:
-The <code>programName</code> is printed first, followed by the command-line options' <a href="#args"><code>args</code></a>.
 <details>
 <summary>
-Read on...
+Prints a synopsis:
+The <code>programName</code> is printed first, followed by the command-line options' <a href="#args"><code>args</code></a>.
 </summary>
 
 <br />
@@ -2227,10 +2190,9 @@ The following usage combinators are available:
 <tr name="usage">
 <td><code><a href="#usage">usage</a>(functions)(opts)(style)</code></td>
 <td>
-Groups several usage functions together.
 <details>
 <summary>
-Read on...
+Groups several usage functions together.
 </summary>
 
 <br />
@@ -2279,11 +2241,10 @@ the Answer.
 <tr name="usageMap">
 <td><code><a href="#usageMap">usageMap</a>(f)(opts)(style)</code></td>
 <td>
-Takes an <code>opts</code> (options) list and a function <code>f</code>,
-which is applied to each option and is expected to return a <a href="#layout-functions">layout function</a>.
 <details>
 <summary>
-Read on...
+Takes an <code>opts</code> (options) list and a function <code>f</code>,
+which is applied to each option and is expected to return a <a href="#layout-functions">layout function</a>.
 </summary>
 
 <br />
@@ -2356,10 +2317,9 @@ Shargs provides the following usage decorators:
 <tr name="justArgs">
 <td><code><a href="#justArgs">justArgs</a>(array)(usageFunction)(opts)</code></td>
 <td>
-Takes an array of args and keeps only those <code>opts</code> that have an arg in the args <code>array</code>.
 <details>
 <summary>
-Read on...
+Takes an array of args and keeps only those <code>opts</code> that have an arg in the args <code>array</code>.
 </summary>
 
 <br />
@@ -2394,10 +2354,9 @@ Result:
 <tr name="noCommands">
 <td><code><a href="#noCommands">noCommands</a>(usageFunction)(opts)</code></td>
 <td>
-Filters out all <a href="#command"><code>commands</code></a> from <code>opts</code>.
 <details>
 <summary>
-Read on...
+Filters out all <a href="#command"><code>commands</code></a> from <code>opts</code>.
 </summary>
 
 <br />
@@ -2432,10 +2391,9 @@ Result:
 <tr name="onlyCommands">
 <td><code><a href="#onlyCommands">onlyCommands</a>(usageFunction)(opts)</code></td>
 <td>
-Keeps only <a href="#command"><code>commands</code></a> in <code>opts</code>.
 <details>
 <summary>
-Read on...
+Keeps only <a href="#command"><code>commands</code></a> in <code>opts</code>.
 </summary>
 
 <br />
@@ -2468,10 +2426,9 @@ Result:
 <tr name="onlyFirstArg">
 <td><code><a href="#onlyFirstArg">onlyFirstArg</a>(usageFunction)(opts)</code></td>
 <td>
-Keeps only the first <a href="#args"><code>arg</code></a> from each opt.
 <details>
 <summary>
-Read on...
+Keeps only the first <a href="#args"><code>arg</code></a> from each opt.
 </summary>
 
 <br />
@@ -2506,10 +2463,9 @@ Result:
 <tr name="optsFilter">
 <td><code><a href="#optsFilter">optsFilter</a>(p)(usageFunction)(opts)</code></td>
 <td>
-Applies array's filter method to the <code>opts</code> array using a predicate <code>p</code>.
 <details>
 <summary>
-Read on...
+Applies array's filter method to the <code>opts</code> array using a predicate <code>p</code>.
 </summary>
 
 <br />
@@ -2546,10 +2502,9 @@ Result:
 <tr name="optsMap">
 <td><code><a href="#optsMap">optsMap</a>(f)(usageFunction)(opts)</code></td>
 <td>
-Applies array's map method to the <code>opts</code> array using a function <code>f</code>.
 <details>
 <summary>
-Read on...
+Applies array's map method to the <code>opts</code> array using a function <code>f</code>.
 </summary>
 
 <br />
@@ -2632,10 +2587,9 @@ Shargs provides the following layout functions:
 <tr name="br">
 <td><code name="brFrom"><a href="#br">br</a>(style)</code><br /><code><a href="#brFrom">brFrom</a>(id)(style)</code></td>
 <td>
-Introduces a single blank line.
 <details>
 <summary>
-Read on...
+Introduces a single blank line.
 </summary>
 
 <br />
@@ -2672,10 +2626,9 @@ Last line
 <tr name="brs">
 <td><code name="brsFrom"><a href="#brs">brs</a>(length)(style)</code><br /><code><a href="#brsFrom">brsFrom</a>(id)(length)(style)</code></td>
 <td>
-Introduces several blank lines with the number defined by the <code>length</code> parameter.
 <details>
 <summary>
-Read on...
+Introduces several blank lines with the number defined by the <code>length</code> parameter.
 </summary>
 
 <br />
@@ -2713,13 +2666,12 @@ Last line
 <tr name="cols">
 <td><code name="colsFrom"><a href="#cols">cols</a>(columns)(style)</code><br /><code><a href="#colsFrom">colsFrom</a>(id)(columns)(style)</code></td>
 <td>
+<details>
+<summary>
 Takes a list of <code>columns</code> with each column consisting of several strings.
 Prints the first column at the left and the last column at the right.
 The <a href="#style">style</a> parameter must have a <code>cols</code> id with a number of style objects equal to the number of columns.
 If a column string is longer than a column's width, it is cut off.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -2763,12 +2715,11 @@ Result:
 <tr name="defs">
 <td><code name="defsFrom"><a href="#defs">defs</a>(rowsList)(style)</code><br /><code><a href="#defsFrom">defsFrom</a>(id1, id2)(rowsList)(style)</code></td>
 <td>
+<details>
+<summary>
 Takes a list of title/desc row pairs.
 Prints the title as a <a href="#text"><code>text</code></a> before printing the desc as a <code>text</code>.
 Title and text may be assigned different <a href="#style">style</a> ids.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -2813,12 +2764,11 @@ Result:
 <tr name="line">
 <td><code name="lineFrom"><a href="#line">line</a>(string)(style)</code><br /><code><a href="#lineFrom">lineFrom</a>(id)(string)(style)</code></td>
 <td>
+<details>
+<summary>
 Prints the <code>string</code> with a linebreak at the end.
 Takes the line width from <a href="#style">style</a> and pads with spaces at the end.
 If the string is too long to fit the line's width, it is cut off.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -2849,10 +2799,9 @@ A line
 <tr name="lines">
 <td><code name="linesFrom"><a href="#lines">lines</a>(strings)(style)</code><br /><code><a href="#linesFrom">linesFrom</a>(id)(strings)(style)</code></td>
 <td>
-Prints several strings using the <a href="#line"><code>line</code></a> function for each.
 <details>
 <summary>
-Read on...
+Prints several strings using the <a href="#line"><code>line</code></a> function for each.
 </summary>
 
 <br />
@@ -2887,13 +2836,12 @@ Last line
 <tr name="table">
 <td><code name="tableFrom"><a href="#table">table</a>(rowsList)(style)</code><br /><code><a href="#tableFrom">tableFrom</a>(id)(rowsList)(style)</code></td>
 <td>
+<details>
+<summary>
 Takes a <code>rowsList</code> with each row holding a number of strings equal to the number of table columns.
 The <a href="#style">style</a> parameter must have a <code>cols</code> key with a number of style objects equal to the number of columns.
 The strings in each row are formatted according to the defined columns.
 If a string surpasses the width of a column, its remaining words are printed in the following rows.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
@@ -2938,11 +2886,10 @@ Result:
 <tr name="text">
 <td><code name="textFrom"><a href="#text">text</a>(string)(style)</code><br /><code><a href="#textFrom">textFrom</a>(id)(string)(style)</code></td>
 <td>
-Text acts much like <a href="#line"><code>line</code></a>, but does not cut off strings that surpass a line's width.
-Instead, it splits the string by words and adds new <a href="#line"><code>lines</code></a> with the remaining words.
 <details>
 <summary>
-Read on...
+Text acts much like <a href="#line"><code>line</code></a>, but does not cut off strings that surpass a line's width.
+Instead, it splits the string by words and adds new <a href="#line"><code>lines</code></a> with the remaining words.
 </summary>
 
 <br />
@@ -2976,10 +2923,9 @@ the Answer.
 <tr name="texts">
 <td><code name="textsFrom"><a href="#texts">texts</a>(strings)(style)</code><br /><code><a href="#textsFrom">textsFrom</a>(id)(strings)(style)</code></td>
 <td>
-Takes several <code>strings</code> and applies the <a href="#text"><code>text</code></a> function to each.
 <details>
 <summary>
-Read on...
+Takes several <code>strings</code> and applies the <a href="#text"><code>text</code></a> function to each.
 </summary>
 
 <br />
@@ -3033,10 +2979,9 @@ Shargs provides the following layout combinators:
 <tr name="layout">
 <td><code><a href="#layout">layout</a>(functions)(style)</code></td>
 <td>
-Groups several <a href="#layout-functions">layout <code>functions</code></a> together and lets them share one <a href="#style"><code>style</code></a> definition.
 <details>
 <summary>
-Read on...
+Groups several <a href="#layout-functions">layout <code>functions</code></a> together and lets them share one <a href="#style"><code>style</code></a> definition.
 </summary>
 
 <br />
@@ -3067,12 +3012,11 @@ Last line
 <tr name="layoutMap">
 <td><code><a href="#layoutMap">layoutMap</a>(f)(itemsList)(style)</code></td>
 <td>
+<details>
+<summary>
 Takes a list of values and a function <code>f</code>,
 which is applied to each string and is expected to return a <a href="#layout-function">layout function</a>.
 The strings are then formatted according to <code>f</code>.
-<details>
-<summary>
-Read on...
 </summary>
 
 <br />
