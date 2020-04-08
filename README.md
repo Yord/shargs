@@ -731,7 +731,7 @@ Result:
 <td>
 <details>
 <summary>
-Verifies that no option in the <code><a href="#contradics">contradics</a></code> field of an option has <code><a href="#values">values</a></code> if the option has <code>values</code>.
+Verifies that no option in the <code><a href="#contradicts">contradicts</a></code> field of an option has <code><a href="#values">values</a></code> if the option has <code>values</code>.
 </summary>
 
 <br />
@@ -1951,7 +1951,7 @@ The Ultimate Question.
 <td>
 <details>
 <summary>
-Prints a <code><a href="#def">def</a></code> (definition) list,
+Prints a <code><a href="#defs">defs</a></code> (definitions) list,
 with the command-line option <code><a href="#args">args</a></code> as title and the <code><a href="#desc">desc</a></code> field as text.
 </summary>
 
@@ -3015,7 +3015,7 @@ Last line
 <details>
 <summary>
 Takes a list of values and a function <code>f</code>,
-which is applied to each string and is expected to return a <a href="#layout-function">layout function</a>.
+which is applied to each string and is expected to return a <a href="#layout-functions">layout function</a>.
 The strings are then formatted according to <code>f</code>.
 </summary>
 
