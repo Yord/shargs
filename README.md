@@ -3432,6 +3432,32 @@ This is of course a very simplified example that makes many assumptions that are
 and should not be made in real projects.
 Your own function would most probably need much more validations and handling of edge cases.
 
+#### Custom Usage Functions
+
+Writing and using custom usage functions in shargs is very simple:
+You only have to write a function with the correct signature and it can be used as a usage function.
+It must take an [`opts`](#command-line-options) array and a [`style` object](#style) and return a `string`.
+
+The following example shows the custom `descs` function that displays the options' descriptions:
+
+```js
+const descs = opts => style => {
+  const descriptions = opts.map(_ => _.desc)
+
+  return texts(descriptions)(style)
+}
+```
+
+Using [`usageMap`](#usageMap) simplifies the process of defining your own functions:
+
+```js
+const optsTable = usageMap(
+  ({key, args, required, desc}) => table([
+    [(required ? '*' : '') + key, args.join(', '), desc]
+  ])
+)
+```
+
 ## Comparison to Related Libraries
 
 <table>
