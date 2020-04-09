@@ -1,4 +1,4 @@
-const pipe    = require('./parser/combinators/pipe')
+const pipe    = require('./pipe')
 const TO_ARGS = require('./toArgs')
 const TO_OPTS = require('./toOpts')
 
