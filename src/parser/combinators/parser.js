@@ -2,8 +2,6 @@ const pipe    = require('./pipe')
 const TO_ARGS = require('../toArgs')
 const TO_OPTS = require('../toOpts')
 
-const defaultStages  = {argv: [], opts: [], args: []}
-
 module.exports = function parser (stages = {}, {checks = {}, parsers = {}} = {}) {
   const checksAndStages = {
     argv: [...(checks.argv || []), ...(stages.argv || [])],
