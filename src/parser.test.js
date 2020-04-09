@@ -1,9 +1,6 @@
-const parser            = require('./parser')
-const splitShortOptions = require('./parser/argv/splitShortOptions')
-const cast              = require('./parser/opts/cast')
-const clearRest         = require('./parser/args/clearRest')
-const toOpts            = require('./toOpts')
-const toArgs            = require('./toArgs')
+const parser = require('./parser')
+const toOpts = require('./toOpts')
+const toArgs = require('./toArgs')
 
 const opts = [
   {key: 'title', types: ['string'], args: ['--title']},
@@ -81,6 +78,13 @@ test('parser applies argv stages', () => {
     '-VV'
   ]
 
+  const splitShortOptions = ({argv}) => ({
+    argv: argv.reduce(
+      (arr, _) => [...arr, ..._.slice(1).split('').map(_ => '-' + _)],
+      []
+    )
+  })
+
   const stages = {
     argv: [splitShortOptions]
   }
@@ -100,6 +104,12 @@ test('parser applies opts stages', () => {
     '-n', '23', 'true'
   ]
 
+  const cast = ({opts}) => ({
+    opts: opts.map(
+      opt => opt.key !== 'numBool' ? opt : {...opt, values: [23, true]}
+    )
+  })
+
   const stages = {
     opts: [cast]
   }
@@ -118,6 +128,10 @@ test('parser applies args stages', () => {
   const argv = [
     'foo'
   ]
+
+  const clearRest = ({args}) => ({
+    args: {_: []}
+  })
 
   const stages = {
     args: [clearRest]
