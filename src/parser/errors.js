@@ -52,12 +52,6 @@ const falseRules = ({key, rules, option}) => ({
   info: {key, rules, option}
 })
 
-const illegalKeyName = ({key, option}) => ({
-  code: 'Illegal key name',
-  msg:  'An option key had an illegal name.',
-  info: {key, option}
-})
-
 const implicationViolated = ({key, implies, option}) => ({
   code: 'Implication violated',
   msg:  'Some given keys that imply each other are not all defined.',
@@ -76,24 +70,6 @@ const invalidBoolMapping = ({key, alt}) => ({
   info: {key, alt}
 })
 
-const invalidDefaultValues = ({defaultValues, option}) => ({
-  code: 'Invalid default values',
-  msg:  "An option's defaultValues field has an invalid type. It must be an array with any values in it.",
-  info: {defaultValues, option}
-})
-
-const invalidOptionsListInCombine = ({options, arg, argument}) => ({
-  code: 'Invalid options list in combine',
-  msg:  'Options list in combine was undefined, null or empty',
-  info: {options, arg, argument}
-})
-
-const invalidRequiredPositionalArgument = ({positionalArguments}) => ({
-  code: 'Invalid required positional argument',
-  msg:  'If a positional argument is required, all previous positional arguments must be required as well. The required field must either be undefined, true or false.',
-  info: {positionalArguments}
-})
-
 const invalidTypes = ({types, option}) => ({
   code: 'Invalid types',
   msg:  'Each argument must have a types key that must be null or an array',
@@ -106,18 +82,6 @@ const invalidValues = ({values, defaultValues, option}) => ({
   info: {values, defaultValues, option}
 })
 
-const invalidVariadicPositionalArgument = ({positionalArguments}) => ({
-  code: 'Invalid variadic positional argument',
-  msg:  'Only the last positional argument may be variadic. The variadic field must either be undefined, true or false.',
-  info: {positionalArguments}
-})
-
-const nonMatchingArgumentTypes = ({arg, ref, option}) => ({
-  code: 'Non-matching argument types',
-  msg:  'If arguments have the same arg, their types must either be equal or have the same length',
-  info: {arg, ref, option}
-})
-
 const requiredOptionFormat = ({key, values, option}) => ({
   code: 'Wrong format for required option',
   msg:  'A required option has values in the wrong format. It should be an array of values.',
@@ -128,12 +92,6 @@ const requiredOptionMissing = ({key, args, option}) => ({
   code: 'Required option is missing',
   msg:  'An option that is marked as required has not been provided.',
   info: {key, args, option}
-})
-
-const requiredPositionalArgumentMissing = ({key, positionalArgument}) => ({
-  code: 'Required positional argument missing',
-  msg:  'A required positional argument has not been provided.',
-  info: {key, positionalArgument}
 })
 
 const unexpectedArgument = ({argument}) => ({
@@ -194,20 +152,13 @@ module.exports = {
   falseArgvRules,
   falseOptsRules,
   falseRules,
-  illegalKeyName,
   implicationViolated,
   invalidArity,
   invalidBoolMapping,
-  invalidDefaultValues,
-  invalidOptionsListInCombine,
-  invalidRequiredPositionalArgument,
   invalidTypes,
   invalidValues,
-  invalidVariadicPositionalArgument,
-  nonMatchingArgumentTypes,
   requiredOptionFormat,
   requiredOptionMissing,
-  requiredPositionalArgumentMissing,
   unexpectedArgument,
   valueRestrictionsViolated,
   wrongArgsRulesType,
