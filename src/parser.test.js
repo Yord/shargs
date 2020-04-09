@@ -1,9 +1,9 @@
 const parser            = require('./parser')
-const splitShortOptions = require('../argv/splitShortOptions')
-const cast              = require('../opts/cast')
-const clearRest         = require('../args/clearRest')
-const toOpts            = require('../toOpts')
-const toArgs            = require('../toArgs')
+const splitShortOptions = require('./parser/argv/splitShortOptions')
+const cast              = require('./parser/opts/cast')
+const clearRest         = require('./parser/args/clearRest')
+const toOpts            = require('./toOpts')
+const toArgs            = require('./toArgs')
 
 const opts = [
   {key: 'title', types: ['string'], args: ['--title']},

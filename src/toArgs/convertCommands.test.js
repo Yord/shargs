@@ -1,5 +1,5 @@
 const convertCommands         = require('./convertCommands')
-const parser                  = require('../combinators/parser')
+const parser                  = require('../parser')
 const {invalidRequiredPositionalArgument, invalidVariadicPositionalArgument, requiredPositionalArgumentMissing} = require('../errors')
 
 const parsers = {__: parser(), _: parser()}
