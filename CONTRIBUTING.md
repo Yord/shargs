@@ -1,6 +1,6 @@
 # Contributing
 
-We are open to, and grateful for, any contributions made by the community. By contributing to pixie, you agree to abide by the [code of conduct][code].
+We are open to, and grateful for, any contributions made by the community. By contributing to shargs, you agree to abide by the [code of conduct][code].
 
 ## Reporting Issues and Asking Questions
 
@@ -8,13 +8,13 @@ Before opening an issue, please search the [issue tracker][issues] to make sure 
 
 ### Bugs and Improvements
 
-We use the issue tracker to keep track of bugs and improvements to pixie itself, its examples, and the documentation. We encourage you to open issues to discuss improvements, architecture, theory, internal implementation, etc. If a topic has been discussed before, we will ask you to join the previous discussion.
+We use the issue tracker to keep track of bugs and improvements to shargs itself, its examples, and the documentation. We encourage you to open issues to discuss improvements, architecture, theory, internal implementation, etc. If a topic has been discussed before, we will ask you to join the previous discussion.
 
-As pixie is stable software, changes to its behavior are very carefully considered.
+As shargs is stable software, changes to its behavior are very carefully considered.
 
 ### Getting Help
 
-**For support or usage questions like “how do I do X with pixie and “my code doesn't work”, please search and ask on [StackOverflow with a `shargs` tag][so-shargs] first.**
+**For support or usage questions like “how do I do X with shargs and “my code doesn't work”, please search and ask on [StackOverflow with a `shargs` tag][so-shargs] first.**
 
 We ask you to do this because StackOverflow does a much better job at keeping popular questions visible. Unfortunately good answers get lost and outdated on GitHub.
 
@@ -38,24 +38,9 @@ Fork, then clone the repo:
 git clone https://github.com/your-username/shargs.git
 ```
 
-### Running Pixie
+### Testing
 
-Run pixie with either of the following commands:
-
-```sh
-npm start -- --help
-node index.js --help
-```
-
-### Testing and Linting
-
-To only run linting:
-
-```sh
-npm run lint
-```
-
-To only run tests:
+To run tests:
 
 ```sh
 npm test
@@ -67,7 +52,7 @@ Improvements to the documentation are always welcome.
 
 ### Examples
 
-Pixie comes with official examples to demonstrate its features. When adding a new example, please adhere to the style and format of the existing examples.
+Shargs comes with official examples to demonstrate its features. When adding a new example, please adhere to the style and format of the existing examples.
 
 ### Sending a Pull Request
 
@@ -80,7 +65,7 @@ In general, the contribution workflow looks like this:
 - Open a new issue in the [issue tracker][issues].
 - Fork the repository.
 - Create a new feature branch based off the `develop` branch.
-- Make sure all tests pass and there are no linting errors.
+- Make sure all tests pass.
 - Submit a pull request, referencing any issues it addresses.
 
 Please try to keep your pull request focused in scope and avoid including unrelated commits.
