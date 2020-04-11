@@ -43,6 +43,40 @@ test('parser transforms argv to args', () => {
   expect(args).toStrictEqual(exp)
 })
 
+test('async parser transforms argv to args', async () => {
+  expect.assertions(1)
+
+  const argv = [
+    'foo',
+    '--title', "The Hitchhiker's Guide to the Galaxy",
+    '-n', '23', 'true',
+    '-a', '42',
+    '--verbose', 'false',
+    '--version',
+    'bar',
+    '-h', 'foo', '--bar'
+  ]
+
+  const stages = {}
+
+  const {args} = await parser(stages, {async: true})(opts)(argv)
+
+  const exp = {
+    _: ['foo', 'bar', 'foo'],
+    title: "The Hitchhiker's Guide to the Galaxy",
+    numBool: ['23', 'true'],
+    answer: '42',
+    verbose: 'false',
+    version: {type: 'flag', count: 1},
+    help: {
+      _: ['foo'],
+      bar: {type: 'flag', count: 1}
+    }
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
 test('parser works even if stages are undefined', () => {
   const argv = [
     'foo',
