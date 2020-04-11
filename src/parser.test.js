@@ -107,6 +107,38 @@ test('parser works even if stages are undefined', () => {
   expect(args).toStrictEqual(exp)
 })
 
+test('async parser works even if stages are undefined', async () => {
+  expect.assertions(1)
+
+  const argv = [
+    'foo',
+    '--title', "The Hitchhiker's Guide to the Galaxy",
+    '-n', '23', 'true',
+    '-a', '42',
+    '--verbose', 'false',
+    '--version',
+    'bar',
+    '-h', 'foo', '--bar'
+  ]
+
+  const {args} = await parser(undefined, {async: true})(opts)(argv)
+
+  const exp = {
+    _: ['foo', 'bar', 'foo'],
+    title: "The Hitchhiker's Guide to the Galaxy",
+    numBool: ['23', 'true'],
+    answer: '42',
+    verbose: 'false',
+    version: {type: 'flag', count: 1},
+    help: {
+      _: ['foo'],
+      bar: {type: 'flag', count: 1}
+    }
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
 test('parser applies argv stages', () => {
   const argv = [
     '-VV'
