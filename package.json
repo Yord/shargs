@@ -1,6 +1,6 @@
 {
   "name": "shargs",
-  "version": "0.17.1",
+  "version": "0.17.2",
   "description": "A highly configurable and extensible command-line arguments parser",
   "keywords": [
     "shargs",
@@ -22,7 +22,6 @@
     "url": "https://github.com/Yord/shargs.git"
   },
   "scripts": {
-    "start": "./index.js",
     "test": "jest --ci --coverage --collectCoverageFrom 'src/**/*.js' --logHeapUsage --passWithNoTests"
   },
   "engines": {
