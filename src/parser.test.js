@@ -332,6 +332,30 @@ test('parser applies args stages', () => {
   expect(args).toStrictEqual(exp)
 })
 
+test('async parser applies args stages that are not promises', async () => {
+  expect.assertions(1)
+
+  const argv = [
+    'foo'
+  ]
+
+  const clearRest = ({args}) => ({
+    args: {_: []}
+  })
+
+  const stages = {
+    args: [clearRest]
+  }
+
+  const {args} = await parser(stages, {async: true})(opts)(argv)
+
+  const exp = {
+    _: []
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
 test('parser works with empty opts', () => {
   const argv = [
     'foo'
