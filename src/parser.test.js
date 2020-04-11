@@ -2,6 +2,16 @@ const parser = require('./parser')
 const toOpts = require('./toOpts')
 const toArgs = require('./toArgs')
 
+const promise = f => a => new Promise(
+  (resolve, reject) => {
+    try {
+      resolve(f(a))
+    } catch (err) {
+      reject(err)
+    }
+  }
+)
+
 const opts = [
   {key: 'title', types: ['string'], args: ['--title']},
   {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb']},
@@ -181,6 +191,34 @@ test('async parser applies argv stages that are not promises', async () => {
 
   const stages = {
     argv: [splitShortOptions]
+  }
+
+  const {args} = await parser(stages, {async: true})(opts)(argv)
+
+  const exp = {
+    _: [],
+    version: {type: 'flag', count: 2}
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
+test('async parser applies argv stages that are promises', async () => {
+  expect.assertions(1)
+  
+  const argv = [
+    '-VV'
+  ]
+
+  const splitShortOptions = ({argv}) => ({
+    argv: argv.reduce(
+      (arr, _) => [...arr, ..._.slice(1).split('').map(_ => '-' + _)],
+      []
+    )
+  })
+
+  const stages = {
+    argv: [promise(splitShortOptions)]
   }
 
   const {args} = await parser(stages, {async: true})(opts)(argv)
