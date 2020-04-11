@@ -22,7 +22,6 @@
     "url": "https://github.com/Yord/shargs.git"
   },
   "scripts": {
-    "start": "./index.js",
     "test": "jest --ci --coverage --collectCoverageFrom 'src/**/*.js' --logHeapUsage --passWithNoTests"
   },
   "engines": {
