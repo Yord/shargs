@@ -430,6 +430,24 @@ test('parser works with undefined opts', () => {
   expect(args).toStrictEqual(exp)
 })
 
+test('async parser works with undefined opts', async () => {
+  expect.assertions(1)
+
+  const argv = [
+    'foo'
+  ]
+
+  const stages = {}
+
+  const {args} = await parser(stages, {async: true})()(argv)
+
+  const exp = {
+    _: ['foo']
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
 test('parser works with empty argv', () => {
   const argv = []
 
