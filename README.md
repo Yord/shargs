@@ -12,6 +12,9 @@
 
 ```bash
 $ npm install --save shargs
+$ npm install --save shargs-opts   # opt-in to the type functions DSL
+$ npm install --save shargs-parser # opt-in to a big collection of parser functions
+$ npm install --save shargs-usage  # opt-in to a big collection of usage functions
 ```
 
 ## Features
@@ -41,6 +44,8 @@ Describe command-line options:
 <p>
 
 ```js
+const {flag, number, string} = require('shargs-opts')
+
 const opts = [
   string('question', ['-q', '--question'], {desc: 'A question.', required: true}),
   number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: [42]}),
@@ -75,6 +80,9 @@ Declare a parser:
 <p>
 
 ```js
+const {parser} = require('shargs')
+const {cast, flagsAsBools, requireOptions, splitShortOptions} = require('shargs-parser')
+
 const deepThought = parser({
   argv: [splitShortOptions],
   opts: [requireOptions, cast],
@@ -110,6 +118,8 @@ Layout a usage documentation:
 <p>
 
 ```js
+const {note, optsList, space, synopsis, usage} = require('shargs-usage')
+
 const docs = usage([
   synopsis('deepThought'),
   space,
@@ -131,6 +141,8 @@ The DSL is declarative, which means it describes the desired structure without c
 Try changing [`optsList`](#optsList) to [`optsDefs`](#optsDefs) later to see what that entails:
 
 ```js
+const {note, optsDefs, space, synopsis, usage} = require('shargs-usage')
+
 const docs = usage([
   synopsis('deepThought'),
   space,
@@ -277,7 +289,7 @@ If `help` would not have been `true`, the answer would have been printed.
 
 </details>
 
-Shargs is less a command-line parser than a library to conveniently build command-line parsers.
+If you want to run this example, clone it from the [shargs-example-deepthought][shargs-example-deepthought] repository.
 
 ## 🦈 Shargs
 
@@ -292,6 +304,8 @@ They form the basis for [command-line parsers](#command-line-parsers) as well as
 Shargs gives you a simple DSL for defining command-line options:
 
 ```js
+const {command, flag, number} = require('shargs-opts')
+
 const opts = [
   command('ask', ['ask'], {desc: 'Just ask.', opts: askOpts}),
   number('answer', ['-a', '--answer'], {desc: 'The (default) answer.', only: [42]}),
@@ -456,6 +470,8 @@ Transforms a <code><a href="#bool">bool</a></code> or <code><a href="#flag">flag
 Example:
 
 ```js
+const {bool, complement} = require('shargs-opts')
+
 const fun = bool('fun', ['-f', '--fun'], {defaultValues: ['false']})
 const notFun = complement('--not-')(fun)
 ```
@@ -486,6 +502,9 @@ This means:
 Shargs lets you define command-line parsers with the `parser` function:
 
 ```js
+const {parser} = require('shargs')
+const {cast, clearRest, demandACommand, restrictToOnly, splitShortOptions} = require('shargs-parser')
+
 const stages = {
   argv: [splitShortOptions],
   opts: [restrictToOnly, cast],
@@ -542,6 +561,8 @@ Checks, whether the <code>argv</code> adher to a given <code>rules</code> predic
 Example:
 
 ```js
+const {verifyArgv} = require('shargs-parser')
+
 const rules = argv => (
   argv.some(_ => _ === '-f') &&
   argv.some(_ => _ === '-l')
@@ -592,6 +613,8 @@ It only removes the first equals sign in the argument, so <code>--name=Logan=Wol
 Example:
 
 ```js
+const {equalsSignAsSpace} = require('shargs-parser')
+
 const argv = ['--name=Logan']
 
 equalsSignAsSpace({argv})
@@ -622,6 +645,8 @@ You may either use <code>shortOptsNoSpace</code>, or <code><a href="#splitShortO
 Example:
 
 ```js
+const {shortOptsNoSpace} = require('shargs-parser')
+
 const argv = ['-nLogan']
 
 shortOptsNoSpace({argv})
@@ -652,6 +677,8 @@ You may either use <code>splitShortOptions</code>, or <code><a href="#shortOptsN
 Example:
 
 ```js
+const {splitShortOptions} = require('shargs-parser')
+
 const argv = ['-ab']
 
 splitShortOptions({argv})
@@ -686,6 +713,8 @@ Most of the other <code>argv</code> checks and stages are defined in terms of <c
 Example:
 
 ```js
+const {traverseArgv} = require('shargs-parser')
+
 const argv = [
   '--age=42',
   '--help'
@@ -739,6 +768,9 @@ Verifies that no option in the <code><a href="#contradicts">contradicts</a></cod
 Example:
 
 ```js
+const {contradictOpts} = require('shargs-parser')
+const {number, string} = require('shargs-opts')
+
 const opts = [
   number('age', ['-a'], {
     contradicts: ['birthday'],
@@ -788,6 +820,10 @@ Checks if <code>opts</code> includes at least one <code><a href="#command">comma
 Example:
 
 ```js
+const {demandACommand} = require('shargs-parser')
+const {array, bool, flag, number, string} = require('shargs-opts')
+const numberBool = array(['number', 'bool'])
+
 const opts = [
   string('title', ['--title'], {values: ["Hitchhiker Guide"]}),
   numberBool('numBool', ['-n', '--nb'], {values: ['23', 'true']}),
@@ -829,6 +865,9 @@ Checks if all options in the <code><a href="#implies">implies</a></code> of an o
 Example:
 
 ```js
+const {implyOpts} = require('shargs-parser')
+const {number, string} = require('shargs-opts')
+
 const opts = [
   number('age', ['-a'], {
     implies: ['birthday'],
@@ -871,6 +910,8 @@ If a required option is not present, an error message is reported.
 Example:
 
 ```js
+const {requireOptions} = require('shargs-parser')
+const {number} = require('shargs-opts')
 
 const opts = [
   number('answer', ['-a', '--answer'], {required: true})
@@ -909,6 +950,9 @@ Checks, whether the <code>opts</code> adher to a given <code>rules</code> predic
 Example:
 
 ```js
+const {verifyOpts} = require('shargs-parser')
+const {string} = require('shargs-opts')
+
 const implies = (p, q) => !p || q
 
 const rules = opts => implies(
@@ -954,6 +998,9 @@ Checks, whether the <code><a href="#rules">rules</a></code> field of an option h
 Example:
 
 ```js
+const {verifyRules} = require('shargs-parser')
+const {string} = require('shargs-opts')
+
 const rules = firstName => opts => (
   firstName.values[0] === 'Logan' ||
   opts.some(_ => _.key === 'lastName' && _.values)
@@ -997,6 +1044,9 @@ Checks, whether the <code><a href="#values">values</a></code> and <code><a href=
 Example:
 
 ```js
+const {verifyValuesArity} = require('shargs-parser')
+const {string} = require('shargs-opts')
+
 const opts = [
   string('name', ['--name'], {values: ['Charles', 'Francis']})
 ]
@@ -1044,6 +1094,8 @@ Instead of keeping only the first argument, repeated arguments are collected in 
 Example:
 
 ```js
+const {arrayOnRepeat} = require('shargs-parser')
+
 const obj = {
   opts: [
     {key: 'age', types: ['string'], values: ['42']},
@@ -1082,8 +1134,10 @@ A single minus and a single character for short options or exactly two minusses 
 Example:
 
 ```js
+const {bestGuessOpts} = require('shargs-parser')
+
 const opts = [
-  string('age', ['--age'], {values: ['unknown']}),
+  {key: 'age', types: ['string'], args: ['--age'], values: ['unknown']},
   {values: ['--angry']},
   {values: ['--name']},
   {values: ['Logan']},
@@ -1098,9 +1152,9 @@ Result:
 ```js
 {
   opts: [
-    string('age', ['--age'], {values: ['unknown']}),
-    flag('angry', [], {values: [1]}),
-    string('name', [], {values: ['Logan']}),
+    {key: 'age', types: ['string'], args: ['--age'], values: ['unknown']},
+    {key: 'angry', types: [], args: [], values: [1]},
+    {key: 'name', types: ['string'], args: [], values: ['Logan']},
     {values: ['foo']}
   ]
 }
@@ -1122,6 +1176,10 @@ Casts all <code><a href="#values">values</a></code> according to the options' ty
 Example:
 
 ```js
+const {cast} = require('shargs-parser')
+const {array, bool, command, flag, number, string} = require('shargs-opts')
+const numberBool = array(['number', 'bool'])
+
 const opts = [
   string('title', ['--title'], {values: ["Hitchhiker Guide"]}),
   numberBool('numBool', ['--nb'], {values: ['23', 'true']}),
@@ -1165,6 +1223,9 @@ Reports an error if an option's <code><a href="#values">values</a></code> are no
 Example:
 
 ```js
+const {restrictToOnly} = require('shargs-parser')
+const {number} = require('shargs-opts')
+
 const opts = [
   number('answer', ['--answer'], {only: [42], values: [23]})
 ]
@@ -1203,6 +1264,9 @@ Works on string (e.g. <code>['false']</code>) and boolean (e.g. <code>[false]</c
 Example:
 
 ```js
+const {reverseBools} = require('shargs-parser')
+const {bool} = require('shargs-opts')
+
 const opts = [
   bool('bool', ['-b'], {reverse: true, values: [true]}),
   bool('bool', ['-b'], {reverse: true, values: ['true']})
@@ -1239,6 +1303,9 @@ This may be useful if the presence of a flag should imply <code>false</code>.
 Example:
 
 ```js
+const {reverseFlags} = require('shargs-parser')
+const {flag} = require('shargs-opts')
+
 const opts = [
   flag('flag', ['-f'], {reverse: true, values: [1]})
 ]
@@ -1274,6 +1341,9 @@ The <code>suggestOptions</code> stage collects all unknown options and suggests 
 Example:
 
 ```js
+const {suggestOptions} = require('shargs-parser')
+const {number} = require('shargs-opts')
+
 const opts = [
   number('age', ['-a', '--age']),
   {values: ['--aeg']}
@@ -1345,6 +1415,8 @@ Most of the other <code>opts</code> checks and stages are defined in terms of <c
 Example:
 
 ```js
+const {traverseOpts} = require('shargs-parser')
+
 const opts = [
   {key: 'age', types: ['number'], values: ['42']},
   {key: 'verbose', types: [], values: [1]},
@@ -1399,6 +1471,8 @@ Reports an error for each argument in a rest field. E.g. <code>{_: ['foo']}</cod
 Example:
 
 ```js
+const {failRest} = require('shargs-parser')
+
 const args = {
   _: ['foo'],
   command: {
@@ -1440,6 +1514,8 @@ Checks, whether the <code>args</code> adher to a given <code>rules</code> predic
 Example:
 
 ```js
+const {verifyArgs} = require('shargs-parser')
+
 const rules = args => (
   typeof args.firstName !== 'undefined' &&
   typeof args.lastName  !== 'undefined'
@@ -1493,6 +1569,8 @@ A single minus and a single character for short options or exactly two minusses 
 Example:
 
 ```js
+const {bestGuessArgs} = require('shargs-parser')
+
 const obj = {
   args: {
     _: ['--name', 'Logan', 'foo', '-v'],
@@ -1540,6 +1618,8 @@ Result:
 Example:
 
 ```js
+const {bestGuessCast} = require('shargs-parser')
+
 const args = {
   _: ['--name', 'Logan'],
   str1: 'yay',
@@ -1603,6 +1683,8 @@ Removes all entries from each <code>_</code> key.
 Example:
 
 ```js
+const {clearRest} = require('shargs-parser')
+
 const args = {_: ['foo']}
 
 clearRest({args})
@@ -1632,6 +1714,8 @@ Transforms all count-based <code><a href="#flag">flag</a></code> options into bo
 Example:
 
 ```js
+const {flagsAsBools} = require('shargs-parser')
+
 const args = {
   version: {type: 'flag', count: 1}
 }
@@ -1665,6 +1749,8 @@ Transforms all count-based <code><a href="#flag">flag</a></code> options into nu
 Example:
 
 ```js
+const {flagsAsNumbers} = require('shargs-parser')
+
 const args = {
   version: {type: 'flag', count: 2}
 }
@@ -1702,6 +1788,8 @@ and the rest field `_` is concatenated.
 Example:
 
 ```js
+const {mergeArgs} = require('shargs-parser')
+
 const args = {
   _: ['--help'],
   version: {type: 'flag', count: 2},
@@ -1759,6 +1847,8 @@ Many <code>args</code> checks and stages are implemented in terms of <code>trave
 Example:
 
 ```js
+const {traverseArgs} = require('shargs-parser')
+
 const args = {
   version: {type: 'flag', count: 2},
   answer: 23
@@ -1844,6 +1934,8 @@ This means:
 Defining your own usage documentation layout is as simple as:
 
 ```js
+const {note, space, synopsis, optsList, usage} = require('shargs-usage')
+
 const docs = usage([
   synopsis('deepThought'),
   space,
@@ -1880,12 +1972,16 @@ If the string is too long to fit the <code>line</code>'s width, it is broken up 
 <br />
 
 ```js
+const {noteFrom} = require('shargs-usage')
+
 const note = noteFrom('line')
 ```
 
 Example:
 
 ```js
+const {note} = require('shargs-usage')
+
 const opts = []
 
 const style = {
@@ -1918,12 +2014,16 @@ Prints several strings using <code><a href="#note">note</a></code> for each.
 <br />
 
 ```js
+const {notesFrom} = require('shargs-usage')
+
 const notes = notesFrom('line')
 ```
 
 Example:
 
 ```js
+const {notes} = require('shargs-usage')
+
 const opts = []
 
 const style = {
@@ -1958,12 +2058,17 @@ with the command-line option <code><a href="#args">args</a></code> as title and 
 <br />
 
 ```js
+const {optsDefsFrom} = require('shargs-usage')
+
 const optsDefs = optsDefsFrom('line', 'desc')
 ```
 
 Example:
 
 ```js
+const {optsDefs} = require('shargs-usage')
+const {flag, number} = require('shargs-opts')
+
 const opts = [
   number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
   flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
@@ -2005,12 +2110,17 @@ and the <code><a href="#desc">desc</a></code> field in the right column.
 <br />
 
 ```js
+const {optsListFrom} = require('shargs-usage')
+
 const optsList = optsListFrom('cols')
 ```
 
 Example:
 
 ```js
+const {optsList} = require('shargs-usage')
+const {flag, number} = require('shargs-opts')
+
 const opts = [
   number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
   flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
@@ -2049,12 +2159,16 @@ Introduces a single blank <code><a href="#line">line</a></code>.
 <br />
 
 ```js
+const {spaceFrom} = require('shargs-usage')
+
 const space = spaceFrom('line')
 ```
 
 Example:
 
 ```js
+const {note, space} = require('shargs-usage')
+
 const opts = []
 
 const style = {
@@ -2090,12 +2204,16 @@ Introduces several blank <code><a href="#lines">lines</a></code> with the number
 <br />
 
 ```js
+const {spacesFrom} = require('shargs-usage')
+
 const spaces = spacesFrom('line')
 ```
 
 Example:
 
 ```js
+const {note, spaces} = require('shargs-usage')
+
 const opts = []
 
 const style = {
@@ -2133,12 +2251,17 @@ The <code>programName</code> is printed first, followed by the command-line opti
 <br />
 
 ```js
+const {synopsisFrom} = require('shargs-usage')
+
 const synopsis = synopsisFrom('cols')
 ```
 
 Example:
 
 ```js
+const {synopsis} = require('shargs-usage')
+const {flag, number} = require('shargs-opts')
+
 const opts = [
   number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
   flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
@@ -2170,6 +2293,8 @@ Several usage functions may be combined to form a new usage function.
 Combinators let you build more complex components from simple components, like e.g.:
 
 ```js
+const {layout, text, usageMap} = require('shargs-usage')
+
 const simpleOptsDesc = usageMap(
   opt => layout([
     text(opt.args.join(', ')),
@@ -2200,6 +2325,9 @@ Groups several usage functions together.
 Example:
 
 ```js
+const {note, optsList, space, synopsis, usage} = require('shargs-usage')
+const {flag, number} = require('shargs-opts')
+
 const opts = [
   number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
   flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
@@ -2252,6 +2380,9 @@ which is applied to each option and is expected to return a <a href="#layout-fun
 Example:
 
 ```js
+const {layout, text, textFrom, usageMap} = require('shargs-usage')
+const {flag, number} = require('shargs-opts')
+
 const opts = [
   number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
   flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
@@ -2291,6 +2422,9 @@ Sometimes you want to pass only a portion of the command-line options to a usage
 Shargs has usage decorators for that:
 
 ```js
+const {note, space, synopsis, usage} = require('shargs-usage')
+const {decorate, noCommands, onlyCommands, onlyFirstArg} = require('shargs-usage')
+
 const decoratedDocs = usage([
   decorate(noCommands, onlyFirstArg)(synopsis('deepThought')),
   space,
@@ -2327,6 +2461,9 @@ Takes an array of args and keeps only those <code>opts</code> that have an arg i
 Example:
 
 ```js
+const {justArgs} = require('shargs-usage')
+const {command, flag, number} = require('shargs-opts')
+
 const style = {
   cols: [{width: 20}, {width: 20}]
 }
@@ -2364,6 +2501,9 @@ Filters out all <code><a href="#command">commands</a></code> from <code>opts</co
 Example:
 
 ```js
+const {noCommands} = require('shargs-usage')
+const {command, flag, number} = require('shargs-opts')
+
 const style = {
   cols: [{width: 20}, {width: 20}]
 }
@@ -2401,6 +2541,9 @@ Keeps only <code><a href="#command">commands</a></code> in <code>opts</code>.
 Example:
 
 ```js
+const {onlyCommands} = require('shargs-usage')
+const {command, flag, number} = require('shargs-opts')
+
 const style = {
   cols: [{width: 10, padEnd: 2}, {width: 28}]
 }
@@ -2436,6 +2579,9 @@ Keeps only the first <code><a href="#args">arg</a></code> from each opt.
 Example:
 
 ```js
+const {onlyFirstArg} = require('shargs-usage')
+const {command, flag, number} = require('shargs-opts')
+
 const style = {
   cols: [{width: 10, padEnd: 2}, {width: 28}]
 }
@@ -2473,6 +2619,9 @@ Applies array's filter method to the <code>opts</code> array using a predicate <
 Example:
 
 ```js
+const {optsFilter} = require('shargs-usage')
+const {command, flag, number} = require('shargs-opts')
+
 const style = {
   cols: [{width: 20}, {width: 20}]
 }
@@ -2512,6 +2661,9 @@ Applies array's map method to the <code>opts</code> array using a function <code
 Example:
 
 ```js
+const {optsMap} = require('shargs-usage')
+const {command, flag, number} = require('shargs-opts')
+
 const style = {
   cols: [{width: 20}, {width: 20}]
 }
@@ -2559,6 +2711,8 @@ Usage functions are written in a lower level markup language for formatting text
 The `deepThought ask` documentation could be written as follows in layout syntax:
 
 ```js
+const {br, layout, table, text} = require('shargs-usage')
+
 const askDocs = layout([
   text('deepThought ask (-q|--question) [-h|--help]'),
   br,
@@ -2595,12 +2749,16 @@ Introduces a single blank line.
 <br />
 
 ```js
+const {brFrom} = require('shargs-usage')
+
 const br = brFrom('line')
 ```
 
 Example:
 
 ```js
+const {br, layout, line} = require('shargs-usage')
+
 const style = {
   line: {width: 40}
 }
@@ -2634,12 +2792,16 @@ Introduces several blank lines with the number defined by the <code>length</code
 <br />
 
 ```js
+const {brsFrom} = require('shargs-usage')
+
 const brs = brsFrom('line')
 ```
 
 Example:
 
 ```js
+const {brs, layout, line} = require('shargs-usage')
+
 const style = {
   line: {width: 40}
 }
@@ -2677,12 +2839,16 @@ If a column string is longer than a column's width, it is cut off.
 <br />
 
 ```js
+const {colsFrom} = require('shargs-usage')
+
 const cols = colsFrom('cols')
 ```
 
 Example:
 
 ```js
+const {cols} = require('shargs-usage')
+
 const style = {
   cols: [
     {width: 15},
@@ -2725,12 +2891,16 @@ Title and text may be assigned different <a href="#style">style</a> ids.
 <br />
 
 ```js
+const {defsFrom} = require('shargs-usage')
+
 const defs = defsFrom('line', 'desc')
 ```
 
 Example:
 
 ```js
+const {defs} = require('shargs-usage')
+
 const style = {
   line: {width: 40},
   desc: {padStart: 4, width: 36}
@@ -2774,12 +2944,16 @@ If the string is too long to fit the line's width, it is cut off.
 <br />
 
 ```js
+const {lineFrom} = require('shargs-usage')
+
 const line = lineFrom('line')
 ```
 
 Example:
 
 ```js
+const {line} = require('shargs-usage')
+
 const style = {
   line: {width: 40}
 }
@@ -2807,12 +2981,16 @@ Prints several strings using the <code><a href="#line">line</a></code> function 
 <br />
 
 ```js
+const {linesFrom} = require('shargs-usage')
+
 const lines = linesFrom('line')
 ```
 
 Example:
 
 ```js
+const {lines} = require('shargs-usage')
+
 const style = {
   line: {width: 40}
 }
@@ -2847,12 +3025,16 @@ If a string surpasses the width of a column, its remaining words are printed in 
 <br />
 
 ```js
+const {tableFrom} = require('shargs-usage')
+
 const table = tableFrom('cols')
 ```
 
 Example:
 
 ```js
+const {table} = require('shargs-usage')
+
 const style = {
   cols: [
     {width: 10, padEnd: 2},
@@ -2895,12 +3077,16 @@ Instead, it splits the string by words and adds new <code><a href="#line">lines<
 <br />
 
 ```js
+const {textFrom} = require('shargs-usage')
+
 const text = textFrom('line')
 ```
 
 Example:
 
 ```js
+const {text} = require('shargs-usage')
+
 const style = {
   line: {width: 40}
 }
@@ -2931,12 +3117,16 @@ Takes several <code>strings</code> and applies the <code><a href="#text">text</a
 <br />
 
 ```js
+const {textsFrom} = require('shargs-usage')
+
 const texts = textsFrom('line')
 ```
 
 Example:
 
 ```js
+const {texts} = require('shargs-usage')
+
 const style = {
   line: {width: 40}
 }
@@ -2966,6 +3156,8 @@ Like usage functions, several layout functions may be combined into more complex
 `textsFrom` is a good example:
 
 ```js
+const {layoutMap, textFrom} = require('shargs-usage')
+
 const textsFrom = id => layoutMap(textFrom(id))
 ```
 
@@ -2989,6 +3181,8 @@ Groups several <a href="#layout-functions">layout functions</a> together and let
 Example:
 
 ```js
+const {layout, line} = require('shargs-usage')
+
 const style = {
   line: {width: 40}
 }
@@ -3033,6 +3227,8 @@ const style = {
 Example 1:
 
 ```js
+const {layout, layoutMap, text, textFrom} = require('shargs-usage')
+
 const itemsList = [
   ['-h, --help', 'Prints the help.'],
   ['-v, --version', 'Prints the version.']
@@ -3058,6 +3254,8 @@ Result 1:
 Example 2:
 
 ```js
+const {layoutMap, line} = require('shargs-usage')
+
 const lines = layoutMap(line)
 
 lines([
@@ -3274,7 +3472,11 @@ function demandACommand ({errs = [], opts = []} = {}) {
   )
 
   if (!aCommand) {
-    errs2.push(commandRequired({options: opts}))
+    errs2.push({
+      code: 'Command required',
+      msg:  'No command found. Please use at least one command!',
+      info: {options: opts}
+    })
   }
 
   return {errs: errs.concat(errs2), opts}
@@ -3286,6 +3488,8 @@ If you write a custom `opts` stage, have a look at [`traverseOpts`](#traverseOpt
 Custom `args` stage example:
 
 ```js
+const {traverseArgs} = require('shargs-usage')
+
 function flagsAsBools ({errs = [], args = {}} = {}) {
   const fs = {
     flag: ({key, val, errs, args}) => ({
@@ -3354,6 +3558,8 @@ It must take a [`style` object](#style) and return a `string`.
 The following example showcases the custom `table2` layout function that takes `columns` instead of `rows` as input:
 
 ```js
+const {table} = require('shargs-usage')
+
 const table2 = (columns = []) => style => {
   const rows = []
 
@@ -3385,6 +3591,8 @@ It must take an [`opts`](#command-line-options) array and a [`style` object](#st
 The following example shows the custom `descs` function that displays the options' descriptions:
 
 ```js
+const {texts} = require('shargs-usage')
+
 const descs = opts => style => {
   const descriptions = opts.map(_ => _.desc)
 
@@ -3395,6 +3603,8 @@ const descs = opts => style => {
 Using [`usageMap`](#usageMap) simplifies the process of defining your own functions:
 
 ```js
+const {table, usageMap} = require('shargs-usage')
+
 const optsTable = usageMap(
   ({key, args, required, desc}) => table([
     [(required ? '*' : '') + key, args.join(', '), desc]
@@ -3476,7 +3686,7 @@ Shargs is [MIT licensed][license].
 [license]: https://github.com/Yord/shargs/blob/master/LICENSE
 [node]: https://nodejs.org/
 [npm-package]: https://www.npmjs.com/package/shargs
-[pxi]: https://github.com/Yord/pxi
+[shargs-example-deepthought]: https://github.com/Yord/shargs-example-deepthought
 [shield-license]: https://img.shields.io/npm/l/shargs?color=yellow&labelColor=313A42
 [shield-node]: https://img.shields.io/node/v/shargs?color=red&labelColor=313A42
 [shield-npm]: https://img.shields.io/npm/v/shargs.svg?color=orange&labelColor=313A42
