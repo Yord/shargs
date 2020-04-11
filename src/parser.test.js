@@ -559,3 +559,23 @@ test('parser uses a custom toArgs function', () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('async parser uses a custom toArgs function', async () => {
+  expect.assertions(1)
+
+  const argv = [
+    'foo'
+  ]
+
+  const stages = {
+    toArgs: toArgs()
+  }
+
+  const {args} = await parser(stages, {async: true})(opts)(argv)
+
+  const exp = {
+    _: ['foo']
+  }
+
+  expect(args).toStrictEqual(exp)
+})
