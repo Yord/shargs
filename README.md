@@ -291,6 +291,13 @@ If `help` would not have been `true`, the answer would have been printed.
 
 If you want to run this example, clone it from the [shargs-example-deepthought][shargs-example-deepthought] repository.
 
+### More Examples
+
+The following repositories contain more examples:
+
++   [shargs-example-async][shargs-example-async]
++   [shargs-example-deepthought][shargs-example-deepthought]
+
 ## 🦈 Shargs
 
 Other command-line parsers are often black boxes that offer very limited control over parsing.
@@ -3688,6 +3695,7 @@ Shargs is [MIT licensed][license].
 [license]: https://github.com/Yord/shargs/blob/master/LICENSE
 [node]: https://nodejs.org/
 [npm-package]: https://www.npmjs.com/package/shargs
+[shargs-example-async]: https://github.com/Yord/shargs-example-async
 [shargs-example-deepthought]: https://github.com/Yord/shargs-example-deepthought
 [shield-license]: https://img.shields.io/npm/l/shargs?color=yellow&labelColor=313A42
 [shield-node]: https://img.shields.io/node/v/shargs?color=red&labelColor=313A42
