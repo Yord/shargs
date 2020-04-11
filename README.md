@@ -518,8 +518,9 @@ const checks = {
 }
 
 const parsers = {}
+const async = false
 
-const deepThought = parser(stages, {checks, parsers})
+const deepThought = parser(stages, {checks, parsers, async})
 ```
 
 `parser` takes a `stages` object with up to five keys.
@@ -532,11 +533,12 @@ Each key is the name of a shargs parsing stage:
 4.  [`toArgs`](#toArgs-stage) transforms `opts` into an object holding the parsed arguments.
 5.  [`args`](#args-checks) stages modify arguments objects.
 
-As a second parameter, it takes an object with two possible keys:
-A `checks` key with `argv`, `opts`, and `args` arrays, and a `parsers` key.
+As a second parameter, it takes an object with three possible keys:
+A `checks` key with `argv`, `opts`, and `args` arrays, a `parsers` key, and an `async` key.
 Checks are parser stages that report errors if rules are violated, but do never change the parser tree.
 `parsers` allows you to specify a different parser for each command.
 See the [Command-specific Parsers](#command-specific-parsers) section to learn more.
+If `async` is `true`, `parser` returns a `Promise` and its checks and stages may return `Promises`.
 
 `parser` applies the stages in the given order.
 For each stage, the checks are applied first, followed by the stages.
