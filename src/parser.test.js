@@ -256,6 +256,33 @@ test('parser applies opts stages', () => {
   expect(args).toStrictEqual(exp)
 })
 
+test('async parser applies opts stages that are not promises', async () => {
+  expect.assertions(1)
+
+  const argv = [
+    '-n', '23', 'true'
+  ]
+
+  const cast = ({opts}) => ({
+    opts: opts.map(
+      opt => opt.key !== 'numBool' ? opt : {...opt, values: [23, true]}
+    )
+  })
+
+  const stages = {
+    opts: [cast]
+  }
+
+  const {args} = await parser(stages, {async: true})(opts)(argv)
+
+  const exp = {
+    _: [],
+    numBool: [23, true]
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
 test('parser applies args stages', () => {
   const argv = [
     'foo'
