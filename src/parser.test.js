@@ -1,6 +1,4 @@
-const parser = require('./parser')
-const toOpts = require('./toOpts')
-const toArgs = require('./toArgs')
+const {parser, toArgs, toOpts} = require('.')
 
 const promise = f => a => new Promise(
   (resolve, reject) => {
