@@ -14,7 +14,7 @@ module.exports = function parser (stages = {}, {checks = {}, parsers = {}, async
 
   const {argv, toOpts = TO_OPTS, opts, toArgs, args} = checksAndStages
 
-  return (OPTS = []) => (ARGV, ERRS) => (async ? then : pipe)(
+  return (OPTS = []) => (ARGV, ERRS) => (async === true ? then : pipe)(
     ...argv,
     toOpts(OPTS),
     ...opts,
