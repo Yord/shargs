@@ -3681,6 +3681,76 @@ const optsTable = usageMap(
 
 This section answers frequently asked questions.
 
+<table>
+<tr>
+<th>Question&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Answer</th>
+</tr>
+<tr>
+<td><b>How can I use config objects with shargs?</b></td>
+<td>
+<details>
+<summary>
+A <i>config object</i> in this question denotes an object that is used to read in default values from a file or a URI.
+Shargs does not include reading and merging config objects because there are other specialized libraries for this task that are easy to use alongside shargs.
+However, there are several simple ways to combine shargs' <code>args</code> objects with config objects:
+</summary>
+
+<br />
+
+If you just want to have default values, you may want to check out the [`defaultValues`](#defaultValues) options field.
+If this does not suffice or you have a different problem, read on.
+
+Say we have read in a *config object* from any source:
+
+```js
+const config = {
+  question: 'How can I use config objects with shargs?',
+  answer: 'Read the FAQ section!'
+}
+```
+
+And we have run a shargs parser and have obtained the resulting `args` object:
+
+```js
+const args = {
+  _: [],
+  question: 'What is the meaning of life, the universe, and everything?'
+}
+```
+
+Then *using* the config object would just mean merging the two objects:
+
+```js
+const preferArgs = {
+  ...config,
+  ...args
+}
+
+const preferConfig = {
+  ...args,
+  ...config
+}
+```
+
+Of course these example merges are simple cases, because the objects are *flat*.
+
+In case of commands, the `args` object would have (deeply) nested objects.
+Such cases are common and there are specialized libraries for merging deeply nested objects, like [ramda][ramda] or [lodash][lodash]:
+
+```js
+const {mergeDeepLeft, mergeDeepRight} = require('ramda')
+
+const preferArgs = mergeDeepLeft(args, config)
+
+const preferConfig = mergeDeepRight(args, config)
+```
+
+</details>
+</td>
+</tr>
+</table>
+
 ## Comparison to Related Libraries
 
 <table>
@@ -3753,8 +3823,10 @@ Shargs is [MIT licensed][license].
 [contribute]: https://github.com/Yord/shargs/blob/master/CONTRIBUTING.md
 [issues]: https://github.com/Yord/shargs/issues
 [license]: https://github.com/Yord/shargs/blob/master/LICENSE
+[lodash]: https://lodash.com/
 [node]: https://nodejs.org/
 [npm-package]: https://www.npmjs.com/package/shargs
+[ramda]: https://ramdajs.com/docs/#mergeDeepLeft
 [shargs-example-async]: https://github.com/Yord/shargs-example-async
 [shargs-example-deepthought]: https://github.com/Yord/shargs-example-deepthought
 [shield-license]: https://img.shields.io/npm/l/shargs?color=yellow&labelColor=313A42
