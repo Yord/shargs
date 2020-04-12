@@ -525,9 +525,8 @@ const checks = {
 }
 
 const parsers = {}
-const async = false
 
-const deepThought = parser(stages, {checks, parsers, async})
+const deepThought = parser(stages, {checks, parsers, async: false})
 ```
 
 `parser` takes a `stages` object with up to five keys.
@@ -540,9 +539,9 @@ Each key is the name of a shargs parsing stage:
 4.  [`toArgs`](#toArgs-stage) transforms `opts` into an object holding the parsed arguments.
 5.  [`args`](#args-checks) stages modify arguments objects.
 
-As a second parameter, it takes an object with three possible keys:
+As a second parameter, `parser` takes an object with three possible keys:
 A `checks` key with `argv`, `opts`, and `args` arrays, a `parsers` key, and an `async` key.
-Checks are parser stages that report errors if rules are violated, but do never change the parser tree.
+Checks are parser stages that report errors if rules are violated, but never change the parser tree.
 `parsers` allows you to specify a different parser for each command.
 See the [Command-specific Parsers](#command-specific-parsers) section to learn more.
 If `async` is `true`, `parser` returns a `Promise` and its checks and stages may return `Promises`.
@@ -1928,6 +1927,7 @@ More in-depth information regarding parsers can be found in the [advanced comman
 +   [`toArgs` stage documentation](#toArgs-stage)
 +   [Custom checks and stages](#custom-checks-and-stages)
 +   [Relation between checks and stages](#relation-between-checks-and-stages)
++   [Promise-based asynchronous parsers](#promise-based-asynchronous-parsers)
 
 ### Automatic Usage Documentation Generation
 
@@ -3552,6 +3552,62 @@ and each parent parser `__` only includes the `parser`'s stages and not its chec
 Repeated `parser` calls only occur in the presence of `command` options.
 This means, if you do not use `command` options, you do not need to separate checks and stages.
 In such cases, you may safely add your checks to `parser`'s stages parameter.
+
+#### Promise-based Asynchronous Parsers
+
+The `parser` function can be run synchronously or asynchronously.
+Making a `parser` asynchronous is as easy as providing `{async: true}` in the second argument.
+With this change, `parser` is now able to work with parser stages returing promises and returns a promise itself.
+
+The following code is a simple example of an asynchronous parser:
+
+```js
+const {parser} = require('shargs')
+const {number, string} = require('shargs-opts')
+const {cast, flagsAsBools, requireOptions, splitShortOptions, traverseOpts} = require('shargs-parser')
+
+const opts = [
+  string('question', ['-q', '--question'], {required: true}),
+  number('answer', ['-a', '--answer'])
+]
+
+const answerQuestion = ({errs, opts}) => new Promise(resolve =>
+  setTimeout(
+    () => {
+      const isAnswer = ({key}) => key === 'answer'
+      const answer42 = opt => ({
+        opts: [{...opt, values: opt.values || ['42']}]
+      })
+
+      resolve(traverseOpts(isAnswer)(answer42)({errs, opts}))
+    },
+    5000
+  )
+)
+
+const stages = {
+  argv: [splitShortOptions],
+  opts: [requireOptions, answerQuestion, cast],
+  args: [flagsAsBools]
+}
+
+const argv = process.argv.slice(2)
+
+const deepThought = parser(stages, {async: true})(opts)
+
+deepThought(argv)
+.then(({args}) => {
+  console.log(`The answer is: ${args.answer}`)
+  process.exit(0)
+})
+```
+
+In the example, the `answerQuestion` performs a fake REST request to the Deep Thought API.
+It returns with a promise for an answer that is resolved after a longer time delay.
+If you run the example, you will note that the parser takes five seconds before printing the answer to the screen,
+suggesting it waited for the `answerQuestion` stage to resolve before carrying on.
+
+Have a look at the [shargs-example-async][shargs-example-async] repository for the full example.
 
 ### Advanced Usage Generation
 
