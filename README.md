@@ -3837,6 +3837,63 @@ const number2 = array2(['number'])
 </details>
 </td>
 </tr>
+<tr>
+<td><b>Can I use custom command-line option <code><a href="#types">types</a></code> like <code>date</code>?</b></td>
+<td>
+<details>
+<summary>
+Yes, you can add and use your own option types.
+Both, the command-line options DSL and the parser functions have been designed with this in mind:
+</summary>
+
+Say you want to add your own custom `date` type.
+First, you need to add a command-line option of that type:
+
+```js
+const {array} = require('shargs-options')
+
+const date = array(['date'])
+```
+
+A `date` is an option that takes exactly one argument, whose type is described as `'date'`.
+
+Now we have an option, we may want to write parser stages that work with `dates`.
+How about a stage that transforms dates to their millisecond representation:
+
+```js
+function dateToMillis ({errs = [], opts = []} = {}) {
+  const isDate = ({types}) => (
+    Array.isArray(types) &&
+    types.length === 1 &&
+    types[0] === 'date'
+  )
+
+  const toMillis = string => new Date(string).getTime()
+
+  const dateToMillis = opt => ({
+    opts: [{
+      ...opt,
+      ...(Array.isArray(opt.defaultValues)
+          ? {defaultValues: opt.defaultValues.map(toMillis)}
+          : {}
+      ),
+      ...(Array.isArray(opt.values)
+          ? {values: opt.values.map(toMillis)}
+          : {}
+      )
+    }]
+  })
+
+  return traverseOpts(isDate)(dateToMillis)({errs, opts})
+}
+```
+
+This parser stages works alongside the other parser stages.
+Note, that a real implementation would test more edge cases, like dates that occur in arrays.
+
+</details>
+</td>
+</tr>
 </table>
 
 ## Comparison to Related Libraries
