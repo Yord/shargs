@@ -2,10 +2,11 @@ const convertNonCommands = require('./convertNonCommands')
 
 test('convertNonCommands works as expected', () => {
   const name     = {key: 'name', types: ['string'], args: ['--name'], values: ['Logan']}
+  const address  = {key: 'name', types: ['number', 'string'], args: ['--address'], values: [38100, 'Braunschweig']}
   const question = {key: 'question', types: ['string'], args: ['-q'], values: ["What's your lastname?"]}
   const jokingly = {key: 'jokingly', types: [], args: ['-j'], defaultValue: [1]}
   const ask      = {key: 'ask', types: null, args: ['ask'], opts: [question, jokingly]}
-  const opts     = [ask, name]
+  const opts     = [ask, name, address]
 
   const {errs, args} = convertNonCommands({opts})
 
