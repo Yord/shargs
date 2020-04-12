@@ -3758,6 +3758,85 @@ In such cases, you may safely add your checks to `parser`'s stages parameter.
 </details>
 </td>
 </tr>
+<tr name="why-key-field">
+<td><b>Why do command-line options have a <code>key</code> field?</b></td>
+<td>
+<details>
+<summary>
+The <code><a href="#key">key</a></code> field is an apparent difference between shargs and other command-line parsers.
+So one might ask, why shargs uses it, while other parsers do not need it.
+But as is mostly the case, shargs has good reasons:
+</summary>
+
+<br />
+
+Command-line parsers read arguments and assign them to variables that are passed as inputs to programs.
+So we are dealing with two different sets of things, here: Names of arguments and names of variables.
+Those two sets are connected by a unidirectional mapping, where arguments map to variable names.
+
+If a single argument would only ever map to a single variable, the two could just as well have the same name.
+But for more complex mappings, things start to get complex, too:
+
+Say we have two arguments, `-v` and `--version`, that can be used interchangingly.
+If they would map to two variables, `-v` and `--version`, the program would have to have knowledge about the arguments being interchangable, in order to correctly interpret its inputs.
+As leaking this knowledge to the program would be undesirable, parsers usually work around this by assigning the value of one argument to both variables.
+But now we are in a situation where we have two dependant variables that always have the same value.
+A less verbose solution is just letting both arguments map to the same variable (the [`key`](#key) field):
+
+```js
+const {string} = require('shargs-opts')
+
+const opts = [
+  string('version', ['-v', '--version'])
+]
+```
+
+A special situation of two arguments mapping to the same variable is, when the arguments belong to separate options.
+This frequently occurs for [`flag`](#flag) and [`bool`](#bool) options that have a [`complement`](#complement):
+
+```js
+const {flag} = require('shargs-opts')
+
+const opts = [
+  flag('fun', ['--fun']),
+  flag('fun', ['--no-fun'], {reverse: true})
+]
+```
+
+In the example, `--fun` adds `1` to the flag count, while `--no-fun` adds `-1` due to [`reverse`](#reverse) (assuming the parser has the [`reverseFlags`](#reverseFlags) stage).
+
+But we have other possible mappings yet to explore:
+Situations, where one argument maps to two different variable names.
+Say we have a `--birthday` argument and the `birthday` and `age` variables.
+`birthday` is a string in date format, while `age` is a number holding the current age,
+transformed by the custom `ageAsNumber` stage.
+This kind of mapping is only possible if the parser's arguments are independent of the program's variables.
+
+So, command-line options have a `key` field, because:
+
+1.  Separating internal variable names from external argument names is a good practice.
+2.  Separating argument and variable names enables functionality that would otherwise not be possible.
+3.  Separating arguments and variables makes interpreting variables less verbose for programs.
+
+If you really do not need `key` fields and wish to use argument names instead,
+it is straight forward to adjust the type function syntax accordingly:
+
+```js
+const array2 = types => (args = [], fields = {}) => ({
+  key: args.length > 0 ? arg : undefined,
+  types,
+  args,
+  ...fields
+})
+
+const number2 = array2(['number'])
+
+// ...
+```
+
+</details>
+</td>
+</tr>
 </table>
 
 ## Comparison to Related Libraries
