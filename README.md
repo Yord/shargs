@@ -3515,44 +3515,6 @@ function flagsAsBools ({errs = [], args = {}} = {}) {
 
 If you write a custom `args` stage, have a look at [`traverseArgs`](#traverseArgs)!
 
-#### Relation Between Checks and Stages
-
-As you may have noticed by now, checks and stages of the same kind have the same signatures.
-This is not a coincidence.
-In fact, checks and stages behave the same for most scenarios.
-This section looks at the cases where they are different.
-
-While stages change data and report errors once, checks only report errors and never change data.
-Thus, if a check is run several times in a row, it is guaranteed to report multiple error messages.
-Stages and checks are seldomly run several times, but there is a case in the [`toArgs`](#toargs-stage) stage, where this happens:
-
-`toArgs` takes a list of parsers as its input, including the *parent parser* `__` that is set by the [`parser`](#command-line-parsers) function.
-The parent parser's purpose is to parse any leftover argv from the commands' *child parsers*.
-This comes to pass, if arguments to a parent command are given after the arguments of a child command, e.g. `--answer 42` in:
-
-```bash
-node deepThought ask --question "What is the Answer?" --answer 42
-# 1:             |p|
-# 2:                 |-------------------- c -------------------|
-# 3:                                                  |---(p)---|
-```
-
-In row 1, the parent parser `p` reads the `ask` [`command`](#command) and interprets all following argv as parameters of `ask`.
-Thus, as depicted in row 2, from `--question` onwards, `ask`'s child parser `c` is responsible for parsing up to `42`.
-However, as row 3 suggests, the `--answer 42` argv are actually a parent's option and the child parser will not recognize them.
-
-To solve situations like this, all unrecognized argv from child parsers are again processed by their parent's parsers.
-This means, **parent parsers may run several times and their checks may be repeated**.
-Since checks do not change any data, repeating them is not harmful.
-However, it may result in duplicated error messages, which is undesirable.
-
-Because of this, shargs and the [`parser`](#command-line-parsers) function distinguishes between checks and stages
-and each parent parser `__` only includes the `parser`'s stages and not its checks. 
-
-Repeated `parser` calls only occur in the presence of `command` options.
-This means, if you do not use `command` options, you do not need to separate checks and stages.
-In such cases, you may safely add your checks to `parser`'s stages parameter.
-
 #### Promise-based Asynchronous Parsers
 
 The `parser` function can be run synchronously or asynchronously.
@@ -3686,7 +3648,7 @@ This section answers frequently asked questions.
 <th>Question&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Answer</th>
 </tr>
-<tr>
+<tr name="how-can-i-use-config-objects-with-shargs">
 <td><b>How can I use config objects with shargs?</b></td>
 <td>
 <details>
@@ -3745,6 +3707,53 @@ const preferArgs = mergeDeepLeft(args, config)
 
 const preferConfig = mergeDeepRight(args, config)
 ```
+
+</details>
+</td>
+</tr>
+<tr name="relation-between-checks-and-stages">
+<td><b>How do parser checks and parser stages relate?</b></td>
+<td>
+<details>
+<summary>
+You may have noticed, checks and stages of the same kind have the same signatures.
+This is not a coincidence.
+In fact, checks and stages behave the same for most scenarios.
+Let's looks at cases where they are different:
+</summary>
+
+<br />
+
+While stages change data and report errors once, checks only report errors and never change data.
+Thus, if a check is run several times in a row, it is guaranteed to report multiple error messages.
+Stages and checks are seldomly run several times, but there is a case in the [`toArgs`](#toargs-stage) stage, where this happens:
+
+`toArgs` takes a list of parsers as its input, including the *parent parser* `__` that is set by the [`parser`](#command-line-parsers) function.
+The parent parser's purpose is to parse any leftover argv from the commands' *child parsers*.
+This comes to pass, if arguments to a parent command are given after the arguments of a child command, e.g. `--answer 42` in:
+
+```bash
+node deepThought ask --question "What is the Answer?" --answer 42
+# 1:             |p|
+# 2:                 |-------------------- c -------------------|
+# 3:                                                  |---(p)---|
+```
+
+In row 1, the parent parser `p` reads the `ask` [`command`](#command) and interprets all following argv as parameters of `ask`.
+Thus, as depicted in row 2, from `--question` onwards, `ask`'s child parser `c` is responsible for parsing up to `42`.
+However, as row 3 suggests, the `--answer 42` argv are actually a parent's option and the child parser will not recognize them.
+
+To solve situations like this, all unrecognized argv from child parsers are again processed by their parent's parsers.
+This means, **parent parsers may run several times and their checks may be repeated**.
+Since checks do not change any data, repeating them is not harmful.
+However, it may result in duplicated error messages, which is undesirable.
+
+Because of this, shargs and the [`parser`](#command-line-parsers) function distinguishes between checks and stages
+and each parent parser `__` only includes the `parser`'s stages and not its checks. 
+
+Repeated `parser` calls only occur in the presence of `command` options.
+This means, if you do not use `command` options, you do not need to separate checks and stages.
+In such cases, you may safely add your checks to `parser`'s stages parameter.
 
 </details>
 </td>
