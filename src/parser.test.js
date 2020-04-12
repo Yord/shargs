@@ -577,3 +577,96 @@ test('async parser uses a custom toArgs function', async () => {
 
   expect(args).toStrictEqual(exp)
 })
+
+test('parser uses the first option if options are defined several times 1/3', () => {
+  const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
+  const help  = {key: 'help', types: null, args: ['help']}
+
+  const opts = [
+    tired,
+    help
+  ]
+
+  const stages = {}
+
+  const parse = parser(stages)(opts)
+
+  const argv = ['--tired', 'true', '--tired', 'false', 'help']
+
+  const {errs, args} = parse(argv)
+
+  const expErrs = []
+
+  const expArgs = {
+    _: [],
+    tired: 'true',
+    help: {
+      _: []
+    }
+  }
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs).toStrictEqual(expErrs)
+})
+
+test('parser uses the first option if options are defined several times 2/3', () => {
+  const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
+  const help  = {key: 'help', types: null, args: ['help']}
+
+  const opts = [
+    tired,
+    help
+  ]
+
+  const stages = {}
+
+  const parse = parser(stages)(opts)
+
+  const argv = ['--tired', 'true', 'help', '--tired', 'false']
+
+  const {errs, args} = parse(argv)
+
+  const expErrs = []
+
+  const expArgs = {
+    _: ['--tired', 'false'],
+    help: {
+      _: ['--tired', 'false']
+    },
+    tired: 'true'
+  }
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs).toStrictEqual(expErrs)
+})
+
+test('parser uses the first option if options are defined several times 3/3', () => {
+  const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
+  const help  = {key: 'help', types: null, args: ['help']}
+
+  const opts = [
+    tired,
+    help
+  ]
+
+  const stages = {}
+
+  const parse = parser(stages)(opts)
+
+  const argv = ['help', '--tired', 'true', '--tired', 'false']
+
+  const {errs, args} = parse(argv)
+
+  const expErrs = []
+
+  const expArgs = {
+    _: [],
+    help: {
+      _: ['--tired', 'true', '--tired', 'false']
+    },
+    tired: 'true'
+  }
+
+  expect(args).toStrictEqual(expArgs)
+  expect(errs).toStrictEqual(expErrs)
+})

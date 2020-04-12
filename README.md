@@ -3515,44 +3515,6 @@ function flagsAsBools ({errs = [], args = {}} = {}) {
 
 If you write a custom `args` stage, have a look at [`traverseArgs`](#traverseArgs)!
 
-#### Relation Between Checks and Stages
-
-As you may have noticed by now, checks and stages of the same kind have the same signatures.
-This is not a coincidence.
-In fact, checks and stages behave the same for most scenarios.
-This section looks at the cases where they are different.
-
-While stages change data and report errors once, checks only report errors and never change data.
-Thus, if a check is run several times in a row, it is guaranteed to report multiple error messages.
-Stages and checks are seldomly run several times, but there is a case in the [`toArgs`](#toargs-stage) stage, where this happens:
-
-`toArgs` takes a list of parsers as its input, including the *parent parser* `__` that is set by the [`parser`](#command-line-parsers) function.
-The parent parser's purpose is to parse any leftover argv from the commands' *child parsers*.
-This comes to pass, if arguments to a parent command are given after the arguments of a child command, e.g. `--answer 42` in:
-
-```bash
-node deepThought ask --question "What is the Answer?" --answer 42
-# 1:             |p|
-# 2:                 |-------------------- c -------------------|
-# 3:                                                  |---(p)---|
-```
-
-In row 1, the parent parser `p` reads the `ask` [`command`](#command) and interprets all following argv as parameters of `ask`.
-Thus, as depicted in row 2, from `--question` onwards, `ask`'s child parser `c` is responsible for parsing up to `42`.
-However, as row 3 suggests, the `--answer 42` argv are actually a parent's option and the child parser will not recognize them.
-
-To solve situations like this, all unrecognized argv from child parsers are again processed by their parent's parsers.
-This means, **parent parsers may run several times and their checks may be repeated**.
-Since checks do not change any data, repeating them is not harmful.
-However, it may result in duplicated error messages, which is undesirable.
-
-Because of this, shargs and the [`parser`](#command-line-parsers) function distinguishes between checks and stages
-and each parent parser `__` only includes the `parser`'s stages and not its checks. 
-
-Repeated `parser` calls only occur in the presence of `command` options.
-This means, if you do not use `command` options, you do not need to separate checks and stages.
-In such cases, you may safely add your checks to `parser`'s stages parameter.
-
 #### Promise-based Asynchronous Parsers
 
 The `parser` function can be run synchronously or asynchronously.
@@ -3677,6 +3639,263 @@ const optsTable = usageMap(
 )
 ```
 
+## FAQ
+
+This section answers frequently asked questions.
+
+<table>
+<tr>
+<th>Question&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Answer</th>
+</tr>
+<tr name="how-can-i-use-config-objects-with-shargs">
+<td><b>How can I use config objects with shargs?</b></td>
+<td>
+<details>
+<summary>
+A <i>config object</i> in this question denotes an object that is used to read in default values from a file or a URI.
+Shargs does not include reading and merging config objects because there are other specialized libraries for this task that are easy to use alongside shargs.
+However, there are several simple ways to combine shargs' <code>args</code> objects with config objects:
+</summary>
+
+<br />
+
+If you just want to have default values, you may want to check out the [`defaultValues`](#defaultValues) options field.
+If this does not suffice or you have a different problem, read on.
+
+Say we have read in a *config object* from any source:
+
+```js
+const config = {
+  question: 'How can I use config objects with shargs?',
+  answer: 'Read the FAQ section!'
+}
+```
+
+And we have run a shargs parser and have obtained the resulting `args` object:
+
+```js
+const args = {
+  _: [],
+  question: 'What is the meaning of life, the universe, and everything?'
+}
+```
+
+Then *using* the config object would just mean merging the two objects:
+
+```js
+const preferArgs = {
+  ...config,
+  ...args
+}
+
+const preferConfig = {
+  ...args,
+  ...config
+}
+```
+
+Of course these example merges are simple cases, because the objects are *flat*.
+
+In case of commands, the `args` object would have (deeply) nested objects.
+Such cases are common and there are specialized libraries for merging deeply nested objects, like [ramda][ramda] or [lodash][lodash]:
+
+```js
+const {mergeDeepLeft, mergeDeepRight} = require('ramda')
+
+const preferArgs = mergeDeepLeft(args, config)
+
+const preferConfig = mergeDeepRight(args, config)
+```
+
+</details>
+</td>
+</tr>
+<tr name="relation-between-checks-and-stages">
+<td><b>How do parser checks and parser stages relate?</b></td>
+<td>
+<details>
+<summary>
+You may have noticed, checks and stages of the same kind have the same signatures.
+This is not a coincidence.
+In fact, checks and stages behave the same for most scenarios.
+Let's looks at cases where they are different:
+</summary>
+
+<br />
+
+While stages change data and report errors once, checks only report errors and never change data.
+Thus, if a check is run several times in a row, it is guaranteed to report multiple error messages.
+Stages and checks are seldomly run several times, but there is a case in the [`toArgs`](#toargs-stage) stage, where this happens:
+
+`toArgs` takes a list of parsers as its input, including the *parent parser* `__` that is set by the [`parser`](#command-line-parsers) function.
+The parent parser's purpose is to parse any leftover argv from the commands' *child parsers*.
+This comes to pass, if arguments to a parent command are given after the arguments of a child command, e.g. `--answer 42` in:
+
+```bash
+node deepThought ask --question "What is the Answer?" --answer 42
+# 1:             |p|
+# 2:                 |-------------------- c -------------------|
+# 3:                                                  |---(p)---|
+```
+
+In row 1, the parent parser `p` reads the `ask` [`command`](#command) and interprets all following argv as parameters of `ask`.
+Thus, as depicted in row 2, from `--question` onwards, `ask`'s child parser `c` is responsible for parsing up to `42`.
+However, as row 3 suggests, the `--answer 42` argv are actually a parent's option and the child parser will not recognize them.
+
+To solve situations like this, all unrecognized argv from child parsers are again processed by their parent's parsers.
+This means, **parent parsers may run several times and their checks may be repeated**.
+Since checks do not change any data, repeating them is not harmful.
+However, it may result in duplicated error messages, which is undesirable.
+
+Because of this, shargs and the [`parser`](#command-line-parsers) function distinguishes between checks and stages
+and each parent parser `__` only includes the `parser`'s stages and not its checks. 
+
+Repeated `parser` calls only occur in the presence of `command` options.
+This means, if you do not use `command` options, you do not need to separate checks and stages.
+In such cases, you may safely add your checks to `parser`'s stages parameter.
+
+</details>
+</td>
+</tr>
+<tr name="why-key-field">
+<td><b>Why do command-line options have a <code>key</code> field?</b></td>
+<td>
+<details>
+<summary>
+The <code><a href="#key">key</a></code> field is an apparent difference between shargs and other command-line parsers.
+So one might ask, why shargs uses it, while other parsers do not need it.
+But as is mostly the case, shargs has good reasons:
+</summary>
+
+<br />
+
+Command-line parsers read arguments and assign them to variables that are passed as inputs to programs.
+So we are dealing with two different sets of things, here: Names of arguments and names of variables.
+Those two sets are connected by a unidirectional mapping, where arguments map to variable names.
+
+If a single argument would only ever map to a single variable, the two could just as well have the same name.
+But for more complex mappings, things start to get complex, too:
+
+Say we have two arguments, `-v` and `--version`, that can be used interchangingly.
+If they would map to two variables, `-v` and `--version`, the program would have to have knowledge about the arguments being interchangable, in order to correctly interpret its inputs.
+As leaking this knowledge to the program would be undesirable, parsers usually work around this by assigning the value of one argument to both variables.
+But now we are in a situation where we have two dependant variables that always have the same value.
+A less verbose solution is just letting both arguments map to the same variable (the [`key`](#key) field):
+
+```js
+const {string} = require('shargs-opts')
+
+const opts = [
+  string('version', ['-v', '--version'])
+]
+```
+
+A special situation of two arguments mapping to the same variable is, when the arguments belong to separate options.
+This frequently occurs for [`flag`](#flag) and [`bool`](#bool) options that have a [`complement`](#complement):
+
+```js
+const {flag} = require('shargs-opts')
+
+const opts = [
+  flag('fun', ['--fun']),
+  flag('fun', ['--no-fun'], {reverse: true})
+]
+```
+
+In the example, `--fun` adds `1` to the flag count, while `--no-fun` adds `-1` due to [`reverse`](#reverse) (assuming the parser has the [`reverseFlags`](#reverseFlags) stage).
+
+But we have other possible mappings yet to explore:
+Situations, where one argument maps to two different variable names.
+Say we have a `--birthday` argument and the `birthday` and `age` variables.
+`birthday` is a string in date format, while `age` is a number holding the current age,
+transformed by the custom `ageAsNumber` stage.
+This kind of mapping is only possible if the parser's arguments are independent of the program's variables.
+
+So, command-line options have a `key` field, because:
+
+1.  Separating internal variable names from external argument names is a good practice.
+2.  Separating argument and variable names enables functionality that would otherwise not be possible.
+3.  Separating arguments and variables makes interpreting variables less verbose for programs.
+
+If you really do not need `key` fields and wish to use argument names instead,
+it is straight forward to adjust the type function syntax accordingly:
+
+```js
+const array2 = types => (args = [], fields = {}) => ({
+  key: args.length > 0 ? arg : undefined,
+  types,
+  args,
+  ...fields
+})
+
+const number2 = array2(['number'])
+
+// ...
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<td><b>Can I use custom command-line option <code><a href="#types">types</a></code> like <code>date</code>?</b></td>
+<td>
+<details>
+<summary>
+Yes, you can add and use your own option types.
+Both, the command-line options DSL and the parser functions have been designed with this in mind:
+</summary>
+
+Say you want to add your own custom `date` type.
+First, you need to add a command-line option of that type:
+
+```js
+const {array} = require('shargs-options')
+
+const date = array(['date'])
+```
+
+A `date` is an option that takes exactly one argument, whose type is described as `'date'`.
+
+Now we have an option, we may want to write parser stages that work with `dates`.
+How about a stage that transforms dates to their millisecond representation:
+
+```js
+function dateToMillis ({errs = [], opts = []} = {}) {
+  const isDate = ({types}) => (
+    Array.isArray(types) &&
+    types.length === 1 &&
+    types[0] === 'date'
+  )
+
+  const toMillis = string => new Date(string).getTime()
+
+  const dateToMillis = opt => ({
+    opts: [{
+      ...opt,
+      ...(Array.isArray(opt.defaultValues)
+          ? {defaultValues: opt.defaultValues.map(toMillis)}
+          : {}
+      ),
+      ...(Array.isArray(opt.values)
+          ? {values: opt.values.map(toMillis)}
+          : {}
+      )
+    }]
+  })
+
+  return traverseOpts(isDate)(dateToMillis)({errs, opts})
+}
+```
+
+This parser stages works alongside the other parser stages.
+Note, that a real implementation would test more edge cases, like dates that occur in arrays.
+
+</details>
+</td>
+</tr>
+</table>
+
 ## Comparison to Related Libraries
 
 <table>
@@ -3749,8 +3968,10 @@ Shargs is [MIT licensed][license].
 [contribute]: https://github.com/Yord/shargs/blob/master/CONTRIBUTING.md
 [issues]: https://github.com/Yord/shargs/issues
 [license]: https://github.com/Yord/shargs/blob/master/LICENSE
+[lodash]: https://lodash.com/
 [node]: https://nodejs.org/
 [npm-package]: https://www.npmjs.com/package/shargs
+[ramda]: https://ramdajs.com/docs/#mergeDeepLeft
 [shargs-example-async]: https://github.com/Yord/shargs-example-async
 [shargs-example-deepthought]: https://github.com/Yord/shargs-example-deepthought
 [shield-license]: https://img.shields.io/npm/l/shargs?color=yellow&labelColor=313A42
