@@ -3677,6 +3677,10 @@ const optsTable = usageMap(
 )
 ```
 
+## FAQ
+
+This section answers frequently asked questions.
+
 ## Comparison to Related Libraries
 
 <table>
