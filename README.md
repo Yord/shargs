@@ -3873,10 +3873,6 @@ function dateToMillis ({errs = [], opts = []} = {}) {
   const dateToMillis = opt => ({
     opts: [{
       ...opt,
-      ...(Array.isArray(opt.defaultValues)
-          ? {defaultValues: opt.defaultValues.map(toMillis)}
-          : {}
-      ),
       ...(Array.isArray(opt.values)
           ? {values: opt.values.map(toMillis)}
           : {}
