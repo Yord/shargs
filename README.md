@@ -4158,10 +4158,13 @@ function traverseKeys (p) {
       if (!Array.isArray(val) && typeof val === 'object') {
         obj[key] = traverseKeys(p)(f)(val)
       }
-      if (p(key)) obj = f(key, val, obj)
+      if (p(key)) {
+        const {[key]: _, ...rest} = obj
+        obj = {...rest, ...f(key, val)}
+      }
       return obj
     },
-    {}
+    args
   )
 }
 ```
@@ -4173,9 +4176,9 @@ const _ = require('lodash')
 
 const hasDots = key => key.indexOf('.') > -1
 
-const nestValue = (key, val, obj) => {
-  const path = key.replace(/^[-]+/, '')
-  _.set(obj, path, val)
+const nestValue = (key, val) => {
+  const obj = {}
+  _.set(obj, key, val)
   return obj
 }
 
