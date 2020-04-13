@@ -1238,6 +1238,7 @@ Result:
 <summary>
 <code>commandsAsArrays</code> transforms commands whose <code><a href="#array">array</a></code> field
 is <code>true</code> into string arrays.
+Remember that <code><a href="#commands">commands</a></code> may be terminated by <code>--</code>.
 </summary>
 
 <br />
