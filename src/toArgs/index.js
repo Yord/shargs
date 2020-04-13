@@ -11,8 +11,8 @@ module.exports = parsers => ({errs = [], opts = []} = {}) => {
     errs: errs.concat(errs2).concat(errs3).concat(errs4),
     args: {
       ...args4,
-      ...args2,
       ...args3,
+      ...args2,
       _: [...args2._, ...args3._]
     }
   }
