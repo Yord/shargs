@@ -4110,6 +4110,27 @@ Also note that this demonstration implementation is very brittle and should not 
 </details>
 </td>
 </tr>
+<tr name="can-i-use-enums">
+<td><b>Can I use enums?</b></td>
+<td>
+<details>
+<summary>
+Yes, you can use enums with a combination of <code><a href="#string">string</a></code> command-line options,
+the <code><a href="#only">only</a></code> options field,
+and the <code><a href="#restrictToOnly">restrictToOnly</a></code> parser stage:
+</summary>
+
+<br />
+
+```js
+const {string} = require('shargs-opts')
+
+const answers = string('answers', ['-a'], {only: ['yes', 'no', 'maybe']})
+```
+
+</details>
+</td>
+</tr>
 </table>
 
 ## Comparison to Related Libraries
