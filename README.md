@@ -10,12 +10,12 @@
 
 ## Installation
 
-```bash
-$ npm install --save shargs
-$ npm install --save shargs-opts   # opt-in to the type functions DSL
-$ npm install --save shargs-parser # opt-in to a big collection of parser functions
-$ npm install --save shargs-usage  # opt-in to a big collection of usage functions
-```
+<pre>
+$ npm install --save <a href="https://github.com/Yord/shargs">shargs</a>
+$ npm install --save <a href="https://github.com/Yord/shargs-opts">shargs-opts</a>   # opt-in to the type functions DSL
+$ npm install --save <a href="https://github.com/Yord/shargs-parser">shargs-parser</a> # opt-in to a big collection of parser functions
+$ npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</a>  # opt-in to a big collection of usage functions
+</pre>
 
 ## Features
 
