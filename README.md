@@ -4071,26 +4071,32 @@ const fun = command('fun', ['--fun'], {threeValued: true})
 Now, let us define an [`opts`](#opts-stages) stage that transforms the `command`:
 
 ```js
-const {traverseOpts} = require('shargs-parser')
-
 const isThreeValued = ({threeValued}) => threeValued === true
 
 const toThreeValued = opt => {
   const types = ['threeValued']
 
   const interpretValues = values => (
-    values.length === 0        ? 'true'  :
-    values[0]     === 'true'   ? 'true'  :
-    values[0]     === 'false'  ? 'false' :
-                               : 'unknown'
+    values.length === 0         ? [['true'], []]  :
+    values[0]     === 'true'    ? [['true'], values.slice(1)]  :
+    values[0]     === 'false'   ? [['false'], values.slice(1)] :
+    values[0]     === 'unknown' ? [['unknown'], values.slice(1)]
+                                : [['true'], values]
   )
 
-  const values = [
-    !Array.isArray(opt.values) ? 'unknown' : interpretValues(opt.values)
-  ]
+  const valuesAndRest = (
+    !Array.isArray(opt.values)
+      ? [['unknown'], []]
+      : interpretValues(opt.values)
+  )
+
+  const [values, rest] = valuesAndRest
 
   return {
-    opts: [{...opt, types, values}]
+    opts: [
+      {...opt, types, values},
+      {...opt, values: rest}
+    ]
   }
 }
 
