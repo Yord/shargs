@@ -338,7 +338,11 @@ The following type functions are available:
 </tr>
 <tr name="command">
 <td><code><a href="#command">command</a>(key, args, fields)</code></td>
-<td>An array of unknown length. If <code>fields</code> contains an <a href="#opts"><code>opts</code></a> field, it turns into a command.</td>
+<td>
+Commands are arrays of variable length.
+They are either terminated by the end of the argv array, or by <code>--</code>.
+Commands are the only type that may have <code><a href="#opts">opts</a></code> and <code><a href="#posArgs">posArgs</a></code> fields.
+</td>
 </tr>
 <tr name="flag">
 <td><code><a href="#flag">flag</a>(key, args, fields)</code></td>
@@ -389,6 +393,11 @@ The following fields are available:
 <td><code><a href="#types">types</a></code>*</td>
 <td>array of type strings or <code>null</code></td>
 <td><code>types</code> is an array of strings that represents the command-line option's type. <code>null</code> describes a <code><a href="#command">command</a></code>, <code>[]</code> describes a <code><a href="#flag">flag</a></code>, arrays with one element either describe a <code><a href="#number">number</a></code> (<code>['number']</code>), a <code><a href="#string">string</a></code> (<code>['string']</code>), or a <code><a href="#bool">bool</a></code> (<code>['bool']</code>), and arrays with more than one element describe an <code><a href="#array">array</a></code> of known size (e.g. <code>['string','number','bool']</code> is an array of size 3).</td>
+</tr>
+<tr name="array">
+<td><code><a href="#array">array</a></code></td>
+<td>boolean</td>
+<td><code>array</code> is used by the <code><a href="#commandsAsArrays">commandsAsArrays</a></code> stage to mark <code><a href="#command">commands</a></code> that should be transformed into fixed-length string arrays.</td>
 </tr>
 <tr name="contradicts">
 <td><code><a href="#contradicts">contradicts</a></code></td>
@@ -1211,6 +1220,46 @@ Result:
     command('help', ['-h', '--help'], {values: ['--foo', 'bar']}),
     bool('verbose', ['--verbose'], {values: [false]}),
     flag('version', ['--version'], {values: {type: 'flag', count: 1}})
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="commandsAsArrays">
+<td><code><a href="#commandsAsArrays">commandsAsArrays</a>({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+<code>commandsAsArrays</code> transforms commands whose <code><a href="#array">array</a></code> field
+is <code>true</code> into string arrays.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  {key: 'heroes', types: null, args: ['-h'],
+  array: true, values: ['Charles', 'Logan']}
+]
+
+commandsAsArrays(opts)
+```
+
+Result:
+
+```js
+{
+  opts: [
+    {key: 'heroes', types: ['string', 'string'],
+    args: ['-h'], array: true, values: ['Charles', 'Logan']}
   ]
 }
 ```
@@ -3641,8 +3690,6 @@ const optsTable = usageMap(
 
 ## FAQ
 
-This section answers frequently asked questions.
-
 <table>
 <tr>
 <th>Question&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
@@ -4169,7 +4216,7 @@ function traverseKeys (p) {
 }
 ```
 
-Using `traverseKeys`, we can implement a `nestingKeys` [`args`](#args-stages) stage:
+Using `traverseKeys`, we can implement a `nestKeys` [`args`](#args-stages) stage:
 
 ```js
 const _ = require('lodash')
