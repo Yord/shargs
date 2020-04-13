@@ -394,6 +394,11 @@ The following fields are available:
 <td>array of type strings or <code>null</code></td>
 <td><code>types</code> is an array of strings that represents the command-line option's type. <code>null</code> describes a <code><a href="#command">command</a></code>, <code>[]</code> describes a <code><a href="#flag">flag</a></code>, arrays with one element either describe a <code><a href="#number">number</a></code> (<code>['number']</code>), a <code><a href="#string">string</a></code> (<code>['string']</code>), or a <code><a href="#bool">bool</a></code> (<code>['bool']</code>), and arrays with more than one element describe an <code><a href="#array">array</a></code> of known size (e.g. <code>['string','number','bool']</code> is an array of size 3).</td>
 </tr>
+<tr name="array">
+<td><code><a href="#array">array</a></code></td>
+<td>boolean</td>
+<td><code>array</code> is used by the <code><a href="#commandsAsArrays">commandsAsArrays</a></code> stage to mark <code><a href="#command">commands</a></code> that should be transformed into fixed-length string arrays.</td>
+</tr>
 <tr name="contradicts">
 <td><code><a href="#contradicts">contradicts</a></code></td>
 <td>array of keys</td>
