@@ -4009,6 +4009,107 @@ but that would clutter the stages' signatures.
 So shargs decided to leave interpreting these arguments to the individual programs.
 </td>
 </tr>
+<tr name="option-cardinalities-0-1">
+<td><b>Can I have command-line options with 0..1 values?</b></td>
+<td>
+<details>
+<summary>
+An example for such an option would be ternary logics types, like <code>true</code>, <code>false</code>, <code>unknown</code>,
+that could be represented as a mixture of <code><a href="#flag">flags</a></code> and <code><a href="#bool">bools</a></code>.
+Shargs does not support such options out of the box, but you can implement them quite easily:
+</summary>
+
+<br />
+
+We generally recommend against using options with 0..1 cardinalities in programs.
+This is also why shargs does not support it.
+
+A better approach is using an enumeration, implemented with the [`only`](#only) options field
+and the [`restrictToOnly`](#restrictToOnly) parser stage.
+
+If you want to use it anyway, here is how you could do it in shargs:
+
+Flags give you only two cases, the presense of the flag (`true` if [`flagsAsBools`](#flagsAsBools) is used),
+and its absense (`unknown`):
+
+```js
+const {flag} = require('shargs-opts')
+
+const fun = flag('fun', ['--fun'])
+```
+
+You could add a third case by using only `flags` by defining a complement:
+
+```js
+const {complement} = require('shargs-opts')
+
+const noFun = complement('--no-')(fun)
+```
+
+Which is the same as writing:
+
+```js
+const noFun = flag('fun', ['--no-fun'], {reverse: true})
+```
+
+If you provide `--fun`, the `fun` variable is set to `true`, on `--no-fun` it is set to `false`,
+and providing neither `--fun`, nor `--no-fun` would mean `unknown`.
+
+You could implement the same behaviour with an option that takes none or one argument,
+by using a combination of variable length arrays, aka [`commands`](#command) and a custom command-line options field.
+The general idea is to mark an `command` as `threeValued` with a flag,
+and then transform it to a custom type in the opts stage.
+
+First, let us define an option:
+
+```js
+const {command} = require('shargs-opts')
+
+const fun = command('fun', ['--fun'], {threeValued: true})
+```
+
+Now, let us define an [`opts`](#opts-stages) stage that transforms the `command`:
+
+```js
+const {traverseOpts} = require('shargs-parser')
+
+const isThreeValued = ({threeValued}) => threeValued === true
+
+const toThreeValued = opt => {
+  const types = ['threeValued']
+
+  const interpretValues = values => (
+    values.length === 0        ? 'true'  :
+    values[0]     === 'true'   ? 'true'  :
+    values[0]     === 'false'  ? 'false' :
+                               : 'unknown'
+  )
+
+  const values = [
+    !Array.isArray(opt.values) ? 'unknown' : interpretValues(opt.values)
+  ]
+
+  return {
+    opts: [{...opt, types, values}]
+  }
+}
+
+const commandsToThreeValued = traverseOpts(isThreeValued)(toThreeValued)
+```
+
+`commandsToThreeValued` only transforms `commands` that have the `threeValued` field.
+For each `command`, it checks, whether the `command` is not present (`unknown`),
+it is present but has no values (`true`), or if it is present and has at least one value,
+(`true` if the value is `true`, `false` if it is `false`, otherwise `unknown`).
+
+Note that a `command` takes all arguments following it, not just the first.
+However, the `toArgs` stages reparses those arguments with the parent parser, so they are not lost.
+
+Also note that this demonstration implementation is very brittle and should not be used as presented in a program.
+
+</details>
+</td>
+</tr>
 </table>
 
 ## Comparison to Related Libraries
