@@ -3890,6 +3890,115 @@ Note, that a real implementation would test much more edge cases, like dates tha
 </details>
 </td>
 </tr>
+<tr name="comma-separated-values">
+<td><b>Can I use comma-separated values to define <code><a href="#array">arrays</a></code>?</b></td>
+<td>
+<details>
+<summary>
+<a href="https://github.com/Yord/shargs-parser">shargs-parser</a> does not include a parser stage to split comma-separated values into arrays.
+But it is easy enough to write a stage yourself:
+</summary>
+
+<br />
+
+First let us talk about the options you have for implementing the stage.
+Generally speaking, we have two different kinds of arrays we could target:
+Arrays with a fixed length, and arrays with a variable length.
+
+Let us first talk about options for arrays of fixed length:
+
+1.  Write an [`argv`](#argv-stages) stage that replaces commands with spaces.
+    
+    If the length is known, we can just replace the commas with spaces.
+    The [`toOpts`](#toOpts-stage) stage then takes care of collecting the values for us.
+
+    ```js
+    const {traverseArgv} = require('shargs-parser')
+
+    const hasComma = arg => arg.indexOf(',') > -1
+
+    const replaceCommasWithSpace = arg => ({
+      argv: [arg.replace(/,/g, ' ')]
+    })
+
+    const commasToSpaces = traverseArgv(hasComma)(replaceCommasWithSpace)
+    ```
+
+    The `commasToSpaces` stage transforms input of the form `1,2,3,4` into `1 2 3 4`.
+    Since the array had a predefined length, the result is a valid input of the array option.
+
+Let us now talk about arrays with variable lengths (aka [`commands`](#command)):
+
+1.  Write an [`argv`](#argv-stages) stage that replaces commands with spaces.
+    
+    The same approach that worked for arrays of fixed length also work for arrays with variable lengths.
+    However, we may run into problems if strings are supplied that are included in an [`args`](#args) array of any parent `command` option by the [`toArgs`](#toArgs-stage) stage.
+    In this case, the string would be interpreted as a parent arg.
+    So the next approach is safer.
+2.  Write an [`opts`](#opts-stages) stage that replaces commands with spaces for `commands` with a certain `key`.
+    
+    Writing an `opts` stage is safer, we can transform the `command` option into an `array` option,
+    which prevents it from being interpreted as a `command` by the `toArgs` stage.
+    Say we want to provide a variable `attendees` list:
+
+    ```js
+    const {command} = require('shargs-opts')
+
+    const attendees = command('attendees', ['attendees'])
+    ```
+
+    The `opts` stage for transforming attendees could be implemented as follows:
+
+    ```js
+    const {traverseOpts} = require('shargs-parser')
+
+    const isAttendees = ({key}) => key === 'attendees'
+    
+    const replaceCommasWithSpace = string => string.replace(/,/g, ' ')
+
+    const commandToArray = opt => {
+      const values = opt.values.map(replaceCommasWithSpace)
+      const types = Array.from({length: values.length}, () => 'string')
+
+      return {
+        opts: [{...opt, types, values}]
+      }
+    }
+
+    const attendeesToArray = traverseOpts(isAttendees)(commandToArray)
+    ```
+
+    The `attendeesToArray` stage transforms `commands` whose `key` equals `attendees` to `arrays` of fixed length.
+    Since all arguments have been given, the length of the array is known at this point.
+    The cons of this approach are, that `attendeesToArray` is very specific to just one `key`.
+    The next approach mitigates this.
+3.  Write an [`opts`](#opts-stages) stage that replaces commands with spaces for `commands` using a custom option field.
+     
+    This approach works much like approach 2, but does not rely on the `key` field.
+    Instead, it introduces the `array` command-line options field:
+
+    ```js
+    const {command} = require('shargs-opts')
+
+    const attendees = command('attendees', ['attendees'], {array: true})
+    ```
+
+    This field can be used to mark all `commands` that should be interpreted as variable length arrays by `attendeesToArray`:
+
+    ```js
+    const isAttendees = ({array}) => array === true
+    ```
+
+    The rest of the code is the same as approach 2.
+
+So why doesn't `shargs-parser` support comma-separated values by default?
+The reason is that using comma-separated values in commands is just not that common.
+Also, shargs has good alternatives, like [`commandsAsArrays`](#commandsAsArrays).
+And if you nontheless need comma-separated values, it is simple enough to implement yourself as described above.
+
+</details>
+</td>
+</tr>
 </table>
 
 ## Comparison to Related Libraries
