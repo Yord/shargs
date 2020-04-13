@@ -3837,7 +3837,7 @@ const number2 = array2(['number'])
 </details>
 </td>
 </tr>
-<tr>
+<tr name="custom-command-line-options-date">
 <td><b>Can I use custom command-line option <code><a href="#types">types</a></code> like <code>date</code>?</b></td>
 <td>
 <details>
@@ -3884,8 +3884,8 @@ function dateToMillis ({errs = [], opts = []} = {}) {
 }
 ```
 
-This parser stages works alongside the other parser stages.
-Note, that a real implementation would test more edge cases, like dates that occur in arrays.
+This parser stage works alongside the other parser stages.
+Note, that a real implementation would test much more edge cases, like dates that occur in arrays.
 
 </details>
 </td>
