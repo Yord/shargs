@@ -4131,6 +4131,60 @@ const answers = string('answers', ['-a'], {only: ['yes', 'no', 'maybe']})
 </details>
 </td>
 </tr>
+<tr name="nest-keys">
+<td><b>Can I use keys like <code>'a.b'</code>, indicating object fields?</b></td>
+<td>
+<details>
+<summary>
+Some command-line parsers allow arguments of the form <code>--a.b 42</code>,
+whose values are stored in nested objects <code>{a: {b: 42}}</code>.
+Shargs does not provide this functionality.
+However, it is very easy to write your own parser stage for it:
+</summary>
+
+First, let us write a helper function for traversing args objects:
+
+```js
+function traverseKeys (p) {
+  return f => args => Object.keys(args).reduce(
+    (obj, key) => {
+      const val = args[key]
+      if (!Array.isArray(val) && typeof val === 'object') {
+        obj[key] = traverseKeys(p)(f)(val)
+      }
+      if (p(key)) obj = f(key, val, obj)
+      return obj
+    },
+    {}
+  )
+}
+```
+
+Using `traverseKeys`, we can implement a `nestingKeys` [`args`](#args-stages) stage:
+
+```js
+const _ = require('lodash')
+
+const hasDots = key => key.indexOf('.') > -1
+
+const nestValue = (key, val, obj) => {
+  const path = key.replace(/^[-]+/, '')
+  _.set(obj, path, val)
+  return obj
+}
+
+const nestKeys = traverseKeys(hasDots)(nestValue)
+```
+
+The `nestKeys` args stage should now nest the values into an object.
+
+The reason why shargs does not include such a stage by default is,
+that this is a niche case that can be either implemented after parsing,
+or is easy enough to implement yourself.
+
+</details>
+</td>
+</tr>
 </table>
 
 ## Comparison to Related Libraries
