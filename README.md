@@ -3995,6 +3995,7 @@ So why doesn't `shargs-parser` support comma-separated values by default?
 The reason is that using comma-separated values in commands is just not that common.
 Also, shargs has good alternatives, like [`commandsAsArrays`](#commandsAsArrays).
 And if you nontheless need comma-separated values, it is simple enough to implement yourself as described above.
+Also, this could be a function worth implementing in a third-party parser stages library.
 
 </details>
 </td>
