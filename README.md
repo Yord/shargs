@@ -1227,6 +1227,46 @@ Result:
 </details>
 </td>
 </tr>
+<tr>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="commandsAsArrays">
+<td><code><a href="#commandsAsArrays">commandsAsArrays</a>({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+<code>commandsAsArrays</code> transforms commands whose <code><a href="#array">array</a></code> field
+is <code>true</code> into string arrays.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  {key: 'heroes', types: null, args: ['-h'],
+  array: true, values: ['Charles', 'Logan']}
+]
+
+commandsAsArrays(opts)
+```
+
+Result:
+
+```js
+{
+  opts: [
+    {key: 'heroes', types: ['string', 'string'],
+    args: ['-h'], array: true, values: ['Charles', 'Logan']}
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="restrictToOnly">
 <td><code><a href="#restrictToOnly">restrictToOnly</a>({errs, opts})</code></td>
 <td>
