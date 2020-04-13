@@ -10,12 +10,12 @@
 
 ## Installation
 
-```bash
-$ npm install --save shargs
-$ npm install --save shargs-opts   # opt-in to the type functions DSL
-$ npm install --save shargs-parser # opt-in to a big collection of parser functions
-$ npm install --save shargs-usage  # opt-in to a big collection of usage functions
-```
+<pre>
+$ npm install --save <a href="https://github.com/Yord/shargs">shargs</a>
+$ npm install --save <a href="https://github.com/Yord/shargs-opts">shargs-opts</a>   # opt-in to the type functions DSL
+$ npm install --save <a href="https://github.com/Yord/shargs-parser">shargs-parser</a> # opt-in to a big collection of parser functions
+$ npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</a>  # opt-in to a big collection of usage functions
+</pre>
 
 ## Features
 
@@ -3837,7 +3837,7 @@ const number2 = array2(['number'])
 </details>
 </td>
 </tr>
-<tr>
+<tr name="custom-command-line-options-date">
 <td><b>Can I use custom command-line option <code><a href="#types">types</a></code> like <code>date</code>?</b></td>
 <td>
 <details>
@@ -3873,10 +3873,6 @@ function dateToMillis ({errs = [], opts = []} = {}) {
   const dateToMillis = opt => ({
     opts: [{
       ...opt,
-      ...(Array.isArray(opt.defaultValues)
-          ? {defaultValues: opt.defaultValues.map(toMillis)}
-          : {}
-      ),
       ...(Array.isArray(opt.values)
           ? {values: opt.values.map(toMillis)}
           : {}
@@ -3888,8 +3884,312 @@ function dateToMillis ({errs = [], opts = []} = {}) {
 }
 ```
 
-This parser stages works alongside the other parser stages.
-Note, that a real implementation would test more edge cases, like dates that occur in arrays.
+This parser stage works alongside the other parser stages.
+Note, that a real implementation would test much more edge cases, like dates that occur in arrays.
+
+</details>
+</td>
+</tr>
+<tr name="comma-separated-values">
+<td><b>Can I use comma-separated values to define <code><a href="#array">arrays</a></code>?</b></td>
+<td>
+<details>
+<summary>
+<a href="https://github.com/Yord/shargs-parser">shargs-parser</a> does not include a parser stage to split comma-separated values into arrays.
+But it is easy enough to write a stage yourself:
+</summary>
+
+<br />
+
+First let us talk about the options you have for implementing the stage.
+Generally speaking, we have two different kinds of arrays we could target:
+Arrays with a fixed length, and arrays with a variable length.
+
+Let us first talk about options for arrays of fixed length:
+
+1.  Write an [`argv`](#argv-stages) stage that replaces commands with spaces.
+    
+    If the length is known, we can just replace the commas with spaces.
+    The [`toOpts`](#toOpts-stage) stage then takes care of collecting the values for us.
+
+    ```js
+    const {traverseArgv} = require('shargs-parser')
+
+    const hasComma = arg => arg.indexOf(',') > -1
+
+    const replaceCommasWithSpace = arg => ({
+      argv: [arg.replace(/,/g, ' ')]
+    })
+
+    const commasToSpaces = traverseArgv(hasComma)(replaceCommasWithSpace)
+    ```
+
+    The `commasToSpaces` stage transforms input of the form `1,2,3,4` into `1 2 3 4`.
+    Since the array had a predefined length, the result is a valid input of the array option.
+
+Let us now talk about arrays with variable lengths (aka [`commands`](#command)):
+
+1.  Write an [`argv`](#argv-stages) stage that replaces commands with spaces.
+    
+    The same approach that worked for arrays of fixed length also work for arrays with variable lengths.
+    However, we may run into problems if strings are supplied that are included in an [`args`](#args) array of any parent `command` option by the [`toArgs`](#toArgs-stage) stage.
+    In this case, the string would be interpreted as a parent arg.
+    So the next approach is safer.
+2.  Write an [`opts`](#opts-stages) stage that replaces commands with spaces for `commands` with a certain `key`.
+    
+    Writing an `opts` stage is safer, we can transform the `command` option into an `array` option,
+    which prevents it from being interpreted as a `command` by the `toArgs` stage.
+    Say we want to provide a variable `attendees` list:
+
+    ```js
+    const {command} = require('shargs-opts')
+
+    const attendees = command('attendees', ['attendees'])
+    ```
+
+    The `opts` stage for transforming attendees could be implemented as follows:
+
+    ```js
+    const {traverseOpts} = require('shargs-parser')
+
+    const isAttendees = ({key}) => key === 'attendees'
+    
+    const replaceCommasWithSpace = string => string.replace(/,/g, ' ')
+
+    const commandToArray = opt => {
+      const values = opt.values.map(replaceCommasWithSpace)
+      const types = Array.from({length: values.length}, () => 'string')
+
+      return {
+        opts: [{...opt, types, values}]
+      }
+    }
+
+    const attendeesToArray = traverseOpts(isAttendees)(commandToArray)
+    ```
+
+    The `attendeesToArray` stage transforms `commands` whose `key` equals `attendees` to `arrays` of fixed length.
+    Since all arguments have been given, the length of the array is known at this point.
+    The cons of this approach are, that `attendeesToArray` is very specific to just one `key`.
+    The next approach mitigates this.
+3.  Write an [`opts`](#opts-stages) stage that replaces commands with spaces for `commands` using a custom option field.
+     
+    This approach works much like approach 2, but does not rely on the `key` field.
+    Instead, it introduces the `array` command-line options field:
+
+    ```js
+    const {command} = require('shargs-opts')
+
+    const attendees = command('attendees', ['attendees'], {array: true})
+    ```
+
+    This field can be used to mark all `commands` that should be interpreted as variable length arrays by `attendeesToArray`:
+
+    ```js
+    const isAttendees = ({array}) => array === true
+    ```
+
+    The rest of the code is the same as approach 2.
+
+So why doesn't `shargs-parser` support comma-separated values by default?
+The reason is that using comma-separated values in commands is just not that common.
+Also, shargs has good alternatives, like [`commandsAsArrays`](#commandsAsArrays).
+And if you nontheless need comma-separated values, it is simple enough to implement yourself as described above.
+Also, this could be a function worth implementing in a third-party parser stages library.
+
+</details>
+</td>
+</tr>
+<tr name="why-no-no">
+<td><b>Why are <code>--no-*</code> arguments not reversed by the <code>bestGuess*</code> stages?</b></td>
+<td>
+The reason is because there is no simple way to opt-out of this functionality, once it is employed.
+You could add an <code>optOutReverse</code> parameter to each <code>bestGuess*</code> stage, I guess,
+but that would clutter the stages' signatures.
+So shargs decided to leave interpreting these arguments to the individual programs.
+</td>
+</tr>
+<tr name="option-cardinalities-0-1">
+<td><b>Can I have command-line options with 0..1 values?</b></td>
+<td>
+<details>
+<summary>
+An example for such an option would be ternary logics types, like <code>true</code>, <code>false</code>, <code>unknown</code>,
+that could be represented as a mixture of <code><a href="#flag">flags</a></code> and <code><a href="#bool">bools</a></code>.
+Shargs does not support such options out of the box, but you can implement them quite easily:
+</summary>
+
+<br />
+
+We generally recommend against using options with 0..1 cardinalities in programs.
+This is also why shargs does not support it.
+
+A better approach is using an enumeration, implemented with the [`only`](#only) options field
+and the [`restrictToOnly`](#restrictToOnly) parser stage.
+
+If you want to use it anyway, here is how you could do it in shargs:
+
+Flags give you only two cases, the presense of the flag (`true` if [`flagsAsBools`](#flagsAsBools) is used),
+and its absense (`unknown`):
+
+```js
+const {flag} = require('shargs-opts')
+
+const fun = flag('fun', ['--fun'])
+```
+
+You could add a third case by using only `flags` by defining a complement:
+
+```js
+const {complement} = require('shargs-opts')
+
+const noFun = complement('--no-')(fun)
+```
+
+Which is the same as writing:
+
+```js
+const noFun = flag('fun', ['--no-fun'], {reverse: true})
+```
+
+If you provide `--fun`, the `fun` variable is set to `true`, on `--no-fun` it is set to `false`,
+and providing neither `--fun`, nor `--no-fun` would mean `unknown`.
+
+You could implement the same behaviour with an option that takes none or one argument,
+by using a combination of variable length arrays, aka [`commands`](#command) and a custom command-line options field.
+The general idea is to mark an `command` as `threeValued` with a flag,
+and then transform it to a custom type in the opts stage.
+
+First, let us define an option:
+
+```js
+const {command} = require('shargs-opts')
+
+const fun = command('fun', ['--fun'], {threeValued: true})
+```
+
+Now, let us define an [`opts`](#opts-stages) stage that transforms the `command`:
+
+```js
+const isThreeValued = ({threeValued}) => threeValued === true
+
+const toThreeValued = opt => {
+  const types = ['threeValued']
+
+  const interpretValues = values => (
+    values.length === 0         ? [['true'], []]  :
+    values[0]     === 'true'    ? [['true'], values.slice(1)]  :
+    values[0]     === 'false'   ? [['false'], values.slice(1)] :
+    values[0]     === 'unknown' ? [['unknown'], values.slice(1)]
+                                : [['true'], values]
+  )
+
+  const valuesAndRest = (
+    !Array.isArray(opt.values)
+      ? [['unknown'], []]
+      : interpretValues(opt.values)
+  )
+
+  const [values, rest] = valuesAndRest
+
+  return {
+    opts: [
+      {...opt, types, values},
+      {...opt, values: rest}
+    ]
+  }
+}
+
+const commandsToThreeValued = traverseOpts(isThreeValued)(toThreeValued)
+```
+
+`commandsToThreeValued` only transforms `commands` that have the `threeValued` field.
+For each `command`, it checks, whether the `command` is not present (`unknown`),
+it is present but has no values (`true`), or if it is present and has at least one value,
+(`true` if the value is `true`, `false` if it is `false`, otherwise `unknown`).
+
+Note that a `command` takes all arguments following it, not just the first.
+However, the `toArgs` stages reparses those arguments with the parent parser, so they are not lost.
+
+Also note that this demonstration implementation is very brittle and should not be used as presented in a program.
+
+</details>
+</td>
+</tr>
+<tr name="can-i-use-enums">
+<td><b>Can I use enums?</b></td>
+<td>
+<details>
+<summary>
+Yes, you can use enums with a combination of <code><a href="#string">string</a></code> command-line options,
+the <code><a href="#only">only</a></code> options field,
+and the <code><a href="#restrictToOnly">restrictToOnly</a></code> parser stage:
+</summary>
+
+<br />
+
+```js
+const {string} = require('shargs-opts')
+
+const answers = string('answers', ['-a'], {only: ['yes', 'no', 'maybe']})
+```
+
+</details>
+</td>
+</tr>
+<tr name="nest-keys">
+<td><b>Can I use keys like <code>'a.b'</code>, indicating object fields?</b></td>
+<td>
+<details>
+<summary>
+Some command-line parsers allow arguments of the form <code>--a.b 42</code>,
+whose values are stored in nested objects <code>{a: {b: 42}}</code>.
+Shargs does not provide this functionality.
+However, it is very easy to write your own parser stage for it:
+</summary>
+
+First, let us write a helper function for traversing args objects:
+
+```js
+function traverseKeys (p) {
+  return f => args => Object.keys(args).reduce(
+    (obj, key) => {
+      const val = args[key]
+      if (!Array.isArray(val) && typeof val === 'object') {
+        obj[key] = traverseKeys(p)(f)(val)
+      }
+      if (p(key)) {
+        const {[key]: _, ...rest} = obj
+        obj = {...rest, ...f(key, val)}
+      }
+      return obj
+    },
+    args
+  )
+}
+```
+
+Using `traverseKeys`, we can implement a `nestingKeys` [`args`](#args-stages) stage:
+
+```js
+const _ = require('lodash')
+
+const hasDots = key => key.indexOf('.') > -1
+
+const nestValue = (key, val) => {
+  const obj = {}
+  _.set(obj, key, val)
+  return obj
+}
+
+const nestKeys = traverseKeys(hasDots)(nestValue)
+```
+
+The `nestKeys` args stage should now nest the values into an object.
+
+The reason why shargs does not include such a stage by default is,
+that this is a niche case that can be either implemented after parsing,
+or is easy enough to implement yourself.
 
 </details>
 </td>
