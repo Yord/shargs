@@ -3999,6 +3999,15 @@ And if you nontheless need comma-separated values, it is simple enough to implem
 </details>
 </td>
 </tr>
+<tr name="why-no-no">
+<td><b>Why are <code>--no-*</code> arguments not reversed by the <code>bestGuess*</code> stages?</b></td>
+<td>
+The reason is because there is no simple way to opt-out of this functionality, once it is employed.
+You could add an <code>optOutReverse</code> parameter to each <code>bestGuess*</code> stage, I guess,
+but that would clutter the stages' signatures.
+So shargs decided to leave interpreting these arguments to the individual programs.
+</td>
+</tr>
 </table>
 
 ## Comparison to Related Libraries
