@@ -77,6 +77,8 @@ const opts = [
 ]
 ```
 
+For details, see the [command-line options](#command-line-options) section.
+
 </details>
 
 <details>
@@ -114,6 +116,8 @@ The `deepThought` parser consists of six parser functions that are applied in th
 4.  [`cast`](#cast)
 5.  [`toArgs`](#toArgs) (is called after `opts` and before `args`)
 6.  [`flagsAsBools`](#flagsAsBools)
+
+For much more parser stages, read the [command-line parsers](#command-line-parsers) section.
 
 </details>
 
@@ -160,6 +164,8 @@ const docs = usage([
   )
 ])
 ```
+
+The [automatic usage documentation generation](#automatic-usage-documentation-generation) section has all the details.
 
 </details>
 
@@ -230,6 +236,8 @@ Life, the Universe, and Everything.
 ```
 
 Note, how shargs automatically takes care of line breaks and other formatting for you.
+
+See the [style](#style) section.
 
 </details>
 
