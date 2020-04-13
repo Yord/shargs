@@ -4167,7 +4167,7 @@ function traverseKeys (p) {
 }
 ```
 
-Using `traverseKeys`, we can implement a `nestingKeys` [`args`](#args-stages) stage:
+Using `traverseKeys`, we can implement a `nestKeys` [`args`](#args-stages) stage:
 
 ```js
 const _ = require('lodash')
