@@ -33,6 +33,12 @@ The advantages are:
 +   You have fine-grained control over the documentation layout if you need that.
 +   You can write your own layout functions and combine them with existing ones.
 
+But shargs also has general qualities:
+
++   It works with synchronous as well as asynchronous code bases.
++   It has zero dependencies (apart from shargs modules of course).
++   It is well documented, extensively tested, modular, and extensible.
+
 Shargs' extensibility and release of control to the developer sets it apart from <a href="#comparison-to-related-libraries">other command-line parsers</a>.
 
 ## Getting Started
@@ -71,6 +77,8 @@ const opts = [
 ]
 ```
 
+For details, see the [command-line options](#command-line-options) section.
+
 </details>
 
 <details>
@@ -108,6 +116,8 @@ The `deepThought` parser consists of six parser functions that are applied in th
 4.  [`cast`](#cast)
 5.  [`toArgs`](#toArgs) (is called after `opts` and before `args`)
 6.  [`flagsAsBools`](#flagsAsBools)
+
+For much more parser stages, read the [command-line parsers](#command-line-parsers) section.
 
 </details>
 
@@ -154,6 +164,8 @@ const docs = usage([
   )
 ])
 ```
+
+The [automatic usage documentation generation](#automatic-usage-documentation-generation) section has all the details.
 
 </details>
 
@@ -224,6 +236,8 @@ Life, the Universe, and Everything.
 ```
 
 Note, how shargs automatically takes care of line breaks and other formatting for you.
+
+See the [style](#style) section.
 
 </details>
 
@@ -1238,6 +1252,7 @@ Result:
 <summary>
 <code>commandsAsArrays</code> transforms commands whose <code><a href="#array">array</a></code> field
 is <code>true</code> into string arrays.
+Remember that <code><a href="#commands">commands</a></code> may be terminated by <code>--</code>.
 </summary>
 
 <br />
