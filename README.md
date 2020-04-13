@@ -338,7 +338,11 @@ The following type functions are available:
 </tr>
 <tr name="command">
 <td><code><a href="#command">command</a>(key, args, fields)</code></td>
-<td>An array of unknown length. If <code>fields</code> contains an <a href="#opts"><code>opts</code></a> field, it turns into a command.</td>
+<td>
+Commands are arrays of variable length.
+They are either terminated by the end of the argv array, or by <code>--</code>.
+Commands are the only type that may have <code><a href="#opts">opts</a></code> and <code><a href="#posArgs">posArgs</a></code> fields.
+</td>
 </tr>
 <tr name="flag">
 <td><code><a href="#flag">flag</a>(key, args, fields)</code></td>
