@@ -9,9 +9,13 @@ test('setDefaultValues works as expected', () => {
       key: 'ask',
       types: null,
       args: ['ask'],
-      opts: [{key: 'question', types: ['string'], args: ['-q']}, {key: 'jokingly', types: [], args: ['-j'], defaultValues: [1]}],
-      defaultValues: {jokingly: true}
-    }
+      opts: [
+        {key: 'question', types: ['string'], args: ['-q']},
+        {key: 'jokingly', types: [], args: ['-j'], defaultValues: {type: 'flag', count: 1}}
+      ],
+      defaultValues: {jokingly: 'foo'}
+    },
+    {key: 'brisk', types: [], args: ['--brisk'], defaultValues: {type: 'flag', count: 1}},
   ]
 
   const {errs, args} = setDefaultValues({opts})
@@ -21,8 +25,9 @@ test('setDefaultValues works as expected', () => {
     name: 'Logan',
     numStr: ['42', 'string'],
     ask: {
-      jokingly: true
-    }
+      jokingly: 'foo'
+    },
+    brisk: {type: 'flag', count: 1}
   }
 
   const expErrs = []
@@ -42,8 +47,11 @@ test('setDefaultValues reports an error if it has the wrong format', () => {
       key: 'ask',
       types: null,
       args: ['ask'],
-      opts: [{key: 'question', types: ['string'], args: ['-q']}, {key: 'jokingly', types: [], args: ['-j'], defaultValues: [1]}],
-      defaultValues: {jokingly: true}
+      opts: [
+        {key: 'question', types: ['string'], args: ['-q']},
+        {key: 'jokingly', types: [], args: ['-j'], defaultValues: {type: 'flag', count: 1}
+      }],
+      defaultValues: {jokingly: 'foo'}
     }
   ]
 
@@ -52,7 +60,7 @@ test('setDefaultValues reports an error if it has the wrong format', () => {
   const expArgs = {
     _: [],
     ask: {
-      jokingly: true
+      jokingly: 'foo'
     }
   }
 
