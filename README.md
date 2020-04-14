@@ -565,7 +565,7 @@ if a <code><a href="#bool">bool</a></code> or <code><a href="#flag">flag</a></co
 <td>array with value(s)</td>
 <td>
 <code>values</code> is used by the <code><a href="#toOpts">toOpts</a></code> parser stage to store command-line arguments.
-This field should not be set by the user.
+<b>This field should not be set by the user.</b>
 If you need to set default values, use the <code><a href="#defaultValues">defaultValues</a></code> field, instead.
 </td>
 </tr>
@@ -1228,11 +1228,12 @@ Example:
 
 ```js
 const {arrayOnRepeat} = require('shargs-parser')
+const {number, string} = require('shargs-opts')
 
 const obj = {
   opts: [
-    {key: 'age', types: ['string'], values: ['42']},
-    {key: 'age', types: ['number'], values: [42]}
+    string('age', ['-a'], {values: ['42']}),
+    number('age', ['-a'], {values: [42]})
   ]
 }
 
@@ -1244,7 +1245,7 @@ Result:
 ```js
 {
   opts: [
-    {key: 'age', types: ['string', 'number'], values: ['42', 42]}
+    array(['string', 'number'])('age', ['-a'], {values: ['42', 42]})
   ]
 }
 ```
@@ -1268,9 +1269,10 @@ Example:
 
 ```js
 const {bestGuessOpts} = require('shargs-parser')
+const {flag, string} = require('shargs-opts')
 
 const opts = [
-  {key: 'age', types: ['string'], args: ['--age'], values: ['unknown']},
+  string('age', ['--age'], {values: ['unknown']}),
   {values: ['--angry']},
   {values: ['--name']},
   {values: ['Logan']},
@@ -1285,9 +1287,9 @@ Result:
 ```js
 {
   opts: [
-    {key: 'age', types: ['string'], args: ['--age'], values: ['unknown']},
-    {key: 'angry', types: [], args: [], values: [1]},
-    {key: 'name', types: ['string'], args: [], values: ['Logan']},
+    string('age', ['--age'], {values: ['unknown']}),
+    flag('angry', [], {values: [1]}),
+    string('name', [], {values: ['Logan']}),
     {values: ['foo']}
   ]
 }
@@ -1310,11 +1312,14 @@ Users may now use <code>yes</code> in place of <code>true</code> when providing 
 Example:
 
 ```js
+const {broadenBools} = require('shargs-parser')
+const {array, bool, number} = require('shargs-opts')
+
 const opts = [
-  {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']},
-  {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: ['23', 'yes']},
-  {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['no']},
-  {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['false']}
+  number('answer', ['-a', '--answer'], {values: ['42']}),
+  array(['number', 'bool'])('numBool', ['-n', '--nb'], {values: ['23', 'yes']}),
+  bool('verbose', ['--verbose'], {values: ['no']}),
+  bool('verbose', ['--verbose'], {values: ['false']})
 ]
 
 const alt = {
@@ -1330,10 +1335,10 @@ Result:
 ```js
 {
   opts: [
-    {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']},
-    {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: ['23', 'true']},
-    {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['false']},
-    {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['false']}
+    number('answer', ['-a', '--answer'], {values: ['42']}),
+    array(['number', 'bool'])('numBool', ['-n', '--nb'], {values: ['23', 'true']}),
+    bool('verbose', ['--verbose'], {values: ['false']}),
+    bool('verbose', ['--verbose'], {values: ['false']})
   ]
 }
 ```
@@ -1359,7 +1364,7 @@ const {array, bool, command, flag, number, string} = require('shargs-opts')
 const numberBool = array(['number', 'bool'])
 
 const opts = [
-  string('title', ['--title'], {values: ["Hitchhiker Guide"]}),
+  string('title', ['--title'], {values: ['Hitchhiker Guide']}),
   numberBool('numBool', ['--nb'], {values: ['23', 'true']}),
   number('answer', ['-a', '--answer'], {values: ['42']}),
   command('help', ['-h', '--help'], {values: ['--foo', 'bar']}),
@@ -1375,7 +1380,7 @@ Result:
 ```js
 {
   opts: [
-    string('title', ['--title'], {values: ["Hitchhiker Guide"]}),
+    string('title', ['--title'], {values: ['Hitchhiker Guide']}),
     numberBool('numBool', ['--nb'], {values: [23, true]}),
     number('answer', ['-a', '--answer'], {values: [42]}),
     command('help', ['-h', '--help'], {values: ['--foo', 'bar']}),
@@ -1403,9 +1408,14 @@ Remember that <code><a href="#commands">commands</a></code> may be terminated by
 Example:
 
 ```js
+const {commandsAsArrays} = require('shargs-parser')
+const {array, command} = require('shargs-opts')
+
 const opts = [
-  {key: 'heroes', types: null, args: ['-h'],
-  array: true, values: ['Charles', 'Logan']}
+  command('heroes', ['-h'], {
+    array: true,
+    values: ['Charles', 'Logan']
+  })
 ]
 
 commandsAsArrays(opts)
@@ -1416,8 +1426,10 @@ Result:
 ```js
 {
   opts: [
-    {key: 'heroes', types: ['string', 'string'],
-    args: ['-h'], array: true, values: ['Charles', 'Logan']}
+    array(['string', 'string'])('heroes', ['-h'], {
+      array: true,
+      values: ['Charles', 'Logan']
+    })
   ]
 }
 ```
@@ -1631,11 +1643,12 @@ Example:
 
 ```js
 const {traverseOpts} = require('shargs-parser')
+const {flag, number} = require('shargs-opts')
 
 const opts = [
-  {key: 'age', types: ['number'], values: ['42']},
-  {key: 'verbose', types: [], values: [1]},
-  {key: 'help', types: [], values: [1]}
+  number('age', ['-a'], {values: ['42']}),
+  flag('verbose', ['-v'], {values: [1]}),
+  flag('help', ['-h'], {values: [1]})
 ]
 
 const isFlag = _ => Array.isArray(_.types) && _.types.length === 0
@@ -1654,9 +1667,9 @@ Result:
 ```js
 {
   opts: [
-    {key: 'age', types: ['number'], values: ['42']},
-    {key: 'verbose', types: [], values: [-1]},
-    {key: 'help', types: [], values: [-1]}
+    number('age', ['-a'], {values: ['42']}),
+    flag('verbose', ['-v'], {values: [-1]}),
+    flag('help', ['-h'], {values: [-1]})
   ]
 }
 ```
