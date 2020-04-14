@@ -1194,6 +1194,51 @@ Result:
 </details>
 </td>
 </tr>
+<tr name="broadenBools">
+<td><code><a href="#broadenBools">broadenBools</a>(alt)({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+<code>broadenBools</code> takes an <code>alt</code> parameter defining new values for <code><a href="#bool">bools</a></code> like <code>{true: ['yes'], false: ['no']}</code>.
+Users may now use <code>yes</code> in place of <code>true</code> when providing command-line arguments.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']},
+  {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: ['23', 'yes']},
+  {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['no']},
+  {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['false']}
+]
+
+const alt = {
+  true: ['yes'],
+  false: ['no', 'f']
+}
+
+broadenBools(alt)({opts})
+```
+
+Result:
+
+```js
+{
+  opts: [
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']},
+    {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: ['23', 'true']},
+    {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['false']},
+    {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['false']}
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="cast">
 <td><code><a href="#cast">cast</a>({errs, opts})</code></td>
 <td>
