@@ -1245,7 +1245,9 @@ Result:
 ```js
 {
   opts: [
-    array(['string', 'number'])('age', ['-a'], {values: ['42', 42]})
+    array(['string', 'number'])('age', ['-a'], {
+      values: ['42', 42]
+    })
   ]
 }
 ```
@@ -1317,7 +1319,9 @@ const {array, bool, number} = require('shargs-opts')
 
 const opts = [
   number('answer', ['-a', '--answer'], {values: ['42']}),
-  array(['number', 'bool'])('numBool', ['-n', '--nb'], {values: ['23', 'yes']}),
+  array(['number', 'bool'])('numBool', ['-n', '--nb'], {
+    values: ['23', 'yes']
+  }),
   bool('verbose', ['--verbose'], {values: ['no']}),
   bool('verbose', ['--verbose'], {values: ['false']})
 ]
@@ -1336,7 +1340,9 @@ Result:
 {
   opts: [
     number('answer', ['-a', '--answer'], {values: ['42']}),
-    array(['number', 'bool'])('numBool', ['-n', '--nb'], {values: ['23', 'true']}),
+    array(['number', 'bool'])('numBool', ['-n', '--nb'], {
+      values: ['23', 'true']
+    }),
     bool('verbose', ['--verbose'], {values: ['false']}),
     bool('verbose', ['--verbose'], {values: ['false']})
   ]
@@ -1360,7 +1366,8 @@ Example:
 
 ```js
 const {cast} = require('shargs-parser')
-const {array, bool, command, flag, number, string} = require('shargs-opts')
+const {array, bool, command} = require('shargs-opts')
+const {flag, number, string} = require('shargs-opts')
 const numberBool = array(['number', 'bool'])
 
 const opts = [
@@ -1369,7 +1376,9 @@ const opts = [
   number('answer', ['-a', '--answer'], {values: ['42']}),
   command('help', ['-h', '--help'], {values: ['--foo', 'bar']}),
   bool('verbose', ['--verbose'], {values: ['false']}),
-  flag('version', ['--version'], {values: {type: 'flag', count: 1}})
+  flag('version', ['--version'], {
+    values: {type: 'flag', count: 1}
+  })
 ]
 
 cast({opts})
@@ -1385,7 +1394,9 @@ Result:
     number('answer', ['-a', '--answer'], {values: [42]}),
     command('help', ['-h', '--help'], {values: ['--foo', 'bar']}),
     bool('verbose', ['--verbose'], {values: [false]}),
-    flag('version', ['--version'], {values: {type: 'flag', count: 1}})
+    flag('version', ['--version'], {
+      values: {type: 'flag', count: 1}
+    })
   ]
 }
 ```
@@ -2554,7 +2565,8 @@ Groups several usage functions together.
 Example:
 
 ```js
-const {note, optsList, space, synopsis, usage} = require('shargs-usage')
+const {note, optsList, space} = require('shargs-usage')
+const {synopsis, usage} = require('shargs-usage')
 const {flag, number} = require('shargs-opts')
 
 const opts = [
@@ -4064,6 +4076,8 @@ Yes, you can add and use your own option types.
 Both, the command-line options DSL and the parser functions have been designed with this in mind:
 </summary>
 
+<br />
+
 Say you want to add your own custom `date` type.
 First, you need to add a command-line option of that type:
 
@@ -4365,6 +4379,8 @@ whose values are stored in nested objects <code>{a: {b: 42}}</code>.
 Shargs does not provide this functionality.
 However, it is very easy to write your own parser stage for it:
 </summary>
+
+<br />
 
 First, let us write a helper function for traversing args objects:
 
