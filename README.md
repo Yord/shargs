@@ -602,8 +602,10 @@ Example:
 ```js
 const {bool, complement} = require('shargs-opts')
 
+const not = complement('--not-')
+
 const fun = bool('fun', ['-f', '--fun'], {defaultValues: ['false']})
-const notFun = complement('--not-')(fun)
+const notFun = not(fun)
 ```
 
 Is the same as:
