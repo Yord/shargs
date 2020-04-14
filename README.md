@@ -379,7 +379,10 @@ If you need a <code>flag</code> to imply <code>false</code> (e.g. <code>--no-fun
 </tr>
 <tr name="number">
 <td><code><a href="#number">number</a>(key, args, fields)</code></td>
-<td>An option that takes exactly one value that is meant to represent a number.</td>
+<td>
+An option that takes exactly one number.
+<code>Numbers</code> are stored as strings, so you may want to <code><a href="#cast">cast</a></code> them.
+</td>
 </tr>
 <tr name="string">
 <td><code><a href="#string">string</a>(key, args, fields)</code></td>
