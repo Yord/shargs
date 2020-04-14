@@ -365,6 +365,7 @@ If you need to treat a provided <code>bool</code> as its <code><a href="#reverse
 Commands are arrays of variable length.
 They are either terminated by the end of the argv array, or by <code>--</code>.
 Commands are the only type that may have <code><a href="#opts">opts</a></code> and <code><a href="#posArgs">posArgs</a></code> fields.
+If you want to treat a <code>command</code> as an <code><a href="#array">array</a></code>, have a look at the <code><a href="#asArray">array</a></code> field and the <code><a href="#commandsAsArrays">commandsAsArrays</a></code> stage.
 </td>
 </tr>
 <tr name="flag">
