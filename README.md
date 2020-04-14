@@ -2372,7 +2372,7 @@ The Ultimate Question.
 </td>
 </tr>
 <tr name="synopsis">
-<td><code name="synopsisFrom"><a href="#synopsis">synopsis</a>(programName)(opts)(style)</code><br /><code><a href="#synopsisFrom">synopsisFrom</a>(id)(start, end)(opts)(style)</code></td>
+<td><code name="synopsisFrom"><a href="#synopsis">synopsis</a>(programName)(opts)(style)</code><br /><code><a href="#synopsisFrom">synopsisFrom</a>(id)(programName)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
