@@ -11,10 +11,10 @@
 ## Installation
 
 <pre>
-$ npm install --save <a href="https://github.com/Yord/shargs">shargs</a>
-$ npm install --save <a href="https://github.com/Yord/shargs-opts">shargs-opts</a>   # opt-in to the type functions DSL
-$ npm install --save <a href="https://github.com/Yord/shargs-parser">shargs-parser</a> # opt-in to a big collection of parser functions
-$ npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</a>  # opt-in to a big collection of usage functions
+npm install --save <a href="https://github.com/Yord/shargs">shargs</a>
+npm install --save <a href="https://github.com/Yord/shargs-opts">shargs-opts</a>   # opt-in to type functions for <a href="#command-line-options">command-line options</a>
+npm install --save <a href="https://github.com/Yord/shargs-parser">shargs-parser</a> # opt-in to a standard library of <a href="#command-line-parsers">parser functions</a>
+npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</a>  # opt-in to a standard library of <a href="#automatic-usage-documentation-generation">usage functions</a>
 </pre>
 
 ## Features
@@ -344,11 +344,20 @@ The following type functions are available:
 </tr>
 <tr name="array">
 <td><code><a href="#array">array</a>(types)(key, args, fields)</code></td>
-<td>An array of known length. The types parameter holds the types for each individual entry.</td>
+<td>
+An array with a known length.
+The <code><a href="#types">types</a></code> parameter holds the entries' types (e.g. <code>['string', 'number', 'bool']</code>).
+</td>
 </tr>
 <tr name="bool">
 <td><code><a href="#bool">bool</a>(key, args, fields)</code></td>
-<td>An explicitly defined boolean value. May be <code>true</code> or <code>false</code>.</td>
+<td>
+An explicitly defined boolean value.
+May be <code>true</code> or <code>false</code>.
+If you need more values to mean <code>true</code> (e.g. <code>yes</code>, <code>y</code>, and <code>t</code>), have a look at <code><a href="#broadenBools">broadenBools</a></code>.
+If you need to treat a provided <code>bool</code> as its <code><a href="#reverse">reverse</a></code>, see <code><a href="#reverseBools">reverseBools</a></code>.
+<code>Bools</code> are stored as strings, so you may want to <code><a href="#cast">cast</a></code> them.
+</td>
 </tr>
 <tr name="command">
 <td><code><a href="#command">command</a>(key, args, fields)</code></td>
@@ -356,15 +365,24 @@ The following type functions are available:
 Commands are arrays of variable length.
 They are either terminated by the end of the argv array, or by <code>--</code>.
 Commands are the only type that may have <code><a href="#opts">opts</a></code> and <code><a href="#posArgs">posArgs</a></code> fields.
+If you want to treat a <code>command</code> as an <code><a href="#array">array</a></code>, have a look at the <code><a href="#asArray">array</a></code> field and the <code><a href="#commandsAsArrays">commandsAsArrays</a></code> stage.
 </td>
 </tr>
 <tr name="flag">
 <td><code><a href="#flag">flag</a>(key, args, fields)</code></td>
-<td>A type describing a self-sufficient command-line option. Like e.g. <code>--help</code>.</td>
+<td>
+A type describing a self-sufficient command-line option. Like e.g. <code>--help</code>.
+<code>flags</code> are implemented as counts (e.g. <code>{help: {type: 'flag', count: 1}}</code>) that count the number of times a flag was used.
+If you need a boolean or a number instead, see the <code><a href="#flagsAsBools">flagsAsBools</a></code> and <code><a href="#flagsAsNumbers">flagsAsNumbers</a></code> parser stages.
+If you need a <code>flag</code> to imply <code>false</code> (e.g. <code>--no-fun</code>), see <code><a href="#complement">complement</a></code>, <code><a href="#reverse">reverse</a></code> and <code><a href="#reverseFlags">reverseFlags</a></code>.
+</td>
 </tr>
 <tr name="number">
 <td><code><a href="#number">number</a>(key, args, fields)</code></td>
-<td>An option that takes exactly one value that is meant to represent a number.</td>
+<td>
+An option that takes exactly one number.
+<code>Numbers</code> are stored as strings, so you may want to <code><a href="#cast">cast</a></code> them.
+</td>
 </tr>
 <tr name="string">
 <td><code><a href="#string">string</a>(key, args, fields)</code></td>
@@ -409,7 +427,7 @@ The following fields are available:
 <td><code>types</code> is an array of strings that represents the command-line option's type. <code>null</code> describes a <code><a href="#command">command</a></code>, <code>[]</code> describes a <code><a href="#flag">flag</a></code>, arrays with one element either describe a <code><a href="#number">number</a></code> (<code>['number']</code>), a <code><a href="#string">string</a></code> (<code>['string']</code>), or a <code><a href="#bool">bool</a></code> (<code>['bool']</code>), and arrays with more than one element describe an <code><a href="#array">array</a></code> of known size (e.g. <code>['string','number','bool']</code> is an array of size 3).</td>
 </tr>
 <tr name="array">
-<td><code><a href="#array">array</a></code></td>
+<td><code><a href="#asArray">array</a></code></td>
 <td>boolean</td>
 <td><code>array</code> is used by the <code><a href="#commandsAsArrays">commandsAsArrays</a></code> stage to mark <code><a href="#command">commands</a></code> that should be transformed into fixed-length string arrays.</td>
 </tr>
@@ -1194,6 +1212,51 @@ Result:
 </details>
 </td>
 </tr>
+<tr name="broadenBools">
+<td><code><a href="#broadenBools">broadenBools</a>(alt)({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+<code>broadenBools</code> takes an <code>alt</code> parameter defining new values for <code><a href="#bool">bools</a></code> like <code>{true: ['yes'], false: ['no']}</code>.
+Users may now use <code>yes</code> in place of <code>true</code> when providing command-line arguments.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']},
+  {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: ['23', 'yes']},
+  {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['no']},
+  {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['false']}
+]
+
+const alt = {
+  true: ['yes'],
+  false: ['no', 'f']
+}
+
+broadenBools(alt)({opts})
+```
+
+Result:
+
+```js
+{
+  opts: [
+    {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']},
+    {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: ['23', 'true']},
+    {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['false']},
+    {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['false']}
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="cast">
 <td><code><a href="#cast">cast</a>({errs, opts})</code></td>
 <td>
@@ -1241,16 +1304,12 @@ Result:
 </details>
 </td>
 </tr>
-<tr>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description</th>
-</tr>
 <tr name="commandsAsArrays">
 <td><code><a href="#commandsAsArrays">commandsAsArrays</a>({errs, opts})</code></td>
 <td>
 <details>
 <summary>
-<code>commandsAsArrays</code> transforms commands whose <code><a href="#array">array</a></code> field
+<code>commandsAsArrays</code> transforms commands whose <code><a href="#asArray">array</a></code> field
 is <code>true</code> into string arrays.
 Remember that <code><a href="#commands">commands</a></code> may be terminated by <code>--</code>.
 </summary>
@@ -2313,7 +2372,7 @@ The Ultimate Question.
 </td>
 </tr>
 <tr name="synopsis">
-<td><code name="synopsisFrom"><a href="#synopsis">synopsis</a>(programName)(opts)(style)</code><br /><code><a href="#synopsisFrom">synopsisFrom</a>(id)(start, end)(opts)(style)</code></td>
+<td><code name="synopsisFrom"><a href="#synopsis">synopsis</a>(programName)(opts)(style)</code><br /><code><a href="#synopsisFrom">synopsisFrom</a>(id)(programName)(opts)(style)</code></td>
 <td>
 <details>
 <summary>
@@ -4256,6 +4315,164 @@ or is easy enough to implement yourself.
 </details>
 </td>
 </tr>
+<tr name="shargs-tacit">
+<td><b>Why do shargs' functions have several parameter lists?</b></td>
+<td>
+<details>
+<summary>
+Many functions have an unusual signature, like <code><a href="#text">text</a>(string)(style)</code>
+and the question arises, why it is not <code><a href="#text">text</a>(string, style)</code>, instead.
+The reason has to do with function composition and <a href="https://en.wikipedia.org/wiki/Tacit_programming">tacit programming</a>:
+</summary>
+
+<br />
+
+<code>Shargs</code> builds command-line parsers and usage documentation by composing parser and usage functions with functions it calls *combinators*.
+An examplary combinator function is <code><a href="#layout">layout</a>(functions)(style)</code>.
+
+<code>layout</code> takes a list of <code>functions</code> that have a common signature:
+They take a <code><a href="#style">style</a></code>, and return a string.
+Next, it takes its own <code>style</code> parameter and feeds it to each function, getting a list of strings.
+Then it concatenates all strings together, which results in a string:
+
+```js
+const {layout, text} = require('shargs-usage')
+
+const style = {line: {width: 10}}
+
+const string = layout([
+  text('First.'),
+  text('Second.')
+])(style)
+
+// string === 'First.    \nSecond.   \n'
+```
+
+What <code>layout</code> basically gives us is a way to provide only one <code>style</code> parameter to a list of functions, instead of one parameter per function.
+But why does <code>layout</code> have such a weird signature?
+
+Let us assume we had <code>layout2</code> and <code>text2</code> functions, instead:
+
+```js
+const {layout, text} = require('shargs-usage')
+
+const style = {line: {width: 10}}
+
+const layout2 = (functions, style) => layout(functions)(style)
+
+const text2 = (string, style) => text(string)(style)
+```
+
+How could we concatenate strings only using <code>text2</code>?
+
+```js
+const style = {line: {width: 10}}
+
+const string = text2('First.', style) + text2('Second.', style)
+
+// string === 'First.    \nSecond.   \n'
+```
+
+Do you see how the <code>style</code> parameter is repeated for every function?
+It gets worse if you have more functions.
+
+Now let us use <code>layout2</code>:
+
+```js
+const style = {line: {width: 10}}
+
+const string = layout2([
+  style => text2('First.', style),
+  style => text2('Second.', style)
+], style)
+
+// string === 'First.    \nSecond.   \n'
+```
+
+See how <code>style</code> is still repeated and we do not have the advantage of only providing it once?
+Actually, using <code>layout2</code> looks worse than using just <code>text2</code>!
+
+But we can do better and rewrite the same example with <code>text</code> and two parameter lists:
+
+```js
+const {text} = require('shargs-usage')
+
+const style = {line: {width: 10}}
+
+const string = layout2([
+  style => text('First.')(style),
+  style => text('Second.')(style)
+], style)
+
+// string === 'First.    \nSecond.   \n'
+```
+
+And then we can apply an optimization:
+See how we define a function that takes a <code>style</code> and feed it to a function <code>text('First.')</code> that takes a <code>style</code>?
+This is redundant, and we can just leave out <code>style</code> alltogether:
+
+```js
+const {text} = require('shargs-usage')
+
+const style = {line: {width: 10}}
+
+const string = layout2([
+  text('First.'),
+  text('Second.')
+], style)
+
+// string === 'First.    \nSecond.   \n'
+```
+
+Now we do not repeat style for every function!
+The code is much shorter and is easier to read.
+
+And we can do even better by using a signature like <code>layout</code>.
+Because then <code>layout</code> is also a function that takes a <code>style</code> and returns a string,
+like <code>text</code>, and can be used inside other <code>layout</code> functions!
+
+```js
+const {layout, text} = require('shargs-usage')
+
+const style = {line: {width: 10}}
+
+const firstSecond = layout([
+  text('First.'),
+  text('Second.')
+])
+
+const andThird = layout([
+  firstSecond,
+  text('Third.')
+])
+
+const string = andThird(style)
+
+// string === 'First.    \nSecond.   \nThird.    \n'
+```
+
+And although we have five functions that each take a <code>style</code> parameter, we only have to apply it once.
+
+Shargs employs tacit programming techniques to reduce boilerplate in its DSLs.
+A side-effect is that function signatures are weird (the technical term is *curried*).
+
+Some JavaScript libraries like [Ramda][ramda] and [lodash/fp][lodash-fp] use a technique called *auto-currying*.
+If <code>layout</code> would be auto-curried, it would have the signatures of <code>layout</code>
+and <code>layout2</code> at the same time and you could choose which one to use.
+Shargs decided against auto-currying functions, since it is simple enough to <code><a href="https://ramdajs.com/docs/#curry">curry</a></code> your functions yourself if you wanted:
+
+```js
+const {curry} = require('ramda')
+const {layout} = require('shargs-usage')
+
+const curriedLayout = curry(layout)
+```
+
+`curriedLayout` can now be used like <code>layout</code> and like <code>layout2</code>.
+
+</details>
+</td>
+</tr>
 </table>
 
 ## Comparison to Related Libraries
@@ -4331,6 +4548,7 @@ Shargs is [MIT licensed][license].
 [issues]: https://github.com/Yord/shargs/issues
 [license]: https://github.com/Yord/shargs/blob/master/LICENSE
 [lodash]: https://lodash.com/
+[lodash-fp]: https://github.com/lodash/lodash/wiki/FP-Guide
 [node]: https://nodejs.org/
 [npm-package]: https://www.npmjs.com/package/shargs
 [ramda]: https://ramdajs.com/docs/#mergeDeepLeft
