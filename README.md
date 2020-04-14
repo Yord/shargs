@@ -414,87 +414,169 @@ The following fields are available:
 <tr name="key">
 <td><code><a href="#key">key</a></code>*</td>
 <td>string</td>
-<td><code>key</code> is the name of the variable the parser uses to store the command-line option's value. It should be a unique identifier or otherwise risks to be overridden by other command-line options. A key must not be named <code>_</code>, as it is a reserved field for collecting unmatched <code>argv</code>.</td>
+<td>
+<code>key</code> is the name of the variable the parser uses to store the command-line option's value.
+It should be a unique identifier or otherwise risks to collide with other command-line options.
+Note that options with the same <code>key</code> are sometimes a good idea (e.g. to define <code><a href="#complement">complements</a></code>).
+A key must not be named <code>_</code>, for this is a reserved field that collects unmatched <code>argv</code>.
+</td>
 </tr>
 <tr name="args">
 <td><code><a href="#args">args</a></code>*</td>
 <td>array of strings</td>
-<td><code>args</code> is an array of strings that may be used to define a command-line option. E.g. <code>['--help', '-h']</code> could be used for a help <code><a href="#flag">flag</a></code> or <code>['-f', '--file']</code> could be used in a <code><a href="#string">string</a></code> option that parses a file path.</td>
+<td>
+<code>args</code> is an array of strings that may be used to define a command-line option.
+E.g. <code>['--help', '-h']</code> could be used for a help <code><a href="#flag">flag</a></code>
+or <code>['-f', '--file']</code> could be used in a <code><a href="#string">string</a></code> option that parses a file path.
+</td>
 </tr>
 <tr name="types">
 <td><code><a href="#types">types</a></code>*</td>
 <td>array of type strings or <code>null</code></td>
-<td><code>types</code> is an array of strings that represents the command-line option's type. <code>null</code> describes a <code><a href="#command">command</a></code>, <code>[]</code> describes a <code><a href="#flag">flag</a></code>, arrays with one element either describe a <code><a href="#number">number</a></code> (<code>['number']</code>), a <code><a href="#string">string</a></code> (<code>['string']</code>), or a <code><a href="#bool">bool</a></code> (<code>['bool']</code>), and arrays with more than one element describe an <code><a href="#array">array</a></code> of known size (e.g. <code>['string','number','bool']</code> is an array of size 3).</td>
+<td>
+<code>types</code> is an array of strings that represents the command-line option's type.
+<code>null</code> describes a <code><a href="#command">command</a></code>,
+<code>[]</code> describes a <code><a href="#flag">flag</a></code>,
+arrays with one element either describe a <code><a href="#number">number</a></code> (<code>['number']</code>),
+a <code><a href="#string">string</a></code> (<code>['string']</code>),
+or a <code><a href="#bool">bool</a></code> (<code>['bool']</code>),
+and arrays with more than one element describe an <code><a href="#array">array</a></code> of known size
+(e.g. <code>['string','number','bool']</code> is an array of size 3).
+</td>
 </tr>
 <tr name="array">
 <td><code><a href="#asArray">array</a></code></td>
 <td>boolean</td>
-<td><code>array</code> is used by the <code><a href="#commandsAsArrays">commandsAsArrays</a></code> stage to mark <code><a href="#command">commands</a></code> that should be transformed into fixed-length string arrays.</td>
+<td>
+<code>array</code> is used by the <code><a href="#commandsAsArrays">commandsAsArrays</a></code> stage
+to mark <code><a href="#command">commands</a></code> that should be transformed into fixed-length string arrays.
+</td>
 </tr>
 <tr name="contradicts">
 <td><code><a href="#contradicts">contradicts</a></code></td>
 <td>array of keys</td>
-<td><code>contradicts</code> is used by the <code><a href="#contradictOpts">contradictOpts</a></code> stage to specify an array of command-line options identified by their <code><a href="#key">key</a></code> that are incompatible with this command-line option.</td>
+<td>
+<code>contradicts</code> is used by the <code><a href="#contradictOpts">contradictOpts</a></code> stage
+to specify an array of command-line options identified by their <code><a href="#key">key</a></code>
+that are incompatible with this command-line option.
+</td>
 </tr>
 <tr name="defaultValues">
 <td><code><a href="#defaultValues">defaultValues</a></code></td>
 <td>array of values</td>
-<td><code>defaultValues</code> is used by the <code><a href="#toArgs">toArgs</a></code> parser stage to set default values for command-line options without supplied command-line arguments. For non-<code><a href="#command">command</a></code> options, it takes an array of values, <code>command</code> options may take any value.</td>
+<td>
+<code>defaultValues</code> is used by the <code><a href="#toArgs">toArgs</a></code> parser stage
+to set default values for command-line options without supplied command-line arguments.
+For non-<code><a href="#command">command</a></code> options,
+it takes an array of values, <code>command</code> options may take any value.
+</td>
 </tr>
 <tr name="desc">
 <td><code><a href="#desc">desc</a></code></td>
 <td>string</td>
-<td><code>desc</code> is the user-facing description of a command-line option that is used by the <a href="#automatic-usage-documentation-generation">automatic usage documentation generation</a>.</td>
+<td>
+<code>desc</code> is the user-facing description of a command-line option
+that is used by the <a href="#automatic-usage-documentation-generation">automatic usage documentation generation</a>.
+</td>
 </tr>
 <tr name="descArg">
 <td><code><a href="#descArg">descArg</a></code></td>
 <td>string</td>
-<td><code>descArg</code> is the user-facing description of an argument value that is used by the <a href="#automatic-usage-documentation-generation">automatic usage documentation generation</a>.</td>
+<td>
+<code>descArg</code> is the user-facing description of an argument value
+that is used by the <a href="#automatic-usage-documentation-generation">automatic usage documentation generation</a>.
+If <code><a href="#only">only</a></code> is not set, the <code>descArg</code> is used to describe an argument.
+If <code>only</code> and <code>descArg</code> are not set, the argument's <code><a href="#types">type</a></code> is used, instead.
+</td>
 </tr>
 <tr name="implies">
 <td><code><a href="#implies">implies</a></code></td>
 <td>array of keys</td>
-<td><code>implies</code> is used by the <code><a href="#implyOpts">implyOpts</a></code> stage to specify an array of command-line options identified by their <code><a href="#key">key</a></code> that must have <code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code>, if this command-line option has <code>values</code> or <code><a href="#defaultValues">defaultValues</a></code>.</td>
+<td>
+<code>implies</code> is used by the <code><a href="#implyOpts">implyOpts</a></code> stage
+to specify an array of command-line options identified by their <code><a href="#key">key</a></code>
+that must have <code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code>,
+if this command-line option has <code>values</code> or <code><a href="#defaultValues">defaultValues</a></code>.
+</td>
 </tr>
 <tr name="only">
 <td><code><a href="#only">only</a></code></td>
 <td>array of values</td>
-<td><code>only</code> is used by the <code><a href="#restrictToOnly">restrictToOnly</a></code> parser stage to validate user input. It takes a non-empty array of values.</td>
+<td>
+<code>only</code> is used by the <code><a href="#restrictToOnly">restrictToOnly</a></code> parser stage to validate user input.
+It takes a non-empty array of values.
+</td>
 </tr>
 <tr name="opts">
 <td><code><a href="#opts">opts</a></code></td>
 <td>array of command-line options</td>
-<td><code>opts</code> can be set if the command-line option is a <code><a href="#command">command</a></code> (if <code><a href="#types">types</a></code> is <code>null</code>) to describe the command's options. It uses the same syntax as regular command-line options.</td>
+<td>
+<code>opts</code> can be set if the command-line option is a <code><a href="#command">command</a></code>
+(if <code><a href="#types">types</a></code> is <code>null</code>) to describe the command's options.
+It uses the same syntax as regular command-line options.
+</td>
 </tr>
 <tr name="posArgs">
 <td><code><a href="#posArgs">posArgs</a></code></td>
 <td>array of positional arguments</td>
-<td><code>posArgs</code> is used by the <code><a href="#toArgs">toArgs</a></code> parser stage. It is only interpreted if the command-line option is a <code><a href="#command">command</a></code> (if <code><a href="#types">types</a></code> is <code>null</code>) to describe the command's positional arguments. A positional argument is a special kind of option with the <code><a href="#key">key</a></code> and <code><a href="#types">types</a></code> (both must be given), <code><a href="#required">required</a></code>, and <code><a href="#variadic">variadic</a></code> fields (e.g. <code>{key: 'file', types: ['number'], required: true, variadic: false}</code>). Only the last positional argument may be <code>variadic: true</code> and if an argument is <code>required: true</code>, all prior arguments must be <code>required: true</code> as well.</td>
+<td>
+<code>posArgs</code> is used by the <code><a href="#toArgs">toArgs</a></code> parser stage.
+It is only interpreted if the command-line option is a <code><a href="#command">command</a></code>
+(if <code><a href="#types">types</a></code> is <code>null</code>) to describe the command's positional arguments.
+A positional argument is a special kind of option with the <code><a href="#key">key</a></code>
+and <code><a href="#types">types</a></code> (both must be given),
+<code><a href="#required">required</a></code>,
+and <code><a href="#variadic">variadic</a></code> fields
+(e.g. <code>{key: 'file', types: ['number'], required: true, variadic: false}</code>).
+Only the last positional argument may be <code>variadic: true</code>
+and if an argument is <code>required: true</code>, all prior arguments must be <code>required: true</code> as well.
+</td>
 </tr>
 <tr name="required">
 <td><code><a href="#required">required</a></code></td>
 <td>boolean</td>
-<td><code>required</code> is used by <code><a href="#posArgs">posArgs</a></code> and by the <code><a href="#requireOptions">requireOptions</a></code> parser stage to demand an option is set. In case of <code><a href="#requireOptions">requireOptions</a></code>, if a required option has no <code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code> an error is reported. In case of <code><a href="#posArgs">posArgs</a></code>, if a required positional argument is not found, an error is reported.</td>
+<td>
+<code>required</code> is used by <code><a href="#posArgs">posArgs</a></code>
+and by the <code><a href="#requireOptions">requireOptions</a></code> parser stage to demand an option is set.
+In case of <code><a href="#requireOptions">requireOptions</a></code>,
+if a required option has no <code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code> an error is reported.
+In case of <code><a href="#posArgs">posArgs</a></code>,
+if a required positional argument is not found, an error is reported.
+</td>
 </tr>
 <tr name="reverse">
 <td><code><a href="#reverse">reverse</a></code></td>
 <td>boolean</td>
-<td><code>reverse</code> is used by the <code><a href="#reverseBools">reverseBools</a></code> and <code><a href="#reverseFlags">reverseFlags</a></code> parser stages and indicates, if a <code><a href="#bool">bool</a></code> or <code><a href="#flag">flag</a></code> should be treated as its reverse.</td>
+<td>
+<code>reverse</code> is used by the <code><a href="#reverseBools">reverseBools</a></code>
+and <code><a href="#reverseFlags">reverseFlags</a></code> parser stages and indicates,
+if a <code><a href="#bool">bool</a></code> or <code><a href="#flag">flag</a></code> should be treated as its reverse.
+</td>
 </tr>
 <tr name="rules">
 <td><code><a href="#rules">rules</a></code></td>
 <td>predicate</td>
-<td><code>rules</code> is a predicate applied by <code><a href="#verifyRules">verifyRules</a></code> to check if parsed <code>opts</code> are correct.</td>
+<td>
+<code>rules</code> is a predicate applied by <code><a href="#verifyRules">verifyRules</a></code> to check if parsed <code>opts</code> are correct.
+</td>
 </tr>
 <tr name="values">
 <td><code><a href="#values">values</a></code></td>
 <td>array with value(s)</td>
-<td><code>values</code> is used by the <code><a href="#toOpts">toOpts</a></code> parser stage to store command-line arguments. This field should not be set by the user. If you need to set default values, use the <code><a href="#defaultValues">defaultValues</a></code> field, instead.</td>
+<td>
+<code>values</code> is used by the <code><a href="#toOpts">toOpts</a></code> parser stage to store command-line arguments.
+This field should not be set by the user.
+If you need to set default values, use the <code><a href="#defaultValues">defaultValues</a></code> field, instead.
+</td>
 </tr>
 <tr name="variadic">
 <td><code><a href="#variadic">variadic</a></code></td>
 <td>boolean</td>
-<td><code>variadic</code> is used in positional arguments (see <code><a href="#posArgs">posArgs</a></code>) to define, whether an argument takes any number of values. If <code>variadic</code> is <code>true</code>, the positional argument's <code><a href="#types">types</a></code> must be <code>null</code>.</td>
+<td>
+<code>variadic</code> is used in positional arguments (see <code><a href="#posArgs">posArgs</a></code>) to define,
+whether an argument takes a variable number of values.
+If <code>variadic</code> is <code>true</code>, the positional argument's <code><a href="#types">types</a></code> must be <code>null</code>.
+</td>
 </tr>
 </table>
 
