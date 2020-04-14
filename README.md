@@ -351,7 +351,13 @@ The <code><a href="#types">types</a></code> parameter holds the entries' types (
 </tr>
 <tr name="bool">
 <td><code><a href="#bool">bool</a>(key, args, fields)</code></td>
-<td>An explicitly defined boolean value. May be <code>true</code> or <code>false</code>.</td>
+<td>
+An explicitly defined boolean value.
+May be <code>true</code> or <code>false</code>.
+If you need more values to mean <code>true</code> (e.g. <code>yes</code>, <code>y</code>, and <code>t</code>), have a look at <code><a href="#broadenBools">broadenBools</a></code>.
+If you need to treat a provided <code>bool</code> as its <code><a href="#reverse">reverse</a></code>, see <code><a href="#reverseBools">reverseBools</a></code>.
+<code>Bools</code> are stored as strings, so you may want to <code><a href="#cast">cast</a></code> them.
+</td>
 </tr>
 <tr name="command">
 <td><code><a href="#command">command</a>(key, args, fields)</code></td>
