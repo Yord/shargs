@@ -370,7 +370,12 @@ If you want to treat a <code>command</code> as an <code><a href="#array">array</
 </tr>
 <tr name="flag">
 <td><code><a href="#flag">flag</a>(key, args, fields)</code></td>
-<td>A type describing a self-sufficient command-line option. Like e.g. <code>--help</code>.</td>
+<td>
+A type describing a self-sufficient command-line option. Like e.g. <code>--help</code>.
+<code>flags</code> are implemented as counts (e.g. <code>{help: {type: 'flag', count: 1}}</code>) that count the number of times a flag was used.
+If you need a boolean or a number instead, see the <code><a href="#flagsAsBools">flagsAsBools</a></code> and <code><a href="#flagsAsNumbers">flagsAsNumbers</a></code> parser stages.
+If you need a <code>flag</code> to imply <code>false</code> (e.g. <code>--no-fun</code>), see <code><a href="#complement">complement</a></code>, <code><a href="#reverse">reverse</a></code> and <code><a href="#reverseFlags">reverseFlags</a></code>.
+</td>
 </tr>
 <tr name="number">
 <td><code><a href="#number">number</a>(key, args, fields)</code></td>
