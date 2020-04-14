@@ -467,8 +467,10 @@ that are incompatible with this command-line option.
 <td>
 <code>defaultValues</code> is used by the <code><a href="#toArgs">toArgs</a></code> parser stage
 to set default values for command-line options without supplied command-line arguments.
-For non-<code><a href="#command">command</a></code> options,
-it takes an array of values, <code>command</code> options may take any value.
+For <code><a href="#command">command</a></code> options, it may take any value.
+<code><a href="#flag">Flags</a></code> must have a count object <code>{type: 'flag', count: 1}</code>
+whose <code>count</code> field can be any number.
+All other options take an array of values, that must have the same length as their <code><a href="#types">types</a></code> field.
 </td>
 </tr>
 <tr name="desc">
