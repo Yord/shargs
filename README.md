@@ -344,7 +344,10 @@ The following type functions are available:
 </tr>
 <tr name="array">
 <td><code><a href="#array">array</a>(types)(key, args, fields)</code></td>
-<td>An array of known length. The types parameter holds the types for each individual entry.</td>
+<td>
+An array with a known length.
+The <code><a href="#types">types</a></code> parameter holds the entries' types (e.g. <code>['string', 'number', 'bool']</code>).
+</td>
 </tr>
 <tr name="bool">
 <td><code><a href="#bool">bool</a>(key, args, fields)</code></td>
