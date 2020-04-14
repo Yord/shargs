@@ -4315,6 +4315,164 @@ or is easy enough to implement yourself.
 </details>
 </td>
 </tr>
+<tr name="shargs-tacit">
+<td><b>Why do shargs' functions have several parameter lists?</b></td>
+<td>
+<details>
+<summary>
+Many functions have an unusual signature, like <code><a href="#text">text</a>(string)(style)</code>
+and the question arises, why it is not <code><a href="#text">text</a>(string, style)</code>, instead.
+The reason has to do with function composition and <a href="https://en.wikipedia.org/wiki/Tacit_programming">tacit programming</a>:
+</summary>
+
+<br />
+
+<code>Shargs</code> builds command-line parsers and usage documentation by composing parser and usage functions with functions it calls *combinators*.
+An examplary combinator function is <code><a href="#layout">layout</a>(functions)(style)</code>.
+
+<code>layout</code> takes a list of <code>functions</code> that have a common signature:
+They take a <code><a href="#style">style</a></code>, and return a string.
+Next, it takes its own <code>style</code> parameter and feeds it to each function, getting a list of strings.
+Then it concatenates all strings together, which results in a string:
+
+```js
+const {layout, text} = require('shargs-usage')
+
+const style = {line: {width: 10}}
+
+const string = layout([
+  text('First.'),
+  text('Second.')
+])(style)
+
+// string === 'First.    \nSecond.   \n'
+```
+
+What <code>layout</code> basically gives us is a way to provide only one <code>style</code> parameter to a list of functions, instead of one parameter per function.
+But why does <code>layout</code> have such a weird signature?
+
+Let us assume we had <code>layout2</code> and <code>text2</code> functions, instead:
+
+```js
+const {layout, text} = require('shargs-usage')
+
+const style = {line: {width: 10}}
+
+const layout2 = (functions, style) => layout(functions)(style)
+
+const text2 = (string, style) => text(string)(style)
+```
+
+How could we concatenate strings only using <code>text2</code>?
+
+```js
+const style = {line: {width: 10}}
+
+const string = text2('First.', style) + text2('Second.', style)
+
+// string === 'First.    \nSecond.   \n'
+```
+
+Do you see how the <code>style</code> parameter is repeated for every function?
+It gets worse if you have more functions.
+
+Now let us use <code>layout2</code>:
+
+```js
+const style = {line: {width: 10}}
+
+const string = layout2([
+  style => text2('First.', style),
+  style => text2('Second.', style)
+], style)
+
+// string === 'First.    \nSecond.   \n'
+```
+
+See how <code>style</code> is still repeated and we do not have the advantage of only providing it once?
+Actually, using <code>layout2</code> looks worse than using just <code>text2</code>!
+
+But we can do better and rewrite the same example with <code>text</code> and two parameter lists:
+
+```js
+const {text} = require('shargs-usage')
+
+const style = {line: {width: 10}}
+
+const string = layout2([
+  style => text('First.')(style),
+  style => text('Second.')(style)
+], style)
+
+// string === 'First.    \nSecond.   \n'
+```
+
+And then we can apply an optimization:
+See how we define a function that takes a <code>style</code> and feed it to a function <code>text('First.')</code> that takes a <code>style</code>?
+This is redundant, and we can just leave out <code>style</code> alltogether:
+
+```js
+const {text} = require('shargs-usage')
+
+const style = {line: {width: 10}}
+
+const string = layout2([
+  text('First.'),
+  text('Second.')
+], style)
+
+// string === 'First.    \nSecond.   \n'
+```
+
+Now we do not repeat style for every function!
+The code is much shorter and is easier to read.
+
+And we can do even better by using a signature like <code>layout</code>.
+Because then <code>layout</code> is also a function that takes a <code>style</code> and returns a string,
+like <code>text</code>, and can be used inside other <code>layout</code> functions!
+
+```js
+const {layout, text} = require('shargs-usage')
+
+const style = {line: {width: 10}}
+
+const firstSecond = layout([
+  text('First.'),
+  text('Second.')
+])
+
+const andThird = layout([
+  firstSecond,
+  text('Third.')
+])
+
+const string = andThird(style)
+
+// string === 'First.    \nSecond.   \nThird.    \n'
+```
+
+And although we have five functions that each take a <code>style</code> parameter, we only have to apply it once.
+
+Shargs employs tacit programming techniques to reduce boilerplate in its DSLs.
+A side-effect is that function signatures are weird (the technical term is *curried*).
+
+Some JavaScript libraries like [Ramda][ramda] and [lodash/fp][lodash-fp] use a technique called *auto-currying*.
+If <code>layout</code> would be auto-curried, it would have the signatures of <code>layout</code>
+and <code>layout2</code> at the same time and you could choose which one to use.
+Shargs decided against auto-currying functions, since it is simple enough to <code><a href="https://ramdajs.com/docs/#curry">curry</a></code> your functions yourself if you wanted:
+
+```js
+const {curry} = require('ramda')
+const {layout} = require('shargs-usage')
+
+const curriedLayout = curry(layout)
+```
+
+`curriedLayout` can now be used like <code>layout</code> and like <code>layout2</code>.
+
+</details>
+</td>
+</tr>
 </table>
 
 ## Comparison to Related Libraries
@@ -4390,6 +4548,7 @@ Shargs is [MIT licensed][license].
 [issues]: https://github.com/Yord/shargs/issues
 [license]: https://github.com/Yord/shargs/blob/master/LICENSE
 [lodash]: https://lodash.com/
+[lodash-fp]: https://github.com/lodash/lodash/wiki/FP-Guide
 [node]: https://nodejs.org/
 [npm-package]: https://www.npmjs.com/package/shargs
 [ramda]: https://ramdajs.com/docs/#mergeDeepLeft
