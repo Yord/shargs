@@ -1,6 +1,4 @@
-const toOpts  = require('./index')
-
-const without = (keys = [], opts = []) => opts.filter(({key}) => keys.indexOf(key) === -1)
+const pairArgvWithArgs = require('./pairArgvWithArgs')
 
 const OPTS = [
   {key: 'positional', types: ['string'], args: null},
@@ -12,7 +10,7 @@ const OPTS = [
   {key: 'version', types: [], args: ['--version']}
 ]
 
-test('toOpts transforms argv into opts', () => {
+test('pairArgvWithArgs transforms argv into opts', () => {
   const obj = {
     argv: [
       'foo',
@@ -26,10 +24,10 @@ test('toOpts transforms argv into opts', () => {
     ]
   }
 
-  const {opts} = toOpts(OPTS)(obj)
+  const {opts} = pairArgvWithArgs(OPTS)(obj)
 
   const exp = [
-    {key: 'positional', types: ['string'], args: null, values: ['foo']},
+    {values: ['foo']},
     {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]},
     {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: ['23', 'true']},
     {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']},
@@ -42,7 +40,7 @@ test('toOpts transforms argv into opts', () => {
   expect(opts).toStrictEqual(exp)
 })
 
-test('toOpts returns an unmatched value if an option has too few argvs', () => {
+test('pairArgvWithArgs returns an unmatched value if an option has too few argvs', () => {
   const obj = {
     argv: [
       '--name'
@@ -51,70 +49,48 @@ test('toOpts returns an unmatched value if an option has too few argvs', () => {
 
   const testDefault = {key: 'name', types: ['string'], args: ['-n']}
 
-  const {opts} = toOpts([testDefault])(obj)
+  const {opts} = pairArgvWithArgs([testDefault])(obj)
 
   const exp = [
-    {values: ['--name']},
-    testDefault
+    {values: ['--name']}
   ]
 
   expect(opts).toStrictEqual(exp)
 })
 
-test('toOpts keeps unrecognized strings after applying positional arguments', () => {
-  const obj = {
-    argv: [
-      'foo',
-      'bar'
-    ]
-  }
-
-  const {opts} = toOpts(OPTS)(obj)
-
-  const exp = [
-    {key: 'positional', types: ['string'], args: null, values: ['foo']},
-    {values: ['bar']},
-    ...OPTS.slice(1)
-  ]
-
-  expect(opts).toStrictEqual(exp)
-})
-
-test('toOpts transforms unary options', () => {
+test('pairArgvWithArgs transforms unary options', () => {
   const obj = {
     argv: [
       '--title', "The Hitchhiker's Guide to the Galaxy"
     ]
   }
 
-  const {opts} = toOpts(OPTS)(obj)
+  const {opts} = pairArgvWithArgs(OPTS)(obj)
 
   const exp = [
-    {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]},
-    ...without(['title'], OPTS)
+    {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]}
   ]
 
   expect(opts).toStrictEqual(exp)
 })
 
-test('toOpts transforms command opts at the end of the line', () => {
+test('pairArgvWithArgs transforms command opts at the end of the line', () => {
   const obj = {
     argv: [
       '-h', 'foo', '--bar'
     ]
   }
 
-  const {opts} = toOpts(OPTS)(obj)
+  const {opts} = pairArgvWithArgs(OPTS)(obj)
 
   const exp = [
-    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
-    ...without(['help'], OPTS)
+    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']}
   ]
 
   expect(opts).toStrictEqual(exp)
 })
 
-test('toOpts transforms command opts at the end of the line with double minusses', () => {
+test('pairArgvWithArgs transforms command opts at the end of the line with double minusses', () => {
   const obj = {
     argv: [
       'foo',
@@ -123,19 +99,18 @@ test('toOpts transforms command opts at the end of the line with double minusses
     ]
   }
 
-  const {opts} = toOpts(OPTS)(obj)
+  const {opts} = pairArgvWithArgs(OPTS)(obj)
 
   const exp = [
-    {key: 'positional', types: ['string'], args: null, values: ['foo']},
+    {values: ['foo']},
     {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
-    {values: ['--']},
-    ...without(['help', 'positional'], OPTS)
+    {values: ['--']}
   ]
 
   expect(opts).toStrictEqual(exp)
 })
 
-test('toOpts transforms command opts at the start of the line with double minusses', () => {
+test('pairArgvWithArgs transforms command opts at the start of the line with double minusses', () => {
   const obj = {
     argv: [
       '-h', 'foo', '--bar',
@@ -144,19 +119,18 @@ test('toOpts transforms command opts at the start of the line with double minuss
     ]
   }
 
-  const {opts} = toOpts(OPTS)(obj)
+  const {opts} = pairArgvWithArgs(OPTS)(obj)
 
   const exp = [
     {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
     {values: ['--']},
-    {key: 'positional', types: ['string'], args: null, values: ['foo']},
-    ...without(['help', 'positional'], OPTS)
+    {values: ['foo']}
   ]
 
   expect(opts).toStrictEqual(exp)
 })
 
-test('toOpts transforms command opts in the middle of the line with double minusses', () => {
+test('pairArgvWithArgs transforms command opts in the middle of the line with double minusses', () => {
   const obj = {
     argv: [
       'foo',
@@ -166,67 +140,65 @@ test('toOpts transforms command opts in the middle of the line with double minus
     ]
   }
 
-  const {opts} = toOpts(OPTS)(obj)
+  const {opts} = pairArgvWithArgs(OPTS)(obj)
 
   const exp = [
-    {key: 'positional', types: ['string'], args: null, values: ['foo']},
+    {values: ['foo']},
     {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
     {values: ['--']},
-    {values: ['foo']},
-    ...without(['help', 'positional'], OPTS)
+    {values: ['foo']}
   ]
 
   expect(opts).toStrictEqual(exp)
 })
 
-test('toOpts works with commands that have no argv', () => {
+test('pairArgvWithArgs works with commands that have no argv', () => {
   const obj = {
     argv: [
       '-h'
     ]
   }
 
-  const {opts} = toOpts(OPTS)(obj)
+  const {opts} = pairArgvWithArgs(OPTS)(obj)
 
   const exp = [
-    {key: 'help', types: null, args: ['-h', '--help'], values: []},
-    ...without(['help'], OPTS)
+    {key: 'help', types: null, args: ['-h', '--help'], values: []}
   ]
 
   expect(opts).toStrictEqual(exp)
 })
 
-test('toOpts transforms empty argv into empty opts', () => {
+test('pairArgvWithArgs transforms empty argv into empty opts', () => {
   const obj = {
     argv: []
   }
 
-  const {opts} = toOpts(OPTS)(obj)
+  const {opts} = pairArgvWithArgs(OPTS)(obj)
 
-  const exp = OPTS
+  const exp = []
 
   expect(opts).toStrictEqual(exp)
 })
 
-test('toOpts transforms missing argv into empty opts', () => {
+test('pairArgvWithArgs transforms missing argv into empty opts', () => {
   const obj = {}
 
-  const {opts} = toOpts(OPTS)(obj)
+  const {opts} = pairArgvWithArgs(OPTS)(obj)
 
-  const exp = OPTS
-
-  expect(opts).toStrictEqual(exp)
-})
-
-test('toOpts transforms undefined input into empty opts', () => {
-  const {opts} = toOpts(OPTS)()
-
-  const exp = OPTS
+  const exp = []
 
   expect(opts).toStrictEqual(exp)
 })
 
-test('toOpts works even if opts are empty', () => {
+test('pairArgvWithArgs transforms undefined input into empty opts', () => {
+  const {opts} = pairArgvWithArgs(OPTS)()
+
+  const exp = []
+
+  expect(opts).toStrictEqual(exp)
+})
+
+test('pairArgvWithArgs works even if opts are empty', () => {
   const obj = {
     argv: [
       '-h',
@@ -234,7 +206,7 @@ test('toOpts works even if opts are empty', () => {
     ]
   }
 
-  const {opts} = toOpts([])(obj)
+  const {opts} = pairArgvWithArgs([])(obj)
 
   const exp = [
     {values: ['-h']},
@@ -244,7 +216,7 @@ test('toOpts works even if opts are empty', () => {
   expect(opts).toStrictEqual(exp)
 })
 
-test('toOpts works even if opts are undefined', () => {
+test('pairArgvWithArgs works even if opts are undefined', () => {
   const obj = {
     argv: [
       '-h',
@@ -252,7 +224,7 @@ test('toOpts works even if opts are undefined', () => {
     ]
   }
 
-  const {opts} = toOpts()(obj)
+  const {opts} = pairArgvWithArgs()(obj)
 
   const exp = [
     {values: ['-h']},
@@ -262,10 +234,10 @@ test('toOpts works even if opts are undefined', () => {
   expect(opts).toStrictEqual(exp)
 })
 
-test('toOpts passes on errors', () => {
+test('pairArgvWithArgs passes on errors', () => {
   const ERRS = ['foo']
 
-  const {errs} = toOpts()({errs: ERRS})
+  const {errs} = pairArgvWithArgs()({errs: ERRS})
 
   expect(errs).toStrictEqual(ERRS)
 })

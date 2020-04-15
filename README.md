@@ -525,11 +525,12 @@ It uses the same syntax as regular command-line options.
 <code>posArgs</code> is used by the <code><a href="#toArgs">toArgs</a></code> parser stage.
 It is only interpreted if the command-line option is a <code><a href="#command">command</a></code>
 (if <code><a href="#types">types</a></code> is <code>null</code>) to describe the command's positional arguments.
-A positional argument is a special kind of option with the <code><a href="#key">key</a></code>
-and <code><a href="#types">types</a></code> (both must be given),
+A positional argument is a special kind of option with the <code><a href="#key">key</a></code>*
+<code><a href="#types">types</a></code>*,
 <code><a href="#required">required</a></code>,
 and <code><a href="#variadic">variadic</a></code> fields
 (e.g. <code>{key: 'file', types: ['number'], required: true, variadic: false}</code>).
+The <code><a href="#args">args</a></code> field must be <code>null</code> or <code>undefined</code>.
 Only the last positional argument may be <code>variadic: true</code>
 and if an argument is <code>required: true</code>, all prior arguments must be <code>required: true</code> as well.
 </td>
