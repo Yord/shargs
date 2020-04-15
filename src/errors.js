@@ -16,22 +16,10 @@ const invalidOptionsListInCombine = ({options, arg, argument}) => ({
   info: {options, arg, argument}
 })
 
-const invalidRequiredPositionalArgument = ({positionalArguments}) => ({
-  code: 'Invalid required positional argument',
-  msg:  'If a positional argument is required, all previous positional arguments must be required as well. The required field must either be undefined, true or false.',
-  info: {positionalArguments}
-})
-
 const invalidTypes = ({types, option}) => ({
   code: 'Invalid types',
   msg:  'Each argument must have a types key that must be null or an array',
   info: {types, option}
-})
-
-const invalidVariadicPositionalArgument = ({positionalArguments}) => ({
-  code: 'Invalid variadic positional argument',
-  msg:  'Only the last positional argument may be variadic. The variadic field must either be undefined, true or false.',
-  info: {positionalArguments}
 })
 
 const nonMatchingArgumentTypes = ({arg, ref, option}) => ({
@@ -40,19 +28,10 @@ const nonMatchingArgumentTypes = ({arg, ref, option}) => ({
   info: {arg, ref, option}
 })
 
-const requiredPositionalArgumentMissing = ({key, positionalArgument}) => ({
-  code: 'Required positional argument missing',
-  msg:  'A required positional argument has not been provided.',
-  info: {key, positionalArgument}
-})
-
 module.exports = {
   illegalKeyName,
   invalidDefaultValues,
   invalidOptionsListInCombine,
-  invalidRequiredPositionalArgument,
   invalidTypes,
-  invalidVariadicPositionalArgument,
-  nonMatchingArgumentTypes,
-  requiredPositionalArgumentMissing
+  nonMatchingArgumentTypes
 }
