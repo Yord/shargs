@@ -339,32 +339,39 @@ The following type functions are available:
 
 <table>
 <tr>
-<th>Type&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Type&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
 <tr name="array">
-<td><code><a href="#array">array</a>(types)(key, args, fields)</code></td>
+<td>
+<code><a href="#array">array</a>(types)(key, args, fields)</code><br />
+<code><a href="#arrayPos">arrayPos</a>(types)(key, fields)</code>
+</td>
 <td>
 An array with a known length.
+For arrays with variable lengths, see <code><a href="#variadic">variadic</a></code>.
 The <code><a href="#types">types</a></code> parameter holds the entries' types (e.g. <code>['string', 'number', 'bool']</code>).
+<code>arrayPos</code> defines a positional argument without <code><a href="#args">args</a></code>.
 </td>
 </tr>
 <tr name="bool">
-<td><code><a href="#bool">bool</a>(key, args, fields)</code></td>
+<td>
+<code><a href="#bool">bool</a>(key, args, fields)</code><br />
+<code><a href="#boolPos">boolPos</a>(key, fields)</code>
+</td>
 <td>
 An explicitly defined boolean value.
 May be <code>true</code> or <code>false</code>.
 If you need more values to mean <code>true</code> (e.g. <code>yes</code>, <code>y</code>, and <code>t</code>), have a look at <code><a href="#broadenBools">broadenBools</a></code>.
 If you need to treat a provided <code>bool</code> as its <code><a href="#reverse">reverse</a></code>, see <code><a href="#reverseBools">reverseBools</a></code>.
 <code>Bools</code> are stored as strings, so you may want to <code><a href="#cast">cast</a></code> them.
+<code>boolPos</code> defines a positional argument without <code><a href="#args">args</a></code>.
 </td>
 </tr>
 <tr name="command">
-<td><code><a href="#command">command</a>(key, args, fields)</code></td>
+<td><code><a href="#command">command</a>(opts)(key, args, fields)</code></td>
 <td>
-Commands are arrays of variable length.
-They are either terminated by the end of the argv array, or by <code>--</code>.
-Commands are the only type that may have <code><a href="#opts">opts</a></code> field.
+Commands are <code><a href="#variadic">variadic</a></code> options that have an <code><a href="#opts">opts</a></code> field.
 If you want to treat a <code>command</code> as an <code><a href="#array">array</a></code>, have a look at the <code><a href="#asArray">array</a></code> field and the <code><a href="#commandsAsArrays">commandsAsArrays</a></code> stage.
 </td>
 </tr>
@@ -378,15 +385,37 @@ If you need a <code>flag</code> to imply <code>false</code> (e.g. <code>--no-fun
 </td>
 </tr>
 <tr name="number">
-<td><code><a href="#number">number</a>(key, args, fields)</code></td>
+<td>
+<code><a href="#number">number</a>(key, args, fields)</code><br />
+<code><a href="#numberPos">numberPos</a>(key, fields)</code>
+</td>
 <td>
 An option that takes exactly one number.
 <code>Numbers</code> are stored as strings, so you may want to <code><a href="#cast">cast</a></code> them.
+<code>numberPos</code> defines a positional argument without <code><a href="#args">args</a></code>.
 </td>
 </tr>
 <tr name="string">
-<td><code><a href="#string">string</a>(key, args, fields)</code></td>
-<td>An option that takes exactly one string.</td>
+<td>
+<code><a href="#string">string</a>(key, args, fields)</code><br />
+<code><a href="#stringPos">stringPos</a>(key, fields)</code>
+</td>
+<td>
+An option that takes exactly one string.
+<code>stringPos</code> defines a positional argument without <code><a href="#args">args</a></code>.
+</td>
+</tr>
+<tr name="variadic">
+<td>
+<code><a href="#variadic">variadic</a>(key, args, fields)</code><br />
+<code><a href="#variadicPos">variadicPos</a>(key, fields)</code>
+</td>
+<td>
+An option representing an array of variable length.
+It is either terminated by the end of the argv, or by <code>--</code>.
+For arrays with known lengths, see <code><a href="#array">array</a></code>.
+<code>variadicPos</code> defines a positional argument without <code><a href="#args">args</a></code>.
+</td>
 </tr>
 </table>
 
