@@ -57,3 +57,19 @@ test('pairArgvWithArgs returns an unmatched value if an option has too few argvs
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('pairArgvWithArgs transforms unary options', () => {
+  const obj = {
+    argv: [
+      '--title', "The Hitchhiker's Guide to the Galaxy"
+    ]
+  }
+
+  const {opts} = pairArgvWithArgs(OPTS)(obj)
+
+  const exp = [
+    {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
