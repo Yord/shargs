@@ -233,3 +233,11 @@ test('pairArgvWithArgs works even if opts are undefined', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('pairArgvWithArgs passes on errors', () => {
+  const ERRS = ['foo']
+
+  const {errs} = pairArgvWithArgs()({errs: ERRS})
+
+  expect(errs).toStrictEqual(ERRS)
+})
