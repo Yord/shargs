@@ -70,3 +70,15 @@ test('addPositionalArguments works with variadic pos args that eat up all values
 
   expect(opts3).toStrictEqual(exp)
 })
+
+test('addPositionalArguments works if obj is empty', () => {
+  const opts = [{key: 'pos1', types: ['number'], args: null}]
+
+  const obj = {}
+
+  const {opts: opts2} = addPositionalArguments(opts)(obj)
+
+  const exp = []
+
+  expect(opts2).toStrictEqual(exp)
+})
