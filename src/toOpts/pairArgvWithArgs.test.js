@@ -167,3 +167,15 @@ test('pairArgvWithArgs works with commands that have no argv', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('pairArgvWithArgs transforms empty argv into empty opts', () => {
+  const obj = {
+    argv: []
+  }
+
+  const {opts} = pairArgvWithArgs(OPTS)(obj)
+
+  const exp = []
+
+  expect(opts).toStrictEqual(exp)
+})
