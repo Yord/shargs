@@ -151,3 +151,19 @@ test('pairArgvWithArgs transforms command opts in the middle of the line with do
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('pairArgvWithArgs works with commands that have no argv', () => {
+  const obj = {
+    argv: [
+      '-h'
+    ]
+  }
+
+  const {opts} = pairArgvWithArgs(OPTS)(obj)
+
+  const exp = [
+    {key: 'help', types: null, args: ['-h', '--help'], values: []}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
