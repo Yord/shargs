@@ -14,7 +14,7 @@ module.exports = (opts = []) => ({errs = [], opts: opts2 = []} = {}) => {
     if (isRest(opt) && posArgs.length > at) {
       const posArg = posArgs[at]
 
-      if (posArg.variadic === true) {
+      if (posArg.types === null) {
         variadicValues = variadicValues.concat(opt.values)
       } else {
         at++
@@ -25,7 +25,7 @@ module.exports = (opts = []) => ({errs = [], opts: opts2 = []} = {}) => {
     }
   }
 
-  if (variadicValues.length > 0 && posArgs.length > at && posArgs[at].variadic === true) {
+  if (variadicValues.length > 0 && posArgs.length > at && posArgs[at].types === null) {
     const posArg = posArgs[at]
     const types = Array.from({length: variadicValues.length}, () => 'string')
 
