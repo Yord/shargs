@@ -328,7 +328,7 @@ Shargs gives you a simple DSL for defining command-line options:
 const {command, flag, number} = require('shargs-opts')
 
 const opts = [
-  command('ask', ['ask'], {desc: 'Just ask.', opts: askOpts}),
+  command(askOpts)('ask', ['ask'], {desc: 'Just ask.'}),
   number('answer', ['-a', '--answer'], {desc: 'The (default) answer.', only: [42]}),
   flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
 ]
@@ -1381,7 +1381,7 @@ const opts = [
   string('title', ['--title'], {values: ['Hitchhiker Guide']}),
   numberBool('numBool', ['--nb'], {values: ['23', 'true']}),
   number('answer', ['-a', '--answer'], {values: ['42']}),
-  command('help', ['-h', '--help'], {values: ['--foo', 'bar']}),
+  command([])('help', ['-h', '--help'], {values: ['--foo', 'bar']}),
   bool('verbose', ['--verbose'], {values: ['false']}),
   flag('version', ['--version'], {
     values: {type: 'flag', count: 1}
@@ -1399,7 +1399,7 @@ Result:
     string('title', ['--title'], {values: ['Hitchhiker Guide']}),
     numberBool('numBool', ['--nb'], {values: [23, true]}),
     number('answer', ['-a', '--answer'], {values: [42]}),
-    command('help', ['-h', '--help'], {values: ['--foo', 'bar']}),
+    command([])('help', ['-h', '--help'], {values: ['--foo', 'bar']}),
     bool('verbose', ['--verbose'], {values: [false]}),
     flag('version', ['--version'], {
       values: {type: 'flag', count: 1}
@@ -1430,7 +1430,7 @@ const {commandsAsArrays} = require('shargs-parser')
 const {array, command} = require('shargs-opts')
 
 const opts = [
-  command('heroes', ['-h'], {
+  command([])('heroes', ['-h'], {
     array: true,
     values: ['Charles', 'Logan']
   })
@@ -2718,7 +2718,7 @@ const style = {
 
 const opts = [
   number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  command([])('help', ['-h', '--help'], {desc: 'Prints help'}),
   flag('version', ['--version'], {desc: 'Prints version'})
 ]
 
@@ -2758,7 +2758,7 @@ const style = {
 
 const opts = [
   number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  command([])('help', ['-h', '--help'], {desc: 'Prints help'}),
   flag('version', ['--version'], {desc: 'Prints version'})
 ]
 
@@ -2798,7 +2798,7 @@ const style = {
 
 const opts = [
   number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  command([])('help', ['-h', '--help'], {desc: 'Prints help'}),
   flag('version', ['--version'], {desc: 'Prints version'})
 ]
 
@@ -2836,7 +2836,7 @@ const style = {
 
 const opts = [
   number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  command([])('help', ['-h', '--help'], {desc: 'Prints help'}),
   flag('version', ['--version'], {desc: 'Prints version'})
 ]
 
@@ -2876,7 +2876,7 @@ const style = {
 
 const opts = [
   number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  command([])('help', ['-h', '--help'], {desc: 'Prints help'}),
   flag('version', ['--version'], {desc: 'Prints version'})
 ]
 
@@ -2918,7 +2918,7 @@ const style = {
 
 const opts = [
   number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command('help', ['-h', '--help'], {desc: 'Prints help'}),
+  command([])('help', ['-h', '--help'], {desc: 'Prints help'}),
   flag('version', ['--version'], {desc: 'Prints version'})
 ]
 
