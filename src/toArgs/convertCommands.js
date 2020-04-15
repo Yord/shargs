@@ -5,14 +5,14 @@ module.exports = parsers => ({errs = [], opts: OPTS = []} = {}) => {
   for (let i = 0; i < OPTS.length; i++) {
     const {key, values, types, opts} = OPTS[i]
 
-    if (Array.isArray(values) && types === null) {
+    if (Array.isArray(values) && types === null && Array.isArray(opts)) {
       const parentParser = parsers.__
       const childParser  = typeof parsers[key] === 'function' ? parsers[key] : parsers._
 
       if (typeof args[key] === 'undefined') {
         args[key] = {}
 
-        const child = childParser(opts || [])(values, [])
+        const child = childParser(opts)(values, [])
         errs2       = errs2.concat(child.errs || [])
         args[key]   = Object.assign({}, args[key], child.args)
 

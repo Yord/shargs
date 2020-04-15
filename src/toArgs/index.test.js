@@ -11,7 +11,7 @@ test('toArgs transforms opts into args', () => {
       {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]},
       {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: [23, true]},
       {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: [42]},
-      {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
+      {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar'], opts: []},
       {key: 'verbose', types: ['bool'], args: ['--verbose'], values: [false]},
       {key: 'version', types: [], args: ['--version'], values: [1]},
       {values: ['bar']}
