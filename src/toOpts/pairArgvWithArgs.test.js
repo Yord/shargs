@@ -73,3 +73,19 @@ test('pairArgvWithArgs transforms unary options', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('pairArgvWithArgs transforms command opts at the end of the line', () => {
+  const obj = {
+    argv: [
+      '-h', 'foo', '--bar'
+    ]
+  }
+
+  const {opts} = pairArgvWithArgs(OPTS)(obj)
+
+  const exp = [
+    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
