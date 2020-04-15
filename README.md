@@ -364,7 +364,7 @@ If you need to treat a provided <code>bool</code> as its <code><a href="#reverse
 <td>
 Commands are arrays of variable length.
 They are either terminated by the end of the argv array, or by <code>--</code>.
-Commands are the only type that may have <code><a href="#opts">opts</a></code> and <code><a href="#posArgs">posArgs</a></code> fields.
+Commands are the only type that may have <code><a href="#opts">opts</a></code> field.
 If you want to treat a <code>command</code> as an <code><a href="#array">array</a></code>, have a look at the <code><a href="#asArray">array</a></code> field and the <code><a href="#commandsAsArrays">commandsAsArrays</a></code> stage.
 </td>
 </tr>
@@ -518,33 +518,12 @@ It takes a non-empty array of values.
 It uses the same syntax as regular command-line options.
 </td>
 </tr>
-<tr name="posArgs">
-<td><code><a href="#posArgs">posArgs</a></code></td>
-<td>array of positional arguments</td>
-<td>
-<code>posArgs</code> is used by the <code><a href="#toArgs">toArgs</a></code> parser stage.
-It is only interpreted if the command-line option is a <code><a href="#command">command</a></code>
-(if <code><a href="#types">types</a></code> is <code>null</code>) to describe the command's positional arguments.
-A positional argument is a special kind of option with the <code><a href="#key">key</a></code>*
-<code><a href="#types">types</a></code>*,
-<code><a href="#required">required</a></code>,
-and <code><a href="#variadic">variadic</a></code> fields
-(e.g. <code>{key: 'file', types: ['number'], required: true, variadic: false}</code>).
-The <code><a href="#args">args</a></code> field must be <code>null</code> or <code>undefined</code>.
-Only the last positional argument may be <code>variadic: true</code>
-and if an argument is <code>required: true</code>, all prior arguments must be <code>required: true</code> as well.
-</td>
-</tr>
 <tr name="required">
 <td><code><a href="#required">required</a></code></td>
 <td>boolean</td>
 <td>
-<code>required</code> is used by <code><a href="#posArgs">posArgs</a></code>
-and by the <code><a href="#requireOptions">requireOptions</a></code> parser stage to demand an option is set.
-In case of <code><a href="#requireOptions">requireOptions</a></code>,
-if a required option has no <code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code> an error is reported.
-In case of <code><a href="#posArgs">posArgs</a></code>,
-if a required positional argument is not found, an error is reported.
+<code>required</code> is used by the <code><a href="#requireOptions">requireOptions</a></code> parser stage to demand an option is set.
+If a required option has no <code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code> an error is reported.
 </td>
 </tr>
 <tr name="reverse">
@@ -570,15 +549,6 @@ if a <code><a href="#bool">bool</a></code> or <code><a href="#flag">flag</a></co
 <code>values</code> is used by the <code><a href="#toOpts">toOpts</a></code> parser stage to store command-line arguments.
 <b>This field should not be set by the user.</b>
 If you need to set default values, use the <code><a href="#defaultValues">defaultValues</a></code> field, instead.
-</td>
-</tr>
-<tr name="variadic">
-<td><code><a href="#variadic">variadic</a></code></td>
-<td>boolean</td>
-<td>
-<code>variadic</code> is used in positional arguments (see <code><a href="#posArgs">posArgs</a></code>) to define,
-whether an argument takes a variable number of values.
-If <code>variadic</code> is <code>true</code>, the positional argument's <code><a href="#types">types</a></code> must be <code>null</code>.
 </td>
 </tr>
 </table>
@@ -3625,7 +3595,10 @@ The order of the command-line options plays an important role, since `toOpts` wo
 While transforming, `toOpts` encounters the following cases:
 
 1.  **A string matches no `args` value:**\
-    In this case, `toOpts` returns an unmatched value (e.g. `{values: 'foo'}` if `foo` is the string).
+    In this case, `toOpts` returns an unmatched value (e.g. `{values: 'foo'}` if `foo` is the string),
+    unless positional arguments are defined.
+    In case of positional arguments, the values go to the first positional argument.
+    If the last positional argument is variadic, it collects all remaining unmatched values.
 2.  **A string matches an `args` value of exactly one option:**\
     Here, `toOpts` checks the [`types`](#types) arity and reads a matching number of `argv`.
     If too few `argv` are available, it returns an unmatched value like in case 1.
@@ -3658,9 +3631,6 @@ by applying three different stages in order:
     The commands' [`values`](#values) fields still holds `argv` arrays
     that need to be processed by a parser.
     Thus, `toArgs` recursively calls a child parser for each command to get `args` objects.
-
-    Then, non-empty rest keys (e.g. `{_: ['/tmp']}`) are parsed for positional arguments.
-    For a more detailed description of positional arguments, see the [`posArgs`](#posArgs) options field.
 
     At this point, the `args` objects may still have non-empty rest keys (e.g. `{_: ['--help']}`).
     These unmatched arguments may have mistakenly assigned to the child command,
