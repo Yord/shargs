@@ -215,3 +215,21 @@ test('pairArgvWithArgs works even if opts are empty', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('pairArgvWithArgs works even if opts are undefined', () => {
+  const obj = {
+    argv: [
+      '-h',
+      'foo'
+    ]
+  }
+
+  const {opts} = pairArgvWithArgs()(obj)
+
+  const exp = [
+    {values: ['-h']},
+    {values: ['foo']}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
