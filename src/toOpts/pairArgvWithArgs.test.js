@@ -129,3 +129,25 @@ test('pairArgvWithArgs transforms command opts at the start of the line with dou
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('pairArgvWithArgs transforms command opts in the middle of the line with double minusses', () => {
+  const obj = {
+    argv: [
+      'foo',
+      '-h', 'foo', '--bar',
+      '--',
+      'foo'
+    ]
+  }
+
+  const {opts} = pairArgvWithArgs(OPTS)(obj)
+
+  const exp = [
+    {values: ['foo']},
+    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
+    {values: ['--']},
+    {values: ['foo']}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
