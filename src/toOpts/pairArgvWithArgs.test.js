@@ -39,3 +39,21 @@ test('pairArgvWithArgs transforms argv into opts', () => {
 
   expect(opts).toStrictEqual(exp)
 })
+
+test('pairArgvWithArgs returns an unmatched value if an option has too few argvs', () => {
+  const obj = {
+    argv: [
+      '--name'
+    ]
+  }
+
+  const testDefault = {key: 'name', types: ['string'], args: ['-n']}
+
+  const {opts} = pairArgvWithArgs([testDefault])(obj)
+
+  const exp = [
+    {values: ['--name']}
+  ]
+
+  expect(opts).toStrictEqual(exp)
+})
