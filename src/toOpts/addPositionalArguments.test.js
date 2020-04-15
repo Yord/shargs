@@ -94,3 +94,13 @@ test('addPositionalArguments works if opts is undefined', () => {
 
   expect(opts2).toStrictEqual(exp)
 })
+
+test('addPositionalArguments works if obj is undefined', () => {
+  const opts = [{key: 'pos1', types: ['number'], args: null}]
+
+  const {opts: opts2} = addPositionalArguments(opts)()
+
+  const exp = []
+
+  expect(opts2).toStrictEqual(exp)
+})
