@@ -3,6 +3,7 @@ const toOpts  = require('./index')
 const without = (keys = [], opts = []) => opts.filter(({key}) => keys.indexOf(key) === -1)
 
 const OPTS = [
+  {key: 'positional', types: ['string'], args: null},
   {key: 'title', types: ['string'], args: ['--title']},
   {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb']},
   {key: 'answer', types: ['number'], args: ['-a', '--answer']},
@@ -28,7 +29,7 @@ test('toOpts transforms argv into opts', () => {
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    {values: ['foo']},
+    {key: 'positional', types: ['string'], args: null, values: ['foo']},
     {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]},
     {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: ['23', 'true']},
     {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']},
@@ -60,7 +61,7 @@ test('toOpts returns an unmatched value if an option has too few argvs', () => {
   expect(opts).toStrictEqual(exp)
 })
 
-test('toOpts keeps unrecognized strings', () => {
+test('toOpts keeps unrecognized strings after applying positional arguments', () => {
   const obj = {
     argv: [
       'foo',
@@ -71,9 +72,9 @@ test('toOpts keeps unrecognized strings', () => {
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    {values: ['foo']},
+    {key: 'positional', types: ['string'], args: null, values: ['foo']},
     {values: ['bar']},
-    ...OPTS
+    ...OPTS.slice(1)
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -125,10 +126,10 @@ test('toOpts transforms command opts at the end of the line with double minusses
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    {values: ['foo']},
+    {key: 'positional', types: ['string'], args: null, values: ['foo']},
     {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
     {values: ['--']},
-    ...without(['help'], OPTS)
+    ...without(['help', 'positional'], OPTS)
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -148,8 +149,8 @@ test('toOpts transforms command opts at the start of the line with double minuss
   const exp = [
     {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
     {values: ['--']},
-    {values: ['foo']},
-    ...without(['help'], OPTS)
+    {key: 'positional', types: ['string'], args: null, values: ['foo']},
+    ...without(['help', 'positional'], OPTS)
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -168,11 +169,11 @@ test('toOpts transforms command opts in the middle of the line with double minus
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    {values: ['foo']},
+    {key: 'positional', types: ['string'], args: null, values: ['foo']},
     {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
     {values: ['--']},
     {values: ['foo']},
-    ...without(['help'], OPTS)
+    ...without(['help', 'positional'], OPTS)
   ]
 
   expect(opts).toStrictEqual(exp)
