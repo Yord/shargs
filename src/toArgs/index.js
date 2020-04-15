@@ -3,12 +3,12 @@ const convertCommands    = require('./convertCommands')
 const setDefaultValues   = require('./setDefaultValues')
 
 module.exports = parsers => ({errs = [], opts = []} = {}) => {
-  const {errs: errs2, args: args2} = convertNonCommands({opts})
-  const {errs: errs3, args: args3} = convertCommands(parsers)({opts})
-  const {errs: errs4, args: args4} = setDefaultValues({opts})
+  const {errs: errs2, args: args2} = convertNonCommands({errs, opts})
+  const {errs: errs3, args: args3} = convertCommands(parsers)({errs: errs2, opts})
+  const {errs: errs4, args: args4} = setDefaultValues({errs: errs3, opts})
 
   return {
-    errs: errs.concat(errs2).concat(errs3).concat(errs4),
+    errs: errs4,
     args: {
       ...args4,
       ...args3,

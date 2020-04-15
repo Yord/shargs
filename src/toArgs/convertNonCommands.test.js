@@ -6,13 +6,15 @@ test('convertNonCommands works as expected', () => {
   const question = {key: 'question', types: ['string'], args: ['-q'], values: ["What's your lastname?"]}
   const jokingly = {key: 'jokingly', types: [], args: ['-j'], defaultValue: [1]}
   const ask      = {key: 'ask', types: null, args: ['ask'], opts: [question, jokingly]}
-  const opts     = [ask, name, address]
+  const variadic = {key: 'variadic', types: null, args: null, values: ['1', '2']}
+  const opts     = [ask, name, address, variadic]
 
   const {errs, args} = convertNonCommands({opts})
 
   const expArgs = {
     _: [],
-    name: 'Logan'
+    name: 'Logan',
+    variadic: ['1', '2']
   }
 
   const expErrs = []

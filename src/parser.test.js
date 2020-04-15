@@ -580,7 +580,7 @@ test('async parser uses a custom toArgs function', async () => {
 
 test('parser uses the first option if options are defined several times 1/3', () => {
   const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
-  const help  = {key: 'help', types: null, args: ['help']}
+  const help  = {key: 'help', types: null, args: ['help'], opts: []}
 
   const opts = [
     tired,
@@ -611,7 +611,7 @@ test('parser uses the first option if options are defined several times 1/3', ()
 
 test('parser uses the first option if options are defined several times 2/3', () => {
   const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
-  const help  = {key: 'help', types: null, args: ['help']}
+  const help  = {key: 'help', types: null, args: ['help'], opts: []}
 
   const opts = [
     tired,
@@ -642,7 +642,7 @@ test('parser uses the first option if options are defined several times 2/3', ()
 
 test('parser uses the first option if options are defined several times 3/3', () => {
   const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
-  const help  = {key: 'help', types: null, args: ['help']}
+  const help  = {key: 'help', types: null, args: ['help'], opts: []}
 
   const opts = [
     tired,

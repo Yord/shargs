@@ -25,7 +25,7 @@ test('addPositionalArguments works as expected', () => {
 test('addPositionalArguments works with variadic pos args', () => {
   const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']}
   const pos1   = {key: 'pos1', types: ['number'], args: null}
-  const pos2   = {key: 'pos2', types: null, args: null, variadic: true}
+  const pos2   = {key: 'pos2', types: null, args: null}
 
   const opts = [answer, pos1, pos2]
 
@@ -50,7 +50,7 @@ test('addPositionalArguments works with variadic pos args', () => {
 test('addPositionalArguments works with variadic pos args that eat up all values if they are not defined last', () => {
   const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']}
   const pos1   = {key: 'pos1', types: ['number'], args: null}
-  const pos2   = {key: 'pos2', types: null, args: null, variadic: true}
+  const pos2   = {key: 'pos2', types: null, args: null}
 
   const opts = [answer, pos2, pos1]
 

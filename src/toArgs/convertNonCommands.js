@@ -3,10 +3,12 @@ module.exports = ({errs = [], opts: OPTS = []} = {}) => {
   let errs2 = []
 
   for (let i = 0; i < OPTS.length; i++) {
-    const {key, values, types} = OPTS[i]
+    const {key, opts, types, values} = OPTS[i]
 
-    if (Array.isArray(values) && types !== null) {
-      if (typeof types === 'undefined') {
+    if (Array.isArray(values) && (types !== null || typeof opts === 'undefined')) {
+      if (types === null && typeof opts === 'undefined') {
+        args[key] = values
+      } else if (typeof types === 'undefined') {
         if (values.length !== 1 || values[0] !== '--') args['_'] = args['_'].concat(values)
       } else if (Array.isArray(types) && types.length === 0) {
         args[key] = {
