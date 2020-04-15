@@ -423,11 +423,16 @@ A key must not be named <code>_</code>, for this is a reserved field that collec
 </tr>
 <tr name="args">
 <td><code><a href="#args">args</a></code>*</td>
-<td>array of strings</td>
+<td>array of strings or <code>null</code></td>
 <td>
 <code>args</code> is an array of strings that may be used to define a command-line option.
 E.g. <code>['--help', '-h']</code> could be used for a help <code><a href="#flag">flag</a></code>
 or <code>['-f', '--file']</code> could be used in a <code><a href="#string">string</a></code> option that parses a file path.
+If <code>args</code> is <code>null</code>, the option is a positional argument that is not specified by argument name, but by providing strings
+(e.g. in <code>cat [-benstuv] [file ...]</code>, <code>file</code> is a positional argument).
+If a positional argument's <code><a href="types">types</a></code> are <code>null</code>,
+it is a variadic positional argument that takes any number of strings
+(e.g. <code>[file ...]</code> in <code>cat</code> is variadic).
 </td>
 </tr>
 <tr name="types">
