@@ -6,6 +6,7 @@ const parsers = {__: parser(), _: parser()}
 test('convertCommands works as expected', () => {
   const opts = [
     {key: 'name', types: ['string'], args: ['--name']},
+    {key: 'variadic', types: null, args: ['--var']},
     {
       key: 'ask',
       types: null,
@@ -14,7 +15,7 @@ test('convertCommands works as expected', () => {
         {key: 'question', types: ['string'], args: ['-q']},
         {key: 'jokingly', types: [], args: ['-j'], defaultValue: [1]}
       ],
-      values: ['-q', "What's your lastname?", '--name', 'Logan']
+      values: ['-q', "What's your lastname?", '--name', 'Logan', '--var', 'foo', 'bar']
     }
   ]
 
@@ -24,9 +25,10 @@ test('convertCommands works as expected', () => {
     _: [],
     name: 'Logan',
     ask: {
-      _: ['--name', 'Logan'],
+      _: ['--name', 'Logan', '--var', 'foo', 'bar'],
       question: "What's your lastname?"
-    }
+    },
+    variadic: ['foo', 'bar']
   }
 
   const expErrs = []
