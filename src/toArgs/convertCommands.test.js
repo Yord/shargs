@@ -1,5 +1,5 @@
-const convertCommands         = require('./convertCommands')
-const parser                  = require('../parser')
+const convertCommands = require('./convertCommands')
+const parser          = require('../parser')
 
 const parsers = {__: parser(), _: parser()}
 
