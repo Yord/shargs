@@ -420,7 +420,8 @@ const boolPos = (key, fields) => ({
 <details>
 <summary>
 Commands are <code><a href="#variadic">variadic</a></code> options that have an <code><a href="#opts">opts</a></code> field.
-If you want to treat a <code>command</code> as an <code><a href="#array">array</a></code>, have a look at the <code><a href="#asArray">array</a></code> field and the <code><a href="#commandsAsArrays">commandsAsArrays</a></code> stage.
+The opts field is used by the <code><a href="#toArgs-stage">toArgs</a></code> stage to parse the <code>command</code>'s <code><a href="#values">values</a></code>.
+If you want to treat a <code>command</code> as an <code><a href="#array">array</a></code>, have a look at the <code><a href="#variadic">variadic</a></code> type.
 </summary>
 
 <br />
@@ -614,7 +615,7 @@ The following fields are available:
 <table>
 <tr>
 <th>Field</th>
-<th>Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
 <tr name="key">
@@ -653,14 +654,6 @@ a <code><a href="#string">string</a></code> (<code>['string']</code>),
 or a <code><a href="#bool">bool</a></code> (<code>['bool']</code>),
 and arrays with more than one element describe an <code><a href="#array">array</a></code> of known size
 (e.g. <code>['string','number','bool']</code> is an array of size 3).
-</td>
-</tr>
-<tr name="array">
-<td><code><a href="#asArray">array</a></code></td>
-<td>boolean</td>
-<td>
-<code>array</code> is used by the <code><a href="#commandsAsArrays">commandsAsArrays</a></code> stage
-to mark <code><a href="#command">commands</a></code> that should be transformed into fixed-length string arrays.
 </td>
 </tr>
 <tr name="contradicts">
@@ -1254,6 +1247,58 @@ Result:
 </details>
 </td>
 </tr>
+<tr name="validatePosArgs">
+<td><code><a href="#validatePosArgs">validatePosArgs</a>({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Checks, whether the positional arguments follow the rules for <code><a href="#required">required</a></code>
+and <code><a href="#variadicPos">variadicPos</a></code>:
+A <code>required</code> positional argument may never follow on a non-<code>required</code> argument.
+Also, there may only be a single <code>variadicPos</code> and it must be the last supplied positional argument.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const {validatePosArgs} = require('shargs-parser')
+const {stringPos, variadicPos} = require('shargs-opts')
+
+const opts = [
+  stringPos('pos1', {required: true, values: ['Logan']}),
+  stringPos('pos2', {required: false, values: ['Charles']}),
+  stringPos('pos3', {required: true, values: ['Xavier']}),
+  variadicPos('pos4', {values: ['Logan', 'Charles']}),
+  stringPos('pos5', {values: ['Xavier']})
+]
+
+validatePosArgs({opts})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'Invalid required positional argument',
+      msg:  'If a positional argument is required, all previous...',
+      info: {...}
+    },
+    {
+      code: 'Invalid variadic positional argument',
+      msg:  'Only the last positional argument may be variadic.',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="verifyOpts">
 <td><code><a href="#verifyOpts">verifyOpts</a>(rules)({errs, opts})</code></td>
 <td>
@@ -1580,50 +1625,6 @@ Result:
     bool('verbose', ['--verbose'], {values: [false]}),
     flag('version', ['--version'], {
       values: {type: 'flag', count: 1}
-    })
-  ]
-}
-```
-
-</details>
-</td>
-</tr>
-<tr name="commandsAsArrays">
-<td><code><a href="#commandsAsArrays">commandsAsArrays</a>({errs, opts})</code></td>
-<td>
-<details>
-<summary>
-<code>commandsAsArrays</code> transforms commands whose <code><a href="#asArray">array</a></code> field
-is <code>true</code> into string arrays.
-Remember that <code><a href="#commands">commands</a></code> may be terminated by <code>--</code>.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const {commandsAsArrays} = require('shargs-parser')
-const {array, command} = require('shargs-opts')
-
-const opts = [
-  command([])('heroes', ['-h'], {
-    array: true,
-    values: ['Charles', 'Logan']
-  })
-]
-
-commandsAsArrays(opts)
-```
-
-Result:
-
-```js
-{
-  opts: [
-    array(['string', 'string'])('heroes', ['-h'], {
-      array: true,
-      values: ['Charles', 'Logan']
     })
   ]
 }
