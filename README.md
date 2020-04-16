@@ -1247,6 +1247,58 @@ Result:
 </details>
 </td>
 </tr>
+<tr name="validatePosArgs">
+<td><code><a href="#validatePosArgs">validatePosArgs</a>({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+Checks, whether the positional arguments follow the rules for <code><a href="#required">required</a></code>
+and <code><a href="#variadicPos">variadicPos</a></code>:
+A <code>required</code> positional argument may never follow on a non-<code>required</code> argument.
+Also, there may only be a single <code>variadicPos</code> and it must be the last supplied positional argument.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const {validatePosArgs} = require('shargs-parser')
+const {stringPos, variadicPos} = require('shargs-opts')
+
+const opts = [
+  stringPos('pos1', {required: true, values: ['Logan']}),
+  stringPos('pos2', {required: false, values: ['Charles']}),
+  stringPos('pos3', {required: true, values: ['Xavier']}),
+  variadicPos('pos4', {values: ['Logan', 'Charles']}),
+  stringPos('pos5', {values: ['Xavier']})
+]
+
+validatePosArgs({opts})
+```
+
+Result:
+
+```js
+{
+  errs: [
+    {
+      code: 'Invalid required positional argument',
+      msg:  'If a positional argument is required, all previous...',
+      info: {...}
+    },
+    {
+      code: 'Invalid variadic positional argument',
+      msg:  'Only the last positional argument may be variadic.',
+      info: {...}
+    }
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="verifyOpts">
 <td><code><a href="#verifyOpts">verifyOpts</a>(rules)({errs, opts})</code></td>
 <td>
