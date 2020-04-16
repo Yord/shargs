@@ -32,8 +32,8 @@ function filter (opts) {
   return opts.filter(opt => isNoCommand(opt) && isNotRest(opt) && hasNoValues(opt))
 }
 
-function isNoCommand ({types}) {
-  return types !== null
+function isNoCommand ({opts}) {
+  return typeof opts === 'undefined'
 }
 
 function isNotRest ({types}) {

@@ -348,10 +348,33 @@ The following type functions are available:
 <code><a href="#arrayPos">arrayPos</a>(types)(key, fields)</code>
 </td>
 <td>
+<details>
+<summary>
 An array with a known length.
 For arrays with variable lengths, see <code><a href="#variadic">variadic</a></code>.
 The <code><a href="#types">types</a></code> parameter holds the entries' types (e.g. <code>['string', 'number', 'bool']</code>).
 <code>arrayPos</code> defines a positional argument without <code><a href="#args">args</a></code>.
+</summary>
+
+<br />
+
+`array` returns the following object:
+
+```js
+const array = types => (key, args, fields) => ({
+  key, types, args, ...fields
+})
+```
+
+`arrayPos` returns the following object:
+
+```js
+const array = types => (key, fields) => ({
+  key, types, args: null, ...fields
+})
+```
+
+</details>
 </td>
 </tr>
 <tr name="bool">
@@ -360,28 +383,101 @@ The <code><a href="#types">types</a></code> parameter holds the entries' types (
 <code><a href="#boolPos">boolPos</a>(key, fields)</code>
 </td>
 <td>
+<details>
+<summary>
 An explicitly defined boolean value.
 May be <code>true</code> or <code>false</code>.
 If you need more values to mean <code>true</code> (e.g. <code>yes</code>, <code>y</code>, and <code>t</code>), have a look at <code><a href="#broadenBools">broadenBools</a></code>.
 If you need to treat a provided <code>bool</code> as its <code><a href="#reverse">reverse</a></code>, see <code><a href="#reverseBools">reverseBools</a></code>.
 <code>Bools</code> are stored as strings, so you may want to <code><a href="#cast">cast</a></code> them.
 <code>boolPos</code> defines a positional argument without <code><a href="#args">args</a></code>.
+</summary>
+
+<br />
+
+`bool` returns the following object:
+
+```js
+const bool = (key, args, fields) => ({
+  key, types: ['bool'], args, ...fields
+})
+```
+
+`boolPos` returns the following object:
+
+```js
+const boolPos = (key, fields) => ({
+  key, types: ['bool'], args: null, ...fields
+})
+```
+
+</details>
 </td>
 </tr>
 <tr name="command">
 <td><code><a href="#command">command</a>(opts)(key, args, fields)</code></td>
 <td>
+<details>
+<summary>
 Commands are <code><a href="#variadic">variadic</a></code> options that have an <code><a href="#opts">opts</a></code> field.
 If you want to treat a <code>command</code> as an <code><a href="#array">array</a></code>, have a look at the <code><a href="#asArray">array</a></code> field and the <code><a href="#commandsAsArrays">commandsAsArrays</a></code> stage.
+</summary>
+
+<br />
+
+The object `command` returns depends on the number of values it contains:
+
+```js
+// if fields contains values of length 1
+const command = opts => (key, args, fields) => ({
+  key, types: ['string'], args, opts, ...fields
+})
+
+// if fields contains values of length 2
+const command = opts => (key, fields) => ({
+  key, types: ['string', 'string'], args, opts, ...fields
+})
+```
+
+`commandPos` works just like `command`:
+
+```js
+// if fields contains values of length 1
+const commandPos = opts => (key, fields) => ({
+  key, types: ['string'], args: null, opts, ...fields
+})
+
+// if fields contains values of length 2
+const commandPos = opts => (key, fields) => ({
+  key, types: ['string', 'string'], args: null, opts, ...fields
+})
+```
+
+</details>
 </td>
 </tr>
 <tr name="flag">
 <td><code><a href="#flag">flag</a>(key, args, fields)</code></td>
 <td>
+<details>
+<summary>
 A type describing a self-sufficient command-line option. Like e.g. <code>--help</code>.
 <code>flags</code> are implemented as counts (e.g. <code>{help: {type: 'flag', count: 1}}</code>) that count the number of times a flag was used.
 If you need a boolean or a number instead, see the <code><a href="#flagsAsBools">flagsAsBools</a></code> and <code><a href="#flagsAsNumbers">flagsAsNumbers</a></code> parser stages.
 If you need a <code>flag</code> to imply <code>false</code> (e.g. <code>--no-fun</code>), see <code><a href="#complement">complement</a></code>, <code><a href="#reverse">reverse</a></code> and <code><a href="#reverseFlags">reverseFlags</a></code>.
+</summary>
+
+<br />
+
+`flag` returns the following object:
+
+```js
+const flag = (key, args, fields) => ({
+  key, types: [], args, ...fields
+})
+```
+
+</details>
 </td>
 </tr>
 <tr name="number">
@@ -390,9 +486,32 @@ If you need a <code>flag</code> to imply <code>false</code> (e.g. <code>--no-fun
 <code><a href="#numberPos">numberPos</a>(key, fields)</code>
 </td>
 <td>
+<details>
+<summary>
 An option that takes exactly one number.
 <code>Numbers</code> are stored as strings, so you may want to <code><a href="#cast">cast</a></code> them.
 <code>numberPos</code> defines a positional argument without <code><a href="#args">args</a></code>.
+</summary>
+
+<br />
+
+`number` returns the following object:
+
+```js
+const number = (key, args, fields) => ({
+  key, types: ['number'], args, ...fields
+})
+```
+
+`numberPos` returns the following object:
+
+```js
+const numberPos = (key, fields) => ({
+  key, types: ['number'], args: null, ...fields
+})
+```
+
+</details>
 </td>
 </tr>
 <tr name="string">
@@ -401,8 +520,31 @@ An option that takes exactly one number.
 <code><a href="#stringPos">stringPos</a>(key, fields)</code>
 </td>
 <td>
+<details>
+<summary>
 An option that takes exactly one string.
 <code>stringPos</code> defines a positional argument without <code><a href="#args">args</a></code>.
+</summary>
+
+<br />
+
+`string` returns the following object:
+
+```js
+const string = (key, args, fields) => ({
+  key, types: ['string'], args, ...fields
+})
+```
+
+`stringPos` returns the following object:
+
+```js
+const stringPos = (key, fields) => ({
+  key, types: ['string'], args: null, ...fields
+})
+```
+
+</details>
 </td>
 </tr>
 <tr name="variadic">
@@ -411,10 +553,45 @@ An option that takes exactly one string.
 <code><a href="#variadicPos">variadicPos</a>(key, fields)</code>
 </td>
 <td>
+<details>
+<summary>
 An option representing an array of variable length.
 It is either terminated by the end of the argv, or by <code>--</code>.
 For arrays with known lengths, see <code><a href="#array">array</a></code>.
 <code>variadicPos</code> defines a positional argument without <code><a href="#args">args</a></code>.
+</summary>
+
+<br />
+
+The object `variadic` returns depends on the number of values it contains:
+
+```js
+// if fields contains values of length 1
+const variadic = (key, args, fields) => ({
+  key, types: ['string'], args, ...fields
+})
+
+// if fields contains values of length 2
+const variadic = (key, args, fields) => ({
+  key, types: ['string', 'string'], args, ...fields
+})
+```
+
+`variadicPos` works just like `variadic`:
+
+```js
+// if fields contains values of length 1
+const variadicPos = (key, fields) => ({
+  key, types: ['string'], args: null, ...fields
+})
+
+// if fields contains values of length 2
+const variadicPos = (key, fields) => ({
+  key, types: ['string', 'string'], args: null, ...fields
+})
+```
+
+</details>
 </td>
 </tr>
 </table>
