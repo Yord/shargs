@@ -1,11 +1,11 @@
 const pairArgvWithArgs = require('./pairArgvWithArgs')
 
 const OPTS = [
-  {key: 'positional', types: ['string'], args: null},
+  {key: 'positional', types: ['string']},
   {key: 'title', types: ['string'], args: ['--title']},
   {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb']},
   {key: 'answer', types: ['number'], args: ['-a', '--answer']},
-  {key: 'help', types: null, args: ['-h', '--help']},
+  {key: 'help', args: ['-h', '--help']},
   {key: 'verbose', types: ['bool'], args: ['--verbose']},
   {key: 'version', types: [], args: ['--version']}
 ]
@@ -34,7 +34,7 @@ test('pairArgvWithArgs transforms argv into opts', () => {
     {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['false']},
     {key: 'version', types: [], args: ['--version'], values: [1]},
     {values: ['bar']},
-    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']}
+    {key: 'help', args: ['-h', '--help'], values: ['foo', '--bar']}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -84,7 +84,7 @@ test('pairArgvWithArgs transforms command opts at the end of the line', () => {
   const {opts} = pairArgvWithArgs(OPTS)(obj)
 
   const exp = [
-    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']}
+    {key: 'help', args: ['-h', '--help'], values: ['foo', '--bar']}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -103,7 +103,7 @@ test('pairArgvWithArgs transforms command opts at the end of the line with doubl
 
   const exp = [
     {values: ['foo']},
-    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
+    {key: 'help', args: ['-h', '--help'], values: ['foo', '--bar']},
     {values: ['--']}
   ]
 
@@ -122,7 +122,7 @@ test('pairArgvWithArgs transforms command opts at the start of the line with dou
   const {opts} = pairArgvWithArgs(OPTS)(obj)
 
   const exp = [
-    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
+    {key: 'help', args: ['-h', '--help'], values: ['foo', '--bar']},
     {values: ['--']},
     {values: ['foo']}
   ]
@@ -144,7 +144,7 @@ test('pairArgvWithArgs transforms command opts in the middle of the line with do
 
   const exp = [
     {values: ['foo']},
-    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
+    {key: 'help', args: ['-h', '--help'], values: ['foo', '--bar']},
     {values: ['--']},
     {values: ['foo']}
   ]
@@ -162,7 +162,7 @@ test('pairArgvWithArgs works with commands that have no argv', () => {
   const {opts} = pairArgvWithArgs(OPTS)(obj)
 
   const exp = [
-    {key: 'help', types: null, args: ['-h', '--help'], values: []}
+    {key: 'help', args: ['-h', '--help'], values: []}
   ]
 
   expect(opts).toStrictEqual(exp)
