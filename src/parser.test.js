@@ -14,7 +14,7 @@ const opts = [
   {key: 'title', types: ['string'], args: ['--title']},
   {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb']},
   {key: 'answer', types: ['number'], args: ['-a', '--answer']},
-  {key: 'help', types: null, args: ['-h', '--help'], opts: [{key: 'bar', types: [], args: ['--bar']}]},
+  {key: 'help', args: ['-h', '--help'], opts: [{key: 'bar', types: [], args: ['--bar']}]},
   {key: 'verbose', types: ['bool'], args: ['--verbose']},
   {key: 'version', types: [], args: ['--version', '-V']}
 ]
@@ -580,7 +580,7 @@ test('async parser uses a custom toArgs function', async () => {
 
 test('parser uses the first option if options are defined several times 1/3', () => {
   const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
-  const help  = {key: 'help', types: null, args: ['help'], opts: []}
+  const help  = {key: 'help', args: ['help'], opts: []}
 
   const opts = [
     tired,
@@ -611,7 +611,7 @@ test('parser uses the first option if options are defined several times 1/3', ()
 
 test('parser uses the first option if options are defined several times 2/3', () => {
   const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
-  const help  = {key: 'help', types: null, args: ['help'], opts: []}
+  const help  = {key: 'help', args: ['help'], opts: []}
 
   const opts = [
     tired,
@@ -642,7 +642,7 @@ test('parser uses the first option if options are defined several times 2/3', ()
 
 test('parser uses the first option if options are defined several times 3/3', () => {
   const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
-  const help  = {key: 'help', types: null, args: ['help'], opts: []}
+  const help  = {key: 'help', args: ['help'], opts: []}
 
   const opts = [
     tired,
