@@ -22,7 +22,7 @@ module.exports = (...ARGUMENTS) => {
             for (let k = 0; k < options.length; k++) {
               const option = options[k]
               
-              const optionHasValidType = Array.isArray(option.types) || option.types === null
+              const optionHasValidType = Array.isArray(option.types) || typeof option.types === 'undefined'
               if (optionHasValidType) {
                 if (typeof args[arg] === 'undefined') args[arg] = []
                 args[arg].push(option)
@@ -39,7 +39,7 @@ module.exports = (...ARGUMENTS) => {
           for (let k = 0; k < options.length; k++) {
             const option = options[k]
 
-            const optionHasValidType = Array.isArray(option.types) || option.types === null
+            const optionHasValidType = Array.isArray(option.types) || typeof option.types === 'undefined'
             if (optionHasValidType) {
               if ((option.types || []).length === (types || []).length) {
                 args[arg].push(option)
