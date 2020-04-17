@@ -2,8 +2,8 @@ const addPositionalArguments = require('./addPositionalArguments')
 
 test('addPositionalArguments works as expected', () => {
   const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']}
-  const pos1   = {key: 'pos1', types: ['number'], args: null}
-  const pos2   = {key: 'pos2', types: ['string'], args: null}
+  const pos1   = {key: 'pos1', types: ['number']}
+  const pos2   = {key: 'pos2', types: ['string']}
 
   const opts = [answer, pos1, pos2]
 
@@ -24,8 +24,8 @@ test('addPositionalArguments works as expected', () => {
 
 test('addPositionalArguments works with variadic pos args', () => {
   const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']}
-  const pos1   = {key: 'pos1', types: ['number'], args: null}
-  const pos2   = {key: 'pos2', types: null, args: null}
+  const pos1   = {key: 'pos1', types: ['number']}
+  const pos2   = {key: 'pos2'}
 
   const opts = [answer, pos1, pos2]
 
@@ -49,8 +49,8 @@ test('addPositionalArguments works with variadic pos args', () => {
 
 test('addPositionalArguments works with variadic pos args that eat up all values if they are not defined last', () => {
   const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']}
-  const pos1   = {key: 'pos1', types: ['number'], args: null}
-  const pos2   = {key: 'pos2', types: null, args: null}
+  const pos1   = {key: 'pos1', types: ['number']}
+  const pos2   = {key: 'pos2'}
 
   const opts = [answer, pos2, pos1]
 
@@ -72,7 +72,7 @@ test('addPositionalArguments works with variadic pos args that eat up all values
 })
 
 test('addPositionalArguments works if obj is empty', () => {
-  const opts = [{key: 'pos1', types: ['number'], args: null}]
+  const opts = [{key: 'pos1', types: ['number']}]
 
   const obj = {}
 
@@ -84,7 +84,7 @@ test('addPositionalArguments works if obj is empty', () => {
 })
 
 test('addPositionalArguments works if opts is undefined', () => {
-  const opts = [{key: 'pos1', types: ['number'], args: null, values: ['42']}]
+  const opts = [{key: 'pos1', types: ['number'], values: ['42']}]
 
   const obj = {opts}
 
@@ -96,7 +96,7 @@ test('addPositionalArguments works if opts is undefined', () => {
 })
 
 test('addPositionalArguments works if obj is undefined', () => {
-  const opts = [{key: 'pos1', types: ['number'], args: null}]
+  const opts = [{key: 'pos1', types: ['number']}]
 
   const {opts: opts2} = addPositionalArguments(opts)()
 
@@ -106,7 +106,7 @@ test('addPositionalArguments works if obj is undefined', () => {
 })
 
 test('addPositionalArguments passes on errors', () => {
-  const opts = [{key: 'pos1', types: ['number'], args: null}]
+  const opts = [{key: 'pos1', types: ['number']}]
 
   const ERRS = ['foo']
 
