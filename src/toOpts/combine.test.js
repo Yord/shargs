@@ -1,6 +1,6 @@
 const {anything, array, assert, base64, constant, integer, oneof, property} = require('fast-check')
-const combine = require('./combine')
 const {invalidTypes, nonMatchingArgumentTypes, invalidOptionsListInCombine} = require('../errors')
+const combine = require('./combine')
 
 test('combine combines all options and appends options if they have the same argument', () => {
   const optionsCombined = array(option(), 2, 20).map(opts => {
@@ -76,11 +76,11 @@ test("combine fails with an error if an argument's list is null, undefined or em
   )
 })
 
-test("combine fails with an error if an argument has a types key that is not null or an array", () => {
+test("combine fails with an error if an argument has a types key that is not an array", () => {
   const optionResult = (
     array(
       anything()
-      .filter(a => a !== null && !Array.isArray(a))
+      .filter(a => typeof a !== 'undefined' && !Array.isArray(a))
       .chain(types =>
         option(undefined, false, undefined, true, types)
         .map(option => ({option, types}))
@@ -140,8 +140,8 @@ test("combine passes on errors", () => {
 })
 
 test('combine fails with an error if two options with different types lengths are grouped in the same argument', () => {
-  const optionA = {key: 'A', args: ['-a'], types: ['string'], desc: '', only: null, opts: null, values: null}
-  const optionB = {key: 'B', args: ['-a'], types: ['string', 'number'], desc: '', only: null, opts: null, values: null}
+  const optionA = {key: 'A', args: ['-a'], types: ['string']}
+  const optionB = {key: 'B', args: ['-a'], types: ['string', 'number']}
 
   const opts = [
     optionA,
@@ -162,8 +162,8 @@ test('combine fails with an error if two options with different types lengths ar
 })
 
 test('combine fails with an error if two options are grouped in the same argument and the second does not have a valid type', () => {
-  const optionA = {key: 'A', args: ['-a'], types: ['string'], desc: '', only: null, opts: null, values: null}
-  const optionB = {key: 'B', args: ['-a'], types: 42, desc: '', only: null, opts: null, values: null}
+  const optionA = {key: 'A', args: ['-a'], types: ['string']}
+  const optionB = {key: 'B', args: ['-a'], types: 42}
 
   const opts = [
     optionA,
@@ -204,8 +204,8 @@ test('combine works if args are empty', () => {
 })
 
 test('combine also takes several options at the same time', () => {
-  const optionA = {key: 'A', args: ['-a'], types: ['string'], desc: '', only: null, opts: null}
-  const optionB = {key: 'B', args: ['-a'], types: ['number'], desc: '', only: null, opts: null}
+  const optionA = {key: 'A', args: ['-a'], types: ['string']}
+  const optionB = {key: 'B', args: ['-a'], types: ['number']}
 
   const {args} = combine({
     args: {'-a': [optionA, optionB]}
@@ -219,7 +219,7 @@ test('combine also takes several options at the same time', () => {
 function option (_arg, hasArguments, _arguments, hasTypes, _types) {
   return base64().chain(arg =>
     base64().chain(key =>
-      types().map(types =>
+      oneof(constant(undefined), types()).map(types =>
         ({
           errs: [],
           args: {
@@ -234,5 +234,5 @@ function option (_arg, hasArguments, _arguments, hasTypes, _types) {
 function types () {
   const oneElem = ['string', 'number', 'bool']
   const arr = array(oneof(...oneElem.map(constant)), 2, 10)
-  return oneof(...[...oneElem.map(a => [a]), [], null].map(constant), arr)
+  return oneof(...[...oneElem.map(a => [a]), []].map(constant), arr)
 }

@@ -3,11 +3,11 @@ const toOpts  = require('./index')
 const without = (keys = [], opts = []) => opts.filter(({key}) => keys.indexOf(key) === -1)
 
 const OPTS = [
-  {key: 'positional', types: ['string'], args: null},
+  {key: 'positional', types: ['string']},
   {key: 'title', types: ['string'], args: ['--title']},
   {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb']},
   {key: 'answer', types: ['number'], args: ['-a', '--answer']},
-  {key: 'help', types: null, args: ['-h', '--help']},
+  {key: 'help', args: ['-h', '--help']},
   {key: 'verbose', types: ['bool'], args: ['--verbose']},
   {key: 'version', types: [], args: ['--version']}
 ]
@@ -29,14 +29,14 @@ test('toOpts transforms argv into opts', () => {
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    {key: 'positional', types: ['string'], args: null, values: ['foo']},
+    {key: 'positional', types: ['string'], values: ['foo']},
     {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]},
     {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: ['23', 'true']},
     {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']},
     {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['false']},
     {key: 'version', types: [], args: ['--version'], values: [1]},
     {values: ['bar']},
-    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']}
+    {key: 'help', args: ['-h', '--help'], values: ['foo', '--bar']}
   ]
 
   expect(opts).toStrictEqual(exp)
@@ -72,7 +72,7 @@ test('toOpts keeps unrecognized strings after applying positional arguments', ()
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    {key: 'positional', types: ['string'], args: null, values: ['foo']},
+    {key: 'positional', types: ['string'], values: ['foo']},
     {values: ['bar']},
     ...OPTS.slice(1)
   ]
@@ -107,7 +107,7 @@ test('toOpts transforms command opts at the end of the line', () => {
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
+    {key: 'help', args: ['-h', '--help'], values: ['foo', '--bar']},
     ...without(['help'], OPTS)
   ]
 
@@ -126,8 +126,8 @@ test('toOpts transforms command opts at the end of the line with double minusses
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    {key: 'positional', types: ['string'], args: null, values: ['foo']},
-    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
+    {key: 'positional', types: ['string'], values: ['foo']},
+    {key: 'help', args: ['-h', '--help'], values: ['foo', '--bar']},
     {values: ['--']},
     ...without(['help', 'positional'], OPTS)
   ]
@@ -147,9 +147,9 @@ test('toOpts transforms command opts at the start of the line with double minuss
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
+    {key: 'help', args: ['-h', '--help'], values: ['foo', '--bar']},
     {values: ['--']},
-    {key: 'positional', types: ['string'], args: null, values: ['foo']},
+    {key: 'positional', types: ['string'], values: ['foo']},
     ...without(['help', 'positional'], OPTS)
   ]
 
@@ -169,8 +169,8 @@ test('toOpts transforms command opts in the middle of the line with double minus
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    {key: 'positional', types: ['string'], args: null, values: ['foo']},
-    {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar']},
+    {key: 'positional', types: ['string'], values: ['foo']},
+    {key: 'help', args: ['-h', '--help'], values: ['foo', '--bar']},
     {values: ['--']},
     {values: ['foo']},
     ...without(['help', 'positional'], OPTS)
@@ -189,7 +189,7 @@ test('toOpts works with commands that have no argv', () => {
   const {opts} = toOpts(OPTS)(obj)
 
   const exp = [
-    {key: 'help', types: null, args: ['-h', '--help'], values: []},
+    {key: 'help', args: ['-h', '--help'], values: []},
     ...without(['help'], OPTS)
   ]
 

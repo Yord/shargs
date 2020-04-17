@@ -6,10 +6,9 @@ const parsers = {__: parser(), _: parser()}
 test('convertCommands works as expected', () => {
   const opts = [
     {key: 'name', types: ['string'], args: ['--name']},
-    {key: 'variadic', types: null, args: ['--var']},
+    {key: 'variadic', args: ['--var']},
     {
       key: 'ask',
-      types: null,
       args: ['ask'],
       opts: [
         {key: 'question', types: ['string'], args: ['-q']},
@@ -42,7 +41,6 @@ test('convertCommands works as expected if parent parser is not set', () => {
     {key: 'name', types: ['string'], args: ['--name']},
     {
       key: 'ask',
-      types: null,
       args: ['ask'],
       opts: [
         {key: 'question', types: ['string'], args: ['-q']},
@@ -73,10 +71,9 @@ test('convertCommands works as expected if parent parser is not set', () => {
 test('convertCommands works with command-specific parsers', () => {
   const opts = [
     {key: 'name', types: ['string'], args: ['--name']},
-    {key: 'other', types: null, args: ['other'], opts: [], values: []},
+    {key: 'other', args: ['other'], opts: [], values: []},
     {
       key: 'ask',
-      types: null,
       args: ['ask'],
       opts: [
         {key: 'question', types: ['string'], args: ['-q']},
@@ -112,8 +109,8 @@ test('convertCommands works with command-specific parsers', () => {
 
 test('convertCommands only sets a command once and does not set it again if the same command is specified several times', () => {
   const opts = [
-    {key: 'other', types: null, args: ['other'], opts: [], values: ['foo']},
-    {key: 'other', types: null, args: ['other'], opts: [], values: ['bar']}
+    {key: 'other', args: ['other'], opts: [], values: ['foo']},
+    {key: 'other', args: ['other'], opts: [], values: ['bar']}
   ]
 
   const parsers = {

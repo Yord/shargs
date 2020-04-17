@@ -11,7 +11,7 @@ test('toArgs transforms opts into args', () => {
       {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]},
       {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: [23, true]},
       {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: [42]},
-      {key: 'help', types: null, args: ['-h', '--help'], values: ['foo', '--bar'], opts: []},
+      {key: 'help', args: ['-h', '--help'], values: ['foo', '--bar'], opts: []},
       {key: 'verbose', types: ['bool'], args: ['--verbose'], values: [false]},
       {key: 'version', types: [], args: ['--version'], values: [1]},
       {values: ['bar']}
@@ -53,23 +53,6 @@ test('toArgs represents flags as counts', () => {
   const obj = {
     opts: [
       {key: 'verbose', types: [], args: ['-v'], values: [1]}
-    ]
-  }
-
-  const {args} = toArgs(discard)(obj)
-
-  const exp = {
-    _: [],
-    verbose: {type: 'flag', count: 1}
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('toArgs represents flags as counts and uses 1 if the values are empty', () => {
-  const obj = {
-    opts: [
-      {key: 'verbose', types: [], args: ['-v'], values: []}
     ]
   }
 

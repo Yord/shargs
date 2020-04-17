@@ -3,9 +3,10 @@ module.exports = parsers => ({errs = [], opts: OPTS = []} = {}) => {
   let errs2 = []
 
   for (let i = 0; i < OPTS.length; i++) {
-    const {key, values, types, opts} = OPTS[i]
+    const opt = OPTS[i]
+    const {key, values, opts} = opt
 
-    if (Array.isArray(values) && types === null && Array.isArray(opts)) {
+    if (Array.isArray(values) && isCommandOption(opt)) {
       const parentParser = parsers.__
       const childParser  = typeof parsers[key] === 'function' ? parsers[key] : parsers._
 
@@ -14,7 +15,7 @@ module.exports = parsers => ({errs = [], opts: OPTS = []} = {}) => {
 
         const child = childParser(opts)(values, [])
         errs2       = errs2.concat(child.errs || [])
-        args[key]   = Object.assign({}, args[key], child.args)
+        args[key]   = child.args
 
         if (typeof parentParser === 'function') {
           const parent = parentParser(filter(OPTS))(child.args._, [])
@@ -28,16 +29,24 @@ module.exports = parsers => ({errs = [], opts: OPTS = []} = {}) => {
   return {errs: errs.concat(errs2), args}
 }
 
+function isCommandOption ({key, args, opts, types}) {
+  return isOption({key, args}) && isVariadic({types}) && Array.isArray(opts)
+}
+
 function filter (opts) {
-  return opts.filter(opt => isNoCommand(opt) && isNotRest(opt) && hasNoValues(opt))
+  return opts.filter(opt => isVariable(opt) && !isCommandOption(opt) && hasNoValues(opt))
 }
 
-function isNoCommand ({opts}) {
-  return typeof opts === 'undefined'
+function isVariable ({key}) {
+  return typeof key !== 'undefined'
 }
 
-function isNotRest ({types}) {
-  return typeof types !== 'undefined'
+function isOption ({key, args}) {
+  return isVariable({key}) && Array.isArray(args)
+}
+
+function isVariadic ({types}) {
+  return typeof types === 'undefined'
 }
 
 function hasNoValues ({values}) {

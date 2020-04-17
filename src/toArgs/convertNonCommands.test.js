@@ -5,9 +5,10 @@ test('convertNonCommands works as expected', () => {
   const address  = {key: 'name', types: ['number', 'string'], args: ['--address'], values: [38100, 'Braunschweig']}
   const question = {key: 'question', types: ['string'], args: ['-q'], values: ["What's your lastname?"]}
   const jokingly = {key: 'jokingly', types: [], args: ['-j'], defaultValue: [1]}
-  const ask      = {key: 'ask', types: null, args: ['ask'], opts: [question, jokingly]}
-  const variadic = {key: 'variadic', types: null, args: null, values: ['1', '2']}
-  const opts     = [ask, name, address, variadic]
+  const ask      = {key: 'ask', args: ['ask'], opts: [question, jokingly]}
+  const variadic = {key: 'variadic', values: ['1', '2']}
+  const weird    = {key: 'weird', types: null, values: ['1', '2']}
+  const opts     = [ask, name, address, variadic, weird]
 
   const {errs, args} = convertNonCommands({opts})
 
