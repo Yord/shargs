@@ -45,7 +45,6 @@ test('setDefaultValues reports an error if it has the wrong format', () => {
     birthday,
     {
       key: 'ask',
-      types: null,
       args: ['ask'],
       opts: [
         {key: 'question', types: ['string'], args: ['-q']},
