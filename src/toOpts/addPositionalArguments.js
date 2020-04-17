@@ -14,7 +14,7 @@ module.exports = (opts = []) => ({errs = [], opts: opts2 = []} = {}) => {
     if (isRest(opt) && posArgs.length > at) {
       const posArg = posArgs[at]
 
-      if (posArg.types === null) {
+      if (typeof posArg.types === 'undefined') {
         variadicValues = variadicValues.concat(opt.values)
       } else {
         at++
@@ -25,7 +25,7 @@ module.exports = (opts = []) => ({errs = [], opts: opts2 = []} = {}) => {
     }
   }
 
-  if (variadicValues.length > 0 && posArgs.length > at && posArgs[at].types === null) {
+  if (variadicValues.length > 0 && posArgs.length > at && typeof posArgs[at].types === 'undefined') {
     const posArg = posArgs[at]
     const types = Array.from({length: variadicValues.length}, () => 'string')
 
@@ -48,6 +48,6 @@ function isRest (opt) {
 
 function positionalArguments (opts) {
   return opts.filter(
-    ({key, types, args}) => typeof key === 'string' && typeof types !== 'undefined' && args === null
+    ({key, args}) => typeof key === 'string' && typeof args === 'undefined'
   )
 }
