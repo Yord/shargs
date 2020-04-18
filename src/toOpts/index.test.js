@@ -4,6 +4,7 @@ const without = (keys = [], opts = []) => opts.filter(({key}) => keys.indexOf(ke
 
 const OPTS = [
   {key: 'positional', types: ['string']},
+  {key: 'boolStringPos', types: ['bool', 'string']},
   {key: 'title', types: ['string'], args: ['--title']},
   {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb']},
   {key: 'answer', types: ['number'], args: ['-a', '--answer']},
@@ -16,6 +17,8 @@ test('toOpts transforms argv into opts', () => {
   const obj = {
     argv: [
       'foo',
+      'true',
+      'bar',
       '--title', "The Hitchhiker's Guide to the Galaxy",
       '-n', '23', 'true',
       '-a', '42',
@@ -30,6 +33,7 @@ test('toOpts transforms argv into opts', () => {
 
   const exp = [
     {key: 'positional', types: ['string'], values: ['foo']},
+    {key: 'boolStringPos', types: ['bool', 'string'], values: ['true', 'bar']},
     {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]},
     {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: ['23', 'true']},
     {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']},
