@@ -6,7 +6,7 @@ module.exports = (opts = []) => ({errs = [], opts: opts2 = []} = {}) => {
 
   let at = 0
 
-  let variadicValues = []
+  let vals = []
 
   for (let i = 0; i < opts2.length; i++) {
     const opt = opts2[i]
@@ -15,21 +15,33 @@ module.exports = (opts = []) => ({errs = [], opts: opts2 = []} = {}) => {
       const posArg = posArgs[at]
 
       if (typeof posArg.types === 'undefined') {
-        variadicValues = variadicValues.concat(opt.values)
+        vals = vals.concat(opt.values)
       } else {
-        at++
-        opts3.push({...posArg, values: opt.values})
+        if (posArg.types.length === vals.length + 1) {
+          opts3.push({...posArg, values: vals.concat(opt.values)})
+          at++
+          vals = []
+        } else {
+          vals = vals.concat(opt.values)
+        }
       }
     } else {
       opts3.push(opt)
     }
   }
 
-  if (variadicValues.length > 0 && posArgs.length > at && typeof posArgs[at].types === 'undefined') {
+  if (vals.length > 0 && posArgs.length > at && typeof posArgs[at].types === 'undefined') {
     const posArg = posArgs[at]
-    const types = Array.from({length: variadicValues.length}, () => 'string')
+    const types = Array.from({length: vals.length}, () => 'string')
 
-    opts3.push({...posArg, types, values: variadicValues})
+    opts3.push({...posArg, types, values: vals})
+    vals = []
+  }
+
+  if (vals.length > 0) {
+    for (let i = 0; i < vals.length; i++) {
+      opts3.push({values: [vals[i]]})
+    }
   }
 
   return {errs: errs.concat(errs2), opts: opts3}
