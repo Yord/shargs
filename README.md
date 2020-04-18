@@ -369,8 +369,8 @@ const array = types => (key, args, fields) => ({
 `arrayPos` returns the following object:
 
 ```js
-const array = types => (key, fields) => ({
-  key, types, args: null, ...fields
+const arrayPos = types => (key, fields) => ({
+  key, types, ...fields
 })
 ```
 
@@ -407,7 +407,7 @@ const bool = (key, args, fields) => ({
 
 ```js
 const boolPos = (key, fields) => ({
-  key, types: ['bool'], args: null, ...fields
+  key, types: ['bool'], ...fields
 })
 ```
 
@@ -445,12 +445,12 @@ const command = opts => (key, fields) => ({
 ```js
 // if fields contains values of length 1
 const commandPos = opts => (key, fields) => ({
-  key, types: ['string'], args: null, opts, ...fields
+  key, types: ['string'], opts, ...fields
 })
 
 // if fields contains values of length 2
 const commandPos = opts => (key, fields) => ({
-  key, types: ['string', 'string'], args: null, opts, ...fields
+  key, types: ['string', 'string'], opts, ...fields
 })
 ```
 
@@ -508,7 +508,7 @@ const number = (key, args, fields) => ({
 
 ```js
 const numberPos = (key, fields) => ({
-  key, types: ['number'], args: null, ...fields
+  key, types: ['number'], ...fields
 })
 ```
 
@@ -541,7 +541,7 @@ const string = (key, args, fields) => ({
 
 ```js
 const stringPos = (key, fields) => ({
-  key, types: ['string'], args: null, ...fields
+  key, types: ['string'], ...fields
 })
 ```
 
@@ -583,12 +583,12 @@ const variadic = (key, args, fields) => ({
 ```js
 // if fields contains values of length 1
 const variadicPos = (key, fields) => ({
-  key, types: ['string'], args: null, ...fields
+  key, types: ['string'], ...fields
 })
 
 // if fields contains values of length 2
 const variadicPos = (key, fields) => ({
-  key, types: ['string', 'string'], args: null, ...fields
+  key, types: ['string', 'string'], ...fields
 })
 ```
 
