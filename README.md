@@ -2740,8 +2740,8 @@ deepThought [-a|--answer] [-h|--help]
 <details>
 <summary>
 Prints several synopses:
-One for the program and one for each command.
-Each synopsis includes all options except the commands.
+One for the program and one for each <code><a href="#command">command</a></code>.
+Each <code><a href="#synopsis">synopsis</a></code> includes all options except the <code>commands</code>.
 </summary>
 
 <br />
