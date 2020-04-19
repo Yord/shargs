@@ -2691,7 +2691,7 @@ The Ultimate Question.
 <details>
 <summary>
 Prints a synopsis:
-The <code>programName</code> is printed first, followed by the command-line options' <code><a href="#args">args</a></code>.
+The program's <code>name</code> is printed first, followed by a short summary of the command-line options.
 </summary>
 
 <br />
