@@ -2731,6 +2731,64 @@ deepThought [-a|--answer] [-h|--help]
 </details>
 </td>
 </tr>
+<tr name="synopsisDeep">
+<td>
+<code name="synopsisDeepFrom"><a href="#synopsisDeep">synopsisDeep</a>(name)(opts)(style)</code><br />
+<code><a href="#synopsisDeepFrom">synopsisDeepFrom</a>(id)(name)(opts)(style)</code>
+</td>
+<td>
+<details>
+<summary>
+Prints several synopses:
+One for the program and one for each command.
+Each synopsis includes all options except the commands.
+</summary>
+
+<br />
+
+```js
+const {synopsisDeepFrom} = require('shargs-usage')
+
+const synopsisDeep = synopsisDeepFrom('cols')
+```
+
+Example:
+
+```js
+const {synopsis} = require('shargs-usage')
+const {command, flag} = require('shargs-opts')
+const {number, variadicPos} = require('shargs-opts')
+
+const askOpts = [
+  flag('help', ['-h']),
+  variadicPos('questions', {required: true})
+]
+
+const ask = command(askOpts)
+
+const opts = [
+  ask('ask', ['ask'], {required: true}),
+  number('answer', ['-a', '--answer']),
+  flag('help', ['-h', '--help'])
+]
+
+const style = {
+  line: {width: 40}
+}
+
+synopsisDeep('deepThought')(opts)(style)
+```
+
+Result:
+
+```bash
+deepThought [-a|--answer] [-h|--help]   
+deepThought ask [-h] (<questions>...)   
+```
+
+</details>
+</td>
+</tr>
 </table>
 
 #### Usage Combinators
