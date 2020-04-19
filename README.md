@@ -3730,6 +3730,48 @@ const decoratedAskDocs = layout([
 `decoratedAskDocs` adds a padding of `4` spaces to the table.
 Shargs provides the following layout decorators:
 
+<table>
+<tr>
+<th>Layout&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="pad">
+<td>
+<code><a href="#pad">pad</a>(path, spaces)(layoutFunction)(style)</code>
+</td>
+<td>
+<details>
+<summary>
+Takes an array of property names as the <code>path</code> parameter and adds padding to the style object at the <code>path</code>.
+Padding is applied by adding a number of <code>spaces</code> to <code><a href="#padStart">padStart</a></code>,
+while subtracting the same number of <code>spaces</code> from the <code><a href="#width">width</a></code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const {line, pad} = require('shargs-usage')
+
+const style = {
+  line: {width: 40}
+}
+
+pad(['line'], 4)(line('The answer is 42.'))(style)
+```
+
+Result:
+
+```js
+    The answer is 42.                   
+```
+
+</details>
+</td>
+</tr>
+</table>
+
 #### Style
 
 Usage styles are applied to [usage](#automatic-usage-documentation-generation) and [layout](#layout-functions) functions to format the generated text snippets.
