@@ -3772,6 +3772,52 @@ Result:
 </details>
 </td>
 </tr>
+<tr name="stylePath">
+<td>
+<code><a href="#stylePath">stylePath</a>(path, f)(layoutFunction)(style)</code>
+</td>
+<td>
+<details>
+<summary>
+Takes an array of property names as the <code>path</code> and a function as the <code>f</code> parameter.
+It navigates <code>style</code> according to the <code>path</code> and applies <code>f</code> to <code>path</code>'s value.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const {line, stylePath} = require('shargs-usage')
+
+const style = {
+  line: {width: 40}
+}
+
+const pad4 = obj => ({
+  ...obj,
+  padStart: (obj.padStart || 0) + 4,
+  width: obj.width - 4
+})
+
+const answer42 = line('The answer is 42.')
+
+stylePath(['line'], pad4)(
+  line('The answer is 42.')
+)(style)
+
+const exp = '    The answer is 42.                   \n'
+```
+
+Result:
+
+```js
+    The answer is 42.                   
+```
+
+</details>
+</td>
+</tr>
 </table>
 
 #### Style
