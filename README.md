@@ -2385,7 +2385,10 @@ Shargs provides the following usage functions:
 <th>Description</th>
 </tr>
 <tr name="note">
-<td><code name="noteFrom"><a href="#note">note</a>(string)(opts)(style)</code><br /><code><a href="#noteFrom">noteFrom</a>(id)(string)(opts)(style)</code></td>
+<td>
+<code name="noteFrom"><a href="#note">note</a>(string)(opts)(style)</code><br />
+<code><a href="#noteFrom">noteFrom</a>(id)(string)(opts)(style)</code>
+</td>
 <td>
 <details>
 <summary>
@@ -2429,7 +2432,10 @@ the Answer.
 </td>
 </tr>
 <tr name="notes">
-<td><code name="notesFrom"><a href="#notes">notes</a>(strings)(opts)(style)</code><br /><code><a href="#notesFrom">notesFrom</a>(id)(strings)(opts)(style)</code></td>
+<td>
+<code name="notesFrom"><a href="#notes">notes</a>(strings)(opts)(style)</code><br />
+<code><a href="#notesFrom">notesFrom</a>(id)(strings)(opts)(style)</code>
+</td>
 <td>
 <details>
 <summary>
@@ -2472,7 +2478,10 @@ The Ultimate Question.
 </td>
 </tr>
 <tr name="optsDefs">
-<td><code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>(opts)(style)</code><br /><code><a href="#optsDefsFrom">optsDefsFrom</a>(id1, id2)(opts)(style)</code></td>
+<td>
+<code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>(opts)(style)</code><br />
+<code><a href="#optsDefsFrom">optsDefsFrom</a>(id1, id2)(opts)(style)</code>
+</td>
 <td>
 <details>
 <summary>
@@ -2523,7 +2532,10 @@ Result:
 </td>
 </tr>
 <tr name="optsList">
-<td><code name="optsListFrom"><a href="#optsList">optsList</a>(opts)(style)</code><br /><code><a href="#optsListFrom">optsListFrom</a>(id)(opts)(style)</code></td>
+<td>
+<code name="optsListFrom"><a href="#optsList">optsList</a>(opts)(style)</code><br />
+<code><a href="#optsListFrom">optsListFrom</a>(id)(opts)(style)</code>
+</td>
 <td>
 <details>
 <summary>
@@ -2574,7 +2586,10 @@ Result:
 </td>
 </tr>
 <tr name="space">
-<td><code name="spaceFrom"><a href="#space">space</a>(opts)(style)</code><br /><code><a href="#spaceFrom">spaceFrom</a>(id)(opts)(style)</code></td>
+<td>
+<code name="spaceFrom"><a href="#space">space</a>(opts)(style)</code><br />
+<code><a href="#spaceFrom">spaceFrom</a>(id)(opts)(style)</code>
+</td>
 <td>
 <details>
 <summary>
@@ -2619,7 +2634,10 @@ The Ultimate Question.
 </td>
 </tr>
 <tr name="spaces">
-<td><code name="spacesFrom"><a href="#spaces">spaces</a>(length)(opts)(style)</code><br /><code><a href="#spacesFrom">spacesFrom</a>(id)(length)(opts)(style)</code></td>
+<td>
+<code name="spacesFrom"><a href="#spaces">spaces</a>(length)(opts)(style)</code><br />
+<code><a href="#spacesFrom">spacesFrom</a>(id)(length)(opts)(style)</code>
+</td>
 <td>
 <details>
 <summary>
@@ -2665,7 +2683,10 @@ The Ultimate Question.
 </td>
 </tr>
 <tr name="synopsis">
-<td><code name="synopsisFrom"><a href="#synopsis">synopsis</a>(programName)(opts)(style)</code><br /><code><a href="#synopsisFrom">synopsisFrom</a>(id)(programName)(opts)(style)</code></td>
+<td>
+<code name="synopsisFrom"><a href="#synopsis">synopsis</a>(name)(opts)(style)</code><br />
+<code><a href="#synopsisFrom">synopsisFrom</a>(id)(name)(opts)(style)</code>
+</td>
 <td>
 <details>
 <summary>
