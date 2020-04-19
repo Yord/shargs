@@ -3702,6 +3702,34 @@ Prints the help.
 </tr>
 </table>
 
+#### Layout Decorators
+
+Sometimes you want to modify the style you pass to a layout function.
+Shargs helps you with layout decorators:
+
+```js
+const {br, layout, pad, table, text} = require('shargs-usage')
+
+const decoratedAskDocs = layout([
+  text('deepThought ask (-q|--question) [-h|--help]'),
+  br,
+  pad(['cols', 0], 4)(
+    table([
+      ['-q, --question=<string>', 'A question. [required]'],
+      ['-h, --help', 'Print this help message and exit.']
+    ]),
+  )
+  br,
+  text(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+]
+```
+
+`decoratedAskDocs` adds a padding of `4` spaces to the table.
+Shargs provides the following layout decorators:
+
 #### Style
 
 Usage styles are applied to [usage](#automatic-usage-documentation-generation) and [layout](#layout-functions) functions to format the generated text snippets.
