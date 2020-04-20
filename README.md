@@ -2385,7 +2385,10 @@ Shargs provides the following usage functions:
 <th>Description</th>
 </tr>
 <tr name="note">
-<td><code name="noteFrom"><a href="#note">note</a>(string)(opts)(style)</code><br /><code><a href="#noteFrom">noteFrom</a>(id)(string)(opts)(style)</code></td>
+<td>
+<code name="noteFrom"><a href="#note">note</a>(string)(opts)(style)</code><br />
+<code><a href="#noteFrom">noteFrom</a>(id)(string)(opts)(style)</code>
+</td>
 <td>
 <details>
 <summary>
@@ -2429,7 +2432,10 @@ the Answer.
 </td>
 </tr>
 <tr name="notes">
-<td><code name="notesFrom"><a href="#notes">notes</a>(strings)(opts)(style)</code><br /><code><a href="#notesFrom">notesFrom</a>(id)(strings)(opts)(style)</code></td>
+<td>
+<code name="notesFrom"><a href="#notes">notes</a>(strings)(opts)(style)</code><br />
+<code><a href="#notesFrom">notesFrom</a>(id)(strings)(opts)(style)</code>
+</td>
 <td>
 <details>
 <summary>
@@ -2472,7 +2478,10 @@ The Ultimate Question.
 </td>
 </tr>
 <tr name="optsDefs">
-<td><code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>(opts)(style)</code><br /><code><a href="#optsDefsFrom">optsDefsFrom</a>(id1, id2)(opts)(style)</code></td>
+<td>
+<code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>(opts)(style)</code><br />
+<code><a href="#optsDefsFrom">optsDefsFrom</a>(id1, id2)(opts)(style)</code>
+</td>
 <td>
 <details>
 <summary>
@@ -2522,8 +2531,81 @@ Result:
 </details>
 </td>
 </tr>
+<tr name="optsDefsDeep">
+<td>
+<code name="optsDefsDeepFrom"><a href="#optsDefsDeep">optsDefsDeep</a>(opts)(style)</code><br />
+<code><a href="#optsDefsDeepFrom">optsDefsDeepFrom</a>(id)(opts)(style)</code>
+</td>
+<td>
+<details>
+<summary>
+Prints several <code><a href="#optsDefs">optsDefs</a></code>:
+One for the program and one for each <code><a href="#command">command</a></code>.
+Each <code><a href="#optsDefs">optsDefs</a></code> includes all options except the <code>commands</code>
+and are indented with four spaces.
+</summary>
+
+<br />
+
+```js
+const {optsDefsDeepFrom} = require('shargs-usage')
+
+const optsDefsDeep = optsDefsDeepFrom('cols')
+```
+
+Example:
+
+```js
+const {optsDefsDeep} = require('shargs-parser')
+const {command, flag} = require('shargs-opts')
+const {number, variadicPos} = require('shargs-opts')
+
+const required = true
+
+const askOpts = [
+  flag('help', ['-h'], {desc: 'Show the usage docs.'}),
+  variadicPos('questions', {required, desc: 'Questions.'})
+]
+
+const ask = command(askOpts)
+
+const opts = [
+  ask('ask', ['ask'], {desc: 'Ask questions.', required}),
+  number('answer', ['-a', '--ans'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Usage docs.'})
+]
+
+const style = {
+  line: {width: 30},
+  desc: {padStart: 4, width: 26}
+}
+
+optsDefsDeep(opts)(style)
+```
+
+Result:
+
+```bash
+-a, --ans=<number>            
+    The answer.               
+-h, --help                    
+    Show the usage docs.      
+ask [required]                
+    Ask questions.            
+    -h                        
+        Usage docs.           
+    <questions>... [required] 
+        Questions.            
+```
+
+</details>
+</td>
+</tr>
 <tr name="optsList">
-<td><code name="optsListFrom"><a href="#optsList">optsList</a>(opts)(style)</code><br /><code><a href="#optsListFrom">optsListFrom</a>(id)(opts)(style)</code></td>
+<td>
+<code name="optsListFrom"><a href="#optsList">optsList</a>(opts)(style)</code><br />
+<code><a href="#optsListFrom">optsListFrom</a>(id)(opts)(style)</code>
+</td>
 <td>
 <details>
 <summary>
@@ -2573,8 +2655,75 @@ Result:
 </details>
 </td>
 </tr>
+<tr name="optsListDeep">
+<td>
+<code name="optsListDeepFrom"><a href="#optsListDeep">optsListDeep</a>(opts)(style)</code><br />
+<code><a href="#optsListDeepFrom">optsListDeepFrom</a>(id)(opts)(style)</code>
+</td>
+<td>
+<details>
+<summary>
+Prints several <code><a href="#optsList">optsList</a></code>s:
+One for the program and one for each <code><a href="#command">command</a></code>.
+Each <code><a href="#optsList">optsList</a></code> includes all options except the <code>commands</code>
+and are indented with four spaces.
+</summary>
+
+<br />
+
+```js
+const {optsListDeepFrom} = require('shargs-usage')
+
+const optsListDeep = optsListDeepFrom('cols')
+```
+
+Example:
+
+```js
+const {optsListDeep} = require('shargs-parser')
+const {command, flag} = require('shargs-usage')
+const {number, variadicPos} = require('shargs-usage')
+
+const required = true
+
+const askOpts = [
+  flag('help', ['-h'], {desc: 'Show the usage docs.'}),
+  variadicPos('questions', {required, desc: 'Questions.'})
+]
+
+const ask = command(askOpts)
+
+const opts = [
+  ask('ask', ['ask'], {desc: 'Ask questions.', required}),
+  number('answer', ['-a', '--ans'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Usage docs.'})
+]
+
+const style = {
+  cols: [{width: 20}, {width: 25}]
+}
+
+optsListDeep(opts)(style)
+```
+
+Result:
+
+```bash
+-a, --ans=<number>  The answer.              
+-h, --help          Usage docs.              
+ask                 Ask questions. [required]
+    -h              Show the usage docs.     
+    <questions>...  Questions. [required]    
+```
+
+</details>
+</td>
+</tr>
 <tr name="space">
-<td><code name="spaceFrom"><a href="#space">space</a>(opts)(style)</code><br /><code><a href="#spaceFrom">spaceFrom</a>(id)(opts)(style)</code></td>
+<td>
+<code name="spaceFrom"><a href="#space">space</a>(opts)(style)</code><br />
+<code><a href="#spaceFrom">spaceFrom</a>(id)(opts)(style)</code>
+</td>
 <td>
 <details>
 <summary>
@@ -2619,7 +2768,10 @@ The Ultimate Question.
 </td>
 </tr>
 <tr name="spaces">
-<td><code name="spacesFrom"><a href="#spaces">spaces</a>(length)(opts)(style)</code><br /><code><a href="#spacesFrom">spacesFrom</a>(id)(length)(opts)(style)</code></td>
+<td>
+<code name="spacesFrom"><a href="#spaces">spaces</a>(length)(opts)(style)</code><br />
+<code><a href="#spacesFrom">spacesFrom</a>(id)(length)(opts)(style)</code>
+</td>
 <td>
 <details>
 <summary>
@@ -2665,12 +2817,15 @@ The Ultimate Question.
 </td>
 </tr>
 <tr name="synopsis">
-<td><code name="synopsisFrom"><a href="#synopsis">synopsis</a>(programName)(opts)(style)</code><br /><code><a href="#synopsisFrom">synopsisFrom</a>(id)(programName)(opts)(style)</code></td>
+<td>
+<code name="synopsisFrom"><a href="#synopsis">synopsis</a>(name)(opts)(style)</code><br />
+<code><a href="#synopsisFrom">synopsisFrom</a>(id)(name)(opts)(style)</code>
+</td>
 <td>
 <details>
 <summary>
 Prints a synopsis:
-The <code>programName</code> is printed first, followed by the command-line options' <code><a href="#args">args</a></code>.
+The program's <code>name</code> is printed first, followed by a short summary of the command-line options.
 </summary>
 
 <br />
@@ -2705,6 +2860,64 @@ Result:
 ```bash
 deepThought [-a|--answer] [-h|--help]   
             [--version]                 
+```
+
+</details>
+</td>
+</tr>
+<tr name="synopsisDeep">
+<td>
+<code name="synopsisDeepFrom"><a href="#synopsisDeep">synopsisDeep</a>(name)(opts)(style)</code><br />
+<code><a href="#synopsisDeepFrom">synopsisDeepFrom</a>(id)(name)(opts)(style)</code>
+</td>
+<td>
+<details>
+<summary>
+Prints several synopses:
+One for the program and one for each <code><a href="#command">command</a></code>.
+Each <code><a href="#synopsis">synopsis</a></code> includes all options except the <code>commands</code>.
+</summary>
+
+<br />
+
+```js
+const {synopsisDeepFrom} = require('shargs-usage')
+
+const synopsisDeep = synopsisDeepFrom('cols')
+```
+
+Example:
+
+```js
+const {synopsis} = require('shargs-usage')
+const {command, flag} = require('shargs-opts')
+const {number, variadicPos} = require('shargs-opts')
+
+const askOpts = [
+  flag('help', ['-h']),
+  variadicPos('questions', {required: true})
+]
+
+const ask = command(askOpts)
+
+const opts = [
+  ask('ask', ['ask'], {required: true}),
+  number('answer', ['-a', '--answer']),
+  flag('help', ['-h', '--help'])
+]
+
+const style = {
+  line: {width: 40}
+}
+
+synopsisDeep('deepThought')(opts)(style)
+```
+
+Result:
+
+```bash
+deepThought [-a|--answer] [-h|--help]   
+deepThought ask [-h] (<questions>...)   
 ```
 
 </details>
@@ -3695,6 +3908,124 @@ Result 2:
 ```bash
 -h, --help                              
 Prints the help.                        
+```
+
+</details>
+</td>
+</tr>
+</table>
+
+#### Layout Decorators
+
+Sometimes you want to modify the style you pass to a layout function.
+Shargs helps you with layout decorators:
+
+```js
+const {br, layout, pad, table, text} = require('shargs-usage')
+
+const decoratedAskDocs = layout([
+  text('deepThought ask (-q|--question) [-h|--help]'),
+  br,
+  pad(['cols', 0], 4)(
+    table([
+      ['-q, --question=<string>', 'A question. [required]'],
+      ['-h, --help', 'Print this help message and exit.']
+    ]),
+  )
+  br,
+  text(
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+]
+```
+
+`decoratedAskDocs` adds a padding of `4` spaces to the table.
+Shargs provides the following layout decorators:
+
+<table>
+<tr>
+<th>Layout&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="pad">
+<td>
+<code><a href="#pad">pad</a>(path, spaces)(layoutFunction)(style)</code>
+</td>
+<td>
+<details>
+<summary>
+Takes an array of property names as the <code>path</code> parameter and adds padding to the style object at the <code>path</code>.
+Padding is applied by adding a number of <code>spaces</code> to <code><a href="#padStart">padStart</a></code>,
+while subtracting the same number of <code>spaces</code> from the <code><a href="#width">width</a></code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const {pad, table} = require('shargs-usage')
+
+const style = {
+  cols: [{width: 20}, {width: 20}]
+}
+
+pad(['cols', 0], 4)(
+  table([['--answer', '42']])
+)(style)
+```
+
+Result:
+
+```js
+    --answer        42                  
+```
+
+</details>
+</td>
+</tr>
+<tr name="stylePath">
+<td>
+<code><a href="#stylePath">stylePath</a>(path, f)(layoutFunction)(style)</code>
+</td>
+<td>
+<details>
+<summary>
+Takes an array of property names as the <code>path</code> and a function as the <code>f</code> parameter.
+It navigates <code>style</code> according to the <code>path</code> and applies <code>f</code> to <code>path</code>'s value.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const {line, stylePath} = require('shargs-usage')
+
+const style = {
+  line: {width: 40}
+}
+
+const pad4 = obj => ({
+  ...obj,
+  padStart: (obj.padStart || 0) + 4,
+  width: obj.width - 4
+})
+
+const answer42 = line('The answer is 42.')
+
+stylePath(['line'], pad4)(
+  line('The answer is 42.')
+)(style)
+
+const exp = '    The answer is 42.                   \n'
+```
+
+Result:
+
+```js
+    The answer is 42.                   
 ```
 
 </details>
