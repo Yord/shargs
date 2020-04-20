@@ -148,15 +148,15 @@ const docs = usage([
 Every command-line tool benefits from a well-formatted usage documentation.
 Shargs brings its own DSL for defining one that can easily be extended with user functions.
 The DSL is declarative, which means it describes the desired structure without concerning itself with the details.
-Try changing [`optsList`](#optsList) to [`optsDefs`](#optsDefs) later to see what that entails:
+Try changing [`optsList`](#optsList) to [`optsDef`](#optsDef) later to see what that entails:
 
 ```js
-const {note, optsDefs, space, synopsis, usage} = require('shargs-usage')
+const {note, optsDef, space, synopsis, usage} = require('shargs-usage')
 
 const docs = usage([
   synopsis('deepThought'),
   space,
-  optsDefs,
+  optsDef,
   space,
   note(
     'Deep Thought was created to come up with the Answer to ' +
@@ -2477,10 +2477,10 @@ The Ultimate Question.
 </details>
 </td>
 </tr>
-<tr name="optsDefs">
+<tr name="optsDef">
 <td>
-<code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>(opts)(style)</code><br />
-<code><a href="#optsDefsFrom">optsDefsFrom</a>(id1, id2)(opts)(style)</code>
+<code name="optsDefFrom"><a href="#optsDef">optsDef</a>(opts)(style)</code><br />
+<code><a href="#optsDefFrom">optsDefFrom</a>(id1, id2)(opts)(style)</code>
 </td>
 <td>
 <details>
@@ -2492,15 +2492,15 @@ with the command-line option <code><a href="#args">args</a></code> as title and 
 <br />
 
 ```js
-const {optsDefsFrom} = require('shargs-usage')
+const {optsDefFrom} = require('shargs-usage')
 
-const optsDefs = optsDefsFrom('line', 'desc')
+const optsDef = optsDefFrom('line', 'desc')
 ```
 
 Example:
 
 ```js
-const {optsDefs} = require('shargs-usage')
+const {optsDef} = require('shargs-usage')
 const {flag, number} = require('shargs-opts')
 
 const opts = [
@@ -2514,7 +2514,7 @@ const style = {
   desc: {padStart: 4, width: 36}
 }
 
-optsDefs(opts)(style)
+optsDef(opts)(style)
 ```
 
 Result:
@@ -2531,32 +2531,32 @@ Result:
 </details>
 </td>
 </tr>
-<tr name="optsDefsDeep">
+<tr name="optsDefs">
 <td>
-<code name="optsDefsDeepFrom"><a href="#optsDefsDeep">optsDefsDeep</a>(opts)(style)</code><br />
-<code><a href="#optsDefsDeepFrom">optsDefsDeepFrom</a>(id)(opts)(style)</code>
+<code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>(opts)(style)</code><br />
+<code><a href="#optsDefsFrom">optsDefsFrom</a>(id)(opts)(style)</code>
 </td>
 <td>
 <details>
 <summary>
-Prints several <code><a href="#optsDefs">optsDefs</a></code>:
+Prints several <code><a href="#optsDef">optsDef</a></code>s:
 One for the program and one for each <code><a href="#command">command</a></code>.
-Each <code><a href="#optsDefs">optsDefs</a></code> includes all options except the <code>commands</code>
+Each <code><a href="#optsDef">optsDef</a></code> includes all options except the <code>commands</code>
 and are indented with four spaces.
 </summary>
 
 <br />
 
 ```js
-const {optsDefsDeepFrom} = require('shargs-usage')
+const {optsDefsFrom} = require('shargs-usage')
 
-const optsDefsDeep = optsDefsDeepFrom('cols')
+const optsDefs = optsDefsFrom('cols')
 ```
 
 Example:
 
 ```js
-const {optsDefsDeep} = require('shargs-parser')
+const {optsDefs} = require('shargs-parser')
 const {command, flag} = require('shargs-opts')
 const {number, variadicPos} = require('shargs-opts')
 
@@ -2580,7 +2580,7 @@ const style = {
   desc: {padStart: 4, width: 26}
 }
 
-optsDefsDeep(opts)(style)
+optsDefs(opts)(style)
 ```
 
 Result:
@@ -3061,13 +3061,13 @@ Sometimes you want to pass only a portion of the command-line options to a usage
 Shargs has usage decorators for that:
 
 ```js
-const {note, space, synopsis, usage} = require('shargs-usage')
+const {note, optsDef, optsList, space, synopsis, usage} = require('shargs-usage')
 const {decorate, noCommands, onlyCommands, onlyFirstArg} = require('shargs-usage')
 
 const decoratedDocs = usage([
   decorate(noCommands, onlyFirstArg)(synopsis('deepThought')),
   space,
-  onlyCommands(optsDefs),
+  onlyCommands(optsDef),
   space,
   noCommands(optsList),
   space,
