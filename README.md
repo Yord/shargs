@@ -2531,6 +2531,76 @@ Result:
 </details>
 </td>
 </tr>
+<tr name="optsDefsDeep">
+<td>
+<code name="optsDefsDeepFrom"><a href="#optsDefsDeep">optsDefsDeep</a>(opts)(style)</code><br />
+<code><a href="#optsDefsDeepFrom">optsDefsDeepFrom</a>(id)(opts)(style)</code>
+</td>
+<td>
+<details>
+<summary>
+Prints several <code><a href="#optsDefs">optsDefs</a></code>:
+One for the program and one for each <code><a href="#command">command</a></code>.
+Each <code><a href="#optsDefs">optsDefs</a></code> includes all options except the <code>commands</code>
+and are indented with four spaces.
+</summary>
+
+<br />
+
+```js
+const {optsDefsDeepFrom} = require('shargs-usage')
+
+const optsDefsDeep = optsDefsDeepFrom('cols')
+```
+
+Example:
+
+```js
+const {optsDefsDeep} = require('shargs-parser')
+const {command, flag} = require('shargs-opts')
+const {number, variadicPos} = require('shargs-opts')
+
+const required = true
+
+const askOpts = [
+  flag('help', ['-h'], {desc: 'Show the usage docs.'}),
+  variadicPos('questions', {required, desc: 'Questions.'})
+]
+
+const ask = command(askOpts)
+
+const opts = [
+  ask('ask', ['ask'], {desc: 'Ask questions.', required}),
+  number('answer', ['-a', '--ans'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Usage docs.'})
+]
+
+const style = {
+  line: {width: 30},
+  desc: {padStart: 4, width: 26}
+}
+
+optsDefsDeep(opts)(style)
+```
+
+Result:
+
+```bash
+-a, --ans=<number>            
+    The answer.               
+-h, --help                    
+    Show the usage docs.      
+ask [required]                
+    Ask questions.            
+    -h                        
+        Usage docs.           
+    <questions>... [required] 
+        Questions.            
+```
+
+</details>
+</td>
+</tr>
 <tr name="optsList">
 <td>
 <code name="optsListFrom"><a href="#optsList">optsList</a>(opts)(style)</code><br />
