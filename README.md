@@ -3341,7 +3341,11 @@ Usage decorator functions can be combined with the following usage decorator com
 </tr>
 <tr name="decorate-usage">
 <td><code><a href="#decorate-usage">decorate</a>(decorators)(usageFunction)(opts)</code></td>
-<td>Combines several usage decorators to one decorator. See the example at the <a href="#usage-decorators">start of this section</a>.</td>
+<td>
+Combines several usage decorators to one decorator.
+See the example at the <a href="#usage-decorators">start of this section</a>.
+<code>decorate</code> applies its functions from right to left.
+</td>
 </tr>
 </table>
 
@@ -4046,7 +4050,11 @@ Layout decorator functions can be combined with the following layout decorator c
 </tr>
 <tr name="decorate-layout">
 <td><code><a href="#decorate-layout">decorate</a>(decorators)(layoutFunction)(style)</code></td>
-<td>Combines several layout decorators to one decorator. See the example at the <a href="#layout-decorators">start of this section</a>.</td>
+<td>
+Combines several layout decorators to one decorator.
+See the example at the <a href="#layout-decorators">start of this section</a>.
+<code>decorate</code> applies its functions from right to left.
+</td>
 </tr>
 </table>
 
