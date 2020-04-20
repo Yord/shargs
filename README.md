@@ -2816,6 +2816,64 @@ The Ultimate Question.
 </details>
 </td>
 </tr>
+<tr name="synopses">
+<td>
+<code name="synopsesFrom"><a href="#synopses">synopses</a>(name)(opts)(style)</code><br />
+<code><a href="#synopsesFrom">synopsesFrom</a>(id)(name)(opts)(style)</code>
+</td>
+<td>
+<details>
+<summary>
+Prints several <code><a href="#synopsis">synopsis</a></code> usage functions:
+One for the program and one for each <code><a href="#command">command</a></code>.
+Each <code>synopsis</code> includes all options except the <code>commands</code>.
+</summary>
+
+<br />
+
+```js
+const {synopsesFrom} = require('shargs-usage')
+
+const synopses = synopsesFrom('cols')
+```
+
+Example:
+
+```js
+const {synopsis} = require('shargs-usage')
+const {command, flag} = require('shargs-opts')
+const {number, variadicPos} = require('shargs-opts')
+
+const askOpts = [
+  flag('help', ['-h']),
+  variadicPos('questions', {required: true})
+]
+
+const ask = command(askOpts)
+
+const opts = [
+  ask('ask', ['ask'], {required: true}),
+  number('answer', ['-a', '--answer']),
+  flag('help', ['-h', '--help'])
+]
+
+const style = {
+  line: {width: 40}
+}
+
+synopses('deepThought')(opts)(style)
+```
+
+Result:
+
+```bash
+deepThought [-a|--answer] [-h|--help]   
+deepThought ask [-h] (<questions>...)   
+```
+
+</details>
+</td>
+</tr>
 <tr name="synopsis">
 <td>
 <code name="synopsisFrom"><a href="#synopsis">synopsis</a>(name)(opts)(style)</code><br />
@@ -2860,64 +2918,6 @@ Result:
 ```bash
 deepThought [-a|--answer] [-h|--help]   
             [--version]                 
-```
-
-</details>
-</td>
-</tr>
-<tr name="synopsisDeep">
-<td>
-<code name="synopsisDeepFrom"><a href="#synopsisDeep">synopsisDeep</a>(name)(opts)(style)</code><br />
-<code><a href="#synopsisDeepFrom">synopsisDeepFrom</a>(id)(name)(opts)(style)</code>
-</td>
-<td>
-<details>
-<summary>
-Prints several synopses:
-One for the program and one for each <code><a href="#command">command</a></code>.
-Each <code><a href="#synopsis">synopsis</a></code> includes all options except the <code>commands</code>.
-</summary>
-
-<br />
-
-```js
-const {synopsisDeepFrom} = require('shargs-usage')
-
-const synopsisDeep = synopsisDeepFrom('cols')
-```
-
-Example:
-
-```js
-const {synopsis} = require('shargs-usage')
-const {command, flag} = require('shargs-opts')
-const {number, variadicPos} = require('shargs-opts')
-
-const askOpts = [
-  flag('help', ['-h']),
-  variadicPos('questions', {required: true})
-]
-
-const ask = command(askOpts)
-
-const opts = [
-  ask('ask', ['ask'], {required: true}),
-  number('answer', ['-a', '--answer']),
-  flag('help', ['-h', '--help'])
-]
-
-const style = {
-  line: {width: 40}
-}
-
-synopsisDeep('deepThought')(opts)(style)
-```
-
-Result:
-
-```bash
-deepThought [-a|--answer] [-h|--help]   
-deepThought ask [-h] (<questions>...)   
 ```
 
 </details>
