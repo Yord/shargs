@@ -148,15 +148,15 @@ const docs = usage([
 Every command-line tool benefits from a well-formatted usage documentation.
 Shargs brings its own DSL for defining one that can easily be extended with user functions.
 The DSL is declarative, which means it describes the desired structure without concerning itself with the details.
-Try changing [`optsList`](#optsList) to [`optsDefs`](#optsDefs) later to see what that entails:
+Try changing [`optsList`](#optsList) to [`optsDef`](#optsDef) later to see what that entails:
 
 ```js
-const {note, optsDefs, space, synopsis, usage} = require('shargs-usage')
+const {note, optsDef, space, synopsis, usage} = require('shargs-usage')
 
 const docs = usage([
   synopsis('deepThought'),
   space,
-  optsDefs,
+  optsDef,
   space,
   note(
     'Deep Thought was created to come up with the Answer to ' +
@@ -693,6 +693,7 @@ that is used by the <a href="#automatic-usage-documentation-generation">automati
 that is used by the <a href="#automatic-usage-documentation-generation">automatic usage documentation generation</a>.
 If <code><a href="#only">only</a></code> is not set, the <code>descArg</code> is used to describe an argument.
 If <code>only</code> and <code>descArg</code> are not set, the argument's <code><a href="#types">type</a></code> is used, instead.
+If <code>descArg</code> is set to the empty string (<code>''</code>), the argument description is disabled.
 </td>
 </tr>
 <tr name="implies">
@@ -2477,10 +2478,10 @@ The Ultimate Question.
 </details>
 </td>
 </tr>
-<tr name="optsDefs">
+<tr name="optsDef">
 <td>
-<code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>(opts)(style)</code><br />
-<code><a href="#optsDefsFrom">optsDefsFrom</a>(id1, id2)(opts)(style)</code>
+<code name="optsDefFrom"><a href="#optsDef">optsDef</a>(opts)(style)</code><br />
+<code><a href="#optsDefFrom">optsDefFrom</a>(id1, id2)(opts)(style)</code>
 </td>
 <td>
 <details>
@@ -2492,15 +2493,15 @@ with the command-line option <code><a href="#args">args</a></code> as title and 
 <br />
 
 ```js
-const {optsDefsFrom} = require('shargs-usage')
+const {optsDefFrom} = require('shargs-usage')
 
-const optsDefs = optsDefsFrom('line', 'desc')
+const optsDef = optsDefFrom('line', 'desc')
 ```
 
 Example:
 
 ```js
-const {optsDefs} = require('shargs-usage')
+const {optsDef} = require('shargs-usage')
 const {flag, number} = require('shargs-opts')
 
 const opts = [
@@ -2514,7 +2515,7 @@ const style = {
   desc: {padStart: 4, width: 36}
 }
 
-optsDefs(opts)(style)
+optsDef(opts)(style)
 ```
 
 Result:
@@ -2531,32 +2532,32 @@ Result:
 </details>
 </td>
 </tr>
-<tr name="optsDefsDeep">
+<tr name="optsDefs">
 <td>
-<code name="optsDefsDeepFrom"><a href="#optsDefsDeep">optsDefsDeep</a>(opts)(style)</code><br />
-<code><a href="#optsDefsDeepFrom">optsDefsDeepFrom</a>(id)(opts)(style)</code>
+<code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>(opts)(style)</code><br />
+<code><a href="#optsDefsFrom">optsDefsFrom</a>(id)(opts)(style)</code>
 </td>
 <td>
 <details>
 <summary>
-Prints several <code><a href="#optsDefs">optsDefs</a></code>:
+Prints several <code><a href="#optsDef">optsDef</a></code>s:
 One for the program and one for each <code><a href="#command">command</a></code>.
-Each <code><a href="#optsDefs">optsDefs</a></code> includes all options except the <code>commands</code>
+Each <code><a href="#optsDef">optsDef</a></code> includes all options except the <code>commands</code>
 and are indented with four spaces.
 </summary>
 
 <br />
 
 ```js
-const {optsDefsDeepFrom} = require('shargs-usage')
+const {optsDefsFrom} = require('shargs-usage')
 
-const optsDefsDeep = optsDefsDeepFrom('cols')
+const optsDefs = optsDefsFrom('cols')
 ```
 
 Example:
 
 ```js
-const {optsDefsDeep} = require('shargs-parser')
+const {optsDefs} = require('shargs-parser')
 const {command, flag} = require('shargs-opts')
 const {number, variadicPos} = require('shargs-opts')
 
@@ -2580,7 +2581,7 @@ const style = {
   desc: {padStart: 4, width: 26}
 }
 
-optsDefsDeep(opts)(style)
+optsDefs(opts)(style)
 ```
 
 Result:
@@ -2655,10 +2656,10 @@ Result:
 </details>
 </td>
 </tr>
-<tr name="optsListDeep">
+<tr name="optsLists">
 <td>
-<code name="optsListDeepFrom"><a href="#optsListDeep">optsListDeep</a>(opts)(style)</code><br />
-<code><a href="#optsListDeepFrom">optsListDeepFrom</a>(id)(opts)(style)</code>
+<code name="optsListsFrom"><a href="#optsLists">optsLists</a>(opts)(style)</code><br />
+<code><a href="#optsListsFrom">optsListsFrom</a>(id)(opts)(style)</code>
 </td>
 <td>
 <details>
@@ -2672,15 +2673,15 @@ and are indented with four spaces.
 <br />
 
 ```js
-const {optsListDeepFrom} = require('shargs-usage')
+const {optsListsFrom} = require('shargs-usage')
 
-const optsListDeep = optsListDeepFrom('cols')
+const optsLists = optsListsFrom('cols')
 ```
 
 Example:
 
 ```js
-const {optsListDeep} = require('shargs-parser')
+const {optsLists} = require('shargs-parser')
 const {command, flag} = require('shargs-usage')
 const {number, variadicPos} = require('shargs-usage')
 
@@ -2703,7 +2704,7 @@ const style = {
   cols: [{width: 20}, {width: 25}]
 }
 
-optsListDeep(opts)(style)
+optsLists(opts)(style)
 ```
 
 Result:
@@ -2816,6 +2817,64 @@ The Ultimate Question.
 </details>
 </td>
 </tr>
+<tr name="synopses">
+<td>
+<code name="synopsesFrom"><a href="#synopses">synopses</a>(name)(opts)(style)</code><br />
+<code><a href="#synopsesFrom">synopsesFrom</a>(id)(name)(opts)(style)</code>
+</td>
+<td>
+<details>
+<summary>
+Prints several <code><a href="#synopsis">synopsis</a></code> usage functions:
+One for the program and one for each <code><a href="#command">command</a></code>.
+Each <code>synopsis</code> includes all options except the <code>commands</code>.
+</summary>
+
+<br />
+
+```js
+const {synopsesFrom} = require('shargs-usage')
+
+const synopses = synopsesFrom('cols')
+```
+
+Example:
+
+```js
+const {synopsis} = require('shargs-usage')
+const {command, flag} = require('shargs-opts')
+const {number, variadicPos} = require('shargs-opts')
+
+const askOpts = [
+  flag('help', ['-h']),
+  variadicPos('questions', {required: true})
+]
+
+const ask = command(askOpts)
+
+const opts = [
+  ask('ask', ['ask'], {required: true}),
+  number('answer', ['-a', '--answer']),
+  flag('help', ['-h', '--help'])
+]
+
+const style = {
+  line: {width: 40}
+}
+
+synopses('deepThought')(opts)(style)
+```
+
+Result:
+
+```bash
+deepThought [-a|--answer] [-h|--help]   
+deepThought ask [-h] (<questions>...)   
+```
+
+</details>
+</td>
+</tr>
 <tr name="synopsis">
 <td>
 <code name="synopsisFrom"><a href="#synopsis">synopsis</a>(name)(opts)(style)</code><br />
@@ -2860,64 +2919,6 @@ Result:
 ```bash
 deepThought [-a|--answer] [-h|--help]   
             [--version]                 
-```
-
-</details>
-</td>
-</tr>
-<tr name="synopsisDeep">
-<td>
-<code name="synopsisDeepFrom"><a href="#synopsisDeep">synopsisDeep</a>(name)(opts)(style)</code><br />
-<code><a href="#synopsisDeepFrom">synopsisDeepFrom</a>(id)(name)(opts)(style)</code>
-</td>
-<td>
-<details>
-<summary>
-Prints several synopses:
-One for the program and one for each <code><a href="#command">command</a></code>.
-Each <code><a href="#synopsis">synopsis</a></code> includes all options except the <code>commands</code>.
-</summary>
-
-<br />
-
-```js
-const {synopsisDeepFrom} = require('shargs-usage')
-
-const synopsisDeep = synopsisDeepFrom('cols')
-```
-
-Example:
-
-```js
-const {synopsis} = require('shargs-usage')
-const {command, flag} = require('shargs-opts')
-const {number, variadicPos} = require('shargs-opts')
-
-const askOpts = [
-  flag('help', ['-h']),
-  variadicPos('questions', {required: true})
-]
-
-const ask = command(askOpts)
-
-const opts = [
-  ask('ask', ['ask'], {required: true}),
-  number('answer', ['-a', '--answer']),
-  flag('help', ['-h', '--help'])
-]
-
-const style = {
-  line: {width: 40}
-}
-
-synopsisDeep('deepThought')(opts)(style)
-```
-
-Result:
-
-```bash
-deepThought [-a|--answer] [-h|--help]   
-deepThought ask [-h] (<questions>...)   
 ```
 
 </details>
@@ -3061,13 +3062,13 @@ Sometimes you want to pass only a portion of the command-line options to a usage
 Shargs has usage decorators for that:
 
 ```js
-const {note, space, synopsis, usage} = require('shargs-usage')
+const {note, optsDef, optsList, space, synopsis, usage} = require('shargs-usage')
 const {decorate, noCommands, onlyCommands, onlyFirstArg} = require('shargs-usage')
 
 const decoratedDocs = usage([
   decorate(noCommands, onlyFirstArg)(synopsis('deepThought')),
   space,
-  onlyCommands(optsDefs),
+  onlyCommands(optsDef),
   space,
   noCommands(optsList),
   space,
@@ -3338,9 +3339,13 @@ Usage decorator functions can be combined with the following usage decorator com
 <th>Usage&nbsp;Decorator&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
-<tr name="decorate">
-<td><code><a href="#decorate">decorate</a>(decorators)(usageFunction)(opts)</code></td>
-<td>Combines several usage decorators to one decorator. See the example at the <a href="#usage-decorators">start of this section</a>.</td>
+<tr name="decorate-usage">
+<td><code><a href="#decorate-usage">decorate</a>(decorators)(usageFunction)(opts)</code></td>
+<td>
+Combines several usage decorators to one decorator.
+See the example at the <a href="#usage-decorators">start of this section</a>.
+<code>decorate</code> applies its functions from right to left.
+</td>
 </tr>
 </table>
 
@@ -3921,12 +3926,15 @@ Sometimes you want to modify the style you pass to a layout function.
 Shargs helps you with layout decorators:
 
 ```js
-const {br, layout, pad, table, text} = require('shargs-usage')
+const {br, decorate, layout, pad, table, text} = require('shargs-usage')
 
 const decoratedAskDocs = layout([
   text('deepThought ask (-q|--question) [-h|--help]'),
   br,
-  pad(['cols', 0], 4)(
+  decorate(
+    pad(['cols', 0], 4),
+    pad(['cols', 1], 4)
+  )(
     table([
       ['-q, --question=<string>', 'A question. [required]'],
       ['-h, --help', 'Print this help message and exit.']
@@ -4029,6 +4037,23 @@ Result:
 ```
 
 </details>
+</td>
+</tr>
+</table>
+
+Layout decorator functions can be combined with the following layout decorator combinators:
+
+<table>
+<tr>
+<th>Layout&nbsp;Decorator&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
+</tr>
+<tr name="decorate-layout">
+<td><code><a href="#decorate-layout">decorate</a>(decorators)(layoutFunction)(style)</code></td>
+<td>
+Combines several layout decorators to one decorator.
+See the example at the <a href="#layout-decorators">start of this section</a>.
+<code>decorate</code> applies its functions from right to left.
 </td>
 </tr>
 </table>
