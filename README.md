@@ -693,6 +693,7 @@ that is used by the <a href="#automatic-usage-documentation-generation">automati
 that is used by the <a href="#automatic-usage-documentation-generation">automatic usage documentation generation</a>.
 If <code><a href="#only">only</a></code> is not set, the <code>descArg</code> is used to describe an argument.
 If <code>only</code> and <code>descArg</code> are not set, the argument's <code><a href="#types">type</a></code> is used, instead.
+If <code>descArg</code> is set to the empty string (<code>''</code>), the argument description is disabled.
 </td>
 </tr>
 <tr name="implies">
