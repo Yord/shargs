@@ -2655,10 +2655,10 @@ Result:
 </details>
 </td>
 </tr>
-<tr name="optsListDeep">
+<tr name="optsLists">
 <td>
-<code name="optsListDeepFrom"><a href="#optsListDeep">optsListDeep</a>(opts)(style)</code><br />
-<code><a href="#optsListDeepFrom">optsListDeepFrom</a>(id)(opts)(style)</code>
+<code name="optsListsFrom"><a href="#optsLists">optsLists</a>(opts)(style)</code><br />
+<code><a href="#optsListsFrom">optsListsFrom</a>(id)(opts)(style)</code>
 </td>
 <td>
 <details>
@@ -2672,15 +2672,15 @@ and are indented with four spaces.
 <br />
 
 ```js
-const {optsListDeepFrom} = require('shargs-usage')
+const {optsListsFrom} = require('shargs-usage')
 
-const optsListDeep = optsListDeepFrom('cols')
+const optsLists = optsListsFrom('cols')
 ```
 
 Example:
 
 ```js
-const {optsListDeep} = require('shargs-parser')
+const {optsLists} = require('shargs-parser')
 const {command, flag} = require('shargs-usage')
 const {number, variadicPos} = require('shargs-usage')
 
@@ -2703,7 +2703,7 @@ const style = {
   cols: [{width: 20}, {width: 25}]
 }
 
-optsListDeep(opts)(style)
+optsLists(opts)(style)
 ```
 
 Result:
