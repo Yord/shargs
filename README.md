@@ -39,7 +39,7 @@ But shargs also has general qualities:
 +   It has zero dependencies (apart from shargs modules of course).
 +   It is well documented, extensively tested, modular, and extensible.
 
-Shargs' extensibility and release of control to the developer sets it apart from <a href="#comparison-to-related-libraries">other command-line parsers</a>.
+Shargs' flexibility and adaptability sets it apart from <a href="#comparison-to-related-libraries">other command-line parsers</a>.
 
 ## Getting Started
 
