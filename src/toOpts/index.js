@@ -1,4 +1,4 @@
-const addUnusedOpts          = require('./addUnusedOpts')
+const addRestOpts            = require('./addRestOpts')
 const addPositionalArguments = require('./addPositionalArguments')
 const pairArgvWithArgs       = require('./pairArgvWithArgs')
 const pipe                   = require('../pipe')
@@ -6,5 +6,5 @@ const pipe                   = require('../pipe')
 module.exports = (opts = []) => pipe(
   pairArgvWithArgs(opts),
   addPositionalArguments(opts),
-  addUnusedOpts(opts)
+  addRestOpts(opts)
 )
