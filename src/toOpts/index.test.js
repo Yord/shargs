@@ -267,7 +267,7 @@ test('toOpts works even if opts are undefined', () => {
 })
 
 test('toOpts passes on errors', () => {
-  const ERRS = ['foo']
+  const ERRS = [{code: 'foo', msg: 'bar', info: {}}]
 
   const {errs} = toOpts()({errs: ERRS})
 
