@@ -67,7 +67,7 @@ test('async parser transforms argv to args', async () => {
 
   const stages = {}
 
-  const {args} = await parser(stages, {async: true})(opts)(argv)
+  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
 
   const exp = {
     _: ['foo', 'bar', 'foo'],
@@ -129,7 +129,7 @@ test('async parser works even if stages are undefined', async () => {
     '-h', 'foo', '--bar'
   ]
 
-  const {args} = await parser(undefined, {async: true})(opts)(argv)
+  const {args} = await parser(undefined, {mode: 'async'})(opts)(argv)
 
   const exp = {
     _: ['foo', 'bar', 'foo'],
@@ -191,7 +191,7 @@ test('async parser applies argv stages that are not promises', async () => {
     argv: [splitShortOptions]
   }
 
-  const {args} = await parser(stages, {async: true})(opts)(argv)
+  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
 
   const exp = {
     _: [],
@@ -219,7 +219,7 @@ test('async parser applies argv stages that are promises', async () => {
     argv: [promise(splitShortOptions)]
   }
 
-  const {args} = await parser(stages, {async: true})(opts)(argv)
+  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
 
   const exp = {
     _: [],
@@ -271,7 +271,7 @@ test('async parser applies opts stages that are not promises', async () => {
     opts: [cast]
   }
 
-  const {args} = await parser(stages, {async: true})(opts)(argv)
+  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
 
   const exp = {
     _: [],
@@ -298,7 +298,7 @@ test('async parser applies opts stages that are promises', async () => {
     opts: [promise(cast)]
   }
 
-  const {args} = await parser(stages, {async: true})(opts)(argv)
+  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
 
   const exp = {
     _: [],
@@ -345,7 +345,7 @@ test('async parser applies args stages that are not promises', async () => {
     args: [clearRest]
   }
 
-  const {args} = await parser(stages, {async: true})(opts)(argv)
+  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
 
   const exp = {
     _: []
@@ -369,7 +369,7 @@ test('async parser applies args stages that are promises', async () => {
     args: [promise(clearRest)]
   }
 
-  const {args} = await parser(stages, {async: true})(opts)(argv)
+  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
 
   const exp = {
     _: []
@@ -403,7 +403,7 @@ test('async parser works with empty opts', async () => {
 
   const stages = {}
 
-  const {args} = await parser(stages, {async: true})([])(argv)
+  const {args} = await parser(stages, {mode: 'async'})([])(argv)
 
   const exp = {
     _: ['foo']
@@ -437,7 +437,7 @@ test('async parser works with undefined opts', async () => {
 
   const stages = {}
 
-  const {args} = await parser(stages, {async: true})()(argv)
+  const {args} = await parser(stages, {mode: 'async'})()(argv)
 
   const exp = {
     _: ['foo']
@@ -467,7 +467,7 @@ test('async parser works with empty argv', async () => {
 
   const stages = {}
 
-  const {args} = await parser(stages, {async: true})(opts)(argv)
+  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
 
   const exp = {
     _: []
@@ -493,7 +493,7 @@ test('async parser works with undefined argv', async () => {
 
   const stages = {}
 
-  const {args} = await parser(stages, {async: true})(opts)()
+  const {args} = await parser(stages, {mode: 'async'})(opts)()
 
   const exp = {
     _: []
@@ -531,7 +531,7 @@ test('async parser uses a custom toOpts function', async () => {
     toOpts
   }
 
-  const {args} = await parser(stages, {async: true})(opts)(argv)
+  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
 
   const exp = {
     _: ['foo']
@@ -569,7 +569,7 @@ test('async parser uses a custom toArgs function', async () => {
     toArgs: toArgs()
   }
 
-  const {args} = await parser(stages, {async: true})(opts)(argv)
+  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
 
   const exp = {
     _: ['foo']

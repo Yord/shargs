@@ -3,7 +3,9 @@ const {then} = require('./then')
 const {toArgs: TO_ARGS} = require('./toArgs')
 const {toOpts: TO_OPTS} = require('./toOpts')
 
-function parser (stages = {}, {checks = {}, parsers = {}, async = false} = {}) {
+function parser (stages = {}, options = {}) {
+  const {checks = {}, parsers = {}, mode = 'sync'} = options
+
   const checksAndStages = {
     argv: [...(checks.argv || []), ...(stages.argv || [])],
     toOpts: stages.toOpts,
@@ -14,7 +16,7 @@ function parser (stages = {}, {checks = {}, parsers = {}, async = false} = {}) {
 
   const {argv, toOpts = TO_OPTS, opts, toArgs, args} = checksAndStages
 
-  return (OPTS = []) => (ARGV, ERRS) => (async === true ? then : pipe)(
+  return (OPTS = []) => (ARGV, ERRS) => (mode === 'async' ? then : pipe)(
     ...argv,
     toOpts(OPTS),
     ...opts,
