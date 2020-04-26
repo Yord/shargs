@@ -1,4 +1,4 @@
-const setDefaultValues       = require('./setDefaultValues')
+const {setDefaultValues}     = require('./setDefaultValues')
 const {invalidDefaultValues} = require('../errors')
 
 test('setDefaultValues works as expected', () => {

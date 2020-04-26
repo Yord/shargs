@@ -1,4 +1,4 @@
-const convertNonCommands = require('./convertNonCommands')
+const {convertNonCommands} = require('./convertNonCommands')
 
 test('convertNonCommands works as expected', () => {
   const name     = {key: 'name', types: ['string'], args: ['--name'], values: ['Logan']}

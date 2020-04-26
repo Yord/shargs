@@ -1,9 +1,11 @@
-const pipe    = require('./pipe')
-const then    = require('./then')
-const TO_ARGS = require('./toArgs')
-const TO_OPTS = require('./toOpts')
+const {pipe} = require('./pipe')
+const {then} = require('./then')
+const {toArgs: TO_ARGS} = require('./toArgs')
+const {toOpts: TO_OPTS} = require('./toOpts')
 
-module.exports = function parser (stages = {}, {checks = {}, parsers = {}, async = false} = {}) {
+function parser (stages = {}, options = {}) {
+  const {checks = {}, parsers = {}, mode = 'sync'} = options
+
   const checksAndStages = {
     argv: [...(checks.argv || []), ...(stages.argv || [])],
     toOpts: stages.toOpts,
@@ -14,11 +16,15 @@ module.exports = function parser (stages = {}, {checks = {}, parsers = {}, async
 
   const {argv, toOpts = TO_OPTS, opts, toArgs, args} = checksAndStages
 
-  return (OPTS = []) => (ARGV, ERRS) => (async === true ? then : pipe)(
+  return (OPTS = []) => (ARGV, ERRS) => (mode === 'async' ? then : pipe)(
     ...argv,
     toOpts(OPTS),
     ...opts,
     toArgs || TO_ARGS({_: parser(stages), ...parsers, __: parser(stages)}),
     ...args
   )({errs: ERRS, argv: ARGV})
+}
+
+module.exports = {
+  parser
 }

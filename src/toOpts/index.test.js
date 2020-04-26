@@ -1,4 +1,4 @@
-const toOpts  = require('./index')
+const {toOpts}  = require('./index')
 
 const without = (keys = [], opts = []) => opts.filter(({key}) => keys.indexOf(key) === -1)
 
@@ -267,7 +267,7 @@ test('toOpts works even if opts are undefined', () => {
 })
 
 test('toOpts passes on errors', () => {
-  const ERRS = ['foo']
+  const ERRS = [{code: 'foo', msg: 'bar', info: {}}]
 
   const {errs} = toOpts()({errs: ERRS})
 

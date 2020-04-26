@@ -1,4 +1,4 @@
-module.exports = ({errs = [], opts: OPTS = []} = {}) => {
+const convertNonCommands = ({errs = [], opts: OPTS = []} = {}) => {
   let args  = {_: []}
   let errs2 = []
 
@@ -27,6 +27,10 @@ module.exports = ({errs = [], opts: OPTS = []} = {}) => {
   }
 
   return {errs: errs.concat(errs2), args}
+}
+
+module.exports = {
+  convertNonCommands
 }
 
 function isRest ({key, values}) {

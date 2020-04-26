@@ -1,6 +1,6 @@
 {
   "name": "shargs",
-  "version": "0.20.5",
+  "version": "0.21.0",
   "description": "A highly configurable and extensible command-line arguments parser",
   "keywords": [
     "shargs",
@@ -29,6 +29,7 @@
   },
   "private": false,
   "devDependencies": {
+    "@types/jest": "25.2.1",
     "fast-check": "1.23.0",
     "jest": "25.1.0"
   }

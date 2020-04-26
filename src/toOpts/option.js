@@ -1,6 +1,6 @@
 const {illegalKeyName} = require('../errors')
 
-module.exports = (opt = {}) => {
+const option = (opt = {}) => {
   const errs = []
   const args = {}
 
@@ -22,4 +22,8 @@ module.exports = (opt = {}) => {
   }
 
   return {errs, args}
+}
+
+module.exports = {
+  option
 }

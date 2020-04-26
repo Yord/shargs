@@ -1,8 +1,7 @@
-const toArgs = require('./index')
+const {toArgs} = require('./index')
+const {parser} = require('../parser')
 
-const discard = () => () => ({
-  args: {_: []}
-})
+const discard = parser()
 
 test('toArgs transforms opts into args', () => {
   const obj = {
@@ -21,11 +20,11 @@ test('toArgs transforms opts into args', () => {
   const {args} = toArgs({_: discard, __: discard})(obj)
 
   const exp = {
-    _: ['foo', 'bar'],
+    _: ['foo', 'bar', 'foo', '--bar'],
     title: "The Hitchhiker's Guide to the Galaxy",
     numBool: [23, true],
     answer: 42,
-    help: {_: []},
+    help: {_: ['foo', '--bar']},
     verbose: false,
     version: {type: 'flag', count: 1}
   }
@@ -40,7 +39,7 @@ test('toArgs removes double minus', () => {
     ]
   }
 
-  const {args} = toArgs(discard)(obj)
+  const {args} = toArgs({_: discard, __: discard})(obj)
 
   const exp = {
     _: []
@@ -56,7 +55,7 @@ test('toArgs represents flags as counts', () => {
     ]
   }
 
-  const {args} = toArgs(discard)(obj)
+  const {args} = toArgs({_: discard, __: discard})(obj)
 
   const exp = {
     _: [],
@@ -75,7 +74,7 @@ test('toArgs counts the occurrences of flags', () => {
     ]
   }
 
-  const {args} = toArgs(discard)(obj)
+  const {args} = toArgs({_: discard, __: discard})(obj)
 
   const exp = {
     _: [],
@@ -94,7 +93,7 @@ test('toArgs counts the occurrences of flags and has a negative count if the fla
     ]
   }
 
-  const {args} = toArgs(discard)(obj)
+  const {args} = toArgs({_: discard, __: discard})(obj)
 
   const exp = {
     _: [],
@@ -107,21 +106,21 @@ test('toArgs counts the occurrences of flags and has a negative count if the fla
 test('toArgs works if opts is undefined', () => {
   const obj = {}
 
-  const {args} = toArgs(discard)(obj)
+  const {args} = toArgs({_: discard, __: discard})(obj)
 
   expect(args).toStrictEqual({_: []})
 })
 
 test('toArgs works if input is undefined', () => {
-  const {args} = toArgs(discard)()
+  const {args} = toArgs({_: discard, __: discard})()
 
   expect(args).toStrictEqual({_: []})
 })
 
 test('toArgs passes on errors', () => {
-  const ERRS = ['foo']
+  const ERRS = [{code: 'foo', msg: 'bar', info: {}}]
 
-  const {errs} = toArgs(discard)({errs: ERRS})
+  const {errs} = toArgs({_: discard, __: discard})({errs: ERRS})
 
   expect(errs).toStrictEqual(ERRS)
 })

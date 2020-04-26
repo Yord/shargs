@@ -1,4 +1,4 @@
-module.exports = parsers => ({errs = [], opts: OPTS = []} = {}) => {
+const convertCommands = parsers => ({errs = [], opts: OPTS = []} = {}) => {
   let args  = {_: []}
   let errs2 = []
 
@@ -27,6 +27,10 @@ module.exports = parsers => ({errs = [], opts: OPTS = []} = {}) => {
   }
 
   return {errs: errs.concat(errs2), args}
+}
+
+module.exports = {
+  convertCommands
 }
 
 function isCommandOption ({key, args, opts, types}) {

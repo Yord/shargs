@@ -1,7 +1,7 @@
-const combine = require('./combine')
-const option  = require('./option')
+const {combine} = require('./combine')
+const {option}  = require('./option')
 
-module.exports = (opts = []) => {
+const pairArgvWithArgs = (opts = []) => {
   const {args, errs: ERRS} = combine(...opts.map(option))
 
   return ({errs = [], argv: ARGV = []} = {}) => {
@@ -54,4 +54,8 @@ module.exports = (opts = []) => {
 
     return {errs: errs2, opts: opts2}
   }
+}
+
+module.exports = {
+  pairArgvWithArgs
 }

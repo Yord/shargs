@@ -1,4 +1,4 @@
-const addPositionalArguments = require('./addPositionalArguments')
+const {addPositionalArguments} = require('./addPositionalArguments')
 
 test('addPositionalArguments works as expected', () => {
   const answer = {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']}
