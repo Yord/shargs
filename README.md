@@ -5854,7 +5854,7 @@ like `text`, and can be used inside other `layout` functions!
 ```js
 const {layout, text} = require('shargs-usage')
 
-const style = {line: {width: 10}}
+const style = {line: [{width: 10}]}
 
 const firstSecond = layout([
   text('First.'),
