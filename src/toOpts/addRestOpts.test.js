@@ -1,4 +1,4 @@
-const addRestOpts = require('./addRestOpts')
+const {addRestOpts} = require('./addRestOpts')
 
 test('addRestOpts works as expected', () => {
   const answer   = {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: [42]}

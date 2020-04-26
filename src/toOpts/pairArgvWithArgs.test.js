@@ -1,4 +1,4 @@
-const pairArgvWithArgs = require('./pairArgvWithArgs')
+const {pairArgvWithArgs} = require('./pairArgvWithArgs')
 
 const OPTS = [
   {key: 'positional', types: ['string']},

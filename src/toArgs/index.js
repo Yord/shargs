@@ -1,8 +1,8 @@
-const convertNonCommands = require('./convertNonCommands')
-const convertCommands    = require('./convertCommands')
-const setDefaultValues   = require('./setDefaultValues')
+const {convertNonCommands} = require('./convertNonCommands')
+const {convertCommands}    = require('./convertCommands')
+const {setDefaultValues}   = require('./setDefaultValues')
 
-module.exports = parsers => ({errs = [], opts = []} = {}) => {
+const toArgs = parsers => ({errs = [], opts = []} = {}) => {
   const {errs: errs2, args: args2} = convertNonCommands({errs, opts})
   const {errs: errs3, args: args3} = convertCommands(parsers)({errs: errs2, opts})
   const {errs: errs4, args: args4} = setDefaultValues({errs: errs3, opts})
@@ -16,4 +16,8 @@ module.exports = parsers => ({errs = [], opts = []} = {}) => {
       _: [...args2._, ...args3._]
     }
   }
+}
+
+module.exports = {
+  toArgs
 }

@@ -1,5 +1,5 @@
 const {anything, array, assert, base64, property} = require('fast-check')
-const option = require('./option')
+const {option} = require('./option')
 const {illegalKeyName} = require('../errors')
 
 test('option transforms arguments DSL into options DSL', () => {

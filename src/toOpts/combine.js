@@ -1,6 +1,6 @@
 const {invalidTypes, nonMatchingArgumentTypes, invalidOptionsListInCombine} = require('../errors')
 
-module.exports = (...ARGUMENTS) => {
+const combine = (...ARGUMENTS) => {
   let errs   = []
   const args = {}
 
@@ -56,4 +56,8 @@ module.exports = (...ARGUMENTS) => {
   }
 
   return {errs, args}
+}
+
+module.exports = {
+  combine
 }

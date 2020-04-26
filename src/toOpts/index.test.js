@@ -1,4 +1,4 @@
-const toOpts  = require('./index')
+const {toOpts}  = require('./index')
 
 const without = (keys = [], opts = []) => opts.filter(({key}) => keys.indexOf(key) === -1)
 

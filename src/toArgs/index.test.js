@@ -1,4 +1,4 @@
-const toArgs = require('./index')
+const {toArgs} = require('./index')
 
 const discard = () => () => ({
   args: {_: []}

@@ -1,5 +1,5 @@
 const {anything, assert, func, property} = require('fast-check')
-const pipe = require('./pipe')
+const {pipe} = require('./pipe')
 
 test('pipe composes functions, but backwards', () => {
   const f = func(anything())

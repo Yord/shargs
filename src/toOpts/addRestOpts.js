@@ -1,4 +1,4 @@
-module.exports = (opts = []) => ({errs = [], opts: opts2 = []} = {}) => {
+const addRestOpts = (opts = []) => ({errs = [], opts: opts2 = []} = {}) => {
   const errs2 = []
   const opts3 = opts2
 
@@ -11,6 +11,10 @@ module.exports = (opts = []) => ({errs = [], opts: opts2 = []} = {}) => {
   }
 
   return {errs: errs.concat(errs2), opts: opts3}
+}
+
+module.exports = {
+  addRestOpts
 }
 
 function optsContainsOpt (opt, opts) {
