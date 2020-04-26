@@ -29,6 +29,7 @@
   },
   "private": false,
   "devDependencies": {
+    "@types/jest": "25.2.1",
     "fast-check": "1.23.0",
     "jest": "25.1.0"
   }
