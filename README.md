@@ -3111,6 +3111,49 @@ But first, let us have a closer look at how to declare a usage documentation lay
 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
+<tr name="usage-desc">
+<td>
+<code name="usage-descFrom"><a href="#usage-desc">desc</a>(opts)(style)</code><br />
+<code><a href="#usage-descFrom">descFrom</a>(id)(opts)(style)</code>
+</td>
+<td>
+<details>
+<summary>
+<code>desc</code> takes the <code><a href="#desc">desc</a></code> field from <code>opts</code>
+and formats it according to a <code><a href="#style">style</a></code>.
+If the description is too long to fit one line, it is split and spread over several lines.
+<code>desc</code> is defined as <code>descFrom('line')</code>.
+</summary>
+
+<br />
+
+Example:
+
+```bash
+Deep Thought was created to come up with
+the Answer                              
+```
+
+Code:
+
+```js
+const {desc} = require('shargs-usage')
+
+const opt = {
+  opts: [],
+  desc: 'Deep Thought was created to come up with the Answer'
+}
+
+const style = {
+  line: [{width: 40}]
+}
+
+desc(opt)(style)
+```
+
+</details>
+</td>
+</tr>
 <tr name="note">
 <td>
 <code name="noteFrom"><a href="#note">note</a>(string)(opts)(style)</code><br />
