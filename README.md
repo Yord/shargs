@@ -780,15 +780,10 @@ If you wish to write out command-line options by hand, or write your own DSLs fo
 Command-line options use the following syntax:
 
 ```js
-const rules = html => opts => (
-  typeof html.values === 'undefined' ||
-  opts.some(_ => _.key === 'format' && (typeof _.values === 'undefined' || _.values[0] === 'json'))
-)
-
 const askOpts = [
   {key: 'format', args: ['--format'], types: ['string'], only: ['json', 'xml'], defaultValues: ['json'],
    desc: 'Respond either with json or xml.'},
-  {key: 'html', args: ['--no-html'], types: [], reverse: true, rules, desc: 'Remove HTML tags.'},
+  {key: 'html', args: ['--no-html'], types: [], reverse: true, desc: 'Remove HTML tags.'},
   {key: 'help', args: ['-h', '--help'], types: [], desc: 'Print this help message and exit.'},
   {key: 'question', types: ['string'], required: true, desc: 'State your question.'}
 ]
@@ -798,7 +793,7 @@ Apart from [`key`](#key), [`args`](#args), [`types`](#types), [`opts`](#opts), a
 that you have already seen and that determine an option's type,
 command-line option objects may be given any other <code>fields</code>,
 that may be used to provide information to parser stages
-(e.g. [`only`](#only), [`rules`](#rules)),
+(e.g. [`only`](#only), [`reverse`](#reverse)),
 or to provide descriptions for usage documentation generation
 (e.g. <code><a href="#desc">desc</a></code>, <code><a href="#descArg">descArg</a></code>).
 If you wish to write your own parser stages, go ahead and define your own fields.
@@ -972,16 +967,6 @@ parser stages, that operate on
 <code><a href="#values">values</a></code> as well as <code><a href="#defaultValues">defaultValues</a></code>.
 </td>
 </tr>
-<tr name="rules">
-<td><code><a href="#rules">rules</a></code></td>
-<td>predicate</td>
-<td>
-<code>rules</code> defines a predicate (i.e. a function returning a boolean) that is used by the
-<code><a href="#verifyRules">verifyRules</a></code> parser stage to check, whether parsed <code>opts</code> are correct.
-The predicate's signature must be <code>opt => opts => true|false</code>.
-E.g. see <code>askOpts</code> or <code><a href="#verifyRules">verifyRules</a></code>.
-</td>
-</tr>
 <tr name="types">
 <td><code><a href="#types">types</a></code></td>
 <td>array of types</td>
@@ -1091,14 +1076,14 @@ but this section finally paints the whole picture:
 ```js
 const {parser} = require('shargs')
 const {cast, flagsAsBools, requireOptions, restrictToOnly} = require('shargs-parser')
-const {reverseFlags, splitShortOptions, verifyRules} = require('shargs-parser')
+const {reverseFlags, splitShortOptions} = require('shargs-parser')
 
 const checks = {
   opts: [requireOptions]
 }
 
 const askChecks = {
-  opts: [verifyRules]
+  opts: [requireOptions]
 }
 
 const stages = {
@@ -1264,7 +1249,7 @@ const checks = {
 }
 
 const askChecks = {
-  opts: [verifyRules]
+  opts: [requireOptions]
 }
 
 const stages = {
@@ -2002,63 +1987,6 @@ Result:
     {
       code: 'False opts rules',
       msg:  'Your opts rules returned false...',
-      info: {...}
-    }
-  ]
-}
-```
-
-</details>
-</td>
-</tr>
-<tr name="verifyRules">
-<td><code><a href="#verifyRules">verifyRules</a>({errs, opts})</code></td>
-<td>
-<details>
-<summary>
-<code>verifyRules</code> checks, whether each option with a <code><a href="#rules">rules</a></code> field
-adhers to the predicate defined by <code><a href="#rules">rules</a></code>.
-The <code><a href="#rules">rules</a></code> field must have the following signature:
-<code>opt => opts => true|false</code>.
-For each <code>opt</code> that returns <code>false</code>, a <code>FalseRules</code> error is reported.
-If <code><a href="#rules">rules</a></code> is not a function,
-a <code>WrongRulesType</code> error is reported.
-</summary>
-
-<br />
-
-Example:
-
-```js
-const {verifyRules} = require('shargs-parser')
-const {string} = require('shargs-opts')
-
-const rules = question => opts => (
-  question.values[0].indexOf('Universe') === -1 ||
-  opts.some(
-    _ => _.key === 'answer' && _.values && _.values[0] === '42'
-  )
-)
-
-const opts = [
-  string('question', ['-q'], {
-    rules,
-    values: ['What is Life, the Universe, and Everything?']
-  }),
-  string('answer', ['-a'])
-]
-
-verifyRules(obj)
-```
-
-Result:
-
-```js
-{
-  errs: [
-    {
-      code: 'False rules',
-      msg:  "An option's rules returned false...",
       info: {...}
     }
   ]
@@ -4990,15 +4918,10 @@ Before we go into the program, let us revisit some code snippets from earlier th
 <br />
 
 ```js
-const rules = html => opts => (
-  typeof html.values === 'undefined' ||
-  opts.some(_ => _.key === 'format' && (typeof _.values === 'undefined' || _.values[0] === 'json'))
-)
-
 const askOpts = [
   {key: 'format', args: ['--format'], types: ['string'], only: ['json', 'xml'],
    defaultValues: ['json'], desc: 'Respond either with json or xml.'},
-  {key: 'html', args: ['--no-html'], types: [], reverse: true, rules, desc: 'Remove HTML tags.'},
+  {key: 'html', args: ['--no-html'], types: [], reverse: true, desc: 'Remove HTML tags.'},
   {key: 'help', args: ['-h', '--help'], types: [], desc: 'Print this help message and exit.'},
   {key: 'question', types: ['string'], required: true, desc: 'State your question.'}
 ]
@@ -5041,14 +4964,14 @@ const opts = [
 ```js
 const {parser} = require('shargs')
 const {cast, flagsAsBools, requireOptions, restrictToOnly} = require('shargs-parser')
-const {reverseFlags, splitShortOptions, verifyRules} = require('shargs-parser')
+const {reverseFlags, splitShortOptions} = require('shargs-parser')
 
 const checks = {
   opts: [requireOptions]
 }
 
 const askChecks = {
-  opts: [verifyRules]
+  opts: [requireOptions]
 }
 
 const stages = {
