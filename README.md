@@ -866,9 +866,9 @@ that must have the same length as their <code><a href="#types">types</a></code> 
 <td>string</td>
 <td>
 <code>desc</code> defines a description for the command-line option used by the
-<code><a href="#optsList">optsList</a></code>, <code><a href="#optsLists">optsLists</a></code>,
-<code><a href="#optsDef">optsDef</a></code>, and <code><a href="#optsDefs">optsDefs</a></code> usage functions
-and their <code>*From</code> versions.
+<code><a href="#usage-desc">desc</a></code>, <code><a href="#optsList">optsList</a></code>,
+<code><a href="#optsLists">optsLists</a></code>, <code><a href="#optsDef">optsDef</a></code>,
+and <code><a href="#optsDefs">optsDefs</a></code> usage functions and their <code>*From</code> versions.
 </td>
 </tr>
 <tr name="descArg">
