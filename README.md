@@ -2328,7 +2328,8 @@ Result:
 and <code><a href="#values">values</a></code> fields, if all values in <code><a href="#values">values</a></code>
 are also contained in <code><a href="#only">only</a></code>.
 If values are not found in <code><a href="#only">only</a></code>,
-a <code>ValueRestrictionsViolated</code> error is reported for each value.
+a <code>ValueRestrictionsViolated</code> error is reported for each value
+and the <code><a href="#values">values</a></code> field is removed from the option.
 </summary>
 
 <br />
@@ -2356,6 +2357,9 @@ Result:
       msg:  'A value lies outside the allowed values...',
       info: {...}
     }
+  ],
+  opts: [
+    number('answer', ['--answer'], {only: ['42']})
   ]
 }
 ```
