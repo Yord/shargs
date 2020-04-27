@@ -47,18 +47,25 @@ Shargs' flexibility and adaptability sets it apart from
 
 <details>
 <summary>
-Describe command-line options:
+Describe your script and command-line options:
 
 <p>
 
 ```js
 const {flag, number, string} = require('shargs-opts')
 
-const opts = [
-  stringPos('question', {desc: 'Ask a question.', required: true}),
-  number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: [42]}),
-  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
-]
+const script = {
+  key: 'deepThought',
+  opts: [
+    stringPos('question', {desc: 'Ask a question.', required: true}),
+    number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: [42]}),
+    flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
+  ],
+  desc: (
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+}
 ```
 
 </p>
@@ -102,13 +109,7 @@ Layout a usage documentation:
 ```js
 const {desc, optsList, space, synopsis, usage} = require('shargs-usage')
 
-const docs = usage([
-  synopsis,
-  space,
-  optsList,
-  space,
-  desc
-])
+const docs = usage([synopsis, space, optsList, space, desc])
 ```
 
 </p>
@@ -147,11 +148,10 @@ Use the parser and the usage documentation in your program:
 ```js
 const argv = process.argv.slice(2)
 
-const {errs, args} = deepThought(opts)(argv)
-
-const help = docs(opts)(style)
+const {errs, args} = deepThought(script)(argv)
 
 if (args.help) {
+  const help = docs(script)(style)
   console.log(help)
 } else if (errs.length > 0) {
   errs.forEach(({code, msg}) => console.log(`${code}: ${msg}`))
@@ -289,26 +289,33 @@ We should now talk about what exactly we wish to parse:
 ```js
 const {flag, number, stringPos} = require('shargs-opts')
 
-const opts = [
-  stringPos('question', {desc: 'Ask a question.', required: true}),
-  number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: ['42']}),
-  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
-]
+const script = {
+  key: 'deepThought',
+  opts: [
+    stringPos('question', {desc: 'Ask a question.', required: true}),
+    number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: ['42']}),
+    flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
+  ],
+  desc: (
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+}
 ```
 
-Our program should have three command-line options:
+The `deepThought` script should have three command-line options:
 
 1.  A `required` string positional argument named `question`.
 2.  An `answer` number option specified with `-a` or `--answer` that should default to `'42'` if not given.
 3.  A `help` command-line flag given by `-h` or `--help`.
 
 We used the `shargs-opts` module to get a nice DSL for describing our options.
-However, we could have also written them out as objects ourselves or could have used a different DSL.
+However, we could have also have written them out as objects ourselves or could have used a different DSL.
 
 Next, we tell our parser about the options:
 
 ```js
-const parse = deepThought(opts)
+const parse = deepThought(script)
 ```
 
 We may now use the `parse` function to transform `process.argv` arrays:
@@ -338,17 +345,11 @@ How about a documentation following this layout:
 ```js
 const {desc, optsList, space, synopsis, usage} = require('shargs-usage')
 
-const docs = usage([
-  synopsis,
-  space,
-  optsList,
-  space,
-  desc
-])
+const docs = usage([synopsis, space, optsList, space, desc])
 ```
 
 We can use `shargs-usage` to automatically generate a usage documentation based on command-line option definitions
-(e.g. `opts` from before).
+(e.g. `script` from before).
 The module provides components generally found in usage documentations of popular tools, like:
 
 1.  A `synopsis`, summarizing available options: e.g. `deepThought (<question>) [-a|--answer] [-h|--help]`.
@@ -358,10 +359,10 @@ Note that `shargs-usage` is declarative:
 We only specify what components our usage documentation should have.
 The details on how exactly those components transform command-line options into text is hidden away.
 
-We may now generate and print a usage documentation for `opts`:
+We may now generate and print a usage documentation for `script`:
 
 ```js
-const usageText = docs(opts)
+const usageText = docs(script)
 
 const style = {
   line: [{width: 80}],
@@ -373,7 +374,7 @@ const help = usageText(style)
 console.log(help)
 ```
 
-First, we tell `docs` about our command-line `opts`.
+First, we tell `docs` about our command-line options.
 Then, we decide to `style` the documentation with a `width` of `80` characters per `line`.
 The `optsList` table's two `cols` should be `25` and `55` characters in `width`.
 
@@ -3031,21 +3032,28 @@ We separate these three parts with [`space`](#space)s and enclose everything wit
 
 Note that we have not mentioned any command-line options, yet.
 We have only told `docs` how the usage documentation should look like, not what should be documented.
-But the `opts` follows shortly after:
+But the command-line options follow shortly after:
 
 ```js
 const {flag, number, stringPos} = require('shargs-opts')
 
-const opts = [
-  stringPos('question', {desc: 'Ask a question.', required: true}),
-  number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: [42]}),
-  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
-]
+const script = {
+  key: 'deepThought',
+  opts: [
+    stringPos('question', {desc: 'Ask a question.', required: true}),
+    number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: [42]}),
+    flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
+  ],
+  desc: (
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+}
 
-const optsDocs = docs(opts)
+const optsDocs = docs(script)
 ```
 
-`optsDocs` now knows what to layout (`opts`), and how it should look like (`docs`).
+`optsDocs` now knows what to layout (`script`), and how it should look like (`docs`).
 But there is still one decision to be made:
 How to `style` the different parts of the documentation:
 
@@ -3072,9 +3080,9 @@ Deep Thought was created to come up with the Answer to The
 Ultimate Question of Life, the Universe, and Everything.    
 ```
 
-[`opts`](#command-line-options), `docs`, and [`style`](#style)
+[`script`](#command-line-options), `docs`, and [`style`](#style)
 are the moving parts of [automatic usage documentation generation](#automatic-usage-documentation-generation).
-We have already talked about [`opts`](#command-line-options) before
+We have already talked about [command-line options](#command-line-options) before
 and will talk about [`style`](#style) in an upcoming section.
 
 But first, let us have a closer look at how to declare a usage documentation layout.
@@ -3533,17 +3541,20 @@ const askOpts = [
 
 const ask = command(askOpts)
 
-const opts = [
-  ask('ask', ['ask'], {required}),
-  number('answer', ['-a', '--answer'], {required}),
-  flag('help', ['-h', '--help'])
-]
+const script = {
+  key: 'deepThought',
+  opts: [
+    ask('ask', ['ask'], {required}),
+    number('answer', ['-a', '--answer'], {required}),
+    flag('help', ['-h', '--help'])
+  ]
+}
 
 const style = {
   line: [{width: 40}]
 }
 
-synopses(opts)(style)
+synopses(script)(style)
 ```
 
 </details>
@@ -3582,20 +3593,23 @@ Code:
 const {synopsis} = require('shargs-usage')
 const {flag, number, variadicPos} = require('shargs-opts')
 
-const opts = [
-  number('answer', ['-a', '--answer'], {
-    desc: 'The answer.', required: true
-  }),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'}),
-  variadicPos('questions')
-]
+const script = {
+  key: 'deepThought',
+  opts: [
+    number('answer', ['-a', '--answer'], {
+      desc: 'The answer.', required: true
+    }),
+    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'}),
+    variadicPos('questions')
+  ]
+}
 
 const style = {
   line: [{width: 40}]
 }
 
-synopsis(opts)(style)
+synopsis(script)(style)
 ```
 
 </details>
@@ -3683,24 +3697,22 @@ const {note, optsList, space} = require('shargs-usage')
 const {synopsis, usage} = require('shargs-usage')
 const {flag, number} = require('shargs-opts')
 
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
+const script = {
+  key: 'deepThought',
+  opts: [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ],
+  desc: 'Deep Thought was created to come up with the Answer.'
+}
 
 const style = {
   line: [{width: 50}],
   cols: [{width: 25}, {width: 25}]
 }
 
-usage([
-  synopsis,
-  space,
-  optsList,
-  space,
-  desc
-])(opts)(style)
+usage([synopsis, space, optsList, space, desc])(script)(style)
 ```
 
 </details>
@@ -4922,7 +4934,7 @@ const askOpts = [
 <td>
 <details>
 <summary>
-<code>opts</code> from the <a href="#command-line-options">Command-line options</a> section.
+<code>script</code> from the <a href="#command-line-options">Command-line options</a> section.
 </summary>
 
 <br />
@@ -4930,11 +4942,18 @@ const askOpts = [
 ```js
 const {command, flag, number} = require('shargs-opts')
 
-const opts = [
-  command(askOpts)('ask', ['ask'], {required: true, desc: 'Ask a question.'}),
-  number('answer', ['-a', '--answer'], {defaultValues: [42], desc: 'The answer.'}),
-  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
-]
+const script = {
+  key: 'deepThought',
+  opts: [
+    command(askOpts)('ask', ['ask'], {required: true, desc: 'Ask a question.'}),
+    number('answer', ['-a', '--answer'], {defaultValues: [42], desc: 'The answer.'}),
+    flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
+  ],
+  desc: (
+    'Deep Thought was created to come up with the Answer to ' +
+    'The Ultimate Question of Life, the Universe, and Everything.'
+  )
+}
 ```
 
 </details>
@@ -4989,13 +5008,7 @@ const deepThought = parser(stages, {checks, parsers, mode: 'sync'})
 ```js
 const {desc, optsLists, space, synopses, usage} = require('shargs-usage')
 
-const docs = usage([
-  synopses,
-  space,
-  optsLists,
-  space,
-  desc
-])
+const docs = usage([synopses, space, optsLists, space, desc])
 ```
 
 </details>
@@ -5028,10 +5041,10 @@ Then, a sample program written with shargs could be:
 
 ```js
 const argv = process.argv.slice(2)
-const {errs, args} = deepThought(opts)(argv)
+const {errs, args} = deepThought(script)(argv)
 
 if (args.help) {
-  const help = docs(opts)(style)
+  const help = docs(script)(style)
   console.log(help)
   process.exit(0)
 }
@@ -5046,13 +5059,13 @@ process.exit(0)
 ```
 
 First, we skip the first two values of `process.argv`.
-They are `node` and the script name and can be ignored.
+They are `node` and the file name and can be ignored.
 
 We then parse the remaining `argv` with our `deepThought` parser and get two results:
 A list of `errs`, and an `args` object with parsed argument values.
 Based on those two results, we build our program.
 
-If the `args.help` field is set, we print a `help` text generated from `docs` by applying `opts` and `style`.
+If the `args.help` field is set, we print a `help` text generated from `docs` by applying `script` and `style`.
 Then, we `exit` with exit code `0`.
 
 E.g. if we run the program with `node ./deepThought --help`, the following text is printed:
