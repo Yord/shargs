@@ -20,7 +20,7 @@ function parser (stages = {}, options = {}) {
     ...argv,
     toOpts(OPTS),
     ...opts,
-    toArgs || TO_ARGS({_: parser(stages), ...parsers, __: parser(stages)}),
+    toArgs || TO_ARGS({_: parser(stages, {mode}), ...parsers, __: parser(stages, {mode})}, mode),
     ...args
   )({errs: ERRS, argv: ARGV})
 }
