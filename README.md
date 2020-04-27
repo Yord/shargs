@@ -5619,7 +5619,41 @@ But it is easy enough to write a stage yourself:
 
 <br />
 
-TODO
+We are inventing a new option type for this FAQ: `commas`:
+
+```js
+const {array} = require('shargs-opts')
+
+const commas = array(['commas'])
+```
+
+The `commas` type function is used to mark options we want to split.
+
+We then write a custom [`opts` stage](#opts-stage) to perform the splitting:
+
+```js
+const isCommas = ({key, types, values}) => (
+  typeof key !== 'undefined' &&
+  Array.isArray(types) && types.length === 1 && types[0] === 'commas' &&
+  Array.isArray(values) && values.length === 1
+)
+
+const transformCommaArray = opt => {
+  const value = opt.values[0]
+  const values = value.split(',')
+  const types = Array.from({length: values.length}, () => 'string')
+
+  return {opts: [{...opt, types, values}]}
+}
+
+const splitCommas = traverseOpts(isCommas)(transformCommaArray)
+```
+
+`splitCommas` may now be used with options of type `commas`!
+
+So why doesn't `shargs-parser` support comma-separated values by default?
+The reason is that using comma-separated values is just not that common.
+And if you nontheless need comma-separated values, it is simple enough to implement yourself.
 
 </details>
 </td>
@@ -5642,12 +5676,103 @@ An example for such an option would be ternary logics types,
 like <code>true</code>, <code>false</code>, <code>unknown</code>,
 that could be represented as a mixture of <code><a href="#flag">flags</a></code>
 and <code><a href="#bool">bools</a></code>.
-Shargs does not support such options out of the box, but you can implement them quite easily:
+Shargs does not support such options out of the box, but you can implement them with some gotchas:
 </summary>
 
 <br />
 
-TODO
+We generally recommend against using options with 0..1 cardinalities in programs.
+This is also why shargs does not support it.
+
+A better approach is using an enumeration, implemented with the [`only`](#only) options field
+and the [`restrictToOnly`](#restrictToOnly) parser stage.
+
+If you want to use it anyway, here is how you could do it in shargs:
+
+Flags give you only two cases, the presense of the flag (`true` if [`flagsAsBools`](#flagsAsBools) is used),
+and its absense (`unknown`):
+
+```js
+const {flag} = require('shargs-opts')
+
+const fun = flag('fun', ['--fun'])
+```
+
+You could add a third case by using only `flags` by defining a complement:
+
+```js
+const {complement} = require('shargs-opts')
+
+const noFun = complement('--no-')(fun)
+```
+
+Which is the same as writing:
+
+```js
+const noFun = flag('fun', ['--no-fun'], {reverse: true})
+```
+
+If you provide `--fun`, the `fun` variable is set to `true`, on `--no-fun` it is set to `false`,
+and providing neither `--fun`, nor `--no-fun` would mean `unknown`.
+
+You could implement the same behaviour with an option that takes none or one argument,
+by using a combination of variable length arrays, aka [`commands`](#command) and a custom command-line options field.
+The general idea is to mark an `command` as `threeValued` with a flag,
+and then transform it to a custom type in the opts stage.
+
+First, let us define an option:
+
+```js
+const {command} = require('shargs-opts')
+
+const fun = command('fun', ['--fun'], {threeValued: true})
+```
+
+Now, let us define an [`opts`](#opts-stages) stage that transforms the `command`:
+
+```js
+const isThreeValued = ({threeValued}) => threeValued === true
+
+const toThreeValued = opt => {
+  const types = ['threeValued']
+
+  const interpretValues = values => (
+    values.length === 0         ? [['true'], []]  :
+    values[0]     === 'true'    ? [['true'], values.slice(1)]  :
+    values[0]     === 'false'   ? [['false'], values.slice(1)] :
+    values[0]     === 'unknown' ? [['unknown'], values.slice(1)]
+                                : [['true'], values]
+  )
+
+  const valuesAndRest = (
+    !Array.isArray(opt.values)
+      ? [['unknown'], []]
+      : interpretValues(opt.values)
+  )
+
+  const [values, rest] = valuesAndRest
+
+  return {
+    opts: [
+      {...opt, types, values},
+      {...opt, values: rest}
+    ]
+  }
+}
+
+const commandsToThreeValued = traverseOpts(isThreeValued)(toThreeValued)
+```
+
+`commandsToThreeValued` only transforms `commands` that have the `threeValued` field.
+For each `command`, it checks, whether the `command` is not present (`unknown`),
+it is present but has no values (`true`), or if it is present and has at least one value,
+(`true` if the value is `true`, `false` if it is `false`, otherwise `unknown`).
+
+Note that a `command` takes all arguments following it, not just the first.
+However, the `toArgs` stages reparses those arguments with the parent parser, so they are not lost.
+But the parent parser does not run [`checks`](#checks).
+
+Also note that this demonstration implementation is very brittle and should not be used as presented in a program.
 
 </details>
 </td>
