@@ -605,19 +605,23 @@ const boolPos = (key, fields) => ({
 </td>
 </tr>
 <tr name="command">
-<td><code><a href="#command">command</a>(opts)(key, args, fields)</code></td>
+<td>
+<code><a href="#command">command</a>(opts)(key, args, fields)</code><br />
+<code><a href="#program">program</a>(opts)(key, fields)</code>
+</td>
 <td>
 <details>
 <summary>
-<code>command</code> generates a <a href="#command-option">command option</a>.
-This type represents command-line arguments like <code>git commit</code> or <code>git push</code>,
-where a <i>parent</i> command (<code>git</code>) has different <i>child</i> commands
+<code>command</code> generates a <a href="#command-option">command option</a>,
+while <code>program</code> genrates a <a href="#program-pos-arg">program positional argument</a>.
+These typee represent command-line programs like <code>git commit</code> or <code>git push</code>,
+where a <i>parent</i> program (<code>git</code>) has different <i>child</i> commands
 (<code>commit</code> and <code>push</code>) for specific tasks.
-A <code>command</code>'s <code><a href="#opts">opts</a></code> field is an array of command-line options used
-to parse its <code><a href="#values">values</a></code>.
+<code>command</code>'s and <code>program</code>'s <code><a href="#opts">opts</a></code> fields
+are arrays of command-line options used to parse their <code><a href="#values">values</a></code>.
 Commands may have their own <a href="#parsers">command-specific parsers</a>
-or are parsed by their parent's <code>command</code>'s parser.
-A <code>command</code>'s values are either terminated by the end of the input or by <code>--</code>.
+or are parsed by their parent <code>program</code>'s or <code>command</code>'s parser.
+<code>program</code> or <code>command</code> values are either terminated by the end of the input or by <code>--</code>.
 </summary>
 
 <br />
@@ -627,6 +631,14 @@ A <code>command</code>'s values are either terminated by the end of the input or
 ```js
 const command = opts => (key, args, fields) => ({
   key, args, opts, ...fields
+})
+```
+
+`program` returns the following object:
+
+```js
+const program = opts => (key, fields) => ({
+  key, opts, ...fields
 })
 ```
 
