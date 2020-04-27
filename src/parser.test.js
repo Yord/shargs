@@ -229,6 +229,46 @@ test('async parser applies argv stages that are promises', async () => {
   expect(args).toStrictEqual(exp)
 })
 
+test('async parser applies argv stages that are promises in commands', async () => {
+  expect.assertions(1)
+  
+  const argv = [
+    'command', '-VV'
+  ]
+
+  const splitShortOptions = ({argv}) => ({
+    argv: argv.reduce(
+      (arr, _) => [
+        ...arr,
+        ...(_.length > 2 && _[0] === '-' && _[1] !== '-' ? _.slice(1).split('').map(_ => '-' + _) : [_])
+      ],
+      []
+    )
+  })
+
+  const stages = {
+    argv: [promise(splitShortOptions)]
+  }
+
+  const opts = [
+    {key: 'command', args: ['command'], opts: [
+      {key: 'version', args: ['-V'], types: []}
+    ]}
+  ]
+
+  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
+
+  const exp = {
+    _: [],
+    command: {
+      _: [],
+      version: {type: 'flag', count: 2}
+    }
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
 test('parser applies opts stages', () => {
   const argv = [
     '-n', '23', 'true'
