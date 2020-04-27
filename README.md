@@ -100,17 +100,14 @@ Layout a usage documentation:
 <p>
 
 ```js
-const {note, optsList, space, synopsis, usage} = require('shargs-usage')
+const {desc, optsList, space, synopsis, usage} = require('shargs-usage')
 
 const docs = usage([
-  synopsis('deepThought'),
+  synopsis,
   space,
   optsList,
   space,
-  note(
-    'Deep Thought was created to come up with the Answer to ' +
-    'The Ultimate Question of Life, the Universe, and Everything.'
-  )
+  desc
 ])
 ```
 
@@ -339,17 +336,14 @@ This is what the `--help` flag is for, after all.
 How about a documentation following this layout:
 
 ```js
-const {note, optsList, space, synopsis, usage} = require('shargs-usage')
+const {desc, optsList, space, synopsis, usage} = require('shargs-usage')
 
 const docs = usage([
-  synopsis('deepThought'),
+  synopsis,
   space,
   optsList,
   space,
-  note(
-    'Deep Thought was created to come up with the Answer to ' +
-    'The Ultimate Question of Life, the Universe, and Everything.'
-  )
+  desc
 ])
 ```
 
@@ -3019,23 +3013,20 @@ e.g. by generating HTML or Markdown from `opts`.
 But for now, we have [`shargs-usage`][shargs-usage]:
 
 ```js
-const {note, optsLists, space, synopses, usage} = require('shargs-usage')
+const {desc, optsLists, space, synopses, usage} = require('shargs-usage')
 
 const docs = usage([
-  synopses('deepThought'),
+  synopses,
   space,
   optsLists,
   space,
-  note(
-    'Deep Thought was created to come up with the Answer to ' +
-    'The Ultimate Question of Life, the Universe, and Everything.'
-  )
+  desc
 ])
 ```
 
 [`shargs-usage`][shargs-usage] lets you define how your usage documentation should look like in a declarative way.
 In the example, we tell our `docs` to start with [`synopses`](#synopses), have [`optsLists`](#optsLists) in the body,
-and close with a [`note`](#note).
+and close with [`desc`](#usage-desc), that shows the [`desc`](#desc) field.
 We separate these three parts with [`space`](#space)s and enclose everything with a [`usage`](#usage) function.
 
 Note that we have not mentioned any command-line options, yet.
@@ -3505,8 +3496,8 @@ usage([
 </tr>
 <tr name="synopses">
 <td>
-<code name="synopsesFrom"><a href="#synopses">synopses</a>(name)(opts)(style)</code><br />
-<code><a href="#synopsesFrom">synopsesFrom</a>(id)(name)(opts)(style)</code>
+<code name="synopsesFrom"><a href="#synopses">synopses</a>(opts)(style)</code><br />
+<code><a href="#synopsesFrom">synopsesFrom</a>(id)(opts)(style)</code>
 </td>
 <td>
 <details>
@@ -3552,7 +3543,7 @@ const style = {
   line: [{width: 40}]
 }
 
-synopses('deepThought')(opts)(style)
+synopses(opts)(style)
 ```
 
 </details>
@@ -3560,8 +3551,8 @@ synopses('deepThought')(opts)(style)
 </tr>
 <tr name="synopsis">
 <td>
-<code name="synopsisFrom"><a href="#synopsis">synopsis</a>(name)(opts)(style)</code><br />
-<code><a href="#synopsisFrom">synopsisFrom</a>(id)(name)(opts)(style)</code>
+<code name="synopsisFrom"><a href="#synopsis">synopsis</a>(opts)(style)</code><br />
+<code><a href="#synopsisFrom">synopsisFrom</a>(id)(opts)(style)</code>
 </td>
 <td>
 <details>
@@ -3604,7 +3595,7 @@ const style = {
   line: [{width: 40}]
 }
 
-synopsis('deepThought')(opts)(style)
+synopsis(opts)(style)
 ```
 
 </details>
@@ -3704,11 +3695,11 @@ const style = {
 }
 
 usage([
-  synopsis('deepThought'),
+  synopsis,
   space,
   optsList,
   space,
-  note('Deep Thought was created to come up with the Answer.')
+  desc
 ])(opts)(style)
 ```
 
@@ -3727,20 +3718,17 @@ while the other options are layouted as a table.
 Usage decorators enable these use cases by modifying inputs of [usage functions](#usage-functions):
 
 ```js
-const {note, optsDef, optsList, space, synopsis, usage} = require('shargs-usage')
+const {desc, optsDef, optsList, space, synopsis, usage} = require('shargs-usage')
 const {decorate, noCommands, onlyCommands, onlyFirstArg} = require('shargs-usage')
 
 const decoratedDocs = usage([
-  noCommands(onlyFirstArg(synopsis('deepThought'))),
+  noCommands(onlyFirstArg(synopsis)),
   space,
   onlyCommands(optsDef),
   space,
   noCommands(optsList),
   space,
-  note(
-    'Deep Thought was created to come up with the Answer to ' +
-    'The Ultimate Question of Life, the Universe, and Everything.'
-  )
+  desc
 ])
 ```
 
@@ -4022,7 +4010,7 @@ If many usage decorators are applied to a usage function, things get unwieldy, f
 ```js
 const {justArgs, noCommands, onlyFirstArg, synopsis} = require('shargs-usage')
 
-const synopsis2 = noCommands(onlyFirstArg(justArgs('--help')(synopsis('deepThought'))))
+const synopsis2 = noCommands(onlyFirstArg(justArgs('--help')(synopsis)))
 ```
 
 In the example, `synopsis2` is decorated three times and the code is not very readable.
@@ -4033,7 +4021,7 @@ const {decorate, justArgs, noCommands, onlyFirstArg, synopsis} = require('shargs
 
 const decorated = decorate(noCommands, onlyFirstArg, justArgs('--help'))
 
-const synopsis2 = decorated(synopsis('deepThought'))
+const synopsis2 = decorated(synopsis)
 ```
 
 This version of `synopsis2` is much more readable.
@@ -4999,17 +4987,14 @@ const deepThought = parser(stages, {checks, parsers, mode: 'sync'})
 <br />
 
 ```js
-const {note, optsLists, space, synopses, usage} = require('shargs-usage')
+const {desc, optsLists, space, synopses, usage} = require('shargs-usage')
 
 const docs = usage([
-  synopses('deepThought'),
+  synopses,
   space,
   optsLists,
   space,
-  note(
-    'Deep Thought was created to come up with the Answer to ' +
-    'The Ultimate Question of Life, the Universe, and Everything.'
-  )
+  desc
 ])
 ```
 
