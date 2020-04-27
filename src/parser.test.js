@@ -10,14 +10,16 @@ const promise = f => a => new Promise(
   }
 )
 
-const opts = [
-  {key: 'title', types: ['string'], args: ['--title']},
-  {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb']},
-  {key: 'answer', types: ['number'], args: ['-a', '--answer']},
-  {key: 'help', args: ['-h', '--help'], opts: [{key: 'bar', types: [], args: ['--bar']}]},
-  {key: 'verbose', types: ['bool'], args: ['--verbose']},
-  {key: 'version', types: [], args: ['--version', '-V']}
-]
+const opts = {
+  opts: [
+    {key: 'title', types: ['string'], args: ['--title']},
+    {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb']},
+    {key: 'answer', types: ['number'], args: ['-a', '--answer']},
+    {key: 'help', args: ['-h', '--help'], opts: [{key: 'bar', types: [], args: ['--bar']}]},
+    {key: 'verbose', types: ['bool'], args: ['--verbose']},
+    {key: 'version', types: [], args: ['--version', '-V']}
+  ]
+}
 
 test('parser transforms argv to args', () => {
   const argv = [
@@ -250,11 +252,13 @@ test('async parser applies argv stages that are promises in commands', async () 
     argv: [promise(splitShortOptions)]
   }
 
-  const opts = [
-    {key: 'command', args: ['command'], opts: [
-      {key: 'version', args: ['-V'], types: []}
-    ]}
-  ]
+  const opts = {
+    opts: [
+      {key: 'command', args: ['command'], opts: [
+        {key: 'version', args: ['-V'], types: []}
+      ]}
+    ]
+  }
 
   const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
 
@@ -365,11 +369,13 @@ test('async parser applies opts stages that are promises in commands', async () 
     opts: [promise(cast)]
   }
 
-  const opts = [
-    {key: 'command', args: ['command'], opts: [
-      {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb']},
-    ]}
-  ]
+  const opts = {
+    opts: [
+      {key: 'command', args: ['command'], opts: [
+        {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb']},
+      ]}
+    ]
+  }
 
   const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
 
@@ -469,9 +475,11 @@ test('async parser applies args stages that are promises in commands', async () 
     args: [promise(clearRest)]
   }
 
-  const opts = [
-    {key: 'command', args: ['command'], opts: []}
-  ]
+  const opts = {
+    opts: [
+      {key: 'command', args: ['command'], opts: []}
+    ]
+  }
 
   const {args} = await parser(stages, {mode: 'async'})(opts)(argv, [])
 
@@ -492,7 +500,7 @@ test('parser works with empty opts', () => {
 
   const stages = {}
 
-  const {args} = parser(stages)([])(argv)
+  const {args} = parser(stages)({})(argv)
 
   const exp = {
     _: ['foo']
@@ -510,7 +518,7 @@ test('async parser works with empty opts', async () => {
 
   const stages = {}
 
-  const {args} = await parser(stages, {mode: 'async'})([])(argv)
+  const {args} = await parser(stages, {mode: 'async'})({})(argv)
 
   const exp = {
     _: ['foo']
@@ -689,10 +697,12 @@ test('parser uses the first option if options are defined several times 1/3', ()
   const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
   const help  = {key: 'help', args: ['help'], opts: []}
 
-  const opts = [
-    tired,
-    help
-  ]
+  const opts = {
+    opts: [
+      tired,
+      help
+    ]
+  }
 
   const stages = {}
 
@@ -720,10 +730,12 @@ test('parser uses the first option if options are defined several times 2/3', ()
   const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
   const help  = {key: 'help', args: ['help'], opts: []}
 
-  const opts = [
-    tired,
-    help
-  ]
+  const opts = {
+    opts: [
+      tired,
+      help
+    ]
+  }
 
   const stages = {}
 
@@ -751,10 +763,12 @@ test('parser uses the first option if options are defined several times 3/3', ()
   const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
   const help  = {key: 'help', args: ['help'], opts: []}
 
-  const opts = [
-    tired,
-    help
-  ]
+  const opts = {
+    opts: [
+      tired,
+      help
+    ]
+  }
 
   const stages = {}
 

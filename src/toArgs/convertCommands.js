@@ -11,7 +11,7 @@ function convertCommandsSync (parsers) {
   
     for (let i = 0; i < OPTS.length; i++) {
       const opt = OPTS[i]
-      const {key, values, opts} = opt
+      const {key, values} = opt
   
       if (Array.isArray(values) && isCommandOption(opt)) {
         const parentParser = parsers.__
@@ -20,12 +20,12 @@ function convertCommandsSync (parsers) {
         if (typeof args[key] === 'undefined') {
           args[key] = {}
   
-          const child = childParser(opts)(values, [])
+          const child = childParser(opt)(values, [])
           errs2       = errs2.concat(child.errs || [])
           args[key]   = child.args
   
           if (typeof parentParser === 'function') {
-            const parent = parentParser(filter(OPTS))(child.args._, [])
+            const parent = parentParser({opts: filter(OPTS)})(child.args._, [])
             errs2        = errs2.concat(parent.errs || [])
             args         = {...parent.args, ...args, _: args._.concat(parent.args._)}
           }
@@ -43,14 +43,14 @@ function convertCommandsAsync (parsers) {
     .filter(opt => Array.isArray(opt.values) && isCommandOption(opt))
     .map(cmd => {
       const childParser = typeof parsers[cmd.key] === 'function' ? parsers[cmd.key] : parsers._
-      return childParser(cmd.opts)(cmd.values, []).then(child => ({key: cmd.key, child}))
+      return childParser(cmd)(cmd.values, []).then(child => ({key: cmd.key, child}))
     })
   ).then(results =>
     Promise.all(
       results.map(
         ({key, child}) => {
           const parentParser = parsers.__
-          return parentParser(filter(opts))(child.args._, []).then(
+          return parentParser({opts: filter(opts)})(child.args._, []).then(
             parent => ({parent, key, child})
           )
         }
