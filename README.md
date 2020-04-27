@@ -19,14 +19,15 @@ npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</
 
 ## Features
 
-Shargs **gives developers as much control over <a href="#command-line-parsers">command-line parsing</a> as possible**.
+Shargs **gives developers as much control over [command-line parsing](#command-line-parsers) as possible**.
 The advantages are:
 
 +   You get exactly the parser you need, without unnecessary features.
 +   You are able to mix in your own problem-specific parser functions.
 +   There is no magic going on in the background, everything is explicit.
 
-Following the same approach, shargs offers <a href="#automatic-usage-documentation-generation">automatic usage documentation generation</a>.
+Following the same approach, shargs offers
+[automatic usage documentation generation](#automatic-usage-documentation-generation).
 The advantages are:
 
 +   You get exactly the usage documentation you need, no unnecessary extras.
@@ -37,9 +38,10 @@ Shargs also has general qualities:
 
 +   It has a synchronous as well as an asynchronous mode based on Promises.
 +   It is well documented, extensively tested, modular, and highly extensible.
-+   It has zero runtime dependencies, and Typescript type declarations.
++   It has Typescript type declarations, and zero runtime dependencies.
 
-Shargs' flexibility and adaptability sets it apart from <a href="#comparison-to-related-libraries">other command-line parser libraries</a>.
+Shargs' flexibility and adaptability sets it apart from
+[other command-line parser libraries](#comparison-to-related-libraries).
 
 ## Quickstart
 
