@@ -3775,6 +3775,59 @@ usage([synopsis, space, optsList, space, desc])(script)(style)
 </details>
 </td>
 </tr>
+<tr name="usageMap">
+<td><code><a href="#usageMap">usageMap</a>(f)(opt)(style)</code></td>
+<td>
+<details>
+<summary>
+<code>usageMap</code> takes a function <code>f</code> that takes an <code>opt</code>ion
+and returns a <a href="#layout-functions">layout function</a>.
+It maps <code>f</code> over the option's <code><a href="#opts">opts</a></code>
+and applies its <code>style</code> to each resulting <a href="#layout-functions">layout function</a>.
+Finally, it concatenates the resulting strings and returns the result.
+</summary>
+
+<br />
+
+Example:
+
+```bash
+-a, --answer                            
+    The answer.                         
+-h, --help                              
+    Prints help.                        
+--version                               
+    Prints version.                     
+```
+
+Code:
+
+```js
+const {text, textFrom, usageMap} = require('shargs-usage')
+const {flag, number} = require('shargs-opts')
+
+const cmd = {
+  opts: [
+    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'Prints version.'})
+  ]
+}
+
+const style = {
+  line: [{width: 40}],
+  desc: [{padStart: 4, width: 36}]
+}
+
+usageMap(({args, desc}) => layout([
+  text(args.join(', ')),
+  textFrom('desc')(desc)
+]))(cmd)(style)
+```
+
+</details>
+</td>
+</tr>
 </table>
 
 #### Usage Decorators
