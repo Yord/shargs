@@ -16,7 +16,7 @@ function parser (stages = {}, options = {}) {
 
   const {argv, toOpts = TO_OPTS, opts, toArgs, args} = checksAndStages
 
-  return (OPTS = []) => (ARGV, ERRS) => (mode === 'async' ? then : pipe)(
+  return ({opts: OPTS = []} = {}) => (ARGV, ERRS) => (mode === 'async' ? then : pipe)(
     ...argv,
     toOpts(OPTS),
     ...opts,

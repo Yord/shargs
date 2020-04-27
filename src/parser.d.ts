@@ -27,9 +27,9 @@ interface Args {
   [key: string]: any
 }
 
-type Parser = (opts?: Opt[]) => (argv?: string[], errs?: Err[]) => {errs: Err[]; args: Args}
+type Parser = (opts?: Opt) => (argv?: string[], errs?: Err[]) => {errs: Err[]; args: Args}
 
-type PromiseParser = (opts?: Opt[]) => (argv?: string[], errs?: Err[]) => Promise<{errs: Err[]; args: Args}>
+type PromiseParser = (opts?: Opt) => (argv?: string[], errs?: Err[]) => Promise<{errs: Err[]; args: Args}>
 
 interface Parsers {
   _: Parser
