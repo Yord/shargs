@@ -5619,7 +5619,41 @@ But it is easy enough to write a stage yourself:
 
 <br />
 
-TODO
+We are inventing a new option type for this FAQ: `commas`:
+
+```js
+const {array} = require('shargs-opts')
+
+const commas = array(['commas'])
+```
+
+The `commas` type function is used to mark options we want to split.
+
+We then write a custom [`opts` stage](#opts-stage) to perform the splitting:
+
+```js
+const isCommas = ({key, types, values}) => (
+  typeof key !== 'undefined' &&
+  Array.isArray(types) && types.length === 1 && types[0] === 'commas' &&
+  Array.isArray(values) && values.length === 1
+)
+
+const transformCommaArray = opt => {
+  const value = opt.values[0]
+  const values = value.split(',')
+  const types = Array.from({length: values.length}, () => 'string')
+
+  return {opts: [{...opt, types, values}]}
+}
+
+const splitCommas = traverseOpts(isCommas)(transformCommaArray)
+```
+
+`splitCommas` may now be used with options of type `commas`!
+
+So why doesn't `shargs-parser` support comma-separated values by default?
+The reason is that using comma-separated values is just not that common.
+And if you nontheless need comma-separated values, it is simple enough to implement yourself.
 
 </details>
 </td>
