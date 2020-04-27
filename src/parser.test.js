@@ -229,6 +229,46 @@ test('async parser applies argv stages that are promises', async () => {
   expect(args).toStrictEqual(exp)
 })
 
+test('async parser applies argv stages that are promises in commands', async () => {
+  expect.assertions(1)
+  
+  const argv = [
+    'command', '-VV'
+  ]
+
+  const splitShortOptions = ({argv}) => ({
+    argv: argv.reduce(
+      (arr, _) => [
+        ...arr,
+        ...(_.length > 2 && _[0] === '-' && _[1] !== '-' ? _.slice(1).split('').map(_ => '-' + _) : [_])
+      ],
+      []
+    )
+  })
+
+  const stages = {
+    argv: [promise(splitShortOptions)]
+  }
+
+  const opts = [
+    {key: 'command', args: ['command'], opts: [
+      {key: 'version', args: ['-V'], types: []}
+    ]}
+  ]
+
+  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
+
+  const exp = {
+    _: [],
+    command: {
+      _: [],
+      version: {type: 'flag', count: 2}
+    }
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
 test('parser applies opts stages', () => {
   const argv = [
     '-n', '23', 'true'
@@ -308,6 +348,42 @@ test('async parser applies opts stages that are promises', async () => {
   expect(args).toStrictEqual(exp)
 })
 
+test('async parser applies opts stages that are promises in commands', async () => {
+  expect.assertions(1)
+
+  const argv = [
+    'command', '-n', '23', 'true'
+  ]
+
+  const cast = ({opts}) => ({
+    opts: opts.map(
+      opt => opt.key !== 'numBool' ? opt : {...opt, values: [23, true]}
+    )
+  })
+
+  const stages = {
+    opts: [promise(cast)]
+  }
+
+  const opts = [
+    {key: 'command', args: ['command'], opts: [
+      {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb']},
+    ]}
+  ]
+
+  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
+
+  const exp = {
+    _: [],
+    command: {
+      _: [],
+      numBool: [23, true]
+    }
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
 test('parser applies args stages', () => {
   const argv = [
     'foo'
@@ -373,6 +449,37 @@ test('async parser applies args stages that are promises', async () => {
 
   const exp = {
     _: []
+  }
+
+  expect(args).toStrictEqual(exp)
+})
+
+test('async parser applies args stages that are promises in commands', async () => {
+  expect.assertions(1)
+
+  const argv = [
+    'command', 'foo'
+  ]
+
+  const clearRest = ({args}) => ({
+    args: {...args, _: []}
+  })
+
+  const stages = {
+    args: [promise(clearRest)]
+  }
+
+  const opts = [
+    {key: 'command', args: ['command'], opts: []}
+  ]
+
+  const {args} = await parser(stages, {mode: 'async'})(opts)(argv, [])
+
+  const exp = {
+    _: [],
+    command: {
+      _: []
+    }
   }
 
   expect(args).toStrictEqual(exp)

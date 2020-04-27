@@ -52,6 +52,7 @@ test('convertCommands works as expected if parent parser is not set', () => {
 
   const parsers = {_: parser()}
 
+  // @ts-ignore
   const {errs, args} = convertCommands(parsers)({opts})
 
   const expArgs = {
@@ -85,8 +86,8 @@ test('convertCommands works with command-specific parsers', () => {
 
   const parsers = {
     __: parser(),
-    ask: () => () => ({args: {test: 'ask parser!'}}),
-    _: () => () => ({args: {test: 'default parser!'}})
+    ask: () => () => ({errs: [], args: {_: [], test: 'ask parser!'}}),
+    _: () => () => ({errs: [], args: {_: [], test: 'default parser!'}})
   }
 
   const {errs, args} = convertCommands(parsers)({opts})
@@ -94,9 +95,11 @@ test('convertCommands works with command-specific parsers', () => {
   const expArgs = {
     _: [],
     ask: {
+      _: [], 
       test: 'ask parser!'
     },
     other: {
+      _: [], 
       test: 'default parser!'
     }
   }
@@ -148,7 +151,7 @@ test('convertCommands works if input is undefined', () => {
 })
 
 test('convertCommands passes on errors', () => {
-  const ERRS = ['foo']
+  const ERRS = [{code: 'foo', msg: 'bar', info: {}}]
 
   const {errs} = convertCommands(parsers)({errs: ERRS})
 
