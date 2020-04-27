@@ -47,25 +47,23 @@ Shargs' flexibility and adaptability sets it apart from
 
 <details>
 <summary>
-Describe your script and command-line options:
+Describe your command-line program and options:
 
 <p>
 
 ```js
-const {flag, number, string} = require('shargs-opts')
+const {flag, number, program, string} = require('shargs-opts')
 
-const script = {
-  key: 'deepThought',
-  opts: [
-    stringPos('question', {desc: 'Ask a question.', required: true}),
-    number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: [42]}),
-    flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
-  ],
-  desc: (
-    'Deep Thought was created to come up with the Answer to ' +
-    'The Ultimate Question of Life, the Universe, and Everything.'
-  )
-}
+const opts = [
+  stringPos('question', {desc: 'Ask a question.', required: true}),
+  number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: [42]}),
+  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
+]
+
+const script = program(opts)('deepThought', {
+  desc: 'Deep Thought was created to come up with the Answer to ' +
+        'The Ultimate Question of Life, the Universe, and Everything.'
+})
 ```
 
 </p>
@@ -287,20 +285,18 @@ At this point we have decided on the capabilities of our parser.
 We should now talk about what exactly we wish to parse:
 
 ```js
-const {flag, number, stringPos} = require('shargs-opts')
+const {flag, number, program, stringPos} = require('shargs-opts')
 
-const script = {
-  key: 'deepThought',
-  opts: [
-    stringPos('question', {desc: 'Ask a question.', required: true}),
-    number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: ['42']}),
-    flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
-  ],
-  desc: (
-    'Deep Thought was created to come up with the Answer to ' +
-    'The Ultimate Question of Life, the Universe, and Everything.'
-  )
-}
+const opts = [
+  stringPos('question', {desc: 'Ask a question.', required: true}),
+  number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: ['42']}),
+  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
+]
+
+const script = program(opts)('deepThought', {
+  desc: 'Deep Thought was created to come up with the Answer to ' +
+        'The Ultimate Question of Life, the Universe, and Everything.'
+})
 ```
 
 The `deepThought` script should have three command-line options:
@@ -3035,20 +3031,18 @@ We have only told `docs` how the usage documentation should look like, not what 
 But the command-line options follow shortly after:
 
 ```js
-const {flag, number, stringPos} = require('shargs-opts')
+const {flag, number, program, stringPos} = require('shargs-opts')
 
-const script = {
-  key: 'deepThought',
-  opts: [
-    stringPos('question', {desc: 'Ask a question.', required: true}),
-    number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: [42]}),
-    flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
-  ],
-  desc: (
-    'Deep Thought was created to come up with the Answer to ' +
-    'The Ultimate Question of Life, the Universe, and Everything.'
-  )
-}
+const opts = [
+  stringPos('question', {desc: 'Ask a question.', required: true}),
+  number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: [42]}),
+  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
+]
+
+const script = program(opts)('deepThought', {
+  desc: 'Deep Thought was created to come up with the Answer to ' +
+        'The Ultimate Question of Life, the Universe, and Everything.'
+})
 
 const optsDocs = docs(script)
 ```
@@ -3529,8 +3523,8 @@ Code:
 
 ```js
 const {synopses} = require('shargs-usage')
-const {command, flag} = require('shargs-opts')
-const {number, variadicPos} = require('shargs-opts')
+const {command, flag, number} = require('shargs-opts')
+const {program, variadicPos} = require('shargs-opts')
 
 const required = true
 
@@ -3541,14 +3535,13 @@ const askOpts = [
 
 const ask = command(askOpts)
 
-const script = {
-  key: 'deepThought',
-  opts: [
-    ask('ask', ['ask'], {required}),
-    number('answer', ['-a', '--answer'], {required}),
-    flag('help', ['-h', '--help'])
-  ]
-}
+const opts = [
+  ask('ask', ['ask'], {required}),
+  number('answer', ['-a', '--answer'], {required}),
+  flag('help', ['-h', '--help'])
+]
+
+const script = program(opts)('deepThought')
 
 const style = {
   line: [{width: 40}]
@@ -3591,19 +3584,19 @@ Code:
 
 ```js
 const {synopsis} = require('shargs-usage')
-const {flag, number, variadicPos} = require('shargs-opts')
+const {flag, number} = require('shargs-opts')
+const {program, variadicPos} = require('shargs-opts')
 
-const script = {
-  key: 'deepThought',
-  opts: [
-    number('answer', ['-a', '--answer'], {
-      desc: 'The answer.', required: true
-    }),
-    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'}),
-    variadicPos('questions')
-  ]
-}
+const opts = [
+  number('answer', ['-a', '--answer'], {
+    desc: 'The answer.', required: true
+  }),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'}),
+  variadicPos('questions')
+]
+
+const script = program(opts)('deepThought')
 
 const style = {
   line: [{width: 40}]
@@ -3695,17 +3688,17 @@ Code:
 ```js
 const {note, optsList, space} = require('shargs-usage')
 const {synopsis, usage} = require('shargs-usage')
-const {flag, number} = require('shargs-opts')
+const {flag, number, program} = require('shargs-opts')
 
-const script = {
-  key: 'deepThought',
-  opts: [
-    number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
-    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-    flag('version', ['--version'], {desc: 'Prints version.'})
-  ],
+const opts = [
+  number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+  flag('version', ['--version'], {desc: 'Prints version.'})
+]
+
+const script = program(opts)('deepThought', {
   desc: 'Deep Thought was created to come up with the Answer.'
-}
+})
 
 const style = {
   line: [{width: 50}],
@@ -4940,20 +4933,18 @@ const askOpts = [
 <br />
 
 ```js
-const {command, flag, number} = require('shargs-opts')
+const {command, flag, number, program} = require('shargs-opts')
 
-const script = {
-  key: 'deepThought',
-  opts: [
-    command(askOpts)('ask', ['ask'], {required: true, desc: 'Ask a question.'}),
-    number('answer', ['-a', '--answer'], {defaultValues: [42], desc: 'The answer.'}),
-    flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
-  ],
-  desc: (
-    'Deep Thought was created to come up with the Answer to ' +
-    'The Ultimate Question of Life, the Universe, and Everything.'
-  )
-}
+const opts = [
+  command(askOpts)('ask', ['ask'], {required: true, desc: 'Ask a question.'}),
+  number('answer', ['-a', '--answer'], {defaultValues: [42], desc: 'The answer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
+]
+
+const script = program(opts)('deepThought', {
+  desc: 'Deep Thought was created to come up with the Answer to ' +
+        'The Ultimate Question of Life, the Universe, and Everything.'
+})
 ```
 
 </details>
