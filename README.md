@@ -484,6 +484,15 @@ and <code><a href="#args">args</a></code> must be <code>undefined</code>.
 <code><a href="#types">types</a></code> must be <code>undefined</code>.
 </td>
 </tr>
+<tr name="program-pos-arg">
+<td><a href="#program">Program Positional Argument</a></td>
+<td><code>{<a href="#key">key</a>, <a href="#opts">opts</a>}</code></td>
+<td>
+<code><a href="#key">key</a></code> must be defined,
+<code><a href="#args">args</a></code> and <code><a href="#types">types</a></code> must be <code>undefined</code>,
+and <code><a href="#opts">opts</a></code> must be defined.
+</td>
+</tr>
 <tr name="rest">
 <td><a href="#rest">Rest</a></td>
 <td><code>{<a href="#values">values</a>}</code></td>
