@@ -929,7 +929,8 @@ See <code><a href="#complement">complement</a></code> for an example.
 A <code>key</code> must not be named <code>_</code>.
 It is also used by the
 <code><a href="#optsList">optsList</a></code>, <code><a href="#optsLists">optsLists</a></code>,
-<code><a href="#optsDef">optsDef</a></code>, and <code><a href="#optsDefs">optsDefs</a></code> usage functions
+<code><a href="#optsDef">optsDef</a></code>, <code><a href="#optsDefs">optsDefs</a></code>,
+<code><a href="#synopses">synopses</a></code>, and <code><a href="#synopsis">synopsis</a></code>, usage functions
 and their <code>*From</code> versions to describe argument values (e.g. <code>--format=&lt;format&gt;</code>).
 <code><a href="#descArg">descArg</a></code>, <code><a href="#types">only</a></code>,
 and <code><a href="#types">types</a></code> are other fields that change the argument value description.
