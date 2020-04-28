@@ -3701,31 +3701,34 @@ combine them somehow, and return a new one.
 Let's see how usage combinators may be used to implement [`synopses`](#synopses):
 
 ```js
-const {layoutMap, noCommands, onlyCommands, synopsis, usage} = require('shargs-usage')
+const {decorate, noCommands, onlyCommands, optsMap, usage, usageMap} = require('shargs-usage')
 
-function synopses (name) {
+const prefixKey = prefix => optsMap(opt => ({...opt, key: prefix + ' ' + opt.key}))
+
+function synopses (opt) {
   return usage([
-    noCommands(synopsis(name)),
-    onlyCommands(
-      layoutMap(cmd => synopses(name + ' ' + cmd.key)(cmd.opts))
+    noCommands(synopsis),
+    decorate(prefixKey(opt.key), onlyCommands)(
+      usageMap(synopses)
     )
-  ])
+  ])(opt)
 }
 ```
 
-This example uses two [usage decorators](#usage-decorators), that are only introduced in the next section.
+This example uses [usage decorators](#usage-decorators), that are only introduced in the next section.
 For now, you do not need to know what they are, as they work exactly as their name suggests:
 [`noCommands`](#noCommands) removes all [`command`](#command)s from [`opts`](#opts) before applying a usage function,
-while [`onlyCommands`](#onlyCommands) removes everything but [`command`](#command)s from [`opts`](#opts).
+[`onlyCommands`](#onlyCommands) removes everything but [`command`](#command)s from [`opts`](#opts),
+[`optsMap`](#optsMap) applies a function to an option, and [`decorate`](#decorate) combines decorators.
 
 The implementation of `synopses` uses two combinators:
-[`usage`](#usage) and [`layoutMap`](#layoutMap).
+[`usage`](#usage) and [`usageMap`](#usageMap).
 
 [`usage`](#usage) is used to combine two usage functions:
-A [`synopsis`](#synopsis) of all `opts`, but commands, and the usage function returned by [`layoutMap`](#layoutMap). 
-[`layoutMap`](#layoutMap) iterates over all [`command`](#command)s
+A [`synopsis`](#synopsis) of all `opts`, but commands, and the usage function returned by [`usageMap`](#usageMap). 
+[`usageMap`](#usageMap) iterates over all [`command`](#command)s
 and recursively calls `synopses` on each [`command`](#command)'s [`opts`](#opts).
-The recursion stops, if `opts` has no more [`command`](#command)s,
+The recursion stops, if `opt`'s `opts` has no more [`command`](#command)s,
 since usage functions with empty `opts` return an empty string.
 
 Combinators are a powerful feature, as they let you build more complex things from smaller parts.
