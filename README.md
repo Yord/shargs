@@ -623,7 +623,7 @@ const boolPos = (key, fields) => ({
 <summary>
 <code>command</code> generates a <a href="#command-option">command option</a>,
 while <code>program</code> genrates a <a href="#program-pos-arg">program positional argument</a>.
-These typee represent command-line programs like <code>git commit</code> or <code>git push</code>,
+These types represent command-line programs like <code>git commit</code> or <code>git push</code>,
 where a <i>parent</i> program (<code>git</code>) has different <i>child</i> commands
 (<code>commit</code> and <code>push</code>) for specific tasks.
 <code>command</code>'s and <code>program</code>'s <code><a href="#opts">opts</a></code> fields
