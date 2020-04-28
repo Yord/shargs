@@ -72,7 +72,7 @@ Read up on the details on the [command-line options](#command-line-options) sect
 
 <details>
 <summary>
-Declare a parser:
+Declare a parser by choosing from 30+ parser stages:
 
 <p>
 
