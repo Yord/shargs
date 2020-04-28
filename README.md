@@ -60,10 +60,7 @@ const opts = [
   flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
 ]
 
-const script = program(opts)('deepThought', {
-  desc: 'Deep Thought was created to come up with the Answer to ' +
-        'The Ultimate Question of Life, the Universe, and Everything.'
-})
+const script = program('deepThought', opts, {desc: 'Ask the Ultimate Question.'})
 ```
 
 </p>
@@ -107,7 +104,13 @@ Layout a usage documentation:
 ```js
 const {desc, optsList, space, synopsis, usage} = require('shargs-usage')
 
-const docs = usage([synopsis, space, optsList, space, desc])
+const docs = usage([
+  synopsis,
+  space,
+  optsList,
+  space,
+  desc
+])
 ```
 
 </p>
@@ -178,8 +181,7 @@ deepThought (-q|--question) [-a|--answer] [-h|--help]
 -a, --answer=<number>    The answer. [default: 42]                              
 -h, --help               Print this help message and exit.                      
                                                                                 
-Deep Thought was created to come up with the Answer to The Ultimate Question of 
-Life, the Universe, and Everything.                                             
+Ask the Ultimate Question.                                                      
 ```
 
 </p>
@@ -192,7 +194,7 @@ and [writing programs with shargs](#writing-programs-with-shargs) sections have 
 
 <details>
 <summary>
-Run your program with <code>node deepThought -q "What is the answer?"</code>:
+Run your program with <code>node deepThought -q "What is the meaning of Life, the Universe, and Everything?"</code>:
 
 <p>
 
@@ -201,7 +203,7 @@ Run your program with <code>node deepThought -q "What is the answer?"</code>:
   errs: [],
   args: {
     _: [],
-    question: "What is the answer?",
+    question: "What is the meaning of Life, the Universe, and Everything?",
     answer: 42
   }
 }
@@ -293,10 +295,7 @@ const opts = [
   flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
 ]
 
-const script = program(opts)('deepThought', {
-  desc: 'Deep Thought was created to come up with the Answer to ' +
-        'The Ultimate Question of Life, the Universe, and Everything.'
-})
+const script = program('deepThought', opts, {desc: 'Ask the Ultimate Question.'})
 ```
 
 The `deepThought` script should have three command-line options:
@@ -322,14 +321,14 @@ const argv = process.argv.slice(2)
 const {errs, args} = parse(argv)
 ```
 
-If `argv` is `['-a', '5', 'What is the answer to The Ultimate Question of Life, the Universe, and Everything?']`,
+If `argv` is `['-a', '5', 'What is the meaning of Life, the Universe, and Everything?']`,
 `args` would be:
 
 ```js
 {
   _: [],
   answer: 5,
-  question: 'What is the answer to The Ultimate Question of Life, the Universe, and Everything?'
+  question: 'What is the meaning of Life, the Universe, and Everything?'
 }
 ```
 
@@ -341,7 +340,13 @@ How about a documentation following this layout:
 ```js
 const {desc, optsList, space, synopsis, usage} = require('shargs-usage')
 
-const docs = usage([synopsis, space, optsList, space, desc])
+const docs = usage([
+  synopsis,
+  space,
+  optsList,
+  space,
+  desc
+])
 ```
 
 We can use `shargs-usage` to automatically generate a usage documentation based on command-line option definitions
@@ -383,8 +388,7 @@ deepThought (-q|--question) [-a|--answer] [-h|--help]
 -a, --answer=<number>    The answer. [default: 42]                              
 -h, --help               Print this help message and exit.                      
                                                                                 
-Deep Thought was created to come up with the Answer to The Ultimate Question of 
-Life, the Universe, and Everything.                                             
+Ask the Ultimate Question.                                                      
 ```
 
 At this point you have seen the core of what shargs does.
@@ -507,17 +511,22 @@ Since defining objects following these rules can be tedious,
 [`shargs-opts`][shargs-opts] gives you a nice and simple type-based DSL for defining valid command-line options:
 
 ```js
-const {command, flag, number} = require('shargs-opts')
+const {command, flag, number, program} = require('shargs-opts')
 
 const opts = [
   command(askOpts)('ask', ['ask'], {required: true, desc: 'Ask a question.'}),
   number('answer', ['-a', '--answer'], {defaultValues: [42], desc: 'The answer.'}),
   flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
 ]
+
+const script = program('deepThought', opts, {
+  desc: 'Deep Thought was created to come up with the Answer to ' +
+        'The Ultimate Question of Life, the Universe, and Everything.'
+})
 ```
 
-In the example, using [`command`](#command), [`number`](#number),
-and [`flag`](#flag) guarantees the generation of valid objects.
+In the example, using [`command`](#command), [`number`](#number), [`flag`](#flag),
+and [`program`](#program) guarantees the generation of valid objects.
 
 #### Type Functions
 
@@ -1037,7 +1046,7 @@ You may think of decorators as recurring patterns that are provided as functions
 <th>Description</th>
 </tr>
 <tr name="complement">
-<td><code><a href="#complement">complement</a>(prefix)(opt)</code></td>
+<td><code><a href="#complement">complement</a>(prefix)({opts})</code></td>
 <td>
 <details>
 <summary>
@@ -1307,7 +1316,7 @@ const argv = ...
 
 const asyncDeepThought = parser(stages, {checks, parsers, mode: 'async'})
 
-const asyncParse = asyncDeepThought(opts)
+const asyncParse = asyncDeepThought({opts})
 
 const asyncResults = parseAsync(argv)
 
@@ -3060,7 +3069,7 @@ const opts = [
   flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
 ]
 
-const script = program(opts)('deepThought', {
+const script = program('deepThought', opts, {
   desc: 'Deep Thought was created to come up with the Answer to ' +
         'The Ultimate Question of Life, the Universe, and Everything.'
 })
@@ -3108,13 +3117,13 @@ But first, let us have a closer look at how to declare a usage documentation lay
 
 <table>
 <tr>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
 <tr name="usage-desc">
 <td>
-<code name="usage-descFrom"><a href="#usage-desc">desc</a>(opts)(style)</code><br />
-<code><a href="#usage-descFrom">descFrom</a>(id)(opts)(style)</code>
+<code name="usage-descFrom"><a href="#usage-desc">desc</a>({opts})(style)</code><br />
+<code><a href="#usage-descFrom">descFrom</a>(id)({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3130,8 +3139,8 @@ If the description is too long to fit one line, it is split and spread over seve
 Example:
 
 ```bash
-Deep Thought was created to come up with
-the Answer                              
+Deep Thought should answer the Ultimate 
+Question                                
 ```
 
 Code:
@@ -3141,7 +3150,7 @@ const {desc} = require('shargs-usage')
 
 const opt = {
   opts: [],
-  desc: 'Deep Thought was created to come up with the Answer'
+  desc: 'Deep Thought should answer the Ultimate Question'
 }
 
 const style = {
@@ -3156,8 +3165,8 @@ desc(opt)(style)
 </tr>
 <tr name="note">
 <td>
-<code name="noteFrom"><a href="#note">note</a>(string)(opts)(style)</code><br />
-<code><a href="#noteFrom">noteFrom</a>(id)(string)(opts)(style)</code>
+<code name="noteFrom"><a href="#note">note</a>(string)({opts})(style)</code><br />
+<code><a href="#noteFrom">noteFrom</a>(id)(string)({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3196,8 +3205,8 @@ note(
 </tr>
 <tr name="notes">
 <td>
-<code name="notesFrom"><a href="#notes">notes</a>(strings)(opts)(style)</code><br />
-<code><a href="#notesFrom">notesFrom</a>(id)(strings)(opts)(style)</code>
+<code name="notesFrom"><a href="#notes">notes</a>(strings)({opts})(style)</code><br />
+<code><a href="#notesFrom">notesFrom</a>(id)(strings)({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3239,8 +3248,8 @@ notes([
 </tr>
 <tr name="optsDef">
 <td>
-<code name="optsDefFrom"><a href="#optsDef">optsDef</a>(opts)(style)</code><br />
-<code><a href="#optsDefFrom">optsDefFrom</a>(id1, id2)(opts)(style)</code>
+<code name="optsDefFrom"><a href="#optsDef">optsDef</a>({opts})(style)</code><br />
+<code><a href="#optsDefFrom">optsDefFrom</a>(id1, id2)({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3266,7 +3275,7 @@ Example:
 -h, --help                              
     Prints help.                        
 --version                               
-    Prints version.                     
+    The version.                        
 ```
 
 Code:
@@ -3275,20 +3284,22 @@ Code:
 const {optsDef} = require('shargs-usage')
 const {flag, number} = require('shargs-opts')
 
-const opts = [
-  number('answer', ['-a', '--answer'], {
-    desc: 'The answer.', defaultValues: ['42']
-  }),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
+const opt = {
+  opts: [
+    number('answer', ['-a', '--answer'], {
+      desc: 'The answer.', defaultValues: ['42']
+    }),
+    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'The version.'})
+  ]
+}
 
 const style = {
   line: [{width: 40}],
   desc: [{padStart: 4, width: 36}]
 }
 
-optsDef(opts)(style)
+optsDef(opt)(style)
 ```
 
 </details>
@@ -3296,8 +3307,8 @@ optsDef(opts)(style)
 </tr>
 <tr name="optsDefs">
 <td>
-<code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>(opts)(style)</code><br />
-<code><a href="#optsDefsFrom">optsDefsFrom</a>(id)(opts)(style)</code>
+<code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>({opts})(style)</code><br />
+<code><a href="#optsDefsFrom">optsDefsFrom</a>(id)({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3341,20 +3352,22 @@ const askOpts = [
 
 const ask = command(askOpts)
 
-const opts = [
-  ask('ask', ['ask'], {desc: 'Ask questions.', required}),
-  number('answer', ['-a', '--answer'], {
-    desc: 'The answer.', defaultValues: ['42']
-  }),
-  flag('help', ['-h', '--help'], {desc: 'Usage docs.'})
-]
+const opt = {
+  opts: [
+    ask('ask', ['ask'], {desc: 'Ask questions.', required}),
+    number('answer', ['-a', '--answer'], {
+      desc: 'The answer.', defaultValues: ['42']
+    }),
+    flag('help', ['-h', '--help'], {desc: 'Usage docs.'})
+  ]
+}
 
 const style = {
   line: [{width: 40}],
   desc: [{padStart: 4, width: 36}]
 }
 
-optsDefs(opts)(style)
+optsDefs(opt)(style)
 ```
 
 </details>
@@ -3362,8 +3375,8 @@ optsDefs(opts)(style)
 </tr>
 <tr name="optsList">
 <td>
-<code name="optsListFrom"><a href="#optsList">optsList</a>(opts)(style)</code><br />
-<code><a href="#optsListFrom">optsListFrom</a>(id)(opts)(style)</code>
+<code name="optsListFrom"><a href="#optsList">optsList</a>({opts})(style)</code><br />
+<code><a href="#optsListFrom">optsListFrom</a>(id)({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3386,7 +3399,7 @@ Example:
 ```bash
 -a, --answer=<number>    The answer. [default: 42]
 -h, --help               Prints help.             
---version                Prints version.          
+--version                The version.             
 ```
 
 Code:
@@ -3395,19 +3408,21 @@ Code:
 const {optsList} = require('shargs-usage')
 const {flag, number} = require('shargs-opts')
 
-const opts = [
-  number('answer', ['-a', '--answer'], {
-    desc: 'The answer.', defaultValues: ['42']
-  }),
-  flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'})
-]
+const opt = {
+  opts: [
+    number('answer', ['-a', '--answer'], {
+      desc: 'The answer.', defaultValues: ['42']
+    }),
+    flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
+    flag('version', ['--version'], {desc: 'The version.'})
+  ]
+}
 
 const style = {
   cols: [{width: 25}, {width: 25}]
 }
 
-optsList(opts)(style)
+optsList(opt)(style)
 ```
 
 </details>
@@ -3415,8 +3430,8 @@ optsList(opts)(style)
 </tr>
 <tr name="optsLists">
 <td>
-<code name="optsListsFrom"><a href="#optsLists">optsLists</a>(opts)(style)</code><br />
-<code><a href="#optsListsFrom">optsListsFrom</a>(id)(opts)(style)</code>
+<code name="optsListsFrom"><a href="#optsLists">optsLists</a>({opts})(style)</code><br />
+<code><a href="#optsListsFrom">optsListsFrom</a>(id)({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3455,19 +3470,21 @@ const askOpts = [
 
 const ask = command(askOpts)
 
-const opts = [
-  ask('ask', ['ask'], {desc: 'Ask questions.', required}),
-  number('answer', ['-a', '--answer'], {
-    desc: 'The answer.', defaultValues: ['42']
-  }),
-  flag('help', ['-h', '--help'], {desc: 'Usage docs.'})
-]
+const opt = {
+  opts: [
+    ask('ask', ['ask'], {desc: 'Ask questions.', required}),
+    number('answer', ['-a', '--answer'], {
+      desc: 'The answer.', defaultValues: ['42']
+    }),
+    flag('help', ['-h', '--help'], {desc: 'Usage docs.'})
+  ]
+}
 
 const style = {
   cols: [{width: 25}, {width: 25}]
 }
 
-optsLists(opts)(style)
+optsLists(opt)(style)
 ```
 
 </details>
@@ -3475,8 +3492,8 @@ optsLists(opts)(style)
 </tr>
 <tr name="space">
 <td>
-<code name="spaceFrom"><a href="#space">space</a>(opts)(style)</code><br />
-<code><a href="#spaceFrom">spaceFrom</a>(id)(opts)(style)</code>
+<code name="spaceFrom"><a href="#space">space</a>({opts})(style)</code><br />
+<code><a href="#spaceFrom">spaceFrom</a>(id)({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3492,9 +3509,8 @@ Example:
 
 ```bash
 Deep Thought was created to come up with
-the Answer                              
                                         
-to The Ultimate Question.               
+the Answer to The Ultimate Question.    
 ```
 
 Code:
@@ -3507,9 +3523,9 @@ const style = {
 }
 
 usage([
-  note('Deep Thought was created to come up with the Answer'),
+  note('Deep Thought was created to come up with'),
   space,
-  note('to The Ultimate Question.')
+  note('the Answer to The Ultimate Question.')
 ])()(style)
 ```
 
@@ -3518,13 +3534,13 @@ usage([
 </tr>
 <tr name="spaces">
 <td>
-<code name="spacesFrom"><a href="#spaces">spaces</a>(length)(opts)(style)</code><br />
-<code><a href="#spacesFrom">spacesFrom</a>(id)(length)(opts)(style)</code>
+<code name="spacesFrom"><a href="#spaces">spaces</a>(num)({opts})(style)</code><br />
+<code><a href="#spacesFrom">spacesFrom</a>(id)(num)({opts})(style)</code>
 </td>
 <td>
 <details>
 <summary>
-<code>spaces</code> skips <code>opts</code> and returns <code>length</code> lines with only spaces,
+<code>spaces</code> skips <code>opts</code> and returns <code>num</code> lines with only spaces,
 with each line's width as given by <code><a href="#style">style</a></code>.
 <code>spaces</code> is defined as <code>spacesFrom('line')</code>.
 </summary>
@@ -3535,10 +3551,9 @@ Example:
 
 ```bash
 Deep Thought was created to come up with
-the Answer                              
                                         
-
-to The Ultimate Question.               
+                                        
+the Answer to The Ultimate Question.    
 ```
 
 Code:
@@ -3551,9 +3566,9 @@ const style = {
 }
 
 usage([
-  note('Deep Thought was created to come up with the Answer'),
+  note('Deep Thought was created to come up with'),
   spaces(2),
-  note('to The Ultimate Question.')
+  note('the Answer to The Ultimate Question.')
 ])()(style)
 ```
 
@@ -3562,8 +3577,8 @@ usage([
 </tr>
 <tr name="synopses">
 <td>
-<code name="synopsesFrom"><a href="#synopses">synopses</a>(opts)(style)</code><br />
-<code><a href="#synopsesFrom">synopsesFrom</a>(id)(opts)(style)</code>
+<code name="synopsesFrom"><a href="#synopses">synopses</a>({opts})(style)</code><br />
+<code><a href="#synopsesFrom">synopsesFrom</a>(id)({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3605,7 +3620,7 @@ const opts = [
   flag('help', ['-h', '--help'])
 ]
 
-const script = program(opts)('deepThought')
+const script = program('deepThought', opts)
 
 const style = {
   line: [{width: 40}]
@@ -3619,8 +3634,8 @@ synopses(script)(style)
 </tr>
 <tr name="synopsis">
 <td>
-<code name="synopsisFrom"><a href="#synopsis">synopsis</a>(opts)(style)</code><br />
-<code><a href="#synopsisFrom">synopsisFrom</a>(id)(opts)(style)</code>
+<code name="synopsisFrom"><a href="#synopsis">synopsis</a>({opts})(style)</code><br />
+<code><a href="#synopsisFrom">synopsisFrom</a>(id)({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3656,11 +3671,11 @@ const opts = [
     desc: 'The answer.', required: true
   }),
   flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
-  flag('version', ['--version'], {desc: 'Prints version.'}),
+  flag('version', ['--version'], {desc: 'The version.'}),
   variadicPos('questions')
 ]
 
-const script = program(opts)('deepThought')
+const script = program('deepThought', opts)
 
 const style = {
   line: [{width: 40}]
@@ -3717,11 +3732,11 @@ Combinators are a powerful feature, as they let you build more complex things fr
 
 <table>
 <tr>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Usage&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Usage&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
 <tr name="usage">
-<td><code><a href="#usage">usage</a>(functions)(opts)(style)</code></td>
+<td><code><a href="#usage">usage</a>(functions)({opts})(style)</code></td>
 <td>
 <details>
 <summary>
@@ -3760,7 +3775,7 @@ const opts = [
   flag('version', ['--version'], {desc: 'Prints version.'})
 ]
 
-const script = program(opts)('deepThought', {
+const script = program('deepThought', opts, {
   desc: 'Deep Thought was created to come up with the Answer.'
 })
 
@@ -3776,7 +3791,7 @@ usage([synopsis, space, optsList, space, desc])(script)(style)
 </td>
 </tr>
 <tr name="usageMap">
-<td><code><a href="#usageMap">usageMap</a>(f)(opt)(style)</code></td>
+<td><code><a href="#usageMap">usageMap</a>(f)({opts})(style)</code></td>
 <td>
 <details>
 <summary>
@@ -3868,11 +3883,11 @@ removing all but the first argument in their [`args`](#args) fields.
 
 <table>
 <tr>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Usage&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Usage&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
 <tr name="justArgs">
-<td><code><a href="#justArgs">justArgs</a>(args)(usageFunction)(opts)</code></td>
+<td><code><a href="#justArgs">justArgs</a>(args)(usageFunction)({opts})</code></td>
 <td>
 <details>
 <summary>
@@ -3894,13 +3909,17 @@ const style = {
   cols: [{width: 25}, {width: 25}]
 }
 
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command([])('ask', ['ask'], {desc: 'Asks a question'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
+const opt = {
+  opts: [
+    number('answer', ['-a', '--answer'], {
+      desc: 'The answer'
+    }),
+    command([])('ask', ['ask'], {desc: 'Asks a question'}),
+    flag('version', ['--version'], {desc: 'Prints version'})
+  ]
+}
 
-justArgs(['-a'])(optsList)(opts)(style)
+justArgs(['-a'])(optsList)(opt)(style)
 ```
 
 Result:
@@ -3913,7 +3932,7 @@ Result:
 </td>
 </tr>
 <tr name="noCommands">
-<td><code><a href="#noCommands">noCommands</a>(usageFunction)(opts)</code></td>
+<td><code><a href="#noCommands">noCommands</a>(usageFunction)({opts})</code></td>
 <td>
 <details>
 <summary>
@@ -3933,13 +3952,17 @@ const style = {
   cols: [{width: 25}, {width: 25}]
 }
 
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command([])('ask', ['ask'], {desc: 'Asks a question'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
+const opt = {
+  opts: [
+    number('answer', ['-a', '--answer'], {
+      desc: 'The answer'
+    }),
+    command([])('ask', ['ask'], {desc: 'Asks a question'}),
+    flag('version', ['--version'], {desc: 'Prints version'})
+  ]
+}
 
-noCommands(optsList)(opts)(style)
+noCommands(optsList)({opts})(style)
 ```
 
 Result:
@@ -3953,7 +3976,7 @@ Result:
 </td>
 </tr>
 <tr name="onlyCommands">
-<td><code><a href="#onlyCommands">onlyCommands</a>(usageFunction)(opts)</code></td>
+<td><code><a href="#onlyCommands">onlyCommands</a>(usageFunction)({opts})</code></td>
 <td>
 <details>
 <summary>
@@ -3973,13 +3996,17 @@ const style = {
   cols: [{width: 25}, {width: 25}]
 }
 
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command([])('ask', ['ask'], {desc: 'Asks a question'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
+const opt = {
+  opts: [
+    number('answer', ['-a', '--answer'], {
+      desc: 'The answer'
+    }),
+    command([])('ask', ['ask'], {desc: 'Asks a question'}),
+    flag('version', ['--version'], {desc: 'Prints version'})
+  ]
+}
 
-onlyCommands(optsList)(opts)(style)
+onlyCommands(optsList)(opt)(style)
 ```
 
 Result:
@@ -3992,7 +4019,7 @@ ask                      Asks a question
 </td>
 </tr>
 <tr name="onlyFirstArg">
-<td><code><a href="#onlyFirstArg">onlyFirstArg</a>(usageFunction)(opts)</code></td>
+<td><code><a href="#onlyFirstArg">onlyFirstArg</a>(usageFunction)({opts})</code></td>
 <td>
 <details>
 <summary>
@@ -4013,13 +4040,17 @@ const style = {
   cols: [{width: 25}, {width: 25}]
 }
 
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command([])('ask', ['ask'], {desc: 'Asks a question'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
+const opt = {
+  opts: [
+    number('answer', ['-a', '--answer'], {
+      desc: 'The answer'
+    }),
+    command([])('ask', ['ask'], {desc: 'Asks a question'}),
+    flag('version', ['--version'], {desc: 'Prints version'})
+  ]
+}
 
-onlyFirstArg(optsList)(opts)(style)
+onlyFirstArg(optsList)(opt)(style)
 ```
 
 Result:
@@ -4034,7 +4065,7 @@ ask                      Asks a question
 </td>
 </tr>
 <tr name="optsFilter">
-<td><code><a href="#optsFilter">optsFilter</a>(p)(usageFunction)(opts)</code></td>
+<td><code><a href="#optsFilter">optsFilter</a>(p)(usageFunction)({opts})</code></td>
 <td>
 <details>
 <summary>
@@ -4056,15 +4087,19 @@ const style = {
   cols: [{width: 25}, {width: 25}]
 }
 
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command([])('ask', ['ask'], {desc: 'Asks a question'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
+const opt = {
+  opts: [
+    number('answer', ['-a', '--answer'], {
+      desc: 'The answer'
+    }),
+    command([])('ask', ['ask'], {desc: 'Asks a question'}),
+    flag('version', ['--version'], {desc: 'Prints version'})
+  ]
+}
 
 optsFilter(
   ({types}) => types !== null
-)(optsList)(opts)(style)
+)(optsList)(opt)(style)
 ```
 
 Result:
@@ -4079,7 +4114,7 @@ ask                      Asks a question
 </td>
 </tr>
 <tr name="optsMap">
-<td><code><a href="#optsMap">optsMap</a>(f)(usageFunction)(opts)</code></td>
+<td><code><a href="#optsMap">optsMap</a>(f)(usageFunction)({opts})</code></td>
 <td>
 <details>
 <summary>
@@ -4101,15 +4136,19 @@ const style = {
   cols: [{width: 25}, {width: 25}]
 }
 
-const opts = [
-  number('answer', ['-a', '--answer'], {desc: 'The answer'}),
-  command([])('ask', ['ask'], {desc: 'Asks a question'}),
-  flag('version', ['--version'], {desc: 'Prints version'})
-]
+const opt = {
+  opts: [
+    number('answer', ['-a', '--answer'], {
+      desc: 'The answer'
+    }),
+    command([])('ask', ['ask'], {desc: 'Asks a question'}),
+    flag('version', ['--version'], {desc: 'Prints version'})
+  ]
+}
 
 optsMap(
   opt => ({...opt, args: opt.args.slice(0, 1)})
-)(optsList)(opts)(style)
+)(optsList)({opts})(style)
 ```
 
 Result:
@@ -4154,11 +4193,11 @@ As is apparent from the example, usage decorator combinators are usage decorator
 
 <table>
 <tr>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Usage&nbsp;Decorator&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Usage&nbsp;Decorator&nbsp;Combinator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
 <tr name="decorate-usage">
-<td><code><a href="#decorate-usage">decorate</a>(decorators)(usageFunction)(opts)</code></td>
+<td><code><a href="#decorate-usage">decorate</a>(decorators)(usageFunction)({opts})</code></td>
 <td>
 <code>decorate</code> takes many usage function <code>decorators</code>
 and applies them to its <code>usageFunction</code> from right to left.
@@ -5058,7 +5097,7 @@ const opts = [
   flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
 ]
 
-const script = program(opts)('deepThought', {
+const script = program('deepThought', opts, {
   desc: 'Deep Thought was created to come up with the Answer to ' +
         'The Ultimate Question of Life, the Universe, and Everything.'
 })
@@ -5116,7 +5155,13 @@ const deepThought = parser(stages, {checks, parsers, mode: 'sync'})
 ```js
 const {desc, optsLists, space, synopses, usage} = require('shargs-usage')
 
-const docs = usage([synopses, space, optsLists, space, desc])
+const docs = usage([
+  synopses,
+  space,
+  optsLists,
+  space,
+  desc
+])
 ```
 
 </details>
