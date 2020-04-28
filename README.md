@@ -1043,7 +1043,7 @@ You may think of decorators as recurring patterns that are provided as functions
 
 <table>
 <tr>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
 <tr name="complement">
@@ -3034,9 +3034,9 @@ but strictly separates the concerns of parsing command-line arguments and genera
 However, the shargs ecosystem does not leave you high and dry:
 The [`shargs-usage`][shargs-usage] module specializes on
 generating terminal-based usage documentation for `--help` flags
-from [command-line option](#command-line-options) arrays (`opts`).
+from [command-line options](#command-line-options).
 And I would love to see more modules handling the other cases of documentation in the future,
-e.g. by generating HTML or Markdown from `opts`.
+e.g. by generating HTML or Markdown from options.
 
 But for now, we have [`shargs-usage`][shargs-usage]:
 
@@ -3054,8 +3054,8 @@ const docs = usage([
 
 [`shargs-usage`][shargs-usage] lets you define how your usage documentation should look like in a declarative way.
 In the example, we tell our `docs` to start with [`synopses`](#synopses), have [`optsLists`](#optsLists) in the body,
-and close with [`desc`](#usage-desc), that shows the [`desc`](#desc) field.
-We separate these three parts with [`space`](#space)s and enclose everything with a [`usage`](#usage) function.
+and close with a [`desc`](#usage-desc)ription.
+We separate these three parts with [`space`](#space)s and enclose everything in a [`usage`](#usage) function.
 
 Note that we have not mentioned any command-line options, yet.
 We have only told `docs` how the usage documentation should look like, not what should be documented.
@@ -3092,7 +3092,7 @@ const style = {
 const text = optsDocs(style)
 ```
 
-Finally, if we `console.log(text)`, the following `text` is printed to the console:
+Now, if we `console.log(text)`, the following `text` is printed to the console:
 
 ```bash
 deepThought (<question>) [-a|--answer] [-h|--help]          
@@ -3110,7 +3110,7 @@ are the moving parts of [automatic usage documentation generation](#automatic-us
 We have already talked about [command-line options](#command-line-options) before
 and will talk about [`style`](#style) in an upcoming section.
 
-But first, let us have a closer look at how to declare a usage documentation layout.
+Here, we have a closer look at how to declare a usage documentation layout.
 
 #### Usage Functions
 
@@ -3703,7 +3703,7 @@ Let's see how usage combinators may be used to implement [`synopses`](#synopses)
 ```js
 const {decorate, noCommands, onlyCommands, optsMap, usage, usageMap} = require('shargs-usage')
 
-const prefixKey = prefix => optsMap(opt => ({...opt, key: prefix + ' ' + opt.key}))
+const prefixKey = prefix => optsMap(opts => ({...opts, key: prefix + ' ' + opts.key}))
 
 function synopses (opt) {
   return usage([
@@ -3719,9 +3719,9 @@ This example uses [usage decorators](#usage-decorators), that are only introduce
 For now, you do not need to know what they are, as they work exactly as their name suggests:
 [`noCommands`](#noCommands) removes all [`command`](#command)s from [`opts`](#opts) before applying a usage function,
 [`onlyCommands`](#onlyCommands) removes everything but [`command`](#command)s from [`opts`](#opts),
-[`optsMap`](#optsMap) applies a function to an option, and [`decorate`](#decorate) combines decorators.
+[`optsMap`](#optsMap) applies a function to an option's [`opts`](#opts), and [`decorate`](#decorate) combines decorators.
 
-The implementation of `synopses` uses two combinators:
+The implementation of `synopses` uses two usage combinators:
 [`usage`](#usage) and [`usageMap`](#usageMap).
 
 [`usage`](#usage) is used to combine two usage functions:
@@ -4347,13 +4347,13 @@ layout([
 </tr>
 <tr name="brs">
 <td>
-<code name="brsFrom"><a href="#brs">brs</a>(length)(style)</code><br />
-<code><a href="#brsFrom">brsFrom</a>(id)(length)(style)</code>
+<code name="brsFrom"><a href="#brs">brs</a>(num)(style)</code><br />
+<code><a href="#brsFrom">brsFrom</a>(id)(num)(style)</code>
 </td>
 <td>
 <details>
 <summary>
-<code>brs</code> returns <code>length</code> <code><a href="#line">line</a></code>s filled with spaces,
+<code>brs</code> returns <code>num</code> <code><a href="#line">line</a></code>s filled with spaces,
 with each <code><a href="#line">line</a></code>'s <code>width</code> as given by <code><a href="#style">style</a></code>.
 <code>brs</code> is defined as <code>brsFrom('line')</code>.
 </summary>
