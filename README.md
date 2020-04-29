@@ -1833,12 +1833,12 @@ Result:
 </details>
 </td>
 </tr>
-<tr name="suggestOptions">
-<td><code><a href="#suggestOptions">suggestOptions</a>({errs, opts})</code></td>
+<tr name="suggestOpts">
+<td><code><a href="#suggestOpts">suggestOpts</a>({errs, opts})</code></td>
 <td>
 <details>
 <summary>
-<code>suggestOptions</code> checks all <a href="#rest">rest</a> <code><a href="#values">values</a></code>,
+<code>suggestOpts</code> checks all <a href="#rest">rest</a> <code><a href="#values">values</a></code>,
 assuming they are in the <a href="#rest">rest</a> category because of spelling mistakes.
 It collects all command-line options' <code><a href="#args">args</a></code>
 and computes a distance metric (currently Levenshtein distance) between each arg and each <a href="#rest">rest</a>.
@@ -1852,7 +1852,7 @@ suggesting probable <code><a href="#args">args</a></code> replacements for spell
 Example:
 
 ```js
-const {suggestOptions} = require('shargs-parser')
+const {suggestOpts} = require('shargs-parser')
 const {number} = require('shargs-opts')
 
 const opts = [
@@ -1860,7 +1860,7 @@ const opts = [
   {values: ['--asn']}
 ]
 
-suggestOptions({opts})
+suggestOpts({opts})
 ```
 
 Result:
