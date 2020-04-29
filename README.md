@@ -52,7 +52,7 @@ Describe your command-line program and options:
 <p>
 
 ```js
-const {flag, number, program, string} = require('shargs-opts')
+const {flag, number, program, stringPos} = require('shargs-opts')
 
 const opts = [
   stringPos('question', {desc: 'Ask a question.', required: true}),
@@ -66,7 +66,7 @@ const script = program('deepThought', opts, {desc: 'Ask the Ultimate Question.'}
 </p>
 </summary>
 
-Read up on the details on the [command-line options](#command-line-options) section.
+Read up on the details in the [command-line options](#command-line-options) section.
 
 </details>
 
@@ -170,7 +170,7 @@ Find out more in the [writing programs with shargs](#writing-programs-with-sharg
 
 <details>
 <summary>
-Run your program with <code>node deepThought --help</code>:
+Run your program with <code>node ./deepThought --help</code>:
 
 <p>
 
@@ -194,7 +194,7 @@ and [writing programs with shargs](#writing-programs-with-shargs) sections have 
 
 <details>
 <summary>
-Run your program with <code>node deepThought -q "What is the meaning of Life, the Universe, and Everything?"</code>:
+Run your program with <code>node ./deepThought -q "What is the meaning of Life, the Universe, and Everything?"</code>:
 
 <p>
 
@@ -219,7 +219,7 @@ sections for more.
 
 <details>
 <summary>
-Run your program with <code>node deepThought -a 23</code>:
+Run your program with <code>node ./deepThought -a 23</code>:
 
 <p>
 
@@ -257,7 +257,7 @@ const deepThought = parser({argv: [], opts: [], args: []})
 ```
 
 Although not fancy, `deepThought` from the example is already a working command-line parser.
-The empty `argv`, `opts`, and `args` arrays mark extension points, where parser stages can be plugged in.
+The empty `argv`, `opts`, and `args` arrays mark extension points, where parser stages may be plugged in.
 
 While you are encouraged to write your own parser stages,
 most of the time you get along by picking and choosing common ones from the `shargs-parser` module:
@@ -291,21 +291,21 @@ const {flag, number, program, stringPos} = require('shargs-opts')
 
 const opts = [
   stringPos('question', {desc: 'Ask a question.', required: true}),
-  number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: ['42']}),
+  number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: [42]}),
   flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
 ]
 
 const script = program('deepThought', opts, {desc: 'Ask the Ultimate Question.'})
 ```
 
-The `deepThought` script should have three command-line options:
+The `'deepThought'` script should have three command-line options:
 
 1.  A `required` string positional argument named `question`.
-2.  An `answer` number option specified with `-a` or `--answer` that should default to `'42'` if not given.
+2.  An `answer` number option specified with `-a` or `--answer` that should default to `42` if not given.
 3.  A `help` command-line flag given by `-h` or `--help`.
 
 We used the `shargs-opts` module to get a nice DSL for describing our options.
-However, we could have also have written them out as objects ourselves or could have used a different DSL.
+However, we could have also written them out as objects ourselves or could have used a different DSL.
 
 Next, we tell our parser about the options:
 
@@ -502,12 +502,12 @@ and <code><a href="#opts">opts</a></code> must be defined.
 <td><code>{<a href="#values">values</a>}</code></td>
 <td>
 <code><a href="#key">key</a></code> must be <code>undefined</code>.
-<code><a href="#types">types</a></code> must be an array of length 1 with a string representing an unparsed value.
+<code><a href="#values">values</a></code> must be an array of length 1 with a string representing an unparsed value.
 </td>
 </tr>
 </table>
 
-Since defining objects following these rules can be tedious,
+Since writing objects following these rules by hand can be tedious,
 [`shargs-opts`][shargs-opts] gives you a nice and simple type-based DSL for defining valid command-line options:
 
 ```js
@@ -525,7 +525,7 @@ const script = program('deepThought', opts, {
 })
 ```
 
-In the example, using [`command`](#command), [`number`](#number), [`flag`](#flag),
+In the example, using the type functions [`command`](#command), [`number`](#number), [`flag`](#flag),
 and [`program`](#program) guarantees the generation of valid objects.
 
 #### Type Functions
@@ -616,7 +616,7 @@ const boolPos = (key, fields) => ({
 <tr name="command">
 <td>
 <code><a href="#command">command</a>(opts)(key, args, fields)</code><br />
-<code><a href="#program">program</a>(opts)(key, fields)</code>
+<code><a href="#program">program</a>(key, opts, fields)</code>
 </td>
 <td>
 <details>
@@ -646,7 +646,7 @@ const command = opts => (key, args, fields) => ({
 `program` returns the following object:
 
 ```js
-const program = opts => (key, fields) => ({
+const program = (key, opts, fields) => ({
   key, opts, ...fields
 })
 ```
@@ -664,6 +664,7 @@ This type represents command-line options that stand for themselves and take no 
 Shargs counts the number of times a <code>flag</code> occurs
 (e.g. <code>{verbose: {type: 'flag', count: 3}}</code>), so a <code>flag</code> may be amplified by repeating it.
 If you don't need counts and prefer numbers or boolean values, have a look at the
+<code><a href="#flagAsBool">flagAsBool</a></code>, <code><a href="#flagAsNumber">flagAsNumber</a></code>,
 <code><a href="#flagsAsBools">flagsAsBools</a></code> and <code><a href="#flagsAsNumbers">flagsAsNumbers</a></code> 
 parser stages.
 If you need the presence of a <code>flag</code> to imply negativity (e.g. <code>--no-fun</code>),
@@ -819,6 +820,10 @@ or to provide descriptions for usage documentation generation
 (e.g. <code><a href="#desc">desc</a></code>, <code><a href="#descArg">descArg</a></code>).
 If you wish to write your own parser stages, go ahead and define your own fields.
 
+A very useful property of command-line option definitions is, that they are valid JSON.
+This enables use cases like reading an API's option definitions from HTTPS,
+or swapping out definitions on the fly.
+
 #### Option Fields
 
 The following fields are used by [`shargs`][shargs], [`shargs-parser`][shargs-parser] stages
@@ -837,9 +842,9 @@ or [`shargs-usage`][shargs-usage] functions:
 <td>
 <code>args</code> defines argument names for command-line options.
 E.g. <code>['-h', '--help']</code> could be used for a help <code><a href="#flag">flag</a></code>
-or <code>['-F', '--file']</code> could be used for a <code><a href="#string">string</a></code> representing a file.
+or <code>['ask']</code> could be used for a <code><a href="#command">command</a></code>.
 Positional arguments must not have an <code>args</code> field,
-as they are not given by an argument, but by their position.
+as they are not given by argument, but by their position.
 </td>
 </tr>
 <tr name="contradicts">
@@ -930,7 +935,7 @@ A <code>key</code> must not be named <code>_</code>.
 It is also used by the
 <code><a href="#optsList">optsList</a></code>, <code><a href="#optsLists">optsLists</a></code>,
 <code><a href="#optsDef">optsDef</a></code>, <code><a href="#optsDefs">optsDefs</a></code>,
-<code><a href="#synopses">synopses</a></code>, and <code><a href="#synopsis">synopsis</a></code>, usage functions
+<code><a href="#synopses">synopses</a></code>, and <code><a href="#synopsis">synopsis</a></code> usage functions
 and their <code>*From</code> versions to describe argument values (e.g. <code>--format=&lt;format&gt;</code>).
 <code><a href="#descArg">descArg</a></code>, <code><a href="#types">only</a></code>,
 and <code><a href="#types">types</a></code> are other fields that change the argument value description.
@@ -960,7 +965,8 @@ and <code><a href="#key">key</a></code>.
 <td><code><a href="#opts">opts</a></code></td>
 <td>array of options</td>
 <td>
-<code>opts</code> defines the command-line options of <code><a href="#command">command</a></code>s.
+<code>opts</code> defines the command-line options of <code><a href="#command">command</a></code>s
+and <code><a href="#program">program</a></code>s.
 </td>
 </tr>
 <tr name="required">
@@ -1000,8 +1006,9 @@ parser stages, that operate on
 and <a href="#array-option">array options</a>' and <a href="#array-pos-arg">array positional arguments</a>'
 <code>types</code> must be <code>[_, _, ...]</code>,
 where <code>_</code> is the name of a type given as a string.
-<a href="#variadic-option">Variadic options</a>', <a href="#variadic-pos-arg">variadic positional arguments</a>',
-and <a href="#command-option">command options</a>' must not have a <code>types</code> field.
+<a href="#variadic-option">Variadic options</a>, <a href="#variadic-pos-arg">variadic positional arguments</a>,
+<a href="#command-option">command options</a>, and <a href="#program-pos-arg">program positional arguments</a>
+must not have a <code>types</code> field.
 <code>types</code> is also used by the
 <code><a href="#optsList">optsList</a></code>, <code><a href="#optsLists">optsLists</a></code>,
 <code><a href="#optsDef">optsDef</a></code>, and <code><a href="#optsDefs">optsDefs</a></code> usage functions
@@ -1027,9 +1034,9 @@ The length of a <code>values</code>' array depends on the command-line option ty
 must each have <code>values</code> of length <code>1</code>.
 <a href="#array-option">Array options</a>' and <a href="#array-pos-arg">array positional arguments</a>'
 <code>values</code> field must match their <code><a href="#types">types</a></code> in length.
-A <a href="#command-option">command option</a>'s, <a href="#variadic-option">variadic option</a>'s,
-and <a href="#variadic-pos-arg">variadic positional argument</a>'s <code>values</code> may have any number of entries,
-including none.
+A , <a href="#command-option">command option</a>'s, <a href="#program-pos-arg">program positional argument</a>'s,
+<a href="#variadic-option">variadic option</a>'s, and <a href="#variadic-pos-arg">variadic positional argument</a>'s
+<code>values</code> may have any number of entries.
 </td>
 </tr>
 </table>
@@ -1202,7 +1209,7 @@ However, if you do have a use case that needs adjustments to those stages, you m
 The [`argv`](#argv-stage), [`opts`](#opts-stage), and [`args`](#args-stage) stages
 are the actual developer-facing API for defining a parser's behavior using parser stages.
 
-If you read the stages' function signatures from top to bottom, you get a good impression of what `parser` does:
+If you read the stage's function signatures from top to bottom, you get a good impression of what `parser` does:
 
 Most importantly, it takes a list of errors (`errs`) and passes them on the the next stage.
 If you write your own stages, it is of utmost importance to not interrupt this flow.
@@ -1222,7 +1229,8 @@ It is save to assume it uses the information defined in `opts` to drive this tra
 Finally, the [`toArgs` stage's](#toArgs-stage) signature:
 It takes several [`parsers`](#parsers), supposably from the `parsers` field in `options`, and transforms `opts` to `args`.
 Since parsers are used to transform [`opts`](#opts),
-it is save to assume that [`parsers`](#parsers) is used to recursively parse [`command`s](#command).
+it is save to assume that [`parsers`](#parsers) is used to recursively parse [`program`s](#program)
+and [`command`s](#command).
 
 #### `parsers`
 
@@ -1261,7 +1269,7 @@ So if you need to define the same *child* parser for all [`command`s](#command),
 
 #### `checks`
 
-We have learned in the [`parsers`](#parsers) section that checks are treated differently than stages.
+We have learned in the [`parsers`](#parsers) section that checks are treated different than stages.
 But both actually look quite similar, and even have the same signatures.
 So why is that the case:
 
@@ -1290,7 +1298,7 @@ And this causes problems in two different cases:
 First, when declaring the order of stages in `argv`, `opts`, and `args`:
 Checks verify that `argv`, `opts`, or `args` have a certain shape or follow certain rules.
 But applying stages may change that shape or bent those rules.
-And checks cannot possibly account for all these changes, especially if your own custom stages are involved.
+And checks cannot possibly account for all those changes, especially if your own custom stages are involved.
 So there is only one way out:
 Checks must always be run before any stage is run, and by splitting checks and stages into two different objects,
 `parser` makes sure of that.
@@ -1305,11 +1313,11 @@ So in order to avoid duplicating errors, checks are not applied recursively, in 
 
 The `mode` field defines whether a parser runs synchronously or asynchronously.
 So far, all examples we have seen have been synchronous parsers, because those are easier to reason about and to explain.
-However, if `mode` is set to `async`, a parser becomes asynchronous.
+However, if `mode` is set to `'async'`, a parser becomes asynchronous.
 But what does that mean exactly:
 
 ```js
-const opts = ...
+const script = ...
 const checks = ...
 const stages = ...
 const parsers = ...
@@ -1317,7 +1325,7 @@ const argv = ...
 
 const asyncDeepThought = parser(stages, {checks, parsers, mode: 'async'})
 
-const asyncParse = asyncDeepThought({opts})
+const asyncParse = asyncDeepThought(script)
 
 const asyncResults = parseAsync(argv)
 
@@ -1400,7 +1408,7 @@ you get a good impression of what an asynchronous parser must do:
 
 In addition to [what a synchronous parser does](#stages), it needs a way to wait for Promises to resolve,
 before continuing processing functions.
-So it needs a way to chains functions returning objects, as well as functions returning Promises.
+So it needs a way to chain functions returning objects, as well as functions returning Promises.
 Fortunately for us, this is exactly what [Promise.prototype.then][then] does.
 
 So, internally, an asynchronous shargs parser really differs only in one way from a synchronous parser:
@@ -1456,7 +1464,7 @@ Result:
 {
   errs: [
     {
-      code: 'False argv rules',
+      code: 'FalseArgvRules',
       msg:  'Your argv rules returned false...',
       info: {...}
     }
@@ -1575,7 +1583,7 @@ Result:
 </td>
 </tr>
 <tr name="traverseArgv">
-<td><code><a href="#traverseArgv">traverseArgv</a>(p)(f)({errs,opts})</code></td>
+<td><code><a href="#traverseArgv">traverseArgv</a>(p)(f)({errs,argv})</code></td>
 <td>
 <details>
 <summary>
@@ -1676,7 +1684,7 @@ Result:
 {
   errs: [
     {
-      code: 'Contradiction detected',
+      code: 'ContradictionDetected',
       msg:  'Some given keys contradict each other.',
       info: {...}
     }
@@ -1725,7 +1733,7 @@ Result:
 {
   errs: [
     {
-      code: 'Command required',
+      code: 'CommandRequired',
       msg:  'No command found. Please use at least one command!',
       info: {...}
     }
@@ -1776,7 +1784,7 @@ Result:
 {
   errs: [
     {
-      code: 'Implication violated',
+      code: 'ImplicationViolated',
       msg:  'Some given keys that imply...',
       info: {...}
     }
@@ -1822,7 +1830,7 @@ Result:
 {
   errs: [
     {
-      code: 'Required option is missing',
+      code: 'RequiredOptionIsMissing',
       msg:  'A required option has not been provided.',
       info: {...}
     }
@@ -1869,7 +1877,7 @@ Result:
 {
   errs: [
     {
-      code: 'Did you mean',
+      code: 'DidYouMean',
       msg:  'An unknown command-line argument...',
       info: {
         argv: '--asn',
@@ -1887,12 +1895,12 @@ Result:
 
 The <code>options</code> array looks a little bit strange, so an explanation is in order.
 The array's index is the cost necessary to transform the unknown option in the arguments, represented as keys.
-Because of this, you can conveniently work with the results, e.g.:
+Because of this, you can conveniently work with the results, e.g. by only using the most probable ones:
 
 ```js
 'Did you mean: ' + (
   options
-  .slice(0, 4)
+  .slice(0, 3)
   .reduce((a, b) => a.concat(b))
   .flatMap(Object.keys)
   .join(', ')
@@ -1902,7 +1910,7 @@ Because of this, you can conveniently work with the results, e.g.:
 Results in:
 
 ```bash
-Did you mean: --age, -a
+Did you mean: --age
 ```
 
 </details>
@@ -1949,12 +1957,12 @@ Result:
 {
   errs: [
     {
-      code: 'Invalid required positional argument',
+      code: 'InvalidRequiredPositionalArgument',
       msg:  'If a positional argument is required, all prev...',
       info: {...}
     },
     {
-      code: 'Invalid variadic positional argument',
+      code: 'InvalidVariadicPositionalArgument',
       msg:  'Only the last positional argument may be variadic.',
       info: {...}
     }
@@ -2007,7 +2015,7 @@ Result:
 {
   errs: [
     {
-      code: 'False opts rules',
+      code: 'FalseOptsRules',
       msg:  'Your opts rules returned false...',
       info: {...}
     }
@@ -2056,7 +2064,7 @@ Result:
 {
   errs: [
     {
-      code: 'Invalid arity',
+      code: 'InvalidArity',
       msg:  "An option's types arity does not match...",
       info: {...}
     }
@@ -2094,14 +2102,12 @@ Example:
 const {arrayOnRepeat} = require('shargs-parser')
 const {number, string} = require('shargs-opts')
 
-const obj = {
-  opts: [
-    string('answer', ['-a'], {values: ['42']}),
-    number('answer', ['-a'], {values: [42]})
-  ]
-}
+const opts = [
+  string('answer', ['-a'], {values: ['42']}),
+  number('answer', ['-a'], {values: [42]})
+]
 
-arrayOnRepeat(obj)
+arrayOnRepeat({opts})
 ```
 
 Result:
@@ -2128,7 +2134,7 @@ Result:
 (e.g. <code>{values: ['--version']}</code>)
 into new command-line options that are introduced
 based on the <a href="#rest">rest</a> <code><a href="#values">values</a></code>
-(e.g. <code>{key: 'version', types: [], values: {type: 'flag', count: 1}}</code>).
+(e.g. <code>{key: 'version', types: [], values: [1]}</code>).
 It transforms single <a href="#rest">rest</a> options into a <code><a href="#flag">flag</a></code>
 and two consecutive <a href="#rest">rest</a> options into a <code><a href="#string">string</a></code>
 (e.g. <code>[{values: ['--not']}, {values: ['panic']}]</code> would become
@@ -2305,7 +2311,7 @@ Result:
 {
   errs: [
     {
-      code: 'Value restriction violated',
+      code: 'ValueRestrictionViolated',
       msg:  'A value lies outside the allowed values...',
       info: {...}
     }
@@ -2494,7 +2500,7 @@ Result:
 {
   errs: [
     {
-      code: 'Unexpected argument',
+      code: 'UnexpectedArgument',
       msg:  'An unexpected argument was used...',
       info: {...}
     }
@@ -2541,7 +2547,7 @@ Result:
 {
   errs: [
     {
-      code: 'False args rules',
+      code: 'FalseArgsRules',
       msg:  'Your args rules returned false...',
       info: {...}
     }
@@ -2634,7 +2640,7 @@ Example:
 const {bestGuessCast} = require('shargs-parser')
 
 const args = {
-  _: ['--name', 'Logan'],
+  _: ['--name', 'Marvin'],
   str1: 'yay',
   num1: '42.3',
   num2: '123e-1',
@@ -2660,7 +2666,7 @@ Result:
 ```js
 {
   args: {
-    _: ['--name', 'Logan'],
+    _: ['--name', 'Marvin'],
     str1: 'yay',
     num1: 42.3,
     num2: 12.3,
@@ -2919,7 +2925,7 @@ Result:
 ```js
 {
   args: {
-    _: ['--help'],
+    _: ['--help', '-v'],
     version: {type: 'flag', count: 2},
     name: 'Arthur',
     help: true,
@@ -3036,7 +3042,7 @@ The [`shargs-usage`][shargs-usage] module specializes on
 generating terminal-based usage documentation for `--help` flags
 from [command-line options](#command-line-options).
 And I would love to see more modules handling the other cases of documentation in the future,
-e.g. by generating HTML or Markdown from options.
+e.g. by generating HTML or Markdown from option definitions.
 
 But for now, we have [`shargs-usage`][shargs-usage]:
 
@@ -3059,7 +3065,8 @@ We separate these three parts with [`space`](#space)s and enclose everything in 
 
 Note that we have not mentioned any command-line options, yet.
 We have only told `docs` how the usage documentation should look like, not what should be documented.
-But the command-line options follow shortly after:
+
+But we do that next:
 
 ```js
 const {flag, number, program, stringPos} = require('shargs-opts')
@@ -3078,7 +3085,7 @@ const script = program('deepThought', opts, {
 const optsDocs = docs(script)
 ```
 
-`optsDocs` now knows what to layout (`script`), and how it should look like (`docs`).
+`optsDocs` now knows what to layout (`script`), and how how to layout it (`docs`).
 But there is still one decision to be made:
 How to `style` the different parts of the documentation:
 
@@ -3106,7 +3113,8 @@ Ultimate Question of Life, the Universe, and Everything.
 ```
 
 [`script`](#command-line-options), `docs`, and [`style`](#style)
-are the moving parts of [automatic usage documentation generation](#automatic-usage-documentation-generation).
+are the moving parts of [automatic usage documentation generation](#automatic-usage-documentation-generation)
+and they are defined independently.
 We have already talked about [command-line options](#command-line-options) before
 and will talk about [`style`](#style) in an upcoming section.
 
@@ -3123,8 +3131,8 @@ Here, we have a closer look at how to declare a usage documentation layout.
 </tr>
 <tr name="usage-desc">
 <td>
-<code name="usage-descFrom"><a href="#usage-desc">desc</a>({opts})(style)</code><br />
-<code><a href="#usage-descFrom">descFrom</a>(id)({opts})(style)</code>
+<code name="usage-descFrom"><a href="#usage-desc">desc</a>({desc})(style)</code><br />
+<code><a href="#usage-descFrom">descFrom</a>(id)({desc})(style)</code>
 </td>
 <td>
 <details>
@@ -3166,14 +3174,14 @@ desc(opt)(style)
 </tr>
 <tr name="note">
 <td>
-<code name="noteFrom"><a href="#note">note</a>(string)({opts})(style)</code><br />
-<code><a href="#noteFrom">noteFrom</a>(id)(string)({opts})(style)</code>
+<code name="noteFrom"><a href="#note">note</a>(string)()(style)</code><br />
+<code><a href="#noteFrom">noteFrom</a>(id)(string)()(style)</code>
 </td>
 <td>
 <details>
 <summary>
 <code>note</code> takes a <code>string</code> and formats it according to a <code><a href="#style">style</a></code>,
-completely ignoring <code>opts</code> in the process.
+completely ignoring its second parameter.
 If the string is too long to fit one line, it is split and spread over several lines.
 <code>note</code> is defined as <code>noteFrom('line')</code>.
 </summary>
@@ -3206,15 +3214,15 @@ note(
 </tr>
 <tr name="notes">
 <td>
-<code name="notesFrom"><a href="#notes">notes</a>(strings)({opts})(style)</code><br />
-<code><a href="#notesFrom">notesFrom</a>(id)(strings)({opts})(style)</code>
+<code name="notesFrom"><a href="#notes">notes</a>(strings)()(style)</code><br />
+<code><a href="#notesFrom">notesFrom</a>(id)(strings)()(style)</code>
 </td>
 <td>
 <details>
 <summary>
 <code>notes</code> takes a list of <code>strings</code> and formats it
 according to a <code><a href="#style">style</a></code>,
-discarding its <code>opts</code> parameter.
+completely ignoring its second parameter.
 If a string is too long to fit one line, it is split and spread over several lines.
 <code>notes</code> is defined as <code>notesFrom('line')</code>.
 </summary>
@@ -3493,13 +3501,13 @@ optsLists(opt)(style)
 </tr>
 <tr name="space">
 <td>
-<code name="spaceFrom"><a href="#space">space</a>({opts})(style)</code><br />
-<code><a href="#spaceFrom">spaceFrom</a>(id)({opts})(style)</code>
+<code name="spaceFrom"><a href="#space">space</a>()(style)</code><br />
+<code><a href="#spaceFrom">spaceFrom</a>(id)()(style)</code>
 </td>
 <td>
 <details>
 <summary>
-<code>space</code> ignores its <code>opts</code> and returns a line consisting entirely of spaces,
+<code>space</code> ignores its first argument and returns a line consisting entirely of spaces,
 with a width according to <code><a href="#style">style</a></code>.
 <code>space</code> is defined as <code>spaceFrom('line')</code>.
 </summary>
@@ -3535,13 +3543,13 @@ usage([
 </tr>
 <tr name="spaces">
 <td>
-<code name="spacesFrom"><a href="#spaces">spaces</a>(num)({opts})(style)</code><br />
-<code><a href="#spacesFrom">spacesFrom</a>(id)(num)({opts})(style)</code>
+<code name="spacesFrom"><a href="#spaces">spaces</a>(num)()(style)</code><br />
+<code><a href="#spacesFrom">spacesFrom</a>(id)(num)()(style)</code>
 </td>
 <td>
 <details>
 <summary>
-<code>spaces</code> skips <code>opts</code> and returns <code>num</code> lines with only spaces,
+<code>spaces</code> skips its second argument and returns <code>num</code> lines with only spaces,
 with each line's width as given by <code><a href="#style">style</a></code>.
 <code>spaces</code> is defined as <code>spacesFrom('line')</code>.
 </summary>
@@ -3578,8 +3586,8 @@ usage([
 </tr>
 <tr name="synopses">
 <td>
-<code name="synopsesFrom"><a href="#synopses">synopses</a>({opts})(style)</code><br />
-<code><a href="#synopsesFrom">synopsesFrom</a>(id)({opts})(style)</code>
+<code name="synopsesFrom"><a href="#synopses">synopses</a>({key, opts})(style)</code><br />
+<code><a href="#synopsesFrom">synopsesFrom</a>(id)({key, opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3635,8 +3643,8 @@ synopses(script)(style)
 </tr>
 <tr name="synopsis">
 <td>
-<code name="synopsisFrom"><a href="#synopsis">synopsis</a>({opts})(style)</code><br />
-<code><a href="#synopsisFrom">synopsisFrom</a>(id)({opts})(style)</code>
+<code name="synopsisFrom"><a href="#synopsis">synopsis</a>({key, opts})(style)</code><br />
+<code><a href="#synopsisFrom">synopsisFrom</a>(id)({key, opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3740,15 +3748,14 @@ Combinators are a powerful feature, as they let you build more complex things fr
 <th>Description</th>
 </tr>
 <tr name="usage">
-<td><code><a href="#usage">usage</a>(functions)({opts})(style)</code></td>
+<td><code><a href="#usage">usage</a>(functions)(opt)(style)</code></td>
 <td>
 <details>
 <summary>
 <code>usage</code> takes a list of usage <code>functions</code>
-that each take an <code>opts</code>, a <code>style</code> and return a string.
-It then applies its own <code>opts</code> and <code>style</code> to each function,
+that each take an <code>opt</code>, a <code>style</code> and return a string.
+It then applies its own <code>opt</code> and <code>style</code> to each function,
 and concatenates the resulting strings.
-On empty <code>opts</code>, it returns an empty string.
 </summary>
 
 <br />
@@ -3891,12 +3898,12 @@ removing all but the first argument in their [`args`](#args) fields.
 <th>Description</th>
 </tr>
 <tr name="justArgs">
-<td><code><a href="#justArgs">justArgs</a>(args)(usageFunction)({opts})</code></td>
+<td><code><a href="#justArgs">justArgs</a>(args)(usageFunction)(opt)</code></td>
 <td>
 <details>
 <summary>
-<code>justArgs</code> modifies its <code>opts</code>
-by removing all options that have no <code><a href="#args">args</a></code> field
+<code>justArgs</code> modifies its <code>opt</code>
+by removing all <code><a href="#opts">opts</a></code> that have no <code><a href="#args">args</a></code> field
 or whose <code><a href="#args">args</a></code> do not contain any argument
 given in the <code>args</code> list.
 </summary>
@@ -3936,12 +3943,12 @@ Result:
 </td>
 </tr>
 <tr name="noCommands">
-<td><code><a href="#noCommands">noCommands</a>(usageFunction)({opts})</code></td>
+<td><code><a href="#noCommands">noCommands</a>(usageFunction)(opt)</code></td>
 <td>
 <details>
 <summary>
-<code>noCommands</code> modifies its <code>opts</code>
-by removing all <code><a href="#command">command</a></code>s.
+<code>noCommands</code> modifies its <code>opt</code>
+by removing all <code><a href="#command">command</a></code>s from its <code><a href="#opts">opts</a></code>.
 </summary>
 
 <br />
@@ -3980,12 +3987,12 @@ Result:
 </td>
 </tr>
 <tr name="onlyCommands">
-<td><code><a href="#onlyCommands">onlyCommands</a>(usageFunction)({opts})</code></td>
+<td><code><a href="#onlyCommands">onlyCommands</a>(usageFunction)(opt)</code></td>
 <td>
 <details>
 <summary>
-<code>onlyCommands</code> modifies its <code>opts</code>
-by keeping only <code><a href="#command">command</a></code>s.
+<code>onlyCommands</code> modifies its <code>opt</code>
+by keeping only <code><a href="#command">command</a></code>s in its <code><a href="#opts">opts</a></code>.
 </summary>
 
 <br />
@@ -4023,12 +4030,12 @@ ask                      Asks a question
 </td>
 </tr>
 <tr name="onlyFirstArg">
-<td><code><a href="#onlyFirstArg">onlyFirstArg</a>(usageFunction)({opts})</code></td>
+<td><code><a href="#onlyFirstArg">onlyFirstArg</a>(usageFunction)(opt)</code></td>
 <td>
 <details>
 <summary>
-<code>onlyFirstArg</code> modifies its <code>opts</code>
-by first keeping only options that have <code><a href="#args">args</a></code>
+<code>onlyFirstArg</code> modifies its <code>opt</code>
+by first keeping only <code><a href="#opts">opts</a></code> that have <code><a href="#args">args</a></code>
 and by then removing all <code><a href="#args">args</a></code> but the first.
 </summary>
 
@@ -4069,12 +4076,12 @@ ask                      Asks a question
 </td>
 </tr>
 <tr name="optsFilter">
-<td><code><a href="#optsFilter">optsFilter</a>(p)(usageFunction)({opts})</code></td>
+<td><code><a href="#optsFilter">optsFilter</a>(p)(usageFunction)(opt)</code></td>
 <td>
 <details>
 <summary>
-<code>optsFilter</code> modifies its <code>opts</code> by applying a filter with the predicate <code>p</code>,
-whose function signature must be <code>opt => true|false</code>.
+<code>optsFilter</code> modifies its <code>opt</code> by applying a filter with the predicate <code>p</code>,
+whose function signature must be <code>opt => true|false</code> to its <code><a href="#opts">opts</a></code>.
 Many other usage decorators are defined in terms of <code>optsFilter</code>
 and it is of great help for writing custom ones.
 </summary>
@@ -4118,11 +4125,12 @@ ask                      Asks a question
 </td>
 </tr>
 <tr name="optsMap">
-<td><code><a href="#optsMap">optsMap</a>(f)(usageFunction)({opts})</code></td>
+<td><code><a href="#optsMap">optsMap</a>(f)(usageFunction)(opt)</code></td>
 <td>
 <details>
 <summary>
-<code>optsMap</code> modifies its <code>opts</code> by applying a function <code>f</code> to each option,
+<code>optsMap</code> modifies its <code>opt</code> by applying a function <code>f</code>
+to each option in <code><a href="#opts">opts</a></code>,
 whose function signature must be <code>opt => opt</code>.
 Many other usage decorators are defined in terms of <code>optsMap</code>
 and it is of great help for writing custom ones.
@@ -4201,7 +4209,7 @@ As is apparent from the example, usage decorator combinators are usage decorator
 <th>Description</th>
 </tr>
 <tr name="decorate-usage">
-<td><code><a href="#decorate-usage">decorate</a>(decorators)(usageFunction)({opts})</code></td>
+<td><code><a href="#decorate-usage">decorate</a>(decorators)(usageFunction)(opt)</code></td>
 <td>
 <code>decorate</code> takes many usage function <code>decorators</code>
 and applies them to its <code>usageFunction</code> from right to left.
@@ -4211,7 +4219,7 @@ and applies them to its <code>usageFunction</code> from right to left.
 
 #### Layout Functions
 
-[Usage functions](#usage-functions) that are applied to `opts`
+[Usage functions](#usage-functions) that are applied to an `opt`
 are transformed into a group of functions called `layout functions`.
 If we take a closer look at the signatures of usage and layout functions, this becomes apparent:
 
@@ -4228,13 +4236,13 @@ If we take a closer look at the signatures of usage and layout functions, this b
 </tr>
 <tr name="usage-function">
 <td><a href="#usage-function">Usage Function</a></td>
-<td align="right"><code>opts => style => string</code></td>
-<td>Usage functions take <code>opts</code> and return a layout function.</td>
+<td align="right"><code>opt => style => string</code></td>
+<td>Usage functions take an <code>opt</code> and return a layout function.</td>
 </tr>
 </table>
 
-In [`shargs-usage`](#shargs-usage), `opts` purpose is to provide the textual contents of layout functions
-and the [usage functions](#usage-functions)' only job is to specify how this textual content is extracted from `opts`.
+In [`shargs-usage`](#shargs-usage), an `opt`'s purpose is to provide the textual contents of layout functions
+and the [usage functions](#usage-functions)' only job is to specify how this textual content is extracted from the `opt`.
 The layout functions do the actual work of formatting strings.
 
 Let's have a look at an example:
@@ -4311,7 +4319,7 @@ Experiment with [`style`](#style) to get different layouts!
 <details>
 <summary>
 <code>br</code> returns a <code><a href="#line">line</a></code> filled with spaces,
-with a <code>width</code> according to <code><a href="#style">style</a></code>.
+with a <code><a href="#width">width</a></code> according to <code><a href="#style">style</a></code>.
 <code>br</code> is defined as <code>brFrom('line')</code>.
 </summary>
 
@@ -4354,7 +4362,8 @@ layout([
 <details>
 <summary>
 <code>brs</code> returns <code>num</code> <code><a href="#line">line</a></code>s filled with spaces,
-with each <code><a href="#line">line</a></code>'s <code>width</code> as given by <code><a href="#style">style</a></code>.
+with each <code><a href="#line">line</a></code>'s <code><a href="#width">width</a></code>
+as given by <code><a href="#style">style</a></code>.
 <code>brs</code> is defined as <code>brsFrom('line')</code>.
 </summary>
 
@@ -4399,7 +4408,8 @@ layout([
 <summary>
 <code>cols</code> takes a list of <code>columns</code>,
 where each column is a list of strings corresponding to <code><a href="#line">line</a></code>s.
-It formats the <code>columns</code> according to their <code>width</code>s and cuts off strings that are too long.
+It formats the <code>columns</code> according to their <code><a href="#width">width</a></code>s
+and cuts off strings that are too long.
 <code>cols</code> is defined as <code>colsFrom('cols')</code>.
 </summary>
 
@@ -4499,9 +4509,9 @@ defs([
 <details>
 <summary>
 <code>line</code> takes a <code>string</code>
-and formats it according to a <code><a href="#style">style</a></code>'s <code>width</code>.
-If a <code>string</code> exceeds its <code>width</code>, it is cut off,
-otherwise, the <code>width</code> is filled up with spaces.
+and formats it according to a <code><a href="#style">style</a></code>'s <code><a href="#width">width</a></code>.
+If a <code>string</code> exceeds its <code><a href="#width">width</a></code>, it is cut off,
+otherwise, the <code><a href="#width">width</a></code> is filled up with spaces.
 It ends with a line break.
 <code>line</code> is defined as <code>lineFrom('line')</code>.
 </summary>
@@ -4956,7 +4966,7 @@ pad(['line', 0], 4)(
 )(style)
 ```
 
-Layout decorator combinators avoids nesting deeply, by first collecting layout decorators and applying them all at once:
+Layout decorator combinators avoid nesting deeply, by first collecting layout decorators and applying them all at once:
 
 ```js
 const {decorate, defs, pad} = require('shargs-usage')
@@ -5006,7 +5016,7 @@ const style = {
 ```
 
 In the example, `style` provides the details for how many columns a usage documentation text should be wide,
-an whether it should have padding.
+and whether it should have padding.
 A `style` is an object whose values are arrays of *style objects*, that must have a [`width`](#width) key,
 and may have [`padEnd`](#padEnd) and [`padStart`](#padStart) keys:
 
@@ -5264,7 +5274,7 @@ The answer is: 42
 ## More In-depth Documentation
 
 While you may want to read the whole [documentation](#documentation) section when getting started,
-this section is for topics that do not occur often and need to be consulted on a case by case bases.
+this section is for topics that do not occur often and need to be consulted on a case by case basis.
 You may still want to read this section to get the most out of shargs,
 but feel free to skip it, start using shargs, and come back later.
 
@@ -5288,7 +5298,7 @@ While transforming, `toOpts` encounters the following cases:
     In this case, `toOpts` returns a [rest option](#rest) (e.g. `{values: 'foo'}` if `foo` is the string).
     If positional arguments are defined that have no [`values`](#values) yet,
     the `args` value goes to the first positional argument, instead.
-    If the last positional argument is variadic, it collects all `args` values.
+    If the positional argument is variadic, it collects all remaining [rest](#rest) values.
 2.  **A string matches an `args` value of exactly one option:**\
     Here, `toOpts` checks the [`types`](#types)' arity and reads a matching number of `argv`.
     If too few `argv` are available, it returns a [rest option](#rest) like in case 1.
@@ -5306,9 +5316,9 @@ Do this with caution, as it may break defined parser checks and stages.
 
 #### `toArgs` Stage
 
-Similar to [`toOpts`](#toOpts), the `toArgs` stage takes just one function:
+Like [`toOpts`](#toOpts), the `toArgs` stage takes just one function:
 <code><a href="#toArgs-stage">toArgs</a>(parsers)({errs, opts})</code>.
-It transforms `opts` arrays into an `args` object by applying three different stages in order:
+It transforms `opts` arrays into an `args` object by applying three different stages in parallel:
 
 1.  **Convert Non-commands:**\
     It converts all options that are not [`command`](#command)s, resulting in an object of key-values-pairs.
@@ -5327,7 +5337,6 @@ It transforms `opts` arrays into an `args` object by applying three different st
     These unmatched arguments may have been mistakenly assigned to the child command,
     although they actually belong to the parent.
     Therefore, non-empty rest keys are additionally parsed with the parent parser.
-    See the [relation between checks and stages](#relation-between-checks-and-stages) section for details.
 
     The results of the child parsers and the results of the parent parser run are combined into a nested `args` object.
 3.  **Set Default Values:**\
@@ -5346,7 +5355,7 @@ Do this with caution, as it may break defined parser checks and stages.
 
 Shargs makes writing and using custom checks and stages very simple.
 The only thing you have to do is to follow the correct function signatures for your check or stage,
-as given in the [`stages`](#stages) section.
+as given in the [`stages`](#stages) and [`mode`](#mode) sections.
 The following code snippets showcase very simple examples with the correct signatures.
 
 Regardless of whether you implement a check or a stage, the most important thing to remember is:
@@ -5380,7 +5389,7 @@ function demandACommand ({errs = [], opts = []} = {}) {
 
   if (!aCommand) {
     errs2.push({
-      code: 'Command required',
+      code: 'CommandRequired',
       msg:  'No command found. Please use at least one command!',
       info: {options: opts}
     })
@@ -5455,26 +5464,26 @@ Your own function would most probably need much more validations and handling of
 
 Writing and using custom [usage functions](#usage-function) in shargs is very simple:
 You only have to write a function with the correct signature and it can be used as a [usage function](#usage-function).
-It must take an [`opts`](#command-line-options) array and a [`style` object](#style) and return a `string`.
+It must take an [`opt`](#command-line-options) object and a [`style` object](#style) and return a `string`.
 
 The following example shows the custom `descs` function that displays the options' descriptions:
 
 ```js
 const {texts} = require('shargs-usage')
 
-const descs = opts => style => {
+const desc = ({opts = []} = {}) => style => {
   const descriptions = opts.map(_ => _.desc)
 
   return texts(descriptions)(style)
 }
 ```
 
-Using [`layoutMap`](#layoutMap) simplifies the process of defining your own functions:
+Using [`usageMap`](#usageMap) simplifies the process of defining your own functions:
 
 ```js
-const {table, layoutMap} = require('shargs-usage')
+const {table, usageMap} = require('shargs-usage')
 
-const optsTable = layoutMap(
+const optsTable = usageMap(
   ({key, args, required, desc}) => table([
     [(required ? '*' : '') + key, args.join(', '), desc]
   ])
@@ -5496,7 +5505,7 @@ const optsTable = layoutMap(
 A <i>config object</i> in this question denotes an object that is used to read in default values from a file or a URI.
 Shargs does not include reading and merging config objects because there are other specialized libraries for this task
 that are easy to use alongside shargs.
-However, there are several simple ways to combine shargs' <code>args</code> objects with config objects:
+There are several simple ways to combine shargs' <code>args</code> objects with config objects:
 </summary>
 
 <br />
@@ -5801,7 +5810,7 @@ and providing neither `--fun`, nor `--no-fun` would mean `unknown`.
 
 You could implement the same behavior with an option that takes none or one argument,
 by using a combination of variable length arrays, aka [`commands`](#command) and a custom command-line options field.
-The general idea is to mark an `command` as `threeValued` with a flag,
+The general idea is to mark a `command` as `threeValued` with a flag,
 and then transform it to a custom type in the opts stage.
 
 First, let us define an option:
@@ -5899,8 +5908,8 @@ First, let us write a helper function for traversing `args` objects:
 
 ```js
 function traverseKeys (p) {
-  return f => args => Object.keys(args).reduce(
-    (obj, key) => {
+  return f => ({errs, args}) => Object.keys(args).reduce(
+    ({errs, args: obj}, key) => {
       const val = args[key]
       if (!Array.isArray(val) && typeof val === 'object') {
         obj[key] = traverseKeys(p)(f)(val)
@@ -5909,9 +5918,9 @@ function traverseKeys (p) {
         const {[key]: _, ...rest} = obj
         obj = {...rest, ...f(key, val)}
       }
-      return obj
+      return {errs, args: obj}
     },
-    args
+    {errs, args}
   )
 }
 ```
@@ -6138,7 +6147,7 @@ A command-line parser library with a focus on enabling developers to easily
 and quickly build their own parsers of just the right size.
 </td>
 <td>
-A large parser with lots of features with a focus on providing a developer with all the options out of the box.
+A large parser with lots of features with a focus on providing the options out of the box.
 </td>
 <td>
 A medium parser with a strong focus on a textual DSL that makes it easy to define options.
@@ -6229,6 +6238,7 @@ Shargs is [MIT licensed][license].
 [contribute]: https://github.com/Yord/shargs/blob/master/CONTRIBUTING.md
 [issues]: https://github.com/Yord/shargs/issues
 [license]: https://github.com/Yord/shargs/blob/master/LICENSE
+[lodash]: https://github.com/lodash/lodash
 [lodash-fp]: https://github.com/lodash/lodash/wiki/FP-Guide
 [node]: https://nodejs.org/
 [npm-package]: https://www.npmjs.com/package/shargs
