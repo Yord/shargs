@@ -622,7 +622,7 @@ const boolPos = (key, fields) => ({
 <details>
 <summary>
 <code>command</code> generates a <a href="#command-option">command option</a>,
-while <code>program</code> genrates a <a href="#program-pos-arg">program positional argument</a>.
+while <code>program</code> generates a <a href="#program-pos-arg">program positional argument</a>.
 These types represent command-line programs like <code>git commit</code> or <code>git push</code>,
 where a <i>parent</i> program (<code>git</code>) has different <i>child</i> commands
 (<code>commit</code> and <code>push</code>) for specific tasks.
@@ -666,7 +666,7 @@ Shargs counts the number of times a <code>flag</code> occurs
 If you don't need counts and prefer numbers or boolean values, have a look at the
 <code><a href="#flagsAsBools">flagsAsBools</a></code> and <code><a href="#flagsAsNumbers">flagsAsNumbers</a></code> 
 parser stages.
-If you need the presense of a <code>flag</code> to imply negativity (e.g. <code>--no-fun</code>),
+If you need the presence of a <code>flag</code> to imply negativity (e.g. <code>--no-fun</code>),
 see <code><a href="#complement">complement</a></code>,
 <code><a href="#reverse">reverse</a></code> and <code><a href="#reverseFlags">reverseFlags</a></code>.
 </summary>
@@ -848,7 +848,7 @@ as they are not given by an argument, but by their position.
 <td>
 <code>contradicts</code> defines what <code><a href="#key">key</a></code>s an option is incompatible with.
 This information is used by the <code><a href="#contradictOpts">contradictOpts</a></code> parser stage
-to report errors if incompatibe options are used together.
+to report errors if incompatible options are used together.
 Note that <code>contradicts</code> is unidirectional and not transitive
 (e.g. if <code>a</code> contradicts <code>b</code> and <code>b</code> contradicts <code>c</code>,
 <code>a</code> does not contradict <code>c</code>, and thus <code>a</code> and <code>c</code> are compatible).
@@ -1197,7 +1197,7 @@ to command-line options (`opts`) and finally to arguments (`args`):
 </table>
 
 The [`toOps`](#toOpts-stage) and [`toArgs`](#toArgs-stage) stages
-define the core behaviour of [`parser`](#the-parser-function) and should not have to be changed in most use cases.
+define the core behavior of [`parser`](#the-parser-function) and should not have to be changed in most use cases.
 However, if you do have a use case that needs adjustments to those stages, you may carefully swap them out.
 The [`argv`](#argv-stage), [`opts`](#opts-stage), and [`args`](#args-stage) stages
 are the actual developer-facing API for defining a parser's behavior using parser stages.
@@ -1428,7 +1428,7 @@ Checks go into [`parser`](#the-parser-function)'s [`checks`](#checks) field, whi
 <td>
 <details>
 <summary>
-<code>verifyArgv</code> checks, whether the <code>argv</code> adher to the <code>rules</code> predicate.
+<code>verifyArgv</code> checks, whether the <code>argv</code> adhere to the <code>rules</code> predicate.
 If <code>rules</code> returns <code>false</code>, it reports a <code>FalseArgvRules</code> error.
 If <code>rules</code> is not a function, it reports a <code>WrongArgvRulesType</code> error.
 </summary>
@@ -1970,7 +1970,7 @@ Result:
 <td>
 <details>
 <summary>
-<code>verifyOpts</code> checks, whether the <code>opts</code> array adhers to the <code>rules</code> predicate.
+<code>verifyOpts</code> checks, whether the <code>opts</code> array adheres to the <code>rules</code> predicate.
 <code>rules</code> must have the following function signature: <code>opt => true|false</code>.
 For each <code>opt</code> that returns <code>false</code>, a <code>FalseOptsRules</code> error is reported.
 If <code>rules</code> is not a function, <code>verifyOpts</code> reports a <code>WrongOptsRulesType</code> error.
@@ -2137,7 +2137,7 @@ It only assumes <a href="#rest">rest</a> <code><a href="#values">values</a></cod
 to be <code><a href="#string">string</a></code>s
 if the first <a href="#rest">rest</a> is in short option format
 (one minus with a single character, e.g. <code>-h</code>, <code>-v</code>)
-or in long option format (two minusses with any more characters, e.g. <code>--help</code>, <code>--verbose</code>).
+or in long option format (two minuses with any more characters, e.g. <code>--help</code>, <code>--verbose</code>).
 <code><a href="#bestGuessArgs">bestGuessArgs</a></code> is very similar to <code>bestGuessOpts</code>,
 but also considers non-consecutive rest <code><a href="#values">values</a></code>.
 </summary>
@@ -2510,7 +2510,7 @@ Result:
 <td>
 <details>
 <summary>
-<code>verifyArgs</code> checks, whether the <code>args</code> object adhers to the <code>rules</code> predicate.
+<code>verifyArgs</code> checks, whether the <code>args</code> object adheres to the <code>rules</code> predicate.
 <code>rules</code> must have the following function signature: <code>arg => true|false</code>.
 For each arg that returns <code>false</code>, a <code>FalseArgsRules</code> error is reported.
 If <code>rules</code> is not a function, <code>verifyArgs</code> reports a <code>WrongArgsRulesType</code> error.
@@ -2572,7 +2572,7 @@ It transforms single rest field values into a flag and two consecutive rest opti
 (e.g. <code>{_: ['--not', 'panic']}</code> would become <code>{not: 'panic'}</code>).
 It only assumes rest field values to be strings if the first rest is in short option format
 (one minus with a single character, e.g. <code>-h</code>, <code>-v</code>)
-or in long option format (two minusses with any more characters, e.g. <code>--help</code>, <code>--verbose</code>).
+or in long option format (two minuses with any more characters, e.g. <code>--help</code>, <code>--verbose</code>).
 <code>bestGuessArgs</code> is very similar to <code><a href="#bestGuessOpts">bestGuessOpts</a></code>,
 but also considers rest fields that were originally not in tandem.
 </summary>
@@ -2941,7 +2941,7 @@ by applying functions <code>fs</code> to each key/value pair based on the value'
 <code>fs</code> supports the following types:
 <code>array</code>, <code>boolean</code>, <code>flag</code>, <code>function</code>, <code>null</code>,
 <code>number</code>, <code>object</code>, <code>string</code>, <code>undefined</code>, and <code>otherwise</code>.
-The default behaviour for most types is to not change the value, with three notable exceptions:
+The default behavior for most types is to not change the value, with three notable exceptions:
 <code>function</code>s and <code>otherwise</code>s key/value pairs are removed from args,
 while <code>object</code>'s default function applies <code>fs</code> to nested objects.
 <code>{flag: ({key, val, errs, args}) => ({errs, args})}</code>
@@ -3853,8 +3853,8 @@ usageMap(({args, desc}) => layout([
 
 When defining layouts, we may want to feature some `opts` in one place,
 and the others in a different place of our documentation.
-For example, the [`command`](#command)s chould be presented in a definition list,
-while the other options are layouted as a table.
+For example, the [`command`](#command)s should be presented in a definition list,
+while the other options are layed out as a table.
 
 Usage decorators enable these use cases by modifying inputs of [usage functions](#usage-functions):
 
@@ -5572,9 +5572,9 @@ Those two sets are connected by a unidirectional mapping, where arguments map to
 If a single argument would only ever map to a single variable, the two could just as well have the same name.
 But for more complex mappings, things start to get complex, too:
 
-Say we have two arguments, `-v` and `--version`, that can be used interchangingly.
+Say we have two arguments, `-v` and `--version`, that can be used interchangeably.
 If they would map to two variables, `-v` and `--version`,
-the program would have to have knowledge about the arguments being interchangable,
+the program would have to have knowledge about the arguments being interchangeable,
 in order to correctly interpret its inputs.
 As leaking this knowledge to the program would be undesirable,
 parsers usually work around this by assigning the value of one argument to both variables.
@@ -5737,7 +5737,7 @@ const splitCommas = traverseOpts(isCommas)(transformCommaArray)
 
 So why doesn't `shargs-parser` support comma-separated values by default?
 The reason is that using comma-separated values is just not that common.
-And if you nontheless need comma-separated values, it is simple enough to implement yourself.
+And if you nonetheless need comma-separated values, it is simple enough to implement yourself.
 
 </details>
 </td>
@@ -5773,8 +5773,8 @@ and the [`restrictToOnly`](#restrictToOnly) parser stage.
 
 If you want to use it anyway, here is how you could do it in shargs:
 
-Flags give you only two cases, the presense of the flag (`true` if [`flagsAsBools`](#flagsAsBools) is used),
-and its absense (`unknown`):
+Flags give you only two cases, the presence of the flag (`true` if [`flagsAsBools`](#flagsAsBools) is used),
+and its absence (`unknown`):
 
 ```js
 const {flag} = require('shargs-opts')
@@ -5799,7 +5799,7 @@ const noFun = flag('fun', ['--no-fun'], {reverse: true})
 If you provide `--fun`, the `fun` variable is set to `true`, on `--no-fun` it is set to `false`,
 and providing neither `--fun`, nor `--no-fun` would mean `unknown`.
 
-You could implement the same behaviour with an option that takes none or one argument,
+You could implement the same behavior with an option that takes none or one argument,
 by using a combination of variable length arrays, aka [`commands`](#command) and a custom command-line options field.
 The general idea is to mark an `command` as `threeValued` with a flag,
 and then transform it to a custom type in the opts stage.
@@ -5956,7 +5956,7 @@ and <a href="https://en.wikipedia.org/wiki/Tacit_programming">tacit programming<
 
 [`shargs`][shargs] builds command-line parsers and usage documentation by composing parser
 and usage functions with functions it calls *combinators*.
-An examplary combinator function is <code><a href="#layout">layout</a>(functions)(style)</code>.
+An exemplary combinator function is <code><a href="#layout">layout</a>(functions)(style)</code>.
 
 `layout` takes a list of `functions` that have a common signature:
 They take a [`style`](#style), and return a string.
@@ -6038,7 +6038,7 @@ const string = layout2([
 
 And then we can apply an optimization:
 See how we define a function that takes a `style` and feed it to a function `text('First.')` that takes a `style`?
-This is redundant, and we can just leave out `style` alltogether:
+This is redundant, and we can just leave out `style` altogether:
 
 ```js
 const {text} = require('shargs-usage')
