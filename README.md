@@ -882,7 +882,7 @@ that must have the same length as their <code><a href="#types">types</a></code> 
 <code>desc</code> defines a description for the command-line option used by the
 <code><a href="#usage-desc">desc</a></code>, <code><a href="#optsList">optsList</a></code>,
 <code><a href="#optsLists">optsLists</a></code>, <code><a href="#optsDef">optsDef</a></code>,
-and <code><a href="#optsDefs">optsDefs</a></code> usage functions and their <code>*From</code> versions.
+and <code><a href="#optsDefs">optsDefs</a></code> usage functions and their <code>*With</code> versions.
 </td>
 </tr>
 <tr name="descArg">
@@ -894,7 +894,7 @@ and <code><a href="#optsDefs">optsDefs</a></code> usage functions and their <cod
 instead of <code>--format=&lt;string&gt;</code>).
 It is used by the <code><a href="#optsList">optsList</a></code>, <code><a href="#optsLists">optsLists</a></code>,
 <code><a href="#optsDef">optsDef</a></code>, and <code><a href="#optsDefs">optsDefs</a></code> usage functions
-and their <code>*From</code> versions.
+and their <code>*With</code> versions.
 <code><a href="#only">only</a></code>, <code><a href="#types">types</a></code>, and <code><a href="#key">key</a></code> 
 are other fields that change the argument value description.
 These fields are applied in the following order (highest priority first):
@@ -936,7 +936,7 @@ It is also used by the
 <code><a href="#optsList">optsList</a></code>, <code><a href="#optsLists">optsLists</a></code>,
 <code><a href="#optsDef">optsDef</a></code>, <code><a href="#optsDefs">optsDefs</a></code>,
 <code><a href="#synopses">synopses</a></code>, and <code><a href="#synopsis">synopsis</a></code> usage functions
-and their <code>*From</code> versions to describe argument values (e.g. <code>--format=&lt;format&gt;</code>).
+and their <code>*With</code> versions to describe argument values (e.g. <code>--format=&lt;format&gt;</code>).
 <code><a href="#descArg">descArg</a></code>, <code><a href="#types">only</a></code>,
 and <code><a href="#types">types</a></code> are other fields that change the argument value description.
 These fields are applied in the following order (highest priority first):
@@ -953,7 +953,7 @@ It is used by the <code><a href="#restrictToOnly">restrictToOnly</a></code> pars
 <code>only</code> may be used to <a href="can-i-use-enums">implement enumerations</a>.
 It is also used by the <code><a href="#optsList">optsList</a></code>, <code><a href="#optsLists">optsLists</a></code>,
 <code><a href="#optsDef">optsDef</a></code>, and <code><a href="#optsDefs">optsDefs</a></code> usage functions
-and their <code>*From</code> versions to describe argument values (e.g. <code>--format=&lt;json|xml&gt;</code>).
+and their <code>*With</code> versions to describe argument values (e.g. <code>--format=&lt;json|xml&gt;</code>).
 <code><a href="#descArg">descArg</a></code>, <code><a href="#types">types</a></code>,
 and <code><a href="#key">key</a></code> are other fields that change the argument value description.
 These fields are applied in the following order (highest priority first):
@@ -982,7 +982,7 @@ if all previously defined positional arguments are <code>required</code> as well
 The <code><a href="#synopsis">synopsis</a></code>, <code><a href="#synopses">synopses</a></code>,
 <code><a href="#optsList">optsList</a></code>, <code><a href="#optsLists">optsLists</a></code>,
 <code><a href="#optsDef">optsDef</a></code>, and <code><a href="#optsDefs">optsDefs</a></code> usage functions
-and their <code>*From</code> versions mark <code>required</code> options.
+and their <code>*With</code> versions mark <code>required</code> options.
 </td>
 </tr>
 <tr name="reverse">
@@ -1012,7 +1012,7 @@ must not have a <code>types</code> field.
 <code>types</code> is also used by the
 <code><a href="#optsList">optsList</a></code>, <code><a href="#optsLists">optsLists</a></code>,
 <code><a href="#optsDef">optsDef</a></code>, and <code><a href="#optsDefs">optsDefs</a></code> usage functions
-and their <code>*From</code> versions to describe argument values
+and their <code>*With</code> versions to describe argument values
 (e.g. <code>--format=&lt;bool&gt;</code> for a <code><a href="#bool">bool</a></code> option).
 <code><a href="#descArg">descArg</a></code>, <code><a href="#types">only</a></code>,
 and <code><a href="#key">key</a></code> are other fields that change the argument value description.
@@ -3131,8 +3131,8 @@ Here, we have a closer look at how to declare a usage documentation layout.
 </tr>
 <tr name="usage-desc">
 <td>
-<code name="usage-descFrom"><a href="#usage-desc">desc</a>({desc})(style)</code><br />
-<code><a href="#usage-descFrom">descFrom</a>(id)({desc})(style)</code>
+<code name="usage-descWith"><a href="#usage-desc">desc</a>({desc})(style)</code><br />
+<code><a href="#usage-descWith">descWith</a>({id})({desc})(style)</code>
 </td>
 <td>
 <details>
@@ -3140,7 +3140,7 @@ Here, we have a closer look at how to declare a usage documentation layout.
 <code>desc</code> takes the <code><a href="#desc">desc</a></code> field from <code>opts</code>
 and formats it according to a <code><a href="#style">style</a></code>.
 If the description is too long to fit one line, it is split and spread over several lines.
-<code>desc</code> is defined as <code>descFrom('line')</code>.
+<code>desc</code> is defined as <code>descWith({id: 'line'})</code>.
 </summary>
 
 <br />
@@ -3174,8 +3174,8 @@ desc(opt)(style)
 </tr>
 <tr name="note">
 <td>
-<code name="noteFrom"><a href="#note">note</a>(string)()(style)</code><br />
-<code><a href="#noteFrom">noteFrom</a>(id)(string)()(style)</code>
+<code name="noteWith"><a href="#note">note</a>(string)()(style)</code><br />
+<code><a href="#noteWith">noteWith</a>({id})(string)()(style)</code>
 </td>
 <td>
 <details>
@@ -3183,7 +3183,7 @@ desc(opt)(style)
 <code>note</code> takes a <code>string</code> and formats it according to a <code><a href="#style">style</a></code>,
 completely ignoring its second parameter.
 If the string is too long to fit one line, it is split and spread over several lines.
-<code>note</code> is defined as <code>noteFrom('line')</code>.
+<code>note</code> is defined as <code>noteWith({id: 'line'})</code>.
 </summary>
 
 <br />
@@ -3214,8 +3214,8 @@ note(
 </tr>
 <tr name="notes">
 <td>
-<code name="notesFrom"><a href="#notes">notes</a>(strings)()(style)</code><br />
-<code><a href="#notesFrom">notesFrom</a>(id)(strings)()(style)</code>
+<code name="notesWith"><a href="#notes">notes</a>(strings)()(style)</code><br />
+<code><a href="#notesWith">notesWith</a>({id})(strings)()(style)</code>
 </td>
 <td>
 <details>
@@ -3224,7 +3224,7 @@ note(
 according to a <code><a href="#style">style</a></code>,
 completely ignoring its second parameter.
 If a string is too long to fit one line, it is split and spread over several lines.
-<code>notes</code> is defined as <code>notesFrom('line')</code>.
+<code>notes</code> is defined as <code>notesWith({id: 'line'})</code>.
 </summary>
 
 <br />
@@ -3257,8 +3257,8 @@ notes([
 </tr>
 <tr name="optsDef">
 <td>
-<code name="optsDefFrom"><a href="#optsDef">optsDef</a>({opts})(style)</code><br />
-<code><a href="#optsDefFrom">optsDefFrom</a>(id1, id2)({opts})(style)</code>
+<code name="optsDefWith"><a href="#optsDef">optsDef</a>({opts})(style)</code><br />
+<code><a href="#optsDefWith">optsDefWith</a>({id, num})({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3271,7 +3271,7 @@ fields, followed by the
 <code><a href="#contradicts">contradicts</a></code>, <code><a href="#defaultValues">defaultValues</a></code>,
 <code><a href="#implies">implies</a></code>, and <code><a href="#required">required</a></code> fields.
 The <code><a href="#desc">desc</a></code> field is given in the definition part.
-<code>optsDef</code> is defined as <code>optsDefFrom('line', 'desc')</code>.
+<code>optsDef</code> is defined as <code>optsDefWith({id: 'line', num: 4})</code>.
 </summary>
 
 <br />
@@ -3316,8 +3316,8 @@ optsDef(opt)(style)
 </tr>
 <tr name="optsDefs">
 <td>
-<code name="optsDefsFrom"><a href="#optsDefs">optsDefs</a>({opts})(style)</code><br />
-<code><a href="#optsDefsFrom">optsDefsFrom</a>(id)({opts})(style)</code>
+<code name="optsDefsWith"><a href="#optsDefs">optsDefs</a>({opts})(style)</code><br />
+<code><a href="#optsDefsWith">optsDefsWith</a>({id, num})({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3325,7 +3325,7 @@ optsDef(opt)(style)
 <code>optsDefs</code> first layouts its <code>opts</code> and then the <code><a href="#opts">opts</a></code>
 of all its <code><a href="#command">command</a></code>s recursively, using <code><a href="#optsDef">optsDef</a></code>s,
 indenting each <code><a href="#optsDef">optsDef</a></code> layer by four spaces.
-<code>optsDefs</code> is defined as <code>optsDefsFrom('line', 'desc')</code>.
+<code>optsDefs</code> is defined as <code>optsDefsWith({id: 'line', num: 4})</code>.
 </summary>
 
 <br />
@@ -3384,8 +3384,8 @@ optsDefs(opt)(style)
 </tr>
 <tr name="optsList">
 <td>
-<code name="optsListFrom"><a href="#optsList">optsList</a>({opts})(style)</code><br />
-<code><a href="#optsListFrom">optsListFrom</a>(id)({opts})(style)</code>
+<code name="optsListWith"><a href="#optsList">optsList</a>({opts})(style)</code><br />
+<code><a href="#optsListWith">optsListWith</a>({id})({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3398,7 +3398,7 @@ fields.
 The <code><a href="#desc">desc</a></code> field is given in the second column, followed by the
 <code><a href="#contradicts">contradicts</a></code>, <code><a href="#defaultValues">defaultValues</a></code>,
 <code><a href="#implies">implies</a></code>, and <code><a href="#required">required</a></code> fields.
-<code>optsList</code> is defined as <code>optsListFrom('cols')</code>.
+<code>optsList</code> is defined as <code>optsListWith({id: 'cols'})</code>.
 </summary>
 
 <br />
@@ -3439,8 +3439,8 @@ optsList(opt)(style)
 </tr>
 <tr name="optsLists">
 <td>
-<code name="optsListsFrom"><a href="#optsLists">optsLists</a>({opts})(style)</code><br />
-<code><a href="#optsListsFrom">optsListsFrom</a>(id)({opts})(style)</code>
+<code name="optsListsWith"><a href="#optsLists">optsLists</a>({opts})(style)</code><br />
+<code><a href="#optsListsWith">optsListsWith</a>({id})({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3448,7 +3448,7 @@ optsList(opt)(style)
 <code>optsLists</code> first layouts its <code>opts</code> and then the <code><a href="#opts">opts</a></code>
 of all its <code><a href="#command">command</a></code>s recursively, using <code><a href="#optsList">optsList</a></code>s,
 indenting the first column of each <code><a href="#optsList">optsList</a></code> layer by four spaces.
-<code>optsLists</code> is defined as <code>optsListsFrom('cols')</code>.
+<code>optsLists</code> is defined as <code>optsListsWith({id: 'cols'})</code>.
 </summary>
 
 <br />
@@ -3501,15 +3501,15 @@ optsLists(opt)(style)
 </tr>
 <tr name="space">
 <td>
-<code name="spaceFrom"><a href="#space">space</a>()(style)</code><br />
-<code><a href="#spaceFrom">spaceFrom</a>(id)()(style)</code>
+<code name="spaceWith"><a href="#space">space</a>()(style)</code><br />
+<code><a href="#spaceWith">spaceWith</a>({id, num})()(style)</code>
 </td>
 <td>
 <details>
 <summary>
 <code>space</code> ignores its first argument and returns a line consisting entirely of spaces,
 with a width according to <code><a href="#style">style</a></code>.
-<code>space</code> is defined as <code>spaceFrom('line')</code>.
+<code>space</code> is defined as <code>spaceWith({id: 'line', num: 1})</code>.
 </summary>
 
 <br />
@@ -3541,53 +3541,10 @@ usage([
 </details>
 </td>
 </tr>
-<tr name="spaces">
-<td>
-<code name="spacesFrom"><a href="#spaces">spaces</a>(num)()(style)</code><br />
-<code><a href="#spacesFrom">spacesFrom</a>(id)(num)()(style)</code>
-</td>
-<td>
-<details>
-<summary>
-<code>spaces</code> skips its second argument and returns <code>num</code> lines with only spaces,
-with each line's width as given by <code><a href="#style">style</a></code>.
-<code>spaces</code> is defined as <code>spacesFrom('line')</code>.
-</summary>
-
-<br />
-
-Example:
-
-```bash
-Deep Thought was created to come up with
-                                        
-                                        
-the Answer to The Ultimate Question.    
-```
-
-Code:
-
-```js
-const {note, spaces} = require('shargs-usage')
-
-const style = {
-  line: [{width: 40}]
-}
-
-usage([
-  note('Deep Thought was created to come up with'),
-  spaces(2),
-  note('the Answer to The Ultimate Question.')
-])()(style)
-```
-
-</details>
-</td>
-</tr>
 <tr name="synopses">
 <td>
-<code name="synopsesFrom"><a href="#synopses">synopses</a>({key, opts})(style)</code><br />
-<code><a href="#synopsesFrom">synopsesFrom</a>(id)({key, opts})(style)</code>
+<code name="synopsesWith"><a href="#synopses">synopses</a>({key, opts})(style)</code><br />
+<code><a href="#synopsesWith">synopsesWith</a>({id})({key, opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3595,7 +3552,7 @@ usage([
 <code>synopses</code> first layouts its <code>opts</code> and then the <code><a href="#opts">opts</a></code>
 of all its <code><a href="#command">command</a></code>s,
 using a <code><a href="#synopsis">synopsis</a></code> each.
-<code>synopses</code> is defined as <code>synopsesFrom('line')</code>.
+<code>synopses</code> is defined as <code>synopsesWith({id: 'line'})</code>.
 </summary>
 
 <br />
@@ -3643,8 +3600,8 @@ synopses(script)(style)
 </tr>
 <tr name="synopsis">
 <td>
-<code name="synopsisFrom"><a href="#synopsis">synopsis</a>({key, opts})(style)</code><br />
-<code><a href="#synopsisFrom">synopsisFrom</a>(id)({key, opts})(style)</code>
+<code name="synopsisWith"><a href="#synopsis">synopsis</a>({key, opts})(style)</code><br />
+<code><a href="#synopsisWith">synopsisWith</a>({id})({key, opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3656,7 +3613,7 @@ For each opt, the <code><a href="#args">args</a></code>, <code><a href="#descArg
 <code><a href="#only">only</a></code>, <code><a href="#required">required</a></code>,
 <code><a href="#types">types</a></code>, and <code><a href="#key">key</a></code> fields
 are used for a brief overview.
-<code>synopsis</code> is defined as <code>synopsisFrom('line')</code>.
+<code>synopsis</code> is defined as <code>synopsisWith({id: 'line'})</code>.
 </summary>
 
 <br />
@@ -3829,7 +3786,7 @@ Example:
 Code:
 
 ```js
-const {text, textFrom, usageMap} = require('shargs-usage')
+const {text, textWith, usageMap} = require('shargs-usage')
 const {flag, number} = require('shargs-opts')
 
 const cmd = {
@@ -3847,7 +3804,7 @@ const style = {
 
 usageMap(({args, desc}) => layout([
   text(args.join(', ')),
-  textFrom('desc')(desc)
+  textWith({id: 'desc'})(desc)
 ]))(cmd)(style)
 ```
 
@@ -4312,15 +4269,15 @@ Experiment with [`style`](#style) to get different layouts!
 </tr>
 <tr name="br">
 <td>
-<code name="brFrom"><a href="#br">br</a>(style)</code><br />
-<code><a href="#brFrom">brFrom</a>(id)(style)</code>
+<code name="brWith"><a href="#br">br</a>(style)</code><br />
+<code><a href="#brWith">brWith</a>({id, num})(style)</code>
 </td>
 <td>
 <details>
 <summary>
 <code>br</code> returns a <code><a href="#line">line</a></code> filled with spaces,
 with a <code><a href="#width">width</a></code> according to <code><a href="#style">style</a></code>.
-<code>br</code> is defined as <code>brFrom('line')</code>.
+<code>br</code> is defined as <code>brWith({id: 'line', num: 1})</code>.
 </summary>
 
 <br />
@@ -4353,55 +4310,10 @@ layout([
 </details>
 </td>
 </tr>
-<tr name="brs">
-<td>
-<code name="brsFrom"><a href="#brs">brs</a>(num)(style)</code><br />
-<code><a href="#brsFrom">brsFrom</a>(id)(num)(style)</code>
-</td>
-<td>
-<details>
-<summary>
-<code>brs</code> returns <code>num</code> <code><a href="#line">line</a></code>s filled with spaces,
-with each <code><a href="#line">line</a></code>'s <code><a href="#width">width</a></code>
-as given by <code><a href="#style">style</a></code>.
-<code>brs</code> is defined as <code>brsFrom('line')</code>.
-</summary>
-
-<br />
-
-Example:
-
-```bash
-Deep Thought was created to come up with
-the Answer                              
-                                        
-
-to The Ultimate Question.               
-```
-
-Code:
-
-```js
-const {brs, layout, text} = require('shargs-usage')
-
-const style = {
-  line: [{width: 40}]
-}
-
-layout([
-  text('Deep Thought was created to come up with the Answer'),
-  brs(2),
-  text('to The Ultimate Question.')
-])(style)
-```
-
-</details>
-</td>
-</tr>
 <tr name="cols">
 <td>
-<code name="colsFrom"><a href="#cols">cols</a>(columns)(style)</code><br />
-<code><a href="#colsFrom">colsFrom</a>(id)(columns)(style)</code>
+<code name="colsWith"><a href="#cols">cols</a>(columns)(style)</code><br />
+<code><a href="#colsWith">colsWith</a>({id})(columns)(style)</code>
 </td>
 <td>
 <details>
@@ -4410,7 +4322,7 @@ layout([
 where each column is a list of strings corresponding to <code><a href="#line">line</a></code>s.
 It formats the <code>columns</code> according to their <code><a href="#width">width</a></code>s
 and cuts off strings that are too long.
-<code>cols</code> is defined as <code>colsFrom('cols')</code>.
+<code>cols</code> is defined as <code>colsWith({id: 'cols'})</code>.
 </summary>
 
 <br />
@@ -4451,8 +4363,8 @@ cols([
 </tr>
 <tr name="defs">
 <td>
-<code name="defsFrom"><a href="#defs">defs</a>(tuples)(style)</code><br />
-<code><a href="#defsFrom">defsFrom</a>(id1, id2)(tuples)(style)</code>
+<code name="defsWith"><a href="#defs">defs</a>(tuples)(style)</code><br />
+<code><a href="#defsWith">defsWith</a>({id, num})(tuples)(style)</code>
 </td>
 <td>
 <details>
@@ -4464,7 +4376,7 @@ It formats its <code>tuples</code> as a definition list over two <code><a href="
 with the term in the first, and the definition in the second <code><a href="#line">line</a></code>.
 If a term or definition extends its <code><a href="#line">line</a></code>,
 it is continued in another <code><a href="#line">line</a></code>.
-<code>defs</code> is defined as <code>defsFrom('line', 'desc')</code>.
+<code>defs</code> is defined as <code>defsWith({id: 'line', num: 4})</code>.
 </summary>
 
 <br />
@@ -4502,8 +4414,8 @@ defs([
 </tr>
 <tr name="line">
 <td>
-<code name="lineFrom"><a href="#line">line</a>(string)(style)</code><br />
-<code><a href="#lineFrom">lineFrom</a>(id)(string)(style)</code>
+<code name="lineWith"><a href="#line">line</a>(string)(style)</code><br />
+<code><a href="#lineWith">lineWith</a>({id})(string)(style)</code>
 </td>
 <td>
 <details>
@@ -4513,7 +4425,7 @@ and formats it according to a <code><a href="#style">style</a></code>'s <code><a
 If a <code>string</code> exceeds its <code><a href="#width">width</a></code>, it is cut off,
 otherwise, the <code><a href="#width">width</a></code> is filled up with spaces.
 It ends with a line break.
-<code>line</code> is defined as <code>lineFrom('line')</code>.
+<code>line</code> is defined as <code>lineWith({id: 'line'})</code>.
 </summary>
 
 <br />
@@ -4545,15 +4457,15 @@ layout([
 </tr>
 <tr name="lines">
 <td>
-<code name="linesFrom"><a href="#lines">lines</a>(strings)(style)</code><br />
-<code><a href="#linesFrom">linesFrom</a>(id)(strings)(style)</code>
+<code name="linesWith"><a href="#lines">lines</a>(strings)(style)</code><br />
+<code><a href="#linesWith">linesWith</a>({id})(strings)(style)</code>
 </td>
 <td>
 <details>
 <summary>
 <code>lines</code> takes a list of <code>strings</code>
 and layouts each <code>string</code> with <code><a href="#line">line</a></code>.
-<code>lines</code> is defined as <code>linesFrom('line')</code>.
+<code>lines</code> is defined as <code>linesWith({id: 'line'})</code>.
 </summary>
 
 <br />
@@ -4587,8 +4499,8 @@ lines([
 </tr>
 <tr name="table">
 <td>
-<code name="tableFrom"><a href="#table">table</a>(rows)(style)</code><br />
-<code><a href="#tableFrom">tableFrom</a>(id)(rows)(style)</code>
+<code name="tableWith"><a href="#table">table</a>(rows)(style)</code><br />
+<code><a href="#tableWith">tableWith</a>({id})(rows)(style)</code>
 </td>
 <td>
 <details>
@@ -4596,7 +4508,7 @@ lines([
 <code>table</code> takes a list of <code>rows</code>, lays it out as a borderless table,
 and formats it according to a <code><a href="#style">style</a></code>.
 If an entry exceeds the length of a column, it breaks into the next row.
-<code>table</code> is defined as <code>tableFrom('cols')</code>.
+<code>table</code> is defined as <code>tableWith({id: 'cols'})</code>.
 </summary>
 
 <br />
@@ -4630,15 +4542,15 @@ table([
 </tr>
 <tr name="text">
 <td>
-<code name="textFrom"><a href="#text">text</a>(string)(style)</code><br />
-<code><a href="#textFrom">textFrom</a>(id)(string)(style)</code>
+<code name="textWith"><a href="#text">text</a>(string)(style)</code><br />
+<code><a href="#textWith">textWith</a>({id})(string)(style)</code>
 </td>
 <td>
 <details>
 <summary>
 <code>text</code> takes a <code>string</code> and formats it according to a <code><a href="#style">style</a></code>.
 If the <code>string</code> exceeds a line, it continues on the next.
-<code>text</code> is defined as <code>textFrom('line')</code>.
+<code>text</code> is defined as <code>textWith({id: 'line'})</code>.
 </summary>
 
 <br />
@@ -4669,15 +4581,15 @@ text(
 </tr>
 <tr name="texts">
 <td>
-<code name="textsFrom"><a href="#texts">texts</a>(strings)(style)</code><br />
-<code><a href="#textsFrom">textsFrom</a>(id)(strings)(style)</code>
+<code name="textsWith"><a href="#texts">texts</a>(strings)(style)</code><br />
+<code><a href="#textsWith">textsWith</a>({id})(strings)(style)</code>
 </td>
 <td>
 <details>
 <summary>
 <code>texts</code> takes a list of <code>strings</code>
 and layouts each <code>string</code> with <code><a href="#text">text</a></code>.
-<code>texts</code> is defined as <code>textsFrom('line')</code>.
+<code>texts</code> is defined as <code>textsWith({id: 'line'})</code>.
 </summary>
 
 <br />
@@ -4718,20 +4630,19 @@ They are the primary way of building more complex constructs from simpler compon
 The following examples demonstrate the use of layout combinators:
 
 ```js
-const {layout, layoutMap, textFrom} = require('shargs-usage')
+const {layout, layoutMap, textWith} = require('shargs-usage')
 
-const defsFrom = (id1, id2) => layoutMap(
+const defsWith = ({id}) => layoutMap(
   ([term, definition] = []) => layout([
-    textFrom(id1)(term),
-    textFrom(id2)(definition)
+    textWith({id})(term),
+    textWith({id})(definition)
   ])
 )
 ```
 
-[`defsFrom`](#defsFrom) is implemented in terms of [`layout`](#layout), [`layoutMap`](#layoutMap),
-and [`textFrom`](#textFrom).
-It [`maps`](#layoutMap) over a list of `term` and `definition` pairs
-and `layout`s them as [`texts`](#texts) with different ids, so they can be styled independently.
+[`defsWith`](#defsWith) is implemented in terms of [`layout`](#layout), [`layoutMap`](#layoutMap),
+and [`textWith`](#textWith).
+It [`maps`](#layoutMap) over a list of `term` and `definition` pairs and `layout`s them as [`texts`](#texts).
 
 [`shargs-usage`][shargs-usage] has the following layout combinators:
 
@@ -4795,16 +4706,16 @@ Finally, it concatenates the resulting strings and returns the result.
 Example:
 
 ```js
-const {layout, layoutMap, textFrom} = require('shargs-usage')
+const {layout, layoutMap, textWith} = require('shargs-usage')
 
-const defsFrom = (id1, id2) => layoutMap(
+const defsWith = ({id}) => layoutMap(
   ([term, definition] = []) => layout([
-    textFrom(id1)(term),
-    textFrom(id2)(definition)
+    textWith({id})(term),
+    textWith({id})(definition)
   ])
 )
 
-const defs = defsFrom('line', 'desc')
+const defs = defsWith({id: 'line'})
 
 const style = {
   line: [{width: 40}],
