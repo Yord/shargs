@@ -4857,13 +4857,13 @@ If many decorators are applied to a [layout function](#layout-function), the res
 const {defs, pad} = require('shargs-usage')
 
 const style = {
-  line: [{width: 40}]
+  cols: [{width: 25}, {width: 30}]
 }
 
-pad(['line', 0], 4)(
-  pad(['desc', 0], 4)(
-    defs([
-      ['-a, --answer=<number> [default: 42]', 'The answer.']
+pad(['cols', 0], 4)(
+  pad(['cols', 1], 4)(
+    table([
+      ['-a, --answer=<number>', 'The answer. [default: 42]']
     ])
   )
 )(style)
@@ -4875,14 +4875,14 @@ Layout decorator combinators avoid nesting deeply, by first collecting layout de
 const {decorate, defs, pad} = require('shargs-usage')
 
 const style = {
-  line: [{width: 40}]
+  cols: [{width: 25}, {width: 30}]
 }
 
-const decorated = decorate(pad(['line', 0], 4), pad(['desc', 0], 4))
+const decorated = decorate(pad(['cols', 0], 4), pad(['cols', 1], 4))
 
 decorated(
-  defs([
-    ['-a, --answer=<number> [default: 42]', 'The answer.']
+  table([
+    ['-a, --answer=<number>', 'The answer. [default: 42]']
   ])
 )(style)
 ```
