@@ -78,10 +78,10 @@ Declare a parser by choosing from 30+ parser stages:
 
 ```js
 const {parser} = require('shargs')
-const {cast, flagsAsBools, requireOpts, splitShortOptions} = require('shargs-parser')
+const {cast, flagsAsBools, requireOpts, splitShortOpts} = require('shargs-parser')
 
 const deepThought = parser({
-  argv: [splitShortOptions],
+  argv: [splitShortOpts],
   opts: [requireOpts, cast],
   args: [flagsAsBools]
 })
@@ -264,10 +264,10 @@ most of the time you get along by picking and choosing common ones from the `sha
 
 ```js
 const {parser} = require('shargs')
-const {cast, flagsAsBools, requireOpts, splitShortOptions} = require('shargs-parser')
+const {cast, flagsAsBools, requireOpts, splitShortOpts} = require('shargs-parser')
 
 const deepThought = parser({
-  argv: [splitShortOptions],
+  argv: [splitShortOpts],
   opts: [requireOpts, cast],
   args: [flagsAsBools]
 })
@@ -1098,7 +1098,7 @@ but this section finally paints the whole picture:
 ```js
 const {parser} = require('shargs')
 const {cast, flagsAsBools, requireOpts, restrictToOnly} = require('shargs-parser')
-const {reverseFlags, splitShortOptions} = require('shargs-parser')
+const {reverseFlags, splitShortOpts} = require('shargs-parser')
 
 const checks = {
   opts: [requireOpts]
@@ -1109,7 +1109,7 @@ const askChecks = {
 }
 
 const stages = {
-  argv: [splitShortOptions],
+  argv: [splitShortOpts],
   opts: [reverseFlags, restrictToOnly, cast],
   args: [flagsAsBools]
 }
@@ -1135,7 +1135,7 @@ Let's first take a closer look at `stages`:
 
 ```js
 const stages = {
-  argv: [splitShortOptions],
+  argv: [splitShortOpts],
   opts: [reverseFlags, restrictToOnly, cast],
   args: [flagsAsBools]
 }
@@ -1275,7 +1275,7 @@ const askChecks = {
 }
 
 const stages = {
-  argv: [splitShortOptions],
+  argv: [splitShortOpts],
   opts: [reverseFlags, restrictToOnly, cast],
   args: [flagsAsBools]
 }
@@ -1516,7 +1516,7 @@ Result:
 <details>
 <summary>
 <code>shortOptsNoSpace</code> transforms arguments like <code>['-a42']</code> into <code>['-a', '42']</code>.
-It cannot be used together with <code><a href="#splitShortOptions">splitShortOptions</a></code> in the same parser.
+It cannot be used together with <code><a href="#splitShortOpts">splitShortOpts</a></code> in the same parser.
 </summary>
 
 <br />
@@ -1542,12 +1542,12 @@ Result:
 </details>
 </td>
 </tr>
-<tr name="splitShortOptions">
-<td><code><a href="#splitShortOptions">splitShortOptions</a>({errs, argv})</code></td>
+<tr name="splitShortOpts">
+<td><code><a href="#splitShortOpts">splitShortOpts</a>({errs, argv})</code></td>
 <td>
 <details>
 <summary>
-<code>splitShortOptions</code> transforms arguments like <code>['-vh']</code> into <code>['-v', '-h']</code>.
+<code>splitShortOpts</code> transforms arguments like <code>['-vh']</code> into <code>['-v', '-h']</code>.
 It cannot be used together with <code><a href="#shortOptsNoSpace">shortOptsNoSpace</a></code> in the same parser.
 </summary>
 
@@ -1556,11 +1556,11 @@ It cannot be used together with <code><a href="#shortOptsNoSpace">shortOptsNoSpa
 Example:
 
 ```js
-const {splitShortOptions} = require('shargs-parser')
+const {splitShortOpts} = require('shargs-parser')
 
 const argv = ['-ha', '42']
 
-splitShortOptions({argv})
+splitShortOpts({argv})
 ```
 
 Result:
@@ -5122,7 +5122,7 @@ const script = program('deepThought', opts, {
 ```js
 const {parser} = require('shargs')
 const {cast, flagsAsBools, requireOpts, restrictToOnly} = require('shargs-parser')
-const {reverseFlags, splitShortOptions} = require('shargs-parser')
+const {reverseFlags, splitShortOpts} = require('shargs-parser')
 
 const checks = {
   opts: [requireOpts]
@@ -5133,7 +5133,7 @@ const askChecks = {
 }
 
 const stages = {
-  argv: [splitShortOptions],
+  argv: [splitShortOpts],
   opts: [reverseFlags, restrictToOnly, cast],
   args: [flagsAsBools]
 }
@@ -5355,7 +5355,7 @@ Always pass on errors!
 Custom `argv` stage example:
 
 ```js
-function splitShortOptions ({errs = [], argv = []} = {}) {
+function splitShortOpts ({errs = [], argv = []} = {}) {
   const argv2 = argv.flatMap(arg =>
     arg.length > 2 && arg[0] === '-' && arg[1] !== '-'
       ? arg.slice(1).split('').map(c => '-' + c)
