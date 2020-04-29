@@ -3092,7 +3092,6 @@ How to `style` the different parts of the documentation:
 ```js
 const style = {
   line: [{width: 60}],
-  desc: [{padStart: 4, width: 56}],
   cols: [{width: 25}, {width: 35}]
 }
 
@@ -3304,8 +3303,7 @@ const opt = {
 }
 
 const style = {
-  line: [{width: 40}],
-  desc: [{padStart: 4, width: 36}]
+  line: [{width: 40}]
 }
 
 optsDef(opt)(style)
@@ -3372,8 +3370,7 @@ const opt = {
 }
 
 const style = {
-  line: [{width: 40}],
-  desc: [{padStart: 4, width: 36}]
+  line: [{width: 40}]
 }
 
 optsDefs(opt)(style)
@@ -3798,8 +3795,7 @@ const cmd = {
 }
 
 const style = {
-  line: [{width: 40}],
-  desc: [{padStart: 4, width: 36}]
+  line: [{width: 40}]
 }
 
 usageMap(({args, desc}) => layout([
@@ -4233,7 +4229,6 @@ Depending on how we [`style`](#style) the [`layout`](#layout), we get different 
 ```js
 const style = {
   line: [{width: 80}],
-  desc: [{padStart: 4, width: 76}],
   cols: [{width: 16}, {width: 64}]
 }
 
@@ -4398,8 +4393,7 @@ Code:
 const {defs} = require('shargs-usage')
 
 const style = {
-  line: [{width: 40}],
-  desc: [{padStart: 4, width: 36}]
+  line: [{width: 40}]
 }
 
 defs([
@@ -4718,8 +4712,7 @@ const defsWith = ({id}) => layoutMap(
 const defs = defsWith({id: 'line'})
 
 const style = {
-  line: [{width: 40}],
-  desc: [{padStart: 4, width: 36}]
+  line: [{width: 40}]
 }
 
 defs([
@@ -4864,8 +4857,7 @@ If many decorators are applied to a [layout function](#layout-function), the res
 const {defs, pad} = require('shargs-usage')
 
 const style = {
-  line: [{width: 40}],
-  desc: [{padStart: 4, width: 36}]
+  line: [{width: 40}]
 }
 
 pad(['line', 0], 4)(
@@ -4883,8 +4875,7 @@ Layout decorator combinators avoid nesting deeply, by first collecting layout de
 const {decorate, defs, pad} = require('shargs-usage')
 
 const style = {
-  line: [{width: 40}],
-  desc: [{padStart: 4, width: 36}]
+  line: [{width: 40}]
 }
 
 const decorated = decorate(pad(['line', 0], 4), pad(['desc', 0], 4))
@@ -4921,7 +4912,6 @@ and applies them to its <code>layoutFunction</code> from right to left.
 ```js
 const style = {
   line: [{width: 80}],
-  desc: [{padStart: 4, width: 76}],
   cols: [{width: 25}, {width: 55}]
 }
 ```
@@ -5104,7 +5094,6 @@ const docs = usage([
 ```js
 const style = {
   line: [{width: 80}],
-  desc: [{padStart: 4, width: 76}],
   cols: [{width: 25}, {width: 55}]
 }
 ```
