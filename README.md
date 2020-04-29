@@ -78,11 +78,11 @@ Declare a parser by choosing from 30+ parser stages:
 
 ```js
 const {parser} = require('shargs')
-const {cast, flagsAsBools, requireOptions, splitShortOptions} = require('shargs-parser')
+const {cast, flagsAsBools, requireOpts, splitShortOptions} = require('shargs-parser')
 
 const deepThought = parser({
   argv: [splitShortOptions],
-  opts: [requireOptions, cast],
+  opts: [requireOpts, cast],
   args: [flagsAsBools]
 })
 ```
@@ -264,11 +264,11 @@ most of the time you get along by picking and choosing common ones from the `sha
 
 ```js
 const {parser} = require('shargs')
-const {cast, flagsAsBools, requireOptions, splitShortOptions} = require('shargs-parser')
+const {cast, flagsAsBools, requireOpts, splitShortOptions} = require('shargs-parser')
 
 const deepThought = parser({
   argv: [splitShortOptions],
-  opts: [requireOptions, cast],
+  opts: [requireOpts, cast],
   args: [flagsAsBools]
 })
 ```
@@ -968,7 +968,7 @@ and <code><a href="#key">key</a></code>.
 <td>boolean</td>
 <td>
 <code>required</code> defines whether a command-line option has to be present or not.
-It is used by the <code><a href="#requireOptions">requireOptions</a></code> stage that reports an error,
+It is used by the <code><a href="#requireOpts">requireOpts</a></code> stage that reports an error,
 if a <code>required</code> option does not have <code><a href="#values">values</a></code>
 or <code><a href="#defaultValues">defaultValues</a></code>.
 A positional argument (<code>*Pos</code>) can only be <code>required</code>,
@@ -1097,15 +1097,15 @@ but this section finally paints the whole picture:
 
 ```js
 const {parser} = require('shargs')
-const {cast, flagsAsBools, requireOptions, restrictToOnly} = require('shargs-parser')
+const {cast, flagsAsBools, requireOpts, restrictToOnly} = require('shargs-parser')
 const {reverseFlags, splitShortOptions} = require('shargs-parser')
 
 const checks = {
-  opts: [requireOptions]
+  opts: [requireOpts]
 }
 
 const askChecks = {
-  opts: [requireOptions]
+  opts: [requireOpts]
 }
 
 const stages = {
@@ -1267,11 +1267,11 @@ So why is that the case:
 
 ```js
 const checks = {
-  opts: [requireOptions]
+  opts: [requireOpts]
 }
 
 const askChecks = {
-  opts: [requireOptions]
+  opts: [requireOpts]
 }
 
 const stages = {
@@ -1787,12 +1787,12 @@ Result:
 </details>
 </td>
 </tr>
-<tr name="requireOptions">
-<td><code><a href="#requireOptions">requireOptions</a>({errs, opts})</code></td>
+<tr name="requireOpts">
+<td><code><a href="#requireOpts">requireOpts</a>({errs, opts})</code></td>
 <td>
 <details>
 <summary>
-<code>requireOptions</code> checks,
+<code>requireOpts</code> checks,
 if all options whose <code><a href="#required">required</a></code> field is <code>true</code> have
 <code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code>.
 For each missing <code><a href="#required">required</a></code> option, a <code>RequiredOptionMissing</code> error
@@ -1806,14 +1806,14 @@ is not an array, it reports a <code>RequiredOptionFormat</code> error.
 Example:
 
 ```js
-const {requireOptions} = require('shargs-parser')
+const {requireOpts} = require('shargs-parser')
 const {string} = require('shargs-opts')
 
 const opts = [
   string('question', ['--question'], {required: true})
 ]
 
-requireOptions({opts})
+requireOpts({opts})
 ```
 
 Result:
@@ -5121,15 +5121,15 @@ const script = program('deepThought', opts, {
 
 ```js
 const {parser} = require('shargs')
-const {cast, flagsAsBools, requireOptions, restrictToOnly} = require('shargs-parser')
+const {cast, flagsAsBools, requireOpts, restrictToOnly} = require('shargs-parser')
 const {reverseFlags, splitShortOptions} = require('shargs-parser')
 
 const checks = {
-  opts: [requireOptions]
+  opts: [requireOpts]
 }
 
 const askChecks = {
-  opts: [requireOptions]
+  opts: [requireOpts]
 }
 
 const stages = {
