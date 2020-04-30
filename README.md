@@ -230,7 +230,7 @@ Required option is missing: An option that is marked as required has not been pr
 </p>
 </summary>
 
-Read the [writing programs with shargs](#writing-programs-with-shargs) sections to find out more.
+See the [error codes](#error-codes) sections for a reference of all error codes.
 
 </details>
 
@@ -5536,6 +5536,233 @@ const optsTable = usageMap(
   ])
 )
 ```
+
+### Error Codes
+
+[`shargs`][shargs] and [`shargs-parser`][shargs-parser] report errors if a
+[command-line option](#command-line-options)'s syntax is invalid, or if [`checks`](#checks) fail.
+The following table contains all error codes currently in use and where they are thrown:
+
+<table>
+<tr>
+<th>Code</th>
+<th>Message</th>
+<th>Thrown&nbsp;by</th>
+</tr>
+<tr name="ArgumentIsNotABool">
+<td><code><a href="#ArgumentIsNotABool">ArgumentIsNotABool</a></code></td>
+<td>The passed command line argument must either be 'true' or 'false'.</td>
+<td>
+<code><a href="#cast">cast</code>
+</td>
+</tr>
+<tr name="ArgumentIsNotANumber">
+<td><code><a href="#ArgumentIsNotANumber">ArgumentIsNotANumber</a></code></td>
+<td>The passed command line argument must be a number.</td>
+<td>
+<code><a href="#cast">cast</code>
+</td>
+</tr>
+<tr name="CommandRequired">
+<td><code><a href="#CommandRequired">CommandRequired</a></code></td>
+<td>No command found. Please use at least one command!</td>
+<td>
+<code><a href="#demandACommand">demandACommand</code>
+</td>
+</tr>
+<tr name="ContradictionDetected">
+<td><code><a href="#ContradictionDetected">ContradictionDetected</a></code></td>
+<td>Some given keys contradict each other.</td>
+<td>
+<code><a href="#contradictOpts">contradictOpts</code>
+</td>
+</tr>
+<tr name="DidYouMean">
+<td><code><a href="#DidYouMean">DidYouMean</a></code></td>
+<td>An unknown command-line argument was passed. Did you mean any of the following options?</td>
+<td>
+<code><a href="#suggestOpts">suggestOpts</code>
+</td>
+</tr>
+<tr name="FalseArgsRules">
+<td><code><a href="#FalseArgsRules">FalseArgsRules</a></code></td>
+<td>Your args rules returned false. Please abide to the rules defined in verifyArgs.</td>
+<td>
+<code><a href="#verifyArgs">verifyArgs</code>
+</td>
+</tr>
+<tr name="FalseArgvRules">
+<td><code><a href="#FalseArgvRules">FalseArgvRules</a></code></td>
+<td>Your argv rules returned false. Please abide to the rules defined in verifyArgv.</td>
+<td>
+<code><a href="#verifyArgv">verifyArgv</code>
+</td>
+</tr>
+<tr name="FalseOptsRules">
+<td><code><a href="#FalseOptsRules">FalseOptsRules</a></code></td>
+<td>Your opts rules returned false. Please abide to the rules defined in verifyOpts.</td>
+<td>
+<code><a href="#verifyOpts">verifyOpts</code>
+</td>
+</tr>
+<tr name="IllegalKeyName">
+<td><code><a href="#IllegalKeyName">IllegalKeyName</a></code></td>
+<td>An option key had an illegal name.</td>
+<td>
+<code><a href="#toOpts-stage">toOpts</code>
+</td>
+</tr>
+<tr name="ImplicationViolated">
+<td><code><a href="#ImplicationViolated">ImplicationViolated</a></code></td>
+<td>Some given keys that imply each other are not all defined.</td>
+<td>
+<code><a href="#implyOpts">implyOpts</code>
+</td>
+</tr>
+<tr name="IncompatibleTypes">
+<td><code><a href="#IncompatibleTypes">IncompatibleTypes</a></code></td>
+<td>Repeated options must either both be variadic or both not.</td>
+<td>
+<code><a href="#arrayOnRepeat">arrayOnRepeat</code>
+</td>
+</tr>
+<tr name="InvalidArity">
+<td><code><a href="#InvalidArity">InvalidArity</a></code></td>
+<td>An option's types arity does not match its values arity.</td>
+<td>
+<code><a href="#verifyValuesArity">verifyValuesArity</code>
+</td>
+</tr>
+<tr name="InvalidBoolMapping">
+<td><code><a href="#InvalidBoolMapping">InvalidBoolMapping</a></code></td>
+<td>The mapping provided to broadenBools must only map from 'true' or 'false' to a list of alternatives.</td>
+<td>
+<code><a href="#broadenBools">broadenBools</code>
+</td>
+</tr>
+<tr name="InvalidDefaultValues">
+<td><code><a href="#InvalidDefaultValues">InvalidDefaultValues</a></code></td>
+<td>An option's defaultValues field has an invalid type. It must be an array with any values in it.</td>
+<td>
+<code><a href="#toArgs-stage">toArgs</code>
+</td>
+</tr>
+<tr name="InvalidOptionsListInCombine">
+<td><code><a href="#InvalidOptionsListInCombine">InvalidOptionsListInCombine</a></code></td>
+<td>Options list in combine was undefined, null or empty.</td>
+<td>
+<code><a href="#toOpts-stage">toOpts</code>
+</td>
+</tr>
+<tr name="InvalidRequiredPositionalArgument">
+<td><code><a href="#InvalidRequiredPositionalArgument">InvalidRequiredPositionalArgument</a></code></td>
+<td>
+If a positional argument is required, all previous positional arguments must be required as well.
+The required field must either be undefined, true or false.
+</td>
+<td>
+<code><a href="#validatePosArgs">validatePosArgs</code>
+</td>
+</tr>
+<tr name="InvalidTypes">
+<td><code><a href="#InvalidTypes">InvalidTypes</a></code></td>
+<td>Each argument must have a types key that must be null or an array.</td>
+<td>
+<code><a href="#toOpts-stage">toOpts</a></code><br />
+<code><a href="#verifyValuesArity">verifyValuesArity</a></code>
+</td>
+</tr>
+<tr name="InvalidValues">
+<td><code><a href="#InvalidValues">InvalidValues</a></code></td>
+<td>An option's values field has an invalid type.</td>
+<td>
+<code><a href="#verifyValuesArity">verifyValuesArity</code>
+</td>
+</tr>
+<tr name="InvalidVariadicPositionalArgument">
+<td><code><a href="#InvalidVariadicPositionalArgument">InvalidVariadicPositionalArgument</a></code></td>
+<td>Only the last positional argument may be variadic.</td>
+<td>
+<code><a href="#validatePosArgs">validatePosArgs</code>
+</td>
+</tr>
+<tr name="NonMatchingArgumentTypes">
+<td><code><a href="#NonMatchingArgumentTypes">NonMatchingArgumentTypes</a></code></td>
+<td>If arguments have the same arg, their types must either be equal or have the same length.</td>
+<td>
+<code><a href="#toOpts-stage">toOpts</code>
+</td>
+</tr>
+<tr name="RequiredOptionMissing">
+<td><code><a href="#RequiredOptionMissing">RequiredOptionMissing</a></code></td>
+<td>An option that is marked as required has not been provided.</td>
+<td>
+<code><a href="#requireOpts">requireOpts</code>
+</td>
+</tr>
+<tr name="UnexpectedArgument">
+<td><code><a href="#UnexpectedArgument">UnexpectedArgument</a></code></td>
+<td>An unexpected argument was used that has no option defined.</td>
+<td>
+<code><a href="#failRest">failRest</code>
+</td>
+</tr>
+<tr name="ValueRestrictionsViolated">
+<td><code><a href="#ValueRestrictionsViolated">ValueRestrictionsViolated</a></code></td>
+<td>A value lies outside the allowed values of an option.</td>
+<td>
+<code><a href="#restrictToOnly">restrictToOnly</code>
+</td>
+</tr>
+<tr name="WrongArgsRulesType">
+<td><code><a href="#WrongArgsRulesType">WrongArgsRulesType</a></code></td>
+<td>The args rules are of a wrong type, please provide a predicate with the following signature: (args) => boolean.</td>
+<td>
+<code><a href="#verifyArgs">verifyArgs</code>
+</td>
+</tr>
+<tr name="WrongArgvRulesType">
+<td><code><a href="#WrongArgvRulesType">WrongArgvRulesType</a></code></td>
+<td>The argv rules are of a wrong type, please provide a predicate with the following signature: (argv) => boolean.</td>
+<td>
+<code><a href="#verifyArgv">verifyArgv</code>
+</td>
+</tr>
+<tr name="WrongContradictsType">
+<td><code><a href="#WrongContradictsType">WrongContradictsType</a></code></td>
+<td>The contradicts field has the wrong type, please provide an array of command-line option keys.</td>
+<td>
+<code><a href="#contradictOpts">contradictOpts</code>
+</td>
+</tr>
+<tr name="WrongFormatForRequiredOption">
+<td><code><a href="#WrongFormatForRequiredOption">WrongFormatForRequiredOption</a></code></td>
+<td>
+A required option has values or defaultValues in the wrong format.
+Default values are different depending on the command-line option type:
+Commands take objects, flags take counts, and other options take arrays of the correct length.
+</td>
+<td>
+<code><a href="#requireOpts">requireOpts</code>
+</td>
+</tr>
+<tr name="WrongImpliesType">
+<td><code><a href="#WrongImpliesType">WrongImpliesType</a></code></td>
+<td>The implies field has the wrong type, please provide an array of command-line option keys.</td>
+<td>
+<code><a href="#implyOpts">implyOpts</code>
+</td>
+</tr>
+<tr name="WrongOptsRulesType">
+<td><code><a href="#WrongOptsRulesType">WrongOptsRulesType</a></code></td>
+<td>
+The opts rules are of a wrong type, please provide a predicate with the following signature: (options) => boolean.
+</td>
+<td>
+<code><a href="#verifyOpts">verifyOpts</code>
+</td>
+</tr>
+</table>
 
 ## FAQ
 
