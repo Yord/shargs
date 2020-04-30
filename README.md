@@ -3043,6 +3043,40 @@ Result:
 </details>
 </td>
 </tr>
+<tr name="numbersAsFlags">
+<td><code><a href="#numbersAsFlags">numbersAsFlags</a>({errs, args})</code></td>
+<td>
+<details>
+<summary>
+<code>numbersAsFlags</code> transforms all numbers in <code>args</code> to flag objects.
+The numbers are the flags' <code>count</code>s (e.g. <code>42</code> becomes <code>{type: 'flag', count: 42}</code>).
+</summary>
+
+<br />
+
+Example:
+
+```js
+const args = {
+  _: [],
+  answer: 42
+}
+
+numbersAsFlags({args})
+```
+
+Result:
+
+```js
+{
+  _: [],
+  answer: {type: 'flag', count: 42}
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="traverseArgs">
 <td><code><a href="#traverseArgs">traverseArgs</a>(fs)({errs, args})</code></td>
 <td>
