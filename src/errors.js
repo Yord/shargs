@@ -12,19 +12,19 @@ const invalidDefaultValues = ({defaultValues, option}) => ({
 
 const invalidOptionsListInCombine = ({options, arg, argument}) => ({
   code: 'InvalidOptionsListInCombine',
-  msg:  'Options list in combine was undefined, null or empty',
+  msg:  'Options list in combine was undefined, null or empty.',
   info: {options, arg, argument}
 })
 
 const invalidTypes = ({types, option}) => ({
   code: 'InvalidTypes',
-  msg:  'Each argument must have a types key that must be null or an array',
+  msg:  'Each argument must have a types key that must be null or an array.',
   info: {types, option}
 })
 
 const nonMatchingArgumentTypes = ({arg, ref, option}) => ({
   code: 'NonMatchingArgumentTypes',
-  msg:  'If arguments have the same arg, their types must either be equal or have the same length',
+  msg:  'If arguments have the same arg, their types must either be equal or have the same length.',
   info: {arg, ref, option}
 })
 

@@ -230,7 +230,7 @@ Required option is missing: An option that is marked as required has not been pr
 </p>
 </summary>
 
-Read the [writing programs with shargs](#writing-programs-with-shargs) sections to find out more.
+See the [error codes](#error-codes) sections for a reference of all error codes.
 
 </details>
 
@@ -489,7 +489,7 @@ and <code><a href="#args">args</a></code> must be <code>undefined</code>.
 </td>
 </tr>
 <tr name="program-pos-arg">
-<td><a href="#program">Program Positional Argument</a></td>
+<td><a href="#program-pos-arg">Program Positional Argument</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#opts">opts</a>}</code></td>
 <td>
 <code><a href="#key">key</a></code> must be defined,
@@ -539,7 +539,7 @@ The following type functions are available:
 </tr>
 <tr name="array">
 <td>
-<code><a href="#array">array</a>(types)(key, args, fields)</code><br />
+<code name="arrayPos"><a href="#array">array</a>(types)(key, args, fields)</code><br />
 <code><a href="#arrayPos">arrayPos</a>(types)(key, fields)</code>
 </td>
 <td>
@@ -575,7 +575,7 @@ const arrayPos = types => (key, fields) => ({
 </tr>
 <tr name="bool">
 <td>
-<code><a href="#bool">bool</a>(key, args, fields)</code><br />
+<code name="boolPos"><a href="#bool">bool</a>(key, args, fields)</code><br />
 <code><a href="#boolPos">boolPos</a>(key, fields)</code>
 </td>
 <td>
@@ -590,6 +590,9 @@ or <code>'false'</code> (e.g. <code>'F'</code>, <code>'no'</code>),
 have a look at <code><a href="#broadenBools">broadenBools</a></code>.
 If you want to treat a value as its <code><a href="#reverse">reverse</a></code>,
 see <code><a href="#reverseBools">reverseBools</a></code>.
+If you need <code><a href="#flag">flag</a></code>s instead of <code>bool</code>s, have a look at the
+<code><a href="#boolAsFlag">boolAsFlag</a></code> and <code><a href="#boolsAsFlags">boolsAsFlags</a></code> 
+parser stages.
 </summary>
 
 <br />
@@ -615,7 +618,7 @@ const boolPos = (key, fields) => ({
 </tr>
 <tr name="command">
 <td>
-<code><a href="#command">command</a>(opts)(key, args, fields)</code><br />
+<code name="program"><a href="#command">command</a>(opts)(key, args, fields)</code><br />
 <code><a href="#program">program</a>(key, opts, fields)</code>
 </td>
 <td>
@@ -687,7 +690,7 @@ const flag = (key, args, fields) => ({
 </tr>
 <tr name="number">
 <td>
-<code><a href="#number">number</a>(key, args, fields)</code><br />
+<code name="numberPos"><a href="#number">number</a>(key, args, fields)</code><br />
 <code><a href="#numberPos">numberPos</a>(key, fields)</code>
 </td>
 <td>
@@ -697,6 +700,9 @@ const flag = (key, args, fields) => ({
 while <code>numberPos</code> generates a <a href="#primitive-pos-arg">primitive positional argument</a>.
 These types represent JavaScript numbers.
 Numbers are represented as strings and you may want to <code><a href="#cast">cast</a></code> them.
+If you need <code><a href="#flag">flag</a></code>s instead of <code>number</code>s, have a look at the
+<code><a href="#numberAsFlag">numberAsFlag</a></code> and <code><a href="#numbersAsFlags">numbersAsFlags</a></code> 
+parser stages.
 </summary>
 
 <br />
@@ -722,7 +728,7 @@ const numberPos = (key, fields) => ({
 </tr>
 <tr name="string">
 <td>
-<code><a href="#string">string</a>(key, args, fields)</code><br />
+<code name="stringPos"><a href="#string">string</a>(key, args, fields)</code><br />
 <code><a href="#stringPos">stringPos</a>(key, fields)</code>
 </td>
 <td>
@@ -756,7 +762,7 @@ const stringPos = (key, fields) => ({
 </tr>
 <tr name="variadic">
 <td>
-<code><a href="#variadic">variadic</a>(key, args, fields)</code><br />
+<code name="variadicPos"><a href="#variadic">variadic</a>(key, args, fields)</code><br />
 <code><a href="#variadicPos">variadicPos</a>(key, fields)</code>
 </td>
 <td>
@@ -937,7 +943,7 @@ It is also used by the
 <code><a href="#optsDef">optsDef</a></code>, <code><a href="#optsDefs">optsDefs</a></code>,
 <code><a href="#synopses">synopses</a></code>, and <code><a href="#synopsis">synopsis</a></code> usage functions
 and their <code>*With</code> versions to describe argument values (e.g. <code>--format=&lt;format&gt;</code>).
-<code><a href="#descArg">descArg</a></code>, <code><a href="#types">only</a></code>,
+<code><a href="#descArg">descArg</a></code>, <code><a href="#only">only</a></code>,
 and <code><a href="#types">types</a></code> are other fields that change the argument value description.
 These fields are applied in the following order (highest priority first):
 <code><a href="#descArg">descArg</a></code>, <code><a href="#only">only</a></code>,
@@ -950,7 +956,7 @@ These fields are applied in the following order (highest priority first):
 <td>
 <code>only</code> defines valid values of an option.
 It is used by the <code><a href="#restrictToOnly">restrictToOnly</a></code> parser stage to validate user input.
-<code>only</code> may be used to <a href="can-i-use-enums">implement enumerations</a>.
+<code>only</code> may be used to <a href="#can-i-use-enums">implement enumerations</a>.
 It is also used by the <code><a href="#optsList">optsList</a></code>, <code><a href="#optsLists">optsLists</a></code>,
 <code><a href="#optsDef">optsDef</a></code>, and <code><a href="#optsDefs">optsDefs</a></code> usage functions
 and their <code>*With</code> versions to describe argument values (e.g. <code>--format=&lt;json|xml&gt;</code>).
@@ -1014,7 +1020,7 @@ must not have a <code>types</code> field.
 <code><a href="#optsDef">optsDef</a></code>, and <code><a href="#optsDefs">optsDefs</a></code> usage functions
 and their <code>*With</code> versions to describe argument values
 (e.g. <code>--format=&lt;bool&gt;</code> for a <code><a href="#bool">bool</a></code> option).
-<code><a href="#descArg">descArg</a></code>, <code><a href="#types">only</a></code>,
+<code><a href="#descArg">descArg</a></code>, <code><a href="#only">only</a></code>,
 and <code><a href="#key">key</a></code> are other fields that change the argument value description.
 These fields are applied in the following order (highest priority first):
 <code><a href="#descArg">descArg</a></code>, <code><a href="#only">only</a></code>, <code>types</code>,
@@ -1096,8 +1102,8 @@ const noHtml = flag('html', ['--no-H', '--no-html'], {reverse: true})
 
 ### The `parser` Function
 
-The `parser` function is [`shargs`](#shargs)' core abstraction and (almost) its only export.
-It may be used entirely without [`shargs-opts`](#shargs-opts) and [`shargs-parser`](#shargs-parser),
+The `parser` function is [`shargs`][shargs]' core abstraction and (almost) its only export.
+It may be used entirely without [`shargs-opts`][shargs-opts] and [`shargs-parser`][shargs-parser],
 e.g. with manually written option objects and parser stages, or with other option DSL or parser stage libraries.
 Up to this point, we have already seen some of the things, `parser` does, and others have been hinted at,
 but this section finally paints the whole picture:
@@ -1134,7 +1140,7 @@ const deepThought = parser(stages, {checks, parsers, mode: 'sync'})
 
 1.  A `stages` object that collects [parser stages](#command-line-parsers)
     and defines what transformations should be applied in which order.
-2.  An optional `options` object with `checks`, [`parsers`](#parsers), and [`mode`](#mode) fields.
+2.  An optional `options` object with [`checks`](#checks), [`parsers`](#parsers), and [`mode`](#mode) fields.
 
 #### `stages`
 
@@ -1158,43 +1164,43 @@ to command-line options (`opts`) and finally to arguments (`args`):
 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Function&nbsp;Signature&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
-<tr name="argv-stage">
+<tr name="argv-stages">
 <td>1</td>
-<td><code><a href="#argv-stage">argv</a></code></td>
+<td><code><a href="#argv-stages">argv</a></code></td>
 <td align="right"><code>({errs, argv}) => ({errs, argv})</code></td>
 <td>
 <code>argv</code> stages modify command-line argument values
 (e.g. <code>['--help', '-a', '42']</code>).
 </td>
 </tr>
-<tr name="toOpts-stage">
+<tr name="toOpts-stages">
 <td>2</td>
-<td><code><a href="#toOpts-stage">toOpts</a></code></td>
+<td><code><a href="#toOpts-stages">toOpts</a></code></td>
 <td align="right"><code>opts => ({errs, argv}) => ({errs, opts})</code></td>
 <td>
 <code>toOpts</code> transforms command-line argument values syntax into command-line options syntax.
 </td>
 </tr>
-<tr name="opts-stage">
+<tr name="opts-stages">
 <td>3</td>
-<td><code><a href="#opts-stage">opts</a></code></td>
+<td><code><a href="#opts-stages">opts</a></code></td>
 <td align="right"><code>({errs, opts}) => ({errs, opts})</code></td>
 <td>
 <code>opts</code> stages modify command-line options
 (e.g. <code>{key: 'answer', args: ['-a'], types: ['number'], values: ['42']}</code>).
 </td>
 </tr>
-<tr name="toArgs-stage">
+<tr name="toArgs-stages">
 <td>4</td>
-<td><code><a href="#toArgs-stage">toArgs</a></code></td>
+<td><code><a href="#toArgs-stages">toArgs</a></code></td>
 <td align="right"><code>parsers => ({errs, opts}) => ({errs, args})</code></td>
 <td>
 <code>toArgs</code> transforms command-line options syntax into arguments objects syntax.
 </td>
 </tr>
-<tr name="args-stage">
+<tr name="args-stages">
 <td>5</td>
-<td><code><a href="#args-stage">args</a></code></td>
+<td><code><a href="#args-stages">args</a></code></td>
 <td align="right"><code>({errs, args}) => ({errs, args})</code></td>
 <td>
 <code>args</code> stages modify arguments objects
@@ -1203,10 +1209,10 @@ to command-line options (`opts`) and finally to arguments (`args`):
 </tr>
 </table>
 
-The [`toOps`](#toOpts-stage) and [`toArgs`](#toArgs-stage) stages
+The [`toOps`](#toOpts-stages) and [`toArgs`](#toArgs-stages) stages
 define the core behavior of [`parser`](#the-parser-function) and should not have to be changed in most use cases.
 However, if you do have a use case that needs adjustments to those stages, you may carefully swap them out.
-The [`argv`](#argv-stage), [`opts`](#opts-stage), and [`args`](#args-stage) stages
+The [`argv`](#argv-stages), [`opts`](#opts-stages), and [`args`](#args-stages) stages
 are the actual developer-facing API for defining a parser's behavior using parser stages.
 
 If you read the stage's function signatures from top to bottom, you get a good impression of what `parser` does:
@@ -1217,16 +1223,16 @@ You may ask why errors are not collected internally, to make sure they are passe
 The answer is, to make stages possible that operate on errors,
 e.g. by combining several errors into one or by improving error messages.
 
-[`argv` stages](#argv-stage) transform `argv`s into other `argv`s,
-[`opts` stages](#opts-stage) transform `opts`' into other `opts`', and
-[`args` stages](#args-stage) transform `args`' into other `args`'.
+[`argv` stages](#argv-stages) transform `argv`s into other `argv`s,
+[`opts` stages](#opts-stages) transform `opts`' into other `opts`', and
+[`args` stages](#args-stages) transform `args`' into other `args`'.
 Nothing to see here, move along.
 
-The [`toOpts` stage's](#toOpts-stage) signature reveals more:
+The [`toOpts` stage's](#toOpts-stages) signature reveals more:
 It takes an `opts` array, supposably the one we passed to parser, and transforms `args` to `opts`.
 It is save to assume it uses the information defined in `opts` to drive this transformation.
 
-Finally, the [`toArgs` stage's](#toArgs-stage) signature:
+Finally, the [`toArgs` stage's](#toArgs-stages) signature:
 It takes several [`parsers`](#parsers), supposably from the `parsers` field in `options`, and transforms `opts` to `args`.
 Since parsers are used to transform [`opts`](#opts),
 it is save to assume that [`parsers`](#parsers) is used to recursively parse [`program`s](#program)
@@ -1337,7 +1343,7 @@ asyncResults.then(
 An asynchronous parser differs in two ways:
 It returns a [JavaScript Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 instead of an object,
-and its `stages` and `checks` parameters take the following types of parser stages:
+and its [`stages`](#stages) and [`checks`](#checks) parameters take the following types of parser stages:
 
 <table>
 <tr>
@@ -1346,9 +1352,9 @@ and its `stages` and `checks` parameters take the following types of parser stag
 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Function&nbsp;Signature&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
-<tr name="argv-stage-async">
+<tr name="argv-stages-async">
 <td>1</td>
-<td><code><a href="#argv-stage-async">argv</a></code></td>
+<td><code><a href="#argv-stages-async">argv</a></code></td>
 <td align="right">
 <code>({errs, argv}) => ({errs, argv})</code><br />
 <code>({errs, argv}) => Promise({errs, argv})</code>
@@ -1357,9 +1363,9 @@ and its `stages` and `checks` parameters take the following types of parser stag
 Async <code>argv</code> stages work just like their sync counterpart, but return a Promise.
 </td>
 </tr>
-<tr name="toOpts-stage-async">
+<tr name="toOpts-stages-async">
 <td>2</td>
-<td><code><a href="#toOpts-stage-async">toOpts</a></code></td>
+<td><code><a href="#toOpts-stages-async">toOpts</a></code></td>
 <td align="right">
 <code>opts => ({errs, argv}) => ({errs, opts})</code><br />
 <code>opts => ({errs, argv}) => Promise({errs, opts})</code>
@@ -1368,9 +1374,9 @@ Async <code>argv</code> stages work just like their sync counterpart, but return
 An async <code>toOpts</code> stage works just like its sync counterpart, but returns a Promise.
 </td>
 </tr>
-<tr name="opts-stage-async">
+<tr name="opts-stages-async">
 <td>3</td>
-<td><code><a href="#opts-stage-async">opts</a></code></td>
+<td><code><a href="#opts-stages-async">opts</a></code></td>
 <td align="right">
 <code>({errs, opts}) => ({errs, opts})</code><br />
 <code>({errs, opts}) => Promise({errs, opts})</code>
@@ -1379,9 +1385,9 @@ An async <code>toOpts</code> stage works just like its sync counterpart, but ret
 Async <code>opts</code> stages work just like their sync counterpart, but return a Promise.
 </td>
 </tr>
-<tr name="toArgs-stage-async">
+<tr name="toArgs-stages-async">
 <td>4</td>
-<td><code><a href="#toArgs-stage-async">toArgs</a></code></td>
+<td><code><a href="#toArgs-stages-async">toArgs</a></code></td>
 <td align="right">
 <code>parsers => ({errs, opts}) => ({errs, args})</code><br />
 <code>parsers => ({errs, opts}) => Promise({errs, args})</code>
@@ -1390,9 +1396,9 @@ Async <code>opts</code> stages work just like their sync counterpart, but return
 An async <code>toArgs</code> stage works just like its sync counterpart, but returns a Promise.
 </td>
 </tr>
-<tr name="args-stage-async">
+<tr name="args-stages-async">
 <td>5</td>
-<td><code><a href="#args-stage-async">args</a></code></td>
+<td><code><a href="#args-stages-async">args</a></code></td>
 <td align="right">
 <code>({errs, args}) => ({errs, args})</code><br />
 <code>({errs, args}) => Promise({errs, args})</code>
@@ -3265,7 +3271,7 @@ Here, we have a closer look at how to declare a usage documentation layout.
 
 <table>
 <tr>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
 <tr name="usage-desc">
@@ -3276,7 +3282,7 @@ Here, we have a closer look at how to declare a usage documentation layout.
 <td>
 <details>
 <summary>
-<code>desc</code> takes the <code><a href="#desc">desc</a></code> field from <code>opts</code>
+<code>desc</code> takes a command-line option's <code><a href="#desc">desc</a></code> field
 and formats it according to a <code><a href="#style">style</a></code>.
 If the description is too long to fit one line, it is split and spread over several lines.
 <code>desc</code> is defined as <code>descWith({id: 'line'})</code>.
@@ -3821,7 +3827,8 @@ This example uses [usage decorators](#usage-decorators), that are only introduce
 For now, you do not need to know what they are, as they work exactly as their name suggests:
 [`noCommands`](#noCommands) removes all [`command`](#command)s from [`opts`](#opts) before applying a usage function,
 [`onlyCommands`](#onlyCommands) removes everything but [`command`](#command)s from [`opts`](#opts),
-[`optsMap`](#optsMap) applies a function to an option's [`opts`](#opts), and [`decorate`](#decorate) combines decorators.
+[`optsMap`](#optsMap) applies a function to an option's [`opts`](#opts),
+and [`decorate`](#decorate-usage) combines decorators.
 
 The implementation of `synopses` uses two usage combinators:
 [`usage`](#usage) and [`usageMap`](#usageMap).
@@ -3976,7 +3983,7 @@ const decoratedDocs = usage([
 The example uses three different decorators:
 [`noCommands`](#noCommands), [`onlyCommands`](#onlyCommands), and [`onlyFirstArg`](#onlyFirstArg).
 Each of these decorators modifies the `opts` array in some way,
-before passing it on to their wrapped [usage function](#usage-function).
+before passing it on to their wrapped [usage function](#usage-functions).
 The first two focus on filtering `opts`:
 [`noCommands`](#noCommands) removes all [`command`](#command)s,
 while [`onlyCommands`](#onlyCommands) keeps only [`command`](#command)s.
@@ -4294,7 +4301,7 @@ This version of `synopsis2` is much more readable.
 Note, that [`decorate`](#decorate-usage) applies its usage decorators from right to left.
 As is apparent from the example, usage decorator combinators are usage decorators, themselves.
 
-[`shargs-usage`](#shargs-usage) has the following usage decorator combinators:
+[`shargs-usage`][shargs-usage] has the following usage decorator combinators:
 
 <table>
 <tr>
@@ -4334,7 +4341,7 @@ If we take a closer look at the signatures of usage and layout functions, this b
 </tr>
 </table>
 
-In [`shargs-usage`](#shargs-usage), an `opt`'s purpose is to provide the textual contents of layout functions
+In [`shargs-usage`][shargs-usage], an `opt`'s purpose is to provide the textual contents of layout functions
 and the [usage functions](#usage-functions)' only job is to specify how this textual content is extracted from the `opt`.
 The layout functions do the actual work of formatting strings.
 
@@ -4395,11 +4402,11 @@ Life, the Universe, and Everything.
 
 Experiment with [`style`](#style) to get different layouts!
 
-[`shargs-usage`](#shargs-usage) gives you the following layout functions:
+[`shargs-usage`][shargs-usage] gives you the following layout functions:
 
 <table>
 <tr>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Layout&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Layout&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
 <tr name="br">
@@ -4901,7 +4908,7 @@ Here, the `term`, as well as the `definition` have the same id, [`text`](#text)s
 However, we want to add a padding of `4` spaces to the `definition`.
 So we use [`pad`](#pad) to add `4` spaces to the id at the `['line']` path of [`style`](#style).
 
-[`shargs-usage`](#shargs-usage) ships with the following layout decorators:
+[`shargs-usage`][shargs-usage] ships with the following layout decorators:
 
 <table>
 <tr>
@@ -4991,7 +4998,7 @@ Result:
 
 #### Layout Decorator Combinators
 
-If many decorators are applied to a [layout function](#layout-function), the resulting code can get deeply nested:
+If many decorators are applied to a [layout function](#layout-functions), the resulting code can get deeply nested:
 
 ```js
 const {pad, table} = require('shargs-usage')
@@ -5029,7 +5036,7 @@ decorated(
 
 Note, that [`decorate`](#decorate-layout) applies layout decorators from right to left.
 
-[`shargs-usage`](#shargs-usage) contains the following layout decorator combinators:
+[`shargs-usage`][shargs-usage] contains the following layout decorator combinators:
 
 <table>
 <tr>
@@ -5356,7 +5363,7 @@ Do this with caution, as it may break defined parser checks and stages.
 
 #### `toArgs` Stage
 
-Like [`toOpts`](#toOpts), the `toArgs` stage takes just one function:
+Like [`toOpts`](#toOpts-stage), the `toArgs` stage takes just one function:
 <code><a href="#toArgs-stage">toArgs</a>(parsers)({errs, opts})</code>.
 It transforms `opts` arrays into an `args` object by applying three different stages in parallel:
 
@@ -5529,6 +5536,233 @@ const optsTable = usageMap(
   ])
 )
 ```
+
+### Error Codes
+
+[`shargs`][shargs] and [`shargs-parser`][shargs-parser] report errors if a
+[command-line option](#command-line-options)'s syntax is invalid, or if [`checks`](#checks) fail.
+The following table contains all error codes currently in use and where they are thrown:
+
+<table>
+<tr>
+<th>Code</th>
+<th>Message</th>
+<th>Thrown&nbsp;by</th>
+</tr>
+<tr name="ArgumentIsNotABool">
+<td><code><a href="#ArgumentIsNotABool">ArgumentIsNotABool</a></code></td>
+<td>The passed command line argument must either be 'true' or 'false'.</td>
+<td>
+<code><a href="#cast">cast</code>
+</td>
+</tr>
+<tr name="ArgumentIsNotANumber">
+<td><code><a href="#ArgumentIsNotANumber">ArgumentIsNotANumber</a></code></td>
+<td>The passed command line argument must be a number.</td>
+<td>
+<code><a href="#cast">cast</code>
+</td>
+</tr>
+<tr name="CommandRequired">
+<td><code><a href="#CommandRequired">CommandRequired</a></code></td>
+<td>No command found. Please use at least one command!</td>
+<td>
+<code><a href="#demandACommand">demandACommand</code>
+</td>
+</tr>
+<tr name="ContradictionDetected">
+<td><code><a href="#ContradictionDetected">ContradictionDetected</a></code></td>
+<td>Some given keys contradict each other.</td>
+<td>
+<code><a href="#contradictOpts">contradictOpts</code>
+</td>
+</tr>
+<tr name="DidYouMean">
+<td><code><a href="#DidYouMean">DidYouMean</a></code></td>
+<td>An unknown command-line argument was passed. Did you mean any of the following options?</td>
+<td>
+<code><a href="#suggestOpts">suggestOpts</code>
+</td>
+</tr>
+<tr name="FalseArgsRules">
+<td><code><a href="#FalseArgsRules">FalseArgsRules</a></code></td>
+<td>Your args rules returned false. Please abide to the rules defined in verifyArgs.</td>
+<td>
+<code><a href="#verifyArgs">verifyArgs</code>
+</td>
+</tr>
+<tr name="FalseArgvRules">
+<td><code><a href="#FalseArgvRules">FalseArgvRules</a></code></td>
+<td>Your argv rules returned false. Please abide to the rules defined in verifyArgv.</td>
+<td>
+<code><a href="#verifyArgv">verifyArgv</code>
+</td>
+</tr>
+<tr name="FalseOptsRules">
+<td><code><a href="#FalseOptsRules">FalseOptsRules</a></code></td>
+<td>Your opts rules returned false. Please abide to the rules defined in verifyOpts.</td>
+<td>
+<code><a href="#verifyOpts">verifyOpts</code>
+</td>
+</tr>
+<tr name="IllegalKeyName">
+<td><code><a href="#IllegalKeyName">IllegalKeyName</a></code></td>
+<td>An option key had an illegal name.</td>
+<td>
+<code><a href="#toOpts-stage">toOpts</code>
+</td>
+</tr>
+<tr name="ImplicationViolated">
+<td><code><a href="#ImplicationViolated">ImplicationViolated</a></code></td>
+<td>Some given keys that imply each other are not all defined.</td>
+<td>
+<code><a href="#implyOpts">implyOpts</code>
+</td>
+</tr>
+<tr name="IncompatibleTypes">
+<td><code><a href="#IncompatibleTypes">IncompatibleTypes</a></code></td>
+<td>Repeated options must either both be variadic or both not.</td>
+<td>
+<code><a href="#arrayOnRepeat">arrayOnRepeat</code>
+</td>
+</tr>
+<tr name="InvalidArity">
+<td><code><a href="#InvalidArity">InvalidArity</a></code></td>
+<td>An option's types arity does not match its values arity.</td>
+<td>
+<code><a href="#verifyValuesArity">verifyValuesArity</code>
+</td>
+</tr>
+<tr name="InvalidBoolMapping">
+<td><code><a href="#InvalidBoolMapping">InvalidBoolMapping</a></code></td>
+<td>The mapping provided to broadenBools must only map from 'true' or 'false' to a list of alternatives.</td>
+<td>
+<code><a href="#broadenBools">broadenBools</code>
+</td>
+</tr>
+<tr name="InvalidDefaultValues">
+<td><code><a href="#InvalidDefaultValues">InvalidDefaultValues</a></code></td>
+<td>An option's defaultValues field has an invalid type. It must be an array with any values in it.</td>
+<td>
+<code><a href="#toArgs-stage">toArgs</code>
+</td>
+</tr>
+<tr name="InvalidOptionsListInCombine">
+<td><code><a href="#InvalidOptionsListInCombine">InvalidOptionsListInCombine</a></code></td>
+<td>Options list in combine was undefined, null or empty.</td>
+<td>
+<code><a href="#toOpts-stage">toOpts</code>
+</td>
+</tr>
+<tr name="InvalidRequiredPositionalArgument">
+<td><code><a href="#InvalidRequiredPositionalArgument">InvalidRequiredPositionalArgument</a></code></td>
+<td>
+If a positional argument is required, all previous positional arguments must be required as well.
+The required field must either be undefined, true or false.
+</td>
+<td>
+<code><a href="#validatePosArgs">validatePosArgs</code>
+</td>
+</tr>
+<tr name="InvalidTypes">
+<td><code><a href="#InvalidTypes">InvalidTypes</a></code></td>
+<td>Each argument must have a types key that must be null or an array.</td>
+<td>
+<code><a href="#toOpts-stage">toOpts</a></code><br />
+<code><a href="#verifyValuesArity">verifyValuesArity</a></code>
+</td>
+</tr>
+<tr name="InvalidValues">
+<td><code><a href="#InvalidValues">InvalidValues</a></code></td>
+<td>An option's values field has an invalid type.</td>
+<td>
+<code><a href="#verifyValuesArity">verifyValuesArity</code>
+</td>
+</tr>
+<tr name="InvalidVariadicPositionalArgument">
+<td><code><a href="#InvalidVariadicPositionalArgument">InvalidVariadicPositionalArgument</a></code></td>
+<td>Only the last positional argument may be variadic.</td>
+<td>
+<code><a href="#validatePosArgs">validatePosArgs</code>
+</td>
+</tr>
+<tr name="NonMatchingArgumentTypes">
+<td><code><a href="#NonMatchingArgumentTypes">NonMatchingArgumentTypes</a></code></td>
+<td>If arguments have the same arg, their types must either be equal or have the same length.</td>
+<td>
+<code><a href="#toOpts-stage">toOpts</code>
+</td>
+</tr>
+<tr name="RequiredOptionMissing">
+<td><code><a href="#RequiredOptionMissing">RequiredOptionMissing</a></code></td>
+<td>An option that is marked as required has not been provided.</td>
+<td>
+<code><a href="#requireOpts">requireOpts</code>
+</td>
+</tr>
+<tr name="UnexpectedArgument">
+<td><code><a href="#UnexpectedArgument">UnexpectedArgument</a></code></td>
+<td>An unexpected argument was used that has no option defined.</td>
+<td>
+<code><a href="#failRest">failRest</code>
+</td>
+</tr>
+<tr name="ValueRestrictionsViolated">
+<td><code><a href="#ValueRestrictionsViolated">ValueRestrictionsViolated</a></code></td>
+<td>A value lies outside the allowed values of an option.</td>
+<td>
+<code><a href="#restrictToOnly">restrictToOnly</code>
+</td>
+</tr>
+<tr name="WrongArgsRulesType">
+<td><code><a href="#WrongArgsRulesType">WrongArgsRulesType</a></code></td>
+<td>The args rules are of a wrong type, please provide a predicate with the following signature: (args) => boolean.</td>
+<td>
+<code><a href="#verifyArgs">verifyArgs</code>
+</td>
+</tr>
+<tr name="WrongArgvRulesType">
+<td><code><a href="#WrongArgvRulesType">WrongArgvRulesType</a></code></td>
+<td>The argv rules are of a wrong type, please provide a predicate with the following signature: (argv) => boolean.</td>
+<td>
+<code><a href="#verifyArgv">verifyArgv</code>
+</td>
+</tr>
+<tr name="WrongContradictsType">
+<td><code><a href="#WrongContradictsType">WrongContradictsType</a></code></td>
+<td>The contradicts field has the wrong type, please provide an array of command-line option keys.</td>
+<td>
+<code><a href="#contradictOpts">contradictOpts</code>
+</td>
+</tr>
+<tr name="WrongFormatForRequiredOption">
+<td><code><a href="#WrongFormatForRequiredOption">WrongFormatForRequiredOption</a></code></td>
+<td>
+A required option has values or defaultValues in the wrong format.
+Default values are different depending on the command-line option type:
+Commands take objects, flags take counts, and other options take arrays of the correct length.
+</td>
+<td>
+<code><a href="#requireOpts">requireOpts</code>
+</td>
+</tr>
+<tr name="WrongImpliesType">
+<td><code><a href="#WrongImpliesType">WrongImpliesType</a></code></td>
+<td>The implies field has the wrong type, please provide an array of command-line option keys.</td>
+<td>
+<code><a href="#implyOpts">implyOpts</code>
+</td>
+</tr>
+<tr name="WrongOptsRulesType">
+<td><code><a href="#WrongOptsRulesType">WrongOptsRulesType</a></code></td>
+<td>
+The opts rules are of a wrong type, please provide a predicate with the following signature: (options) => boolean.
+</td>
+<td>
+<code><a href="#verifyOpts">verifyOpts</code>
+</td>
+</tr>
+</table>
 
 ## FAQ
 
@@ -5764,7 +5998,7 @@ const commas = array(['commas'])
 
 The `commas` type function is used to mark options we want to split.
 
-We then write a custom [`opts` stage](#opts-stage) to perform the splitting:
+We then write a custom [`opts` stage](#opts-stages) to perform the splitting:
 
 ```js
 const {traverseOpts} = require('shargs-parser')
