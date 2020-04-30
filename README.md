@@ -3257,7 +3257,7 @@ notes([
 <tr name="optsDef">
 <td>
 <code name="optsDefWith"><a href="#optsDef">optsDef</a>({opts})(style)</code><br />
-<code><a href="#optsDefWith">optsDefWith</a>({id, padding})({opts})(style)</code>
+<code><a href="#optsDefWith">optsDefWith</a>({id, pad})({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3270,7 +3270,7 @@ fields, followed by the
 <code><a href="#contradicts">contradicts</a></code>, <code><a href="#defaultValues">defaultValues</a></code>,
 <code><a href="#implies">implies</a></code>, and <code><a href="#required">required</a></code> fields.
 The <code><a href="#desc">desc</a></code> field is given in the definition part.
-<code>optsDef</code> is defined as <code>optsDefWith({id: 'line', padding: 4})</code>.
+<code>optsDef</code> is defined as <code>optsDefWith({id: 'line', pad: 4})</code>.
 </summary>
 
 <br />
@@ -3315,7 +3315,7 @@ optsDef(opt)(style)
 <tr name="optsDefs">
 <td>
 <code name="optsDefsWith"><a href="#optsDefs">optsDefs</a>({opts})(style)</code><br />
-<code><a href="#optsDefsWith">optsDefsWith</a>({id, padding})({opts})(style)</code>
+<code><a href="#optsDefsWith">optsDefsWith</a>({id, pad})({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3323,7 +3323,7 @@ optsDef(opt)(style)
 <code>optsDefs</code> first layouts its <code>opts</code> and then the <code><a href="#opts">opts</a></code>
 of all its <code><a href="#command">command</a></code>s recursively, using <code><a href="#optsDef">optsDef</a></code>s,
 indenting each <code><a href="#optsDef">optsDef</a></code> layer by four spaces.
-<code>optsDefs</code> is defined as <code>optsDefsWith({id: 'line', padding: 4})</code>.
+<code>optsDefs</code> is defined as <code>optsDefsWith({id: 'line', pad: 4})</code>.
 </summary>
 
 <br />
@@ -4359,7 +4359,7 @@ cols([
 <tr name="defs">
 <td>
 <code name="defsWith"><a href="#defs">defs</a>(tuples)(style)</code><br />
-<code><a href="#defsWith">defsWith</a>({id, padding})(tuples)(style)</code>
+<code><a href="#defsWith">defsWith</a>({id, pad})(tuples)(style)</code>
 </td>
 <td>
 <details>
@@ -4371,7 +4371,7 @@ It formats its <code>tuples</code> as a definition list over two <code><a href="
 with the term in the first, and the definition in the second <code><a href="#line">line</a></code>.
 If a term or definition extends its <code><a href="#line">line</a></code>,
 it is continued in another <code><a href="#line">line</a></code>.
-<code>defs</code> is defined as <code>defsWith({id: 'line', padding: 4})</code>.
+<code>defs</code> is defined as <code>defsWith({id: 'line', pad: 4})</code>.
 </summary>
 
 <br />
