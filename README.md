@@ -2724,6 +2724,43 @@ Result:
 </details>
 </td>
 </tr>
+<tr name="boolsAsFlags">
+<td><code><a href="#boolsAsFlags">boolsAsFlags</a>({errs, args})</code></td>
+<td>
+<details>
+<summary>
+<code>boolsAsFlags</code> transforms all booleans in <code>args</code> to flag objects.
+If a boolean is <code>true</code> it is transformed to <code>{type: 'flag', count: 1}</code>,
+otherwise to <code>{type: 'flag', count: -1}</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const args = {
+  _: [],
+  html: false,
+  version: true
+}
+
+boolsAsFlags({args})
+```
+
+Result:
+
+```js
+{
+  _: [],
+  html: {type: 'flag', count: -1},
+  version: {type: 'flag', count: 1}
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="clearRest">
 <td><code><a href="#clearRest">clearRest</a>({errs, args})</code></td>
 <td>
