@@ -2689,6 +2689,41 @@ Result:
 </details>
 </td>
 </tr>
+<tr name="boolAsFlag">
+<td><code><a href="#boolAsFlag">boolAsFlag</a>(key)({errs, args})</code></td>
+<td>
+<details>
+<summary>
+<code>boolAsFlag</code> transforms the bool with <code>key</code> in <code>args</code> to a flag object.
+If it is <code>true</code> it is transformed to <code>{type: 'flag', count: 1}</code>,
+otherwise to <code>{type: 'flag', count: -1}</code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const args = {
+  _: [],
+  version: true
+}
+
+boolAsFlag('version')({args})
+```
+
+Result:
+
+```js
+{
+  _: [],
+  version: {type: 'flag', count: 1}
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="clearRest">
 <td><code><a href="#clearRest">clearRest</a>({errs, args})</code></td>
 <td>
