@@ -3009,6 +3009,40 @@ Result:
 </details>
 </td>
 </tr>
+<tr name="numberAsFlag">
+<td><code><a href="#numberAsFlag">numberAsFlag</a>(key)({errs, args})</code></td>
+<td>
+<details>
+<summary>
+<code>numberAsFlag</code> transforms the number with <code>key</code> in <code>args</code> to a flag object.
+The number is the flag's <code>count</code> (e.g. <code>42</code> becomes <code>{type: 'flag', count: 42}</code>).
+</summary>
+
+<br />
+
+Example:
+
+```js
+const args = {
+  _: [],
+  answer: 42
+}
+
+numberAsFlag('answer')({args})
+```
+
+Result:
+
+```js
+{
+  _: [],
+  answer: {type: 'flag', count: 42}
+}
+```
+
+</details>
+</td>
+</tr>
 <tr name="traverseArgs">
 <td><code><a href="#traverseArgs">traverseArgs</a>(fs)({errs, args})</code></td>
 <td>
