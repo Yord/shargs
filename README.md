@@ -175,9 +175,9 @@ Run your program with <code>node ./deepThought --help</code>:
 <p>
 
 ```bash
-deepThought (-q|--question) [-a|--answer] [-h|--help]                           
+deepThought (<question>) [-a|--answer] [-h|--help]                              
                                                                                 
--q, --question=<string>  Ask a question. [required]                             
+<question>               Ask a question. [required]                             
 -a, --answer=<number>    The answer. [default: 42]                              
 -h, --help               Print this help message and exit.                      
                                                                                 
@@ -194,7 +194,7 @@ and [writing programs with shargs](#writing-programs-with-shargs) sections have 
 
 <details>
 <summary>
-Run your program with <code>node ./deepThought -q "What is the meaning of Life, the Universe, and Everything?"</code>:
+Run your program with <code>node ./deepThought "What is the meaning of Life, the Universe, and Everything?"</code>:
 
 <p>
 
@@ -203,8 +203,8 @@ Run your program with <code>node ./deepThought -q "What is the meaning of Life, 
   errs: [],
   args: {
     _: [],
-    question: "What is the meaning of Life, the Universe, and Everything?",
-    answer: 42
+    answer: 42,
+    question: 'What is the meaning of Life, the Universe, and Everything?'
   }
 }
 ```
@@ -382,9 +382,9 @@ The `optsList` table's two `cols` should be `25` and `55` characters in `width`.
 Let's print `help` to the terminal:
 
 ```bash
-deepThought (-q|--question) [-a|--answer] [-h|--help]                           
+deepThought (<question>) [-a|--answer] [-h|--help]                              
                                                                                 
--q, --question=<string>  Ask a question. [required]                             
+<question>               Ask a question. [required]                             
 -a, --answer=<number>    The answer. [default: 42]                              
 -h, --help               Print this help message and exit.                      
                                                                                 
@@ -3803,7 +3803,7 @@ combine them somehow, and return a new one.
 Let's see how usage combinators may be used to implement [`synopses`](#synopses):
 
 ```js
-const {decorate, noCommands, onlyCommands, optsMap, usage, usageMap} = require('shargs-usage')
+const {decorate, noCommands, onlyCommands, optsMap, synopsis, usage, usageMap} = require('shargs-usage')
 
 const prefixKey = prefix => optsMap(opts => ({...opts, key: prefix + ' ' + opts.key}))
 
@@ -4276,7 +4276,7 @@ If many usage decorators are applied to a usage function, things get unwieldy, f
 ```js
 const {justArgs, noCommands, onlyFirstArg, synopsis} = require('shargs-usage')
 
-const synopsis2 = noCommands(onlyFirstArg(justArgs('--help')(synopsis)))
+const synopsis2 = noCommands(onlyFirstArg(justArgs(['--help'])(synopsis)))
 ```
 
 In the example, `synopsis2` is decorated three times and the code is not very readable.
@@ -4285,7 +4285,7 @@ Usage decorator combinators facilitate a cleaner code layout:
 ```js
 const {decorate, justArgs, noCommands, onlyFirstArg, synopsis} = require('shargs-usage')
 
-const decorated = decorate(noCommands, onlyFirstArg, justArgs('--help'))
+const decorated = decorate(noCommands, onlyFirstArg, justArgs(['--help']))
 
 const synopsis2 = decorated(synopsis)
 ```
@@ -4994,7 +4994,7 @@ Result:
 If many decorators are applied to a [layout function](#layout-function), the resulting code can get deeply nested:
 
 ```js
-const {defs, pad} = require('shargs-usage')
+const {pad, table} = require('shargs-usage')
 
 const style = {
   cols: [{width: 25}, {width: 30}]
@@ -5012,7 +5012,7 @@ pad(['cols', 0], 4)(
 Layout decorator combinators avoid nesting deeply, by first collecting layout decorators and applying them all at once:
 
 ```js
-const {decorate, defs, pad} = require('shargs-usage')
+const {decorate, pad, table} = require('shargs-usage')
 
 const style = {
   cols: [{width: 25}, {width: 30}]
@@ -5304,7 +5304,7 @@ Required option is missing: An option that is marked as required has not been pr
 
 Otherwise, we print the `args.answer`.
 
-E.g. if we run it with `node ./deepThought ask "What is the meaning of life, the universe, and everything?"`,
+E.g. if we run it with `node ./deepThought ask "What is the meaning of Life, the Universe, and Everything?"`,
 it prints:
 
 ```bash
@@ -5424,7 +5424,11 @@ function demandACommand ({errs = [], opts = []} = {}) {
   const errs2 = []
 
   const aCommand = opts.some(
-    ({types, values}) => types === null && typeof values !== 'undefined'
+    ({key, args, types, opts}) => (
+      typeof key !== 'undefined' &&
+      typeof types === 'undefined' &&
+      Array.isArray(args) && Array.isArray(opts)
+    )
   )
 
   if (!aCommand) {
@@ -5444,7 +5448,7 @@ If you write a custom `opts` stage, have a look at [`traverseOpts`](#traverseOpt
 Custom `args` stage example:
 
 ```js
-const {traverseArgs} = require('shargs-usage')
+const {traverseArgs} = require('shargs-parser')
 
 function flagsAsBools ({errs = [], args = {}} = {}) {
   const fs = {
@@ -5509,13 +5513,9 @@ It must take an [`opt`](#command-line-options) object and a [`style` object](#st
 The following example shows the custom `descs` function that displays the options' descriptions:
 
 ```js
-const {texts} = require('shargs-usage')
+const {text} = require('shargs-usage')
 
-const desc = ({opts = []} = {}) => style => {
-  const descriptions = opts.map(_ => _.desc)
-
-  return texts(descriptions)(style)
-}
+const desc = ({desc = ''} = {}) => text(desc)
 ```
 
 Using [`usageMap`](#usageMap) simplifies the process of defining your own functions:
@@ -5671,9 +5671,9 @@ it is straight forward to adjust the type function syntax accordingly:
 
 ```js
 const array2 = types => (args = [], fields = {}) => ({
-  key: args.length > 0 ? arg : undefined,
-  types,
+  key: args.length > 0 ? args[0] : undefined,
   args,
+  types,
   ...fields
 })
 
@@ -5700,7 +5700,7 @@ Say you want to add your own custom `date` type.
 First, you need to add a [command-line option](#command-line-options) of that type:
 
 ```js
-const {array} = require('shargs-options')
+const {array} = require('shargs-opts')
 
 const date = array(['date'])
 ```
@@ -5711,6 +5711,8 @@ Now we have an option, we may want to write parser stages that work with `dates`
 How about a stage that transforms dates to their millisecond representation:
 
 ```js
+const {traverseOpts} = require('shargs-parser')
+
 function dateToMillis ({errs = [], opts = []} = {}) {
   const isDate = ({types}) => (
     Array.isArray(types) &&
@@ -5765,6 +5767,8 @@ The `commas` type function is used to mark options we want to split.
 We then write a custom [`opts` stage](#opts-stage) to perform the splitting:
 
 ```js
+const {traverseOpts} = require('shargs-parser')
+
 const isCommas = ({key, types, values}) => (
   typeof key !== 'undefined' &&
   Array.isArray(types) && types.length === 1 && types[0] === 'commas' &&
@@ -5864,31 +5868,31 @@ const fun = command('fun', ['--fun'], {threeValued: true})
 Now, let us define an [`opts`](#opts-stages) stage that transforms the `command`:
 
 ```js
+const {traverseOpts} = require('shargs-parser')
+
 const isThreeValued = ({threeValued}) => threeValued === true
 
 const toThreeValued = opt => {
   const types = ['threeValued']
 
   const interpretValues = values => (
-    values.length === 0         ? [['true'], []]  :
-    values[0]     === 'true'    ? [['true'], values.slice(1)]  :
-    values[0]     === 'false'   ? [['false'], values.slice(1)] :
-    values[0]     === 'unknown' ? [['unknown'], values.slice(1)]
-                                : [['true'], values]
+    values.length === 0         ? 'true' :
+    values[0]     === 'true'    ? 'true' :
+    values[0]     === 'false'   ? 'false'
+                                : 'unknown'
   )
 
-  const valuesAndRest = (
+  const values = (
     !Array.isArray(opt.values)
-      ? [['unknown'], []]
+      ? 'unknown'
       : interpretValues(opt.values)
   )
 
-  const [values, rest] = valuesAndRest
+  const {threeValued, opts, ...rest} = opt
 
   return {
     opts: [
-      {...opt, types, values},
-      {...opt, values: rest}
+      {...rest, types, values}
     ]
   }
 }
@@ -6034,8 +6038,6 @@ Let us assume we had the following `layout2` and `text2` functions, instead:
 ```js
 const {layout, text} = require('shargs-usage')
 
-const style = {line: [{width: 10}]}
-
 const layout2 = (functions, style) => layout(functions)(style)
 
 const text2 = (string, style) => text(string)(style)
@@ -6144,7 +6146,7 @@ since it is simple enough to [`curry`](https://ramdajs.com/docs/#curry) your fun
 const {curry} = require('ramda')
 const {layout} = require('shargs-usage')
 
-const curriedLayout = curry(layout)
+const curriedLayout = curry((fs, style) => layout(fs)(style))
 ```
 
 `curriedLayout` can now be used like `layout` and like `layout2`.
