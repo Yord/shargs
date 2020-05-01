@@ -1060,7 +1060,7 @@ You may think of decorators as recurring patterns that are provided as functions
 <th>Description</th>
 </tr>
 <tr name="complement">
-<td><code><a href="#complement">complement</a>(prefix)({opts})</code></td>
+<td><code><a href="#complement">complement</a>(prefix)(opt)</code></td>
 <td>
 <details>
 <summary>
@@ -1093,6 +1093,42 @@ const {flag} = require('shargs-opts')
 
 const html = flag('html', ['-H', '--html'], {defaultValues: ['false']})
 const noHtml = flag('html', ['--no-H', '--no-html'], {reverse: true})
+```
+
+</details>
+</td>
+</tr>
+<tr name="posArgToOpt">
+<td><code><a href="#posArgToOpt">posArgToOpt</a>(args)(opt)</code></td>
+<td>
+<details>
+<summary>
+<code>posArgToOpt</code> transforms a positional argument into an option
+by adding <code><a href="#args">args</a></code>.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const {program, stringPos} = require('shargs-opts')
+
+const opts = [stringPos('question')]
+
+const args = ['deepThought', 'D']
+
+const deepThought = program('deepThought', opts)
+
+posArgToOpt(args)(deepThought)
+```
+
+Is the same as:
+
+```js
+const {command} = require('shargs-opts')
+
+command(opts)('deepThought', args)
 ```
 
 </details>
