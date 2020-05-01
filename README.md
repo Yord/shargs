@@ -6041,14 +6041,27 @@ const {traverseOpts} = require('shargs-parser')
 
 const isCommas = ({key, types, values}) => (
   typeof key !== 'undefined' &&
-  Array.isArray(types) && types.length === 1 && types[0] === 'commas' &&
-  Array.isArray(values) && values.length === 1
+  Array.isArray(types) && types.indexOf('commas') > -1 &&
+  Array.isArray(values) && values.length === types.length
 )
 
 const transformCommaArray = opt => {
-  const value = opt.values[0]
-  const values = value.split(',')
-  const types = Array.from({length: values.length}, () => 'string')
+  let values = []
+  let types  = []
+
+  for (let i = 0; i < opt.values.length; i++) {
+    const value = opt.values[i]
+    const type = opt.types[i]
+
+    if (type === 'commas') {
+      const elements = value.split(',')
+      values = [...values, ...elements]
+      types = [...types, ...Array.from({length: elements.length}, () => 'string')]
+    } else {
+      values.push(value)
+      types.push(type)
+    }
+  }
 
   return {opts: [{...opt, types, values}]}
 }
