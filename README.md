@@ -1,3 +1,7 @@
+<p align="center">
+<img width="800" src="shargs.jpg" />
+</p>
+
 🦈 shargs (**sh**ell **args**) is a highly customizable command-line arguments parser and usage documentation generator.
 
 [![node version][shield-node]][node]
@@ -6557,6 +6561,8 @@ Please read the [contributing guide][contribute].
 ## License
 
 Shargs is [MIT licensed][license].
+
+Logo created by brgfx (<a href="https://www.freepik.com/free-photos-vectors/education">www.freepik.com</a>).
 
 [actions]: https://github.com/Yord/shargs/actions
 [code]: https://github.com/Yord/shargs/blob/master/CODE_OF_CONDUCT.md
