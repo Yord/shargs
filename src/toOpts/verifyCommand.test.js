@@ -262,3 +262,23 @@ test('verifyCommand fails for pos args with invalid types', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('verifyCommand fails for opts with invalid types', () => {
+  const foo = {key: 'arc', args: ['-a'], types: null}
+
+  const opt = {
+    key: 'foo',
+    opts: [
+      foo
+    ]
+  }
+
+  const res = verifyCommand(opt)
+
+  const exp = {
+    errs: [OptionExpected({opt: foo}), InvalidTypes({opt: foo})],
+    opt: {...opt, opts: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
