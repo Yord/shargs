@@ -802,3 +802,28 @@ test('assignOptsAndPosArgs works for one primitive pos args with two arguments',
 
   expect(res).toStrictEqual(exp)
 })
+
+test('assignOptsAndPosArgs works for array pos args', () => {
+  const foo = {key: 'foo', types: ['foo', 'bar']}
+
+  const opt = {
+    opts: [
+      foo
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['a', 'b']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...foo, values: ['a', 'b']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
