@@ -85,3 +85,26 @@ test('verifyCommand fails for programs with wrong opts syntax', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('verifyCommand fails for nested programs with wrong opts syntax', () => {
+  const bar = {
+    key: 'bar',
+    opts: []
+  }
+
+  const opt = {
+    key: 'foo',
+    opts: [
+      bar
+    ]
+  }
+
+  const res = verifyCommand(opt)
+
+  const exp = {
+    errs: [InvalidNestedCommand({opt: bar})],
+    opt: {...opt, opts: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
