@@ -630,3 +630,34 @@ test('parser works with variadic options', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('parser does not work with duplicate variadic options without --', () => {
+  const stages = {}
+
+  const parsers = {}
+
+  const arc = {key: 'arc', args: ['-a']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', '2', '-a', '3']
+
+  const errs = []
+
+  const res = parser(stages, parsers)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2', '-a', '3']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
