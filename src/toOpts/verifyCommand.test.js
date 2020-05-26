@@ -70,3 +70,18 @@ test('verifyCommand fails for programs without opts', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('verifyCommand fails for programs with wrong opts syntax', () => {
+  const opt = {
+    key: 'foo',
+    opts: 'bar'
+  }
+
+  const res = verifyCommand(opt)
+
+  const exp = {
+    errs: [CommandExpected({opt}), InvalidOpts({opt})]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
