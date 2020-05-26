@@ -256,3 +256,36 @@ test('parser works with empty stages', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('parser works with stages returning undefined', () => {
+  const stages = {
+    toArgv:         () => undefined,
+    argv:          [() => undefined],
+    toOpts:   () => () => undefined,
+    opts:          [() => undefined],
+    toArgs:         () => undefined,
+    args:          [() => undefined],
+    fromArgs:       () => undefined
+  }
+
+  const parsers = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const errs = []
+
+  const res = parser(stages, parsers)(opt)(argv, errs)
+
+  const exp = undefined
+
+  expect(res).toStrictEqual(exp)
+})
