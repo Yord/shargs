@@ -1013,3 +1013,33 @@ test('parser works with duplicate subcommands by setting fromArgs to the identit
 
   expect(res).toStrictEqual(exp)
 })
+
+test('parser passes on errors', () => {
+  const stages = {}
+
+  const parsers = {}
+
+  const opt = {
+    key: 'Foo',
+    opts: []
+  }
+
+  const argv = []
+
+  const err = {code: 'Test', msg: 'This is a test.', info: {}}
+
+  const errs = [
+    err
+  ]
+
+  const res = parser(stages, parsers)(opt)(argv, errs)
+
+  const exp = {
+    errs: [
+      err
+    ],
+    args: {_: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
