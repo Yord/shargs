@@ -24,3 +24,28 @@ test('assignOptsAndPosArgs works for rest values', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('assignOptsAndPosArgs works with invalid values that are objects', () => {
+  const foo = {}
+
+  const opt = {
+    opts: [
+      foo
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['unknown']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {values: ['unknown']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
