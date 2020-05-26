@@ -30,3 +30,34 @@ test('parser works with undefined stages', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('parser works with undefined parsers', () => {
+  const stages = {}
+
+  const parsers = undefined
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const errs = []
+
+  const res = parser(stages, parsers)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1'
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
