@@ -315,3 +315,30 @@ test('assignOptsAndPosArgs works for variadic options 2/3', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('assignOptsAndPosArgs works for variadic options 3/3', () => {
+  const foo = {key: 'foo', args: ['-f']}
+
+  const opt = {
+    opts: [
+      foo
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['-f', 'baz', 'bat', '--', 'bam']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...foo, types: ['string', 'string'], values: ['baz', 'bat']},
+      {values: ['--']},
+      {values: ['bam']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
