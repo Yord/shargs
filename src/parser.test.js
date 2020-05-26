@@ -786,3 +786,36 @@ test('parser works with duplicate variadic positional arguments and -- by taking
 
   expect(res).toStrictEqual(exp)
 })
+
+test('parser works with empty subcommands 1', () => {
+  const stages = {}
+
+  const parsers = {}
+
+  const Arc = {key: 'Arc', args: ['Arc'], opts: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', '1']
+
+  const errs = []
+
+  const res = parser(stages, parsers)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: ['1']
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
