@@ -222,3 +222,23 @@ test('verifyCommand fails for subcommands with invalid opts', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('verifyCommand fails for invalid option types', () => {
+  const foo = {foo: 'bar'}
+
+  const opt = {
+    key: 'foo',
+    opts: [
+      foo
+    ]
+  }
+
+  const res = verifyCommand(opt)
+
+  const exp = {
+    errs: [UnknownCommandLineOptionType({opt: foo})],
+    opt: {...opt, opts: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
