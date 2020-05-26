@@ -56,3 +56,17 @@ test('verifyCommand fails for programs with wrong key syntax', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('verifyCommand fails for programs without opts', () => {
+  const opt = {
+    key: 'foo'
+  }
+
+  const res = verifyCommand(opt)
+
+  const exp = {
+    errs: [CommandExpected({opt})]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
