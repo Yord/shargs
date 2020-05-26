@@ -1124,3 +1124,36 @@ test('assignOptsAndPosArgs works for different options with the same args: if no
 
   expect(res).toStrictEqual(exp)
 })
+
+test('assignOptsAndPosArgs works for different options with the same args: if no command is present, take all options with the same length as the first 3', () => {
+  const foo = {key: 'foo', types: ['foo', 'foo'], args: ['foo']}
+  const bar = {key: 'bar', types: [], args: ['foo']}
+  const baz = {key: 'baz', types: ['baz', 'baz'], args: ['foo']}
+  const bat = {key: 'bar', types: ['bat'], args: ['foo']}
+
+  const opt = {
+    opts: [
+      foo,
+      bar,
+      baz,
+      bat
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['foo', 'b', 'c', 'd']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...foo, values: ['b', 'c']},
+      {...baz, values: ['b', 'c']},
+      {values: ['d']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
