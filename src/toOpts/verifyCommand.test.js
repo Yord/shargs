@@ -282,3 +282,30 @@ test('verifyCommand fails for opts with invalid types', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('verifyCommand removes only incorrect options from opts', () => {
+  const arc = {key: 'arc', args: ['-a'], types: []}
+  const bar = {key: 'bar', args: ['-b'], types: null}
+  const cat = {key: 'cat', args: ['-c'], types: []}
+  
+  const opt = {
+    key: 'foo',
+    opts: [
+      arc,
+      bar,
+      cat
+    ]
+  }
+
+  const res = verifyCommand(opt)
+
+  const exp = {
+    errs: [OptionExpected({opt: bar}), InvalidTypes({opt: bar})],
+    opt: {...opt, opts: [
+      arc,
+      cat
+    ]}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
