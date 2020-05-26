@@ -568,3 +568,34 @@ test('parser works with array positional arguments', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('parser works with duplicate array positional arguments by adding all remaining to the rest array', () => {
+  const stages = {}
+
+  const parsers = {}
+
+  const arc = {key: 'arc', types: ['A', 'B']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['1', '2', '3', '4']
+
+  const errs = []
+
+  const res = parser(stages, parsers)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['3', '4'],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
