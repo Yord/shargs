@@ -27,3 +27,17 @@ test('verifyCommand works for empty programs', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('verifyCommand fails for programs without key', () => {
+  const opt = {
+    opts: []
+  }
+
+  const res = verifyCommand(opt)
+
+  const exp = {
+    errs: [CommandExpected({opt})]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
