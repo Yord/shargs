@@ -723,3 +723,28 @@ test('assignOptsAndPosArgs takes the middle command if it has conflicting option
 
   expect(res).toStrictEqual(exp)
 })
+
+test('assignOptsAndPosArgs works for primitive pos args', () => {
+  const foo = {key: 'foo', types: ['foo']}
+
+  const opt = {
+    opts: [
+      foo
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['a']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...foo, values: ['a']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
