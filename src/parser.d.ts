@@ -26,3 +26,18 @@ export interface Args {
   _?: string[]
   [key: string]: any
 }
+
+export interface Stages<A, B> {
+  toArgv?:                                    (obj?: {errs?: Err[], any:   A       }) => {errs: Err[], argv: string[]}
+  argv?:                                Array<(obj?: {errs?: Err[], argv?: string[]}) => {errs: Err[], argv: string[]}>
+  toOpts?: (opts?: Opt[], stages?: Stages) => (obj?: {errs?: Err[], argv?: string[]}) => {errs: Err[], opts: Opt[]   }
+  opts?:                                Array<(obj?: {errs?: Err[], opts?: Opt[]   }) => {errs: Err[], opts: Opt[]   }>
+  toArgs?:                                    (obj?: {errs?: Err[], opts?: Opt[]   }) => {errs: Err[], args: Args[]  }
+  args?:                                Array<(obj?: {errs?: Err[], args?: Args[]  }) => {errs: Err[], args: Args[]  }>
+  fromArgs?:                                  (obj?: {errs?: Err[], args?: Args[]  }) => B
+}
+
+const parser: <A, B>(stages?: Stages, parsers?: {}) =>
+                    (opt?: Opt) =>
+                    (any?: A, errs?: Err[]) =>
+                    {errs: Err[], any: B}
