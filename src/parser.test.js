@@ -413,3 +413,34 @@ test('parser works with duplicate primitive options by taking the first option',
 
   expect(res).toStrictEqual(exp)
 })
+
+test('parser works with primitive positional arguments', () => {
+  const stages = {}
+
+  const parsers = {}
+
+  const arc = {key: 'arc', types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['1']
+
+  const errs = []
+
+  const res = parser(stages, parsers)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1'
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
