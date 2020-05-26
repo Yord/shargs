@@ -79,3 +79,28 @@ test('assignOptsAndPosArgs works with -- and invalid values that are objects', (
 
   expect(res).toStrictEqual(exp)
 })
+
+test('assignOptsAndPosArgs works for flags', () => {
+  const foo = {key: 'foo', types: [], args: ['-f']}
+
+  const opt = {
+    opts: [
+      foo
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['-f']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...foo, values: [1]}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
