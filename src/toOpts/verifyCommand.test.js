@@ -182,3 +182,23 @@ test('verifyCommand fails for opts with invalid args', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('verifyCommand fails for subcommands with invalid args', () => {
+  const foo = {key: 'arc', args: null, opts: []}
+
+  const opt = {
+    key: 'foo',
+    opts: [
+      foo
+    ]
+  }
+
+  const res = verifyCommand(opt)
+
+  const exp = {
+    errs: [SubcommandExpected({opt: foo}), InvalidArgs({opt: foo})],
+    opt: {...opt, opts: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
