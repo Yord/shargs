@@ -940,3 +940,36 @@ test('assignOptsAndPosArgs works with primitive pos args in commands', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('assignOptsAndPosArgs works with primitive pos args in command and program', () => {
+  const baz = {key: 'baz', types: ['baz']}
+  const bar = {key: 'bar', types: ['bar']}
+  const foo = {key: 'foo', args: ['foo'], opts: [
+    bar
+  ]}
+
+  const opt = {
+    opts: [
+      foo,
+      baz
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['foo', 'a', 'b']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...foo, values: [
+        {...bar, values: ['a']}
+      ]},
+      {...baz, values: ['b']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
