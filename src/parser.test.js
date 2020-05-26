@@ -223,3 +223,36 @@ test('parser works with sample stages', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('parser works with empty stages', () => {
+  const stages = {
+    toArgv:         ({errs, any }) => ({}),
+    argv:          [({errs, argv}) => ({})],
+    toOpts:   () => ({errs, argv}) => ({}),
+    opts:          [({errs, opts}) => ({})],
+    toArgs:         ({errs, opts}) => ({}),
+    args:          [({errs, args}) => ({})],
+    fromArgs:       ({errs, args}) => ({})
+  }
+
+  const parsers = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const errs = []
+
+  const res = parser(stages, parsers)(opt)(argv, errs)
+
+  const exp = {}
+
+  expect(res).toStrictEqual(exp)
+})
