@@ -692,3 +692,34 @@ test('parser works with duplicate variadic options with -- by taking only the fi
 
   expect(res).toStrictEqual(exp)
 })
+
+test('parser works with variadic positional arguments', () => {
+  const stages = {}
+
+  const parsers = {}
+
+  const arc = {key: 'arc'}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['1', '2', '3']
+
+  const errs = []
+
+  const res = parser(stages, parsers)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2', '3']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
