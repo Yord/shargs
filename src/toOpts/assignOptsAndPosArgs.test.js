@@ -395,3 +395,33 @@ test('assignOptsAndPosArgs works for command options 1', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('assignOptsAndPosArgs works for command options 2', () => {
+  const art = {key: 'art', types: [], args: ['-a']}
+  const foo = {key: 'foo', args: ['foo'], opts: [
+    art
+  ]}
+
+  const opt = {
+    opts: [
+      foo
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['foo', '-a']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...foo, values: [
+        {...art, values: [1]}
+      ]}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
