@@ -683,3 +683,43 @@ test('assignOptsAndPosArgs takes the outer command if it has conflicting options
 
   expect(res).toStrictEqual(exp)
 })
+
+test('assignOptsAndPosArgs takes the middle command if it has conflicting options, in certain situations', () => {
+  const art = {key: 'art', types: [], args: ['-a']}
+  const bar = {key: 'bar', args: ['bar'], opts: [
+    art
+  ]}
+  const foo = {key: 'foo', args: ['foo'], opts: [
+    bar,
+    art
+  ]}
+
+  const opt = {
+    opts: [
+      foo,
+      art
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['foo', 'bar', '--', 'foo', '-a']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...foo, values: [
+        {...bar, values: [
+          {values: ['--']}
+        ]}
+      ]},
+      {...foo, values: [
+        {...art, values: [1]}
+      ]}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
