@@ -142,3 +142,23 @@ test('verifyCommand works for programs with options', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('verifyCommand fails for opts with invalid key', () => {
+  const foo = {key: null, args: ['-a'], types: []}
+
+  const opt = {
+    key: 'foo',
+    opts: [
+      foo
+    ]
+  }
+
+  const res = verifyCommand(opt)
+
+  const exp = {
+    errs: [OptionExpected({opt: foo}), InvalidKey({opt: foo})],
+    opt: {...opt, opts: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
