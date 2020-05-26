@@ -506,3 +506,34 @@ test('parser works with array options', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('parser works with duplicate array options by taking the first one', () => {
+  const stages = {}
+
+  const parsers = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A', 'B']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', '2', '-a', '3', '4']
+
+  const errs = []
+
+  const res = parser(stages, parsers)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
