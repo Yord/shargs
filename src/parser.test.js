@@ -852,3 +852,36 @@ test('parser works with empty subcommands 2', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('parser works with empty subcommands 3', () => {
+  const stages = {}
+
+  const parsers = {}
+
+  const Arc = {key: 'Arc', args: ['Arc'], opts: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', '--', '1']
+
+  const errs = []
+
+  const res = parser(stages, parsers)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['1'],
+      Arc: {
+        _: []
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
