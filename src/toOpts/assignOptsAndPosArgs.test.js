@@ -608,3 +608,40 @@ test('assignOptsAndPosArgs works for command options 6', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('assignOptsAndPosArgs takes the innermost command if it has conflicting options', () => {
+  const art = {key: 'art', types: [], args: ['-a']}
+  const bar = {key: 'bar', args: ['bar'], opts: [
+    art
+  ]}
+  const foo = {key: 'foo', args: ['foo'], opts: [
+    bar,
+    art
+  ]}
+
+  const opt = {
+    opts: [
+      foo,
+      art
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['foo', 'bar', '-a']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...foo, values: [
+        {...bar, values: [
+          {...art, values: [1]}
+        ]}
+      ]}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
