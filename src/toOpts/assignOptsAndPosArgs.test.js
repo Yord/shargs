@@ -855,3 +855,28 @@ test('assignOptsAndPosArgs works for an array pos arg with a primitive pos args'
 
   expect(res).toStrictEqual(exp)
 })
+
+test('assignOptsAndPosArgs works for variadic pos args 1', () => {
+  const foo = {key: 'foo'}
+
+  const opt = {
+    opts: [
+      foo
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['a', 'b']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...foo, types: ['string', 'string'], values: ['a', 'b']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
