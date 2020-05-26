@@ -104,3 +104,31 @@ test('assignOptsAndPosArgs works for flags', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('assignOptsAndPosArgs works for two flags with the same arg', () => {
+  const foo = {key: 'foo', types: [], args: ['-f']}
+  const bar = {key: 'bar', types: [], args: ['-f']}
+
+  const opt = {
+    opts: [
+      foo,
+      bar
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['-f']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...foo, values: [1]},
+      {...bar, values: [1]}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
