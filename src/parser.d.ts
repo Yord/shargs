@@ -21,3 +21,8 @@ export interface Opt {
   values?: any[]
   [key: string]: any
 }
+
+export interface Args {
+  _?: string[]
+  [key: string]: any
+}
