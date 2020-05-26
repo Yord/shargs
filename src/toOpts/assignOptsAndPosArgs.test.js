@@ -238,3 +238,29 @@ test('assignOptsAndPosArgs works for two array options with the same arg', () =>
 
   expect(res).toStrictEqual(exp)
 })
+
+test('assignOptsAndPosArgs works for duplicate array options', () => {
+  const foo = {key: 'foo', types: ['foo', 'bar'], args: ['-f']}
+
+  const opt = {
+    opts: [
+      foo
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['-f', 'baz', 'bat', '-f', 'bam', 'cat']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...foo, values: ['baz', 'bat']},
+      {...foo, values: ['bam', 'cat']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
