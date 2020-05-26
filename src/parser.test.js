@@ -289,3 +289,34 @@ test('parser works with stages returning undefined', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('parser works with flag options', () => {
+  const stages = {}
+
+  const parsers = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a']
+
+  const errs = []
+
+  const res = parser(stages, parsers)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: {type: 'flag', count: 1}
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
