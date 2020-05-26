@@ -35,14 +35,17 @@ function recurseOpts (optsStages) {
     let errs2   = []
     const opts2 = []
 
-    for (let i = 0; i < opts.length; i++) {
-      const opt = opts[i]
+    const {errs: errs3 = [], opts: opts3 = []} = pipe(...optsStages)({errs: [], opts}) || {}
+    errs2 = [...errs2, ...errs3]
+
+    for (let i = 0; i < opts3.length; i++) {
+      const opt = opts3[i]
 
       if (isSubcommand(opt)) {
-        const {errs: errs3, opts: opts3} = pipe(...optsStages)({errs: [], opts: opt.values})
+        const {errs: errs4, opts: opts4} = pipe(...optsStages)({errs: [], opts: opt.values})
         
-        errs2 = [...errs2, ...errs3]
-        opts2.push({...opt, values: opts3})
+        errs2 = [...errs2, ...errs4]
+        opts2.push({...opt, values: opts4})
       } else {
         opts2.push(opt)
       }
