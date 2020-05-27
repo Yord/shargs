@@ -629,3 +629,29 @@ test('toOpts works with undefined argv', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toOpts passes on errors', () => {
+  const test = {code: 'test', msg: 'test', info: {}}
+
+  const opt = {
+    key: 'opt',
+    opts: []
+  }
+
+  const errs = [
+    test
+  ]
+
+  const argv = []
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [
+      test
+    ],
+    opts: []
+  }
+
+  expect(res).toStrictEqual(exp)
+})
