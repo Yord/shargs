@@ -48,3 +48,18 @@ test('fromArgs works for undefined errors', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('fromArgs works for undefined args', () => {
+  const errs = [
+    {code: 'Test', msg: 'This is a test.', info: {}}
+  ]
+
+  const res = fromArgs({errs})
+
+  const exp = {
+    errs,
+    args: {_: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
