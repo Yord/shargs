@@ -3,7 +3,7 @@ const {parser} = require('.')
 test('parser works with undefined stages', () => {
   const stages = undefined
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: ['A']}
 
@@ -18,7 +18,7 @@ test('parser works with undefined stages', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -31,10 +31,10 @@ test('parser works with undefined stages', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with undefined parsers', () => {
+test('parser works with undefined substages', () => {
   const stages = {}
 
-  const parsers = undefined
+  const substages = undefined
 
   const arc = {key: 'arc', args: ['-a'], types: ['A']}
 
@@ -49,7 +49,7 @@ test('parser works with undefined parsers', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -65,7 +65,7 @@ test('parser works with undefined parsers', () => {
 test('parser works with empty opts', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const opt = {
     key: 'Foo',
@@ -76,7 +76,7 @@ test('parser works with empty opts', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -91,7 +91,7 @@ test('parser works with empty opts', () => {
 test('parser works with undefined argv', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: ['A']}
 
@@ -106,7 +106,7 @@ test('parser works with undefined argv', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -121,7 +121,7 @@ test('parser works with undefined argv', () => {
 test('parser works with undefined errs', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: ['A']}
 
@@ -136,7 +136,7 @@ test('parser works with undefined errs', () => {
 
   const errs = undefined
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -160,7 +160,7 @@ test('parser works with undefined stages', () => {
     fromArgs: undefined
   }
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: ['A']}
 
@@ -175,7 +175,7 @@ test('parser works with undefined stages', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -199,7 +199,7 @@ test('parser works with sample stages', () => {
     fromArgs:       a              => a
   }
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: ['A']}
 
@@ -214,7 +214,7 @@ test('parser works with sample stages', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -235,7 +235,7 @@ test('parser works with empty stages', () => {
     fromArgs:       ({errs, args}) => ({})
   }
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: ['A']}
 
@@ -250,7 +250,7 @@ test('parser works with empty stages', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {}
 
@@ -268,7 +268,7 @@ test('parser works with stages returning undefined', () => {
     fromArgs:       () => undefined
   }
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: ['A']}
 
@@ -283,7 +283,7 @@ test('parser works with stages returning undefined', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = undefined
 
@@ -293,7 +293,7 @@ test('parser works with stages returning undefined', () => {
 test('parser works with flag options', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: []}
 
@@ -308,7 +308,7 @@ test('parser works with flag options', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -324,7 +324,7 @@ test('parser works with flag options', () => {
 test('parser works with duplicate flag options by combining them', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: []}
 
@@ -339,7 +339,7 @@ test('parser works with duplicate flag options by combining them', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -355,7 +355,7 @@ test('parser works with duplicate flag options by combining them', () => {
 test('parser works with primitive options', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: ['A']}
 
@@ -370,7 +370,7 @@ test('parser works with primitive options', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -386,7 +386,7 @@ test('parser works with primitive options', () => {
 test('parser works with duplicate primitive options by taking the first option', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: ['A']}
 
@@ -401,7 +401,7 @@ test('parser works with duplicate primitive options by taking the first option',
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -417,7 +417,7 @@ test('parser works with duplicate primitive options by taking the first option',
 test('parser works with primitive positional arguments', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', types: ['A']}
 
@@ -432,7 +432,7 @@ test('parser works with primitive positional arguments', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -448,7 +448,7 @@ test('parser works with primitive positional arguments', () => {
 test('parser works with duplicate positional arguments by adding remaining ones to the rest array', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', types: ['A']}
 
@@ -463,7 +463,7 @@ test('parser works with duplicate positional arguments by adding remaining ones 
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -479,7 +479,7 @@ test('parser works with duplicate positional arguments by adding remaining ones 
 test('parser works with array options', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: ['A', 'B']}
 
@@ -494,7 +494,7 @@ test('parser works with array options', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -510,7 +510,7 @@ test('parser works with array options', () => {
 test('parser works with duplicate array options by taking the first one', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: ['A', 'B']}
 
@@ -525,7 +525,7 @@ test('parser works with duplicate array options by taking the first one', () => 
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -541,7 +541,7 @@ test('parser works with duplicate array options by taking the first one', () => 
 test('parser works with array positional arguments', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', types: ['A', 'B']}
 
@@ -556,7 +556,7 @@ test('parser works with array positional arguments', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -572,7 +572,7 @@ test('parser works with array positional arguments', () => {
 test('parser works with duplicate array positional arguments by adding all remaining to the rest array', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', types: ['A', 'B']}
 
@@ -587,7 +587,7 @@ test('parser works with duplicate array positional arguments by adding all remai
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -603,7 +603,7 @@ test('parser works with duplicate array positional arguments by adding all remai
 test('parser works with variadic options', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a']}
 
@@ -618,7 +618,7 @@ test('parser works with variadic options', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -634,7 +634,7 @@ test('parser works with variadic options', () => {
 test('parser does not work with duplicate variadic options without --', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a']}
 
@@ -649,7 +649,7 @@ test('parser does not work with duplicate variadic options without --', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -665,7 +665,7 @@ test('parser does not work with duplicate variadic options without --', () => {
 test('parser works with duplicate variadic options with -- by taking only the first one', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a']}
 
@@ -680,7 +680,7 @@ test('parser works with duplicate variadic options with -- by taking only the fi
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -696,7 +696,7 @@ test('parser works with duplicate variadic options with -- by taking only the fi
 test('parser works with variadic positional arguments', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc'}
 
@@ -711,7 +711,7 @@ test('parser works with variadic positional arguments', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -727,7 +727,7 @@ test('parser works with variadic positional arguments', () => {
 test('parser works with variadic positional arguments and --', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc'}
 
@@ -742,7 +742,7 @@ test('parser works with variadic positional arguments and --', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -758,7 +758,7 @@ test('parser works with variadic positional arguments and --', () => {
 test('parser works with duplicate variadic positional arguments and -- by taking only the first', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc'}
 
@@ -774,7 +774,7 @@ test('parser works with duplicate variadic positional arguments and -- by taking
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -790,7 +790,7 @@ test('parser works with duplicate variadic positional arguments and -- by taking
 test('parser works with empty subcommands 1', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const Arc = {key: 'Arc', args: ['Arc'], opts: []}
 
@@ -805,7 +805,7 @@ test('parser works with empty subcommands 1', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -823,7 +823,7 @@ test('parser works with empty subcommands 1', () => {
 test('parser works with empty subcommands 2', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const Arc = {key: 'Arc', args: ['Arc'], opts: []}
 
@@ -838,7 +838,7 @@ test('parser works with empty subcommands 2', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -856,7 +856,7 @@ test('parser works with empty subcommands 2', () => {
 test('parser works with empty subcommands 3', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const Arc = {key: 'Arc', args: ['Arc'], opts: []}
 
@@ -871,7 +871,7 @@ test('parser works with empty subcommands 3', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -889,7 +889,7 @@ test('parser works with empty subcommands 3', () => {
 test('parser works with subcommands', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: ['A']}
   const Arc = {key: 'Arc', args: ['Arc'], opts: [
@@ -907,7 +907,7 @@ test('parser works with subcommands', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -935,7 +935,7 @@ test('parser works with subcommands of subcommands', () => {
     ]
   }
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: ['A']}
   const Bar = {key: 'Bar', args: ['Bar'], opts: [
@@ -956,7 +956,7 @@ test('parser works with subcommands of subcommands', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -1036,7 +1036,7 @@ test('parser works with substages', () => {
 test('parser works with duplicate subcommands by only taking the first', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: []}
   const Arc = {key: 'Arc', args: ['Arc'], opts: [
@@ -1055,7 +1055,7 @@ test('parser works with duplicate subcommands by only taking the first', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -1079,7 +1079,7 @@ test('parser works with duplicate subcommands by setting fromArgs to the identit
     fromArgs: identity
   }
 
-  const parsers = {}
+  const substages = {}
 
   const arc = {key: 'arc', args: ['-a'], types: []}
   const Arc = {key: 'Arc', args: ['Arc'], opts: [
@@ -1098,7 +1098,7 @@ test('parser works with duplicate subcommands by setting fromArgs to the identit
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -1127,7 +1127,7 @@ test('parser works with duplicate subcommands by setting fromArgs to the identit
 test('parser passes on errors', () => {
   const stages = {}
 
-  const parsers = {}
+  const substages = {}
 
   const opt = {
     key: 'Foo',
@@ -1142,7 +1142,7 @@ test('parser passes on errors', () => {
     err
   ]
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [
@@ -1163,7 +1163,7 @@ test('parser passes on errors from argv stages', () => {
     argv: [withErr]
   }
 
-  const parsers = {}
+  const substages = {}
 
   const opt = {
     key: 'Foo',
@@ -1174,7 +1174,7 @@ test('parser passes on errors from argv stages', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [
@@ -1195,7 +1195,7 @@ test('parser passes on errors from opts stages', () => {
     opts: [withErr]
   }
 
-  const parsers = {}
+  const substages = {}
 
   const opt = {
     key: 'Foo',
@@ -1206,7 +1206,7 @@ test('parser passes on errors from opts stages', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [
@@ -1228,7 +1228,7 @@ test('parser passes on errors from args stages', () => {
     args: [withErr]
   }
 
-  const parsers = {}
+  const substages = {}
 
   const opt = {
     key: 'Foo',
@@ -1239,7 +1239,7 @@ test('parser passes on errors from args stages', () => {
 
   const errs = []
 
-  const res = parser(stages, parsers)(opt)(argv, errs)
+  const res = parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [
