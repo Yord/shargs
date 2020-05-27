@@ -19,7 +19,7 @@ const parser = (stages = {}, substages = {}) => {
     toArgv,
     ...argv,
     toOpts(opt),
-    recurseOpts(opts),
+    recurseOpts(opts, substages),
     toArgs,
     transformArgs(args),
     fromArgs
