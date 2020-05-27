@@ -180,3 +180,37 @@ test('fromArgs takes only the first duplicate primitive value', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('fromArgs takes only the first duplicate primitive array', () => {
+  const errs = [
+    {code: 'Test', msg: 'This is a test.', info: {}}
+  ]
+
+  const args1 = {_: ['1']}
+  const args2 = {
+    _: [],
+    arc: ['2', '3']
+  }
+  const args3 = {
+    _: ['4'],
+    arc: ['5', '6']
+  }
+
+  const args = [
+    args1,
+    args2,
+    args3
+  ]
+
+  const res = fromArgs({errs, args})
+
+  const exp = {
+    errs,
+    args: {
+      _: ['1', '4'],
+      arc: ['2', '3']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
