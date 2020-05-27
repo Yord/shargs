@@ -46,3 +46,25 @@ test('toOpts works for nonempty command and empty argv', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toOpts works for empty command and nonempty argv', () => {
+  const opt = {
+    key: 'opt',
+    opts: []
+  }
+
+  const errs = []
+
+  const argv = ['unknown']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {values: ['unknown']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
