@@ -597,3 +597,19 @@ test('toOpts works with undefined input', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toOpts works with undefined errs', () => {
+  const opt = {
+    key: 'opt',
+    opts: []
+  }
+
+  const res = toOpts(opt)({argv: []})
+
+  const exp = {
+    errs: [],
+    opts: []
+  }
+
+  expect(res).toStrictEqual(exp)
+})
