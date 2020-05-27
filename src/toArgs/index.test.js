@@ -20,3 +20,24 @@ test('toArgs works for rest values', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgs works for cancel values', () => {
+  const errs = []
+
+  const opts = [
+    {values: ['--']}
+  ]
+
+  const res = toArgs({errs, opts})
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: []
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
