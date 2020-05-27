@@ -624,3 +624,20 @@ test('toArgs works with empty input', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgs works without errs in input', () => {
+  const opts = []
+
+  const res = toArgs({opts})
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: []
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
