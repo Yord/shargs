@@ -117,3 +117,32 @@ test('fromArgs merges a primitive value', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('fromArgs merges a primitive array', () => {
+  const errs = [
+    {code: 'Test', msg: 'This is a test.', info: {}}
+  ]
+
+  const args1 = {_: ['1']}
+  const args2 = {
+    _: ['2'],
+    arc: ['3', '4']
+  }
+
+  const args = [
+    args1,
+    args2
+  ]
+
+  const res = fromArgs({errs, args})
+
+  const exp = {
+    errs,
+    args: {
+      _: ['1', '2'],
+      arc: ['3', '4']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
