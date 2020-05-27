@@ -552,3 +552,45 @@ test('toArgs works for duplicate subcommands without values', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgs works for duplicate subcommands with values', () => {
+  const arc  = {key: 'arc', args: ['-a'], types: ['A']}
+  const Arc1 = {key: 'Arc', args: ['Arc'], opts: [arc], values: [
+    {...arc, values: ['1']}
+  ]}
+  const Arc2 = {key: 'Arc', args: ['Arc'], opts: [arc], values: [
+    {...arc, values: ['2']}
+  ]}
+
+  const errs = []
+
+  const opts = [
+    Arc1,
+    Arc2
+  ]
+
+  const res = toArgs({errs, opts})
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: []
+      },
+      {
+        Arc: {
+          _: [],
+          arc: '1'
+        }
+      },
+      {
+        Arc: {
+          _: [],
+          arc: '2'
+        }
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
