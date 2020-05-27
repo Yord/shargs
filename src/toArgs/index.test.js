@@ -336,3 +336,29 @@ test('toArgs works for array options', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgs works for duplicate array options', () => {
+  const arc1 = {key: 'arc', args: ['-a'], types: ['A', 'B'], values: ['1', '2']}
+  const arc2 = {key: 'arc', args: ['-a'], types: ['A', 'B'], values: ['3', '4']}
+
+  const errs = []
+
+  const opts = [
+    arc1,
+    arc2
+  ]
+
+  const res = toArgs({errs, opts})
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: [],
+        arc: ['1', '2']
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
