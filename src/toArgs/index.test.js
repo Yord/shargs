@@ -521,3 +521,34 @@ test('toArgs works for nested subcommands', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgs works for duplicate subcommands without values', () => {
+  const Arc1 = {key: 'Arc', args: ['Arc'], opts: [], values: []}
+  const Arc2 = {key: 'Arc', args: ['Arc'], opts: [], values: []}
+
+  const errs = []
+
+  const opts = [
+    Arc1,
+    Arc2
+  ]
+
+  const res = toArgs({errs, opts})
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: []
+      },
+      {
+        Arc: {_: []}
+      },
+      {
+        Arc: {_: []}
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
