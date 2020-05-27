@@ -286,3 +286,29 @@ test('toArgs works for primitive positional arguments', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgs works for two primitive positional arguments', () => {
+  const arc1 = {key: 'arc', types: ['A'], values: ['1']}
+  const arc2 = {key: 'arc', types: ['A'], values: ['2']}
+
+  const errs = []
+
+  const opts = [
+    arc1,
+    arc2
+  ]
+
+  const res = toArgs({errs, opts})
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: [],
+        arc: '1'
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
