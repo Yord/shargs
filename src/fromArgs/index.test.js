@@ -252,3 +252,48 @@ test('fromArgs merges subcommands', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('fromArgs merges only the first of two duplicate subcommands', () => {
+  const errs = [
+    {code: 'Test', msg: 'This is a test.', info: {}}
+  ]
+
+  const args1 = {
+    _: ['1'],
+    arc: '2'
+  }
+  const args2 = {
+    foo: {
+      _: ['3'],
+      bar: {type: 'flag', count: 2}
+    }
+  }
+  const args3 = {
+    foo: {
+      _: ['4'],
+      bar: '5'
+    }
+  }
+
+  const args = [
+    args1,
+    args2,
+    args3
+  ]
+
+  const res = fromArgs({errs, args})
+
+  const exp = {
+    errs,
+    args: {
+      _: ['1'],
+      arc: '2',
+      foo: {
+        _: ['3'],
+        bar: {type: 'flag', count: 2}
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
