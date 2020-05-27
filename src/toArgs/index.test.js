@@ -386,3 +386,29 @@ test('toArgs works for array positional arguments', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgs works for two array positional arguments', () => {
+  const arc1 = {key: 'arc', types: ['A', 'B'], values: ['1', '2']}
+  const arc2 = {key: 'arc', types: ['A', 'B'], values: ['3', '4', '5']}
+
+  const errs = []
+
+  const opts = [
+    arc1,
+    arc2
+  ]
+
+  const res = toArgs({errs, opts})
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: [],
+        arc: ['1', '2']
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
