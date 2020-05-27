@@ -594,3 +594,18 @@ test('toArgs works for duplicate subcommands with values', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgs works with undefined input', () => {
+  const res = toArgs()
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: []
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
