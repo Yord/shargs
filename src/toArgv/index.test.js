@@ -40,3 +40,18 @@ test('toArgv works for undefined errors', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgv works for undefined argv', () => {
+  const errs = [
+    {code: 'Test', msg: 'This is a test.', info: {}}
+  ]
+
+  const res = toArgv({errs})
+
+  const exp = {
+    errs,
+    argv: []
+  }
+
+  expect(res).toStrictEqual(exp)
+})
