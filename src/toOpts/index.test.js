@@ -121,3 +121,29 @@ test('toOpts works for flag options', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toOpts works for primitive options', () => {
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      arc
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['-a', '1']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...arc, values: ['1']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
