@@ -173,3 +173,29 @@ test('toOpts works for array options', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toOpts works for variadic options', () => {
+  const arc = {key: 'arc', args: ['-a']}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      arc
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['-a', '1', '2', '3']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...arc, types: ['string', 'string', 'string'], values: ['1', '2', '3']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
