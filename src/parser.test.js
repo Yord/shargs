@@ -923,6 +923,58 @@ test('parser works with subcommands', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('parser works with subcommands of subcommands', () => {
+  const stages = {
+    opts: [
+      ({errs, opts}) => ({
+        errs,
+        opts: opts.map(opt =>
+          ({...opt, ...(opt.key === 'arc' ? {values: ['foo']} : {})})
+        )
+      })
+    ]
+  }
+
+  const parsers = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [
+    arc
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    Bar
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', 'Bar', '-a', '1']
+
+  const errs = []
+
+  const res = parser(stages, parsers)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: [],
+        Bar: {
+          _: [],
+          arc: 'foo'
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parser works with duplicate subcommands by only taking the first', () => {
   const stages = {}
 
