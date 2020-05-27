@@ -609,3 +609,18 @@ test('toArgs works with undefined input', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgs works with empty input', () => {
+  const res = toArgs({})
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: []
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
