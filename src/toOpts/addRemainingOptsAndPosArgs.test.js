@@ -147,3 +147,28 @@ test('addRemainingOptsAndPosArgs works for primitive positional arguments', () =
 
   expect(res).toStrictEqual(exp)
 })
+
+test('addRemainingOptsAndPosArgs works for array positional arguments', () => {
+  const foo = {key: 'foo', types: ['foo', 'bar']}
+
+  const opt = {
+    opts: [
+      foo
+    ]
+  }
+
+  const errs = []
+
+  const opts = []
+
+  const res = addRemainingOptsAndPosArgs(opt)({errs, opts})
+
+  const exp = {
+    errs: [],
+    opts: [
+      foo
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
