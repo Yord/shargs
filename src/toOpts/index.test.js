@@ -613,3 +613,19 @@ test('toOpts works with undefined errs', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toOpts works with undefined argv', () => {
+  const opt = {
+    key: 'opt',
+    opts: []
+  }
+
+  const res = toOpts(opt)({errs: []})
+
+  const exp = {
+    errs: [],
+    opts: []
+  }
+
+  expect(res).toStrictEqual(exp)
+})
