@@ -96,3 +96,36 @@ test('toArgs ignores options and positional arguments without values', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgs ignores invalid options', () => {
+  const arc = null
+  const bar = undefined
+  const cat = 42
+  const dot = 'yay'
+  const eat = ['this', 'is', 'Sparta']
+  const fit = {foo: 'bar'}
+
+  const errs = []
+
+  const opts = [
+    arc,
+    bar,
+    cat,
+    dot,
+    eat,
+    fit
+  ]
+
+  const res = toArgs({errs, opts})
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: []
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
