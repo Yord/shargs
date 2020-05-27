@@ -1107,3 +1107,36 @@ test('parser passes on errors from opts stages', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+
+test('parser passes on errors from args stages', () => {
+  const err = {code: 'Test', msg: 'This is a test.', info: {}}
+
+  const withErr = ({errs, args}) => ({errs: [...errs, err], args})
+
+  const stages = {
+    args: [withErr]
+  }
+
+  const parsers = {}
+
+  const opt = {
+    key: 'Foo',
+    opts: []
+  }
+
+  const argv = []
+
+  const errs = []
+
+  const res = parser(stages, parsers)(opt)(argv, errs)
+
+  const exp = {
+    errs: [
+      err
+    ],
+    args: {_: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
