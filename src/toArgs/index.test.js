@@ -658,3 +658,28 @@ test('toArgs works without opts in input', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgs passes on errors', () => {
+  const err = {code: 'Test', msg: 'This is a test.', info: {}}
+
+  const errs = [
+    err
+  ]
+
+  const opts = []
+
+  const res = toArgs({errs, opts})
+
+  const exp = {
+    errs: [
+      err
+    ],
+    args: [
+      {
+        _: []
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
