@@ -178,3 +178,37 @@ test('toArgs works for duplicate flag options', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgs works for two flag options in different subcommands', () => {
+  const arc = {key: 'arc', args: ['-a'], types: []}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [arc], values: [
+    {...arc, values: [1]}
+  ]}
+
+  const errs = []
+
+  const opts = [
+    {...arc, values: [1]},
+    Arc
+  ]
+
+  const res = toArgs({errs, opts})
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: [],
+        arc: {type: 'flag', count: 1}
+      },
+      {
+        Arc: {
+          _: [],
+          arc: {type: 'flag', count: 1}
+        }
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
