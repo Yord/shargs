@@ -333,3 +333,43 @@ test('addRemainingOptsAndPosArgs works for command options 4', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('addRemainingOptsAndPosArgs works for command options 5', () => {
+  const dot = {key: 'dot', types: ['dot']}
+  const cat = {key: 'cat', types: [], args: ['-c']}
+  const but = {key: 'but', types: [], args: ['-b']}
+  const foo = {key: 'foo', args: ['foo'], opts: [
+    but,
+    cat,
+    dot
+  ]}
+
+  const opt = {
+    opts: [
+      foo
+    ]
+  }
+
+  const errs = []
+
+  const opts = [
+    {...foo, values: [
+      {...cat, values: [1]}
+    ]}
+  ]
+
+  const res = addRemainingOptsAndPosArgs(opt)({errs, opts})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...foo, values: [
+        {...cat, values: [1]},
+        but,
+        dot
+      ]}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
