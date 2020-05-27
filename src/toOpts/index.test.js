@@ -562,3 +562,22 @@ test('toOpts works for subcommands with variadic positional arguments', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toOpts works with undefined opt', () => {
+  const err = CommandExpected({opt: {}})
+
+  const errs = []
+
+  const argv = []
+
+  const res = toOpts()({errs, argv})
+
+  const exp = {
+    errs: [
+      err
+    ],
+    opts: []
+  }
+
+  expect(res).toStrictEqual(exp)
+})
