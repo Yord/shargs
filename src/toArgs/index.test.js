@@ -153,3 +153,28 @@ test('toArgs works for flag options', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgs works for duplicate flag options', () => {
+  const arc = {key: 'arc', args: ['-a'], types: [], values: [1]}
+
+  const errs = []
+
+  const opts = [
+    arc,
+    arc
+  ]
+
+  const res = toArgs({errs, opts})
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: [],
+        arc: {type: 'flag', count: 2}
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
