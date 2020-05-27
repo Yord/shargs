@@ -251,3 +251,29 @@ test('toOpts works for array positional arguments', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toOpts works for variadic positional arguments', () => {
+  const arc = {key: 'arc'}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      arc
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['1', '2', '3']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...arc, types: ['string', 'string', 'string'], values: ['1', '2', '3']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
