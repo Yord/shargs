@@ -212,3 +212,27 @@ test('toArgs works for two flag options in different subcommands', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgs works for primitive options', () => {
+  const arc = {key: 'arc', args: ['-a'], types: ['A'], values: ['1']}
+
+  const errs = []
+
+  const opts = [
+    arc
+  ]
+
+  const res = toArgs({errs, opts})
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: [],
+        arc: '1'
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
