@@ -451,3 +451,40 @@ test('toOpts works for subcommands with variadic options', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toOpts works for subcommands with primitive positional arguments', () => {
+  const arc = {key: 'arc', types: ['A']}
+  const bar = {key: 'bar'}
+  const cat = {key: 'cat'}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc,
+    bar
+  ]}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      Arc,
+      cat
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['Arc', '1']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...Arc, values: [
+        {...arc, values: ['1']},
+        bar
+      ]},
+      cat
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
