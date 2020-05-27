@@ -214,3 +214,41 @@ test('fromArgs takes only the first duplicate primitive array', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('fromArgs merges subcommands', () => {
+  const errs = [
+    {code: 'Test', msg: 'This is a test.', info: {}}
+  ]
+
+  const args1 = {
+    _: ['1'],
+    arc: '2'
+  }
+  const args2 = {
+    foo: {
+      _: ['3'],
+      bar: {type: 'flag', count: 2}
+    }
+  }
+
+  const args = [
+    args1,
+    args2
+  ]
+
+  const res = fromArgs({errs, args})
+
+  const exp = {
+    errs,
+    args: {
+      _: ['1'],
+      arc: '2',
+      foo: {
+        _: ['3'],
+        bar: {type: 'flag', count: 2}
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
