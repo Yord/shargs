@@ -31,3 +31,20 @@ test('fromArgs works for undefined input', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('fromArgs works for undefined errors', () => {
+  const args1 = {_: []}
+
+  const args = [
+    args1
+  ]
+
+  const res = fromArgs({args})
+
+  const exp = {
+    errs: [],
+    args: args1
+  }
+
+  expect(res).toStrictEqual(exp)
+})
