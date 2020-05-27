@@ -412,3 +412,29 @@ test('toArgs works for two array positional arguments', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgs works for subcommands without values', () => {
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [], values: []}
+
+  const errs = []
+
+  const opts = [
+    Arc
+  ]
+
+  const res = toArgs({errs, opts})
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: []
+      },
+      {
+        Arc: {_: []}
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
