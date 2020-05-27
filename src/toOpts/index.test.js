@@ -303,3 +303,40 @@ test('toOpts works for subcommands', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toOpts works for subcommands with flag options', () => {
+  const arc = {key: 'arc', args: ['-a'], types: []}
+  const bar = {key: 'bar'}
+  const cat = {key: 'cat'}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc,
+    bar
+  ]}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      Arc,
+      cat
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['Arc', '-a']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...Arc, values: [
+        {...arc, values: [1]},
+        bar
+      ]},
+      cat
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
