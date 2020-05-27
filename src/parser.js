@@ -4,7 +4,7 @@ const {fromArgs: FROM_ARGS} = require('./fromArgs')
 const {toArgs:   TO_ARGS}   = require('./toArgs')
 const {toArgv:   TO_ARGV}   = require('./toArgv')
 
-const parser = (stages = {}, parsers = {}) => {
+const parser = (stages = {}, substages = {}) => {
   const {
     toArgv   = TO_ARGV,
     argv     = [],
@@ -30,7 +30,12 @@ module.exports = {
   parser
 }
 
-function recurseOpts (optsStages) {
+function recurseOpts (optsStages, substages) {
+  const substages2 = {
+    ...substages,
+    _: typeof substages._ === 'undefined' ? optsStages : substages
+  }
+
   return ({errs = [], opts = []} = {errs: [], opts: []}) => {
     let errs2   = []
     const opts2 = []
@@ -42,7 +47,10 @@ function recurseOpts (optsStages) {
       const opt = opts3[i]
 
       if (isSubcommand(opt)) {
-        const {errs: errs4, opts: opts4} = pipe(...optsStages)({errs: [], opts: opt.values})
+        const stages = Array.isArray(substages2[opt.key]) ? substages2[opt.key] : optsStages
+        const substages3 = {...(substages2[opt.key] || {}), _: substages2._}
+
+        const {errs: errs4, opts: opts4} = recurseOpts(stages, substages3)({errs: [], opts: opt.values})
         
         errs2 = [...errs2, ...errs4]
         opts2.push({...opt, values: opts4})
