@@ -236,3 +236,29 @@ test('toArgs works for primitive options', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgs works for duplicate primitive options', () => {
+  const arc1 = {key: 'arc', args: ['-a'], types: ['A'], values: ['1']}
+  const arc2 = {key: 'arc', args: ['-a'], types: ['A'], values: ['2']}
+
+  const errs = []
+
+  const opts = [
+    arc1,
+    arc2
+  ]
+
+  const res = toArgs({errs, opts})
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: [],
+        arc: '1'
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
