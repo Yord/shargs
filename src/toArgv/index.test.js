@@ -27,3 +27,16 @@ test('toArgv works for undefined input', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('toArgv works for undefined errors', () => {
+  const any = []
+
+  const res = toArgv({any})
+
+  const exp = {
+    errs: [],
+    argv: any
+  }
+
+  expect(res).toStrictEqual(exp)
+})
