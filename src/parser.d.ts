@@ -37,7 +37,11 @@ export interface Stages<A, B> {
   fromArgs?:                                  (obj?: {errs?: Err[], args?: Args[]  }) => B
 }
 
-const parser: <A, B>(stages?: Stages, parsers?: {}) =>
+export interface Substages {
+  [key]: Array<(obj?: {errs?: Err[], opts?: Opt[]}) => {errs: Err[], opts: Opt[]}> | Substages
+}
+
+const parser: <A, B>(stages?: Stages, substages?: Substages) =>
                     (opt?: Opt) =>
                     (any?: A, errs?: Err[]) =>
                     {errs: Err[], any: B}
