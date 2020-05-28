@@ -31,11 +31,6 @@ module.exports = {
 }
 
 function recurseOpts (optsStages, substages) {
-  const substages2 = {
-    ...substages,
-    _: typeof substages._ === 'undefined' ? optsStages : substages
-  }
-
   return ({errs = [], opts = []} = {errs: [], opts: []}) => {
     let errs2   = []
     const opts2 = []
@@ -47,10 +42,14 @@ function recurseOpts (optsStages, substages) {
       const opt = opts3[i]
 
       if (isSubcommand(opt)) {
-        const stages = Array.isArray(substages2[opt.key]) ? substages2[opt.key] : optsStages
-        const substages3 = {...(substages2[opt.key] || {}), _: substages2._}
+        const stages = (
+          Array.isArray(substages[opt.key]) ? substages[opt.key] :
+          Array.isArray(substages._)        ? substages._
+                                            : optsStages
+        )
+        const substages2 = substages[opt.key] || {}
 
-        const {errs: errs4, opts: opts4} = recurseOpts(stages, substages3)({errs: [], opts: opt.values})
+        const {errs: errs4, opts: opts4} = recurseOpts(stages, substages2)({errs: [], opts: opt.values})
         
         errs2 = [...errs2, ...errs4]
         opts2.push({...opt, values: opts4})
