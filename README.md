@@ -1,5 +1,5 @@
 <p align="center">
-<img width="800" src="shargs.jpg" />
+<img width="800" src="shargs.png" />
 </p>
 
 🦈 shargs (**sh**ell **args**) is a highly customizable command-line arguments parser and usage documentation generator.
