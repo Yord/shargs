@@ -2581,3 +2581,35 @@ test('parserSync passes on errors from args stages', () => {
 
   expect(res).toStrictEqual(exp)
 })
+
+test('parser passes on errors from args stages', async () => {
+  const err = {code: 'Test', msg: 'This is a test.', info: {}}
+
+  const withErr = ({errs, args}) => ({errs: [...errs, err], args})
+
+  const stages = {
+    args: [withErr]
+  }
+
+  const substages = {}
+
+  const opt = {
+    key: 'Foo',
+    opts: []
+  }
+
+  const argv = []
+
+  const errs = []
+
+  const res = await parser(stages, substages)(opt)(argv, errs)
+
+  const exp = {
+    errs: [
+      err
+    ],
+    args: {_: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
