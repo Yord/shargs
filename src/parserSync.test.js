@@ -1900,6 +1900,58 @@ test('parserSync works with subcommands of subcommands', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('parser works with subcommands of subcommands', async () => {
+  const stages = {
+    opts: [
+      ({errs, opts}) => ({
+        errs,
+        opts: opts.map(opt =>
+          ({...opt, ...(opt.key === 'arc' ? {values: ['foo']} : {})})
+        )
+      })
+    ]
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [
+    arc
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    Bar
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', 'Bar', '-a', '1']
+
+  const errs = []
+
+  const res = await parser(stages, substages)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: [],
+        Bar: {
+          _: [],
+          arc: 'foo'
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with substages', () => {
   const stages = {}
 
