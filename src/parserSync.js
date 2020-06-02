@@ -10,37 +10,39 @@ const Sync = {
   all: a => a
 }
 
-const parserSync = (stages = {}, substages = {}) => {
-  const {
-    toArgv   = TO_ARGV,
-    argv     = [],
-    toOpts   = TO_OPTS,
-    opts     = [],
-    toArgs   = TO_ARGS,
-    args     = [],
-    fromArgs = FROM_ARGS
-  } = stages
-
-  return opt => (any, errs = []) => Sync.then(
-    toArgv,
-    ...argv,
-    toOpts(opt),
-    recurseOpts(opts, substages),
-    toArgs,
-    transformArgs(args),
-    fromArgs
-  )({errs, any})
-}
-
 module.exports = {
-  parserSync
+  parserSync: parser(Sync)
 }
 
-function recurseOpts (optsStages, substages) {
-  return ({errs = [], opts = []} = {errs: [], opts: []}) => {
-    const promise1 = Sync.then(...optsStages)({errs, opts})
+function parser (Mode) {
+  return (stages = {}, substages = {}) => {
+    const {
+      toArgv   = TO_ARGV,
+      argv     = [],
+      toOpts   = TO_OPTS,
+      opts     = [],
+      toArgs   = TO_ARGS,
+      args     = [],
+      fromArgs = FROM_ARGS
+    } = stages
+  
+    return opt => (any, errs = []) => Mode.then(
+      toArgv,
+      ...argv,
+      toOpts(opt),
+      recurseOpts(Mode)(opts, substages),
+      toArgs,
+      transformArgs(Mode)(args),
+      fromArgs
+    )({errs, any})
+  }
+}
+
+function recurseOpts (Mode) {
+  return (optsStages, substages) => ({errs = [], opts = []} = {errs: [], opts: []}) => {
+    const promise1 = Mode.then(...optsStages)({errs, opts})
     
-    return Sync.then(result => {
+    return Mode.then(result => {
       const {errs: errs3 = [], opts: opts3 = []} = result || {errs, opts: []}
 
       const promises = opts3.map(opt => {
@@ -52,23 +54,23 @@ function recurseOpts (optsStages, substages) {
           )
           const substages2 = substages[opt.key] || {}
   
-          const promise2 = recurseOpts(stages, substages2)({errs: [], opts: opt.values})
+          const promise2 = recurseOpts(Mode)(stages, substages2)({errs: [], opts: opt.values})
           
-          return Sync.then(({errs: errs4, opts: opts4}) => {
+          return Mode.then(({errs: errs4, opts: opts4}) => {
             return {
               errs: errs4,
               opts: [{...opt, values: opts4}]
             }
           })(promise2)
         } else {
-          return Sync.resolve({
+          return Mode.resolve({
             errs: [],
             opts: [opt]
           })
         }
       })
 
-      return Sync.then(results => {
+      return Mode.then(results => {
         return results.reduce(
           ({errs, opts}, {errs: errs2, opts: opts2}) => ({
             errs: [...errs, ...errs2],
@@ -76,18 +78,18 @@ function recurseOpts (optsStages, substages) {
           }),
           {errs: errs3, opts: []}
         )
-      })(Sync.all(promises))
+      })(Mode.all(promises))
     })(promise1)
   }
 }
 
-function transformArgs (argsStages) {
-  return ({errs = [], args = []} = {errs: [], args: []}) => {
+function transformArgs (Mode) {
+  return (argsStages) => ({errs = [], args = []} = {errs: [], args: []}) => {
     const promises = args.map(arg => {
-      return Sync.then(...argsStages)({errs: [], args: arg})
+      return Mode.then(...argsStages)({errs: [], args: arg})
     })
 
-    return Sync.then(results => {
+    return Mode.then(results => {
       return results.reduce(
         ({errs, args}, {errs: errs2, args: args2}) => ({
           errs: [...errs, ...errs2],
@@ -95,7 +97,7 @@ function transformArgs (argsStages) {
         }),
         {errs, args: []}
       )
-    })(Sync.all(promises))
+    })(Mode.all(promises))
   }
 }
 
