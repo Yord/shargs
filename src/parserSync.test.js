@@ -1,5 +1,41 @@
 const {parser, parserSync} = require('.')
 
+test('parser works with async stages 1', async () => {
+  const stages = {
+    toArgv:         ({errs, any }) => Promise.resolve(({errs, argv: any })),
+    argv:           [a             => Promise.resolve(a                  )],
+    toOpts:   () => ({errs, argv}) => Promise.resolve(({errs, opts: argv})),
+    opts:           [a             => Promise.resolve(a                  )],
+    toArgs:         ({errs, opts}) => Promise.resolve(({errs, args: opts})),
+    args:           [a             => Promise.resolve(a                  )],
+    fromArgs:       a              => Promise.resolve(a                   )
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const errs = []
+
+  const res = await parser(stages, substages)(opt)(argv, errs)
+
+  const exp = {
+    errs,
+    args: argv
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with undefined stages', () => {
   const stages = undefined
 
