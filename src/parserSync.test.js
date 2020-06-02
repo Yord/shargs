@@ -150,6 +150,32 @@ test('parserSync works with empty opts', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('parser works with empty opts', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const opt = {
+    key: 'Foo',
+    opts: []
+  }
+
+  const argv = ['-a', '1']
+
+  const errs = []
+
+  const res = await parser(stages, substages)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['-a', '1']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with undefined argv', () => {
   const stages = {}
 
