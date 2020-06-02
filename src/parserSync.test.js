@@ -337,6 +337,45 @@ test('parserSync works with undefined stages', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('parser works with undefined stages', async () => {
+  const stages = {
+    toArgv:   undefined,
+    argv:     undefined,
+    toOpts:   undefined,
+    opts:     undefined,
+    toArgs:   undefined,
+    args:     undefined,
+    fromArgs: undefined
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const errs = []
+
+  const res = await parser(stages, substages)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1'
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with sample stages', () => {
   const stages = {
     toArgv:         ({errs, any }) => ({errs, argv: any }),
