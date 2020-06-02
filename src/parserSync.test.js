@@ -206,6 +206,36 @@ test('parserSync works with undefined argv', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('parser works with undefined argv', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = undefined
+
+  const errs = []
+
+  const res = await parser(stages, substages)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: []
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with undefined errs', () => {
   const stages = {}
 
