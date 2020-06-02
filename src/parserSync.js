@@ -1,8 +1,14 @@
-const {pipe}                = require('./pipe')
-const {toOpts:   TO_OPTS}   = require('./toOpts')
 const {fromArgs: FROM_ARGS} = require('./fromArgs')
+const {pipe}                = require('./pipe')
 const {toArgs:   TO_ARGS}   = require('./toArgs')
 const {toArgv:   TO_ARGV}   = require('./toArgv')
+const {toOpts:   TO_OPTS}   = require('./toOpts')
+
+const Sync = {
+  resolve: a => a,
+  then: pipe,
+  all: a => a
+}
 
 const parserSync = (stages = {}, substages = {}) => {
   const {
@@ -15,7 +21,7 @@ const parserSync = (stages = {}, substages = {}) => {
     fromArgs = FROM_ARGS
   } = stages
 
-  return opt => (any, errs = []) => pipe(
+  return opt => (any, errs = []) => Sync.then(
     toArgv,
     ...argv,
     toOpts(opt),
@@ -32,51 +38,64 @@ module.exports = {
 
 function recurseOpts (optsStages, substages) {
   return ({errs = [], opts = []} = {errs: [], opts: []}) => {
-    let errs2   = []
-    const opts2 = []
+    const promise1 = Sync.then(...optsStages)({errs, opts})
+    
+    return Sync.then(result => {
+      const {errs: errs3 = [], opts: opts3 = []} = result || {errs, opts: []}
 
-    const {errs: errs3 = [], opts: opts3 = []} = pipe(...optsStages)({errs: [], opts}) || {}
-    errs2 = [...errs2, ...errs3]
+      const promises = opts3.map(opt => {
+        if (isSubcommand(opt)) {
+          const stages = (
+            Array.isArray(substages[opt.key]) ? substages[opt.key] :
+            Array.isArray(substages._)        ? substages._
+                                              : optsStages
+          )
+          const substages2 = substages[opt.key] || {}
+  
+          const promise2 = recurseOpts(stages, substages2)({errs: [], opts: opt.values})
+          
+          return Sync.then(({errs: errs4, opts: opts4}) => {
+            return {
+              errs: errs4,
+              opts: [{...opt, values: opts4}]
+            }
+          })(promise2)
+        } else {
+          return Sync.resolve({
+            errs: [],
+            opts: [opt]
+          })
+        }
+      })
 
-    for (let i = 0; i < opts3.length; i++) {
-      const opt = opts3[i]
-
-      if (isSubcommand(opt)) {
-        const stages = (
-          Array.isArray(substages[opt.key]) ? substages[opt.key] :
-          Array.isArray(substages._)        ? substages._
-                                            : optsStages
+      return Sync.then(results => {
+        return results.reduce(
+          ({errs, opts}, {errs: errs2, opts: opts2}) => ({
+            errs: [...errs, ...errs2],
+            opts: [...opts, ...opts2],
+          }),
+          {errs: errs3, opts: []}
         )
-        const substages2 = substages[opt.key] || {}
-
-        const {errs: errs4, opts: opts4} = recurseOpts(stages, substages2)({errs: [], opts: opt.values})
-        
-        errs2 = [...errs2, ...errs4]
-        opts2.push({...opt, values: opts4})
-      } else {
-        opts2.push(opt)
-      }
-    }
-
-    return {errs: [...errs, ...errs2], opts: opts2}
+      })(Sync.all(promises))
+    })(promise1)
   }
 }
 
 function transformArgs (argsStages) {
   return ({errs = [], args = []} = {errs: [], args: []}) => {
-    let errs2   = []
-    const args2 = []
+    const promises = args.map(arg => {
+      return Sync.then(...argsStages)({errs: [], args: arg})
+    })
 
-    for (let i = 0; i < args.length; i++) {
-      const arg = args[i]
-
-      const {errs: errs3, args: args3} = pipe(...argsStages)({errs: [], args: arg})
-
-      errs2 = [...errs2, ...errs3]
-      args2.push(args3)
-    }
-
-    return {errs: [...errs, ...errs2], args: args2}
+    return Sync.then(results => {
+      return results.reduce(
+        ({errs, args}, {errs: errs2, args: args2}) => ({
+          errs: [...errs, ...errs2],
+          args: [...args, args2]
+        }),
+        {errs, args: []}
+      )
+    })(Sync.all(promises))
   }
 }
 
