@@ -1,4 +1,4 @@
-const {parserSync} = require('.')
+const {parser, parserSync} = require('.')
 
 test('parserSync works with undefined stages', () => {
   const stages = undefined
@@ -19,6 +19,37 @@ test('parserSync works with undefined stages', () => {
   const errs = []
 
   const res = parserSync(stages, substages)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1'
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with undefined stages', async () => {
+  const stages = undefined
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const errs = []
+
+  const res = await parser(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
