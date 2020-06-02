@@ -51,12 +51,12 @@ Shargs' flexibility and adaptability sets it apart from
 
 <details>
 <summary>
-Describe your command-line program and options:
+Describe your command and options:
 
 <p>
 
 ```js
-const {flag, number, program, stringPos} = require('shargs-opts')
+const {command, flag, number, stringPos} = require('shargs-opts')
 
 const opts = [
   stringPos('question', {desc: 'Ask a question.', required: true}),
@@ -64,7 +64,7 @@ const opts = [
   flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
 ]
 
-const script = program('deepThought', opts, {desc: 'Ask the Ultimate Question.'})
+const deepThought = command('deepThought', opts, {desc: 'Ask the Ultimate Question.'})
 ```
 
 </p>
@@ -81,10 +81,10 @@ Declare a parser by choosing from 30+ parser stages:
 <p>
 
 ```js
-const {parser} = require('shargs')
+const {parserSync} = require('shargs')
 const {cast, flagsAsBools, requireOpts, splitShortOpts} = require('shargs-parser')
 
-const deepThought = parser({
+const parser = parserSync({
   argv: [splitShortOpts],
   opts: [requireOpts, cast],
   args: [flagsAsBools]
@@ -94,7 +94,7 @@ const deepThought = parser({
 </p>
 </summary>
 
-The [parser function](#the-parser-function)
+The [parser function](#the-parserSync-function)
 and [command-line parsers](#command-line-parsers) sections have all the details.
 
 </details>
@@ -153,7 +153,7 @@ Use the parser and the usage documentation in your program:
 ```js
 const argv = process.argv.slice(2)
 
-const {errs, args} = deepThought(script)(argv)
+const {errs, args} = parser(deepThought)(argv)
 
 if (args.help) {
   const help = docs(script)(style)
@@ -174,7 +174,7 @@ Find out more in the [writing programs with shargs](#writing-programs-with-sharg
 
 <details>
 <summary>
-Run your program with <code>node ./deepThought --help</code>:
+Run your command with <code>node ./deepThought --help</code>:
 
 <p>
 
@@ -198,7 +198,7 @@ and [writing programs with shargs](#writing-programs-with-shargs) sections have 
 
 <details>
 <summary>
-Run your program with <code>node ./deepThought "What is the meaning of Life, the Universe, and Everything?"</code>:
+Run your command with <code>node ./deepThought "What is the meaning of Life, the Universe, and Everything?"</code>:
 
 <p>
 
@@ -216,14 +216,14 @@ Run your program with <code>node ./deepThought "What is the meaning of Life, the
 </p>
 </summary>
 
-Read the [parser function](#the-parser-function) and [writing programs with shargs](#writing-programs-with-shargs) 
+Read the [parser function](#the-parserSync-function) and [writing programs with shargs](#writing-programs-with-shargs) 
 sections for more.
 
 </details>
 
 <details>
 <summary>
-Run your program with <code>node ./deepThought -a 23</code>:
+Run your command with <code>node ./deepThought -a 23</code>:
 
 <p>
 
@@ -245,7 +245,7 @@ See the [error codes](#error-codes) sections for a reference of all error codes.
 
 ## Getting Started
 
-Shargs is not a command-line parser, but a library for building command-line parsers.
+Shargs is a library for building command-line parsers.
 Parsers build with shargs can be tiny or huge, strict or best guess, extensively checked or not checked at all:
 You decide!
 
@@ -255,29 +255,29 @@ Each parser stage is a small step in the transformation of argument values (`pro
 to command-line options (`opts`) and finally to an object of parsed arguments (`args`):
 
 ```js
-const {parser} = require('shargs')
+const {parserSync} = require('shargs')
 
-const deepThought = parser({argv: [], opts: [], args: []})
+const parser = parserSync({argv: [], opts: [], args: []})
 ```
 
-Although not fancy, `deepThought` from the example is already a working command-line parser.
+Although not fancy, `parser` from the example is already a working command-line parser.
 The empty `argv`, `opts`, and `args` arrays mark extension points, where parser stages may be plugged in.
 
 While you are encouraged to write your own parser stages,
 most of the time you get along by picking and choosing common ones from the `shargs-parser` module:
 
 ```js
-const {parser} = require('shargs')
+const {parserSync} = require('shargs')
 const {cast, flagsAsBools, requireOpts, splitShortOpts} = require('shargs-parser')
 
-const deepThought = parser({
+const parser = parserSync({
   argv: [splitShortOpts],
   opts: [requireOpts, cast],
   args: [flagsAsBools]
 })
 ```
 
-This version of `deepThought` does more advanced stuff:
+This version of `parser` does more advanced stuff:
 
 1.  It splits short option groups: e.g. `-cvzf` is transformed to `-c -v -z -f`.
 2.  It checks if all required options are set.
@@ -291,7 +291,7 @@ At this point we have decided on the capabilities of our parser.
 We should now talk about what exactly we wish to parse:
 
 ```js
-const {flag, number, program, stringPos} = require('shargs-opts')
+const {flag, number, command, stringPos} = require('shargs-opts')
 
 const opts = [
   stringPos('question', {desc: 'Ask a question.', required: true}),
@@ -299,10 +299,10 @@ const opts = [
   flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
 ]
 
-const script = program('deepThought', opts, {desc: 'Ask the Ultimate Question.'})
+const deepThought = command('deepThought', opts, {desc: 'Ask the Ultimate Question.'})
 ```
 
-The `'deepThought'` script should have three command-line options:
+The `deepThought` command should have three command-line options:
 
 1.  A `required` string positional argument named `question`.
 2.  An `answer` number option specified with `-a` or `--answer` that should default to `42` if not given.
@@ -314,7 +314,7 @@ However, we could have also written them out as objects ourselves or could have 
 Next, we tell our parser about the options:
 
 ```js
-const parse = deepThought(script)
+const parse = parser(deepThought)
 ```
 
 We may now use the `parse` function to transform `process.argv` arrays:
@@ -353,8 +353,8 @@ const docs = usage([
 ])
 ```
 
-We can use `shargs-usage` to automatically generate a usage documentation based on command-line option definitions
-(e.g. `script` from before).
+We can use `shargs-usage` to automatically generate a usage documentation based on a command definition
+(e.g. `deepThought` from before).
 The module provides components generally found in usage documentations of popular tools, like:
 
 1.  A `synopsis`, summarizing available options: e.g. `deepThought (<question>) [-a|--answer] [-h|--help]`.
@@ -364,10 +364,10 @@ Note that `shargs-usage` is declarative:
 We only specify what components our usage documentation should have.
 The details on how exactly those components transform command-line options into text is hidden away.
 
-We may now generate and print a usage documentation for `script`:
+We may now generate and print a usage documentation for `deepThought`:
 
 ```js
-const usageText = docs(script)
+const usageText = docs(deepThought)
 
 const style = {
   line: [{width: 80}],
@@ -396,7 +396,7 @@ Ask the Ultimate Question.
 ```
 
 At this point you have seen the core of what shargs does.
-Some topics like `commands`, command-specific and asynchronous parsers,
+Some topics like [`subcommand`](#subcommand)s, command-specific and asynchronous parsers,
 and many more parser stages and usage functions are yet to come.
 They are described in detail in the following sections.
 
@@ -405,7 +405,7 @@ They are described in detail in the following sections.
 This documentation encompasses four different shargs modules:
 
 1.  [`shargs-opts`][shargs-opts] is documented in [Command-line Options](#command-line-options).
-2.  [`shargs`][shargs] is documented in [The `parser` Function](#the-parser-function).
+2.  [`shargs`][shargs] is documented in [The `parser` Function](#the-parserSync-function).
 3.  [`shargs-parser`][shargs-parser] is documented in [Command-line Parsers](#command-line-parsers).
 4.  [`shargs-usage`][shargs-usage] is documented in [Automatic Usage Documentation Generation](#automatic-usage-documentation-generation).
 
@@ -456,8 +456,8 @@ Shargs defines many different types of command-line options represented by objec
 <code><a href="#types">types</a></code> must be <code>undefined</code>.
 </td>
 </tr>
-<tr name="command-option">
-<td><a href="#command-option">Command Option</a></td>
+<tr name="subcommand-option">
+<td><a href="#subcommand-option">Subcommand Option</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#args">args</a>, <a href="#opts">opts</a>}</code></td>
 <td>
 <code><a href="#key">key</a></code> and <code><a href="#args">args</a></code> must be defined.
@@ -492,8 +492,8 @@ and <code><a href="#args">args</a></code> must be <code>undefined</code>.
 <code><a href="#types">types</a></code> must be <code>undefined</code>.
 </td>
 </tr>
-<tr name="program-pos-arg">
-<td><a href="#program-pos-arg">Program Positional Argument</a></td>
+<tr name="command-pos-arg">
+<td><a href="#command-pos-arg">Command Positional Argument</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#opts">opts</a>}</code></td>
 <td>
 <code><a href="#key">key</a></code> must be defined,
@@ -515,22 +515,22 @@ Since writing objects following these rules by hand can be tedious,
 [`shargs-opts`][shargs-opts] gives you a nice and simple type-based DSL for defining valid command-line options:
 
 ```js
-const {command, flag, number, program} = require('shargs-opts')
+const {subcommand, command, flag, number} = require('shargs-opts')
 
 const opts = [
-  command(askOpts)('ask', ['ask'], {required: true, desc: 'Ask a question.'}),
+  subcommand(askOpts)('ask', ['ask'], {required: true, desc: 'Ask a question.'}),
   number('answer', ['-a', '--answer'], {defaultValues: [42], desc: 'The answer.'}),
   flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
 ]
 
-const script = program('deepThought', opts, {
+const deepThought = command('deepThought', opts, {
   desc: 'Deep Thought was created to come up with the Answer to ' +
         'The Ultimate Question of Life, the Universe, and Everything.'
 })
 ```
 
-In the example, using the type functions [`command`](#command), [`number`](#number), [`flag`](#flag),
-and [`program`](#program) guarantees the generation of valid objects.
+In the example, using the type functions [`subcommand`](#subcommand), [`number`](#number), [`flag`](#flag),
+and [`command`](#command) guarantees the generation of valid objects.
 
 #### Type Functions
 
@@ -620,40 +620,41 @@ const boolPos = (key, fields) => ({
 </details>
 </td>
 </tr>
-<tr name="command">
+<tr name="subcommand">
 <td>
-<code name="program"><a href="#command">command</a>(opts)(key, args, fields)</code><br />
-<code><a href="#program">program</a>(key, opts, fields)</code>
+<code name="command"><a href="#subcommand">subcommand</a>(opts)(key, args, fields)</code><br />
+<code><a href="#command">command</a>(key, opts, fields)</code>
 </td>
 <td>
 <details>
 <summary>
-<code>command</code> generates a <a href="#command-option">command option</a>,
-while <code>program</code> generates a <a href="#program-pos-arg">program positional argument</a>.
+<code>subcommand</code> generates a <a href="#subcommand-option">subcommand option</a>,
+while <code>command</code> generates a <a href="#command-pos-arg">command positional argument</a>.
 These types represent command-line programs like <code>git commit</code> or <code>git push</code>,
-where a <i>parent</i> program (<code>git</code>) has different <i>child</i> commands
+where a <i>parent</i> command (<code>git</code>) has different <i>child</i> subcommands
 (<code>commit</code> and <code>push</code>) for specific tasks.
-<code>command</code>'s and <code>program</code>'s <code><a href="#opts">opts</a></code> fields
+<code>subcommand</code>'s and <code>command</code>'s <code><a href="#opts">opts</a></code> fields
 are arrays of command-line options used to parse their <code><a href="#values">values</a></code>.
-Commands may have their own <a href="#parsers">command-specific parsers</a>
-or are parsed by their parent <code>program</code>'s or <code>command</code>'s parser.
-<code>program</code> or <code>command</code> values are either terminated by the end of the input or by <code>--</code>.
+Subcommands may have their own <a href="#parsers">command-specific parsers</a>
+or are parsed by <code>command</code>'s parser.
+<code>command</code> or <code>subcommand</code> values are either terminated by the end of the input
+or by <code>--</code>.
 </summary>
 
 <br />
 
-`command` returns the following object:
+`subcommand` returns the following object:
 
 ```js
-const command = opts => (key, args, fields) => ({
+const subcommand = opts => (key, args, fields) => ({
   key, args, opts, ...fields
 })
 ```
 
-`program` returns the following object:
+`command` returns the following object:
 
 ```js
-const program = (key, opts, fields) => ({
+const command = (key, opts, fields) => ({
   key, opts, ...fields
 })
 ```
@@ -825,7 +826,7 @@ Apart from [`key`](#key), [`args`](#args), [`types`](#types), [`opts`](#opts), a
 that you have already seen and that determine an option's type,
 command-line option objects may be given any other <code>fields</code>,
 that may be used to provide information to parser stages
-(e.g. [`only`](#only), [`reverse`](#reverse)),
+(e.g. [`defaultValues`](#defaultValues), [`only`](#only)),
 or to provide descriptions for usage documentation generation
 (e.g. <code><a href="#desc">desc</a></code>, <code><a href="#descArg">descArg</a></code>).
 If you wish to write your own parser stages, go ahead and define your own fields.
@@ -875,12 +876,12 @@ are mutually exclusive.
 <td><code><a href="#defaultValues">defaultValues</a></code></td>
 <td>*</td>
 <td>
-<code>defaultValues</code> defines values for command-line options
-that are used if no <code><a href="#values">values</a></code> are supplied.
-The type of <code>defaultValues</code>' values depends on the command-line option type:
-<a href="#command-option">Command options</a> may take any value.
-<a href="#flag-option">Flag options</a>' values have to be a count object
-(e.g. <code>{type: 'flag', count: 2}</code>) whose <code>count</code> field may be any number.
+<code>defaultValues</code> defines default values for command-line options.
+They are used by the <code><a href="#setDefaultValues">setDefaultValues</a></code> parser stage
+that sets the <code>values</code> field if no <code><a href="#values">values</a></code> are supplied.
+The <code>defaultValues</code>' type depends on the command-line option type:
+<a href="#subcommand-pos-args">Subcommands</a> takes the same array of options as <code><a href="#opts">opts</a></code>.
+<a href="#flag-option">Flag options</a>' values have to be a number.
 All other options take an array of values,
 that must have the same length as their <code><a href="#types">types</a></code> field.
 </td>
@@ -936,7 +937,7 @@ are mutually inclusive.
 <td>string</td>
 <td>
 <code>key</code> defines the name of a command-line option.
-It is used by the <code><a href="#the-parser-function">parser</a></code> function
+It is used by the <code><a href="#the-parserSync-function">parser</a></code> function
 as a field name for the parsed values in the resulting <code>args</code> object.
 Most command-line options should have a unique <code>key</code> to avoid collisions with other options.
 However, if two different options describe the same result field, it may make sense to give them a shared key.
@@ -984,9 +985,8 @@ and <code><a href="#program">program</a></code>s.
 <td>boolean</td>
 <td>
 <code>required</code> defines whether a command-line option has to be present or not.
-It is used by the <code><a href="#requireOpts">requireOpts</a></code> stage that reports an error,
-if a <code>required</code> option does not have <code><a href="#values">values</a></code>
-or <code><a href="#defaultValues">defaultValues</a></code>.
+It is used by the <code><a href="#requireOpts">requireOpts</a></code> stage that reports an error
+if a <code>required</code> option does not have <code><a href="#values">values</a></code>.
 A positional argument (<code>*Pos</code>) can only be <code>required</code>,
 if all previously defined positional arguments are <code>required</code> as well.
 The <code><a href="#synopsis">synopsis</a></code>, <code><a href="#synopses">synopses</a></code>,
@@ -999,10 +999,9 @@ and their <code>*With</code> versions mark <code>required</code> options.
 <td><code><a href="#reverse">reverse</a></code></td>
 <td>boolean</td>
 <td>
-<code>reverse</code> defines whether a given option should be reversed by
+<code>reverse</code> defines whether the <code><a href="#values">values</a></code> of a given option should be reversed by
 the <code><a href="#reverseBools">reverseBools</a></code> or <code><a href="#reverseFlags">reverseFlags</a></code>
-parser stages, that operate on
-<code><a href="#values">values</a></code> as well as <code><a href="#defaultValues">defaultValues</a></code>.
+parser stages.
 </td>
 </tr>
 <tr name="types">
@@ -1017,7 +1016,7 @@ and <a href="#array-option">array options</a>' and <a href="#array-pos-arg">arra
 <code>types</code> must be <code>[_, _, ...]</code>,
 where <code>_</code> is the name of a type given as a string.
 <a href="#variadic-option">Variadic options</a>, <a href="#variadic-pos-arg">variadic positional arguments</a>,
-<a href="#command-option">command options</a>, and <a href="#program-pos-arg">program positional arguments</a>
+<a href="#subcommand-option">subcommand options</a>, and <a href="#command-pos-arg">command positional arguments</a>
 must not have a <code>types</code> field.
 <code>types</code> is also used by the
 <code><a href="#optsList">optsList</a></code>, <code><a href="#optsLists">optsLists</a></code>,
@@ -1044,7 +1043,7 @@ The length of a <code>values</code>' array depends on the command-line option ty
 must each have <code>values</code> of length <code>1</code>.
 <a href="#array-option">Array options</a>' and <a href="#array-pos-arg">array positional arguments</a>'
 <code>values</code> field must match their <code><a href="#types">types</a></code> in length.
-A , <a href="#command-option">command option</a>'s, <a href="#program-pos-arg">program positional argument</a>'s,
+A , <a href="#subcommand-option">subcommand option</a>'s, <a href="#command-pos-arg">command positional argument</a>'s,
 <a href="#variadic-option">variadic option</a>'s, and <a href="#variadic-pos-arg">variadic positional argument</a>'s
 <code>values</code> may have any number of entries.
 </td>
@@ -1116,13 +1115,13 @@ by adding <code><a href="#args">args</a></code>.
 Example:
 
 ```js
-const {program, stringPos} = require('shargs-opts')
+const {command, stringPos} = require('shargs-opts')
 
 const opts = [stringPos('question')]
 
 const args = ['deepThought', 'D']
 
-const deepThought = program('deepThought', opts)
+const deepThought = command('deepThought', opts)
 
 posArgToOpt(args)(deepThought)
 ```
@@ -1130,9 +1129,9 @@ posArgToOpt(args)(deepThought)
 Is the same as:
 
 ```js
-const {command} = require('shargs-opts')
+const {subcommand} = require('shargs-opts')
 
-command(opts)('deepThought', args)
+subcommand(opts)('deepThought', args)
 ```
 
 </details>
@@ -1140,47 +1139,35 @@ command(opts)('deepThought', args)
 </tr>
 </table>
 
-### The `parser` Function
+### The `parserSync` Function
 
-The `parser` function is [`shargs`][shargs]' core abstraction and (almost) its only export.
+The `parserSync` function is [`shargs`][shargs]' core abstraction.
 It may be used entirely without [`shargs-opts`][shargs-opts] and [`shargs-parser`][shargs-parser],
 e.g. with manually written option objects and parser stages, or with other option DSL or parser stage libraries.
-Up to this point, we have already seen some of the things, `parser` does, and others have been hinted at,
+Up to this point, we have already seen some of the things, `parserSync` does, and others have been hinted at,
 but this section finally paints the whole picture:
 
 ```js
-const {parser} = require('shargs')
+const {parserSync} = require('shargs')
 const {cast, flagsAsBools, requireOpts, restrictToOnly} = require('shargs-parser')
 const {reverseFlags, splitShortOpts} = require('shargs-parser')
 
-const checks = {
-  opts: [requireOpts]
-}
-
-const askChecks = {
-  opts: [requireOpts]
-}
-
 const stages = {
   argv: [splitShortOpts],
-  opts: [reverseFlags, restrictToOnly, cast],
+  opts: [requireOpts, reverseFlags, restrictToOnly, cast],
   args: [flagsAsBools]
 }
 
-const options = {checks: askChecks}
+const substages = {ask: []} // TODO
 
-const ask = parser(stages, options)
-
-const parsers = {ask}
-
-const deepThought = parser(stages, {checks, parsers, mode: 'sync'})
+const parser = parserSync(stages, substages)
 ```
 
-`parser` takes two parameters:
+`parserSync` takes two parameters:
 
 1.  A `stages` object that collects [parser stages](#command-line-parsers)
     and defines what transformations should be applied in which order.
-2.  An optional `options` object with [`checks`](#checks), [`parsers`](#parsers), and [`mode`](#mode) fields.
+2.  An optional `substages` object that defines subcommand-specific parser stages.
 
 #### `stages`
 
@@ -1194,270 +1181,227 @@ const stages = {
 }
 ```
 
-Shargs has five different `stages` that are applied in order to transform argument values (`process.argv`)
+Shargs has seven different processing steps that are applied in order to transform argument values (`process.argv`)
 to command-line options (`opts`) and finally to arguments (`args`):
 
 <table>
 <tr>
 <th></th>
-<th>Stage</th>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Function&nbsp;Signature&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Field</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Function&nbsp;Signature&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
-<tr name="argv-stages">
+<tr name="toArgv-stages">
 <td>1</td>
+<td><code><a href="#toArgv-stages">toArgv</a></code></td>
+<td align="right"><code>any => ({errs, argv})&nbsp;</code></td>
+<td>
+<code>argv</code> transforms any value into command-line argument values syntax
+(e.g. <code>['--help', '-a', '42']</code>).
+</td>
+</tr>
+<tr name="argv-stages">
+<td>2</td>
 <td><code><a href="#argv-stages">argv</a></code></td>
-<td align="right"><code>({errs, argv}) => ({errs, argv})</code></td>
+<td align="right"><code>Array<({errs, argv}) => ({errs, argv})></code></td>
 <td>
 <code>argv</code> stages modify command-line argument values
 (e.g. <code>['--help', '-a', '42']</code>).
 </td>
 </tr>
 <tr name="toOpts-stages">
-<td>2</td>
+<td>3</td>
 <td><code><a href="#toOpts-stages">toOpts</a></code></td>
-<td align="right"><code>opts => ({errs, argv}) => ({errs, opts})</code></td>
+<td align="right"><code>(opts, stages) => ({errs, argv}) => ({errs, opts})&nbsp;</code></td>
 <td>
 <code>toOpts</code> transforms command-line argument values syntax into command-line options syntax.
 </td>
 </tr>
 <tr name="opts-stages">
-<td>3</td>
+<td>4</td>
 <td><code><a href="#opts-stages">opts</a></code></td>
-<td align="right"><code>({errs, opts}) => ({errs, opts})</code></td>
+<td align="right"><code>Array<({errs, opts}) => ({errs, opts})></code></td>
 <td>
 <code>opts</code> stages modify command-line options
 (e.g. <code>{key: 'answer', args: ['-a'], types: ['number'], values: ['42']}</code>).
 </td>
 </tr>
 <tr name="toArgs-stages">
-<td>4</td>
+<td>5</td>
 <td><code><a href="#toArgs-stages">toArgs</a></code></td>
-<td align="right"><code>parsers => ({errs, opts}) => ({errs, args})</code></td>
+<td align="right"><code>({errs, opts}) => ({errs, args})&nbsp;</code></td>
 <td>
 <code>toArgs</code> transforms command-line options syntax into arguments objects syntax.
 </td>
 </tr>
 <tr name="args-stages">
-<td>5</td>
+<td>6</td>
 <td><code><a href="#args-stages">args</a></code></td>
-<td align="right"><code>({errs, args}) => ({errs, args})</code></td>
+<td align="right"><code>Array<({errs, args}) => ({errs, args})></code></td>
 <td>
 <code>args</code> stages modify arguments objects
 (e.g. <code>{_: [], answer: '42', help: {type: 'flag', count: 1}}</code>).
 </td>
 </tr>
+<tr name="fromArgs-stages">
+<td>7</td>
+<td><code><a href="#fromArgs-stages">fromArgs</a></code></td>
+<td align="right"><code>({errs, args}) => any&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code></td>
+<td>
+<code>fromArgs</code> transforms argument objects into any result value.
+</td>
+</tr>
 </table>
 
 The [`toOps`](#toOpts-stages) and [`toArgs`](#toArgs-stages) stages
-define the core behavior of [`parser`](#the-parser-function) and should not have to be changed in most use cases.
+define the core behavior of [`parserSync`](#the-parserSync-function) and should not have to be changed in most use cases.
 However, if you do have a use case that needs adjustments to those stages, you may carefully swap them out.
-The [`argv`](#argv-stages), [`opts`](#opts-stages), and [`args`](#args-stages) stages
+The [`argv`](#argv-stages), [`opts`](#opts-stages), and [`args`](#args-stages) steps
 are the actual developer-facing API for defining a parser's behavior using parser stages.
 
-If you read the stage's function signatures from top to bottom, you get a good impression of what `parser` does:
+If you read the function signatures from top to bottom, you get a good impression of what `parserSync` does.
 
-Most importantly, it takes a list of errors (`errs`) and passes them on the the next stage.
-If you write your own stages, it is of utmost importance to not interrupt this flow.
-You may ask why errors are not collected internally, to make sure they are passed:
-The answer is, to make stages possible that operate on errors,
-e.g. by combining several errors into one or by improving error messages.
+#### `substages`
 
-[`argv` stages](#argv-stages) transform `argv`s into other `argv`s,
-[`opts` stages](#opts-stages) transform `opts`' into other `opts`', and
-[`args` stages](#args-stages) transform `args`' into other `args`'.
-Nothing to see here, move along.
-
-The [`toOpts` stage's](#toOpts-stages) signature reveals more:
-It takes an `opts` array, supposably the one we passed to parser, and transforms `args` to `opts`.
-It is save to assume it uses the information defined in `opts` to drive this transformation.
-
-Finally, the [`toArgs` stage's](#toArgs-stages) signature:
-It takes several [`parsers`](#parsers), supposably from the `parsers` field in `options`, and transforms `opts` to `args`.
-Since parsers are used to transform [`opts`](#opts),
-it is save to assume that [`parsers`](#parsers) is used to recursively parse [`program`s](#program)
-and [`command`s](#command).
-
-#### `parsers`
-
-Let's have a look at the `parsers` field:
+Let's have a look at the `substages` field:
 
 ```js
-const checks = ...
-const askChecks = ...
 const stages = ...
 
-const options = {checks: askChecks}
+const substages = {ask: []} // TODO
 
-const ask = parser(stages, options)
-
-const parsers = {ask}
-
-const deepThought = parser(stages, {checks, parsers, mode: 'sync'})
+const parser = parserSync(stages, substages)
 ```
 
-`parsers` takes an object that assigns command-line [`parser`](#the-parser-function)s to keys, in this example `ask`.
-The name of the key is not coincidentally the same as the [`key`](#key) of the `ask` [`command`](#command) from before:
-`parsers` defines command-specific parsers.
+`substages` takes an object that assigns [`opts` stages](#opts-stages) to keys, in this example `ask`.
+The name of the key is not coincidentally the same as the [`key`](#key)
+of the `ask` [`subcommand`](#subcommand) from before:
+`substages` define custom `opts` stages for subcommands.
+That means, while some command-line arguments are parsed using the `opts` defined in `stages`,
+others (the ones that belong to the `ask` command) are parsed using the `opts` defined under the `ask` key.
 
-That means, while some command-line arguments are parsed using the `deepThought` parser,
-others (the ones that belong to the `ask` command) are parsed using the `ask` parser.
-In this example, `deepThought` and `ask` have the same `stages`, but different `checks`.
+The `substages` object may be deeply nested to account for [`subcommand`](#subcommand)s of [`subcommand`](#subcommand)s:
+E.g. if `ask` had a `question` subcommand, `{ask: {question: [...]}}` would assign custom `opts` to it.
+The `_` key is special in `substages`:
+It is used as a wildcard for any [`subcommand`](#subcommand) that does not have its own key.
+E.g. `{ask: {_: [...]}}` would work for question.
 
-If a [`command`](#command) does not have its own parser defined, it is parsed using its *parent's* parser,
-with one important exception:
-Only the `stages` are used, but not the `checks`.
-So if `ask` did not have its own parser, it would have been parsed with the `deepThought` parser, but without `checks`.
+#### Async Parsers
 
-The `parsers` object has a reserved key named `_`,
-that is used as a default parser for all commands that have no key in `parsers`.
-So if you need to define the same *child* parser for all [`command`s](#command), use the `_` key.
-
-#### `checks`
-
-We have learned in the [`parsers`](#parsers) section that checks are treated different than stages.
-But both actually look quite similar, and even have the same signatures.
-So why is that the case:
+The `parserSync` function has an asynchronous alternative called `parser`.
+It is used exactly like `parserSync`,
+but operates on [JavaScript Promises](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise):
 
 ```js
-const checks = {
-  opts: [requireOpts]
-}
+const {parser} = require('shargs')
 
-const askChecks = {
-  opts: [requireOpts]
-}
-
-const stages = {
-  argv: [splitShortOpts],
-  opts: [reverseFlags, restrictToOnly, cast],
-  args: [flagsAsBools]
-}
-```
-
-The difference between stages and checks is implicit and has to do with how they operate internally:
-While stages do both, transforming `argv`, `opts`, and `args` and reporting `errs`,
-checks never apply transformations and only report `errs`.
-
-And this causes problems in two different cases:
-
-First, when declaring the order of stages in `argv`, `opts`, and `args`:
-Checks verify that `argv`, `opts`, or `args` have a certain shape or follow certain rules.
-But applying stages may change that shape or bent those rules.
-And checks cannot possibly account for all those changes, especially if your own custom stages are involved.
-So there is only one way out:
-Checks must always be run before any stage is run, and by splitting checks and stages into two different objects,
-`parser` makes sure of that.
-
-Second, when recursively parsing [`command`](#command)s:
-While stages can report `errs` and then eliminate the cause of an error,
-checks are bound to repeat `errs` if parsers are applied more than once.
-And in some situations, parsers are applied several times, internally.
-So in order to avoid duplicating errors, checks are not applied recursively, in contrast to stages.
-
-#### `mode`
-
-The `mode` field defines whether a parser runs synchronously or asynchronously.
-So far, all examples we have seen have been synchronous parsers, because those are easier to reason about and to explain.
-However, if `mode` is set to `'async'`, a parser becomes asynchronous.
-But what does that mean exactly:
-
-```js
-const script = ...
-const checks = ...
+const deepThought = ...
 const stages = ...
-const parsers = ...
-const argv = ...
+const substages = ...
 
-const asyncDeepThought = parser(stages, {checks, parsers, mode: 'async'})
+const asyncParser = parser(stages, substages)
 
-const asyncParse = asyncDeepThought(script)
+const asyncParse = asyncParser(script)
 
-const asyncResults = parseAsync(argv)
+const asyncResults = asyncParse(argv)
 
 asyncResults.then(
   ({errs, args}) => ...
 )
 ```
 
-An asynchronous parser differs in two ways:
-It returns a [JavaScript Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-instead of an object,
-and its [`stages`](#stages) and [`checks`](#checks) parameters take the following types of parser stages:
+Also, `parser`'s [`stages`](#stages) and [`substages`](#substages) parameters
+take additional parser stages with Promise-based function signatures:
 
 <table>
 <tr>
 <th></th>
-<th>Stage</th>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Function&nbsp;Signature&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Field</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Function&nbsp;Signature&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
-<tr name="argv-stages-async">
+<tr name="toArgv-stages-async">
 <td>1</td>
-<td><code><a href="#argv-stages-async">argv</a></code></td>
+<td><code><a href="#toArgv-stages-async">toArgv</a></code></td>
 <td align="right">
-<code>({errs, argv}) => ({errs, argv})</code><br />
-<code>({errs, argv}) => Promise({errs, argv})</code>
+<code>({errs, any}) => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({errs, argv})&nbsp;</code><br />
+<code>({errs, any}) => Promise({errs, argv})&nbsp;</code>
 </td>
 <td>
-Async <code>argv</code> stages work just like their sync counterpart, but return a Promise.
+An async <code>toArgv</code> stage works just like its sync version, but returns a Promise.
+</td>
+</tr>
+<tr name="argv-stages-async">
+<td>2</td>
+<td><code><a href="#argv-stages-async">argv</a></code></td>
+<td align="right">
+<code>Array<({errs, argv}) => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({errs, argv})></code><br />
+<code>Array<({errs, argv}) => Promise({errs, argv})></code>
+</td>
+<td>
+Async <code>argv</code> stages work just like their sync version, but return a Promise.
 </td>
 </tr>
 <tr name="toOpts-stages-async">
-<td>2</td>
+<td>3</td>
 <td><code><a href="#toOpts-stages-async">toOpts</a></code></td>
 <td align="right">
-<code>opts => ({errs, argv}) => ({errs, opts})</code><br />
-<code>opts => ({errs, argv}) => Promise({errs, opts})</code>
+<code>(opts, stages) => ({errs, argv}) => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({errs, opts})&nbsp;</code><br />
+<code>(opts, stages) => ({errs, argv}) => Promise({errs, opts})&nbsp;</code>
 </td>
 <td>
-An async <code>toOpts</code> stage works just like its sync counterpart, but returns a Promise.
+An async <code>toOpts</code> stage works just like its sync version, but returns a Promise.
 </td>
 </tr>
 <tr name="opts-stages-async">
-<td>3</td>
+<td>4</td>
 <td><code><a href="#opts-stages-async">opts</a></code></td>
 <td align="right">
-<code>({errs, opts}) => ({errs, opts})</code><br />
-<code>({errs, opts}) => Promise({errs, opts})</code>
+<code>Array<({errs, opts}) => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({errs, opts})></code><br />
+<code>Array<({errs, opts}) => Promise({errs, opts})></code>
 </td>
 <td>
-Async <code>opts</code> stages work just like their sync counterpart, but return a Promise.
+Async <code>opts</code> stages work just like their sync version, but return a Promise.
 </td>
 </tr>
 <tr name="toArgs-stages-async">
-<td>4</td>
+<td>5</td>
 <td><code><a href="#toArgs-stages-async">toArgs</a></code></td>
 <td align="right">
-<code>parsers => ({errs, opts}) => ({errs, args})</code><br />
-<code>parsers => ({errs, opts}) => Promise({errs, args})</code>
+<code>({errs, opts}) => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({errs, args})&nbsp;</code><br />
+<code>({errs, opts}) => Promise({errs, args})&nbsp;</code>
 </td>
 <td>
-An async <code>toArgs</code> stage works just like its sync counterpart, but returns a Promise.
+An async <code>toArgs</code> stage works just like its sync version, but returns a Promise.
 </td>
 </tr>
 <tr name="args-stages-async">
-<td>5</td>
+<td>6</td>
 <td><code><a href="#args-stages-async">args</a></code></td>
 <td align="right">
-<code>({errs, args}) => ({errs, args})</code><br />
-<code>({errs, args}) => Promise({errs, args})</code>
+<code>Array<({errs, args}) => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({errs, args})></code><br />
+<code>Array<({errs, args}) => Promise({errs, args})></code>
 </td>
 <td>
-Async <code>args</code> stages work just like their sync counterpart, but return a Promise.
+Async <code>args</code> stages work just like their sync version, but return a Promise.
+</td>
+</tr>
+<tr name="fromArgs-stages-async">
+<td>7</td>
+<td><code><a href="#fromArgs-stages-async">fromArgs</a></code></td>
+<td align="right">
+<code>({errs, args}) => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><br />
+<code>({errs, args}) => Promise(any)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+</td>
+<td>
+An async <code>fromArgs</code> stage works just like its sync version, but returns a Promise.
 </td>
 </tr>
 </table>
 
 If you read the stages' function signatures from top to bottom,
-you get a good impression of what an asynchronous parser must do:
-
-In addition to [what a synchronous parser does](#stages), it needs a way to wait for Promises to resolve,
-before continuing processing functions.
-So it needs a way to chain functions returning objects, as well as functions returning Promises.
-Fortunately for us, this is exactly what [Promise.prototype.then][then] does.
-
-So, internally, an asynchronous shargs parser really differs only in one way from a synchronous parser:
+you get a good impression of what an asynchronous parser does.
+Internally, an asynchronous shargs parser really differs only in one way from a synchronous parser:
 Instead of using function composition, it uses [Promise.prototype.then][then] to chain parser stages.
 
 ### Command-line Parsers
@@ -1466,9 +1410,8 @@ You do not have to write parser stages by yourself.
 The [`shargs-parser`][shargs-parser] library offers a large collection of common parser stages, you can choose from.
 
 The parser stages presented here are split into *checks* and *stages*.
-You may read up on the difference between those two in the [`checks`](#checks) section.
-I give you only the short version here:
-Checks go into [`parser`](#the-parser-function)'s [`checks`](#checks) field, while stages go into [`stages`](#stages).
+While *checks* only report errors, *stages* also transform their `argv`, `opts`, or `args`.
+Usually, *checks* are used before *stages*.
 
 #### `argv` Checks
 
@@ -2239,7 +2182,6 @@ Result:
 <code><a href="#bool">bool</a></code>s with <code>['true']</code> or <code>['false']</code>
 <code><a href="#values">values</a></code> according to an <code>alt</code> mapping
 (e.g. <code>{true: ['yes'], false: ['no']}</code>).
-It also works on <code><a href="#defaultValues">defaultValues</a></code>.
 </summary>
 
 <br />
@@ -2283,7 +2225,7 @@ Result:
 <details>
 <summary>
 <code>cast</code> transforms string <code><a href="#values">values</a></code>
-and <code><a href="#defaultValues">defaultValues</a></code> into other JavaScript types (e.g. numbers, booleans)
+into other JavaScript types (e.g. numbers, booleans)
 according to the command-line options' <code><a href="#types">types</a></code>
 (e.g. <code>{key: 'answer', types: ['number'], values: ['42']}</code> is transformed to
 <code>{key: 'answer', types: ['number'], values: [42]}</code>).
@@ -2377,7 +2319,7 @@ Result:
 <details>
 <summary>
 <code>reverseBools</code> transforms
-<code><a href="#values">values</a></code> and <code><a href="#defaultValues">defaultValues</a></code> of
+<code><a href="#values">values</a></code> of
 <a href="#primitive-option">primitive options</a>,
 <a href="#primitive-pos-arg">primitive positional arguments</a>, <a href="#array-option">array options</a>,
 and <a href="#array-pos-arg">array positional arguments</a>
@@ -2422,7 +2364,7 @@ Result:
 <details>
 <summary>
 <code>reverseFlags</code> transforms
-<code><a href="#values">values</a></code> and <code><a href="#defaultValues">defaultValues</a></code> of
+<code><a href="#values">values</a></code> of
 <a href="#flag-option">flag options</a> whose <code><a href="#reverse">reverse</a></code> field is <code>true</code>
 by inverting the <code><a href="#flag">flag</a></code>'s value (e.g. <code>1</code> becomes <code>-1</code>).
 </summary>
@@ -2448,6 +2390,44 @@ Result:
 {
   opts: [
     flag('help', ['-h'], {reverse: true, values: [-1]})
+  ]
+}
+```
+
+</details>
+</td>
+</tr>
+<tr name="setDefaultValues">
+<td><code><a href="#setDefaultValues">setDefaultValues</a>({errs, opts})</code></td>
+<td>
+<details>
+<summary>
+<code>setDefaultValues</code> transforms all options that have no
+<code><a href="#values">values</a></code>, but <code><a href="#defaultValues">defaultValues</a></code>,
+by setting the <code><a href="#values">values</a></code>' value
+to the <code><a href="#defaultValues">defaultValues</a></code>' value.
+</summary>
+
+<br />
+
+Example:
+
+```js
+const opts = [
+  flag(['-f'], {defaultValues: [1]}),
+  bool(['-b'], {defaultValues: ['true']})
+]
+
+setDefaultValues({opts})
+```
+
+Result:
+
+```js
+{
+  opts: [
+    flag(['-f'], {values: [1]}),
+    bool(['-b'], {values: ['true']})
   ]
 }
 ```
@@ -3203,8 +3183,10 @@ const fs = {
 
 #### Advanced Parsers
 
++   [`toArgv` stage](#toArgv-stage)
 +   [`toOpts` stage](#toOpts-stage)
 +   [`toArgs` stage](#toArgs-stage)
++   [`fromArgs` stage](#fromArgs-stage)
 +   [Custom checks and stages](#custom-checks-and-stages)
 
 ### Automatic Usage Documentation Generation
@@ -5185,21 +5167,21 @@ const askOpts = [
 <td>
 <details>
 <summary>
-<code>script</code> from the <a href="#command-line-options">Command-line options</a> section.
+<code>deepThought</code> from the <a href="#command-line-options">Command-line options</a> section.
 </summary>
 
 <br />
 
 ```js
-const {command, flag, number, program} = require('shargs-opts')
+const {subcommand, flag, number, command} = require('shargs-opts')
 
 const opts = [
-  command(askOpts)('ask', ['ask'], {required: true, desc: 'Ask a question.'}),
+  subcommand(askOpts)('ask', ['ask'], {required: true, desc: 'Ask a question.'}),
   number('answer', ['-a', '--answer'], {defaultValues: [42], desc: 'The answer.'}),
   flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
 ]
 
-const script = program('deepThought', opts, {
+const deepThought = command('deepThought', opts, {
   desc: 'Deep Thought was created to come up with the Answer to ' +
         'The Ultimate Question of Life, the Universe, and Everything.'
 })
@@ -5212,33 +5194,25 @@ const script = program('deepThought', opts, {
 <td>
 <details>
 <summary>
-<code>deepThought</code> from the <a href="#the-parser-function"><code>parser</code> function</a> section.
+<code>parser</code> from the <a href="#the-parserSync-function"><code>parserSync</code> function</a> section.
 </summary>
 
 <br />
 
 ```js
-const {parser} = require('shargs')
+const {parserSync} = require('shargs')
 const {cast, flagsAsBools, requireOpts, restrictToOnly} = require('shargs-parser')
 const {reverseFlags, splitShortOpts} = require('shargs-parser')
 
-const checks = {
-  opts: [requireOpts]
-}
-
-const askChecks = {
-  opts: [requireOpts]
-}
-
 const stages = {
   argv: [splitShortOpts],
-  opts: [reverseFlags, restrictToOnly, cast],
+  opts: [requireOpts, reverseFlags, restrictToOnly, cast],
   args: [flagsAsBools]
 }
 
-const parsers = {ask: parser(stages, {checks: askChecks})}
+const substages = {ask: []} // TODO
 
-const deepThought = parser(stages, {checks, parsers, mode: 'sync'})
+const parser = parserSync(stages, substages)
 ```
 
 </details>
@@ -5295,10 +5269,10 @@ Then, a sample program written with shargs could be:
 
 ```js
 const argv = process.argv.slice(2)
-const {errs, args} = deepThought(script)(argv)
+const {errs, args} = parser(deepThought)(argv)
 
 if (args.help) {
-  const help = docs(script)(style)
+  const help = docs(deepThought)(style)
   console.log(help)
   process.exit(0)
 }
@@ -5367,76 +5341,26 @@ but feel free to skip it, start using shargs, and come back later.
 
 ### Advanced Command-line Parsers
 
-Although we have talked about [`parser`](#the-parser-function) in quite some detail
-in the [parser function](#the-parser-function) section
+Although we have talked about [`parser`](#the-parserSync-function) in quite some detail
+in the [parser function](#the-parserSync-function) section
 and about parser stages in [command-line parsers](#command-line-parsers),
 some topics are left to be discussed, here.
 
+#### `toArgv` Stage
+
+TODO
+
 #### `toOpts` Stage
 
-The `toOpts` stage consists only of the <code><a href="#toOpts-stage">toOpts</a>(opts)({errs, argv})</code> function.
-It transforms `argv` arrays into the [command-line options syntax](#command-line-options)
-by matching the `argv` array with the [`args`](#args) and [`types`](#types) fields from its `opts`.
-The order of the command-line options plays an important role, since `toOpts` works from left to right.
-
-While transforming, `toOpts` encounters the following cases:
-
-1.  **A string matches no `args` value:**\
-    In this case, `toOpts` returns a [rest option](#rest) (e.g. `{values: 'foo'}` if `foo` is the string).
-    If positional arguments are defined that have no [`values`](#values) yet,
-    the `args` value goes to the first positional argument, instead.
-    If the positional argument is variadic, it collects all remaining [rest](#rest) values.
-2.  **A string matches an `args` value of exactly one option:**\
-    Here, `toOpts` checks the [`types`](#types)' arity and reads a matching number of `argv`.
-    If too few `argv` are available, it returns a [rest option](#rest) like in case 1.
-    If enough `argv` are available,
-    it returns the matching option, augmented with a [`values`](#values) field holding the `argv`.
-3.  **A string matches an `args` value in several options:**\
-    If this happens, `toOpts` proceeds as in case 2 for each option, with one addition:
-    It checks if all options have the same arity as the first option.
-    All options with the same arities are added a [`values`](#values) field.
-    For all other options, an error is reported.
-
-The `toOpts` key of the [`parser`](#command-line-parsers)'s [`stages`](#stages) field
-lets users override the described behavior with their own functions.
-Do this with caution, as it may break defined parser checks and stages.
+TODO
 
 #### `toArgs` Stage
 
-Like [`toOpts`](#toOpts-stage), the `toArgs` stage takes just one function:
-<code><a href="#toArgs-stage">toArgs</a>(parsers)({errs, opts})</code>.
-It transforms `opts` arrays into an `args` object by applying three different stages in parallel:
+TODO
 
-1.  **Convert Non-commands:**\
-    It converts all options that are not [`command`](#command)s, resulting in an object of key-values-pairs.
-    The keys and values are taken from the option fields of the same name: [`key`](#key) and [`values`](#values).
-    If an option does not have a [`values`](#values) field, it is ignored for now.
-    All [rest options](#rest) (e.g. `{values: '--help'}`) are collected in the rest key `_` (e.g. `{_: ['--help']}`).
-2.  **Convert Commands:**\
-    Next, it converts all [`command`](#command) options.
-    In the following, we refer to the parser of this `toArgs` stage as the *parent parser*
-    and the [`command`](#command)s parsers as *child parsers*.
+#### `fromArgs` Stage
 
-    The [`command`](#command)s' [`values`](#values) fields still have `argv`s that need to be processed by a parser.
-    Thus, `toArgs` recursively calls the child parser of each [`command`](#command) to get `args` objects.
-
-    At this point, the `args` objects may still have non-empty rest keys (e.g. `{_: ['--help']}`).
-    These unmatched arguments may have been mistakenly assigned to the child command,
-    although they actually belong to the parent.
-    Therefore, non-empty rest keys are additionally parsed with the parent parser.
-
-    The results of the child parsers and the results of the parent parser run are combined into a nested `args` object.
-3.  **Set Default Values:**\
-    Up to this point, only options with [`values`](#values) were processed.
-    However, options without [`values`](#values) fields may still have [`defaultValues`](#defaultValues).
-    This stage sets the [`values`](#values) of options without [`values`](#values)
-    to the [`defaultValues`](#defaultValues).
-
-The resulting `args` objects of the three stages are then merged together.
-
-The `toArgs` key of the [`parser`](#command-line-parsers)'s [`stages`](#stages) field
-lets users override the described behavior with their own functions.
-Do this with caution, as it may break defined parser checks and stages.
+TODO
 
 #### Custom Checks and Stages
 
