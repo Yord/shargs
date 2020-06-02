@@ -2219,6 +2219,45 @@ test('parserSync works with duplicate subcommands by only taking the first', () 
   expect(res).toStrictEqual(exp)
 })
 
+test('parser works with duplicate subcommands by only taking the first', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: []}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '-a', 'Arc', '-a', 'Arc', '-a']
+
+  const errs = []
+
+  const res = await parser(stages, substages)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: {type: 'flag', count: 2},
+      Arc: {
+        _: [],
+        arc: {type: 'flag', count: 1}
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with duplicate subcommands by setting fromArgs to the identity function', () => {
   const identity = a => a
 
