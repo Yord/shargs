@@ -1,10 +1,11 @@
-const {fromArgs}   = require('./fromArgs')
-const {parserSync} = require('./parserSync')
-const {toArgs}     = require('./toArgs')
-const {toArgv}     = require('./toArgv')
-const {toOpts}     = require('./toOpts')
+const {fromArgs}           = require('./fromArgs')
+const {parser, parserSync} = require('./parserSync')
+const {toArgs}             = require('./toArgs')
+const {toArgv}             = require('./toArgv')
+const {toOpts}             = require('./toOpts')
 
 module.exports = {
+  parser,
   parserSync,
   fromArgs,
   toArgs,
