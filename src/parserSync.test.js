@@ -675,6 +675,37 @@ test('parserSync works with duplicate flag options by combining them', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('parser works with duplicate flag options by combining them', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '-a']
+
+  const errs = []
+
+  const res = await parser(stages, substages)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: {type: 'flag', count: 2}
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with primitive options', () => {
   const stages = {}
 
