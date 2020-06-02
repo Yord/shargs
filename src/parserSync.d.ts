@@ -37,6 +37,16 @@ export interface Stages<A, B> {
   fromArgs?:                                  (obj?: {errs?: Err[], args?: Args[]  }) => B
 }
 
+export interface AsyncStages<A, B> {
+  toArgv?:                                    (obj?: {errs?: Err[], any:   A       }) => Promise<{errs: Err[], argv: string[]}>
+  argv?:                                Array<(obj?: {errs?: Err[], argv?: string[]}) => Promise<{errs: Err[], argv: string[]}>>
+  toOpts?: (opts?: Opt[], stages?: Stages) => (obj?: {errs?: Err[], argv?: string[]}) => Promise<{errs: Err[], opts: Opt[]   }>
+  opts?:                                Array<(obj?: {errs?: Err[], opts?: Opt[]   }) => Promise<{errs: Err[], opts: Opt[]   }>>
+  toArgs?:                                    (obj?: {errs?: Err[], opts?: Opt[]   }) => Promise<{errs: Err[], args: Args[]  }>
+  args?:                                Array<(obj?: {errs?: Err[], args?: Args[]  }) => Promise<{errs: Err[], args: Args[]  }>>
+  fromArgs?:                                  (obj?: {errs?: Err[], args?: Args[]  }) => Promise<B>
+}
+
 export interface Substages {
   [key]: Array<(obj?: {errs?: Err[], opts?: Opt[]}) => {errs: Err[], opts: Opt[]}> | Substages
 }
@@ -45,3 +55,8 @@ const parserSync: <A, B>(stages?: Stages<A, B>, substages?: Substages) =>
                         (opt?: Opt) =>
                         (any?: A, errs?: Err[]) =>
                         {errs: Err[], any: B}
+
+const parser: <A, B>(stages?: Stages<A, B> | AsyncStages<A, B>, substages?: Substages) =>
+                    (opt?: Opt) =>
+                    (any?: A, errs?: Err[]) =>
+                    {errs: Err[], any: B}
