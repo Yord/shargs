@@ -4,7 +4,7 @@ const {fromArgs: FROM_ARGS} = require('./fromArgs')
 const {toArgs:   TO_ARGS}   = require('./toArgs')
 const {toArgv:   TO_ARGV}   = require('./toArgv')
 
-const parser = (stages = {}, substages = {}) => {
+const parserSync = (stages = {}, substages = {}) => {
   const {
     toArgv   = TO_ARGV,
     argv     = [],
@@ -27,7 +27,7 @@ const parser = (stages = {}, substages = {}) => {
 }
 
 module.exports = {
-  parser
+  parserSync
 }
 
 function recurseOpts (optsStages, substages) {

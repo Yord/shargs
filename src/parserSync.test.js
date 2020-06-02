@@ -1,6 +1,6 @@
-const {parser} = require('.')
+const {parserSync} = require('.')
 
-test('parser works with undefined stages', () => {
+test('parserSync works with undefined stages', () => {
   const stages = undefined
 
   const substages = {}
@@ -18,7 +18,7 @@ test('parser works with undefined stages', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -31,7 +31,7 @@ test('parser works with undefined stages', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with undefined substages', () => {
+test('parserSync works with undefined substages', () => {
   const stages = {}
 
   const substages = undefined
@@ -49,7 +49,7 @@ test('parser works with undefined substages', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -62,7 +62,7 @@ test('parser works with undefined substages', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with empty opts', () => {
+test('parserSync works with empty opts', () => {
   const stages = {}
 
   const substages = {}
@@ -76,7 +76,7 @@ test('parser works with empty opts', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -88,7 +88,7 @@ test('parser works with empty opts', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with undefined argv', () => {
+test('parserSync works with undefined argv', () => {
   const stages = {}
 
   const substages = {}
@@ -106,7 +106,7 @@ test('parser works with undefined argv', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -118,7 +118,7 @@ test('parser works with undefined argv', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with undefined errs', () => {
+test('parserSync works with undefined errs', () => {
   const stages = {}
 
   const substages = {}
@@ -136,7 +136,7 @@ test('parser works with undefined errs', () => {
 
   const errs = undefined
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -149,7 +149,7 @@ test('parser works with undefined errs', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with undefined stages', () => {
+test('parserSync works with undefined stages', () => {
   const stages = {
     toArgv:   undefined,
     argv:     undefined,
@@ -175,7 +175,7 @@ test('parser works with undefined stages', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -188,7 +188,7 @@ test('parser works with undefined stages', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with sample stages', () => {
+test('parserSync works with sample stages', () => {
   const stages = {
     toArgv:         ({errs, any }) => ({errs, argv: any }),
     argv:           [a             => a                  ],
@@ -214,7 +214,7 @@ test('parser works with sample stages', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -224,7 +224,7 @@ test('parser works with sample stages', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with empty stages', () => {
+test('parserSync works with empty stages', () => {
   const stages = {
     toArgv:         ({errs, any }) => ({}),
     argv:          [({errs, argv}) => ({})],
@@ -250,14 +250,14 @@ test('parser works with empty stages', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {}
 
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with stages returning undefined', () => {
+test('parserSync works with stages returning undefined', () => {
   const stages = {
     toArgv:         () => undefined,
     argv:          [() => undefined],
@@ -283,14 +283,14 @@ test('parser works with stages returning undefined', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = undefined
 
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with flag options', () => {
+test('parserSync works with flag options', () => {
   const stages = {}
 
   const substages = {}
@@ -308,7 +308,7 @@ test('parser works with flag options', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -321,7 +321,7 @@ test('parser works with flag options', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with duplicate flag options by combining them', () => {
+test('parserSync works with duplicate flag options by combining them', () => {
   const stages = {}
 
   const substages = {}
@@ -339,7 +339,7 @@ test('parser works with duplicate flag options by combining them', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -352,7 +352,7 @@ test('parser works with duplicate flag options by combining them', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with primitive options', () => {
+test('parserSync works with primitive options', () => {
   const stages = {}
 
   const substages = {}
@@ -370,7 +370,7 @@ test('parser works with primitive options', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -383,7 +383,7 @@ test('parser works with primitive options', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with duplicate primitive options by taking the first option', () => {
+test('parserSync works with duplicate primitive options by taking the first option', () => {
   const stages = {}
 
   const substages = {}
@@ -401,7 +401,7 @@ test('parser works with duplicate primitive options by taking the first option',
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -414,7 +414,7 @@ test('parser works with duplicate primitive options by taking the first option',
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with primitive positional arguments', () => {
+test('parserSync works with primitive positional arguments', () => {
   const stages = {}
 
   const substages = {}
@@ -432,7 +432,7 @@ test('parser works with primitive positional arguments', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -445,7 +445,7 @@ test('parser works with primitive positional arguments', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with duplicate positional arguments by adding remaining ones to the rest array', () => {
+test('parserSync works with duplicate positional arguments by adding remaining ones to the rest array', () => {
   const stages = {}
 
   const substages = {}
@@ -463,7 +463,7 @@ test('parser works with duplicate positional arguments by adding remaining ones 
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -476,7 +476,7 @@ test('parser works with duplicate positional arguments by adding remaining ones 
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with array options', () => {
+test('parserSync works with array options', () => {
   const stages = {}
 
   const substages = {}
@@ -494,7 +494,7 @@ test('parser works with array options', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -507,7 +507,7 @@ test('parser works with array options', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with duplicate array options by taking the first one', () => {
+test('parserSync works with duplicate array options by taking the first one', () => {
   const stages = {}
 
   const substages = {}
@@ -525,7 +525,7 @@ test('parser works with duplicate array options by taking the first one', () => 
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -538,7 +538,7 @@ test('parser works with duplicate array options by taking the first one', () => 
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with array positional arguments', () => {
+test('parserSync works with array positional arguments', () => {
   const stages = {}
 
   const substages = {}
@@ -556,7 +556,7 @@ test('parser works with array positional arguments', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -569,7 +569,7 @@ test('parser works with array positional arguments', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with duplicate array positional arguments by adding all remaining to the rest array', () => {
+test('parserSync works with duplicate array positional arguments by adding all remaining to the rest array', () => {
   const stages = {}
 
   const substages = {}
@@ -587,7 +587,7 @@ test('parser works with duplicate array positional arguments by adding all remai
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -600,7 +600,7 @@ test('parser works with duplicate array positional arguments by adding all remai
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with variadic options', () => {
+test('parserSync works with variadic options', () => {
   const stages = {}
 
   const substages = {}
@@ -618,7 +618,7 @@ test('parser works with variadic options', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -631,7 +631,7 @@ test('parser works with variadic options', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser does not work with duplicate variadic options without --', () => {
+test('parserSync does not work with duplicate variadic options without --', () => {
   const stages = {}
 
   const substages = {}
@@ -649,7 +649,7 @@ test('parser does not work with duplicate variadic options without --', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -662,7 +662,7 @@ test('parser does not work with duplicate variadic options without --', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with duplicate variadic options with -- by taking only the first one', () => {
+test('parserSync works with duplicate variadic options with -- by taking only the first one', () => {
   const stages = {}
 
   const substages = {}
@@ -680,7 +680,7 @@ test('parser works with duplicate variadic options with -- by taking only the fi
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -693,7 +693,7 @@ test('parser works with duplicate variadic options with -- by taking only the fi
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with variadic positional arguments', () => {
+test('parserSync works with variadic positional arguments', () => {
   const stages = {}
 
   const substages = {}
@@ -711,7 +711,7 @@ test('parser works with variadic positional arguments', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -724,7 +724,7 @@ test('parser works with variadic positional arguments', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with variadic positional arguments and --', () => {
+test('parserSync works with variadic positional arguments and --', () => {
   const stages = {}
 
   const substages = {}
@@ -742,7 +742,7 @@ test('parser works with variadic positional arguments and --', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -755,7 +755,7 @@ test('parser works with variadic positional arguments and --', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with duplicate variadic positional arguments and -- by taking only the first', () => {
+test('parserSync works with duplicate variadic positional arguments and -- by taking only the first', () => {
   const stages = {}
 
   const substages = {}
@@ -774,7 +774,7 @@ test('parser works with duplicate variadic positional arguments and -- by taking
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -787,7 +787,7 @@ test('parser works with duplicate variadic positional arguments and -- by taking
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with empty subcommands 1', () => {
+test('parserSync works with empty subcommands 1', () => {
   const stages = {}
 
   const substages = {}
@@ -805,7 +805,7 @@ test('parser works with empty subcommands 1', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -820,7 +820,7 @@ test('parser works with empty subcommands 1', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with empty subcommands 2', () => {
+test('parserSync works with empty subcommands 2', () => {
   const stages = {}
 
   const substages = {}
@@ -838,7 +838,7 @@ test('parser works with empty subcommands 2', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -853,7 +853,7 @@ test('parser works with empty subcommands 2', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with empty subcommands 3', () => {
+test('parserSync works with empty subcommands 3', () => {
   const stages = {}
 
   const substages = {}
@@ -871,7 +871,7 @@ test('parser works with empty subcommands 3', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -886,7 +886,7 @@ test('parser works with empty subcommands 3', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with subcommands', () => {
+test('parserSync works with subcommands', () => {
   const stages = {}
 
   const substages = {}
@@ -907,7 +907,7 @@ test('parser works with subcommands', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -923,7 +923,7 @@ test('parser works with subcommands', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with subcommands of subcommands', () => {
+test('parserSync works with subcommands of subcommands', () => {
   const stages = {
     opts: [
       ({errs, opts}) => ({
@@ -956,7 +956,7 @@ test('parser works with subcommands of subcommands', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -975,7 +975,7 @@ test('parser works with subcommands of subcommands', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with substages', () => {
+test('parserSync works with substages', () => {
   const stages = {}
 
   const substages = {
@@ -1012,7 +1012,7 @@ test('parser works with substages', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -1033,7 +1033,7 @@ test('parser works with substages', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with default substages', () => {
+test('parserSync works with default substages', () => {
   const stages = {}
 
   const substages = {
@@ -1068,7 +1068,7 @@ test('parser works with default substages', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -1089,7 +1089,7 @@ test('parser works with default substages', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with duplicate subcommands by only taking the first', () => {
+test('parserSync works with duplicate subcommands by only taking the first', () => {
   const stages = {}
 
   const substages = {}
@@ -1111,7 +1111,7 @@ test('parser works with duplicate subcommands by only taking the first', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -1128,7 +1128,7 @@ test('parser works with duplicate subcommands by only taking the first', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with duplicate subcommands by setting fromArgs to the identity function', () => {
+test('parserSync works with duplicate subcommands by setting fromArgs to the identity function', () => {
   const identity = a => a
 
   const stages = {
@@ -1154,7 +1154,7 @@ test('parser works with duplicate subcommands by setting fromArgs to the identit
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [],
@@ -1180,7 +1180,7 @@ test('parser works with duplicate subcommands by setting fromArgs to the identit
   expect(res).toStrictEqual(exp)
 })
 
-test('parser passes on errors', () => {
+test('parserSync passes on errors', () => {
   const stages = {}
 
   const substages = {}
@@ -1198,7 +1198,7 @@ test('parser passes on errors', () => {
     err
   ]
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [
@@ -1210,7 +1210,7 @@ test('parser passes on errors', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser passes on errors from argv stages', () => {
+test('parserSync passes on errors from argv stages', () => {
   const err = {code: 'Test', msg: 'This is a test.', info: {}}
 
   const withErr = ({errs, argv}) => ({errs: [...errs, err], argv})
@@ -1230,7 +1230,7 @@ test('parser passes on errors from argv stages', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [
@@ -1242,7 +1242,7 @@ test('parser passes on errors from argv stages', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser passes on errors from opts stages', () => {
+test('parserSync passes on errors from opts stages', () => {
   const err = {code: 'Test', msg: 'This is a test.', info: {}}
 
   const withErr = ({errs, opts}) => ({errs: [...errs, err], opts})
@@ -1262,7 +1262,7 @@ test('parser passes on errors from opts stages', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [
@@ -1275,7 +1275,7 @@ test('parser passes on errors from opts stages', () => {
 })
 
 
-test('parser passes on errors from args stages', () => {
+test('parserSync passes on errors from args stages', () => {
   const err = {code: 'Test', msg: 'This is a test.', info: {}}
 
   const withErr = ({errs, args}) => ({errs: [...errs, err], args})
@@ -1295,7 +1295,7 @@ test('parser passes on errors from args stages', () => {
 
   const errs = []
 
-  const res = parser(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv, errs)
 
   const exp = {
     errs: [
