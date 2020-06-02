@@ -1,4 +1,4 @@
-import {Err, Opt} from '../parserSync'
+import {Err, Opt} from '../parser'
 
 export const toOpts: (opt?: Opt) =>
                      (obj?: {errs?: Err[], argv?: string[]}) =>

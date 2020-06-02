@@ -1,5 +1,5 @@
 const {fromArgs}           = require('./fromArgs')
-const {parser, parserSync} = require('./parserSync')
+const {parser, parserSync} = require('./parser')
 const {toArgs}             = require('./toArgs')
 const {toArgv}             = require('./toArgv')
 const {toOpts}             = require('./toOpts')
