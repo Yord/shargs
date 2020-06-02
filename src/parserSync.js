@@ -1,5 +1,6 @@
 const {fromArgs: FROM_ARGS} = require('./fromArgs')
 const {pipe}                = require('./pipe')
+const {then}                = require('./then')
 const {toArgs:   TO_ARGS}   = require('./toArgs')
 const {toArgv:   TO_ARGV}   = require('./toArgv')
 const {toOpts:   TO_OPTS}   = require('./toOpts')
@@ -10,7 +11,14 @@ const Sync = {
   all: a => a
 }
 
+const Async = {
+  resolve: a => Promise.resolve(a),
+  then,
+  all: a => Promise.all(a)
+}
+
 module.exports = {
+  parser:     parser(Async),
   parserSync: parser(Sync)
 }
 
