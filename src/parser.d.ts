@@ -28,7 +28,7 @@ export interface Args {
 }
 
 export interface Stages<A, B> {
-  toArgv?:                                          (obj?: {errs?: Err[], any:   A       }) => {errs: Err[], argv: string[]}
+  toArgv?:                                                                         (any: A) => {errs: Err[], argv: string[]}
   argv?:                                      Array<(obj?: {errs?: Err[], argv?: string[]}) => {errs: Err[], argv: string[]}>
   toOpts?: (opts?: Opt[], stages?: Stages<A, B>) => (obj?: {errs?: Err[], argv?: string[]}) => {errs: Err[], opts: Opt[]   }
   opts?:                                      Array<(obj?: {errs?: Err[], opts?: Opt[]   }) => {errs: Err[], opts: Opt[]   }>
@@ -38,7 +38,7 @@ export interface Stages<A, B> {
 }
 
 export interface AsyncStages<A, B> {
-  toArgv?:                                          (obj?: {errs?: Err[], any:   A       }) => Promise<{errs: Err[], argv: string[]}>
+  toArgv?:                                                                         (any: A) => Promise<{errs: Err[], argv: string[]}>
   argv?:                                      Array<(obj?: {errs?: Err[], argv?: string[]}) => Promise<{errs: Err[], argv: string[]}>>
   toOpts?: (opts?: Opt[], stages?: Stages<A, B>) => (obj?: {errs?: Err[], argv?: string[]}) => Promise<{errs: Err[], opts: Opt[]   }>
   opts?:                                      Array<(obj?: {errs?: Err[], opts?: Opt[]   }) => Promise<{errs: Err[], opts: Opt[]   }>>
