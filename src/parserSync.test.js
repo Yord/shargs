@@ -1544,6 +1544,38 @@ test('parserSync works with duplicate variadic positional arguments and -- by ta
   expect(res).toStrictEqual(exp)
 })
 
+test('parser works with duplicate variadic positional arguments and -- by taking only the first', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc'}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc,
+      arc
+    ]
+  }
+
+  const argv = ['1', '2', '--', '3']
+
+  const errs = []
+
+  const res = await parser(stages, substages)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with empty subcommands 1', () => {
   const stages = {}
 
