@@ -474,7 +474,42 @@ test('parserSync works with empty stages', () => {
 
   const errs = []
 
+  // @ts-ignore
   const res = parserSync(stages, substages)(opt)(argv, errs)
+
+  const exp = {}
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with empty stages', async () => {
+  const stages = {
+    toArgv:         ({errs, any }) => ({}),
+    argv:          [({errs, argv}) => ({})],
+    toOpts:   () => ({errs, argv}) => ({}),
+    opts:          [({errs, opts}) => ({})],
+    toArgs:         ({errs, opts}) => ({}),
+    args:          [({errs, args}) => ({})],
+    fromArgs:       ({errs, args}) => ({})
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const errs = []
+
+  // @ts-ignore
+  const res = await parser(stages, substages)(opt)(argv, errs)
 
   const exp = {}
 
