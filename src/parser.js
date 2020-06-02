@@ -7,14 +7,14 @@ const {toOpts:   TO_OPTS}   = require('./toOpts')
 
 const Sync = {
   resolve: a => a,
-  then: pipe,
-  all: a => a
+  then:    pipe,
+  all:     a => a
 }
 
 const Async = {
   resolve: a => Promise.resolve(a),
-  then,
-  all: a => Promise.all(a)
+  then:    then,
+  all:     a => Promise.all(a)
 }
 
 module.exports = {
