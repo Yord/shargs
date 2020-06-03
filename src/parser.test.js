@@ -2,13 +2,13 @@ const {parser, parserSync} = require('.')
 
 test('parser works with async stages 1', async () => {
   const stages = {
-    toArgv:         ({errs, any }) => Promise.resolve(({errs, argv: any })),
-    argv:           [a             => Promise.resolve(a                  )],
-    toOpts:   () => ({errs, argv}) => Promise.resolve(({errs, opts: argv})),
-    opts:           [a             => Promise.resolve(a                  )],
-    toArgs:         ({errs, opts}) => Promise.resolve(({errs, args: opts})),
-    args:           [a             => Promise.resolve(a                  )],
-    fromArgs:       a              => Promise.resolve(a                   )
+    toArgv:                    any => Promise.resolve(({errs: [], argv: any })),
+    argv:           [a             => Promise.resolve(a                      )],
+    toOpts:   () => ({errs, argv}) => Promise.resolve(({errs,     opts: argv})),
+    opts:           [a             => Promise.resolve(a                      )],
+    toArgs:         ({errs, opts}) => Promise.resolve(({errs,     args: opts})),
+    args:           [a             => Promise.resolve(a                      )],
+    fromArgs:       a              => Promise.resolve(a                       )
   }
 
   const substages = {}
@@ -24,12 +24,10 @@ test('parser works with async stages 1', async () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
-    errs,
+    errs: [],
     args: argv
   }
 
@@ -56,9 +54,7 @@ test('parser works with async stages 2', async () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -87,9 +83,7 @@ test('parserSync works with undefined stages', () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -118,9 +112,7 @@ test('parser works with undefined stages', async () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -149,9 +141,7 @@ test('parserSync works with undefined substages', () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -180,9 +170,7 @@ test('parser works with undefined substages', async () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -207,9 +195,7 @@ test('parserSync works with empty opts', () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -233,9 +219,7 @@ test('parser works with empty opts', async () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -263,9 +247,7 @@ test('parserSync works with undefined argv', () => {
 
   const argv = undefined
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -293,76 +275,12 @@ test('parser works with undefined argv', async () => {
 
   const argv = undefined
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
     args: {
       _: []
-    }
-  }
-
-  expect(res).toStrictEqual(exp)
-})
-
-test('parserSync works with undefined errs', () => {
-  const stages = {}
-
-  const substages = {}
-
-  const arc = {key: 'arc', args: ['-a'], types: ['A']}
-
-  const opt = {
-    key: 'Foo',
-    opts: [
-      arc
-    ]
-  }
-
-  const argv = ['-a', '1']
-
-  const errs = undefined
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
-
-  const exp = {
-    errs: [],
-    args: {
-      _: [],
-      arc: '1'
-    }
-  }
-
-  expect(res).toStrictEqual(exp)
-})
-
-test('parser works with undefined errs', async () => {
-  const stages = {}
-
-  const substages = {}
-
-  const arc = {key: 'arc', args: ['-a'], types: ['A']}
-
-  const opt = {
-    key: 'Foo',
-    opts: [
-      arc
-    ]
-  }
-
-  const argv = ['-a', '1']
-
-  const errs = undefined
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
-
-  const exp = {
-    errs: [],
-    args: {
-      _: [],
-      arc: '1'
     }
   }
 
@@ -393,9 +311,7 @@ test('parserSync works with undefined stages', () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -432,9 +348,7 @@ test('parser works with undefined stages', async () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -449,12 +363,12 @@ test('parser works with undefined stages', async () => {
 
 test('parserSync works with sample stages', () => {
   const stages = {
-    toArgv:         ({errs, any }) => ({errs, argv: any }),
-    argv:           [a             => a                  ],
-    toOpts:   () => ({errs, argv}) => ({errs, opts: argv}),
-    opts:           [a             => a                  ],
-    toArgs:         ({errs, opts}) => ({errs, args: opts}),
-    args:           [a             => a                  ],
+    toArgv:                    any => ({errs: [], argv: any }),
+    argv:           [a             => a                      ],
+    toOpts:   () => ({errs, argv}) => ({errs,     opts: argv}),
+    opts:           [a             => a                      ],
+    toArgs:         ({errs, opts}) => ({errs,     args: opts}),
+    args:           [a             => a                      ],
     fromArgs:       a              => a
   }
 
@@ -471,9 +385,7 @@ test('parserSync works with sample stages', () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -485,12 +397,12 @@ test('parserSync works with sample stages', () => {
 
 test('parser works with sample stages', async () => {
   const stages = {
-    toArgv:         ({errs, any }) => ({errs, argv: any }),
-    argv:           [a             => a                  ],
-    toOpts:   () => ({errs, argv}) => ({errs, opts: argv}),
-    opts:           [a             => a                  ],
-    toArgs:         ({errs, opts}) => ({errs, args: opts}),
-    args:           [a             => a                  ],
+    toArgv:                    any => ({errs: [], argv: any }),
+    argv:           [a             => a                      ],
+    toOpts:   () => ({errs, argv}) => ({errs,     opts: argv}),
+    opts:           [a             => a                      ],
+    toArgs:         ({errs, opts}) => ({errs,     args: opts}),
+    args:           [a             => a                      ],
     fromArgs:       a              => a
   }
 
@@ -507,9 +419,7 @@ test('parser works with sample stages', async () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -543,10 +453,8 @@ test('parserSync works with empty stages', () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
   // @ts-ignore
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {}
 
@@ -577,10 +485,8 @@ test('parser works with empty stages', async () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
   // @ts-ignore
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {}
 
@@ -611,9 +517,7 @@ test('parserSync works with stages returning undefined', () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = undefined
 
@@ -644,9 +548,7 @@ test('parser works with stages returning undefined', async () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = undefined
 
@@ -669,9 +571,7 @@ test('parserSync works with flag options', () => {
 
   const argv = ['-a']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -700,9 +600,7 @@ test('parser works with flag options', async () => {
 
   const argv = ['-a']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -731,9 +629,7 @@ test('parserSync works with duplicate flag options by combining them', () => {
 
   const argv = ['-a', '-a']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -762,9 +658,7 @@ test('parser works with duplicate flag options by combining them', async () => {
 
   const argv = ['-a', '-a']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -793,9 +687,7 @@ test('parserSync works with primitive options', () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -824,9 +716,7 @@ test('parser works with primitive options', async () => {
 
   const argv = ['-a', '1']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -855,9 +745,7 @@ test('parserSync works with duplicate primitive options by taking the first opti
 
   const argv = ['-a', '1', '-a', '2']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -886,9 +774,7 @@ test('parser works with duplicate primitive options by taking the first option',
 
   const argv = ['-a', '1', '-a', '2']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -917,9 +803,7 @@ test('parserSync works with primitive positional arguments', () => {
 
   const argv = ['1']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -948,9 +832,7 @@ test('parser works with primitive positional arguments', async () => {
 
   const argv = ['1']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -979,9 +861,7 @@ test('parserSync works with duplicate positional arguments by adding remaining o
 
   const argv = ['1', '2']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1010,9 +890,7 @@ test('parser works with duplicate positional arguments by adding remaining ones 
 
   const argv = ['1', '2']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1041,9 +919,7 @@ test('parserSync works with array options', () => {
 
   const argv = ['-a', '1', '2']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1072,9 +948,7 @@ test('parser works with array options', async () => {
 
   const argv = ['-a', '1', '2']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1103,9 +977,7 @@ test('parserSync works with duplicate array options by taking the first one', ()
 
   const argv = ['-a', '1', '2', '-a', '3', '4']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1134,9 +1006,7 @@ test('parser works with duplicate array options by taking the first one', async 
 
   const argv = ['-a', '1', '2', '-a', '3', '4']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1165,9 +1035,7 @@ test('parserSync works with array positional arguments', () => {
 
   const argv = ['1', '2']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1196,9 +1064,7 @@ test('parser works with array positional arguments', async () => {
 
   const argv = ['1', '2']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1227,9 +1093,7 @@ test('parserSync works with duplicate array positional arguments by adding all r
 
   const argv = ['1', '2', '3', '4']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1258,9 +1122,7 @@ test('parser works with duplicate array positional arguments by adding all remai
 
   const argv = ['1', '2', '3', '4']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1289,9 +1151,7 @@ test('parserSync works with variadic options', () => {
 
   const argv = ['-a', '1', '2', '3']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1320,9 +1180,7 @@ test('parser works with variadic options', async () => {
 
   const argv = ['-a', '1', '2', '3']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1351,9 +1209,7 @@ test('parserSync does not work with duplicate variadic options without --', () =
 
   const argv = ['-a', '1', '2', '-a', '3']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1382,9 +1238,7 @@ test('parser does not work with duplicate variadic options without --', async ()
 
   const argv = ['-a', '1', '2', '-a', '3']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1413,9 +1267,7 @@ test('parserSync works with duplicate variadic options with -- by taking only th
 
   const argv = ['-a', '1', '2', '--', '-a', '3']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1444,9 +1296,7 @@ test('parser works with duplicate variadic options with -- by taking only the fi
 
   const argv = ['-a', '1', '2', '--', '-a', '3']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1475,9 +1325,7 @@ test('parserSync works with variadic positional arguments', () => {
 
   const argv = ['1', '2', '3']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1506,9 +1354,7 @@ test('parser works with variadic positional arguments', async () => {
 
   const argv = ['1', '2', '3']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1537,9 +1383,7 @@ test('parserSync works with variadic positional arguments and --', () => {
 
   const argv = ['1', '2', '--', '3']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1568,9 +1412,7 @@ test('parser works with variadic positional arguments and --', async () => {
 
   const argv = ['1', '2', '--', '3']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1600,9 +1442,7 @@ test('parserSync works with duplicate variadic positional arguments and -- by ta
 
   const argv = ['1', '2', '--', '3']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1632,9 +1472,7 @@ test('parser works with duplicate variadic positional arguments and -- by taking
 
   const argv = ['1', '2', '--', '3']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1663,9 +1501,7 @@ test('parserSync works with empty subcommands 1', () => {
 
   const argv = ['Arc', '1']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1696,9 +1532,7 @@ test('parser works with empty subcommands 1', async () => {
 
   const argv = ['Arc', '1']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1729,9 +1563,7 @@ test('parserSync works with empty subcommands 2', () => {
 
   const argv = ['1', 'Arc']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1762,9 +1594,7 @@ test('parser works with empty subcommands 2', async () => {
 
   const argv = ['1', 'Arc']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1795,9 +1625,7 @@ test('parserSync works with empty subcommands 3', () => {
 
   const argv = ['Arc', '--', '1']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1828,9 +1656,7 @@ test('parser works with empty subcommands 3', async () => {
 
   const argv = ['Arc', '--', '1']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1864,9 +1690,7 @@ test('parserSync works with subcommands', () => {
 
   const argv = ['Arc', '-a', '1']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1901,9 +1725,7 @@ test('parser works with subcommands', async () => {
 
   const argv = ['Arc', '-a', '1']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -1950,9 +1772,7 @@ test('parserSync works with subcommands of subcommands', () => {
 
   const argv = ['Arc', 'Bar', '-a', '1']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -2002,9 +1822,7 @@ test('parser works with subcommands of subcommands', async () => {
 
   const argv = ['Arc', 'Bar', '-a', '1']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -2058,9 +1876,7 @@ test('parserSync works with substages', () => {
 
   const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -2116,9 +1932,7 @@ test('parser works with substages', async () => {
 
   const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -2172,9 +1986,7 @@ test('parserSync works with default substages 1', () => {
 
   const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -2228,9 +2040,7 @@ test('parser works with default substages 1', async () => {
 
   const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -2284,9 +2094,7 @@ test('parserSync works with default substages 2', () => {
 
   const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -2340,9 +2148,7 @@ test('parser works with default substages 2', async () => {
 
   const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -2403,9 +2209,7 @@ test('parserSync works with default substages 3', () => {
 
   const argv = ['-a', '1', 'Arc', '-a', '2', 'Cat', '-a', '3', 'Bar', '-a', '4', 'Cat', '-a', '5']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -2474,9 +2278,7 @@ test('parser works with default substages 3', async () => {
 
   const argv = ['-a', '1', 'Arc', '-a', '2', 'Cat', '-a', '3', 'Bar', '-a', '4', 'Cat', '-a', '5']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -2544,9 +2346,7 @@ test('parserSync works with default substages 4', () => {
 
   const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3', 'Cat', '-a', '4']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -2610,9 +2410,7 @@ test('parser works with default substages 4', async () => {
 
   const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3', 'Cat', '-a', '4']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -2657,9 +2455,7 @@ test('parserSync works with duplicate subcommands by only taking the first', () 
 
   const argv = ['-a', '-a', 'Arc', '-a', 'Arc', '-a']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -2696,9 +2492,7 @@ test('parser works with duplicate subcommands by only taking the first', async (
 
   const argv = ['-a', '-a', 'Arc', '-a', 'Arc', '-a']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -2739,9 +2533,7 @@ test('parserSync works with duplicate subcommands by setting fromArgs to the ide
 
   const argv = ['-a', '-a', 'Arc', '-a', 'Arc', '1']
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -2791,9 +2583,7 @@ test('parser works with duplicate subcommands by setting fromArgs to the identit
 
   const argv = ['-a', '-a', 'Arc', '-a', 'Arc', '1']
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [],
@@ -2819,66 +2609,6 @@ test('parser works with duplicate subcommands by setting fromArgs to the identit
   expect(res).toStrictEqual(exp)
 })
 
-test('parserSync passes on errors', () => {
-  const stages = {}
-
-  const substages = {}
-
-  const opt = {
-    key: 'Foo',
-    opts: []
-  }
-
-  const argv = []
-
-  const err = {code: 'Test', msg: 'This is a test.', info: {}}
-
-  const errs = [
-    err
-  ]
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
-
-  const exp = {
-    errs: [
-      err
-    ],
-    args: {_: []}
-  }
-
-  expect(res).toStrictEqual(exp)
-})
-
-test('parser passes on errors', async () => {
-  const stages = {}
-
-  const substages = {}
-
-  const opt = {
-    key: 'Foo',
-    opts: []
-  }
-
-  const argv = []
-
-  const err = {code: 'Test', msg: 'This is a test.', info: {}}
-
-  const errs = [
-    err
-  ]
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
-
-  const exp = {
-    errs: [
-      err
-    ],
-    args: {_: []}
-  }
-
-  expect(res).toStrictEqual(exp)
-})
-
 test('parserSync passes on errors from argv stages', () => {
   const err = {code: 'Test', msg: 'This is a test.', info: {}}
 
@@ -2897,9 +2627,7 @@ test('parserSync passes on errors from argv stages', () => {
 
   const argv = []
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [
@@ -2929,9 +2657,7 @@ test('parser passes on errors from argv stages', async () => {
 
   const argv = []
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [
@@ -2961,9 +2687,7 @@ test('parserSync passes on errors from opts stages', () => {
 
   const argv = []
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [
@@ -2993,9 +2717,7 @@ test('parser passes on errors from opts stages', async () => {
 
   const argv = []
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [
@@ -3025,9 +2747,7 @@ test('parserSync passes on errors from args stages', () => {
 
   const argv = []
 
-  const errs = []
-
-  const res = parserSync(stages, substages)(opt)(argv, errs)
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [
@@ -3057,9 +2777,7 @@ test('parser passes on errors from args stages', async () => {
 
   const argv = []
 
-  const errs = []
-
-  const res = await parser(stages, substages)(opt)(argv, errs)
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
     errs: [
