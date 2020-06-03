@@ -294,48 +294,59 @@ Shargs defines many different types of command-line options represented by objec
 
 <table>
 <tr>
-<th>Type</th>
-<th>Interface</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interface&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Description</th>
 </tr>
 <tr name="flag-option">
 <td><a href="#flag-option">Flag Option</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#args">args</a>, <a href="#types">types</a>: []}</code></td>
+<td>A present or absent value.</td>
 </tr>
 <tr name="primitive-option">
 <td><a href="#primitive-option">Primitive Option</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#args">args</a>, <a href="#types">types</a>: [_]}</code></td>
+<td>A unary value given by argument.</td>
 </tr>
 <tr name="array-option">
 <td><a href="#array-option">Array Option</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#args">args</a>, <a href="#types">types</a>: [_, _, ...]}</code></td>
+<td>An array of length n given by argument.</td>
 </tr>
 <tr name="variadic-option">
 <td><a href="#variadic-option">Variadic Option</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#args">args</a>}</code></td>
+<td>A variable length array given by argument.</td>
 </tr>
 <tr name="subcommand-option">
 <td><a href="#subcommand-option">Subcommand Option</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#args">args</a>, <a href="#opts">opts</a>}</code></td>
+<td>An option group given by argument.</td>
 </tr>
 <tr name="primitive-pos-arg">
 <td><a href="#primitive-pos-arg">Primitive Positional Argument</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#types">types</a>: [_]}</code></td>
+<td>A unary value given by position.</td>
 </tr>
 <tr name="array-pos-arg">
 <td><a href="#array-pos-arg">Array Positional Argument</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#types">types</a>: [_, _, ...]}</code></td>
+<td>An array of length n given by position.</td>
 </tr>
 <tr name="variadic-pos-arg">
 <td><a href="#variadic-pos-arg">Variadic Positional Argument</a></td>
 <td><code>{<a href="#key">key</a>}</code></td>
+<td>A variable length array given by position.</td>
 </tr>
 <tr name="command-pos-arg">
 <td><a href="#command-pos-arg">Command Positional Argument</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#opts">opts</a>}</code></td>
+<td>An option group given by position.</td>
 </tr>
 <tr name="rest">
 <td><a href="#rest">Rest</a></td>
 <td><code>{<a href="#values">values</a>}</code></td>
+<td>An argument value of unknown type.</td>
 </tr>
 </table>
 
@@ -1158,7 +1169,7 @@ Several stages that modify command-line argument values:
 <td>
 <details>
 <summary>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(opts, stages) => {errs, argv} => {errs, opts}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;command => {errs, argv} => {errs, opts}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
 </summary>
 
 <br />
@@ -1413,8 +1424,8 @@ Several stages that modify command-line argument values:
 <td>
 <details>
 <summary>
-<code>&nbsp;&nbsp;&nbsp;&nbsp;(opts, stages) => {errs, argv} => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{errs, opts}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><br />
-&nbsp;<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(opts, stages) => {errs, argv} => Promise<{errs, opts}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;command => {errs, argv} => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{errs, opts}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><br />
+&nbsp;<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;command => {errs, argv} => Promise<{errs, opts}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
 </summary>
 
 <br />
