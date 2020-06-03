@@ -2307,6 +2307,62 @@ test('parserSync works with default substages 2', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('parser works with default substages 2', async () => {
+  const stages = {}
+
+  const substages = {
+    _: [
+      ({errs, opts}) => ({
+        errs,
+        opts: opts.map(opt =>
+          ({...opt, ...(opt.key === 'arc' ? {values: ['foo']} : {})})
+        )
+      })
+    ]
+  }
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [
+    arc
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc,
+    Bar
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3']
+
+  const errs = []
+
+  const res = await parser(stages, substages)(opt)(argv, errs)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1',
+      Arc: {
+        _: [],
+        arc: 'foo',
+        Bar: {
+          _: [],
+          arc: '3'
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with duplicate subcommands by only taking the first', () => {
   const stages = {}
 
