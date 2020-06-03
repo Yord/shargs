@@ -47,11 +47,11 @@ Shargs also has general qualities:
 Shargs' flexibility and adaptability sets it apart from
 [other command-line parser libraries](#comparison-to-related-libraries).
 
-## Quickstart
+## Getting Started
 
 <details>
 <summary>
-Describe your command and options:
+Describe your command and its options:
 
 <p>
 
@@ -70,13 +70,22 @@ const deepThought = command('deepThought', opts, {desc: 'Ask the Ultimate Questi
 </p>
 </summary>
 
+The `deepThought` command should have three command-line options:
+
+1.  A `required` string positional argument named `question`.
+2.  An `answer` number option specified with `-a` or `--answer` that should default to `42` if not given.
+3.  A `help` command-line flag given by `-h` or `--help`.
+
+You may use the `shargs-opts` module to get a nice DSL for describing our options.
+However, you could have also written them out as objects yourself or could have used a different DSL.
+
 Read up on the details in the [command-line options](#command-line-options) section.
 
 </details>
 
 <details>
 <summary>
-Declare a parser by choosing from 30+ parser stages:
+Declare a parser by composing parser stages:
 
 <p>
 
@@ -86,13 +95,25 @@ const {cast, flagsAsBools, requireOpts, splitShortOpts} = require('shargs-parser
 
 const parser = parserSync({
   argv: [splitShortOpts],
-  opts: [requireOpts, cast],
+  opts: [setDefaultValues, requireOpts, cast],
   args: [flagsAsBools]
 })
 ```
 
 </p>
 </summary>
+
+Shargs gives you fine-grained control over how the options are parsed.
+By using the `shargs` and `shargs-parser` modules, we have build the following `parser`:
+
+1.  Short option groups like `-cvzf` are transformed to `-c -v -z -f`.
+2.  Options with default values that were not provided are set.
+3.  It is verified that all required options have been given.
+4.  Strings are cast to other types, like numbers or booleans.
+5.  Command-line flags are transformed to booleans.
+
+Note that you did not tell `parser` how exactly to do those things.
+Everything is nice and declarative, and the details are hidden away in the parser stages.
 
 The [parser function](#the-parserSync-function)
 and [command-line parsers](#command-line-parsers) sections have all the details.
@@ -120,6 +141,17 @@ const docs = usage([
 </p>
 </summary>
 
+You may use `shargs-usage` to automatically generate a usage documentation based on a command definition
+(e.g. `deepThought` from before).
+The module provides components generally found in usage documentations of popular tools, like:
+
+1.  A `synopsis`, summarizing available options: e.g. `deepThought (<question>) [-a|--answer] [-h|--help]`.
+2.  An options list (`optsList`), describing option details in a tabular format.
+
+Note that `shargs-usage` is declarative:
+You only specify what components our usage documentation should have.
+The details on how exactly those components transform command-line options into text is hidden away.
+
 See the [automatic usage documentation generation](#automatic-usage-documentation-generation) section.
 
 </details>
@@ -140,6 +172,9 @@ const style = {
 </p>
 </summary>
 
+You can fine-tune how each documentation component is printed to the screen
+by providing column widths and paddings.
+
 The [style](#style) section provides more details.
 
 </details>
@@ -156,7 +191,7 @@ const argv = process.argv.slice(2)
 const {errs, args} = parser(deepThought)(argv)
 
 if (args.help) {
-  const help = docs(script)(style)
+  const help = docs(deepThought)(style)
   console.log(help)
 } else if (errs.length > 0) {
   errs.forEach(({code, msg}) => console.log(`${code}: ${msg}`))
@@ -167,6 +202,9 @@ if (args.help) {
 
 </p>
 </summary>
+
+The command-line option DSL, the parser DSL, and the usage documentation DSL combined
+give you a very flexible way to write command-line programs.
 
 Find out more in the [writing programs with shargs](#writing-programs-with-shargs) section.
 
@@ -243,166 +281,9 @@ See the [error codes](#error-codes) sections for a reference of all error codes.
 +   [shargs-example-async][shargs-example-async]
 +   [shargs-example-deepthought][shargs-example-deepthought]
 
-## Getting Started
-
-Shargs is a library for building command-line parsers.
-Parsers build with shargs can be tiny or huge, strict or best guess, extensively checked or not checked at all:
-You decide!
-
-`shargs` is the core library of an ecosystem of modules and does exactly one thing:
-It gives you the `parser` function that composes parsers from a list of parser stages.
-Each parser stage is a small step in the transformation of argument values (`process.argv`)
-to command-line options (`opts`) and finally to an object of parsed arguments (`args`):
-
-```js
-const {parserSync} = require('shargs')
-
-const parser = parserSync({argv: [], opts: [], args: []})
-```
-
-Although not fancy, `parser` from the example is already a working command-line parser.
-The empty `argv`, `opts`, and `args` arrays mark extension points, where parser stages may be plugged in.
-
-While you are encouraged to write your own parser stages,
-most of the time you get along by picking and choosing common ones from the `shargs-parser` module:
-
-```js
-const {parserSync} = require('shargs')
-const {cast, flagsAsBools, requireOpts, splitShortOpts} = require('shargs-parser')
-
-const parser = parserSync({
-  argv: [splitShortOpts],
-  opts: [requireOpts, cast],
-  args: [flagsAsBools]
-})
-```
-
-This version of `parser` does more advanced stuff:
-
-1.  It splits short option groups: e.g. `-cvzf` is transformed to `-c -v -z -f`.
-2.  It checks if all required options are set.
-3.  It casts strings to other types, like numbers or booleans.
-4.  It treats command-line flags as booleans.
-
-Note that we did not tell `parser` how exactly to do those things.
-Everything is nice and declarative, and the details are hidden away in the parser stages.
-
-At this point we have decided on the capabilities of our parser.
-We should now talk about what exactly we wish to parse:
-
-```js
-const {flag, number, command, stringPos} = require('shargs-opts')
-
-const opts = [
-  stringPos('question', {desc: 'Ask a question.', required: true}),
-  number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: [42]}),
-  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
-]
-
-const deepThought = command('deepThought', opts, {desc: 'Ask the Ultimate Question.'})
-```
-
-The `deepThought` command should have three command-line options:
-
-1.  A `required` string positional argument named `question`.
-2.  An `answer` number option specified with `-a` or `--answer` that should default to `42` if not given.
-3.  A `help` command-line flag given by `-h` or `--help`.
-
-We used the `shargs-opts` module to get a nice DSL for describing our options.
-However, we could have also written them out as objects ourselves or could have used a different DSL.
-
-Next, we tell our parser about the options:
-
-```js
-const parse = parser(deepThought)
-```
-
-We may now use the `parse` function to transform `process.argv` arrays:
-
-```js
-const argv = process.argv.slice(2)
-
-const {errs, args} = parse(argv)
-```
-
-If `argv` is `['-a', '5', 'What is the meaning of Life, the Universe, and Everything?']`,
-`args` would be:
-
-```js
-{
-  _: [],
-  answer: 5,
-  question: 'What is the meaning of Life, the Universe, and Everything?'
-}
-```
-
-Now it would be nice if our users would have a usage documentation to look up which command-line options are available.
-This is what the `--help` flag is for, after all.
-
-How about a documentation following this layout:
-
-```js
-const {desc, optsList, space, synopsis, usage} = require('shargs-usage')
-
-const docs = usage([
-  synopsis,
-  space,
-  optsList,
-  space,
-  desc
-])
-```
-
-We can use `shargs-usage` to automatically generate a usage documentation based on a command definition
-(e.g. `deepThought` from before).
-The module provides components generally found in usage documentations of popular tools, like:
-
-1.  A `synopsis`, summarizing available options: e.g. `deepThought (<question>) [-a|--answer] [-h|--help]`.
-2.  An options list (`optsList`), describing option details in a tabular format.
-
-Note that `shargs-usage` is declarative:
-We only specify what components our usage documentation should have.
-The details on how exactly those components transform command-line options into text is hidden away.
-
-We may now generate and print a usage documentation for `deepThought`:
-
-```js
-const usageText = docs(deepThought)
-
-const style = {
-  line: [{width: 80}],
-  cols: [{width: 25}, {width: 55}]
-}
-
-const help = usageText(style)
-
-console.log(help)
-```
-
-First, we tell `docs` about our command-line options.
-Then, we decide to `style` the documentation with a `width` of `80` characters per `line`.
-The `optsList` table's two `cols` should be `25` and `55` characters in `width`.
-
-Let's print `help` to the terminal:
-
-```bash
-deepThought (<question>) [-a|--answer] [-h|--help]                              
-                                                                                
-<question>               Ask a question. [required]                             
--a, --answer=<number>    The answer. [default: 42]                              
--h, --help               Print this help message and exit.                      
-                                                                                
-Ask the Ultimate Question.                                                      
-```
-
-At this point you have seen the core of what shargs does.
-Some topics like [`subcommand`](#subcommand)s, command-specific and asynchronous parsers,
-and many more parser stages and usage functions are yet to come.
-They are described in detail in the following sections.
-
 ## Documentation
 
-This documentation encompasses four different shargs modules:
+This documentation encompasses the following shargs modules:
 
 1.  [`shargs-opts`][shargs-opts] is documented in [Command-line Options](#command-line-options).
 2.  [`shargs`][shargs] is documented in [The `parser` Function](#the-parserSync-function).
