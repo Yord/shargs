@@ -1613,10 +1613,13 @@ Usually, *checks* are used before *stages*.
 <td>
 <details>
 <summary>
-<code>verifyArgv</code> checks, whether the <code>argv</code> adhere to the <code>rules</code> predicate.
+<code>verifyArgv</code> checks, whether the <code>argv</code> adhere to the passed <code>rules</code> predicate.
+</summary>
+
+<br />
+
 If <code>rules</code> returns <code>false</code>, it reports a <code>FalseArgvRules</code> error.
 If <code>rules</code> is not a function, it reports a <code>WrongArgvRulesType</code> error.
-</summary>
 
 <br />
 
@@ -1668,9 +1671,12 @@ Result:
 <summary>
 <code>equalsSignAsSpace</code> transforms arguments of the form <code>['--answer=42']</code>
 into <code>['--answer', '42']</code>.
+</summary>
+
+<br />
+
 It only removes the first <code>=</code>,
 so <code>['--question=1+2=3?']</code> is transformed into <code>['--question', '1+2=3?']</code>.
-</summary>
 
 <br />
 
@@ -1766,11 +1772,14 @@ Result:
 <summary>
 <code>traverseArgv</code> transforms arguments by applying a function <code>f</code>
 to each argument satisfying a predicate <code>p</code>.
+</summary>
+
+<br />
+
 While <code>p</code>'s signature is <code>arg => true|false</code>,
 <code>f</code>'s signature must be <code>(arg, index, argv) => ({errs = [], argv = []})</code>.
 Many other <code>argv</code> checks and stages are defined in terms of <code>traverseArgv</code>
 and it is of great help for writing custom <code>argv</code> stages.
-</summary>
 
 <br />
 
@@ -1826,13 +1835,16 @@ Result:
 <summary>
 <code>contradictOpts</code> checks, if options with a <code><a href="#contradicts">contradicts</a></code> list
 violate their constraints.
+</summary>
+
+<br />
+
 This is the case, if both, the option
 and an option from its <code><a href="#contradicts">contradicts</a></code> list, have
 <code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code>.
 In case of a violation, a <code>ContradictionDetected</code> error is reported.
 If <code><a href="#contradicts">contradicts</a></code> is not a list,
 it reports a <code>WrongContradictsType</code> error.
-</summary>
 
 <br />
 
@@ -1879,8 +1891,11 @@ Result:
 <summary>
 <code>demandACommand</code> checks, whether at least one <code><a href="#command">command</a></code>
 has <code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code>.
-If that is not the case, a <code>CommandRequired</code> error is reported.
 </summary>
+
+<br />
+
+If that is not the case, a <code>CommandRequired</code> error is reported.
 
 <br />
 
@@ -1928,13 +1943,16 @@ Result:
 <summary>
 <code>implyOpts</code> checks, if options with an <code><a href="#implies">implies</a></code> list
 violate their constraints.
+</summary>
+
+<br />
+
 This is the case, if the option has
 <code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code>,
 but an option from its <code><a href="#implies">implies</a></code> list has not.
 In case of a violation, a <code>ImplicationViolated</code> error is reported.
 If <code><a href="#implies">implies</a></code> is not a list,
 it reports a <code>WrongImpliesType</code> error.
-</summary>
 
 <br />
 
@@ -1979,12 +1997,14 @@ Result:
 <summary>
 <code>requireOpts</code> checks,
 if all options whose <code><a href="#required">required</a></code> field is <code>true</code> have
-<code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code>.
+<code><a href="#values">values</a></code>.
+</summary>
+
+<br />
+
 For each missing <code><a href="#required">required</a></code> option, a <code>RequiredOptionMissing</code> error
 is reported.
-If <code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code>
-is not an array, it reports a <code>RequiredOptionFormat</code> error.
-</summary>
+If <code><a href="#values">values</a></code> is not an array, it reports a <code>RequiredOptionFormat</code> error.
 
 <br />
 
@@ -2025,12 +2045,15 @@ Result:
 <summary>
 <code>suggestOpts</code> checks all <a href="#rest">rest</a> <code><a href="#values">values</a></code>,
 assuming they are in the <a href="#rest">rest</a> category because of spelling mistakes.
+</summary>
+
+<br />
+
 It collects all command-line options' <code><a href="#args">args</a></code>
 and computes a distance metric (currently Levenshtein distance) between each arg and each <a href="#rest">rest</a>.
 It reports the results in a <code>DidYouMean</code> error,
 suggesting probable <code><a href="#args">args</a></code> replacements for spelling mistakes
 <a href="#rest">rest</a> <code><a href="#values">values</a></code>.
-</summary>
 
 <br />
 
@@ -2100,14 +2123,17 @@ Did you mean: --age
 <summary>
 <code>validatePosArgs</code> checks, if defined positional arguments (<code>*Pos</code>) violate their rules for the
 <code><a href="#required">required</a></code> field
-or the position of <code><a href="#variadicPos">variadicPos</a></code>:
+or the position of <code><a href="#variadicPos">variadicPos</a></code>.
+</summary>
+
+<br />
+
 If a positional argument is <code><a href="#required">required</a></code>,
 all previously defined positional arguments must be <code><a href="#required">required</a></code>, as well,
 and no other positional arguments can be defined after a <code><a href="#variadicPos">variadicPos</a></code>.
 If rule one is violated, an <code>InvalidRequiredPositionalArgument</code> error is reported,
 and in case of a violation of the second rule, <code>validatePosArgs</code> reports an
 <code>InvalidVariadicPositionalArgument</code> error.
-</summary>
 
 <br />
 
@@ -2157,9 +2183,12 @@ Result:
 <summary>
 <code>verifyOpts</code> checks, whether the <code>opts</code> array adheres to the <code>rules</code> predicate.
 <code>rules</code> must have the following function signature: <code>opt => true|false</code>.
+</summary>
+
+<br />
+
 For each <code>opt</code> that returns <code>false</code>, a <code>FalseOptsRules</code> error is reported.
 If <code>rules</code> is not a function, <code>verifyOpts</code> reports a <code>WrongOptsRulesType</code> error.
-</summary>
 
 <br />
 
@@ -2209,16 +2238,17 @@ Result:
 <details>
 <summary>
 <code>verifyValuesArity</code> checks, whether <code>opts</code>'
-<code><a href="#values">values</a></code> and <code><a href="#defaultValues">defaultValues</a></code>
-fit their <code><a href="#types">types</a></code>.
-See the <code><a href="#values">values</a></code> and <code><a href="#defaultValues">defaultValues</a></code>
-documentations for the exact rules.
-If the lengths of <code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code> 
-and <code><a href="#types">types</a></code> do not match, an <code>InvalidArity</code> error is reported.
+<code><a href="#values">values</a></code> fit their <code><a href="#types">types</a></code>.
+</summary>
+
+<br />
+
+See the <code><a href="#values">values</a></code> documentations for the exact rules.
+If the lengths of <code><a href="#values">values</a></code> and <code><a href="#types">types</a></code> do not match,
+an <code>InvalidArity</code> error is reported.
 If the <code><a href="#types">types</a></code> field has an invalid value, an <code>InvalidTypes</code> error is reported
 and <code>verifyValuesArity</code> reports an <code>InvalidValues</code> error in case of invalid
 <code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code>.
-</summary>
 
 <br />
 
@@ -2312,6 +2342,10 @@ Result:
 into new command-line options that are introduced
 based on the <a href="#rest">rest</a> <code><a href="#values">values</a></code>
 (e.g. <code>{key: 'version', types: [], values: [1]}</code>).
+</summary>
+
+<br />
+
 It transforms single <a href="#rest">rest</a> options into a <code><a href="#flag">flag</a></code>
 and two consecutive <a href="#rest">rest</a> options into a <code><a href="#string">string</a></code>
 (e.g. <code>[{values: ['--not']}, {values: ['panic']}]</code> would become
@@ -2323,7 +2357,6 @@ if the first <a href="#rest">rest</a> is in short option format
 or in long option format (two minuses with any more characters, e.g. <code>--help</code>, <code>--verbose</code>).
 <code><a href="#bestGuessArgs">bestGuessArgs</a></code> is very similar to <code>bestGuessOpts</code>,
 but also considers non-consecutive rest <code><a href="#values">values</a></code>.
-</summary>
 
 <br />
 
@@ -2417,11 +2450,14 @@ into other JavaScript types (e.g. numbers, booleans)
 according to the command-line options' <code><a href="#types">types</a></code>
 (e.g. <code>{key: 'answer', types: ['number'], values: ['42']}</code> is transformed to
 <code>{key: 'answer', types: ['number'], values: [42]}</code>).
+</summary>
+
+<br />
+
 If <code><a href="#types">types</a></code> contains <code>'number'</code>, but <code><a href="#values">values</a></code>
 cannot be cast into a number, an <code>ArgumentIsNotANumber</code> error is reported.
 If <code><a href="#types">types</a></code> contains <code>'bool'</code>, but <code><a href="#values">values</a></code>
 is not <code>['true']</code> or <code>['false']</code>, it reports an <code>ArgumentIsNotABool</code> error.
-</summary>
 
 <br />
 
@@ -2461,10 +2497,13 @@ Result:
 <code>restrictToOnly</code> checks for each command-line option with both, <code><a href="#only">only</a></code>
 and <code><a href="#values">values</a></code> fields, if all values in <code><a href="#values">values</a></code>
 are also contained in <code><a href="#only">only</a></code>.
+</summary>
+
+<br />
+
 If values are not found in <code><a href="#only">only</a></code>,
 a <code>ValueRestrictionsViolated</code> error is reported for each value
 and the <code><a href="#values">values</a></code> field is removed from the option.
-</summary>
 
 <br />
 
@@ -2508,12 +2547,11 @@ Result:
 <summary>
 <code>reverseBools</code> transforms
 <code><a href="#values">values</a></code> of
-<a href="#primitive-option">primitive options</a>,
-<a href="#primitive-pos-arg">primitive positional arguments</a>, <a href="#array-option">array options</a>,
-and <a href="#array-pos-arg">array positional arguments</a>
+<a href="#primitive-option">primitive options</a> and
+<a href="#array-option">array options</a>
 whose <code><a href="#types">types</a></code> contain <code>'bool'</code> and whose
-<code><a href="#reverse">reverse</a></code> field is <code>true</code>.
-It replaces <code>'true'</code> with <code>'false'</code> and vice versa.
+<code><a href="#reverse">reverse</a></code> field is <code>true</code>
+by replacing <code>'true'</code> with <code>'false'</code> and vice versa.
 </summary>
 
 <br />
@@ -2592,7 +2630,7 @@ Result:
 <summary>
 <code>setDefaultValues</code> transforms all options that have no
 <code><a href="#values">values</a></code>, but <code><a href="#defaultValues">defaultValues</a></code>,
-by setting the <code><a href="#values">values</a></code>' value
+by setting the <code><a href="#values">values</a></code> field
 to the <code><a href="#defaultValues">defaultValues</a></code>' value.
 </summary>
 
@@ -2630,11 +2668,14 @@ Result:
 <summary>
 <code>traverseOpts</code> transforms <code>opts</code> by applying a function <code>f</code>
 to each option satisfying a predicate <code>p</code>.
+</summary>
+
+<br />
+
 While <code>p</code>'s signature is <code>opt => true|false</code>,
 <code>f</code>'s signature must be <code>(opt, index, opts) => ({errs = [], opts = []})</code>.
 Many other <code>opts</code> checks and stages are defined in terms of <code>traverseOpts</code>
 and it is of great help for writing custom <code>opts</code> stages.
-</summary>
 
 <br />
 
@@ -2690,7 +2731,7 @@ Result:
 <td>
 <details>
 <summary>
-<code>failRest</code> checks, whether the rest field <code>_</code> in <code>args</code> has any values
+<code>failRest</code> checks, whether the rest field <code>_</code> in <code>args</code> objects has values
 and reports an <code>UnexpectedArgument</code> error for each value found.
 </summary>
 
@@ -2730,11 +2771,14 @@ Result:
 <td>
 <details>
 <summary>
-<code>verifyArgs</code> checks, whether the <code>args</code> object adheres to the <code>rules</code> predicate.
+<code>verifyArgs</code> checks, whether each <code>args</code> object adheres to the <code>rules</code> predicate.
+</summary>
+
+<br />
+
 <code>rules</code> must have the following function signature: <code>arg => true|false</code>.
 For each arg that returns <code>false</code>, a <code>FalseArgsRules</code> error is reported.
 If <code>rules</code> is not a function, <code>verifyArgs</code> reports a <code>WrongArgsRulesType</code> error.
-</summary>
 
 <br />
 
@@ -2788,6 +2832,10 @@ Result:
 <summary>
 <code>bestGuessArgs</code> transforms rest field values (e.g. <code>{_: ['--version']}</code>)
 into new arguments (e.g. <code>{version: {type: 'flag', count: 1}}</code>).
+</summary>
+
+<br />
+
 It transforms single rest field values into a flag and two consecutive rest options into a string
 (e.g. <code>{_: ['--not', 'panic']}</code> would become <code>{not: 'panic'}</code>).
 It only assumes rest field values to be strings if the first rest is in short option format
@@ -2795,7 +2843,6 @@ It only assumes rest field values to be strings if the first rest is in short op
 or in long option format (two minuses with any more characters, e.g. <code>--help</code>, <code>--verbose</code>).
 <code>bestGuessArgs</code> is very similar to <code><a href="#bestGuessOpts">bestGuessOpts</a></code>,
 but also considers rest fields that were originally not in tandem.
-</summary>
 
 <br />
 
@@ -2843,8 +2890,11 @@ Result:
 <summary>
 <code>bestGuessCast</code> transforms string <code>args</code> into other JavaScript types
 by best guess based on their structure (e.g. <code>{answer: '42'}</code> becomes <code>{answer: 42}</code>).
-It supports numbers and booleans (e.g. <code>{help: 'true'}</code> becomes <code>{help: true}</code>).
 </summary>
+
+<br />
+
+It supports numbers and booleans (e.g. <code>{help: 'true'}</code> becomes <code>{help: true}</code>).
 
 <br />
 
@@ -2909,9 +2959,12 @@ Result:
 <details>
 <summary>
 <code>boolAsFlag</code> transforms the bool with <code>key</code> in <code>args</code> to a flag object.
+</summary>
+
+<br />
+
 If it is <code>true</code> it is transformed to <code>{type: 'flag', count: 1}</code>,
 otherwise to <code>{type: 'flag', count: -1}</code>.
-</summary>
 
 <br />
 
@@ -2944,9 +2997,12 @@ Result:
 <details>
 <summary>
 <code>boolsAsFlags</code> transforms all booleans in <code>args</code> to flag objects.
+</summary>
+
+<br />
+
 If a boolean is <code>true</code> it is transformed to <code>{type: 'flag', count: 1}</code>,
 otherwise to <code>{type: 'flag', count: -1}</code>.
-</summary>
 
 <br />
 
@@ -3012,11 +3068,14 @@ Result:
 <details>
 <summary>
 <code>flagAsBool</code> transforms the flag with <code>key</code> in <code>args</code> to a boolean value.
+</summary>
+
+<br />
+
 If its <code>count</code> is greater than <code>0</code> it is considered <code>true</code>,
 otherwise it is considered <code>false</code>
 (e.g. <code>{help: {type: 'flag', count: 1}}</code> becomes <code>{help: true}</code>,
 while <code>{help: {type: 'flag', count: -2}}</code> is transformed to <code>{help: false}</code>).
-</summary>
 
 <br />
 
@@ -3088,11 +3147,14 @@ Result:
 <details>
 <summary>
 <code>flagsAsBools</code> transforms all flags in <code>args</code> to boolean values.
+</summary>
+
+<br />
+
 All flags whose <code>count</code> is greater than <code>0</code> are considered <code>true</code>,
 while all other flags are considered <code>false</code>
 (e.g. <code>{help: {type: 'flag', count: 1}}</code> becomes <code>{help: true}</code>,
 while <code>{help: {type: 'flag', count: -2}}</code> is transformed to <code>{help: false}</code>).
-</summary>
 
 <br />
 
@@ -3165,6 +3227,10 @@ Result:
 <code>mergeArgs</code> transforms <code>args</code> by <i>flattening them</i>
 by recursively merging nested objects into their parent object
 (e.g. <code>{ask: {question: '42?'}, answer: 42}</code> becomes <code>{question: '42?', answer: 42}</code>).
+</summary>
+
+<br />
+
 A custom <code>merge</code> function may be passed with the following function signature:
 <code>(obj1 = {}, obj2 = {}) => {}</code>.
 The default <code>merge</code> function (if <code>merge</code> is <code>undefined</code>)
@@ -3172,7 +3238,6 @@ prefers keys from the parent object over keys from nested objects,
 but concatenates rest values (<code>_</code>) from both objects
 (e.g. <code>{_: ['foo'], answer: 42, ask: {_: ['bar'], answer: 23}}</code> becomes
 <code>{_: ['foo', 'bar'], answer: 42}</code>).
-</summary>
 
 <br />
 
@@ -3229,8 +3294,11 @@ Result:
 <details>
 <summary>
 <code>numberAsFlag</code> transforms the number with <code>key</code> in <code>args</code> to a flag object.
-The number is the flag's <code>count</code> (e.g. <code>42</code> becomes <code>{type: 'flag', count: 42}</code>).
 </summary>
+
+<br />
+
+The number is the flag's <code>count</code> (e.g. <code>42</code> becomes <code>{type: 'flag', count: 42}</code>).
 
 <br />
 
@@ -3263,8 +3331,11 @@ Result:
 <details>
 <summary>
 <code>numbersAsFlags</code> transforms all numbers in <code>args</code> to flag objects.
-The numbers are the flags' <code>count</code>s (e.g. <code>42</code> becomes <code>{type: 'flag', count: 42}</code>).
 </summary>
+
+<br />
+
+The numbers are the flags' <code>count</code>s (e.g. <code>42</code> becomes <code>{type: 'flag', count: 42}</code>).
 
 <br />
 
@@ -3298,6 +3369,10 @@ Result:
 <summary>
 <code>traverseArgs</code> transforms <code>args</code>
 by applying functions <code>fs</code> to each key/value pair based on the value's type.
+</summary>
+
+<br />
+
 <code>fs</code> supports the following types:
 <code>array</code>, <code>boolean</code>, <code>flag</code>, <code>function</code>, <code>null</code>,
 <code>number</code>, <code>object</code>, <code>string</code>, <code>undefined</code>, and <code>otherwise</code>.
@@ -3308,7 +3383,6 @@ while <code>object</code>'s default function applies <code>fs</code> to nested o
 is the signature for <code>fs</code> with fields for each type.
 Many other <code>args</code> checks and stages are defined in terms of <code>traverseArgs</code>
 and it is of great help for writing custom <code>args</code> stages.
-</summary>
 
 <br />
 
