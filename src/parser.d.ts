@@ -53,10 +53,10 @@ export interface Substages {
 
 const parserSync: <A, B>(stages?: Stages<A, B>, substages?: Substages) =>
                         (opt?: Opt) =>
-                        (any?: A, errs?: Err[]) =>
+                        (any?: A) =>
                         {errs: Err[], any: B}
 
 const parser: <A, B>(stages?: Stages<A, B> | AsyncStages<A, B>, substages?: Substages) =>
                     (opt?: Opt) =>
-                    (any?: A, errs?: Err[]) =>
+                    (any?: A) =>
                     {errs: Err[], any: B}

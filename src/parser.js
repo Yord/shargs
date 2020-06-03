@@ -34,7 +34,7 @@ function parser (Mode) {
       fromArgs = FROM_ARGS
     } = stages
   
-    return opt => (any, errs = []) => Mode.then(
+    return opt => Mode.then(
       toArgv,
       ...argv,
       toOpts(opt),
@@ -42,7 +42,7 @@ function parser (Mode) {
       toArgs,
       transformArgs(Mode)(args),
       fromArgs
-    )({errs, any})
+    )
   }
 }
 
