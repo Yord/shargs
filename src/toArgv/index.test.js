@@ -7,10 +7,10 @@ test('toArgv works for regular input', () => {
 
   const any = []
 
-  const res = toArgv({errs, any})
+  const res = toArgv(any)
 
   const exp = {
-    errs,
+    errs: [],
     argv: any
   }
 
@@ -28,45 +28,13 @@ test('toArgv works for undefined input', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('toArgv works for undefined errors', () => {
-  const any = []
+test('toArgv has sensible default for any inputs that are no string arrays', () => {
+  const any = 42
 
-  const res = toArgv({any})
+  const res = toArgv(any)
 
   const exp = {
     errs: [],
-    argv: any
-  }
-
-  expect(res).toStrictEqual(exp)
-})
-
-test('toArgv works for undefined argv', () => {
-  const errs = [
-    {code: 'Test', msg: 'This is a test.', info: {}}
-  ]
-
-  const res = toArgv({errs})
-
-  const exp = {
-    errs,
-    argv: []
-  }
-
-  expect(res).toStrictEqual(exp)
-})
-
-test('toArgv has sensible default for any inputs that are no string arrays', () => {
-  const errs = [
-    {code: 'Test', msg: 'This is a test.', info: {}}
-  ]
-
-  const any = 42
-
-  const res = toArgv({errs, any})
-
-  const exp = {
-    errs,
     argv: []
   }
 
