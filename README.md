@@ -297,103 +297,57 @@ They are the basis for its two main features:
 [Command-line parsers](#command-line-parsers)
 and [automatic usage documentation generation](#automatic-usage-documentation-generation).
 
-Shargs defines many different types of command-line options represented by objects following certain rules:
+Shargs defines many different types of command-line options represented by objects with the following interfaces:
 
 <table>
 <tr>
 <th>Type</th>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interface&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Rules</th>
+<th>Interface</th>
 </tr>
 <tr name="flag-option">
 <td><a href="#flag-option">Flag Option</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#args">args</a>, <a href="#types">types</a>: []}</code></td>
-<td>
-<code><a href="#key">key</a></code> and <code><a href="#args">args</a></code> must be defined.
-<code><a href="#types">types</a></code> must be an empty array.
-</td>
 </tr>
 <tr name="primitive-option">
 <td><a href="#primitive-option">Primitive Option</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#args">args</a>, <a href="#types">types</a>: [_]}</code></td>
-<td>
-<code><a href="#key">key</a></code> and <code><a href="#args">args</a></code> must be defined.
-<code><a href="#types">types</a></code> must be an array of length 1 with a string representing a type.
-</td>
 </tr>
 <tr name="array-option">
 <td><a href="#array-option">Array Option</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#args">args</a>, <a href="#types">types</a>: [_, _, ...]}</code></td>
-<td>
-<code><a href="#key">key</a></code> and <code><a href="#args">args</a></code> must be defined.
-<code><a href="#types">types</a></code> must be an array of at least length 2 with strings representing its types.
-</td>
 </tr>
 <tr name="variadic-option">
 <td><a href="#variadic-option">Variadic Option</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#args">args</a>}</code></td>
-<td>
-<code><a href="#key">key</a></code> and <code><a href="#args">args</a></code> must be defined.
-<code><a href="#types">types</a></code> must be <code>undefined</code>.
-</td>
 </tr>
 <tr name="subcommand-option">
 <td><a href="#subcommand-option">Subcommand Option</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#args">args</a>, <a href="#opts">opts</a>}</code></td>
-<td>
-<code><a href="#key">key</a></code> and <code><a href="#args">args</a></code> must be defined.
-<code><a href="#types">types</a></code> must be <code>undefined</code>
-and <code><a href="#opts">opts</a></code> must be defined.
-</td>
 </tr>
 <tr name="primitive-pos-arg">
 <td><a href="#primitive-pos-arg">Primitive Positional Argument</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#types">types</a>: [_]}</code></td>
-<td>
-<code><a href="#key">key</a></code> must be defined
-and <code><a href="#args">args</a></code> must be <code>undefined</code>.
-<code><a href="#types">types</a></code> must be an array of length 1 with a string representing a type.
-</td>
 </tr>
 <tr name="array-pos-arg">
 <td><a href="#array-pos-arg">Array Positional Argument</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#types">types</a>: [_, _, ...]}</code></td>
-<td>
-<code><a href="#key">key</a></code> must be defined
-and <code><a href="#args">args</a></code> must be <code>undefined</code>.
-<code><a href="#types">types</a></code> must be an array of at least length 2 with strings representing its types.
-</td>
 </tr>
 <tr name="variadic-pos-arg">
 <td><a href="#variadic-pos-arg">Variadic Positional Argument</a></td>
 <td><code>{<a href="#key">key</a>}</code></td>
-<td>
-<code><a href="#key">key</a></code> must be defined
-and <code><a href="#args">args</a></code> must be <code>undefined</code>.
-<code><a href="#types">types</a></code> must be <code>undefined</code>.
-</td>
 </tr>
 <tr name="command-pos-arg">
 <td><a href="#command-pos-arg">Command Positional Argument</a></td>
 <td><code>{<a href="#key">key</a>, <a href="#opts">opts</a>}</code></td>
-<td>
-<code><a href="#key">key</a></code> must be defined,
-<code><a href="#args">args</a></code> and <code><a href="#types">types</a></code> must be <code>undefined</code>,
-and <code><a href="#opts">opts</a></code> must be defined.
-</td>
 </tr>
 <tr name="rest">
 <td><a href="#rest">Rest</a></td>
 <td><code>{<a href="#values">values</a>}</code></td>
-<td>
-<code><a href="#key">key</a></code> must be <code>undefined</code>.
-<code><a href="#values">values</a></code> must be an array of length 1 with a string representing an unparsed value.
-</td>
 </tr>
 </table>
 
-Since writing objects following these rules by hand can be tedious,
-[`shargs-opts`][shargs-opts] gives you a nice and simple type-based DSL for defining valid command-line options:
+Since writing objects following these interfaces by hand can be tedious,
+[`shargs-opts`][shargs-opts] gives you a simple type-based DSL for defining valid command-line options:
 
 ```js
 const {subcommand, command, flag, number} = require('shargs-opts')
@@ -419,7 +373,7 @@ The following type functions are available:
 
 <table>
 <tr>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
 <tr name="array">
@@ -431,11 +385,14 @@ The following type functions are available:
 <details>
 <summary>
 <code>array</code> generates an <a href="#array-option">array option</a>,
-while <code>arrayPos</code> generates an <a href="#array-pos-arg">array positional argument</a>.
-These types represent arrays whose length is known in advance.
+while <code>arrayPos</code> generates an <a href="#array-pos-arg">array positional argument</a>,
+representing arrays whose length is known in advance.
+</summary>
+
+<br />
+
 The closely related <code><a href="#variadic">variadic</a></code>
 and <code><a href="#variadicPos">variadicPos</a></code> represent arrays with unknown lengths.
-</summary>
 
 <br />
 
@@ -467,8 +424,12 @@ const arrayPos = types => (key, fields) => ({
 <details>
 <summary>
 <code>bool</code> generates a <a href="#primitive-option">primitive option</a>,
-while <code>boolPos</code> generates a <a href="#primitive-pos-arg">primitive positional argument</a>.
-These types represent boolean values that may be <code>'true'</code> or <code>'false'</code>.
+while <code>boolPos</code> generates a <a href="#primitive-pos-arg">primitive positional argument</a>,
+representing the boolean values <code>'true'</code> and <code>'false'</code>.
+</summary>
+
+<br />
+
 Note that the values are represented as strings and you may want to <code><a href="#cast">cast</a></code> them.
 If you need more values representing <code>'true'</code> (e.g. <code>'t'</code>, <code>'yes'</code>)
 or <code>'false'</code> (e.g. <code>'F'</code>, <code>'no'</code>),
@@ -478,7 +439,6 @@ see <code><a href="#reverseBools">reverseBools</a></code>.
 If you need <code><a href="#flag">flag</a></code>s instead of <code>bool</code>s, have a look at the
 <code><a href="#boolAsFlag">boolAsFlag</a></code> and <code><a href="#boolsAsFlags">boolsAsFlags</a></code> 
 parser stages.
-</summary>
 
 <br />
 
@@ -511,16 +471,17 @@ const boolPos = (key, fields) => ({
 <summary>
 <code>subcommand</code> generates a <a href="#subcommand-option">subcommand option</a>,
 while <code>command</code> generates a <a href="#command-pos-arg">command positional argument</a>.
-These types represent command-line programs like <code>git commit</code> or <code>git push</code>,
-where a <i>parent</i> command (<code>git</code>) has different <i>child</i> subcommands
-(<code>commit</code> and <code>push</code>) for specific tasks.
+Combined, they enable commands to do multiple things like <code>git init</code>, <code>git commit</code>, and <code>git push</code>.
+</summary>
+
+<br />
+
 <code>subcommand</code>'s and <code>command</code>'s <code><a href="#opts">opts</a></code> fields
 are arrays of command-line options used to parse their <code><a href="#values">values</a></code>.
 Subcommands may have their own <a href="#parsers">command-specific parsers</a>
 or are parsed by <code>command</code>'s parser.
 <code>command</code> or <code>subcommand</code> values are either terminated by the end of the input
 or by <code>--</code>.
-</summary>
 
 <br />
 
@@ -548,10 +509,13 @@ const command = (key, opts, fields) => ({
 <td>
 <details>
 <summary>
-<code>flag</code> generates a <a href="#flag-option">flag option</a>.
-This type represents command-line options that stand for themselves and take no value.
-Shargs counts the number of times a <code>flag</code> occurs
-(e.g. <code>{verbose: {type: 'flag', count: 3}}</code>), so a <code>flag</code> may be amplified by repeating it.
+<code>flag</code> generates a <a href="#flag-option">flag option</a>,
+representing command-line options that take no value.
+</summary>
+
+<br />
+
+Shargs counts the number of times a <code>flag</code> occurs, so a <code>flag</code> may be amplified by repeating it.
 If you don't need counts and prefer numbers or boolean values, have a look at the
 <code><a href="#flagAsBool">flagAsBool</a></code>, <code><a href="#flagAsNumber">flagAsNumber</a></code>,
 <code><a href="#flagsAsBools">flagsAsBools</a></code> and <code><a href="#flagsAsNumbers">flagsAsNumbers</a></code> 
@@ -559,7 +523,6 @@ parser stages.
 If you need the presence of a <code>flag</code> to imply negativity (e.g. <code>--no-fun</code>),
 see <code><a href="#complement">complement</a></code>,
 <code><a href="#reverse">reverse</a></code> and <code><a href="#reverseFlags">reverseFlags</a></code>.
-</summary>
 
 <br />
 
@@ -583,13 +546,16 @@ const flag = (key, args, fields) => ({
 <details>
 <summary>
 <code>number</code> generates a <a href="#primitive-option">primitive option</a>,
-while <code>numberPos</code> generates a <a href="#primitive-pos-arg">primitive positional argument</a>.
-These types represent JavaScript numbers.
+while <code>numberPos</code> generates a <a href="#primitive-pos-arg">primitive positional argument</a>,
+representing JavaScript numbers.
+</summary>
+
+<br />
+
 Numbers are represented as strings and you may want to <code><a href="#cast">cast</a></code> them.
 If you need <code><a href="#flag">flag</a></code>s instead of <code>number</code>s, have a look at the
 <code><a href="#numberAsFlag">numberAsFlag</a></code> and <code><a href="#numbersAsFlags">numbersAsFlags</a></code> 
 parser stages.
-</summary>
 
 <br />
 
@@ -621,8 +587,8 @@ const numberPos = (key, fields) => ({
 <details>
 <summary>
 <code>string</code> generates a <a href="#primitive-option">primitive option</a>,
-while <code>stringPos</code> generates a <a href="#primitive-pos-arg">primitive positional argument</a>.
-These types represent strings.
+while <code>stringPos</code> generates a <a href="#primitive-pos-arg">primitive positional argument</a>,
+representing strings.
 </summary>
 
 <br />
@@ -657,6 +623,10 @@ const stringPos = (key, fields) => ({
 <code>variadic</code> generates a <a href="#variadic-option">variadic option</a>,
 while <code>variadicPos</code> generates a <a href="#variadic-pos-arg">variadic positional argument</a>.
 These types represent arrays whose length is not known in advance.
+</summary>
+
+<br />
+
 An <code>opts</code> array can have at most one <a href="#variadic-pos-arg">variadic positional argument</a>
 and no other positional arguments (<code>*Pos</code>) may be defined after it.
 The closely related <code><a href="#array">array</a></code>
@@ -665,7 +635,6 @@ and <code><a href="#command">command</a></code> is essentially
 a <code>variadic</code> with an <code><a href="#opts">opts</a></code> field.
 A <code>variadic</code>'s or <code>variadicPos</code>' values are either terminated by the end of the input
 or by <code>--</code>.
-</summary>
 
 <br />
 
@@ -690,8 +659,7 @@ const variadicPos = (key, fields) => ({
 </tr>
 </table>
 
-If you wish to write out command-line options by hand, or write your own DSLs for creating them, feel free.
-Command-line options use the following syntax:
+If you wish to write out command-line options by hand, or write your own DSLs for creating them, feel free:
 
 ```js
 const askOpts = [
@@ -704,17 +672,13 @@ const askOpts = [
 ```
 
 Apart from [`key`](#key), [`args`](#args), [`types`](#types), [`opts`](#opts), and [`values`](#values)
-that you have already seen and that determine an option's type,
+that we have already seen and that determine an option's type,
 command-line option objects may be given any other <code>fields</code>,
 that may be used to provide information to parser stages
 (e.g. [`defaultValues`](#defaultValues), [`only`](#only)),
 or to provide descriptions for usage documentation generation
 (e.g. <code><a href="#desc">desc</a></code>, <code><a href="#descArg">descArg</a></code>).
-If you wish to write your own parser stages, go ahead and define your own fields.
-
-A very useful property of command-line option definitions is, that they are valid JSON.
-This enables use cases like reading an API's option definitions from HTTPS,
-or swapping out definitions on the fly.
+If you write your own parser stages, you may also define your own fields.
 
 #### Option Fields
 
@@ -724,26 +688,41 @@ or [`shargs-usage`][shargs-usage] functions:
 <table>
 <tr>
 <th>Field</th>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;Value&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
 
 <tr name="args">
 <td><code><a href="#args">args</a></code></td>
-<td>array of strings</td>
+<td><code>string[]</code></td>
 <td>
-<code>args</code> defines argument names for command-line options.
+<details>
+<summary>
+<code>args</code> defines argument names for command-line options (e.g. <code>['-h', '--help']</code>).
+</summary>
+
+<br />
+
+Argument names have no restrictions and can be any string.
 E.g. <code>['-h', '--help']</code> could be used for a help <code><a href="#flag">flag</a></code>
 or <code>['ask']</code> could be used for a <code><a href="#command">command</a></code>.
 Positional arguments must not have an <code>args</code> field,
 as they are not given by argument, but by their position.
+
+</details>
 </td>
 </tr>
 <tr name="contradicts">
 <td><code><a href="#contradicts">contradicts</a></code></td>
-<td>array of <code><a href="#key">key</a></code>s</td>
+<td><code><a href="#key">key</a>[]</code></td>
 <td>
+<details>
+<summary>
 <code>contradicts</code> defines what <code><a href="#key">key</a></code>s an option is incompatible with.
+</summary>
+
+<br />
+
 This information is used by the <code><a href="#contradictOpts">contradictOpts</a></code> parser stage
 to report errors if incompatible options are used together.
 Note that <code>contradicts</code> is unidirectional and not transitive
@@ -751,13 +730,21 @@ Note that <code>contradicts</code> is unidirectional and not transitive
 <code>a</code> does not contradict <code>c</code>, and thus <code>a</code> and <code>c</code> are compatible).
 Only two <code><a href="#key">key</a></code>s that each contradict the other <code><a href="#key">key</a></code>
 are mutually exclusive.
+
+</details>
 </td>
 </tr>
 <tr name="defaultValues">
 <td><code><a href="#defaultValues">defaultValues</a></code></td>
 <td>*</td>
 <td>
-<code>defaultValues</code> defines default values for command-line options.
+<details>
+<summary>
+<code>defaultValues</code> defines default <code><a href="#values">values</a></code> for command-line options.
+</summary>
+
+<br />
+
 They are used by the <code><a href="#setDefaultValues">setDefaultValues</a></code> parser stage
 that sets the <code>values</code> field if no <code><a href="#values">values</a></code> are supplied.
 The <code>defaultValues</code>' type depends on the command-line option type:
@@ -765,25 +752,42 @@ The <code>defaultValues</code>' type depends on the command-line option type:
 <a href="#flag-option">Flag options</a>' values have to be a number.
 All other options take an array of values,
 that must have the same length as their <code><a href="#types">types</a></code> field.
+
+</details>
 </td>
 </tr>
 <tr name="desc">
 <td><code><a href="#desc">desc</a></code></td>
-<td>string</td>
+<td><code>string</code></td>
 <td>
-<code>desc</code> defines a description for the command-line option used by the
+<details>
+<summary>
+<code>desc</code> defines an option description used by various usage functions.
+</summary>
+
+<br />
+
+More specifically, <code>desc</code> is used by
 <code><a href="#usage-desc">desc</a></code>, <code><a href="#optsList">optsList</a></code>,
 <code><a href="#optsLists">optsLists</a></code>, <code><a href="#optsDef">optsDef</a></code>,
-and <code><a href="#optsDefs">optsDefs</a></code> usage functions and their <code>*With</code> versions.
+and <code><a href="#optsDefs">optsDefs</a></code> and their <code>*With</code> versions.
+
+</details>
 </td>
 </tr>
 <tr name="descArg">
 <td><code><a href="#descArg">descArg</a></code></td>
-<td>string</td>
+<td><code>string</code></td>
 <td>
+<details>
+<summary>
 <code>descArg</code> defines a description for an argument value
 (e.g. <code>{descArg: 'format'}</code> would print <code>--format=&lt;format&gt;</code>
 instead of <code>--format=&lt;string&gt;</code>).
+</summary>
+
+<br />
+
 It is used by the <code><a href="#optsList">optsList</a></code>, <code><a href="#optsLists">optsLists</a></code>,
 <code><a href="#optsDef">optsDef</a></code>, and <code><a href="#optsDefs">optsDefs</a></code> usage functions
 and their <code>*With</code> versions.
@@ -793,13 +797,21 @@ These fields are applied in the following order (highest priority first):
 <code>descArg</code>, <code><a href="#only">only</a></code>, <code><a href="#types">types</a></code>,
 and <code><a href="#key">key</a></code>.
 If <code>descArg</code> is an empty string, no argument value description is displayed.
+
+</details>
 </td>
 </tr>
 <tr name="implies">
 <td><code><a href="#implies">implies</a></code></td>
-<td>array of <code><a href="#key">key</a></code>s</td>
+<td><code><a href="#key">key</a>[]</code></td>
 <td>
+<details>
+<summary>
 <code>implies</code> defines what <code><a href="#key">key</a></code>s an option must be defined with.
+</summary>
+
+<br />
+
 This information is used by the <code><a href="#implyOpts">implyOpts</a></code> parser stage
 to report errors if mandatory options are missing.
 Note that <code>implies</code> is unidirectional
@@ -811,13 +823,21 @@ and transitive
 and thus if <code>a</code> is present, <code>c</code> must also be present).
 Only two <code><a href="#key">key</a></code>s that each imply the other <code><a href="#key">key</a></code>
 are mutually inclusive.
+
+</details>
 </td>
 </tr>
 <tr name="key">
 <td><code><a href="#key">key</a></code></td>
-<td>string</td>
+<td><code>string</code></td>
 <td>
+<details>
+<summary>
 <code>key</code> defines the name of a command-line option.
+</summary>
+
+<br />
+
 It is used by the <code><a href="#the-parserSync-function">parser</a></code> function
 as a field name for the parsed values in the resulting <code>args</code> object.
 Most command-line options should have a unique <code>key</code> to avoid collisions with other options.
@@ -834,13 +854,21 @@ and <code><a href="#types">types</a></code> are other fields that change the arg
 These fields are applied in the following order (highest priority first):
 <code><a href="#descArg">descArg</a></code>, <code><a href="#only">only</a></code>,
 <code><a href="#types">types</a></code>, and <code>key</code>.
+
+</details>
 </td>
 </tr>
 <tr name="only">
 <td><code><a href="#only">only</a></code></td>
-<td>array of values</td>
+<td><code>any[]</code></td>
 <td>
+<details>
+<summary>
 <code>only</code> defines valid values of an option.
+</summary>
+
+<br />
+
 It is used by the <code><a href="#restrictToOnly">restrictToOnly</a></code> parser stage to validate user input.
 <code>only</code> may be used to <a href="#can-i-use-enums">implement enumerations</a>.
 It is also used by the <code><a href="#optsList">optsList</a></code>, <code><a href="#optsLists">optsLists</a></code>,
@@ -851,11 +879,13 @@ and <code><a href="#key">key</a></code> are other fields that change the argumen
 These fields are applied in the following order (highest priority first):
 <code><a href="#descArg">descArg</a></code>, <code>only</code>, <code><a href="#types">types</a></code>,
 and <code><a href="#key">key</a></code>.
+
+</details>
 </td>
 </tr>
 <tr name="opts">
 <td><code><a href="#opts">opts</a></code></td>
-<td>array of options</td>
+<td><code><a href="#command-line-options">option</a>[]</code></td>
 <td>
 <code>opts</code> defines the command-line options of <code><a href="#command">command</a></code>s
 and <code><a href="#program">program</a></code>s.
@@ -863,9 +893,15 @@ and <code><a href="#program">program</a></code>s.
 </tr>
 <tr name="required">
 <td><code><a href="#required">required</a></code></td>
-<td>boolean</td>
+<td><code>boolean</code></td>
 <td>
+<details>
+<summary>
 <code>required</code> defines whether a command-line option has to be present or not.
+</summary>
+
+<br />
+
 It is used by the <code><a href="#requireOpts">requireOpts</a></code> stage that reports an error
 if a <code>required</code> option does not have <code><a href="#values">values</a></code>.
 A positional argument (<code>*Pos</code>) can only be <code>required</code>,
@@ -874,11 +910,13 @@ The <code><a href="#synopsis">synopsis</a></code>, <code><a href="#synopses">syn
 <code><a href="#optsList">optsList</a></code>, <code><a href="#optsLists">optsLists</a></code>,
 <code><a href="#optsDef">optsDef</a></code>, and <code><a href="#optsDefs">optsDefs</a></code> usage functions
 and their <code>*With</code> versions mark <code>required</code> options.
+
+</details>
 </td>
 </tr>
 <tr name="reverse">
 <td><code><a href="#reverse">reverse</a></code></td>
-<td>boolean</td>
+<td><code>boolean</code></td>
 <td>
 <code>reverse</code> defines whether the <code><a href="#values">values</a></code> of a given option should be reversed by
 the <code><a href="#reverseBools">reverseBools</a></code> or <code><a href="#reverseFlags">reverseFlags</a></code>
@@ -887,9 +925,15 @@ parser stages.
 </tr>
 <tr name="types">
 <td><code><a href="#types">types</a></code></td>
-<td>array of types</td>
+<td><code>string[]</code></td>
 <td>
+<details>
+<summary>
 <code>types</code> defines what user input a command-line option takes.
+</summary>
+
+<br />
+
 <a href="#flag-option">Flag options</a>' <code>types</code> must be <code>[]</code>.
 <a href="#primitive-option">Primitive options</a>' and <a href="#primitive-pos-arg">primitive positional arguments</a>'
 <code>types</code> must be <code>[_]</code>,
@@ -909,15 +953,23 @@ and <code><a href="#key">key</a></code> are other fields that change the argumen
 These fields are applied in the following order (highest priority first):
 <code><a href="#descArg">descArg</a></code>, <code><a href="#only">only</a></code>, <code>types</code>,
 and <code><a href="#key">key</a></code>.
+
+</details>
 </td>
 </tr>
 <tr name="values">
 <td><code><a href="#values">values</a></code></td>
-<td>array of value(s)</td>
+<td><code>any[]</code></td>
 <td>
-<code>values</code> holds arguments provided by the user.
+<details>
+<summary>
 <b>This field should only be set by parser stages and never manually.</b>
-If default values are needed, see the <code><a href="#defaultValues">defaultValues</a></code> field.
+<code>values</code> holds arguments provided by the user.
+If default values are needed, see <code><a href="#defaultValues">defaultValues</a></code>.
+</summary>
+
+<br />
+
 The length of a <code>values</code>' array depends on the command-line option type:
 <a href="#flag-option">Flag options</a>, <a href="#primitive-option">primitive options</a>,
 <a href="#primitive-pos-arg">primitive positional arguments</a>, and <a href="#rest">rest</a>
@@ -927,6 +979,8 @@ must each have <code>values</code> of length <code>1</code>.
 A , <a href="#subcommand-option">subcommand option</a>'s, <a href="#command-pos-arg">command positional argument</a>'s,
 <a href="#variadic-option">variadic option</a>'s, and <a href="#variadic-pos-arg">variadic positional argument</a>'s
 <code>values</code> may have any number of entries.
+
+</details>
 </td>
 </tr>
 </table>
@@ -940,7 +994,7 @@ You may think of decorators as recurring patterns that are provided as functions
 
 <table>
 <tr>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Decorator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
 <tr name="complement">
@@ -951,11 +1005,14 @@ You may think of decorators as recurring patterns that are provided as functions
 <code>complement</code> transforms a <code><a href="#bool">bool</a></code> or <code><a href="#flag">flag</a></code> 
 option into a complementary option prefixed with a given string
 (e.g. <code>--no-html</code> if used on <code>--html</code>).
+</summary>
+
+<br />
+
 The complementary option has the same <code><a href="#key">key</a></code> as the original option,
 but <code><a href="#reverse">reverses</a></code> its value.
 If <code>complement</code> is used, either the <code><a href="#reverseBools">reverseBools</a></code>
 or <code><a href="#reverseFlags">reverseFlags</a></code>, or both parser stages must be used.
-</summary>
 
 <br />
 
@@ -1176,13 +1233,14 @@ but operates on [JavaScript Promises](https://developer.mozilla.org/docs/Web/Jav
 ```js
 const {parser} = require('shargs')
 
-const deepThought = ...
 const stages = ...
 const substages = ...
+const deepThought = ...
+const argv = ...
 
 const asyncParser = parser(stages, substages)
 
-const asyncParse = asyncParser(script)
+const asyncParse = asyncParser(deepThought)
 
 const asyncResults = asyncParse(argv)
 
