@@ -2139,7 +2139,7 @@ test('parser works with substages', async () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parserSync works with default substages', () => {
+test('parserSync works with default substages 1', () => {
   const stages = {}
 
   const substages = {
@@ -2195,7 +2195,7 @@ test('parserSync works with default substages', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('parser works with default substages', async () => {
+test('parser works with default substages 1', async () => {
   const stages = {}
 
   const substages = {
