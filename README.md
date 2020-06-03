@@ -56,8 +56,6 @@ Describe your command and its options:
 <p>
 
 ```js
-const {command, flag, number, stringPos} = require('shargs-opts')
-
 const opts = [
   stringPos('question', {desc: 'Ask a question.', required: true}),
   number('answer', ['-a', '--answer'], {desc: 'The answer.', defaultValues: [42]}),
@@ -90,9 +88,6 @@ Declare a parser by composing parser stages:
 <p>
 
 ```js
-const {parserSync} = require('shargs')
-const {cast, flagsAsBools, requireOpts, splitShortOpts} = require('shargs-parser')
-
 const parser = parserSync({
   argv: [splitShortOpts],
   opts: [setDefaultValues, requireOpts, cast],
@@ -127,8 +122,6 @@ Layout a usage documentation:
 <p>
 
 ```js
-const {desc, optsList, space, synopsis, usage} = require('shargs-usage')
-
 const docs = usage([
   synopsis,
   space,
@@ -1080,113 +1073,246 @@ subcommand(opts)('deepThought', args)
 ### The `parserSync` Function
 
 The `parserSync` function is [`shargs`][shargs]' core abstraction.
-It may be used entirely without [`shargs-opts`][shargs-opts] and [`shargs-parser`][shargs-parser],
+It may be used without [`shargs-opts`][shargs-opts] and [`shargs-parser`][shargs-parser],
 e.g. with manually written option objects and parser stages, or with other option DSL or parser stage libraries.
-Up to this point, we have already seen some of the things, `parserSync` does, and others have been hinted at,
-but this section finally paints the whole picture:
+We have already seen some of the things, `parserSync` does, this section fills the gaps:
 
 ```js
 const {parserSync} = require('shargs')
 const {cast, flagsAsBools, requireOpts, restrictToOnly} = require('shargs-parser')
-const {reverseFlags, splitShortOpts} = require('shargs-parser')
+const {reverseFlags, setDefaultValues, splitShortOpts} = require('shargs-parser')
 
 const stages = {
   argv: [splitShortOpts],
-  opts: [requireOpts, reverseFlags, restrictToOnly, cast],
+  opts: [setDefaultValues, requireOpts, reverseFlags, cast],
   args: [flagsAsBools]
 }
 
-const substages = {ask: []} // TODO
+const substages = {
+  ask: [...stages, restrictToOnly]
+}
 
 const parser = parserSync(stages, substages)
 ```
 
 `parserSync` takes two parameters:
 
-1.  A `stages` object that collects [parser stages](#command-line-parsers)
+1.  A `stages` object that takes [parser stages](#command-line-parsers)
     and defines what transformations should be applied in which order.
 2.  An optional `substages` object that defines subcommand-specific parser stages.
 
 #### `stages`
-
-Let's first take a closer look at `stages`:
-
-```js
-const stages = {
-  argv: [splitShortOpts],
-  opts: [reverseFlags, restrictToOnly, cast],
-  args: [flagsAsBools]
-}
-```
 
 Shargs has seven different processing steps that are applied in order to transform argument values (`process.argv`)
 to command-line options (`opts`) and finally to arguments (`args`):
 
 <table>
 <tr>
-<th></th>
+<th>Step</th>
 <th>Field</th>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Function&nbsp;Signature&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description</th>
+<th>Function&nbsp;Signature</th>
 </tr>
 <tr name="toArgv-stages">
-<td>1</td>
+<td align="right">1</td>
 <td><code><a href="#toArgv-stages">toArgv</a></code></td>
-<td align="right"><code>any => ({errs, argv})&nbsp;</code></td>
 <td>
-<code>argv</code> transforms any value into command-line argument values syntax
-(e.g. <code>['--help', '-a', '42']</code>).
+<details>
+<summary>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any => {errs, argv}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+</summary>
+
+<br />
+
+Transforms a value into command-line argument values syntax:
+
+```js
+['-p', 'commit', '-a', '-m', 'First commit']
+```
+
+</details>
 </td>
 </tr>
 <tr name="argv-stages">
-<td>2</td>
+<td align="right">2</td>
 <td><code><a href="#argv-stages">argv</a></code></td>
-<td align="right"><code>Array<({errs, argv}) => ({errs, argv})></code></td>
 <td>
-<code>argv</code> stages modify command-line argument values
-(e.g. <code>['--help', '-a', '42']</code>).
+<details>
+<summary>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Array<{errs, argv} => {errs, argv}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+</summary>
+
+<br />
+
+Several stages that modify command-line argument values:
+
+```js
+['-p', 'commit', '-a', '-m', 'First commit']
+```
+
+</details>
 </td>
 </tr>
 <tr name="toOpts-stages">
-<td>3</td>
+<td align="right">3</td>
 <td><code><a href="#toOpts-stages">toOpts</a></code></td>
-<td align="right"><code>(opts, stages) => ({errs, argv}) => ({errs, opts})&nbsp;</code></td>
 <td>
-<code>toOpts</code> transforms command-line argument values syntax into command-line options syntax.
+<details>
+<summary>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(opts, stages) => {errs, argv} => {errs, opts}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+</summary>
+
+<br />
+
+Transforms argument values into command-line options:
+
+```js
+['-p', 'commit', '-a', '-m', 'First commit']
+```
+
+is transformed to
+
+```js
+[
+  {key: 'paginate', args: ['-p'], types: [], values: [1]},
+  {key: 'commit', args: ['commit'], opts: [...], values: [
+    {key: 'all', args: ['-a'], types: [], values: [1]},
+    {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
+    ...
+  ]},
+  ...
+]
+```
+
+</details>
 </td>
 </tr>
 <tr name="opts-stages">
-<td>4</td>
+<td align="right">4</td>
 <td><code><a href="#opts-stages">opts</a></code></td>
-<td align="right"><code>Array<({errs, opts}) => ({errs, opts})></code></td>
 <td>
-<code>opts</code> stages modify command-line options
-(e.g. <code>{key: 'answer', args: ['-a'], types: ['number'], values: ['42']}</code>).
+<details>
+<summary>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Array<{errs, opts} => {errs, opts}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+</summary>
+
+<br />
+
+Several stages that modify command-line options:
+
+```js
+[
+  {key: 'paginate', args: ['-p'], types: [], values: [1]},
+  {key: 'commit', args: ['commit'], opts: [...], values: [
+    {key: 'all', args: ['-a'], types: [], values: [1]},
+    {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
+    ...
+  ]},
+  ...
+]
+```
+
+</details>
 </td>
 </tr>
 <tr name="toArgs-stages">
-<td>5</td>
+<td align="right">5</td>
 <td><code><a href="#toArgs-stages">toArgs</a></code></td>
-<td align="right"><code>({errs, opts}) => ({errs, args})&nbsp;</code></td>
 <td>
-<code>toArgs</code> transforms command-line options syntax into arguments objects syntax.
+<details>
+<summary>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{errs, opts} => {errs, args}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+</summary>
+
+<br />
+
+Transforms command-line options into arguments object arrays.
+
+```js
+[
+  {key: 'paginate', args: ['-p'], types: [], values: [1]},
+  {key: 'commit', args: ['commit'], opts: [...], values: [
+    {key: 'all', args: ['-a'], types: [], values: [1]},
+    {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
+    ...
+  ]},
+  ...
+]
+```
+
+is transformed to
+
+```js
+[
+  {_: [], paginate: {type: 'flag', count: 1}},
+  {commit: {
+    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
+  }}
+]
+```
+
+</details>
 </td>
 </tr>
 <tr name="args-stages">
-<td>6</td>
+<td align="right">6</td>
 <td><code><a href="#args-stages">args</a></code></td>
-<td align="right"><code>Array<({errs, args}) => ({errs, args})></code></td>
 <td>
-<code>args</code> stages modify arguments objects
-(e.g. <code>{_: [], answer: '42', help: {type: 'flag', count: 1}}</code>).
+<details>
+<summary>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Array<{errs, args} => {errs, args}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+</summary>
+
+<br />
+
+Several stages that modify arguments object arrays:
+
+```js
+[
+  {_: [], paginate: {type: 'flag', count: 1}},
+  {commit: {
+    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
+  }}
+]
+```
+
+</details>
 </td>
 </tr>
 <tr name="fromArgs-stages">
-<td>7</td>
+<td align="right">7</td>
 <td><code><a href="#fromArgs-stages">fromArgs</a></code></td>
-<td align="right"><code>({errs, args}) => any&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code></td>
 <td>
-<code>fromArgs</code> transforms argument objects into any result value.
+<details>
+<summary>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{errs, args} => any&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+</summary>
+
+<br />
+
+Transforms argument object arrays into any result value:
+
+```js
+[
+  {_: [], paginate: {type: 'flag', count: 1}},
+  {commit: [
+    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
+  ]}
+]
+```
+
+is transformed to
+
+```js
+{
+  _: [],
+  paginate: {type: 'flag', count: 1},
+  commit: [
+    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
+  ]
+}
+```
+
+</details>
 </td>
 </tr>
 </table>
@@ -1201,145 +1327,257 @@ If you read the function signatures from top to bottom, you get a good impressio
 
 #### `substages`
 
-Let's have a look at the `substages` field:
-
-```js
-const stages = ...
-
-const substages = {ask: []} // TODO
-
-const parser = parserSync(stages, substages)
-```
-
-`substages` takes an object that assigns [`opts` stages](#opts-stages) to keys, in this example `ask`.
-The name of the key is not coincidentally the same as the [`key`](#key)
-of the `ask` [`subcommand`](#subcommand) from before:
 `substages` define custom `opts` stages for subcommands.
 That means, while some command-line arguments are parsed using the `opts` defined in `stages`,
-others (the ones that belong to the `ask` command) are parsed using the `opts` defined under the `ask` key.
+others (the ones that belong to the `ask` command) are parsed using the `opts` defined under the `ask` [`key`](#key).
 
-The `substages` object may be deeply nested to account for [`subcommand`](#subcommand)s of [`subcommand`](#subcommand)s:
-E.g. if `ask` had a `question` subcommand, `{ask: {question: [...]}}` would assign custom `opts` to it.
-The `_` key is special in `substages`:
-It is used as a wildcard for any [`subcommand`](#subcommand) that does not have its own key.
-E.g. `{ask: {_: [...]}}` would work for question.
+Keys may be deeply nested to account for [`subcommand`](#subcommand)s of [`subcommand`](#subcommand)s:
+E.g. if `ask` had a subcommand with the `question` [`key`](#key), `{ask: {question: [...stages, restrictToOnly]}}` would assign custom `opts` to `question`.
+
+The `_` [`key`](#key) is special in `substages`:
+It is a wildcard that is used by any [`subcommand`](#subcommand) that is not given explicitly by [`key`](#key).
+E.g. `{ask: {_: [...stages, restrictToOnly]}}` and `{_: {_: [...stages, restrictToOnly]}}` both work for `question`.
 
 #### Async Parsers
 
 The `parserSync` function has an asynchronous alternative called `parser`.
 It is used exactly like `parserSync`,
-but operates on [JavaScript Promises](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise):
+but works with stages returning [JavaScript Promises](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+and returns a Promise itself:
 
 ```js
 const {parser} = require('shargs')
 
-const stages = ...
-const substages = ...
-const deepThought = ...
-const argv = ...
+// stages, substages, deepThought, argv are taken from the Getting Started section
 
 const asyncParser = parser(stages, substages)
 
-const asyncParse = asyncParser(deepThought)
+const parse = asyncParser(deepThought)
 
-const asyncResults = asyncParse(argv)
-
-asyncResults.then(
-  ({errs, args}) => ...
-)
+const {errs, args} = await parse(argv)
 ```
 
-Also, `parser`'s [`stages`](#stages) and [`substages`](#substages) parameters
-take additional parser stages with Promise-based function signatures:
+Also, `parser`'s [`stages`](#stages) and [`substages`](#substages) parameters also take parser stages that return Promises:
 
 <table>
 <tr>
-<th></th>
+<th>Step</th>
 <th>Field</th>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Function&nbsp;Signature&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>Description</th>
+<th>Function&nbsp;Signature</th>
 </tr>
-<tr name="toArgv-stages-async">
-<td>1</td>
-<td><code><a href="#toArgv-stages-async">toArgv</a></code></td>
-<td align="right">
-<code>({errs, any}) => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({errs, argv})&nbsp;</code><br />
-<code>({errs, any}) => Promise({errs, argv})&nbsp;</code>
-</td>
+<tr name="toArgv-stages">
+<td align="right">1</td>
+<td><code><a href="#toArgv-stages">toArgv</a></code></td>
 <td>
-An async <code>toArgv</code> stage works just like its sync version, but returns a Promise.
-</td>
-</tr>
-<tr name="argv-stages-async">
-<td>2</td>
-<td><code><a href="#argv-stages-async">argv</a></code></td>
-<td align="right">
-<code>Array<({errs, argv}) => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({errs, argv})></code><br />
-<code>Array<({errs, argv}) => Promise({errs, argv})></code>
-</td>
-<td>
-Async <code>argv</code> stages work just like their sync version, but return a Promise.
+<details>
+<summary>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{errs, argv}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><br />
+&nbsp;<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any => Promise<{errs, argv}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+</summary>
+
+<br />
+
+Transforms a value into command-line argument values syntax:
+
+```js
+['-p', 'commit', '-a', '-m', 'First commit']
+```
+
+</details>
 </td>
 </tr>
-<tr name="toOpts-stages-async">
-<td>3</td>
-<td><code><a href="#toOpts-stages-async">toOpts</a></code></td>
-<td align="right">
-<code>(opts, stages) => ({errs, argv}) => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({errs, opts})&nbsp;</code><br />
-<code>(opts, stages) => ({errs, argv}) => Promise({errs, opts})&nbsp;</code>
-</td>
+<tr name="argv-stages">
+<td align="right">2</td>
+<td><code><a href="#argv-stages">argv</a></code></td>
 <td>
-An async <code>toOpts</code> stage works just like its sync version, but returns a Promise.
+<details>
+<summary>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Array<{errs, argv} => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{errs, argv}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><br />
+&nbsp;<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Array<{errs, argv} => Promise<{errs, argv}>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+</summary>
+
+<br />
+
+Several stages that modify command-line argument values:
+
+```js
+['-p', 'commit', '-a', '-m', 'First commit']
+```
+
+</details>
 </td>
 </tr>
-<tr name="opts-stages-async">
-<td>4</td>
-<td><code><a href="#opts-stages-async">opts</a></code></td>
-<td align="right">
-<code>Array<({errs, opts}) => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({errs, opts})></code><br />
-<code>Array<({errs, opts}) => Promise({errs, opts})></code>
-</td>
+<tr name="toOpts-stages">
+<td align="right">3</td>
+<td><code><a href="#toOpts-stages">toOpts</a></code></td>
 <td>
-Async <code>opts</code> stages work just like their sync version, but return a Promise.
+<details>
+<summary>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;(opts, stages) => {errs, argv} => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{errs, opts}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><br />
+&nbsp;<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(opts, stages) => {errs, argv} => Promise<{errs, opts}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+</summary>
+
+<br />
+
+Transforms argument values into command-line options:
+
+```js
+['-p', 'commit', '-a', '-m', 'First commit']
+```
+
+is transformed to
+
+```js
+[
+  {key: 'paginate', args: ['-p'], types: [], values: [1]},
+  {key: 'commit', args: ['commit'], opts: [...], values: [
+    {key: 'all', args: ['-a'], types: [], values: [1]},
+    {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
+    ...
+  ]},
+  ...
+]
+```
+
+</details>
 </td>
 </tr>
-<tr name="toArgs-stages-async">
-<td>5</td>
-<td><code><a href="#toArgs-stages-async">toArgs</a></code></td>
-<td align="right">
-<code>({errs, opts}) => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({errs, args})&nbsp;</code><br />
-<code>({errs, opts}) => Promise({errs, args})&nbsp;</code>
-</td>
+<tr name="opts-stages">
+<td align="right">4</td>
+<td><code><a href="#opts-stages">opts</a></code></td>
 <td>
-An async <code>toArgs</code> stage works just like its sync version, but returns a Promise.
+<details>
+<summary>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Array<{errs, opts} => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{errs, opts}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><br />
+&nbsp;<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Array<{errs, opts} => Promise<{errs, opts}>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+</summary>
+
+<br />
+
+Several stages that modify command-line options:
+
+```js
+[
+  {key: 'paginate', args: ['-p'], types: [], values: [1]},
+  {key: 'commit', args: ['commit'], opts: [...], values: [
+    {key: 'all', args: ['-a'], types: [], values: [1]},
+    {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
+    ...
+  ]},
+  ...
+]
+```
+
+</details>
 </td>
 </tr>
-<tr name="args-stages-async">
-<td>6</td>
-<td><code><a href="#args-stages-async">args</a></code></td>
-<td align="right">
-<code>Array<({errs, args}) => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({errs, args})></code><br />
-<code>Array<({errs, args}) => Promise({errs, args})></code>
-</td>
+<tr name="toArgs-stages">
+<td align="right">5</td>
+<td><code><a href="#toArgs-stages">toArgs</a></code></td>
 <td>
-Async <code>args</code> stages work just like their sync version, but return a Promise.
+<details>
+<summary>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{errs, opts} => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{errs, args}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><br />
+&nbsp;<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{errs, opts} => Promise<{errs, args}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+</summary>
+
+<br />
+
+Transforms command-line options into arguments object arrays.
+
+```js
+[
+  {key: 'paginate', args: ['-p'], types: [], values: [1]},
+  {key: 'commit', args: ['commit'], opts: [...], values: [
+    {key: 'all', args: ['-a'], types: [], values: [1]},
+    {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
+    ...
+  ]},
+  ...
+]
+```
+
+is transformed to
+
+```js
+[
+  {_: [], paginate: {type: 'flag', count: 1}},
+  {commit: {
+    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
+  }}
+]
+```
+
+</details>
 </td>
 </tr>
-<tr name="fromArgs-stages-async">
-<td>7</td>
-<td><code><a href="#fromArgs-stages-async">fromArgs</a></code></td>
-<td align="right">
-<code>({errs, args}) => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><br />
-<code>({errs, args}) => Promise(any)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
-</td>
+<tr name="args-stages">
+<td align="right">6</td>
+<td><code><a href="#args-stages">args</a></code></td>
 <td>
-An async <code>fromArgs</code> stage works just like its sync version, but returns a Promise.
+<details>
+<summary>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Array<{errs, args} => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{errs, args}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><br />
+&nbsp;<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Array<{errs, args} => Promise<{errs, args}>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+</summary>
+
+<br />
+
+Several stages that modify arguments object arrays:
+
+```js
+[
+  {_: [], paginate: {type: 'flag', count: 1}},
+  {commit: {
+    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
+  }}
+]
+```
+
+</details>
+</td>
+</tr>
+<tr name="fromArgs-stages">
+<td align="right">7</td>
+<td><code><a href="#fromArgs-stages">fromArgs</a></code></td>
+<td>
+<details>
+<summary>
+<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{errs, args} => &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;any&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><br />
+&nbsp;<code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{errs, args} => Promise&lt;any&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code>
+</summary>
+
+<br />
+
+Transforms argument object arrays into any result value:
+
+```js
+[
+  {_: [], paginate: {type: 'flag', count: 1}},
+  {commit: [
+    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
+  ]}
+]
+```
+
+is transformed to
+
+```js
+{
+  _: [],
+  paginate: {type: 'flag', count: 1},
+  commit: [
+    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
+  ]
+}
+```
+
+</details>
 </td>
 </tr>
 </table>
 
-If you read the stages' function signatures from top to bottom,
-you get a good impression of what an asynchronous parser does.
+If you read the stages' function signatures from top to bottom, you get a good impression of what an asynchronous parser does.
 Internally, an asynchronous shargs parser really differs only in one way from a synchronous parser:
 Instead of using function composition, it uses [Promise.prototype.then][then] to chain parser stages.
 
@@ -3122,10 +3360,6 @@ const fs = {
 
 #### Advanced Parsers
 
-+   [`toArgv` stage](#toArgv-stage)
-+   [`toOpts` stage](#toOpts-stage)
-+   [`toArgs` stage](#toArgs-stage)
-+   [`fromArgs` stage](#fromArgs-stage)
 +   [Custom checks and stages](#custom-checks-and-stages)
 
 ### Automatic Usage Documentation Generation
@@ -5141,15 +5375,17 @@ const deepThought = command('deepThought', opts, {
 ```js
 const {parserSync} = require('shargs')
 const {cast, flagsAsBools, requireOpts, restrictToOnly} = require('shargs-parser')
-const {reverseFlags, splitShortOpts} = require('shargs-parser')
+const {reverseFlags, setDefaultValues, splitShortOpts} = require('shargs-parser')
 
 const stages = {
   argv: [splitShortOpts],
-  opts: [requireOpts, reverseFlags, restrictToOnly, cast],
+  opts: [setDefaultValues, requireOpts, reverseFlags, cast],
   args: [flagsAsBools]
 }
 
-const substages = {ask: []} // TODO
+const substages = {
+  ask: [...stages, restrictToOnly]
+}
 
 const parser = parserSync(stages, substages)
 ```
@@ -5284,22 +5520,6 @@ Although we have talked about [`parser`](#the-parserSync-function) in quite some
 in the [parser function](#the-parserSync-function) section
 and about parser stages in [command-line parsers](#command-line-parsers),
 some topics are left to be discussed, here.
-
-#### `toArgv` Stage
-
-TODO
-
-#### `toOpts` Stage
-
-TODO
-
-#### `toArgs` Stage
-
-TODO
-
-#### `fromArgs` Stage
-
-TODO
 
 #### Custom Checks and Stages
 
