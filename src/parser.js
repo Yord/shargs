@@ -47,8 +47,10 @@ function parser (Mode) {
 }
 
 function recurseOpts (Mode) {
-  return (optsStages, substages) => ({errs = [], opts = []} = {errs: [], opts: []}) => {
-    const promise1 = Mode.then(...optsStages)({errs, opts})
+  return (optsStages, substages, optsStages2) => ({errs = [], opts = []} = {errs: [], opts: []}) => {
+    const stages = optsStages2 || optsStages
+
+    const promise1 = Mode.then(...stages)({errs, opts})
     
     return Mode.then(result => {
       const {errs: errs3 = [], opts: opts3 = []} = result || {errs, opts: []}
@@ -58,11 +60,11 @@ function recurseOpts (Mode) {
           const stages = (
             Array.isArray(substages[opt.key]) ? substages[opt.key] :
             Array.isArray(substages._)        ? substages._
-                                              : optsStages
+                                              : undefined
           )
-          const substages2 = substages[opt.key] || {}
+          const substages2 = substages[opt.key] || substages._ || {}
   
-          const promise2 = recurseOpts(Mode)(stages, substages2)({errs: [], opts: opt.values})
+          const promise2 = recurseOpts(Mode)(optsStages, substages2, stages)({errs: [], opts: opt.values})
           
           return Mode.then(({errs: errs4, opts: opts4}) => {
             return {
