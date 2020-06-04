@@ -219,9 +219,7 @@ test('addRemainingOptsAndPosArgs works for subcommand options 1', () => {
   const exp = {
     errs: [],
     opts: [
-      {...foo, values: [
-        bar
-      ]}
+      foo
     ]
   }
 
