@@ -22,41 +22,41 @@ export interface Opt {
   [key: string]: any
 }
 
-interface Args {
-  _: string[]
+export interface Args {
+  _?: string[]
   [key: string]: any
 }
 
-type Parser = (opts?: Opt) => (argv?: string[], errs?: Err[]) => {errs: Err[]; args: Args}
-
-type PromiseParser = (opts?: Opt) => (argv?: string[], errs?: Err[]) => Promise<{errs: Err[]; args: Args}>
-
-interface Parsers {
-  _: Parser
-  __: Parser
-  [key: string]: Parser
+export interface Stages<A, B> {
+  toArgv?:                                                                         (any: A) => {errs: Err[], argv: string[]}
+  argv?:                                      Array<(obj?: {errs?: Err[], argv?: string[]}) => {errs: Err[], argv: string[]}>
+  toOpts?: (opts?: Opt[], stages?: Stages<A, B>) => (obj?: {errs?: Err[], argv?: string[]}) => {errs: Err[], opts: Opt[]   }
+  opts?:                                      Array<(obj?: {errs?: Err[], opts?: Opt[]   }) => {errs: Err[], opts: Opt[]   }>
+  toArgs?:                                          (obj?: {errs?: Err[], opts?: Opt[]   }) => {errs: Err[], args: Args[]  }
+  args?:                                      Array<(obj?: {errs?: Err[], args?: Args[]  }) => {errs: Err[], args: Args[]  }>
+  fromArgs?:                                        (obj?: {errs?: Err[], args?: Args[]  }) => B
 }
 
-interface Checks {
-  argv?: ((obj?: {errs?: Err[], argv?: string[]}) => {errs?: Err[], argv?: string[]})[]
-  opts?: ((obj?: {errs?: Err[], opts?: Opt[]   }) => {errs?: Err[], opts?: Opt[]   })[]
-  args?: ((obj?: {errs?: Err[], args?: Args    }) => {errs?: Err[], args?: Args    })[]
+export interface AsyncStages<A, B> {
+  toArgv?:                                                                         (any: A) => Promise<{errs: Err[], argv: string[]}>
+  argv?:                                      Array<(obj?: {errs?: Err[], argv?: string[]}) => Promise<{errs: Err[], argv: string[]}>>
+  toOpts?: (opts?: Opt[], stages?: Stages<A, B>) => (obj?: {errs?: Err[], argv?: string[]}) => Promise<{errs: Err[], opts: Opt[]   }>
+  opts?:                                      Array<(obj?: {errs?: Err[], opts?: Opt[]   }) => Promise<{errs: Err[], opts: Opt[]   }>>
+  toArgs?:                                          (obj?: {errs?: Err[], opts?: Opt[]   }) => Promise<{errs: Err[], args: Args[]  }>
+  args?:                                      Array<(obj?: {errs?: Err[], args?: Args[]  }) => Promise<{errs: Err[], args: Args[]  }>>
+  fromArgs?:                                        (obj?: {errs?: Err[], args?: Args[]  }) => Promise<B>
 }
 
-interface Stages extends Checks {
-  toOpts?: (opts?: Opt[]) => (obj?: {errs?: Err[], argv?: string[]}) => {errs: Err[], opts: Opt[]}
-  toArgs?:                   (obj?: {errs?: Err[], opts?: Opt[]   }) => {errs: Err[], args: Args }
+export interface Substages {
+  [key]: Array<(obj?: {errs?: Err[], opts?: Opt[]}) => {errs: Err[], opts: Opt[]}> | Substages
 }
 
-interface PromiseChecks {
-  argv?: ((obj?: {errs?: Err[], argv?: string[]}) => ({errs?: Err[], argv?: string[]} | Promise<{errs?: Err[], argv?: string[]}>))[]
-  opts?: ((obj?: {errs?: Err[], opts?: Opt[]   }) => ({errs?: Err[], opts?: Opt[]   } | Promise<{errs?: Err[], opts?: Opt[]   }>))[]
-  args?: ((obj?: {errs?: Err[], args?: Args    }) => ({errs?: Err[], args?: Args    } | Promise<{errs?: Err[], args?: Args    }>))[]
-}
+const parserSync: <A, B>(stages?: Stages<A, B>, substages?: Substages) =>
+                        (opt?: Opt) =>
+                        (any?: A) =>
+                        {errs: Err[], any: B}
 
-interface PromiseStages extends PromiseChecks {
-  toOpts?: (opts?: Opt[]) => (obj?: {errs?: Err[], argv?: string[]}) => ({errs: Err[], opts: Opt[]} | Promise<{errs: Err[], opts: Opt[]}>)
-  toArgs?:                   (obj?: {errs?: Err[], opts?: Opt[]   }) => ({errs: Err[], args: Args } | Promise<{errs: Err[], args: Args }>)
-}
-
-export function parser <M extends 'async' | string>(stages?: M extends 'async' ? PromiseStages : Stages, options?: {checks?: M extends 'async' ? PromiseChecks : Checks; parsers?: Parsers; mode: M}): M extends 'async' ? PromiseParser : Parser
+const parser: <A, B>(stages?: Stages<A, B> | AsyncStages<A, B>, substages?: Substages) =>
+                    (opt?: Opt) =>
+                    (any?: A) =>
+                    {errs: Err[], any: B}

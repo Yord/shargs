@@ -1,37 +1,72 @@
-const illegalKeyName = ({key, option}) => ({
-  code: 'IllegalKeyName',
-  msg:  'An option key had an illegal name.',
-  info: {key, option}
+const CommandExpected = ({opt}) => ({
+  code: 'CommandExpected',
+  msg:  'Expected a command with a string "key" field and an "opts" array.',
+  info: {opt}
 })
 
-const invalidDefaultValues = ({defaultValues, option}) => ({
-  code: 'InvalidDefaultValues',
-  msg:  "An option's defaultValues field has an invalid type. It must be an array with any values in it.",
-  info: {defaultValues, option}
+const InvalidArgs = ({opt}) => ({
+  code: 'InvalidArgs',
+  msg:  'The "args" field has an invalid value: "args" must be a non-empty array of strings.',
+  info: {opt}
 })
 
-const invalidOptionsListInCombine = ({options, arg, argument}) => ({
-  code: 'InvalidOptionsListInCombine',
-  msg:  'Options list in combine was undefined, null or empty.',
-  info: {options, arg, argument}
+const InvalidKey = ({opt}) => ({
+  code: 'InvalidKey',
+  msg:  'The "key" field has an invalid value: "key" must be a string and cannot be "_" or "--".',
+  info: {opt}
 })
 
-const invalidTypes = ({types, option}) => ({
+const InvalidNestedCommand = ({opt}) => ({
+  code: 'InvalidNestedCommand',
+  msg:  'Commands cannot be nested inside commands. Did you forget an "args" field for your subcommand?',
+  info: {opt}
+})
+
+const InvalidOpts = ({opt}) => ({
+  code: 'InvalidOpts',
+  msg:  'The "opts" field has an invalid value: "opts" must be an array of command-line options and positional arguments.',
+  info: {opt}
+})
+
+const InvalidTypes = ({opt}) => ({
   code: 'InvalidTypes',
-  msg:  'Each argument must have a types key that must be null or an array.',
-  info: {types, option}
+  msg:  'The "types" field has an invalid value: "types" must be an array of strings.',
+  info: {opt}
 })
 
-const nonMatchingArgumentTypes = ({arg, ref, option}) => ({
-  code: 'NonMatchingArgumentTypes',
-  msg:  'If arguments have the same arg, their types must either be equal or have the same length.',
-  info: {arg, ref, option}
+const OptionExpected = ({opt}) => ({
+  code: 'OptionExpected',
+  msg:  'A command-line option was expected, but something else was received.',
+  info: {opt}
+})
+
+const PosArgExpected = ({opt}) => ({
+  code: 'PosArgExpected',
+  msg:  'A positional argument was expected, but something else was received.',
+  info: {opt}
+})
+
+const SubcommandExpected = ({opt}) => ({
+  code: 'SubcommandExpected',
+  msg:  'A subcommand was expected, but something else was received.',
+  info: {opt}
+})
+
+const UnknownCommandLineOptionType = ({opt}) => ({
+  code: 'UnknownCommandLineOptionType',
+  msg:  'The command-line option or positional argument given is of an unknown type.',
+  info: {opt}
 })
 
 module.exports = {
-  illegalKeyName,
-  invalidDefaultValues,
-  invalidOptionsListInCombine,
-  invalidTypes,
-  nonMatchingArgumentTypes
+  CommandExpected,
+  InvalidArgs,
+  InvalidKey,
+  InvalidNestedCommand,
+  InvalidOpts,
+  InvalidTypes,
+  OptionExpected,
+  PosArgExpected,
+  SubcommandExpected,
+  UnknownCommandLineOptionType
 }

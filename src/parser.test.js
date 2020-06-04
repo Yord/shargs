@@ -1,793 +1,2846 @@
-const {parser, toArgs, toOpts} = require('.')
+const {parser, parserSync} = require('.')
 
-const promise = f => a => new Promise(
-  (resolve, reject) => {
-    try {
-      resolve(f(a))
-    } catch (err) {
-      reject(err)
+test('parser works with async stages 1', async () => {
+  const stages = {
+    toArgv:                    any => Promise.resolve(({errs: [], argv: any })),
+    argv:           [a             => Promise.resolve(a                      )],
+    toOpts:   () => ({errs, argv}) => Promise.resolve(({errs,     opts: argv})),
+    opts:           [a             => Promise.resolve(a                      )],
+    toArgs:         ({errs, opts}) => Promise.resolve(({errs,     args: opts})),
+    args:           [a             => Promise.resolve(a                      )],
+    fromArgs:       a              => Promise.resolve(a                       )
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: argv
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with async stages 2', async () => {
+  const stages = {
+    argv: [a => Promise.resolve(a)],
+    opts: [a => Promise.resolve(a)],
+    args: [a => Promise.resolve(a)]
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1'
     }
   }
-)
 
-const opts = {
-  opts: [
-    {key: 'title', types: ['string'], args: ['--title']},
-    {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb']},
-    {key: 'answer', types: ['number'], args: ['-a', '--answer']},
-    {key: 'help', args: ['-h', '--help'], opts: [{key: 'bar', types: [], args: ['--bar']}]},
-    {key: 'verbose', types: ['bool'], args: ['--verbose']},
-    {key: 'version', types: [], args: ['--version', '-V']}
-  ]
-}
+  expect(res).toStrictEqual(exp)
+})
 
-test('parser transforms argv to args', () => {
-  const argv = [
-    'foo',
-    '--title', "The Hitchhiker's Guide to the Galaxy",
-    '-n', '23', 'true',
-    '-a', '42',
-    '--verbose', 'false',
-    '--version',
-    'bar',
-    '-h', 'foo', '--bar'
-  ]
+test('parserSync works with undefined stages', () => {
+  const stages = undefined
 
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1'
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with undefined stages', async () => {
+  const stages = undefined
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1'
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with undefined substages', () => {
   const stages = {}
 
-  const {args} = parser(stages)(opts)(argv)
+  const substages = undefined
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
-    _: ['foo', 'bar', 'foo'],
-    title: "The Hitchhiker's Guide to the Galaxy",
-    numBool: ['23', 'true'],
-    answer: '42',
-    verbose: 'false',
-    version: {type: 'flag', count: 1},
-    help: {
-      _: ['foo'],
-      bar: {type: 'flag', count: 1}
+    errs: [],
+    args: {
+      _: [],
+      arc: '1'
     }
   }
 
-  expect(args).toStrictEqual(exp)
+  expect(res).toStrictEqual(exp)
 })
 
-test('async parser transforms argv to args', async () => {
-  expect.assertions(1)
-
-  const argv = [
-    'foo',
-    '--title', "The Hitchhiker's Guide to the Galaxy",
-    '-n', '23', 'true',
-    '-a', '42',
-    '--verbose', 'false',
-    '--version',
-    'bar',
-    '-h', 'foo', '--bar'
-  ]
-
+test('parser works with undefined substages', async () => {
   const stages = {}
 
-  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
+  const substages = undefined
 
-  const exp = {
-    _: ['foo', 'bar', 'foo'],
-    title: "The Hitchhiker's Guide to the Galaxy",
-    numBool: ['23', 'true'],
-    answer: '42',
-    verbose: 'false',
-    version: {type: 'flag', count: 1},
-    help: {
-      _: ['foo'],
-      bar: {type: 'flag', count: 1}
-    }
-  }
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
 
-  expect(args).toStrictEqual(exp)
-})
-
-test('parser works even if stages are undefined', () => {
-  const argv = [
-    'foo',
-    '--title', "The Hitchhiker's Guide to the Galaxy",
-    '-n', '23', 'true',
-    '-a', '42',
-    '--verbose', 'false',
-    '--version',
-    'bar',
-    '-h', 'foo', '--bar'
-  ]
-
-  const {args} = parser()(opts)(argv)
-
-  const exp = {
-    _: ['foo', 'bar', 'foo'],
-    title: "The Hitchhiker's Guide to the Galaxy",
-    numBool: ['23', 'true'],
-    answer: '42',
-    verbose: 'false',
-    version: {type: 'flag', count: 1},
-    help: {
-      _: ['foo'],
-      bar: {type: 'flag', count: 1}
-    }
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('async parser works even if stages are undefined', async () => {
-  expect.assertions(1)
-
-  const argv = [
-    'foo',
-    '--title', "The Hitchhiker's Guide to the Galaxy",
-    '-n', '23', 'true',
-    '-a', '42',
-    '--verbose', 'false',
-    '--version',
-    'bar',
-    '-h', 'foo', '--bar'
-  ]
-
-  const {args} = await parser(undefined, {mode: 'async'})(opts)(argv)
-
-  const exp = {
-    _: ['foo', 'bar', 'foo'],
-    title: "The Hitchhiker's Guide to the Galaxy",
-    numBool: ['23', 'true'],
-    answer: '42',
-    verbose: 'false',
-    version: {type: 'flag', count: 1},
-    help: {
-      _: ['foo'],
-      bar: {type: 'flag', count: 1}
-    }
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('parser applies argv stages', () => {
-  const argv = [
-    '-VV'
-  ]
-
-  const splitShortOptions = ({argv}) => ({
-    argv: argv.reduce(
-      (arr, _) => [...arr, ..._.slice(1).split('').map(_ => '-' + _)],
-      []
-    )
-  })
-
-  const stages = {
-    argv: [splitShortOptions]
-  }
-
-  const {args} = parser(stages)(opts)(argv)
-
-  const exp = {
-    _: [],
-    version: {type: 'flag', count: 2}
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('async parser applies argv stages that are not promises', async () => {
-  expect.assertions(1)
-  
-  const argv = [
-    '-VV'
-  ]
-
-  const splitShortOptions = ({argv}) => ({
-    argv: argv.reduce(
-      (arr, _) => [...arr, ..._.slice(1).split('').map(_ => '-' + _)],
-      []
-    )
-  })
-
-  const stages = {
-    argv: [splitShortOptions]
-  }
-
-  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
-
-  const exp = {
-    _: [],
-    version: {type: 'flag', count: 2}
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('async parser applies argv stages that are promises', async () => {
-  expect.assertions(1)
-  
-  const argv = [
-    '-VV'
-  ]
-
-  const splitShortOptions = ({argv}) => ({
-    argv: argv.reduce(
-      (arr, _) => [...arr, ..._.slice(1).split('').map(_ => '-' + _)],
-      []
-    )
-  })
-
-  const stages = {
-    argv: [promise(splitShortOptions)]
-  }
-
-  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
-
-  const exp = {
-    _: [],
-    version: {type: 'flag', count: 2}
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('async parser applies argv stages that are promises in commands', async () => {
-  expect.assertions(1)
-  
-  const argv = [
-    'command', '-VV'
-  ]
-
-  const splitShortOptions = ({argv}) => ({
-    argv: argv.reduce(
-      (arr, _) => [
-        ...arr,
-        ...(_.length > 2 && _[0] === '-' && _[1] !== '-' ? _.slice(1).split('').map(_ => '-' + _) : [_])
-      ],
-      []
-    )
-  })
-
-  const stages = {
-    argv: [promise(splitShortOptions)]
-  }
-
-  const opts = {
+  const opt = {
+    key: 'Foo',
     opts: [
-      {key: 'command', args: ['command'], opts: [
-        {key: 'version', args: ['-V'], types: []}
-      ]}
+      arc
     ]
   }
 
-  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
+  const argv = ['-a', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
-    _: [],
-    command: {
+    errs: [],
+    args: {
       _: [],
-      version: {type: 'flag', count: 2}
+      arc: '1'
     }
   }
 
-  expect(args).toStrictEqual(exp)
+  expect(res).toStrictEqual(exp)
 })
 
-test('parser applies opts stages', () => {
-  const argv = [
-    '-n', '23', 'true'
-  ]
+test('parserSync works with empty opts', () => {
+  const stages = {}
 
-  const cast = ({opts}) => ({
-    opts: opts.map(
-      opt => opt.key !== 'numBool' ? opt : {...opt, values: [23, true]}
-    )
-  })
+  const substages = {}
 
-  const stages = {
-    opts: [cast]
+  const opt = {
+    key: 'Foo',
+    opts: []
   }
 
-  const {args} = parser(stages)(opts)(argv)
+  const argv = ['-a', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
-    _: [],
-    numBool: [23, true]
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('async parser applies opts stages that are not promises', async () => {
-  expect.assertions(1)
-
-  const argv = [
-    '-n', '23', 'true'
-  ]
-
-  const cast = ({opts}) => ({
-    opts: opts.map(
-      opt => opt.key !== 'numBool' ? opt : {...opt, values: [23, true]}
-    )
-  })
-
-  const stages = {
-    opts: [cast]
-  }
-
-  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
-
-  const exp = {
-    _: [],
-    numBool: [23, true]
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('async parser applies opts stages that are promises', async () => {
-  expect.assertions(1)
-
-  const argv = [
-    '-n', '23', 'true'
-  ]
-
-  const cast = ({opts}) => ({
-    opts: opts.map(
-      opt => opt.key !== 'numBool' ? opt : {...opt, values: [23, true]}
-    )
-  })
-
-  const stages = {
-    opts: [promise(cast)]
-  }
-
-  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
-
-  const exp = {
-    _: [],
-    numBool: [23, true]
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('async parser applies opts stages that are promises in commands', async () => {
-  expect.assertions(1)
-
-  const argv = [
-    'command', '-n', '23', 'true'
-  ]
-
-  const cast = ({opts}) => ({
-    opts: opts.map(
-      opt => opt.key !== 'numBool' ? opt : {...opt, values: [23, true]}
-    )
-  })
-
-  const stages = {
-    opts: [promise(cast)]
-  }
-
-  const opts = {
-    opts: [
-      {key: 'command', args: ['command'], opts: [
-        {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb']},
-      ]}
-    ]
-  }
-
-  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
-
-  const exp = {
-    _: [],
-    command: {
-      _: [],
-      numBool: [23, true]
+    errs: [],
+    args: {
+      _: ['-a', '1']
     }
   }
 
-  expect(args).toStrictEqual(exp)
+  expect(res).toStrictEqual(exp)
 })
 
-test('parser applies args stages', () => {
-  const argv = [
-    'foo'
-  ]
+test('parser works with empty opts', async () => {
+  const stages = {}
 
-  const clearRest = ({args}) => ({
-    args: {_: []}
-  })
+  const substages = {}
 
-  const stages = {
-    args: [clearRest]
+  const opt = {
+    key: 'Foo',
+    opts: []
   }
 
-  const {args} = parser(stages)(opts)(argv)
+  const argv = ['-a', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
 
   const exp = {
-    _: []
+    errs: [],
+    args: {
+      _: ['-a', '1']
+    }
   }
 
-  expect(args).toStrictEqual(exp)
+  expect(res).toStrictEqual(exp)
 })
 
-test('async parser applies args stages that are not promises', async () => {
-  expect.assertions(1)
+test('parserSync works with undefined argv', () => {
+  const stages = {}
 
-  const argv = [
-    'foo'
-  ]
+  const substages = {}
 
-  const clearRest = ({args}) => ({
-    args: {_: []}
-  })
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
 
-  const stages = {
-    args: [clearRest]
-  }
-
-  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
-
-  const exp = {
-    _: []
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('async parser applies args stages that are promises', async () => {
-  expect.assertions(1)
-
-  const argv = [
-    'foo'
-  ]
-
-  const clearRest = ({args}) => ({
-    args: {_: []}
-  })
-
-  const stages = {
-    args: [promise(clearRest)]
-  }
-
-  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
-
-  const exp = {
-    _: []
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('async parser applies args stages that are promises in commands', async () => {
-  expect.assertions(1)
-
-  const argv = [
-    'command', 'foo'
-  ]
-
-  const clearRest = ({args}) => ({
-    args: {...args, _: []}
-  })
-
-  const stages = {
-    args: [promise(clearRest)]
-  }
-
-  const opts = {
+  const opt = {
+    key: 'Foo',
     opts: [
-      {key: 'command', args: ['command'], opts: []}
+      arc
     ]
   }
 
-  const {args} = await parser(stages, {mode: 'async'})(opts)(argv, [])
+  const argv = undefined
+
+  const res = parserSync(stages, substages)(opt)(argv)
 
   const exp = {
-    _: [],
-    command: {
+    errs: [],
+    args: {
       _: []
     }
   }
 
-  expect(args).toStrictEqual(exp)
+  expect(res).toStrictEqual(exp)
 })
 
-test('parser works with empty opts', () => {
-  const argv = [
-    'foo'
-  ]
-
+test('parser works with undefined argv', async () => {
   const stages = {}
 
-  const {args} = parser(stages)({})(argv)
+  const substages = {}
 
-  const exp = {
-    _: ['foo']
-  }
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
 
-  expect(args).toStrictEqual(exp)
-})
-
-test('async parser works with empty opts', async () => {
-  expect.assertions(1)
-
-  const argv = [
-    'foo'
-  ]
-
-  const stages = {}
-
-  const {args} = await parser(stages, {mode: 'async'})({})(argv)
-
-  const exp = {
-    _: ['foo']
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('parser works with undefined opts', () => {
-  const argv = [
-    'foo'
-  ]
-
-  const stages = {}
-
-  const {args} = parser(stages)()(argv)
-
-  const exp = {
-    _: ['foo']
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('async parser works with undefined opts', async () => {
-  expect.assertions(1)
-
-  const argv = [
-    'foo'
-  ]
-
-  const stages = {}
-
-  const {args} = await parser(stages, {mode: 'async'})()(argv)
-
-  const exp = {
-    _: ['foo']
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('parser works with empty argv', () => {
-  const argv = []
-
-  const stages = {}
-
-  const {args} = parser(stages)(opts)(argv)
-
-  const exp = {
-    _: []
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('async parser works with empty argv', async () => {
-  expect.assertions(1)
-
-  const argv = []
-
-  const stages = {}
-
-  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
-
-  const exp = {
-    _: []
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('parser works with undefined argv', () => {
-  const stages = {}
-
-  const {args} = parser(stages)(opts)()
-
-  const exp = {
-    _: []
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('async parser works with undefined argv', async () => {
-  expect.assertions(1)
-
-  const stages = {}
-
-  const {args} = await parser(stages, {mode: 'async'})(opts)()
-
-  const exp = {
-    _: []
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('parser uses a custom toOpts function', () => {
-  const argv = [
-    'foo'
-  ]
-
-  const stages = {
-    toOpts
-  }
-
-  const {args} = parser(stages)(opts)(argv)
-
-  const exp = {
-    _: ['foo']
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('async parser uses a custom toOpts function', async () => {
-  expect.assertions(1)
-
-  const argv = [
-    'foo'
-  ]
-
-  const stages = {
-    toOpts
-  }
-
-  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
-
-  const exp = {
-    _: ['foo']
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('parser uses a custom toArgs function', () => {
-  const argv = [
-    'foo'
-  ]
-
-  const stages = {
-    toArgs: toArgs()
-  }
-
-  const {args} = parser(stages)(opts)(argv)
-
-  const exp = {
-    _: ['foo']
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('async parser uses a custom toArgs function', async () => {
-  expect.assertions(1)
-
-  const argv = [
-    'foo'
-  ]
-
-  const stages = {
-    toArgs: toArgs()
-  }
-
-  const {args} = await parser(stages, {mode: 'async'})(opts)(argv)
-
-  const exp = {
-    _: ['foo']
-  }
-
-  expect(args).toStrictEqual(exp)
-})
-
-test('parser uses the first option if options are defined several times 1/3', () => {
-  const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
-  const help  = {key: 'help', args: ['help'], opts: []}
-
-  const opts = {
+  const opt = {
+    key: 'Foo',
     opts: [
-      tired,
-      help
+      arc
     ]
   }
 
-  const stages = {}
+  const argv = undefined
 
-  const parse = parser(stages)(opts)
+  const res = await parser(stages, substages)(opt)(argv)
 
-  const argv = ['--tired', 'true', '--tired', 'false', 'help']
-
-  const {errs, args} = parse(argv)
-
-  const expErrs = []
-
-  const expArgs = {
-    _: [],
-    tired: 'true',
-    help: {
+  const exp = {
+    errs: [],
+    args: {
       _: []
     }
   }
 
-  expect(args).toStrictEqual(expArgs)
-  expect(errs).toStrictEqual(expErrs)
+  expect(res).toStrictEqual(exp)
 })
 
-test('parser uses the first option if options are defined several times 2/3', () => {
-  const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
-  const help  = {key: 'help', args: ['help'], opts: []}
+test('parserSync works with undefined stages', () => {
+  const stages = {
+    toArgv:   undefined,
+    argv:     undefined,
+    toOpts:   undefined,
+    opts:     undefined,
+    toArgs:   undefined,
+    args:     undefined,
+    fromArgs: undefined
+  }
 
-  const opts = {
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
     opts: [
-      tired,
-      help
+      arc
     ]
   }
 
-  const stages = {}
+  const argv = ['-a', '1']
 
-  const parse = parser(stages)(opts)
+  const res = parserSync(stages, substages)(opt)(argv)
 
-  const argv = ['--tired', 'true', 'help', '--tired', 'false']
-
-  const {errs, args} = parse(argv)
-
-  const expErrs = []
-
-  const expArgs = {
-    _: ['--tired', 'false'],
-    help: {
-      _: ['--tired', 'false']
-    },
-    tired: 'true'
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1'
+    }
   }
 
-  expect(args).toStrictEqual(expArgs)
-  expect(errs).toStrictEqual(expErrs)
+  expect(res).toStrictEqual(exp)
 })
 
-test('parser uses the first option if options are defined several times 3/3', () => {
-  const tired = {key: 'tired', types: ['bool'], args: ['-t', '--tired']}
-  const help  = {key: 'help', args: ['help'], opts: []}
+test('parser works with undefined stages', async () => {
+  const stages = {
+    toArgv:   undefined,
+    argv:     undefined,
+    toOpts:   undefined,
+    opts:     undefined,
+    toArgs:   undefined,
+    args:     undefined,
+    fromArgs: undefined
+  }
 
-  const opts = {
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
     opts: [
-      tired,
-      help
+      arc
     ]
   }
 
-  const stages = {}
+  const argv = ['-a', '1']
 
-  const parse = parser(stages)(opts)
+  const res = await parser(stages, substages)(opt)(argv)
 
-  const argv = ['help', '--tired', 'true', '--tired', 'false']
-
-  const {errs, args} = parse(argv)
-
-  const expErrs = []
-
-  const expArgs = {
-    _: [],
-    help: {
-      _: ['--tired', 'true', '--tired', 'false']
-    },
-    tired: 'true'
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1'
+    }
   }
 
-  expect(args).toStrictEqual(expArgs)
-  expect(errs).toStrictEqual(expErrs)
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with sample stages', () => {
+  const stages = {
+    toArgv:                    any => ({errs: [], argv: any }),
+    argv:           [a             => a                      ],
+    toOpts:   () => ({errs, argv}) => ({errs,     opts: argv}),
+    opts:           [a             => a                      ],
+    toArgs:         ({errs, opts}) => ({errs,     args: opts}),
+    args:           [a             => a                      ],
+    fromArgs:       a              => a
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: ['-a', '1']
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with sample stages', async () => {
+  const stages = {
+    toArgv:                    any => ({errs: [], argv: any }),
+    argv:           [a             => a                      ],
+    toOpts:   () => ({errs, argv}) => ({errs,     opts: argv}),
+    opts:           [a             => a                      ],
+    toArgs:         ({errs, opts}) => ({errs,     args: opts}),
+    args:           [a             => a                      ],
+    fromArgs:       a              => a
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: ['-a', '1']
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with empty stages', () => {
+  const stages = {
+    toArgv:         ({errs, any }) => ({}),
+    argv:          [({errs, argv}) => ({})],
+    toOpts:   () => ({errs, argv}) => ({}),
+    opts:          [({errs, opts}) => ({})],
+    toArgs:         ({errs, opts}) => ({}),
+    args:          [({errs, args}) => ({})],
+    fromArgs:       ({errs, args}) => ({})
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  // @ts-ignore
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {}
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with empty stages', async () => {
+  const stages = {
+    toArgv:         ({errs, any }) => ({}),
+    argv:          [({errs, argv}) => ({})],
+    toOpts:   () => ({errs, argv}) => ({}),
+    opts:          [({errs, opts}) => ({})],
+    toArgs:         ({errs, opts}) => ({}),
+    args:          [({errs, args}) => ({})],
+    fromArgs:       ({errs, args}) => ({})
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  // @ts-ignore
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {}
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with stages returning undefined', () => {
+  const stages = {
+    toArgv:         () => undefined,
+    argv:          [() => undefined],
+    toOpts:   () => () => undefined,
+    opts:          [() => undefined],
+    toArgs:         () => undefined,
+    args:          [() => undefined],
+    fromArgs:       () => undefined
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = undefined
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with stages returning undefined', async () => {
+  const stages = {
+    toArgv:         () => undefined,
+    argv:          [() => undefined],
+    toOpts:   () => () => undefined,
+    opts:          [() => undefined],
+    toArgs:         () => undefined,
+    args:          [() => undefined],
+    fromArgs:       () => undefined
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = undefined
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with flag options', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: {type: 'flag', count: 1}
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with flag options', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: {type: 'flag', count: 1}
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with duplicate flag options by combining them', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '-a']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: {type: 'flag', count: 2}
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with duplicate flag options by combining them', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '-a']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: {type: 'flag', count: 2}
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with primitive options', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1'
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with primitive options', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1'
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with duplicate primitive options by taking the first option', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', '-a', '2']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1'
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with duplicate primitive options by taking the first option', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', '-a', '2']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1'
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with primitive positional arguments', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1'
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with primitive positional arguments', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1'
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with duplicate positional arguments by adding remaining ones to the rest array', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['1', '2']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['2'],
+      arc: '1'
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with duplicate positional arguments by adding remaining ones to the rest array', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['1', '2']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['2'],
+      arc: '1'
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with array options', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A', 'B']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', '2']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with array options', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A', 'B']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', '2']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with duplicate array options by taking the first one', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A', 'B']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', '2', '-a', '3', '4']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with duplicate array options by taking the first one', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A', 'B']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', '2', '-a', '3', '4']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with array positional arguments', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', types: ['A', 'B']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['1', '2']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with array positional arguments', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', types: ['A', 'B']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['1', '2']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with duplicate array positional arguments by adding all remaining to the rest array', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', types: ['A', 'B']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['1', '2', '3', '4']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['3', '4'],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with duplicate array positional arguments by adding all remaining to the rest array', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', types: ['A', 'B']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['1', '2', '3', '4']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['3', '4'],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with variadic options', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', '2', '3']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2', '3']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with variadic options', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', '2', '3']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2', '3']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync does not work with duplicate variadic options without --', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', '2', '-a', '3']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2', '-a', '3']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser does not work with duplicate variadic options without --', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', '2', '-a', '3']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2', '-a', '3']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with duplicate variadic options with -- by taking only the first one', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', '2', '--', '-a', '3']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with duplicate variadic options with -- by taking only the first one', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', '2', '--', '-a', '3']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with variadic positional arguments', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc'}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['1', '2', '3']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2', '3']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with variadic positional arguments', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc'}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['1', '2', '3']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2', '3']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with variadic positional arguments and --', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc'}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['1', '2', '--', '3']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['3'],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with variadic positional arguments and --', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc'}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['1', '2', '--', '3']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['3'],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with duplicate variadic positional arguments and -- by taking only the first', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc'}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc,
+      arc
+    ]
+  }
+
+  const argv = ['1', '2', '--', '3']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with duplicate variadic positional arguments and -- by taking only the first', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc'}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc,
+      arc
+    ]
+  }
+
+  const argv = ['1', '2', '--', '3']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with empty subcommands 1', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const Arc = {key: 'Arc', args: ['Arc'], opts: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: ['1']
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with empty subcommands 1', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const Arc = {key: 'Arc', args: ['Arc'], opts: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: ['1']
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with empty subcommands 2', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const Arc = {key: 'Arc', args: ['Arc'], opts: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['1', 'Arc']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['1'],
+      Arc: {
+        _: []
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with empty subcommands 2', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const Arc = {key: 'Arc', args: ['Arc'], opts: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['1', 'Arc']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['1'],
+      Arc: {
+        _: []
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with empty subcommands 3', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const Arc = {key: 'Arc', args: ['Arc'], opts: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', '--', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['1'],
+      Arc: {
+        _: []
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with empty subcommands 3', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const Arc = {key: 'Arc', args: ['Arc'], opts: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', '--', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['1'],
+      Arc: {
+        _: []
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with unused subcommands', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const Arc = {key: 'Arc', args: ['Arc'], opts: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['1']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with unused subcommands', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const Arc = {key: 'Arc', args: ['Arc'], opts: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['1']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with subcommands', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', '-a', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: [],
+        arc: '1'
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with subcommands', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', '-a', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: [],
+        arc: '1'
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with subcommands of subcommands', () => {
+  const stages = {
+    opts: [
+      ({errs, opts}) => ({
+        errs,
+        opts: opts.map(opt =>
+          ({...opt, ...(opt.key === 'arc' ? {values: ['foo']} : {})})
+        )
+      })
+    ]
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [
+    arc
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    Bar
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', 'Bar', '-a', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: [],
+        Bar: {
+          _: [],
+          arc: 'foo'
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with subcommands of subcommands', async () => {
+  const stages = {
+    opts: [
+      ({errs, opts}) => ({
+        errs,
+        opts: opts.map(opt =>
+          ({...opt, ...(opt.key === 'arc' ? {values: ['foo']} : {})})
+        )
+      })
+    ]
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [
+    arc
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    Bar
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', 'Bar', '-a', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: [],
+        Bar: {
+          _: [],
+          arc: 'foo'
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with substages', () => {
+  const stages = {}
+
+  const substages = {
+    Arc: {
+      Bar: [
+        ({errs, opts}) => ({
+          errs,
+          opts: opts.map(opt =>
+            ({...opt, ...(opt.key === 'arc' ? {values: ['foo']} : {})})
+          )
+        })
+      ]
+    }
+  }
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [
+    arc
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    Bar,
+    arc
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1',
+      Arc: {
+        _: [],
+        arc: '2',
+        Bar: {
+          _: [],
+          arc: 'foo'
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with substages', async () => {
+  const stages = {}
+
+  const substages = {
+    Arc: {
+      Bar: [
+        ({errs, opts}) => ({
+          errs,
+          opts: opts.map(opt =>
+            ({...opt, ...(opt.key === 'arc' ? {values: ['foo']} : {})})
+          )
+        })
+      ]
+    }
+  }
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [
+    arc
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    Bar,
+    arc
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1',
+      Arc: {
+        _: [],
+        arc: '2',
+        Bar: {
+          _: [],
+          arc: 'foo'
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with default substages 1', () => {
+  const stages = {}
+
+  const substages = {
+    _: [
+      ({errs, opts}) => ({
+        errs,
+        opts: opts.map(opt =>
+          ({...opt, ...(opt.key === 'arc' ? {values: ['foo']} : {})})
+        )
+      })
+    ]
+  }
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [
+    arc
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      Bar,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1',
+      Arc: {
+        _: [],
+        arc: 'foo'
+      },
+      Bar: {
+        _: [],
+        arc: 'foo'
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with default substages 1', async () => {
+  const stages = {}
+
+  const substages = {
+    _: [
+      ({errs, opts}) => ({
+        errs,
+        opts: opts.map(opt =>
+          ({...opt, ...(opt.key === 'arc' ? {values: ['foo']} : {})})
+        )
+      })
+    ]
+  }
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [
+    arc
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      Bar,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1',
+      Arc: {
+        _: [],
+        arc: 'foo'
+      },
+      Bar: {
+        _: [],
+        arc: 'foo'
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with default substages 2', () => {
+  const stages = {}
+
+  const substages = {
+    _: [
+      ({errs, opts}) => ({
+        errs,
+        opts: opts.map(opt =>
+          ({...opt, ...(opt.key === 'arc' ? {values: ['foo']} : {})})
+        )
+      })
+    ]
+  }
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [
+    arc
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc,
+    Bar
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1',
+      Arc: {
+        _: [],
+        arc: 'foo',
+        Bar: {
+          _: [],
+          arc: '3'
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with default substages 2', async () => {
+  const stages = {}
+
+  const substages = {
+    _: [
+      ({errs, opts}) => ({
+        errs,
+        opts: opts.map(opt =>
+          ({...opt, ...(opt.key === 'arc' ? {values: ['foo']} : {})})
+        )
+      })
+    ]
+  }
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [
+    arc
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc,
+    Bar
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1',
+      Arc: {
+        _: [],
+        arc: 'foo',
+        Bar: {
+          _: [],
+          arc: '3'
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with default substages 3', () => {
+  const stages = {}
+
+  const substages = {
+    _: {
+      Cat: [
+        ({errs, opts}) => ({
+          errs,
+          opts: opts.map(opt =>
+            ({...opt, ...(opt.key === 'arc' ? {values: ['foo']} : {})})
+          )
+        })
+      ]
+    }
+  }
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Cat = {key: 'Cat', args: ['Cat'], opts: [
+    arc
+  ]}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [
+    arc,
+    Cat
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc,
+    Cat
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      Bar,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', 'Arc', '-a', '2', 'Cat', '-a', '3', 'Bar', '-a', '4', 'Cat', '-a', '5']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1',
+      Arc: {
+        _: [],
+        arc: '2',
+        Cat: {
+          _: [],
+          arc: 'foo'
+        }
+      },
+      Bar: {
+        _: [],
+        arc: '4',
+        Cat: {
+          _: [],
+          arc: 'foo'
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with default substages 3', async () => {
+  const stages = {}
+
+  const substages = {
+    _: {
+      Cat: [
+        ({errs, opts}) => ({
+          errs,
+          opts: opts.map(opt =>
+            ({...opt, ...(opt.key === 'arc' ? {values: ['foo']} : {})})
+          )
+        })
+      ]
+    }
+  }
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Cat = {key: 'Cat', args: ['Cat'], opts: [
+    arc
+  ]}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [
+    arc,
+    Cat
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc,
+    Cat
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      Bar,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', 'Arc', '-a', '2', 'Cat', '-a', '3', 'Bar', '-a', '4', 'Cat', '-a', '5']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1',
+      Arc: {
+        _: [],
+        arc: '2',
+        Cat: {
+          _: [],
+          arc: 'foo'
+        }
+      },
+      Bar: {
+        _: [],
+        arc: '4',
+        Cat: {
+          _: [],
+          arc: 'foo'
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with default substages 4', () => {
+  const stages = {}
+
+  const substages = {
+    _: {
+      _: [
+        ({errs, opts}) => ({
+          errs,
+          opts: opts.map(opt =>
+            ({...opt, ...(opt.key === 'arc' ? {values: ['foo']} : {})})
+          )
+        })
+      ]
+    }
+  }
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Cat = {key: 'Cat', args: ['Cat'], opts: [
+    arc
+  ]}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [
+    arc
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc,
+    Bar,
+    Cat
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3', 'Cat', '-a', '4']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1',
+      Arc: {
+        _: [],
+        arc: '2',
+        Bar: {
+          _: [],
+          arc: 'foo'
+        },
+        Cat: {
+          _: [],
+          arc: 'foo'
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with default substages 4', async () => {
+  const stages = {}
+
+  const substages = {
+    _: {
+      _: [
+        ({errs, opts}) => ({
+          errs,
+          opts: opts.map(opt =>
+            ({...opt, ...(opt.key === 'arc' ? {values: ['foo']} : {})})
+          )
+        })
+      ]
+    }
+  }
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Cat = {key: 'Cat', args: ['Cat'], opts: [
+    arc
+  ]}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [
+    arc
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc,
+    Bar,
+    Cat
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1', 'Arc', '-a', '2', 'Bar', '-a', '3', 'Cat', '-a', '4']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: '1',
+      Arc: {
+        _: [],
+        arc: '2',
+        Bar: {
+          _: [],
+          arc: 'foo'
+        },
+        Cat: {
+          _: [],
+          arc: 'foo'
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with duplicate subcommands by only taking the first', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: []}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '-a', 'Arc', '-a', 'Arc', '-a']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: {type: 'flag', count: 2},
+      Arc: {
+        _: [],
+        arc: {type: 'flag', count: 1}
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with duplicate subcommands by only taking the first', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: []}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '-a', 'Arc', '-a', 'Arc', '-a']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: {type: 'flag', count: 2},
+      Arc: {
+        _: [],
+        arc: {type: 'flag', count: 1}
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with duplicate subcommands by setting fromArgs to the identity function', () => {
+  const identity = a => a
+
+  const stages = {
+    fromArgs: identity
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: []}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '-a', 'Arc', '-a', 'Arc', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: [],
+        arc: {type: 'flag', count: 2}
+      },
+      {
+        Arc: {
+          _: [],
+          arc: {type: 'flag', count: 1}
+        }
+      },
+      {
+        Arc: {
+          _: ['1']
+        }
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with duplicate subcommands by setting fromArgs to the identity function', async () => {
+  const identity = a => a
+
+  const stages = {
+    fromArgs: identity
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: []}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '-a', 'Arc', '-a', 'Arc', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: [],
+        arc: {type: 'flag', count: 2}
+      },
+      {
+        Arc: {
+          _: [],
+          arc: {type: 'flag', count: 1}
+        }
+      },
+      {
+        Arc: {
+          _: ['1']
+        }
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync passes on errors from argv stages', () => {
+  const err = {code: 'Test', msg: 'This is a test.', info: {}}
+
+  const withErr = ({errs, argv}) => ({errs: [...errs, err], argv})
+
+  const stages = {
+    argv: [withErr]
+  }
+
+  const substages = {}
+
+  const opt = {
+    key: 'Foo',
+    opts: []
+  }
+
+  const argv = []
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [
+      err
+    ],
+    args: {_: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser passes on errors from argv stages', async () => {
+  const err = {code: 'Test', msg: 'This is a test.', info: {}}
+
+  const withErr = ({errs, argv}) => ({errs: [...errs, err], argv})
+
+  const stages = {
+    argv: [withErr]
+  }
+
+  const substages = {}
+
+  const opt = {
+    key: 'Foo',
+    opts: []
+  }
+
+  const argv = []
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [
+      err
+    ],
+    args: {_: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync passes on errors from opts stages', () => {
+  const err = {code: 'Test', msg: 'This is a test.', info: {}}
+
+  const withErr = ({errs, opts}) => ({errs: [...errs, err], opts})
+
+  const stages = {
+    opts: [withErr]
+  }
+
+  const substages = {}
+
+  const opt = {
+    key: 'Foo',
+    opts: []
+  }
+
+  const argv = []
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [
+      err
+    ],
+    args: {_: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser passes on errors from opts stages', async () => {
+  const err = {code: 'Test', msg: 'This is a test.', info: {}}
+
+  const withErr = ({errs, opts}) => ({errs: [...errs, err], opts})
+
+  const stages = {
+    opts: [withErr]
+  }
+
+  const substages = {}
+
+  const opt = {
+    key: 'Foo',
+    opts: []
+  }
+
+  const argv = []
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [
+      err
+    ],
+    args: {_: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync passes on errors from args stages', () => {
+  const err = {code: 'Test', msg: 'This is a test.', info: {}}
+
+  const withErr = ({errs, args}) => ({errs: [...errs, err], args})
+
+  const stages = {
+    args: [withErr]
+  }
+
+  const substages = {}
+
+  const opt = {
+    key: 'Foo',
+    opts: []
+  }
+
+  const argv = []
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [
+      err
+    ],
+    args: {_: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser passes on errors from args stages', async () => {
+  const err = {code: 'Test', msg: 'This is a test.', info: {}}
+
+  const withErr = ({errs, args}) => ({errs: [...errs, err], args})
+
+  const stages = {
+    args: [withErr]
+  }
+
+  const substages = {}
+
+  const opt = {
+    key: 'Foo',
+    opts: []
+  }
+
+  const argv = []
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [
+      err
+    ],
+    args: {_: []}
+  }
+
+  expect(res).toStrictEqual(exp)
 })

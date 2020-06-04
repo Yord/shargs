@@ -1,275 +1,657 @@
-const {toOpts}  = require('./index')
+const {toOpts} = require('..')
+const {CommandExpected} = require('../errors')
 
-const without = (keys = [], opts = []) => opts.filter(({key}) => keys.indexOf(key) === -1)
+test('toOpts works for empty command and empty argv', () => {
+  const opt = {
+    key: 'opt',
+    opts: []
+  }
 
-const OPTS = [
-  {key: 'positional', types: ['string']},
-  {key: 'boolStringPos', types: ['bool', 'string']},
-  {key: 'title', types: ['string'], args: ['--title']},
-  {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb']},
-  {key: 'answer', types: ['number'], args: ['-a', '--answer']},
-  {key: 'help', args: ['-h', '--help']},
-  {key: 'verbose', types: ['bool'], args: ['--verbose']},
-  {key: 'version', types: [], args: ['--version']}
-]
+  const errs = []
 
-test('toOpts transforms argv into opts', () => {
-  const obj = {
-    argv: [
-      'foo',
-      'true',
-      'bar',
-      '--title', "The Hitchhiker's Guide to the Galaxy",
-      '-n', '23', 'true',
-      '-a', '42',
-      '--verbose', 'false',
-      '--version',
-      'bar',
-      '-h', 'foo', '--bar'
+  const argv = []
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: []
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('toOpts works for nonempty command and empty argv', () => {
+  const arc = {key: 'arc'}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      arc
     ]
   }
 
-  const {opts} = toOpts(OPTS)(obj)
+  const errs = []
 
-  const exp = [
-    {key: 'positional', types: ['string'], values: ['foo']},
-    {key: 'boolStringPos', types: ['bool', 'string'], values: ['true', 'bar']},
-    {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]},
-    {key: 'numBool', types: ['number', 'bool'], args: ['-n', '--nb'], values: ['23', 'true']},
-    {key: 'answer', types: ['number'], args: ['-a', '--answer'], values: ['42']},
-    {key: 'verbose', types: ['bool'], args: ['--verbose'], values: ['false']},
-    {key: 'version', types: [], args: ['--version'], values: [1]},
-    {values: ['bar']},
-    {key: 'help', args: ['-h', '--help'], values: ['foo', '--bar']}
-  ]
+  const argv = []
 
-  expect(opts).toStrictEqual(exp)
-})
+  const res = toOpts(opt)({errs, argv})
 
-test('toOpts returns an unmatched value if an option has too few argvs', () => {
-  const obj = {
-    argv: [
-      '--name'
+  const exp = {
+    errs: [],
+    opts: [
+      arc
     ]
   }
 
-  const testDefault = {key: 'name', types: ['string'], args: ['-n']}
-
-  const {opts} = toOpts([testDefault])(obj)
-
-  const exp = [
-    {values: ['--name']},
-    testDefault
-  ]
-
-  expect(opts).toStrictEqual(exp)
+  expect(res).toStrictEqual(exp)
 })
 
-test('toOpts keeps unrecognized strings after applying positional arguments', () => {
-  const obj = {
-    argv: [
-      'foo',
-      'bar'
+test('toOpts works for empty command and nonempty argv', () => {
+  const opt = {
+    key: 'opt',
+    opts: []
+  }
+
+  const errs = []
+
+  const argv = ['unknown']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {values: ['unknown']}
     ]
   }
 
-  const {opts} = toOpts(OPTS)(obj)
-
-  const exp = [
-    {key: 'positional', types: ['string'], values: ['foo']},
-    {values: ['bar']},
-    ...OPTS.slice(1)
-  ]
-
-  expect(opts).toStrictEqual(exp)
+  expect(res).toStrictEqual(exp)
 })
 
-test('toOpts transforms unary options', () => {
-  const obj = {
-    argv: [
-      '--title', "The Hitchhiker's Guide to the Galaxy"
+test('toOpts works for rest values', () => {
+  const arc = {key: 'arc', args: ['-a'], types: []}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      arc
     ]
   }
 
-  const {opts} = toOpts(OPTS)(obj)
+  const errs = []
 
-  const exp = [
-    {key: 'title', types: ['string'], args: ['--title'], values: ["The Hitchhiker's Guide to the Galaxy"]},
-    ...without(['title'], OPTS)
-  ]
+  const argv = ['unknown']
 
-  expect(opts).toStrictEqual(exp)
-})
+  const res = toOpts(opt)({errs, argv})
 
-test('toOpts transforms command opts at the end of the line', () => {
-  const obj = {
-    argv: [
-      '-h', 'foo', '--bar'
+  const exp = {
+    errs: [],
+    opts: [
+      {values: ['unknown']},
+      arc
     ]
   }
 
-  const {opts} = toOpts(OPTS)(obj)
-
-  const exp = [
-    {key: 'help', args: ['-h', '--help'], values: ['foo', '--bar']},
-    ...without(['help'], OPTS)
-  ]
-
-  expect(opts).toStrictEqual(exp)
+  expect(res).toStrictEqual(exp)
 })
 
-test('toOpts transforms command opts at the end of the line with double minusses', () => {
-  const obj = {
-    argv: [
-      'foo',
-      '-h', 'foo', '--bar',
-      '--'
+test('toOpts works for flag options', () => {
+  const arc = {key: 'arc', args: ['-a'], types: []}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      arc
     ]
   }
 
-  const {opts} = toOpts(OPTS)(obj)
+  const errs = []
 
-  const exp = [
-    {key: 'positional', types: ['string'], values: ['foo']},
-    {key: 'help', args: ['-h', '--help'], values: ['foo', '--bar']},
-    {values: ['--']},
-    ...without(['help', 'positional'], OPTS)
-  ]
+  const argv = ['-a']
 
-  expect(opts).toStrictEqual(exp)
-})
+  const res = toOpts(opt)({errs, argv})
 
-test('toOpts transforms command opts at the start of the line with double minusses', () => {
-  const obj = {
-    argv: [
-      '-h', 'foo', '--bar',
-      '--',
-      'foo'
+  const exp = {
+    errs: [],
+    opts: [
+      {...arc, values: [1]}
     ]
   }
 
-  const {opts} = toOpts(OPTS)(obj)
-
-  const exp = [
-    {key: 'help', args: ['-h', '--help'], values: ['foo', '--bar']},
-    {values: ['--']},
-    {key: 'positional', types: ['string'], values: ['foo']},
-    ...without(['help', 'positional'], OPTS)
-  ]
-
-  expect(opts).toStrictEqual(exp)
+  expect(res).toStrictEqual(exp)
 })
 
-test('toOpts transforms command opts in the middle of the line with double minusses', () => {
-  const obj = {
-    argv: [
-      'foo',
-      '-h', 'foo', '--bar',
-      '--',
-      'foo'
+test('toOpts works for primitive options', () => {
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      arc
     ]
   }
 
-  const {opts} = toOpts(OPTS)(obj)
+  const errs = []
 
-  const exp = [
-    {key: 'positional', types: ['string'], values: ['foo']},
-    {key: 'help', args: ['-h', '--help'], values: ['foo', '--bar']},
-    {values: ['--']},
-    {values: ['foo']},
-    ...without(['help', 'positional'], OPTS)
-  ]
+  const argv = ['-a', '1']
 
-  expect(opts).toStrictEqual(exp)
-})
+  const res = toOpts(opt)({errs, argv})
 
-test('toOpts works with commands that have no argv', () => {
-  const obj = {
-    argv: [
-      '-h'
+  const exp = {
+    errs: [],
+    opts: [
+      {...arc, values: ['1']}
     ]
   }
 
-  const {opts} = toOpts(OPTS)(obj)
-
-  const exp = [
-    {key: 'help', args: ['-h', '--help'], values: []},
-    ...without(['help'], OPTS)
-  ]
-
-  expect(opts).toStrictEqual(exp)
+  expect(res).toStrictEqual(exp)
 })
 
-test('toOpts transforms empty argv into empty opts', () => {
-  const obj = {
-    argv: []
-  }
+test('toOpts works for array options', () => {
+  const arc = {key: 'arc', args: ['-a'], types: ['A', 'B']}
 
-  const {opts} = toOpts(OPTS)(obj)
-
-  const exp = OPTS
-
-  expect(opts).toStrictEqual(exp)
-})
-
-test('toOpts transforms missing argv into empty opts', () => {
-  const obj = {}
-
-  const {opts} = toOpts(OPTS)(obj)
-
-  const exp = OPTS
-
-  expect(opts).toStrictEqual(exp)
-})
-
-test('toOpts transforms undefined input into empty opts', () => {
-  const {opts} = toOpts(OPTS)()
-
-  const exp = OPTS
-
-  expect(opts).toStrictEqual(exp)
-})
-
-test('toOpts works even if opts are empty', () => {
-  const obj = {
-    argv: [
-      '-h',
-      'foo'
+  const opt = {
+    key: 'opt',
+    opts: [
+      arc
     ]
   }
 
-  const {opts} = toOpts([])(obj)
+  const errs = []
 
-  const exp = [
-    {values: ['-h']},
-    {values: ['foo']}
-  ]
+  const argv = ['-a', '1', '2']
 
-  expect(opts).toStrictEqual(exp)
-})
+  const res = toOpts(opt)({errs, argv})
 
-test('toOpts works even if opts are undefined', () => {
-  const obj = {
-    argv: [
-      '-h',
-      'foo'
+  const exp = {
+    errs: [],
+    opts: [
+      {...arc, values: ['1', '2']}
     ]
   }
 
-  const {opts} = toOpts()(obj)
+  expect(res).toStrictEqual(exp)
+})
 
-  const exp = [
-    {values: ['-h']},
-    {values: ['foo']}
-  ]
+test('toOpts works for variadic options', () => {
+  const arc = {key: 'arc', args: ['-a']}
 
-  expect(opts).toStrictEqual(exp)
+  const opt = {
+    key: 'opt',
+    opts: [
+      arc
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['-a', '1', '2', '3']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...arc, types: ['string', 'string', 'string'], values: ['1', '2', '3']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('toOpts works for primitive positional arguments', () => {
+  const arc = {key: 'arc', types: ['A']}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      arc
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['1']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...arc, values: ['1']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('toOpts works for array positional arguments', () => {
+  const arc = {key: 'arc', types: ['A', 'B']}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      arc
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['1', '2']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...arc, values: ['1', '2']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('toOpts works for variadic positional arguments', () => {
+  const arc = {key: 'arc'}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      arc
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['1', '2', '3']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...arc, types: ['string', 'string', 'string'], values: ['1', '2', '3']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('toOpts works for subcommands', () => {
+  const Arc = {key: 'Arc', args: ['Arc'], opts: []}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      Arc
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['Arc']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...Arc, values: []}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('toOpts works for subcommands with flag options', () => {
+  const arc = {key: 'arc', args: ['-a'], types: []}
+  const bar = {key: 'bar'}
+  const cat = {key: 'cat'}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc,
+    bar
+  ]}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      Arc,
+      cat
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['Arc', '-a']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...Arc, values: [
+        {...arc, values: [1]},
+        bar
+      ]},
+      cat
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('toOpts works for subcommands with primitive options', () => {
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const bar = {key: 'bar'}
+  const cat = {key: 'cat'}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc,
+    bar
+  ]}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      Arc,
+      cat
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['Arc', '-a', '1']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...Arc, values: [
+        {...arc, values: ['1']},
+        bar
+      ]},
+      cat
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('toOpts works for subcommands with array options', () => {
+  const arc = {key: 'arc', args: ['-a'], types: ['A', 'B']}
+  const bar = {key: 'bar'}
+  const cat = {key: 'cat'}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc,
+    bar
+  ]}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      Arc,
+      cat
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['Arc', '-a', '1', '2']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...Arc, values: [
+        {...arc, values: ['1', '2']},
+        bar
+      ]},
+      cat
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('toOpts works for subcommands with variadic options', () => {
+  const arc = {key: 'arc', args: ['-a']}
+  const bar = {key: 'bar'}
+  const cat = {key: 'cat'}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc,
+    bar
+  ]}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      Arc,
+      cat
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['Arc', '-a', '1', '2', '3']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...Arc, values: [
+        {...arc, types: ['string', 'string', 'string'], values: ['1', '2', '3']},
+        bar
+      ]},
+      cat
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('toOpts works for subcommands with primitive positional arguments', () => {
+  const arc = {key: 'arc', types: ['A']}
+  const bar = {key: 'bar'}
+  const cat = {key: 'cat'}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc,
+    bar
+  ]}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      Arc,
+      cat
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['Arc', '1']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...Arc, values: [
+        {...arc, values: ['1']},
+        bar
+      ]},
+      cat
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('toOpts works for subcommands with array positional arguments', () => {
+  const arc = {key: 'arc', types: ['A', 'B']}
+  const bar = {key: 'bar'}
+  const cat = {key: 'cat'}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc,
+    bar
+  ]}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      Arc,
+      cat
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['Arc', '1', '2']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...Arc, values: [
+        {...arc, values: ['1', '2']},
+        bar
+      ]},
+      cat
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('toOpts works for subcommands with variadic positional arguments', () => {
+  const arc = {key: 'arc'}
+  const bar = {key: 'bar'}
+  const cat = {key: 'cat'}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc,
+    bar
+  ]}
+
+  const opt = {
+    key: 'opt',
+    opts: [
+      Arc,
+      cat
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['Arc', '1', '2', '3']
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...Arc, values: [
+        {...arc, types: ['string', 'string', 'string'], values: ['1', '2', '3']},
+        bar
+      ]},
+      cat
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('toOpts works with undefined opt', () => {
+  const err = CommandExpected({opt: {}})
+
+  const errs = []
+
+  const argv = []
+
+  const res = toOpts()({errs, argv})
+
+  const exp = {
+    errs: [
+      err
+    ],
+    opts: []
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('toOpts works with undefined input', () => {
+  const opt = {
+    key: 'opt',
+    opts: []
+  }
+
+  const res = toOpts(opt)()
+
+  const exp = {
+    errs: [],
+    opts: []
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('toOpts works with undefined errs', () => {
+  const opt = {
+    key: 'opt',
+    opts: []
+  }
+
+  const res = toOpts(opt)({argv: []})
+
+  const exp = {
+    errs: [],
+    opts: []
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('toOpts works with undefined argv', () => {
+  const opt = {
+    key: 'opt',
+    opts: []
+  }
+
+  const res = toOpts(opt)({errs: []})
+
+  const exp = {
+    errs: [],
+    opts: []
+  }
+
+  expect(res).toStrictEqual(exp)
 })
 
 test('toOpts passes on errors', () => {
-  const ERRS = [{code: 'foo', msg: 'bar', info: {}}]
+  const test = {code: 'test', msg: 'test', info: {}}
 
-  const {errs} = toOpts()({errs: ERRS})
+  const opt = {
+    key: 'opt',
+    opts: []
+  }
 
-  expect(errs).toStrictEqual(ERRS)
+  const errs = [
+    test
+  ]
+
+  const argv = []
+
+  const res = toOpts(opt)({errs, argv})
+
+  const exp = {
+    errs: [
+      test
+    ],
+    opts: []
+  }
+
+  expect(res).toStrictEqual(exp)
 })

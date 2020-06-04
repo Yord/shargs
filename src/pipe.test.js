@@ -1,6 +1,19 @@
 const {anything, assert, func, property} = require('fast-check')
 const {pipe} = require('./pipe')
 
+test('pipe returns its input for no functions', () => {
+  const a = anything()
+  assert(
+    property(a, (a) => {
+      expect(
+        pipe()(a)
+      ).toStrictEqual(
+        a
+      )
+    })
+  )
+})
+
 test('pipe composes functions, but backwards', () => {
   const f = func(anything())
   const g = func(anything())
