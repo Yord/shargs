@@ -4087,14 +4087,14 @@ combine them in various ways, and return a new usage function.
 Let's see how usage combinators may be used to implement [`synopses`](#synopses):
 
 ```js
-const {decorate, noCommands, onlyCommands, optsMap, synopsis, usage, usageMap} = require('shargs-usage')
+const {decorate, noSubcommands, onlySubcommands, optsMap, synopsis, usage, usageMap} = require('shargs-usage')
 
 const prefixKey = prefix => optsMap(opts => ({...opts, key: prefix + ' ' + opts.key}))
 
 function synopses (opt) {
   return usage([
-    noCommands(synopsis),
-    decorate(prefixKey(opt.key), onlyCommands)(
+    noSubcommands(synopsis),
+    decorate(prefixKey(opt.key), onlySubcommands)(
       usageMap(synopses)
     )
   ])(opt)
@@ -4241,26 +4241,26 @@ Usage decorators enable these use cases by modifying inputs of [usage functions]
 
 ```js
 const {desc, optsDef, optsList, space, synopsis, usage} = require('shargs-usage')
-const {decorate, noCommands, onlyCommands, onlyFirstArg} = require('shargs-usage')
+const {decorate, noSubcommands, onlyFirstArg, onlySubcommands} = require('shargs-usage')
 
 const decoratedDocs = usage([
-  noCommands(onlyFirstArg(synopsis)),
+  noSubcommands(onlyFirstArg(synopsis)),
   space,
-  onlyCommands(optsDef),
+  onlySubcommands(optsDef),
   space,
-  noCommands(optsList),
+  noSubcommands(optsList),
   space,
   desc
 ])
 ```
 
 The example uses three different decorators:
-[`noCommands`](#noCommands), [`onlyCommands`](#onlyCommands), and [`onlyFirstArg`](#onlyFirstArg).
+[`noSubcommands`](#noSubcommands), [`onlySubcommands`](#onlySubcommands), and [`onlyFirstArg`](#onlyFirstArg).
 Each of these decorators modifies the `opts` array in some way,
 before passing it on to their wrapped [usage function](#usage-functions).
 The first two focus on filtering `opts`:
-[`noCommands`](#noCommands) removes all [`subcommands`](#subcommands)s,
-while [`onlyCommands`](#onlyCommands) keeps only [`subcommands`](#subcommands)s.
+[`noSubcommands`](#noSubcommands) removes all [`subcommands`](#subcommands)s,
+while [`onlySubcommands`](#onlySubcommands) keeps only [`subcommands`](#subcommands)s.
 [`onlyFirstArg`](#onlyFirstArg) goes one step further and modifies each option in `opts`,
 removing all but the first argument in their [`args`](#args) fields.
 
@@ -4316,12 +4316,12 @@ Result:
 </details>
 </td>
 </tr>
-<tr name="noCommands">
-<td><code><a href="#noCommands">noCommands</a>(usageFunction)(opt)</code></td>
+<tr name="noSubcommands">
+<td><code><a href="#noSubcommands">noSubcommands</a>(usageFunction)(opt)</code></td>
 <td>
 <details>
 <summary>
-<code>noCommands</code> modifies its <code>opt</code>
+<code>noSubcommands</code> modifies its <code>opt</code>
 by removing all <code><a href="#subcommands">subcommands</a></code>s from its <code><a href="#opts">opts</a></code>.
 </summary>
 
@@ -4330,7 +4330,7 @@ by removing all <code><a href="#subcommands">subcommands</a></code>s from its <c
 Example:
 
 ```js
-const {noCommands} = require('shargs-usage')
+const {noSubcommands} = require('shargs-usage')
 const {flag, number, subcommand} = require('shargs-opts')
 
 const style = {
@@ -4347,7 +4347,7 @@ const opt = {
   ]
 }
 
-noCommands(optsList)({opts})(style)
+noSubcommands(optsList)({opts})(style)
 ```
 
 Result:
@@ -4360,12 +4360,12 @@ Result:
 </details>
 </td>
 </tr>
-<tr name="onlyCommands">
-<td><code><a href="#onlyCommands">onlyCommands</a>(usageFunction)(opt)</code></td>
+<tr name="onlySubcommands">
+<td><code><a href="#onlySubcommands">onlySubcommands</a>(usageFunction)(opt)</code></td>
 <td>
 <details>
 <summary>
-<code>onlyCommands</code> modifies its <code>opt</code>
+<code>onlySubcommands</code> modifies its <code>opt</code>
 by keeping only <code><a href="#subcommands">subcommands</a></code>s in its <code><a href="#opts">opts</a></code>.
 </summary>
 
@@ -4374,7 +4374,7 @@ by keeping only <code><a href="#subcommands">subcommands</a></code>s in its <cod
 Example:
 
 ```js
-const {onlyCommands} = require('shargs-usage')
+const {onlySubcommands} = require('shargs-usage')
 const {flag, number, subcommand} = require('shargs-opts')
 
 const style = {
@@ -4391,7 +4391,7 @@ const opt = {
   ]
 }
 
-onlyCommands(optsList)(opt)(style)
+onlySubcommands(optsList)(opt)(style)
 ```
 
 Result:
@@ -4555,18 +4555,18 @@ ask                      Asks a question
 If many usage decorators are applied to a usage function, things get unwieldy, fast:
 
 ```js
-const {justArgs, noCommands, onlyFirstArg, synopsis} = require('shargs-usage')
+const {justArgs, noSubcommands, onlyFirstArg, synopsis} = require('shargs-usage')
 
-const briefSynopsis = noCommands(onlyFirstArg(justArgs(['--help'])(synopsis)))
+const briefSynopsis = noSubcommands(onlyFirstArg(justArgs(['--help'])(synopsis)))
 ```
 
 In the example, `briefSynopsis` is decorated three times and the code is not very readable.
 Usage decorator combinators facilitate a cleaner code layout:
 
 ```js
-const {decorate, justArgs, noCommands, onlyFirstArg, synopsis} = require('shargs-usage')
+const {decorate, justArgs, noSubcommands, onlyFirstArg, synopsis} = require('shargs-usage')
 
-const decorated = decorate(noCommands, onlyFirstArg, justArgs(['--help']))
+const decorated = decorate(noSubcommands, onlyFirstArg, justArgs(['--help']))
 
 const briefSynopsis = decorated(synopsis)
 ```
