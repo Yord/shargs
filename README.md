@@ -6324,63 +6324,56 @@ If you provide `--fun`, the `fun` variable is set to `true`, on `--no-fun` it is
 and providing neither `--fun`, nor `--no-fun` would mean `unknown`.
 
 You could implement the same behavior with an option that takes none or one argument,
-by using a combination of variable length arrays, aka [`commands`](#command) and a custom command-line options field.
-The general idea is to mark a `command` as `threeValued` with a flag,
+by using a combination of variable length arrays,
+aka [`subcommands`](#subcommand) and a custom command-line options field.
+The general idea is to mark a `subcommand` as `threeValued` with a field,
 and then transform it to a custom type in the opts stage.
 
 First, let us define an option:
 
 ```js
-const {command} = require('shargs-opts')
+const {stringPos, subcommand} = require('shargs-opts')
 
-const fun = command('fun', ['--fun'], {threeValued: true})
+const funOpts = [
+  stringPos('threeValues')
+]
+
+const fun = subcommand(funOpts)('fun', ['--fun'], {threeValued: true})
 ```
 
-Now, let us define an [`opts`](#opts-stages) stage that transforms the `command`:
+Now, let us define an [`opts`](#opts-stages) stage that transforms the `subcommand`:
 
 ```js
 const {traverseOpts} = require('shargs-parser')
 
 const isThreeValued = ({threeValued}) => threeValued === true
 
-const toThreeValued = opt => {
+  const toThreeValued = opt => {
   const types = ['threeValued']
 
-  const interpretValues = values => (
-    values.length === 0         ? 'true' :
-    values[0]     === 'true'    ? 'true' :
-    values[0]     === 'false'   ? 'false'
-                                : 'unknown'
-  )
+  let values = ['unknown']
 
-  const values = (
-    !Array.isArray(opt.values)
-      ? 'unknown'
-      : interpretValues(opt.values)
-  )
-
-  const {threeValued, opts, ...rest} = opt
+  if (Array.isArray(opt.values)) {
+    const threeValues = opt.values.find(opt => opt.key === 'threeValues')
+    values = threeValues.values || ['true']
+  }
 
   return {
     opts: [
-      {...rest, types, values}
+      {...opt, types, values: values.slice(0, 1), opts: undefined}
     ]
   }
 }
 
-const commandsToThreeValued = traverseOpts(isThreeValued)(toThreeValued)
+const subcommandsToThreeValued = traverseOpts(isThreeValued)(toThreeValued)
 ```
 
-`commandsToThreeValued` only transforms `commands` that have the `threeValued` field.
-For each `command`, it checks, whether the `command` is not present (`unknown`),
+`subcommandsToThreeValued` only transforms `subcommands` that have the `threeValued` field.
+For each `subcommand`, it checks, whether the `subcommand` is not present (`unknown`),
 it is present but has no values (`true`), or if it is present and has at least one value,
 (`true` if the value is `true`, `false` if it is `false`, otherwise `unknown`).
 
-Note that a `command` takes all arguments following it, not just the first.
-However, the `toArgs` stages reparses those arguments with the parent parser, so they are not lost.
-But the parent parser does not run [`checks`](#checks).
-
-Also note that this demonstration implementation is very brittle and should not be used as presented in a program.
+Note that this sample implementation is very brittle and should not be used as presented in a program.
 
 </details>
 </td>
