@@ -198,7 +198,7 @@ test('addRemainingOptsAndPosArgs works for variadic positional arguments', () =>
   expect(res).toStrictEqual(exp)
 })
 
-test('addRemainingOptsAndPosArgs works for command options 1', () => {
+test('addRemainingOptsAndPosArgs works for subcommand options 1', () => {
   const bar = {key: 'bar', types: [], args: ['-b']}
   const foo = {key: 'foo', args: ['foo'], opts: [
     bar
@@ -228,7 +228,7 @@ test('addRemainingOptsAndPosArgs works for command options 1', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('addRemainingOptsAndPosArgs works for command options 2', () => {
+test('addRemainingOptsAndPosArgs works for subcommand options 2', () => {
   const bar = {key: 'bar', types: [], args: ['-b']}
   const foo = {key: 'foo', args: ['foo'], opts: [
     bar
@@ -260,7 +260,7 @@ test('addRemainingOptsAndPosArgs works for command options 2', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('addRemainingOptsAndPosArgs works for command options 3', () => {
+test('addRemainingOptsAndPosArgs works for subcommand options 3', () => {
   const cat = {key: 'cat', types: [], args: ['-c']}
   const but = {key: 'but', types: [], args: ['-b']}
   const foo = {key: 'foo', args: ['foo'], opts: [
@@ -297,7 +297,7 @@ test('addRemainingOptsAndPosArgs works for command options 3', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('addRemainingOptsAndPosArgs works for command options 4', () => {
+test('addRemainingOptsAndPosArgs works for subcommand options 4', () => {
   const cat = {key: 'cat', types: [], args: ['-c']}
   const but = {key: 'but', types: [], args: ['-b']}
   const foo = {key: 'foo', args: ['foo'], opts: [
@@ -334,7 +334,7 @@ test('addRemainingOptsAndPosArgs works for command options 4', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('addRemainingOptsAndPosArgs works for command options 5', () => {
+test('addRemainingOptsAndPosArgs works for subcommand options 5', () => {
   const dot = {key: 'dot', types: ['dot']}
   const cat = {key: 'cat', types: [], args: ['-c']}
   const but = {key: 'but', types: [], args: ['-b']}

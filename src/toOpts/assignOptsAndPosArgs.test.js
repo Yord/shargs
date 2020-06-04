@@ -371,7 +371,7 @@ test('assignOptsAndPosArgs works for two variadic options with the same arg', ()
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works for command options 1', () => {
+test('assignOptsAndPosArgs works for subcommand options 1', () => {
   const foo = {key: 'foo', args: ['foo'], opts: []}
 
   const opt = {
@@ -396,7 +396,7 @@ test('assignOptsAndPosArgs works for command options 1', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works for command options 2', () => {
+test('assignOptsAndPosArgs works for subcommand options 2', () => {
   const art = {key: 'art', types: [], args: ['-a']}
   const foo = {key: 'foo', args: ['foo'], opts: [
     art
@@ -426,7 +426,7 @@ test('assignOptsAndPosArgs works for command options 2', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works for command options with rest values', () => {
+test('assignOptsAndPosArgs works for subcommand options with rest values', () => {
   const Bar = {key: 'Bar', args: ['Bar'], opts: []}
   const Art = {key: 'Art', args: ['Art'], opts: [Bar]}
 
@@ -456,7 +456,7 @@ test('assignOptsAndPosArgs works for command options with rest values', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works for command options 3', () => {
+test('assignOptsAndPosArgs works for subcommand options 3', () => {
   const art = {key: 'art', types: [], args: ['-a']}
   const bar = {key: 'bar', args: ['bar'], opts: [
     art
@@ -491,7 +491,7 @@ test('assignOptsAndPosArgs works for command options 3', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works for command options 4', () => {
+test('assignOptsAndPosArgs works for subcommand options 4', () => {
   const art = {key: 'art', types: [], args: ['-a']}
   const but = {key: 'but', types: [], args: ['-b']}
   const bar = {key: 'bar', args: ['bar'], opts: [
@@ -530,7 +530,7 @@ test('assignOptsAndPosArgs works for command options 4', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works for command options 5', () => {
+test('assignOptsAndPosArgs works for subcommand options 5', () => {
   const art = {key: 'art', types: [], args: ['-a']}
   const but = {key: 'but', types: [], args: ['-b']}
   const bar = {key: 'bar', args: ['bar'], opts: [
@@ -571,7 +571,7 @@ test('assignOptsAndPosArgs works for command options 5', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works for command options 6', () => {
+test('assignOptsAndPosArgs works for subcommand options 6', () => {
   const bar = {key: 'bar', args: ['bar'], opts: []}
   const bat = {key: 'bat', args: ['bat'], opts: []}
   const baz = {key: 'baz', args: ['baz'], opts: [bat]}
@@ -609,7 +609,7 @@ test('assignOptsAndPosArgs works for command options 6', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs takes the innermost command if it has conflicting options', () => {
+test('assignOptsAndPosArgs takes the innermost subcommand if it has conflicting options', () => {
   const art = {key: 'art', types: [], args: ['-a']}
   const bar = {key: 'bar', args: ['bar'], opts: [
     art
@@ -646,7 +646,7 @@ test('assignOptsAndPosArgs takes the innermost command if it has conflicting opt
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs takes the outer command if it has conflicting options, but was canceled', () => {
+test('assignOptsAndPosArgs takes the outer subcommand if it has conflicting options, but was canceled', () => {
   const art = {key: 'art', types: [], args: ['-a']}
   const bar = {key: 'bar', args: ['bar'], opts: [
     art
@@ -684,7 +684,7 @@ test('assignOptsAndPosArgs takes the outer command if it has conflicting options
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs takes the middle command if it has conflicting options, in certain situations', () => {
+test('assignOptsAndPosArgs takes the middle subcommand if it has conflicting options, in certain situations', () => {
   const art = {key: 'art', types: [], args: ['-a']}
   const bar = {key: 'bar', args: ['bar'], opts: [
     art
@@ -908,7 +908,7 @@ test('assignOptsAndPosArgs works for variadic pos args 2', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works with primitive pos args in commands', () => {
+test('assignOptsAndPosArgs works with primitive pos args in subcommands', () => {
   const baz = {key: 'baz', types: ['baz']}
   const bar = {key: 'bar', types: ['bar']}
   const foo = {key: 'foo', args: ['foo'], opts: [
@@ -941,7 +941,7 @@ test('assignOptsAndPosArgs works with primitive pos args in commands', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works with primitive pos args in command and program', () => {
+test('assignOptsAndPosArgs works with primitive pos args in subcommand and command', () => {
   const baz = {key: 'baz', types: ['baz']}
   const bar = {key: 'bar', types: ['bar']}
   const foo = {key: 'foo', args: ['foo'], opts: [
@@ -974,7 +974,7 @@ test('assignOptsAndPosArgs works with primitive pos args in command and program'
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works with primitive pos args in programs in command scope', () => {
+test('assignOptsAndPosArgs works with primitive pos args in commands in subcommand scope', () => {
   const bar = {key: 'bar', types: ['bar']}
   const foo = {key: 'foo', args: ['foo'], opts: []}
 
@@ -1003,7 +1003,7 @@ test('assignOptsAndPosArgs works with primitive pos args in programs in command 
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works for different options with the same args: if at least one command is present, take only the first', () => {
+test('assignOptsAndPosArgs works for different options with the same args: if at least one subcommand is present, take only the first', () => {
   const foo = {key: 'foo', types: [], args: ['foo']}
   const bar = {key: 'bar', args: ['foo'], opts: []}
   const baz = {key: 'baz', args: ['foo'], opts: []}
@@ -1032,7 +1032,7 @@ test('assignOptsAndPosArgs works for different options with the same args: if at
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works for different options with the same args: if no command is present, take all options with the same length as the first', () => {
+test('assignOptsAndPosArgs works for different options with the same args: if no subcommand is present, take all options with the same length as the first', () => {
   const foo = {key: 'foo', types: [], args: ['foo']}
   const bar = {key: 'bar', types: ['bar'], args: ['foo']}
   const baz = {key: 'baz', types: [], args: ['foo']}
@@ -1063,7 +1063,7 @@ test('assignOptsAndPosArgs works for different options with the same args: if no
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works for different options with the same args: if no command is present, take all options with the same length as the first 1', () => {
+test('assignOptsAndPosArgs works for different options with the same args: if no subcommand is present, take all options with the same length as the first 1', () => {
   const foo = {key: 'foo', types: [], args: ['foo']}
   const bar = {key: 'bar', types: ['bar'], args: ['foo']}
   const baz = {key: 'baz', types: [], args: ['foo']}
@@ -1094,7 +1094,7 @@ test('assignOptsAndPosArgs works for different options with the same args: if no
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works for different options with the same args: if no command is present, take all options with the same length as the first 2', () => {
+test('assignOptsAndPosArgs works for different options with the same args: if no subcommand is present, take all options with the same length as the first 2', () => {
   const foo = {key: 'foo', types: ['foo'], args: ['foo']}
   const bar = {key: 'bar', types: [], args: ['foo']}
   const baz = {key: 'baz', types: ['baz'], args: ['foo']}
@@ -1125,7 +1125,7 @@ test('assignOptsAndPosArgs works for different options with the same args: if no
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works for different options with the same args: if no command is present, take all options with the same length as the first 3', () => {
+test('assignOptsAndPosArgs works for different options with the same args: if no subcommand is present, take all options with the same length as the first 3', () => {
   const foo = {key: 'foo', types: ['foo', 'foo'], args: ['foo']}
   const bar = {key: 'bar', types: [], args: ['foo']}
   const baz = {key: 'baz', types: ['baz', 'baz'], args: ['foo']}
@@ -1158,7 +1158,7 @@ test('assignOptsAndPosArgs works for different options with the same args: if no
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works for different options with the same args: if no command is present, take all options with the same length as the first 4', () => {
+test('assignOptsAndPosArgs works for different options with the same args: if no subcommand is present, take all options with the same length as the first 4', () => {
   const foo = {key: 'foo', args: ['foo']}
   const bar = {key: 'bar', types: [], args: ['foo']}
   const baz = {key: 'baz', args: ['foo']}
