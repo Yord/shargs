@@ -1618,8 +1618,8 @@ Usually, *checks* are used before *stages*.
 
 <br />
 
-If <code>rules</code> returns <code>false</code>, it reports a <code>FalseArgvRules</code> error.
-If <code>rules</code> is not a function, it reports a <code>WrongArgvRulesType</code> error.
+If `rules` returns `false`, it reports a [`FalseArgvRules`](#FalseArgvRules) error.
+If `rules` is not a function, it reports a [`WrongArgvRulesType`](#WrongArgvRulesType) error.
 
 <br />
 
@@ -1675,8 +1675,8 @@ into <code>['--answer', '42']</code>.
 
 <br />
 
-It only removes the first <code>=</code>,
-so <code>['--question=1+2=3?']</code> is transformed into <code>['--question', '1+2=3?']</code>.
+It only removes the first `=`,
+so `['--question=1+2=3?']` is transformed into `['--question', '1+2=3?']`.
 
 <br />
 
@@ -1776,10 +1776,10 @@ to each argument satisfying a predicate <code>p</code>.
 
 <br />
 
-While <code>p</code>'s signature is <code>arg => true|false</code>,
-<code>f</code>'s signature must be <code>(arg, index, argv) => ({errs = [], argv = []})</code>.
-Many other <code>argv</code> checks and stages are defined in terms of <code>traverseArgv</code>
-and it is of great help for writing custom <code>argv</code> stages.
+While `p`'s signature is `arg => true|false`,
+`f`'s signature must be `(arg, index, argv) => ({errs = [], argv = []})`.
+Many other `argv` checks and stages are defined in terms of `traverseArgv`
+and it is of great help for writing custom `argv` stages.
 
 <br />
 
@@ -1840,11 +1840,10 @@ violate their constraints.
 <br />
 
 This is the case, if both, the option
-and an option from its <code><a href="#contradicts">contradicts</a></code> list, have
-<code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code>.
-In case of a violation, a <code>ContradictionDetected</code> error is reported.
-If <code><a href="#contradicts">contradicts</a></code> is not a list,
-it reports a <code>WrongContradictsType</code> error.
+and an option from its [`contradicts`](#contradicts) list, have [`values`](#values).
+In case of a violation, a [`ContradictionDetected`](#ContradictionDetected) error is reported.
+If [`contradicts`](#contradicts) is not a list,
+it reports a [`WrongContradictsType`](#WrongContradictsType) error.
 
 <br />
 
@@ -1884,29 +1883,29 @@ Result:
 </details>
 </td>
 </tr>
-<tr name="demandACommand">
-<td><code><a href="#demandACommand">demandACommand</a>({errs, opts})</code></td>
+<tr name="demandASubcommand">
+<td><code><a href="#demandASubcommand">demandASubcommand</a>({errs, opts})</code></td>
 <td>
 <details>
 <summary>
-<code>demandACommand</code> checks, whether at least one <code><a href="#command">command</a></code>
-has <code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code>.
+<code>demandASubcommand</code> checks, whether at least one <code><a href="#subcommand">subcommand</a></code>
+has <code><a href="#values">values</a></code>.
 </summary>
 
 <br />
 
-If that is not the case, a <code>CommandRequired</code> error is reported.
+If that is not the case, a [`SubcommandRequired`](#SubcommandRequired) error is reported.
 
 <br />
 
 Example:
 
 ```js
-const {demandACommand} = require('shargs-parser')
-const {command, flag, number} = require('shargs-opts')
+const {demandASubcommand} = require('shargs-parser')
+const {flag, number, subcommand} = require('shargs-opts')
 
 const opts = [
-  command([])('ask', ['ask'], {desc: 'Ask a question.'}),
+  subcommand([])('ask', ['ask'], {desc: 'Ask a question.'}),
   number('answer', ['-a', '--answer'], {
     values: ['42'],
     desc: 'The answer.'
@@ -1916,7 +1915,7 @@ const opts = [
   })
 ]
 
-demandACommand({opts})
+demandASubcommand({opts})
 ```
 
 Result:
@@ -1925,8 +1924,8 @@ Result:
 {
   errs: [
     {
-      code: 'CommandRequired',
-      msg:  'No command found. Please use at least one command!',
+      code: 'SubcommandRequired',
+      msg:  'No subcommand found. Please use at least one subcommand!',
       info: {...}
     }
   ]
@@ -1947,12 +1946,10 @@ violate their constraints.
 
 <br />
 
-This is the case, if the option has
-<code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code>,
-but an option from its <code><a href="#implies">implies</a></code> list has not.
-In case of a violation, a <code>ImplicationViolated</code> error is reported.
-If <code><a href="#implies">implies</a></code> is not a list,
-it reports a <code>WrongImpliesType</code> error.
+This is the case, if the option has [`values`](#values),
+but an option from its [`implies`](#implies) list has not.
+In case of a violation, a [`ImplicationViolated`](#ImplicationViolated) error is reported.
+If [`implies`](#implies) is not a list, it reports a [`WrongImpliesType`](#WrongImpliesType) error.
 
 <br />
 
@@ -2002,9 +1999,8 @@ if all options whose <code><a href="#required">required</a></code> field is <cod
 
 <br />
 
-For each missing <code><a href="#required">required</a></code> option, a <code>RequiredOptionMissing</code> error
-is reported.
-If <code><a href="#values">values</a></code> is not an array, it reports a <code>RequiredOptionFormat</code> error.
+For each missing [`required`](#required) option, a [`RequiredOptionMissing`](#RequiredOptionMissing) error is reported.
+If [`values`](#values) is not an array, it reports a [`RequiredOptionFormat`](#RequiredOptionFormat) error.
 
 <br />
 
@@ -2049,11 +2045,11 @@ assuming they are in the <a href="#rest">rest</a> category because of spelling m
 
 <br />
 
-It collects all command-line options' <code><a href="#args">args</a></code>
-and computes a distance metric (currently Levenshtein distance) between each arg and each <a href="#rest">rest</a>.
-It reports the results in a <code>DidYouMean</code> error,
-suggesting probable <code><a href="#args">args</a></code> replacements for spelling mistakes
-<a href="#rest">rest</a> <code><a href="#values">values</a></code>.
+It collects all command-line options' [`args`](#args)
+and computes a distance metric (currently Levenshtein distance) between each arg and each [`rest`](#rest).
+It reports the results in a [`DidYouMean`](#DidYouMean) error,
+suggesting probable [`args`](#args) replacements for spelling mistakes
+[`rest`](#rest) [`values`](#values).
 
 <br />
 
@@ -2093,7 +2089,7 @@ Result:
 }
 ```
 
-The <code>options</code> array looks a little bit strange, so an explanation is in order.
+The `options` array looks a little bit strange, so an explanation is in order.
 The array's index is the cost necessary to transform the unknown option in the arguments, represented as keys.
 Because of this, you can conveniently work with the results, e.g. by only using the most probable ones:
 
@@ -2128,12 +2124,12 @@ or the position of <code><a href="#variadicPos">variadicPos</a></code>.
 
 <br />
 
-If a positional argument is <code><a href="#required">required</a></code>,
-all previously defined positional arguments must be <code><a href="#required">required</a></code>, as well,
-and no other positional arguments can be defined after a <code><a href="#variadicPos">variadicPos</a></code>.
-If rule one is violated, an <code>InvalidRequiredPositionalArgument</code> error is reported,
-and in case of a violation of the second rule, <code>validatePosArgs</code> reports an
-<code>InvalidVariadicPositionalArgument</code> error.
+If a positional argument is [`required`](#required),
+all previously defined positional arguments must be [`required`](#required), as well,
+and no other positional arguments can be defined after a [`variadicPos`](#variadicPos).
+If rule one is violated, an [`InvalidRequiredPositionalArgument`](#InvalidRequiredPositionalArgument) error is reported,
+and in case of a violation of the second rule, `validatePosArgs` reports an
+[`InvalidVariadicPositionalArgument`](#InvalidVariadicPositionalArgument) error.
 
 <br />
 
@@ -2187,8 +2183,8 @@ Result:
 
 <br />
 
-For each <code>opt</code> that returns <code>false</code>, a <code>FalseOptsRules</code> error is reported.
-If <code>rules</code> is not a function, <code>verifyOpts</code> reports a <code>WrongOptsRulesType</code> error.
+For each `opt` that returns `false`, a [`FalseOptsRules`](#FalseOptsRules) error is reported.
+If `rules` is not a function, `verifyOpts` reports a [`WrongOptsRulesType`](#WrongOptsRulesType) error.
 
 <br />
 
@@ -2243,12 +2239,11 @@ Result:
 
 <br />
 
-See the <code><a href="#values">values</a></code> documentations for the exact rules.
-If the lengths of <code><a href="#values">values</a></code> and <code><a href="#types">types</a></code> do not match,
-an <code>InvalidArity</code> error is reported.
-If the <code><a href="#types">types</a></code> field has an invalid value, an <code>InvalidTypes</code> error is reported
-and <code>verifyValuesArity</code> reports an <code>InvalidValues</code> error in case of invalid
-<code><a href="#values">values</a></code> or <code><a href="#defaultValues">defaultValues</a></code>.
+See the [`values`](#values) documentations for the exact rules.
+If the lengths of [`values`](#values) and [`types`](#types) do not match,
+an [`InvalidArity`](#InvalidArity) error is reported.
+If the [`types`](#types) field has an invalid value, an [`InvalidTypes`](#InvalidTypes) error is reported
+and `verifyValuesArity` reports an [`InvalidValues`](#InvalidValues) error in case of invalid [`values`](#values).
 
 <br />
 
@@ -2346,17 +2341,16 @@ based on the <a href="#rest">rest</a> <code><a href="#values">values</a></code>
 
 <br />
 
-It transforms single <a href="#rest">rest</a> options into a <code><a href="#flag">flag</a></code>
-and two consecutive <a href="#rest">rest</a> options into a <code><a href="#string">string</a></code>
-(e.g. <code>[{values: ['--not']}, {values: ['panic']}]</code> would become
-<code>{key: 'not', types: ['string'], args: ['--not'], values: ['panic']}</code>).
-It only assumes <a href="#rest">rest</a> <code><a href="#values">values</a></code>
-to be <code><a href="#string">string</a></code>s
-if the first <a href="#rest">rest</a> is in short option format
-(one minus with a single character, e.g. <code>-h</code>, <code>-v</code>)
-or in long option format (two minuses with any more characters, e.g. <code>--help</code>, <code>--verbose</code>).
-<code><a href="#bestGuessArgs">bestGuessArgs</a></code> is very similar to <code>bestGuessOpts</code>,
-but also considers non-consecutive rest <code><a href="#values">values</a></code>.
+It transforms single [`rest`](#rest) options into a [`flag`](#flag)
+and two consecutive [`rest`](#rest) options into a [`string`](#string)
+(e.g. `[{values: ['--not']}, {values: ['panic']}]` would become
+`{key: 'not', types: ['string'], args: ['--not'], values: ['panic']}`).
+It only assumes [`rest`](#rest) [`values`](#values)
+to be [`string`](#string)s if the first [`rest`](#rest) is in short option format
+(one minus with a single character, e.g. `-h`, `-v`)
+or in long option format (two minuses with any more characters, e.g. `--help`, `--verbose`).
+[`bestGuessArgs`](#bestGuessArgs) is very similar to `bestGuessOpts`,
+but also considers non-consecutive rest [`values`](#values).
 
 <br />
 
@@ -2454,10 +2448,10 @@ according to the command-line options' <code><a href="#types">types</a></code>
 
 <br />
 
-If <code><a href="#types">types</a></code> contains <code>'number'</code>, but <code><a href="#values">values</a></code>
-cannot be cast into a number, an <code>ArgumentIsNotANumber</code> error is reported.
-If <code><a href="#types">types</a></code> contains <code>'bool'</code>, but <code><a href="#values">values</a></code>
-is not <code>['true']</code> or <code>['false']</code>, it reports an <code>ArgumentIsNotABool</code> error.
+If [`types`](#types) contains `'number'`, but [`values`](#values)
+cannot be cast into a number, an [`ArgumentIsNotANumber`](#ArgumentIsNotANumber) error is reported.
+If [`types`](#types) contains `'bool'`, but [`values`](#values)
+is not `['true']` or `['false']`, it reports an [`ArgumentIsNotABool`](#ArgumentIsNotABool) error.
 
 <br />
 
@@ -2501,9 +2495,9 @@ are also contained in <code><a href="#only">only</a></code>.
 
 <br />
 
-If values are not found in <code><a href="#only">only</a></code>,
-a <code>ValueRestrictionsViolated</code> error is reported for each value
-and the <code><a href="#values">values</a></code> field is removed from the option.
+If values are not found in [`only`](#only),
+a [`ValueRestrictionsViolated`](#ValueRestrictionsViolated) error is reported for each value
+and the [`values`](#values) field is removed from the option.
 
 <br />
 
@@ -2672,10 +2666,10 @@ to each option satisfying a predicate <code>p</code>.
 
 <br />
 
-While <code>p</code>'s signature is <code>opt => true|false</code>,
-<code>f</code>'s signature must be <code>(opt, index, opts) => ({errs = [], opts = []})</code>.
-Many other <code>opts</code> checks and stages are defined in terms of <code>traverseOpts</code>
-and it is of great help for writing custom <code>opts</code> stages.
+While `p`'s signature is `opt => true|false`,
+`f`'s signature must be `(opt, index, opts) => ({errs = [], opts = []})`.
+Many other `opts` checks and stages are defined in terms of `traverseOpts`
+and it is of great help for writing custom `opts` stages.
 
 <br />
 
@@ -2732,7 +2726,7 @@ Result:
 <details>
 <summary>
 <code>failRest</code> checks, whether the rest field <code>_</code> in <code>args</code> objects has values
-and reports an <code>UnexpectedArgument</code> error for each value found.
+and reports an <code><a href="#UnexpectedArgument">UnexpectedArgument</a></code> error for each value found.
 </summary>
 
 <br />
@@ -2776,9 +2770,9 @@ Result:
 
 <br />
 
-<code>rules</code> must have the following function signature: <code>arg => true|false</code>.
-For each arg that returns <code>false</code>, a <code>FalseArgsRules</code> error is reported.
-If <code>rules</code> is not a function, <code>verifyArgs</code> reports a <code>WrongArgsRulesType</code> error.
+`rules` must have the following function signature: `arg => true|false`.
+For each arg that returns `false`, a [`FalseArgsRules`](#FalseArgsRules) error is reported.
+If `rules` is not a function, `verifyArgs` reports a [`WrongArgsRulesType`](#WrongArgsRulesType) error.
 
 <br />
 
@@ -2837,11 +2831,11 @@ into new arguments (e.g. <code>{version: {type: 'flag', count: 1}}</code>).
 <br />
 
 It transforms single rest field values into a flag and two consecutive rest options into a string
-(e.g. <code>{_: ['--not', 'panic']}</code> would become <code>{not: 'panic'}</code>).
+(e.g. `{_: ['--not', 'panic']}` would become `{not: 'panic'}`).
 It only assumes rest field values to be strings if the first rest is in short option format
-(one minus with a single character, e.g. <code>-h</code>, <code>-v</code>)
-or in long option format (two minuses with any more characters, e.g. <code>--help</code>, <code>--verbose</code>).
-<code>bestGuessArgs</code> is very similar to <code><a href="#bestGuessOpts">bestGuessOpts</a></code>,
+(one minus with a single character, e.g. `-h`, `-v`)
+or in long option format (two minuses with any more characters, e.g. `--help`, `--verbose`).
+`bestGuessArgs` is very similar to [`bestGuessOpts`](#bestGuessOpts),
 but also considers rest fields that were originally not in tandem.
 
 <br />
@@ -2894,7 +2888,7 @@ by best guess based on their structure (e.g. <code>{answer: '42'}</code> becomes
 
 <br />
 
-It supports numbers and booleans (e.g. <code>{help: 'true'}</code> becomes <code>{help: true}</code>).
+It supports numbers and booleans (e.g. `{help: 'true'}` becomes `{help: true}`).
 
 <br />
 
@@ -2963,8 +2957,8 @@ Result:
 
 <br />
 
-If it is <code>true</code> it is transformed to <code>{type: 'flag', count: 1}</code>,
-otherwise to <code>{type: 'flag', count: -1}</code>.
+If it is `true` it is transformed to `{type: 'flag', count: 1}`,
+otherwise to `{type: 'flag', count: -1}`.
 
 <br />
 
@@ -3001,8 +2995,8 @@ Result:
 
 <br />
 
-If a boolean is <code>true</code> it is transformed to <code>{type: 'flag', count: 1}</code>,
-otherwise to <code>{type: 'flag', count: -1}</code>.
+If a boolean is `true` it is transformed to `{type: 'flag', count: 1}`,
+otherwise to `{type: 'flag', count: -1}`.
 
 <br />
 
@@ -3072,10 +3066,10 @@ Result:
 
 <br />
 
-If its <code>count</code> is greater than <code>0</code> it is considered <code>true</code>,
-otherwise it is considered <code>false</code>
-(e.g. <code>{help: {type: 'flag', count: 1}}</code> becomes <code>{help: true}</code>,
-while <code>{help: {type: 'flag', count: -2}}</code> is transformed to <code>{help: false}</code>).
+If its `count` is greater than `0` it is considered `true`,
+otherwise it is considered `false`
+(e.g. `{help: {type: 'flag', count: 1}}` becomes `{help: true}`,
+while `{help: {type: 'flag', count: -2}}` is transformed to `{help: false}`).
 
 <br />
 
@@ -3151,10 +3145,10 @@ Result:
 
 <br />
 
-All flags whose <code>count</code> is greater than <code>0</code> are considered <code>true</code>,
-while all other flags are considered <code>false</code>
-(e.g. <code>{help: {type: 'flag', count: 1}}</code> becomes <code>{help: true}</code>,
-while <code>{help: {type: 'flag', count: -2}}</code> is transformed to <code>{help: false}</code>).
+All flags whose `count` is greater than `0` are considered `true`,
+while all other flags are considered `false`
+(e.g. `{help: {type: 'flag', count: 1}}` becomes `{help: true}`,
+while `{help: {type: 'flag', count: -2}}` is transformed to `{help: false}`).
 
 <br />
 
@@ -3231,13 +3225,13 @@ by recursively merging nested objects into their parent object
 
 <br />
 
-A custom <code>merge</code> function may be passed with the following function signature:
-<code>(obj1 = {}, obj2 = {}) => {}</code>.
-The default <code>merge</code> function (if <code>merge</code> is <code>undefined</code>)
+A custom `merge` function may be passed with the following function signature:
+`(obj1 = {}, obj2 = {}) => {}`.
+The default `merge` function (if `merge` is `undefined`)
 prefers keys from the parent object over keys from nested objects,
-but concatenates rest values (<code>_</code>) from both objects
-(e.g. <code>{_: ['foo'], answer: 42, ask: {_: ['bar'], answer: 23}}</code> becomes
-<code>{_: ['foo', 'bar'], answer: 42}</code>).
+but concatenates rest values (`_`) from both objects
+(e.g. `{_: ['foo'], answer: 42, ask: {_: ['bar'], answer: 23}}` becomes
+`{_: ['foo', 'bar'], answer: 42}`).
 
 <br />
 
@@ -3298,7 +3292,7 @@ Result:
 
 <br />
 
-The number is the flag's <code>count</code> (e.g. <code>42</code> becomes <code>{type: 'flag', count: 42}</code>).
+The number is the flag's `count` (e.g. `42` becomes `{type: 'flag', count: 42}`).
 
 <br />
 
@@ -3335,7 +3329,7 @@ Result:
 
 <br />
 
-The numbers are the flags' <code>count</code>s (e.g. <code>42</code> becomes <code>{type: 'flag', count: 42}</code>).
+The numbers are the flags' `count`s (e.g. `42` becomes `{type: 'flag', count: 42}`).
 
 <br />
 
@@ -3373,16 +3367,15 @@ by applying functions <code>fs</code> to each key/value pair based on the value'
 
 <br />
 
-<code>fs</code> supports the following types:
-<code>array</code>, <code>boolean</code>, <code>flag</code>, <code>function</code>, <code>null</code>,
-<code>number</code>, <code>object</code>, <code>string</code>, <code>undefined</code>, and <code>otherwise</code>.
+`fs` supports the following types:
+`array`, `boolean`, `flag`, `function`, `null`, `number`, `object`, `string`, `undefined`, and `otherwise`.
 The default behavior for most types is to not change the value, with three notable exceptions:
-<code>function</code>s and <code>otherwise</code>s key/value pairs are removed from args,
-while <code>object</code>'s default function applies <code>fs</code> to nested objects.
-<code>{flag: ({key, val, errs, args}) => ({errs, args})}</code>
-is the signature for <code>fs</code> with fields for each type.
-Many other <code>args</code> checks and stages are defined in terms of <code>traverseArgs</code>
-and it is of great help for writing custom <code>args</code> stages.
+`function`s and `otherwise`s key/value pairs are removed from args,
+while `object`'s default function applies `fs` to nested objects.
+`{flag: ({key, val, errs, args}) => ({errs, args})}`
+is the signature for `fs` with fields for each type.
+Many other `args` checks and stages are defined in terms of `traverseArgs`
+and it is of great help for writing custom `args` stages.
 
 <br />
 
@@ -3547,7 +3540,7 @@ and formats it according to a <code><a href="#style">style</a></code>.
 <br />
 
 If the description is too long to fit one line, it is split and spread over several lines.
-<code>desc</code> is defined as <code>descWith({id: 'line'})</code>.
+`desc` is defined as `descWith({id: 'line'})`.
 
 <br />
 
@@ -3593,7 +3586,7 @@ ignoring its second parameter.
 <br />
 
 If the string is too long to fit one line, it is split and spread over several lines.
-<code>note</code> is defined as <code>noteWith({id: 'line'})</code>.
+`note` is defined as `noteWith({id: 'line'})`.
 
 <br />
 
@@ -3637,7 +3630,7 @@ ignoring its second parameter.
 <br />
 
 If a string is too long to fit one line, it is split and spread over several lines.
-<code>notes</code> is defined as <code>notesWith({id: 'line'})</code>.
+`notes` is defined as `notesWith({id: 'line'})`.
 
 <br />
 
@@ -3681,13 +3674,12 @@ and formats it according to its <code><a href="#style">style</a></code>.
 
 <br />
 
-The term part comprises of an opt's <code><a href="#args">args</a></code>, <code><a href="#descArg">descArg</a></code>,
-<code><a href="#only">only</a></code>, <code><a href="#types">types</a></code>, and <code><a href="#key">key</a></code>
-fields, followed by the
-<code><a href="#contradicts">contradicts</a></code>, <code><a href="#defaultValues">defaultValues</a></code>,
-<code><a href="#implies">implies</a></code>, and <code><a href="#required">required</a></code> fields.
-The <code><a href="#desc">desc</a></code> field is given in the definition part.
-<code>optsDef</code> is defined as <code>optsDefWith({id: 'line', pad: 4})</code>.
+The term part comprises of an opt's [`args`](#args), [`descArg`](#descArg),
+[`only`](#only), [`types`](#types), and [`key`](#key) fields, followed by the
+[`contradicts`](#contradicts), [`defaultValues`](#defaultValues),
+[`implies`](#implies), and [`required`](#required) fields.
+The [`desc`](#desc) field is given in the definition part.
+`optsDef` is defined as `optsDefWith({id: 'line', pad: 4})`.
 
 <br />
 
@@ -3744,7 +3736,7 @@ indenting each <code><a href="#optsDef">optsDef</a></code> layer by <code>pad</c
 
 <br />
 
-<code>optsDefs</code> is defined as <code>optsDefsWith({id: 'line', pad: 4})</code>.
+`optsDefs` is defined as `optsDefsWith({id: 'line', pad: 4})`.
 
 <br />
 
@@ -3813,13 +3805,12 @@ and formats it according to its <code><a href="#style">style</a></code>.
 
 <br />
 
-The first column comprises of an opt's <code><a href="#args">args</a></code>, <code><a href="#descArg">descArg</a></code>,
-<code><a href="#only">only</a></code>, <code><a href="#types">types</a></code>, and <code><a href="#key">key</a></code>
-fields.
-The <code><a href="#desc">desc</a></code> field is given in the second column, followed by the
-<code><a href="#contradicts">contradicts</a></code>, <code><a href="#defaultValues">defaultValues</a></code>,
-<code><a href="#implies">implies</a></code>, and <code><a href="#required">required</a></code> fields.
-<code>optsList</code> is defined as <code>optsListWith({id: 'cols'})</code>.
+The first column comprises of an opt's [`args`](#args), [`descArg`](#descArg),
+[`only`](#only), [`types`](#types), and [`key`](#key) fields.
+The [`desc`](#desc) field is given in the second column, followed by the
+[`contradicts`](#contradicts), [`defaultValues`](#defaultValues),
+[`implies`](#implies), and [`required`](#required) fields.
+`optsList` is defined as `optsListWith({id: 'cols'})`.
 
 <br />
 
@@ -3873,7 +3864,7 @@ indenting the first column of each <code><a href="#optsList">optsList</a></code>
 
 <br />
 
-<code>optsLists</code> is defined as <code>optsListsWith({id: 'cols'})</code>.
+`optsLists` is defined as `optsListsWith({id: 'cols'})`.
 
 <br />
 
@@ -3937,7 +3928,7 @@ with a width according to <code><a href="#style">style</a></code>.
 
 <br />
 
-<code>space</code> is defined as <code>spaceWith({id: 'line', lines: 1})</code>.
+`space` is defined as `spaceWith({id: 'line', lines: 1})`.
 
 <br />
 
@@ -3983,7 +3974,7 @@ using a <code><a href="#synopsis">synopsis</a></code> each.
 
 <br />
 
-<code>synopses</code> is defined as <code>synopsesWith({id: 'line'})</code>.
+`synopses` is defined as `synopsesWith({id: 'line'})`.
 
 <br />
 
@@ -4043,11 +4034,9 @@ and formats it according to its <code><a href="#style">style</a></code>.
 
 <br />
 
-For each opt, the <code><a href="#args">args</a></code>, <code><a href="#descArg">descArg</a></code>,
-<code><a href="#only">only</a></code>, <code><a href="#required">required</a></code>,
-<code><a href="#types">types</a></code>, and <code><a href="#key">key</a></code> fields
-are used for a brief overview.
-<code>synopsis</code> is defined as <code>synopsisWith({id: 'line'})</code>.
+For each opt, the [`args`](#args), [`descArg`](#descArg), [`only`](#only), [`required`](#required), [`types`](#types), 
+and [`key`](#key) fields are used for a brief overview.
+`synopsis` is defined as `synopsisWith({id: 'line'})`.
 
 <br />
 
@@ -4708,7 +4697,7 @@ with a <code><a href="#width">width</a></code> according to <code><a href="#styl
 
 <br />
 
-<code>br</code> is defined as <code>brWith({id: 'line', lines: 1})</code>.
+`br` is defined as `brWith({id: 'line', lines: 1})`.
 
 <br />
 
@@ -4754,9 +4743,9 @@ where each column is a list of strings corresponding to <code><a href="#line">li
 
 <br />
 
-It formats the <code>columns</code> according to their <code><a href="#width">width</a></code>s
+It formats the `columns` according to their [`width`](#width)s
 and cuts off strings that are too long.
-<code>cols</code> is defined as <code>colsWith({id: 'cols'})</code>.
+`cols` is defined as `colsWith({id: 'cols'})`.
 
 <br />
 
@@ -4809,11 +4798,11 @@ with a term at the first and a definition at the second position.
 
 <br />
 
-It formats its <code>tuples</code> as a definition list over two <code><a href="#line">line</a></code>s,
-with the term in the first, and the definition in the second <code><a href="#line">line</a></code>.
-If a term or definition extends its <code><a href="#line">line</a></code>,
-it is continued in another <code><a href="#line">line</a></code>.
-<code>defs</code> is defined as <code>defsWith({id: 'line', pad: 4})</code>.
+It formats its `tuples` as a definition list over two [`line`](#line)s,
+with the term in the first, and the definition in the second [`line`](#line).
+If a term or definition extends its [`line`](#line),
+it is continued in another [`line`](#line).
+`defs` is defined as `defsWith({id: 'line', pad: 4})`.
 
 <br />
 
@@ -4861,10 +4850,8 @@ and formats it according to a <code><a href="#style">style</a></code>'s <code><a
 
 <br />
 
-If a <code>string</code> exceeds its <code><a href="#width">width</a></code>, it is cut off,
-otherwise, the <code><a href="#width">width</a></code> is filled up with spaces.
-It ends with a line break.
-<code>line</code> is defined as <code>lineWith({id: 'line'})</code>.
+If a `string` exceeds its [`width`](#width), it is cut off, otherwise, the [`width`](#width) is filled up with spaces.
+It ends with a line break. `line` is defined as `lineWith({id: 'line'})`.
 
 <br />
 
@@ -4907,7 +4894,7 @@ and layouts each <code>string</code> with <code><a href="#line">line</a></code>.
 
 <br />
 
-<code>lines</code> is defined as <code>linesWith({id: 'line'})</code>.
+`lines` is defined as `linesWith({id: 'line'})`.
 
 <br />
 
@@ -4953,7 +4940,7 @@ and formats it according to a <code><a href="#style">style</a></code>.
 <br />
 
 If an entry exceeds the length of a column, it breaks into the next row.
-<code>table</code> is defined as <code>tableWith({id: 'cols'})</code>.
+`table` is defined as `tableWith({id: 'cols'})`.
 
 <br />
 
@@ -4997,8 +4984,8 @@ table([
 
 <br />
 
-If the <code>string</code> exceeds a line, it continues on the next.
-<code>text</code> is defined as <code>textWith({id: 'line'})</code>.
+If the `string` exceeds a line, it continues on the next.
+`text` is defined as `textWith({id: 'line'})`.
 
 <br />
 
@@ -5040,7 +5027,7 @@ and layouts each <code>string</code> with <code><a href="#text">text</a></code>.
 
 <br />
 
-<code>texts</code> is defined as <code>textsWith({id: 'line'})</code>.
+`texts` is defined as `textsWith({id: 'line'})`.
 
 <br />
 
@@ -5800,13 +5787,6 @@ The following table contains all error codes currently in use and where they are
 <code><a href="#cast">cast</code>
 </td>
 </tr>
-<tr name="CommandRequired">
-<td><code><a href="#CommandRequired">CommandRequired</a></code></td>
-<td>No command found. Please use at least one command!</td>
-<td>
-<code><a href="#demandACommand">demandACommand</code>
-</td>
-</tr>
 <tr name="ContradictionDetected">
 <td><code><a href="#ContradictionDetected">ContradictionDetected</a></code></td>
 <td>Some given keys contradict each other.</td>
@@ -5935,6 +5915,13 @@ The required field must either be undefined, true or false.
 <td>An option that is marked as required has not been provided.</td>
 <td>
 <code><a href="#requireOpts">requireOpts</code>
+</td>
+</tr>
+<tr name="SubcommandRequired">
+<td><code><a href="#SubcommandRequired">SubcommandRequired</a></code></td>
+<td>No subcommand found. Please use at least one subcommand!</td>
+<td>
+<code><a href="#demandASubcommand">demandASubcommand</code>
 </td>
 </tr>
 <tr name="UnexpectedArgument">
