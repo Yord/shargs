@@ -3522,7 +3522,7 @@ Here, we have a closer look at how to declare a usage documentation layout.
 
 <table>
 <tr>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Usage&nbsp;Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 <th>Description</th>
 </tr>
 <tr name="usage-desc">
@@ -3851,7 +3851,7 @@ optsList(opt)(style)
 <tr name="optsLists">
 <td>
 <code name="optsListsWith"><a href="#optsLists">optsLists</a>({opts})(style)</code><br />
-<code><a href="#optsListsWith">optsListsWith</a>({id})({opts})(style)</code>
+<code><a href="#optsListsWith">optsListsWith</a>({id, pad})({opts})(style)</code>
 </td>
 <td>
 <details>
@@ -3864,7 +3864,7 @@ indenting the first column of each <code><a href="#optsList">optsList</a></code>
 
 <br />
 
-`optsLists` is defined as `optsListsWith({id: 'cols'})`.
+`optsLists` is defined as `optsListsWith({id: 'cols', pad: 4})`.
 
 <br />
 
@@ -4087,7 +4087,8 @@ combine them in various ways, and return a new usage function.
 Let's see how usage combinators may be used to implement [`synopses`](#synopses):
 
 ```js
-const {decorate, noSubcommands, onlySubcommands, optsMap, synopsis, usage, usageMap} = require('shargs-usage')
+const {decorate, noSubcommands, onlySubcommands} = require('shargs-usage')
+const {optsMap, synopsis, usage, usageMap} = require('shargs-usage')
 
 const prefixKey = prefix => optsMap(opts => ({...opts, key: prefix + ' ' + opts.key}))
 
