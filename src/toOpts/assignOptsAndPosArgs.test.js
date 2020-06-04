@@ -426,6 +426,29 @@ test('assignOptsAndPosArgs works for subcommand options 2', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('assignOptsAndPosArgs works for subcommand options 3', () => {
+  const foo = {key: 'foo', args: ['foo'], opts: []}
+
+  const opt = {
+    opts: [
+      foo
+    ]
+  }
+
+  const errs = []
+
+  const argv = []
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: []
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('assignOptsAndPosArgs works for subcommand options with rest values', () => {
   const Bar = {key: 'Bar', args: ['Bar'], opts: []}
   const Art = {key: 'Art', args: ['Art'], opts: [Bar]}
