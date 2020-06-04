@@ -1110,7 +1110,7 @@ const parser = parserSync(stages, substages)
 
 1.  A `stages` object that takes [parser stages](#command-line-parsers)
     and defines what transformations should be applied in which order.
-2.  An optional `substages` object that defines subcommand-specific parser stages.
+2.  An optional `substages` object that defines subcommand-specific `opts` parser stages.
 
 #### `stages`
 
@@ -1340,7 +1340,7 @@ If you read the function signatures from top to bottom, you get a good impressio
 
 `substages` define custom `opts` stages for subcommands.
 That means, while some command-line arguments are parsed using the `opts` defined in `stages`,
-others (the ones that belong to the `ask` command) are parsed using the `opts` defined under the `ask` [`key`](#key).
+others (e.g. the ones that belong to the `ask` command) are parsed using the `opts` defined under the `ask` [`key`](#key).
 
 Keys may be deeply nested to account for [`subcommand`](#subcommand)s of [`subcommand`](#subcommand)s:
 E.g. if `ask` had a subcommand with the `question` [`key`](#key), `{ask: {question: [...stages, restrictToOnly]}}` would assign custom `opts` to `question`.
@@ -1352,8 +1352,8 @@ E.g. `{ask: {_: [...stages, restrictToOnly]}}` and `{_: {_: [...stages, restrict
 #### Async Parsers
 
 The `parserSync` function has an asynchronous alternative called `parser`.
-It is used exactly like `parserSync`,
-but works with stages returning [JavaScript Promises](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+It is used exactly like `parserSync`, but also works with stages returning
+[JavaScript Promises](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 and returns a Promise itself:
 
 ```js
@@ -1368,7 +1368,7 @@ const parse = asyncParser(deepThought)
 const {errs, args} = await parse(argv)
 ```
 
-Also, `parser`'s [`stages`](#stages) and [`substages`](#substages) parameters also take parser stages that return Promises:
+`parser`'s [`stages`](#stages) and [`substages`](#substages) parameters also take parser stages that return Promises:
 
 <table>
 <tr>
@@ -1589,7 +1589,7 @@ is transformed to
 </table>
 
 If you read the stages' function signatures from top to bottom, you get a good impression of what an asynchronous parser does.
-Internally, an asynchronous shargs parser really differs only in one way from a synchronous parser:
+Internally, an asynchronous shargs parser really differs only in one major way from a synchronous parser:
 Instead of using function composition, it uses [Promise.prototype.then][then] to chain parser stages.
 
 ### Command-line Parsers
@@ -3449,28 +3449,10 @@ const fs = {
 
 ### Automatic Usage Documentation Generation
 
-Writing adequate documentation for your programs is a very important part of professional software development
-and does not happen in just one place.
-Most software I am concerned with on my day job is documented in at least two of the following places:
-
-1.  In READMEs with contributor-facing documentation.
-2.  On Websites or wikis with developer-facing documentation.
-3.  In LaTeX or Word documents with user-facing documentation.
-4.  Behind a `--help` flag or in `man` pages in case of CLIs.
-5.  In example projects demonstrating a program's or library's use.
-
-So, if documentation has all shapes and sizes, we should not lock it up inside a command-line parser.
-This is why [`shargs`][shargs] does not handle usage documentation for you,
-but strictly separates the concerns of parsing command-line arguments and generating usage documentation.
-
-However, the shargs ecosystem does not leave you high and dry:
+Shargs strictly separates the concerns of parsing command-line arguments and generating usage documentation.
 The [`shargs-usage`][shargs-usage] module specializes on
 generating terminal-based usage documentation for `--help` flags
-from [command-line options](#command-line-options).
-And I would love to see more modules handling the other cases of documentation in the future,
-e.g. by generating HTML or Markdown from option definitions.
-
-But for now, we have [`shargs-usage`][shargs-usage]:
+from [command-line options](#command-line-options):
 
 ```js
 const {desc, optsLists, space, synopses, usage} = require('shargs-usage')
@@ -3489,13 +3471,10 @@ In the example, we tell our `docs` to start with [`synopses`](#synopses), have [
 and close with a [`desc`](#usage-desc)ription.
 We separate these three parts with [`space`](#space)s and enclose everything in a [`usage`](#usage) function.
 
-Note that we have not mentioned any command-line options, yet.
-We have only told `docs` how the usage documentation should look like, not what should be documented.
-
-But we do that next:
+Note that we did not mention any command-line options, yet:
 
 ```js
-const {flag, number, program, stringPos} = require('shargs-opts')
+const {command, flag, number, stringPos} = require('shargs-opts')
 
 const opts = [
   stringPos('question', {desc: 'Ask a question.', required: true}),
@@ -3503,17 +3482,16 @@ const opts = [
   flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
 ]
 
-const script = program('deepThought', opts, {
+const deepThought = command('deepThought', opts, {
   desc: 'Deep Thought was created to come up with the Answer to ' +
         'The Ultimate Question of Life, the Universe, and Everything.'
 })
 
-const optsDocs = docs(script)
+const optsDocs = docs(deepThought)
 ```
 
-`optsDocs` now knows what to layout (`script`), and how how to layout it (`docs`).
-But there is still one decision to be made:
-How to `style` the different parts of the documentation:
+`optsDocs` now knows what to layout (`deepThought`), and how to layout it (`docs`).
+Finally, we `style` the different parts (lines and columns) of the documentation:
 
 ```js
 const style = {
@@ -3537,9 +3515,9 @@ Deep Thought was created to come up with the Answer to The
 Ultimate Question of Life, the Universe, and Everything.    
 ```
 
-[`script`](#command-line-options), `docs`, and [`style`](#style)
+[`deepThought`](#command-line-options), `docs`, and [`style`](#style)
 are the moving parts of [automatic usage documentation generation](#automatic-usage-documentation-generation)
-and they are defined independently.
+and are defined independently.
 We have already talked about [command-line options](#command-line-options) before
 and will talk about [`style`](#style) in an upcoming section.
 
@@ -3564,9 +3542,12 @@ Here, we have a closer look at how to declare a usage documentation layout.
 <summary>
 <code>desc</code> takes a command-line option's <code><a href="#desc">desc</a></code> field
 and formats it according to a <code><a href="#style">style</a></code>.
+</summary>
+
+<br />
+
 If the description is too long to fit one line, it is split and spread over several lines.
 <code>desc</code> is defined as <code>descWith({id: 'line'})</code>.
-</summary>
 
 <br />
 
@@ -3606,10 +3587,13 @@ desc(opt)(style)
 <details>
 <summary>
 <code>note</code> takes a <code>string</code> and formats it according to a <code><a href="#style">style</a></code>,
-completely ignoring its second parameter.
+ignoring its second parameter.
+</summary>
+
+<br />
+
 If the string is too long to fit one line, it is split and spread over several lines.
 <code>note</code> is defined as <code>noteWith({id: 'line'})</code>.
-</summary>
 
 <br />
 
@@ -3647,10 +3631,13 @@ note(
 <summary>
 <code>notes</code> takes a list of <code>strings</code> and formats it
 according to a <code><a href="#style">style</a></code>,
-completely ignoring its second parameter.
+ignoring its second parameter.
+</summary>
+
+<br />
+
 If a string is too long to fit one line, it is split and spread over several lines.
 <code>notes</code> is defined as <code>notesWith({id: 'line'})</code>.
-</summary>
 
 <br />
 
@@ -3690,6 +3677,10 @@ notes([
 <summary>
 <code>optsDef</code> layouts its <code>opts</code> as a definition list
 and formats it according to its <code><a href="#style">style</a></code>.
+</summary>
+
+<br />
+
 The term part comprises of an opt's <code><a href="#args">args</a></code>, <code><a href="#descArg">descArg</a></code>,
 <code><a href="#only">only</a></code>, <code><a href="#types">types</a></code>, and <code><a href="#key">key</a></code>
 fields, followed by the
@@ -3697,7 +3688,6 @@ fields, followed by the
 <code><a href="#implies">implies</a></code>, and <code><a href="#required">required</a></code> fields.
 The <code><a href="#desc">desc</a></code> field is given in the definition part.
 <code>optsDef</code> is defined as <code>optsDefWith({id: 'line', pad: 4})</code>.
-</summary>
 
 <br />
 
@@ -3747,10 +3737,14 @@ optsDef(opt)(style)
 <details>
 <summary>
 <code>optsDefs</code> first layouts its <code>opts</code> and then the <code><a href="#opts">opts</a></code>
-of all its <code><a href="#command">command</a></code>s recursively, using <code><a href="#optsDef">optsDef</a></code>s,
-indenting each <code><a href="#optsDef">optsDef</a></code> layer by four spaces.
-<code>optsDefs</code> is defined as <code>optsDefsWith({id: 'line', pad: 4})</code>.
+of all its <code><a href="#subcommand">subcommand</a></code>s recursively,
+using <code><a href="#optsDef">optsDef</a></code>s,
+indenting each <code><a href="#optsDef">optsDef</a></code> layer by <code>pad</code> spaces.
 </summary>
+
+<br />
+
+<code>optsDefs</code> is defined as <code>optsDefsWith({id: 'line', pad: 4})</code>.
 
 <br />
 
@@ -3773,7 +3767,7 @@ Code:
 
 ```js
 const {optsDefs} = require('shargs-parser')
-const {command, flag} = require('shargs-opts')
+const {flag, subcommand} = require('shargs-opts')
 const {number, variadicPos} = require('shargs-opts')
 
 const required = true
@@ -3783,7 +3777,7 @@ const askOpts = [
   variadicPos('questions', {required, desc: 'Questions.'})
 ]
 
-const ask = command(askOpts)
+const ask = subcommand(askOpts)
 
 const opt = {
   opts: [
@@ -3815,6 +3809,10 @@ optsDefs(opt)(style)
 <summary>
 <code>optsList</code> layouts its <code>opts</code> as a <code><a href="#table">table</a></code> with two columns
 and formats it according to its <code><a href="#style">style</a></code>.
+</summary>
+
+<br />
+
 The first column comprises of an opt's <code><a href="#args">args</a></code>, <code><a href="#descArg">descArg</a></code>,
 <code><a href="#only">only</a></code>, <code><a href="#types">types</a></code>, and <code><a href="#key">key</a></code>
 fields.
@@ -3822,7 +3820,6 @@ The <code><a href="#desc">desc</a></code> field is given in the second column, f
 <code><a href="#contradicts">contradicts</a></code>, <code><a href="#defaultValues">defaultValues</a></code>,
 <code><a href="#implies">implies</a></code>, and <code><a href="#required">required</a></code> fields.
 <code>optsList</code> is defined as <code>optsListWith({id: 'cols'})</code>.
-</summary>
 
 <br />
 
@@ -3869,10 +3866,14 @@ optsList(opt)(style)
 <details>
 <summary>
 <code>optsLists</code> first layouts its <code>opts</code> and then the <code><a href="#opts">opts</a></code>
-of all its <code><a href="#command">command</a></code>s recursively, using <code><a href="#optsList">optsList</a></code>s,
+of all its <code><a href="#subcommand">subcommand</a></code>s recursively,
+using <code><a href="#optsList">optsList</a></code>s,
 indenting the first column of each <code><a href="#optsList">optsList</a></code> layer by four spaces.
-<code>optsLists</code> is defined as <code>optsListsWith({id: 'cols'})</code>.
 </summary>
+
+<br />
+
+<code>optsLists</code> is defined as <code>optsListsWith({id: 'cols'})</code>.
 
 <br />
 
@@ -3889,9 +3890,9 @@ ask                      Ask questions. [required]
 Code:
 
 ```js
-const {optsLists} = require('shargs-parser')
-const {command, flag} = require('shargs-usage')
-const {number, variadicPos} = require('shargs-usage')
+const {optsLists} = require('shargs-usage')
+const {flag, subcommand} = require('shargs-opts')
+const {number, variadicPos} = require('shargs-opts')
 
 const required = true
 
@@ -3900,7 +3901,7 @@ const askOpts = [
   variadicPos('questions', {required, desc: 'Questions.'})
 ]
 
-const ask = command(askOpts)
+const ask = subcommand(askOpts)
 
 const opt = {
   opts: [
@@ -3932,8 +3933,11 @@ optsLists(opt)(style)
 <summary>
 <code>space</code> ignores its first argument and returns a line consisting entirely of spaces,
 with a width according to <code><a href="#style">style</a></code>.
-<code>space</code> is defined as <code>spaceWith({id: 'line', lines: 1})</code>.
 </summary>
+
+<br />
+
+<code>space</code> is defined as <code>spaceWith({id: 'line', lines: 1})</code>.
 
 <br />
 
@@ -3973,10 +3977,13 @@ usage([
 <details>
 <summary>
 <code>synopses</code> first layouts its <code>opts</code> and then the <code><a href="#opts">opts</a></code>
-of all its <code><a href="#command">command</a></code>s,
+of all its <code><a href="#subcommand">subcommand</a></code>s,
 using a <code><a href="#synopsis">synopsis</a></code> each.
-<code>synopses</code> is defined as <code>synopsesWith({id: 'line'})</code>.
 </summary>
+
+<br />
+
+<code>synopses</code> is defined as <code>synopsesWith({id: 'line'})</code>.
 
 <br />
 
@@ -3992,7 +3999,7 @@ Code:
 ```js
 const {synopses} = require('shargs-usage')
 const {command, flag, number} = require('shargs-opts')
-const {program, variadicPos} = require('shargs-opts')
+const {subcommand, variadicPos} = require('shargs-opts')
 
 const required = true
 
@@ -4001,7 +4008,7 @@ const askOpts = [
   variadicPos('questions', {required})
 ]
 
-const ask = command(askOpts)
+const ask = subcommand(askOpts)
 
 const opts = [
   ask('ask', ['ask'], {required}),
@@ -4009,13 +4016,13 @@ const opts = [
   flag('help', ['-h', '--help'])
 ]
 
-const script = program('deepThought', opts)
+const deepThought = command('deepThought', opts)
 
 const style = {
   line: [{width: 40}]
 }
 
-synopses(script)(style)
+synopses(deepThought)(style)
 ```
 
 </details>
@@ -4032,12 +4039,15 @@ synopses(script)(style)
 <code>synopsis</code> layouts the program's <code>name</code> in the first and its <code>opts</code>
 in the second column of a <code><a href="#table">table</a></code>
 and formats it according to its <code><a href="#style">style</a></code>.
+</summary>
+
+<br />
+
 For each opt, the <code><a href="#args">args</a></code>, <code><a href="#descArg">descArg</a></code>,
 <code><a href="#only">only</a></code>, <code><a href="#required">required</a></code>,
 <code><a href="#types">types</a></code>, and <code><a href="#key">key</a></code> fields
 are used for a brief overview.
 <code>synopsis</code> is defined as <code>synopsisWith({id: 'line'})</code>.
-</summary>
 
 <br />
 
@@ -4052,8 +4062,8 @@ Code:
 
 ```js
 const {synopsis} = require('shargs-usage')
-const {flag, number} = require('shargs-opts')
-const {program, variadicPos} = require('shargs-opts')
+const {command, flag} = require('shargs-opts')
+const {number, variadicPos} = require('shargs-opts')
 
 const opts = [
   number('answer', ['-a', '--answer'], {
@@ -4064,13 +4074,13 @@ const opts = [
   variadicPos('questions')
 ]
 
-const script = program('deepThought', opts)
+const deepThought = command('deepThought', opts)
 
 const style = {
   line: [{width: 40}]
 }
 
-synopsis(script)(style)
+synopsis(deepThought)(style)
 ```
 
 </details>
@@ -4081,10 +4091,9 @@ synopsis(script)(style)
 #### Usage Combinators
 
 While [usage functions](#usage-functions) taken for themselves are useful,
-they really begin to shine if they are combined.
-This is what usage combinators are for.
+they really begin to shine if they are combined by usage combinators.
 In a way, usage combinators are higher-order usage functions in that they take other usage functions as parameters,
-combine them somehow, and return a new one.
+combine them in various ways, and return a new usage function.
 
 Let's see how usage combinators may be used to implement [`synopses`](#synopses):
 
@@ -4104,20 +4113,16 @@ function synopses (opt) {
 ```
 
 This example uses [usage decorators](#usage-decorators), that are only introduced in the next section.
-For now, you do not need to know what they are, as they work exactly as their name suggests:
-[`noCommands`](#noCommands) removes all [`command`](#command)s from [`opts`](#opts) before applying a usage function,
-[`onlyCommands`](#onlyCommands) removes everything but [`command`](#command)s from [`opts`](#opts),
-[`optsMap`](#optsMap) applies a function to an option's [`opts`](#opts),
-and [`decorate`](#decorate-usage) combines decorators.
+For now, you do not need to know what they are, as they work exactly as their name suggests.
 
 The implementation of `synopses` uses two usage combinators:
 [`usage`](#usage) and [`usageMap`](#usageMap).
 
 [`usage`](#usage) is used to combine two usage functions:
-A [`synopsis`](#synopsis) of all `opts`, but commands, and the usage function returned by [`usageMap`](#usageMap). 
-[`usageMap`](#usageMap) iterates over all [`command`](#command)s
-and recursively calls `synopses` on each [`command`](#command)'s [`opts`](#opts).
-The recursion stops, if `opt`'s `opts` has no more [`command`](#command)s,
+A [`synopsis`](#synopsis) of all `opts`, but subcommands, and the usage function returned by [`usageMap`](#usageMap). 
+[`usageMap`](#usageMap) iterates over all [`subcommands`](#subcommands)s
+and recursively calls `synopses` on each [`subcommands`](#subcommands)'s [`opts`](#opts).
+The recursion stops, if `opt`'s `opts` has no more [`subcommands`](#subcommands)s,
 since usage functions with empty `opts` return an empty string.
 
 Combinators are a powerful feature, as they let you build more complex things from smaller parts.
@@ -4159,7 +4164,7 @@ Code:
 ```js
 const {note, optsList, space} = require('shargs-usage')
 const {synopsis, usage} = require('shargs-usage')
-const {flag, number, program} = require('shargs-opts')
+const {command, flag, number} = require('shargs-opts')
 
 const opts = [
   number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
@@ -4167,7 +4172,7 @@ const opts = [
   flag('version', ['--version'], {desc: 'Prints version.'})
 ]
 
-const script = program('deepThought', opts, {
+const deepThought = command('deepThought', opts, {
   desc: 'Deep Thought was created to come up with the Answer.'
 })
 
@@ -4176,7 +4181,7 @@ const style = {
   cols: [{width: 25}, {width: 25}]
 }
 
-usage([synopsis, space, optsList, space, desc])(script)(style)
+usage([synopsis, space, optsList, space, desc])(deepThought)(style)
 ```
 
 </details>
@@ -4213,7 +4218,7 @@ Code:
 const {text, textWith, usageMap} = require('shargs-usage')
 const {flag, number} = require('shargs-opts')
 
-const cmd = {
+const opt = {
   opts: [
     number('answer', ['-a', '--answer'], {desc: 'The answer.'}),
     flag('help', ['-h', '--help'], {desc: 'Prints help.'}),
@@ -4228,7 +4233,7 @@ const style = {
 usageMap(({args, desc}) => layout([
   text(args.join(', ')),
   textWith({id: 'desc'})(desc)
-]))(cmd)(style)
+]))(opt)(style)
 ```
 
 </details>
@@ -4265,8 +4270,8 @@ The example uses three different decorators:
 Each of these decorators modifies the `opts` array in some way,
 before passing it on to their wrapped [usage function](#usage-functions).
 The first two focus on filtering `opts`:
-[`noCommands`](#noCommands) removes all [`command`](#command)s,
-while [`onlyCommands`](#onlyCommands) keeps only [`command`](#command)s.
+[`noCommands`](#noCommands) removes all [`subcommands`](#subcommands)s,
+while [`onlyCommands`](#onlyCommands) keeps only [`subcommands`](#subcommands)s.
 [`onlyFirstArg`](#onlyFirstArg) goes one step further and modifies each option in `opts`,
 removing all but the first argument in their [`args`](#args) fields.
 
@@ -4294,7 +4299,7 @@ Example:
 
 ```js
 const {justArgs} = require('shargs-usage')
-const {command, flag, number} = require('shargs-opts')
+const {flag, number, subcommand} = require('shargs-opts')
 
 const style = {
   cols: [{width: 25}, {width: 25}]
@@ -4305,7 +4310,7 @@ const opt = {
     number('answer', ['-a', '--answer'], {
       desc: 'The answer'
     }),
-    command([])('ask', ['ask'], {desc: 'Asks a question'}),
+    subcommand([])('ask', ['ask'], {desc: 'Asks a question'}),
     flag('version', ['--version'], {desc: 'Prints version'})
   ]
 }
@@ -4328,7 +4333,7 @@ Result:
 <details>
 <summary>
 <code>noCommands</code> modifies its <code>opt</code>
-by removing all <code><a href="#command">command</a></code>s from its <code><a href="#opts">opts</a></code>.
+by removing all <code><a href="#subcommands">subcommands</a></code>s from its <code><a href="#opts">opts</a></code>.
 </summary>
 
 <br />
@@ -4337,7 +4342,7 @@ Example:
 
 ```js
 const {noCommands} = require('shargs-usage')
-const {command, flag, number} = require('shargs-opts')
+const {flag, number, subcommand} = require('shargs-opts')
 
 const style = {
   cols: [{width: 25}, {width: 25}]
@@ -4348,7 +4353,7 @@ const opt = {
     number('answer', ['-a', '--answer'], {
       desc: 'The answer'
     }),
-    command([])('ask', ['ask'], {desc: 'Asks a question'}),
+    subcommand([])('ask', ['ask'], {desc: 'Asks a question'}),
     flag('version', ['--version'], {desc: 'Prints version'})
   ]
 }
@@ -4372,7 +4377,7 @@ Result:
 <details>
 <summary>
 <code>onlyCommands</code> modifies its <code>opt</code>
-by keeping only <code><a href="#command">command</a></code>s in its <code><a href="#opts">opts</a></code>.
+by keeping only <code><a href="#subcommands">subcommands</a></code>s in its <code><a href="#opts">opts</a></code>.
 </summary>
 
 <br />
@@ -4381,7 +4386,7 @@ Example:
 
 ```js
 const {onlyCommands} = require('shargs-usage')
-const {command, flag, number} = require('shargs-opts')
+const {flag, number, subcommand} = require('shargs-opts')
 
 const style = {
   cols: [{width: 25}, {width: 25}]
@@ -4392,7 +4397,7 @@ const opt = {
     number('answer', ['-a', '--answer'], {
       desc: 'The answer'
     }),
-    command([])('ask', ['ask'], {desc: 'Asks a question'}),
+    subcommand([])('ask', ['ask'], {desc: 'Asks a question'}),
     flag('version', ['--version'], {desc: 'Prints version'})
   ]
 }
@@ -4425,7 +4430,7 @@ Example:
 
 ```js
 const {onlyFirstArg} = require('shargs-usage')
-const {command, flag, number} = require('shargs-opts')
+const {flag, number, subcommand} = require('shargs-opts')
 
 const style = {
   cols: [{width: 25}, {width: 25}]
@@ -4436,7 +4441,7 @@ const opt = {
     number('answer', ['-a', '--answer'], {
       desc: 'The answer'
     }),
-    command([])('ask', ['ask'], {desc: 'Asks a question'}),
+    subcommand([])('ask', ['ask'], {desc: 'Asks a question'}),
     flag('version', ['--version'], {desc: 'Prints version'})
   ]
 }
@@ -4472,7 +4477,7 @@ Example:
 
 ```js
 const {optsFilter} = require('shargs-usage')
-const {command, flag, number} = require('shargs-opts')
+const {flag, number, subcommand} = require('shargs-opts')
 
 const style = {
   cols: [{width: 25}, {width: 25}]
@@ -4483,7 +4488,7 @@ const opt = {
     number('answer', ['-a', '--answer'], {
       desc: 'The answer'
     }),
-    command([])('ask', ['ask'], {desc: 'Asks a question'}),
+    subcommand([])('ask', ['ask'], {desc: 'Asks a question'}),
     flag('version', ['--version'], {desc: 'Prints version'})
   ]
 }
@@ -4522,7 +4527,7 @@ Example:
 
 ```js
 const {optsMap} = require('shargs-usage')
-const {command, flag, number} = require('shargs-opts')
+const {flag, number, subcommand} = require('shargs-opts')
 
 const style = {
   cols: [{width: 25}, {width: 25}]
@@ -4533,7 +4538,7 @@ const opt = {
     number('answer', ['-a', '--answer'], {
       desc: 'The answer'
     }),
-    command([])('ask', ['ask'], {desc: 'Asks a question'}),
+    subcommand([])('ask', ['ask'], {desc: 'Asks a question'}),
     flag('version', ['--version'], {desc: 'Prints version'})
   ]
 }
@@ -4563,10 +4568,10 @@ If many usage decorators are applied to a usage function, things get unwieldy, f
 ```js
 const {justArgs, noCommands, onlyFirstArg, synopsis} = require('shargs-usage')
 
-const synopsis2 = noCommands(onlyFirstArg(justArgs(['--help'])(synopsis)))
+const briefSynopsis = noCommands(onlyFirstArg(justArgs(['--help'])(synopsis)))
 ```
 
-In the example, `synopsis2` is decorated three times and the code is not very readable.
+In the example, `briefSynopsis` is decorated three times and the code is not very readable.
 Usage decorator combinators facilitate a cleaner code layout:
 
 ```js
@@ -4574,10 +4579,10 @@ const {decorate, justArgs, noCommands, onlyFirstArg, synopsis} = require('shargs
 
 const decorated = decorate(noCommands, onlyFirstArg, justArgs(['--help']))
 
-const synopsis2 = decorated(synopsis)
+const briefSynopsis = decorated(synopsis)
 ```
 
-This version of `synopsis2` is much more readable.
+This version of `briefSynopsis` is much more readable.
 Note, that [`decorate`](#decorate-usage) applies its usage decorators from right to left.
 As is apparent from the example, usage decorator combinators are usage decorators, themselves.
 
@@ -4599,14 +4604,14 @@ and applies them to its <code>usageFunction</code> from right to left.
 
 #### Layout Functions
 
-[Usage functions](#usage-functions) that are applied to an `opt`
-are transformed into a group of functions called `layout functions`.
-If we take a closer look at the signatures of usage and layout functions, this becomes apparent:
+[Usage functions](#usage-functions) that are applied to an `opt` yield so called `layout functions`.
+If we take a closer look at the signatures of usage and layout functions,
+the connection between the two becomes apparent:
 
 <table>
 <tr>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Signature&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+<th>Type</th>
+<th>Function Signature</th>
 <th>Description</th>
 </tr>
 <tr name="layout-function">
@@ -4699,8 +4704,11 @@ Experiment with [`style`](#style) to get different layouts!
 <summary>
 <code>br</code> returns a <code><a href="#line">line</a></code> filled with spaces,
 with a <code><a href="#width">width</a></code> according to <code><a href="#style">style</a></code>.
-<code>br</code> is defined as <code>brWith({id: 'line', lines: 1})</code>.
 </summary>
+
+<br />
+
+<code>br</code> is defined as <code>brWith({id: 'line', lines: 1})</code>.
 
 <br />
 
@@ -4742,10 +4750,13 @@ layout([
 <summary>
 <code>cols</code> takes a list of <code>columns</code>,
 where each column is a list of strings corresponding to <code><a href="#line">line</a></code>s.
+</summary>
+
+<br />
+
 It formats the <code>columns</code> according to their <code><a href="#width">width</a></code>s
 and cuts off strings that are too long.
 <code>cols</code> is defined as <code>colsWith({id: 'cols'})</code>.
-</summary>
 
 <br />
 
@@ -4794,12 +4805,15 @@ cols([
 <code>defs</code> takes a list of <code>tuples</code>,
 where each entry is a tuple of strings,
 with a term at the first and a definition at the second position.
+</summary>
+
+<br />
+
 It formats its <code>tuples</code> as a definition list over two <code><a href="#line">line</a></code>s,
 with the term in the first, and the definition in the second <code><a href="#line">line</a></code>.
 If a term or definition extends its <code><a href="#line">line</a></code>,
 it is continued in another <code><a href="#line">line</a></code>.
 <code>defs</code> is defined as <code>defsWith({id: 'line', pad: 4})</code>.
-</summary>
 
 <br />
 
@@ -4843,11 +4857,14 @@ defs([
 <summary>
 <code>line</code> takes a <code>string</code>
 and formats it according to a <code><a href="#style">style</a></code>'s <code><a href="#width">width</a></code>.
+</summary>
+
+<br />
+
 If a <code>string</code> exceeds its <code><a href="#width">width</a></code>, it is cut off,
 otherwise, the <code><a href="#width">width</a></code> is filled up with spaces.
 It ends with a line break.
 <code>line</code> is defined as <code>lineWith({id: 'line'})</code>.
-</summary>
 
 <br />
 
@@ -4886,8 +4903,11 @@ layout([
 <summary>
 <code>lines</code> takes a list of <code>strings</code>
 and layouts each <code>string</code> with <code><a href="#line">line</a></code>.
-<code>lines</code> is defined as <code>linesWith({id: 'line'})</code>.
 </summary>
+
+<br />
+
+<code>lines</code> is defined as <code>linesWith({id: 'line'})</code>.
 
 <br />
 
@@ -4928,9 +4948,12 @@ lines([
 <summary>
 <code>table</code> takes a list of <code>rows</code>, lays it out as a borderless table,
 and formats it according to a <code><a href="#style">style</a></code>.
+</summary>
+
+<br />
+
 If an entry exceeds the length of a column, it breaks into the next row.
 <code>table</code> is defined as <code>tableWith({id: 'cols'})</code>.
-</summary>
 
 <br />
 
@@ -4970,9 +4993,12 @@ table([
 <details>
 <summary>
 <code>text</code> takes a <code>string</code> and formats it according to a <code><a href="#style">style</a></code>.
+</summary>
+
+<br />
+
 If the <code>string</code> exceeds a line, it continues on the next.
 <code>text</code> is defined as <code>textWith({id: 'line'})</code>.
-</summary>
 
 <br />
 
@@ -5010,8 +5036,11 @@ text(
 <summary>
 <code>texts</code> takes a list of <code>strings</code>
 and layouts each <code>string</code> with <code><a href="#text">text</a></code>.
-<code>texts</code> is defined as <code>textsWith({id: 'line'})</code>.
 </summary>
+
+<br />
+
+<code>texts</code> is defined as <code>textsWith({id: 'line'})</code>.
 
 <br />
 
@@ -5045,7 +5074,7 @@ texts([
 
 #### Layout Combinators
 
-Layout combinators are functions that wrap [layout functions](#layout-functions)
+Layout combinators are functions that take [layout functions](#layout-functions) as parameters
 and return new [layout functions](#layout-functions).
 They are the primary way of building more complex constructs from simpler components.
 The following examples demonstrate the use of layout combinators:
@@ -5063,7 +5092,7 @@ const defsWith = ({id}) => layoutMap(
 
 [`defsWith`](#defsWith) is implemented in terms of [`layout`](#layout), [`layoutMap`](#layoutMap),
 and [`textWith`](#textWith).
-It [`maps`](#layoutMap) over a list of `term` and `definition` pairs and `layout`s them as [`texts`](#texts).
+It [`maps`](#layoutMap) over a list of `term` and `definition` pairs and `layout`s them as [`text`](#text)s.
 
 [`shargs-usage`][shargs-usage] has the following layout combinators:
 
@@ -5186,7 +5215,7 @@ const defs = layoutMap(
 The example shows a sample implementation of [`defs`](#defs) using the [`pad`](#pad) layout decorator.
 Here, the `term`, as well as the `definition` have the same id, [`text`](#text)s default id `'line'`.
 However, we want to add a padding of `4` spaces to the `definition`.
-So we use [`pad`](#pad) to add `4` spaces to the id at the `['line']` path of [`style`](#style).
+So we use [`pad`](#pad) to add `4` spaces to the id at the `['line', 0]` path of [`style`](#style).
 
 [`shargs-usage`][shargs-usage] ships with the following layout decorators:
 
@@ -5393,7 +5422,7 @@ Since shargs does its best to keep out of the way, it has very little influence 
 It is safe to say that the only reliable similarity between shargs programs
 is parsing `process.argv` with a parser at some point.
 
-Before we go into the program, let us revisit some code snippets from earlier that we will reuse:
+Before we go into writing a program, let us revisit some code snippets from earlier that we will reuse:
 
 <table>
 <tr>
@@ -5431,7 +5460,7 @@ const askOpts = [
 <br />
 
 ```js
-const {subcommand, flag, number, command} = require('shargs-opts')
+const {command, flag, number, subcommand} = require('shargs-opts')
 
 const opts = [
   subcommand(askOpts)('ask', ['ask'], {required: true, desc: 'Ask a question.'}),
@@ -5553,7 +5582,7 @@ We then parse the remaining `argv` with our `deepThought` parser and get two res
 A list of `errs`, and an `args` object with parsed argument values.
 Based on those two results, we build our program.
 
-If the `args.help` field is set, we print a `help` text generated from `docs` by applying `script` and `style`.
+If the `args.help` field is set, we print a `help` text generated from `docs` by applying `deepThought` and `style`.
 Then, we `exit` with exit code `0`.
 
 E.g. if we run the program with `node ./deepThought --help`, the following text is printed:
@@ -5576,7 +5605,7 @@ Life, the Universe, and Everything.
 
 If the `errs` array has errors, we print all errors and `exit` with exit code `1`.
 
-E.g. if we execute `node ./deepThought --answer 5`, without specifying the required `ask` command,
+E.g. if we execute `node ./deepThought --answer 5`, without specifying the required `ask` subcommand,
 the following text appears:
 
 ```bash
