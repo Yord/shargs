@@ -83,7 +83,7 @@ Read up on the details in the [command-line options](#command-line-options) sect
 
 <details>
 <summary>
-Declare a parser by composing parser stages:
+Declare your own command-line parser:
 
 <p>
 
@@ -117,18 +117,17 @@ and [command-line parsers](#command-line-parsers) sections have all the details.
 
 <details>
 <summary>
-Layout a usage documentation:
+Layout a usage documentation with style:
 
 <p>
 
 ```js
-const docs = usage([
-  synopsis,
-  space,
-  optsList,
-  space,
-  desc
-])
+const docs = usage([synopsis, space, optsList, space, desc])
+
+const style = {
+  line: [{width: 80}],
+  cols: [{width: 25}, {width: 55}]
+}
 ```
 
 </p>
@@ -145,30 +144,8 @@ Note that `shargs-usage` is declarative:
 You only specify what components our usage documentation should have.
 The details on how exactly those components transform command-line options into text is hidden away.
 
-See the [automatic usage documentation generation](#automatic-usage-documentation-generation) section.
-
-</details>
-
-<details>
-<summary>
-Style the usage documentation:
-
-<p>
-
-```js
-const style = {
-  line: [{width: 80}],
-  cols: [{width: 25}, {width: 55}]
-}
-```
-
-</p>
-</summary>
-
-You can fine-tune how each documentation component is printed to the screen
-by providing column widths and paddings.
-
-The [style](#style) section provides more details.
+See the [automatic usage documentation generation](#automatic-usage-documentation-generation)
+and [style](#style) sections.
 
 </details>
 
@@ -180,17 +157,11 @@ Use the parser and the usage documentation in your program:
 
 ```js
 const argv = process.argv.slice(2)
-
 const {errs, args} = parser(deepThought)(argv)
 
-if (args.help) {
-  const help = docs(deepThought)(style)
-  console.log(help)
-} else if (errs.length > 0) {
-  errs.forEach(({code, msg}) => console.log(`${code}: ${msg}`))
-} else {
-  console.log(JSON.stringify(args, null, 2))
-}
+errs.forEach(err => console.log(err.msg))
+
+if (args.help) console.log(docs(deepThought)(style))
 ```
 
 </p>
@@ -224,48 +195,6 @@ Ask the Ultimate Question.
 
 The [automatic usage documentation generation](#automatic-usage-documentation-generation)
 and [writing programs with shargs](#writing-programs-with-shargs) sections have more.
-
-</details>
-
-<details>
-<summary>
-Run your command with <code>node ./deepThought "What is the meaning of Life, the Universe, and Everything?"</code>:
-
-<p>
-
-```js
-{
-  errs: [],
-  args: {
-    _: [],
-    answer: 42,
-    question: 'What is the meaning of Life, the Universe, and Everything?'
-  }
-}
-```
-
-</p>
-</summary>
-
-Read the [parser function](#the-parserSync-function) and [writing programs with shargs](#writing-programs-with-shargs) 
-sections for more.
-
-</details>
-
-<details>
-<summary>
-Run your command with <code>node ./deepThought -a 23</code>:
-
-<p>
-
-```bash
-Required option is missing: An option that is marked as required has not been provided.
-```
-
-</p>
-</summary>
-
-See the [error codes](#error-codes) sections for a reference of all error codes.
 
 </details>
 
