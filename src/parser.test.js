@@ -1699,6 +1699,34 @@ test('parserSync works with unused subcommands', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('parser works with unused subcommands', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const Arc = {key: 'Arc', args: ['Arc'], opts: []}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['1']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with subcommands', () => {
   const stages = {}
 
