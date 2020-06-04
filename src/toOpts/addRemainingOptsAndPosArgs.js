@@ -17,7 +17,7 @@ function addRemaining (opt, opts) {
 
     if (isIn(opts2, opt3) > -1) {
       const opt4 = opts2.find(equals(opt3))
-      const opt5 = isCommand(opt3) ? {...opt3, values: addRemaining(opt4, (opt3.values))} : opt3
+      const opt5 = isSubcommand(opt3) ? {...opt3, values: addRemaining(opt4, (opt3.values))} : opt3
       opts3.push(opt5)
     } else {
       opts3.push(opt3)
@@ -28,8 +28,7 @@ function addRemaining (opt, opts) {
     const opt3 = opts2[i]
 
     if (isIn(opts, opt3) === -1) {
-      const opt4 = isCommand(opt3) ? {...opt3, values: addRemaining(opt3, opt3.opts)} : opt3
-      opts3.push(opt4)
+      opts3.push(opt3)
     }
   }
 
@@ -59,6 +58,6 @@ function arrayEquals (arr1, arr2) {
   )
 }
 
-function isCommand ({types, args, opts}) {
+function isSubcommand ({types, args, opts}) {
   return Array.isArray(args) && typeof types === 'undefined' && Array.isArray(opts)
 }

@@ -56,7 +56,7 @@ function recurseOpts (Mode) {
       const {errs: errs3 = [], opts: opts3 = []} = result || {errs, opts: []}
 
       const promises = opts3.map(opt => {
-        if (isSubcommand(opt)) {
+        if (isSubcommand(opt) && hasValues(opt)) {
           const stages = (
             Array.isArray(substages[opt.key]) ? substages[opt.key] :
             Array.isArray(substages._)        ? substages._
@@ -118,4 +118,8 @@ function isSubcommand ({key, args, types, opts}) {
     typeof types === 'undefined' &&
     Array.isArray(opts)
   )
+}
+
+function hasValues ({values}) {
+  return Array.isArray(values)
 }
