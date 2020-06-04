@@ -439,6 +439,29 @@ test('toArgs works for subcommands without values 1', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('toArgs works for subcommands without values 2', () => {
+  const Arc = {key: 'Arc', args: ['Arc'], opts: []}
+
+  const errs = []
+
+  const opts = [
+    Arc
+  ]
+
+  const res = toArgs({errs, opts})
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: []
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('toArgs works for subcommands with values', () => {
   const arc = {key: 'arc', args: ['-a'], types: ['A'], values: ['1']}
   const bar = {key: 'bar', args: ['-b'], types: ['B']}
