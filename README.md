@@ -161,7 +161,8 @@ const {errs, args} = parser(deepThought)(argv)
 
 errs.forEach(err => console.log(err.msg))
 
-if (args.help) console.log(docs(deepThought)(style))
+const help = docs(deepThought)(style)
+if (args.help) console.log(help)
 ```
 
 </p>
