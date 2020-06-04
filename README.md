@@ -1100,7 +1100,7 @@ const stages = {
 }
 
 const substages = {
-  ask: [...stages, restrictToOnly]
+  ask: [...stages.opts, restrictToOnly]
 }
 
 const parser = parserSync(stages, substages)
@@ -1343,11 +1343,11 @@ That means, while some command-line arguments are parsed using the `opts` define
 others (e.g. the ones that belong to the `ask` command) are parsed using the `opts` defined under the `ask` [`key`](#key).
 
 Keys may be deeply nested to account for [`subcommand`](#subcommand)s of [`subcommand`](#subcommand)s:
-E.g. if `ask` had a subcommand with the `question` [`key`](#key), `{ask: {question: [...stages, restrictToOnly]}}` would assign custom `opts` to `question`.
+E.g. if `ask` had a subcommand with the `question` [`key`](#key), `{ask: {question: [...stages.opts, restrictToOnly]}}` would assign custom `opts` to `question`.
 
 The `_` [`key`](#key) is special in `substages`:
 It is a wildcard that is used by any [`subcommand`](#subcommand) that is not given explicitly by [`key`](#key).
-E.g. `{ask: {_: [...stages, restrictToOnly]}}` and `{_: {_: [...stages, restrictToOnly]}}` both work for `question`.
+E.g. `{ask: {_: [...stages.opts, restrictToOnly]}}` and `{_: {_: [...stages.opts, restrictToOnly]}}` both work for `question`.
 
 #### Async Parsers
 
@@ -5486,7 +5486,7 @@ const stages = {
 }
 
 const substages = {
-  ask: [...stages, restrictToOnly]
+  ask: [...stages.opts, restrictToOnly]
 }
 
 const parser = parserSync(stages, substages)
