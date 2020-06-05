@@ -1213,9 +1213,9 @@ could be transformed to
 ```js
 [
   {_: [], paginate: {type: 'flag', count: 1}},
-  {commit: {
+  {commit: [
     {_: [], all: 'true', message: 'First commit'}
-  }}
+  ]}
 ]
 ```
 
@@ -1238,9 +1238,9 @@ Several stages that modify arguments object arrays, e.g.
 ```js
 [
   {_: [], paginate: {type: 'flag', count: 1}},
-  {commit: {
+  {commit: [
     {_: [], all: 'true', message: 'First commit'}
-  }}
+  ]}
 ]
 ```
 
@@ -1274,9 +1274,9 @@ Transforms argument object arrays into any result value:
 ```js
 [
   {_: [], paginate: {type: 'flag', count: 1}},
-  {commit: {
+  {commit: [
     {_: [], all: true, message: 'First commit'}
-  }}
+  ]}
 ]
 ```
 
@@ -1510,9 +1510,9 @@ could be transformed to
 ```js
 [
   {_: [], paginate: {type: 'flag', count: 1}},
-  {commit: {
+  {commit: [
     {_: [], all: 'true', message: 'First commit'}
-  }}
+  ]}
 ]
 ```
 
@@ -1536,9 +1536,9 @@ Several stages that modify arguments object arrays, e.g.
 ```js
 [
   {_: [], paginate: {type: 'flag', count: 1}},
-  {commit: {
+  {commit: [
     {_: [], all: 'true', message: 'First commit'}
-  }}
+  ]}
 ]
 ```
 
@@ -1573,9 +1573,9 @@ Transforms argument object arrays into any result value:
 ```js
 [
   {_: [], paginate: {type: 'flag', count: 1}},
-  {commit: {
+  {commit: [
     {_: [], all: true, message: 'First commit'}
-  }}
+  ]}
 ]
 ```
 
