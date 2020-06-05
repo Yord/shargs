@@ -25,7 +25,7 @@ npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</
 
 +   [Highly customizable](#command-line-parsers) command-line arguments [parser](#the-parsersync-function)
     and [usage documentation generator](#automatic-usage-documentation-generation).
-+   Many opt-in features, e.g. (multiple) [subcommands](#subcommand),
++   Many opt-in features, e.g. ([multiple](#multiple-subcommands)) [subcommands](#subcommand),
     [spelling mistake detection](#suggestOpts), [default values](#setDefaultValues),
     and ([best guess](#bestGuessCast)) [casting](#cast).
 +   [Synchronous](#the-parsersync-function) and Promise-based [asynchronous](#async-parsers) mode
@@ -1591,6 +1591,10 @@ could be transformed to
 If you read the stages' field types from top to bottom, you get a good impression of what an asynchronous parser does.
 Internally, an asynchronous shargs parser really differs only in one major way from a synchronous parser:
 Instead of using function composition, it uses [Promise.prototype.then][then] to chain parser stages.
+
+#### Advanced Parsers
+
++   [Multiple subcommands](#multiple-subcommands)
 
 ### Command-line Parsers
 
@@ -3436,7 +3440,7 @@ const fs = {
 </tr>
 </table>
 
-#### Advanced Parsers
+#### Advanced Parser Stages
 
 +   [Custom checks and stages](#custom-checks-and-stages)
 
@@ -5617,6 +5621,85 @@ You may still want to read this section to get the most out of shargs,
 but feel free to skip it, start using shargs, and come back later.
 
 ### Advanced Command-line Parsers
+
+Some features of [`parserSync`](#the-parsersync-function) and [`parser`](#async-parsers) are not immediately apparent
+or are used only in very few parsers.
+Such features are documented, here.
+
+#### Multiple Subcommands
+
+Shargs supports specifying multiple [`subcommand`](#subcommand)s.
+E.g. you could use both, the `ask` and `design` [`subcommand`](#subcommand)s in the same command
+in the following version of `deepThought`:
+
+```js
+const {command, flag, number, stringPos, subcommand} = require('shargs-opts')
+
+const ask = subcommand([stringPos('question')])
+const design = subcommand([stringPos('name')])
+
+const opts = [
+  ask('ask', ['ask'], {desc: 'Ask a question.'}),
+  design('design', ['design'], {desc: 'Design a more powerful computer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
+]
+
+const deepThought = command('deepThought', opts, {desc: 'Ask the Ultimate Question.'})
+```
+
+If you provide both subcommands in your `argv`, both are parsed:
+
+```js
+const argv = ['design', 'Earth', 'ask', 'What is the answer to the Ultimate Question?']
+
+const parse = parserSync()(deepThought)
+
+const {argv, errs} = parse(argv)
+
+console.log(argv)
+/*
+{
+  _: [],
+  ask: {
+    _: [],
+    question: 'What is the answer to the Ultimate Question?'
+  },
+  design: {
+    _: [],
+    name: 'Earth'
+  }
+}
+*/
+```
+
+Note that the subcommand order is not preserved.
+This is due to the default behavior of [`fromArgs`](#fromArgs-stages),
+that keeps only the first mention of a subcommand and merges all subcommands into an (unordered) object.
+
+The input to [`fromArgs`](#fromArgs-stages) is still ordered and has duplicates,
+so if your program needs the [subcommand](#subcommand) order or duplicates,
+just write a custom [`fromArgs`](#fromArgs-stages) stage:
+
+```js
+const merge = (obj1, obj2) => ({
+  ...obj1,
+  subcommands: [
+    ...(obj1.subcommands || []),
+    obj2
+  ]
+})
+
+const fromArgs = ({errs, args}) => ({
+  errs,
+  args: args.slice(1).reduce(merge, args[0])
+})
+```
+
+This demonstration implementation of [`fromArgs`](#fromArgs-stages) is very simple
+and lacks some features like e.g. subcommands of subcommands.
+Please improve it before using it in your production programs.
+
+### Advanced Command-line Parser Stages
 
 Although we have talked about [`parser`](#the-parserSync-function) in quite some detail
 in the [parser function](#the-parserSync-function) section
