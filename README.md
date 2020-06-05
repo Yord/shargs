@@ -201,8 +201,8 @@ and [writing programs with shargs](#writing-programs-with-shargs) sections have 
 
 ### More Examples
 
-+   [shargs-example-async][shargs-example-async]
-+   [shargs-example-deepthought][shargs-example-deepthought]
++   [shargs-example-async-deepthough][shargs-example-async-deepthough]
++   [shargs-example-sync-deepthought][shargs-example-sync-deepthought]
 
 ## Documentation
 
@@ -6763,8 +6763,8 @@ Logo created by brgfx (<a href="https://www.freepik.com/free-photos-vectors/educ
 [npm-package]: https://www.npmjs.com/package/shargs
 [ramda]: https://ramdajs.com/docs/#mergeDeepLeft
 [shargs]: https://github.com/Yord/shargs
-[shargs-example-async]: https://github.com/Yord/shargs-example-async
-[shargs-example-deepthought]: https://github.com/Yord/shargs-example-deepthought
+[shargs-example-async-deepthought]: https://github.com/Yord/shargs-example-async-deepthought
+[shargs-example-sync-deepthought]: https://github.com/Yord/shargs-example-sync-deepthought
 [shargs-opts]: https://github.com/Yord/shargs-opts
 [shargs-parser]: https://github.com/Yord/shargs-parser
 [shargs-usage]: https://github.com/Yord/shargs-usage
