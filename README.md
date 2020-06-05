@@ -23,16 +23,18 @@ npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</
 
 ## Features
 
-+   Highly customizable command-line arguments parser and usage documentation generator.
-+   Many features like, e.g. (multiple) [subcommands](#subcommand),
++   [Highly customizable](#command-line-parsers) command-line arguments [parser](#the-parsersync-function)
+    and [usage documentation generator](#automatic-usage-documentation-generation).
++   Many opt-in features like, e.g. (multiple) [subcommands](#subcommand),
     [spelling mistake detection](#suggestOpts), [default values](#setDefaultValues),
     and ([best guess](#bestGuessCast)) [casting](#cast).
-+   [Synchronous](#the-parsersync-function) and [asynchronous](#async-parsers) modes.
++   [Synchronous](#the-parsersync-function) and Promise-based [asynchronous](#async-parsers) mode
+    with async/await support.
 +   [Automatic usage documentation generation](#automatic-usage-documentation-generation) with fine-grained control over 
     [layouts](#automatic-usage-documentation-generation) and [styles](#style).
 +   Easily extensible with your own [custom parser stages](#custom-checks-and-stages)
     and [custom usage layouts](#custom-usage-functions).
-+   Extensively documented and very well tested.
++   [Extensively documented](#documentation) and very well tested (750+ unit and integration tests).
 +   Zero runtime dependencies.
 
 ## Getting Started
