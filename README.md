@@ -23,29 +23,17 @@ npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</
 
 ## Features
 
-Shargs **gives developers as much control over [command-line parsing](#command-line-parsers) as possible**.
-The advantages are:
-
-+   You get exactly the parser you need, without unnecessary features.
-+   You are able to mix in your own problem-specific parser functions.
-+   There is no magic going on in the background, everything is explicit.
-
-Following the same approach, shargs offers
-[automatic usage documentation generation](#automatic-usage-documentation-generation).
-The advantages are:
-
-+   You get exactly the usage documentation you need, no unnecessary extras.
-+   You have fine-grained control over the documentation layout if you need that.
-+   You can write your own layout functions and combine them with existing ones.
-
-Shargs also has general qualities:
-
-+   It has a synchronous as well as an asynchronous mode based on Promises.
-+   It is well documented, extensively tested, modular, and highly extensible.
-+   It has Typescript type declarations, and zero runtime dependencies.
-
-Shargs' flexibility and adaptability sets it apart from
-[other command-line parser libraries](#comparison-to-related-libraries).
++   Highly configurable command-line parser.
++   Many features like, e.g. (multiple) [subcommands](#subcommand),
+    [spelling mistake detection](#suggestOpts), [default values](#setDefaultValues),
+    and ([best guess](#bestGuessCast)) [casting](#cast).
++   [Synchronous](#the-parsersync-function) and [asynchronous](#async-parsers) modes.
++   [Automatic usage documentation generation](#automatic-usage-documentation-generation) with fine-grained control over 
+    [layouts](#automatic-usage-documentation-generation) and [styles](#style).
++   Easily extensible with your own [custom parser stages](#custom-checks-and-stages)
+    and [custom usage layouts](#custom-usage-functions).
++   Extensively documented and very well tested.
++   Zero runtime dependencies.
 
 ## Getting Started
 
@@ -201,7 +189,7 @@ and [writing programs with shargs](#writing-programs-with-shargs) sections have 
 
 ### More Examples
 
-+   [shargs-example-async-deepthough][shargs-example-async-deepthough]
++   [shargs-example-async-deepthought][shargs-example-async-deepthought]
 +   [shargs-example-sync-deepthought][shargs-example-sync-deepthought]
 
 ## Documentation
