@@ -25,7 +25,7 @@ npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</
 
 +   [Highly customizable](#command-line-parsers) command-line arguments [parser](#the-parsersync-function)
     and [usage documentation generator](#automatic-usage-documentation-generation).
-+   Many opt-in features like, e.g. (multiple) [subcommands](#subcommand),
++   Many opt-in features, e.g. (multiple) [subcommands](#subcommand),
     [spelling mistake detection](#suggestOpts), [default values](#setDefaultValues),
     and ([best guess](#bestGuessCast)) [casting](#cast).
 +   [Synchronous](#the-parsersync-function) and Promise-based [asynchronous](#async-parsers) mode
