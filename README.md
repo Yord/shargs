@@ -15,7 +15,7 @@
 ## Installation
 
 <pre>
-npm install --save <a href="https://github.com/Yord/shargs">shargs</a>
+npm install --save <a href="https://github.com/Yord/shargs">shargs</a>        # opt-in to <a href="#the-parsersync-function">synchronous</a> and <a href="#async-parsers">asynchronous</a> parsing
 npm install --save <a href="https://github.com/Yord/shargs-opts">shargs-opts</a>   # opt-in to type functions for <a href="#command-line-options">command-line options</a>
 npm install --save <a href="https://github.com/Yord/shargs-parser">shargs-parser</a> # opt-in to a standard library of <a href="#command-line-parsers">parser functions</a>
 npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</a>  # opt-in to a standard library of <a href="#automatic-usage-documentation-generation">usage functions</a>
@@ -23,29 +23,19 @@ npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</
 
 ## Features
 
-Shargs **gives developers as much control over [command-line parsing](#command-line-parsers) as possible**.
-The advantages are:
-
-+   You get exactly the parser you need, without unnecessary features.
-+   You are able to mix in your own problem-specific parser functions.
-+   There is no magic going on in the background, everything is explicit.
-
-Following the same approach, shargs offers
-[automatic usage documentation generation](#automatic-usage-documentation-generation).
-The advantages are:
-
-+   You get exactly the usage documentation you need, no unnecessary extras.
-+   You have fine-grained control over the documentation layout if you need that.
-+   You can write your own layout functions and combine them with existing ones.
-
-Shargs also has general qualities:
-
-+   It has a synchronous as well as an asynchronous mode based on Promises.
-+   It is well documented, extensively tested, modular, and highly extensible.
-+   It has Typescript type declarations, and zero runtime dependencies.
-
-Shargs' flexibility and adaptability sets it apart from
-[other command-line parser libraries](#comparison-to-related-libraries).
++   [Highly customizable](#command-line-parsers) command-line arguments [parser](#the-parsersync-function)
+    and [usage documentation generator](#automatic-usage-documentation-generation).
++   35+ opt-in features, e.g. ([multiple](#multiple-subcommands)) [subcommands](#subcommand),
+    [spelling mistake detection](#suggestOpts), [default values](#setDefaultValues),
+    and ([best guess](#bestGuessCast)) [casting](#cast).
++   [Synchronous](#the-parsersync-function) and Promise-based [asynchronous](#async-parsers) mode
+    with async/await support.
++   [Automatic usage documentation generation](#automatic-usage-documentation-generation) with fine-grained control over 
+    [layouts](#automatic-usage-documentation-generation) and [styles](#style).
++   Easily extensible with your own [custom parser stages](#custom-checks-and-stages)
+    and [custom usage layouts](#custom-usage-functions).
++   [Extensively documented](#documentation) and very well tested (750+ unit and integration tests).
++   [Modular library layout](#installation) with zero runtime dependencies.
 
 ## Getting Started
 
@@ -83,7 +73,7 @@ Read up on the details in the [command-line options](#command-line-options) sect
 
 <details>
 <summary>
-Declare a parser by composing parser stages:
+Declare your own command-line parser:
 
 <p>
 
@@ -117,18 +107,17 @@ and [command-line parsers](#command-line-parsers) sections have all the details.
 
 <details>
 <summary>
-Layout a usage documentation:
+Layout a usage documentation with style:
 
 <p>
 
 ```js
-const docs = usage([
-  synopsis,
-  space,
-  optsList,
-  space,
-  desc
-])
+const docs = usage([synopsis, space, optsList, space, desc])
+
+const style = {
+  line: [{width: 80}],
+  cols: [{width: 25}, {width: 55}]
+}
 ```
 
 </p>
@@ -145,30 +134,8 @@ Note that `shargs-usage` is declarative:
 You only specify what components our usage documentation should have.
 The details on how exactly those components transform command-line options into text is hidden away.
 
-See the [automatic usage documentation generation](#automatic-usage-documentation-generation) section.
-
-</details>
-
-<details>
-<summary>
-Style the usage documentation:
-
-<p>
-
-```js
-const style = {
-  line: [{width: 80}],
-  cols: [{width: 25}, {width: 55}]
-}
-```
-
-</p>
-</summary>
-
-You can fine-tune how each documentation component is printed to the screen
-by providing column widths and paddings.
-
-The [style](#style) section provides more details.
+See the [automatic usage documentation generation](#automatic-usage-documentation-generation)
+and [style](#style) sections.
 
 </details>
 
@@ -180,17 +147,12 @@ Use the parser and the usage documentation in your program:
 
 ```js
 const argv = process.argv.slice(2)
-
 const {errs, args} = parser(deepThought)(argv)
 
-if (args.help) {
-  const help = docs(deepThought)(style)
-  console.log(help)
-} else if (errs.length > 0) {
-  errs.forEach(({code, msg}) => console.log(`${code}: ${msg}`))
-} else {
-  console.log(JSON.stringify(args, null, 2))
-}
+errs.forEach(err => console.log(err.msg))
+
+const help = docs(deepThought)(style)
+if (args.help) console.log(help)
 ```
 
 </p>
@@ -227,52 +189,10 @@ and [writing programs with shargs](#writing-programs-with-shargs) sections have 
 
 </details>
 
-<details>
-<summary>
-Run your command with <code>node ./deepThought "What is the meaning of Life, the Universe, and Everything?"</code>:
-
-<p>
-
-```js
-{
-  errs: [],
-  args: {
-    _: [],
-    answer: 42,
-    question: 'What is the meaning of Life, the Universe, and Everything?'
-  }
-}
-```
-
-</p>
-</summary>
-
-Read the [parser function](#the-parserSync-function) and [writing programs with shargs](#writing-programs-with-shargs) 
-sections for more.
-
-</details>
-
-<details>
-<summary>
-Run your command with <code>node ./deepThought -a 23</code>:
-
-<p>
-
-```bash
-Required option is missing: An option that is marked as required has not been provided.
-```
-
-</p>
-</summary>
-
-See the [error codes](#error-codes) sections for a reference of all error codes.
-
-</details>
-
 ### More Examples
 
-+   [shargs-example-async][shargs-example-async]
-+   [shargs-example-deepthought][shargs-example-deepthought]
++   [shargs-example-async-deepthought][shargs-example-async-deepthought]
++   [shargs-example-sync-deepthought][shargs-example-sync-deepthought]
 
 ## Documentation
 
@@ -354,7 +274,7 @@ Since writing objects following these interfaces by hand can be tedious,
 [`shargs-opts`][shargs-opts] gives you a simple type-based DSL for defining valid command-line options:
 
 ```js
-const {subcommand, command, flag, number} = require('shargs-opts')
+const {command, flag, number, subcommand} = require('shargs-opts')
 
 const opts = [
   subcommand(askOpts)('ask', ['ask'], {required: true, desc: 'Ask a question.'}),
@@ -1100,7 +1020,7 @@ const stages = {
 }
 
 const substages = {
-  ask: [...stages, restrictToOnly]
+  ask: [...stages.opts, restrictToOnly]
 }
 
 const parser = parserSync(stages, substages)
@@ -1108,20 +1028,22 @@ const parser = parserSync(stages, substages)
 
 `parserSync` takes two parameters:
 
-1.  A `stages` object that takes [parser stages](#command-line-parsers)
+1.  A [`stages`](#stages) object that takes [parser stages](#command-line-parsers)
     and defines what transformations should be applied in which order.
-2.  An optional `substages` object that defines subcommand-specific `opts` parser stages.
+2.  An optional [`substages`](#substages) object that defines subcommand-specific `opts` parser stages.
+
+`parserSync` has a twin function called [`parser`](#async-parsers) that works asynchronously.
 
 #### `stages`
 
-Shargs has seven different processing steps that are applied in order to transform argument values (`process.argv`)
-to command-line options (`opts`) and finally to arguments (`args`):
+Shargs has seven different processing steps that are applied in a predefined order
+and transform argument values (`process.argv`) to command-line options (`opts`) and finally to arguments (`args`):
 
 <table>
 <tr>
 <th>Step</th>
 <th>Field</th>
-<th>Function&nbsp;Signature</th>
+<th>Type</th>
 </tr>
 <tr name="toArgv-stages">
 <td align="right">1</td>
@@ -1134,10 +1056,16 @@ to command-line options (`opts`) and finally to arguments (`args`):
 
 <br />
 
-Transforms a value into command-line argument values syntax:
+Transforms a value into command-line argument values syntax, e.g.
 
 ```js
-['-p', 'commit', '-a', '-m', 'First commit']
+"-p commit -am 'First commit'"
+```
+
+could be transformed to
+
+```js
+['-p', 'commit', '-am', 'First commit']
 ```
 
 </details>
@@ -1154,7 +1082,13 @@ Transforms a value into command-line argument values syntax:
 
 <br />
 
-Several stages that modify command-line argument values:
+Several stages that modify command-line argument values, e.g.
+
+```js
+['-p', 'commit', '-am', 'First commit']
+```
+
+could be transformed to
 
 ```js
 ['-p', 'commit', '-a', '-m', 'First commit']
@@ -1174,13 +1108,13 @@ Several stages that modify command-line argument values:
 
 <br />
 
-Transforms argument values into command-line options:
+Transforms argument values into command-line options, e.g.
 
 ```js
 ['-p', 'commit', '-a', '-m', 'First commit']
 ```
 
-is transformed to
+could be transformed to
 
 ```js
 [
@@ -1208,13 +1142,27 @@ is transformed to
 
 <br />
 
-Several stages that modify command-line options:
+Several stages that modify command-line options, e.g.
 
 ```js
 [
   {key: 'paginate', args: ['-p'], types: [], values: [1]},
   {key: 'commit', args: ['commit'], opts: [...], values: [
     {key: 'all', args: ['-a'], types: [], values: [1]},
+    {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
+    ...
+  ]},
+  ...
+]
+```
+
+could be transformed to
+
+```js
+[
+  {key: 'paginate', args: ['-p'], types: [], values: [1]},
+  {key: 'commit', args: ['commit'], opts: [...], values: [
+    {key: 'all', args: ['-a'], types: ['bool'], values: ['true']},
     {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
     ...
   ]},
@@ -1236,13 +1184,13 @@ Several stages that modify command-line options:
 
 <br />
 
-Transforms command-line options into arguments object arrays.
+Transforms command-line options into arguments object arrays, e.g.
 
 ```js
 [
   {key: 'paginate', args: ['-p'], types: [], values: [1]},
   {key: 'commit', args: ['commit'], opts: [...], values: [
-    {key: 'all', args: ['-a'], types: [], values: [1]},
+    {key: 'all', args: ['-a'], types: ['bool'], values: ['true']},
     {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
     ...
   ]},
@@ -1250,14 +1198,14 @@ Transforms command-line options into arguments object arrays.
 ]
 ```
 
-is transformed to
+could be transformed to
 
 ```js
 [
   {_: [], paginate: {type: 'flag', count: 1}},
-  {commit: {
-    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
-  }}
+  {commit: [
+    {_: [], all: 'true', message: 'First commit'}
+  ]}
 ]
 ```
 
@@ -1275,13 +1223,24 @@ is transformed to
 
 <br />
 
-Several stages that modify arguments object arrays:
+Several stages that modify arguments object arrays, e.g.
+
+```js
+[
+  {_: [], paginate: {type: 'flag', count: 1}},
+  {commit: [
+    {_: [], all: 'true', message: 'First commit'}
+  ]}
+]
+```
+
+could be transformed to
 
 ```js
 [
   {_: [], paginate: {type: 'flag', count: 1}},
   {commit: {
-    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
+    {_: [], all: true, message: 'First commit'}
   }}
 ]
 ```
@@ -1306,20 +1265,22 @@ Transforms argument object arrays into any result value:
 [
   {_: [], paginate: {type: 'flag', count: 1}},
   {commit: [
-    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
+    {_: [], all: true, message: 'First commit'}
   ]}
 ]
 ```
 
-is transformed to
+could be transformed to
 
 ```js
 {
   _: [],
   paginate: {type: 'flag', count: 1},
-  commit: [
-    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
-  ]
+  commit: {
+    _: [],
+    all: true,
+    message: 'First commit'
+  }
 }
 ```
 
@@ -1334,7 +1295,7 @@ However, if you do have a use case that needs adjustments to those stages, you m
 The [`argv`](#argv-stages), [`opts`](#opts-stages), and [`args`](#args-stages) steps
 are the actual developer-facing API for defining a parser's behavior using parser stages.
 
-If you read the function signatures from top to bottom, you get a good impression of what `parserSync` does.
+If you read the field types from top to bottom, you get a good impression of what `parserSync` does.
 
 #### `substages`
 
@@ -1343,11 +1304,11 @@ That means, while some command-line arguments are parsed using the `opts` define
 others (e.g. the ones that belong to the `ask` command) are parsed using the `opts` defined under the `ask` [`key`](#key).
 
 Keys may be deeply nested to account for [`subcommand`](#subcommand)s of [`subcommand`](#subcommand)s:
-E.g. if `ask` had a subcommand with the `question` [`key`](#key), `{ask: {question: [...stages, restrictToOnly]}}` would assign custom `opts` to `question`.
+E.g. if `ask` had a subcommand with the `question` [`key`](#key), `{ask: {question: [...stages.opts, restrictToOnly]}}` would assign custom `opts` to `question`.
 
 The `_` [`key`](#key) is special in `substages`:
 It is a wildcard that is used by any [`subcommand`](#subcommand) that is not given explicitly by [`key`](#key).
-E.g. `{ask: {_: [...stages, restrictToOnly]}}` and `{_: {_: [...stages, restrictToOnly]}}` both work for `question`.
+E.g. `{ask: {_: [...stages.opts, restrictToOnly]}}` and `{_: {_: [...stages.opts, restrictToOnly]}}` both work for `question`.
 
 #### Async Parsers
 
@@ -1374,7 +1335,7 @@ const {errs, args} = await parse(argv)
 <tr>
 <th>Step</th>
 <th>Field</th>
-<th>Function&nbsp;Signature</th>
+<th>Type</th>
 </tr>
 <tr name="toArgv-stages">
 <td align="right">1</td>
@@ -1388,10 +1349,16 @@ const {errs, args} = await parse(argv)
 
 <br />
 
-Transforms a value into command-line argument values syntax:
+Transforms a value into command-line argument values syntax, e.g.
 
 ```js
-['-p', 'commit', '-a', '-m', 'First commit']
+"-p commit -am 'First commit'"
+```
+
+could be transformed to
+
+```js
+['-p', 'commit', '-am', 'First commit']
 ```
 
 </details>
@@ -1409,7 +1376,13 @@ Transforms a value into command-line argument values syntax:
 
 <br />
 
-Several stages that modify command-line argument values:
+Several stages that modify command-line argument values, e.g.
+
+```js
+['-p', 'commit', '-am', 'First commit']
+```
+
+could be transformed to
 
 ```js
 ['-p', 'commit', '-a', '-m', 'First commit']
@@ -1430,13 +1403,13 @@ Several stages that modify command-line argument values:
 
 <br />
 
-Transforms argument values into command-line options:
+Transforms argument values into command-line options, e.g.
 
 ```js
 ['-p', 'commit', '-a', '-m', 'First commit']
 ```
 
-is transformed to
+could be transformed to
 
 ```js
 [
@@ -1465,13 +1438,27 @@ is transformed to
 
 <br />
 
-Several stages that modify command-line options:
+Several stages that modify command-line options, e.g.
 
 ```js
 [
   {key: 'paginate', args: ['-p'], types: [], values: [1]},
   {key: 'commit', args: ['commit'], opts: [...], values: [
     {key: 'all', args: ['-a'], types: [], values: [1]},
+    {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
+    ...
+  ]},
+  ...
+]
+```
+
+could be transformed to
+
+```js
+[
+  {key: 'paginate', args: ['-p'], types: [], values: [1]},
+  {key: 'commit', args: ['commit'], opts: [...], values: [
+    {key: 'all', args: ['-a'], types: ['bool'], values: ['true']},
     {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
     ...
   ]},
@@ -1494,13 +1481,13 @@ Several stages that modify command-line options:
 
 <br />
 
-Transforms command-line options into arguments object arrays.
+Transforms command-line options into arguments object arrays, e.g.
 
 ```js
 [
   {key: 'paginate', args: ['-p'], types: [], values: [1]},
   {key: 'commit', args: ['commit'], opts: [...], values: [
-    {key: 'all', args: ['-a'], types: [], values: [1]},
+    {key: 'all', args: ['-a'], types: ['bool'], values: ['true']},
     {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
     ...
   ]},
@@ -1508,14 +1495,14 @@ Transforms command-line options into arguments object arrays.
 ]
 ```
 
-is transformed to
+could be transformed to
 
 ```js
 [
   {_: [], paginate: {type: 'flag', count: 1}},
-  {commit: {
-    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
-  }}
+  {commit: [
+    {_: [], all: 'true', message: 'First commit'}
+  ]}
 ]
 ```
 
@@ -1534,13 +1521,24 @@ is transformed to
 
 <br />
 
-Several stages that modify arguments object arrays:
+Several stages that modify arguments object arrays, e.g.
+
+```js
+[
+  {_: [], paginate: {type: 'flag', count: 1}},
+  {commit: [
+    {_: [], all: 'true', message: 'First commit'}
+  ]}
+]
+```
+
+could be transformed to
 
 ```js
 [
   {_: [], paginate: {type: 'flag', count: 1}},
   {commit: {
-    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
+    {_: [], all: true, message: 'First commit'}
   }}
 ]
 ```
@@ -1566,20 +1564,22 @@ Transforms argument object arrays into any result value:
 [
   {_: [], paginate: {type: 'flag', count: 1}},
   {commit: [
-    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
+    {_: [], all: true, message: 'First commit'}
   ]}
 ]
 ```
 
-is transformed to
+could be transformed to
 
 ```js
 {
   _: [],
   paginate: {type: 'flag', count: 1},
-  commit: [
-    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
-  ]
+  commit: {
+    _: [],
+    all: true,
+    message: 'First commit'
+  }
 }
 ```
 
@@ -1588,9 +1588,13 @@ is transformed to
 </tr>
 </table>
 
-If you read the stages' function signatures from top to bottom, you get a good impression of what an asynchronous parser does.
+If you read the stages' field types from top to bottom, you get a good impression of what an asynchronous parser does.
 Internally, an asynchronous shargs parser really differs only in one major way from a synchronous parser:
 Instead of using function composition, it uses [Promise.prototype.then][then] to chain parser stages.
+
+#### Advanced Parsers
+
++   [Multiple subcommands](#multiple-subcommands)
 
 ### Command-line Parsers
 
@@ -3436,7 +3440,7 @@ const fs = {
 </tr>
 </table>
 
-#### Advanced Parsers
+#### Advanced Parser Stages
 
 +   [Custom checks and stages](#custom-checks-and-stages)
 
@@ -5486,7 +5490,7 @@ const stages = {
 }
 
 const substages = {
-  ask: [...stages, restrictToOnly]
+  ask: [...stages.opts, restrictToOnly]
 }
 
 const parser = parserSync(stages, substages)
@@ -5617,6 +5621,85 @@ You may still want to read this section to get the most out of shargs,
 but feel free to skip it, start using shargs, and come back later.
 
 ### Advanced Command-line Parsers
+
+Some features of [`parserSync`](#the-parsersync-function) and [`parser`](#async-parsers) are not immediately apparent
+or are used only in very few parsers.
+Such features are documented, here.
+
+#### Multiple Subcommands
+
+Shargs supports specifying multiple [`subcommand`](#subcommand)s.
+E.g. you could use both, the `ask` and `design` [`subcommand`](#subcommand)s in the same command
+in the following version of `deepThought`:
+
+```js
+const {command, flag, number, stringPos, subcommand} = require('shargs-opts')
+
+const ask = subcommand([stringPos('question')])
+const design = subcommand([stringPos('name')])
+
+const opts = [
+  ask('ask', ['ask'], {desc: 'Ask a question.'}),
+  design('design', ['design'], {desc: 'Design a more powerful computer.'}),
+  flag('help', ['-h', '--help'], {desc: 'Print this help message and exit.'})
+]
+
+const deepThought = command('deepThought', opts, {desc: 'Ask the Ultimate Question.'})
+```
+
+If you provide both subcommands in your `argv`, both are parsed:
+
+```js
+const argv = ['design', 'Earth', 'ask', 'What is the answer to the Ultimate Question?']
+
+const parse = parserSync()(deepThought)
+
+const {argv, errs} = parse(argv)
+
+console.log(argv)
+/*
+{
+  _: [],
+  ask: {
+    _: [],
+    question: 'What is the answer to the Ultimate Question?'
+  },
+  design: {
+    _: [],
+    name: 'Earth'
+  }
+}
+*/
+```
+
+Note that the subcommand order is not preserved.
+This is due to the default behavior of [`fromArgs`](#fromArgs-stages),
+that keeps only the first mention of a subcommand and merges all subcommands into an (unordered) object.
+
+The input to [`fromArgs`](#fromArgs-stages) is still ordered and has duplicates,
+so if your program needs the [subcommand](#subcommand) order or duplicates,
+just write a custom [`fromArgs`](#fromArgs-stages) stage:
+
+```js
+const merge = (obj1, obj2) => ({
+  ...obj1,
+  subcommands: [
+    ...(obj1.subcommands || []),
+    obj2
+  ]
+})
+
+const fromArgs = ({errs, args}) => ({
+  errs,
+  args: args.slice(1).reduce(merge, args[0])
+})
+```
+
+This demonstration implementation of [`fromArgs`](#fromArgs-stages) is very simple
+and lacks some features like e.g. subcommands of subcommands.
+Please improve it before using it in your production programs.
+
+### Advanced Command-line Parser Stages
 
 Although we have talked about [`parser`](#the-parserSync-function) in quite some detail
 in the [parser function](#the-parserSync-function) section
@@ -6753,8 +6836,8 @@ Logo created by brgfx (<a href="https://www.freepik.com/free-photos-vectors/educ
 [npm-package]: https://www.npmjs.com/package/shargs
 [ramda]: https://ramdajs.com/docs/#mergeDeepLeft
 [shargs]: https://github.com/Yord/shargs
-[shargs-example-async]: https://github.com/Yord/shargs-example-async
-[shargs-example-deepthought]: https://github.com/Yord/shargs-example-deepthought
+[shargs-example-async-deepthought]: https://github.com/Yord/shargs-example-async-deepthought
+[shargs-example-sync-deepthought]: https://github.com/Yord/shargs-example-sync-deepthought
 [shargs-opts]: https://github.com/Yord/shargs-opts
 [shargs-parser]: https://github.com/Yord/shargs-parser
 [shargs-usage]: https://github.com/Yord/shargs-usage

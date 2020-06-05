@@ -2665,6 +2665,128 @@ test('parser works with duplicate subcommands by setting fromArgs to the identit
   expect(res).toStrictEqual(exp)
 })
 
+test('parserSync works with duplicate subcommands by using a custom fromArgs function', () => {
+  const merge = (obj1, obj2) => ({
+    ...obj1,
+    subcommands: [
+      ...(obj1.subcommands || []),
+      obj2
+    ]
+  })
+  
+  const fromArgs = ({errs, args}) => ({
+    errs,
+    args: args.slice(1).reduce(merge, args[0])
+  })
+
+  const stages = {
+    fromArgs
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: []}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '-a', 'Arc', '-a', 'Arc', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: {type: 'flag', count: 2},
+      subcommands: [
+        {
+          Arc: {
+            _: [],
+            arc: {type: 'flag', count: 1}
+          }
+        },
+        {
+          Arc: {
+            _: ['1']
+          }
+        }
+      ]
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with duplicate subcommands by using a custom fromArgs function', async () => {
+  const merge = (obj1, obj2) => ({
+    ...obj1,
+    subcommands: [
+      ...(obj1.subcommands || []),
+      obj2
+    ]
+  })
+  
+  const fromArgs = ({errs, args}) => ({
+    errs,
+    args: args.slice(1).reduce(merge, args[0])
+  })
+
+  const stages = {
+    fromArgs
+  }
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: []}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc,
+      arc
+    ]
+  }
+
+  const argv = ['-a', '-a', 'Arc', '-a', 'Arc', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: {type: 'flag', count: 2},
+      subcommands: [
+        {
+          Arc: {
+            _: [],
+            arc: {type: 'flag', count: 1}
+          }
+        },
+        {
+          Arc: {
+            _: ['1']
+          }
+        }
+      ]
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync passes on errors from argv stages', () => {
   const err = {code: 'Test', msg: 'This is a test.', info: {}}
 
