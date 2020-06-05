@@ -23,7 +23,7 @@ npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</
 
 ## Features
 
-+   Highly configurable command-line parser.
++   Highly customizable command-line arguments parser and usage documentation generator.
 +   Many features like, e.g. (multiple) [subcommands](#subcommand),
     [spelling mistake detection](#suggestOpts), [default values](#setDefaultValues),
     and ([best guess](#bestGuessCast)) [casting](#cast).
