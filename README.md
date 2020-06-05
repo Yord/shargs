@@ -35,7 +35,7 @@ npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</
 +   Easily extensible with your own [custom parser stages](#custom-checks-and-stages)
     and [custom usage layouts](#custom-usage-functions).
 +   [Extensively documented](#documentation) and very well tested (750+ unit and integration tests).
-+   Zero runtime dependencies.
++   [Modular library layout](#installation) with zero runtime dependencies.
 
 ## Getting Started
 
