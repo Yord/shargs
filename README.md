@@ -284,7 +284,7 @@ Since writing objects following these interfaces by hand can be tedious,
 [`shargs-opts`][shargs-opts] gives you a simple type-based DSL for defining valid command-line options:
 
 ```js
-const {subcommand, command, flag, number} = require('shargs-opts')
+const {command, flag, number, subcommand} = require('shargs-opts')
 
 const opts = [
   subcommand(askOpts)('ask', ['ask'], {required: true, desc: 'Ask a question.'}),
@@ -1038,20 +1038,22 @@ const parser = parserSync(stages, substages)
 
 `parserSync` takes two parameters:
 
-1.  A `stages` object that takes [parser stages](#command-line-parsers)
+1.  A [`stages`](#stages) object that takes [parser stages](#command-line-parsers)
     and defines what transformations should be applied in which order.
-2.  An optional `substages` object that defines subcommand-specific `opts` parser stages.
+2.  An optional [`substages`](#substages) object that defines subcommand-specific `opts` parser stages.
+
+`parserSync` has a twin function called [`parser`](#async-parsers) that works asynchronously.
 
 #### `stages`
 
-Shargs has seven different processing steps that are applied in order to transform argument values (`process.argv`)
-to command-line options (`opts`) and finally to arguments (`args`):
+Shargs has seven different processing steps that are applied in a predefined order
+and transform argument values (`process.argv`) to command-line options (`opts`) and finally to arguments (`args`):
 
 <table>
 <tr>
 <th>Step</th>
 <th>Field</th>
-<th>Function&nbsp;Signature</th>
+<th>Type</th>
 </tr>
 <tr name="toArgv-stages">
 <td align="right">1</td>
@@ -1064,10 +1066,16 @@ to command-line options (`opts`) and finally to arguments (`args`):
 
 <br />
 
-Transforms a value into command-line argument values syntax:
+Transforms a value into command-line argument values syntax, e.g.
 
 ```js
-['-p', 'commit', '-a', '-m', 'First commit']
+"-p commit -am 'First commit'"
+```
+
+could be transformed to
+
+```js
+['-p', 'commit', '-am', 'First commit']
 ```
 
 </details>
@@ -1084,7 +1092,13 @@ Transforms a value into command-line argument values syntax:
 
 <br />
 
-Several stages that modify command-line argument values:
+Several stages that modify command-line argument values, e.g.
+
+```js
+['-p', 'commit', '-am', 'First commit']
+```
+
+could be transformed to
 
 ```js
 ['-p', 'commit', '-a', '-m', 'First commit']
@@ -1104,13 +1118,13 @@ Several stages that modify command-line argument values:
 
 <br />
 
-Transforms argument values into command-line options:
+Transforms argument values into command-line options, e.g.
 
 ```js
 ['-p', 'commit', '-a', '-m', 'First commit']
 ```
 
-is transformed to
+could be transformed to
 
 ```js
 [
@@ -1138,13 +1152,27 @@ is transformed to
 
 <br />
 
-Several stages that modify command-line options:
+Several stages that modify command-line options, e.g.
 
 ```js
 [
   {key: 'paginate', args: ['-p'], types: [], values: [1]},
   {key: 'commit', args: ['commit'], opts: [...], values: [
     {key: 'all', args: ['-a'], types: [], values: [1]},
+    {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
+    ...
+  ]},
+  ...
+]
+```
+
+could be transformed to
+
+```js
+[
+  {key: 'paginate', args: ['-p'], types: [], values: [1]},
+  {key: 'commit', args: ['commit'], opts: [...], values: [
+    {key: 'all', args: ['-a'], types: ['bool'], values: ['true']},
     {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
     ...
   ]},
@@ -1166,13 +1194,13 @@ Several stages that modify command-line options:
 
 <br />
 
-Transforms command-line options into arguments object arrays.
+Transforms command-line options into arguments object arrays, e.g.
 
 ```js
 [
   {key: 'paginate', args: ['-p'], types: [], values: [1]},
   {key: 'commit', args: ['commit'], opts: [...], values: [
-    {key: 'all', args: ['-a'], types: [], values: [1]},
+    {key: 'all', args: ['-a'], types: ['bool'], values: ['true']},
     {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
     ...
   ]},
@@ -1180,13 +1208,13 @@ Transforms command-line options into arguments object arrays.
 ]
 ```
 
-is transformed to
+could be transformed to
 
 ```js
 [
   {_: [], paginate: {type: 'flag', count: 1}},
   {commit: {
-    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
+    {_: [], all: 'true', message: 'First commit'}
   }}
 ]
 ```
@@ -1205,13 +1233,24 @@ is transformed to
 
 <br />
 
-Several stages that modify arguments object arrays:
+Several stages that modify arguments object arrays, e.g.
 
 ```js
 [
   {_: [], paginate: {type: 'flag', count: 1}},
   {commit: {
-    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
+    {_: [], all: 'true', message: 'First commit'}
+  }}
+]
+```
+
+could be transformed to
+
+```js
+[
+  {_: [], paginate: {type: 'flag', count: 1}},
+  {commit: {
+    {_: [], all: true, message: 'First commit'}
   }}
 ]
 ```
@@ -1235,21 +1274,23 @@ Transforms argument object arrays into any result value:
 ```js
 [
   {_: [], paginate: {type: 'flag', count: 1}},
-  {commit: [
-    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
-  ]}
+  {commit: {
+    {_: [], all: true, message: 'First commit'}
+  }}
 ]
 ```
 
-is transformed to
+could be transformed to
 
 ```js
 {
   _: [],
   paginate: {type: 'flag', count: 1},
-  commit: [
-    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
-  ]
+  commit: {
+    _: [],
+    all: true,
+    message: 'First commit'
+  }
 }
 ```
 
@@ -1264,7 +1305,7 @@ However, if you do have a use case that needs adjustments to those stages, you m
 The [`argv`](#argv-stages), [`opts`](#opts-stages), and [`args`](#args-stages) steps
 are the actual developer-facing API for defining a parser's behavior using parser stages.
 
-If you read the function signatures from top to bottom, you get a good impression of what `parserSync` does.
+If you read the field types from top to bottom, you get a good impression of what `parserSync` does.
 
 #### `substages`
 
@@ -1304,7 +1345,7 @@ const {errs, args} = await parse(argv)
 <tr>
 <th>Step</th>
 <th>Field</th>
-<th>Function&nbsp;Signature</th>
+<th>Type</th>
 </tr>
 <tr name="toArgv-stages">
 <td align="right">1</td>
@@ -1318,10 +1359,16 @@ const {errs, args} = await parse(argv)
 
 <br />
 
-Transforms a value into command-line argument values syntax:
+Transforms a value into command-line argument values syntax, e.g.
 
 ```js
-['-p', 'commit', '-a', '-m', 'First commit']
+"-p commit -am 'First commit'"
+```
+
+could be transformed to
+
+```js
+['-p', 'commit', '-am', 'First commit']
 ```
 
 </details>
@@ -1339,7 +1386,13 @@ Transforms a value into command-line argument values syntax:
 
 <br />
 
-Several stages that modify command-line argument values:
+Several stages that modify command-line argument values, e.g.
+
+```js
+['-p', 'commit', '-am', 'First commit']
+```
+
+could be transformed to
 
 ```js
 ['-p', 'commit', '-a', '-m', 'First commit']
@@ -1360,13 +1413,13 @@ Several stages that modify command-line argument values:
 
 <br />
 
-Transforms argument values into command-line options:
+Transforms argument values into command-line options, e.g.
 
 ```js
 ['-p', 'commit', '-a', '-m', 'First commit']
 ```
 
-is transformed to
+could be transformed to
 
 ```js
 [
@@ -1395,13 +1448,27 @@ is transformed to
 
 <br />
 
-Several stages that modify command-line options:
+Several stages that modify command-line options, e.g.
 
 ```js
 [
   {key: 'paginate', args: ['-p'], types: [], values: [1]},
   {key: 'commit', args: ['commit'], opts: [...], values: [
     {key: 'all', args: ['-a'], types: [], values: [1]},
+    {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
+    ...
+  ]},
+  ...
+]
+```
+
+could be transformed to
+
+```js
+[
+  {key: 'paginate', args: ['-p'], types: [], values: [1]},
+  {key: 'commit', args: ['commit'], opts: [...], values: [
+    {key: 'all', args: ['-a'], types: ['bool'], values: ['true']},
     {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
     ...
   ]},
@@ -1424,13 +1491,13 @@ Several stages that modify command-line options:
 
 <br />
 
-Transforms command-line options into arguments object arrays.
+Transforms command-line options into arguments object arrays, e.g.
 
 ```js
 [
   {key: 'paginate', args: ['-p'], types: [], values: [1]},
   {key: 'commit', args: ['commit'], opts: [...], values: [
-    {key: 'all', args: ['-a'], types: [], values: [1]},
+    {key: 'all', args: ['-a'], types: ['bool'], values: ['true']},
     {key: 'message', args: ['-m'], types: ['string'], values: ['First commit']},
     ...
   ]},
@@ -1438,13 +1505,13 @@ Transforms command-line options into arguments object arrays.
 ]
 ```
 
-is transformed to
+could be transformed to
 
 ```js
 [
   {_: [], paginate: {type: 'flag', count: 1}},
   {commit: {
-    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
+    {_: [], all: 'true', message: 'First commit'}
   }}
 ]
 ```
@@ -1464,13 +1531,24 @@ is transformed to
 
 <br />
 
-Several stages that modify arguments object arrays:
+Several stages that modify arguments object arrays, e.g.
 
 ```js
 [
   {_: [], paginate: {type: 'flag', count: 1}},
   {commit: {
-    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
+    {_: [], all: 'true', message: 'First commit'}
+  }}
+]
+```
+
+could be transformed to
+
+```js
+[
+  {_: [], paginate: {type: 'flag', count: 1}},
+  {commit: {
+    {_: [], all: true, message: 'First commit'}
   }}
 ]
 ```
@@ -1495,21 +1573,23 @@ Transforms argument object arrays into any result value:
 ```js
 [
   {_: [], paginate: {type: 'flag', count: 1}},
-  {commit: [
-    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
-  ]}
+  {commit: {
+    {_: [], all: true, message: 'First commit'}
+  }}
 ]
 ```
 
-is transformed to
+could be transformed to
 
 ```js
 {
   _: [],
   paginate: {type: 'flag', count: 1},
-  commit: [
-    {_: [], all: {type: 'flag', count: 1}, message: 'First commit'}
-  ]
+  commit: {
+    _: [],
+    all: true,
+    message: 'First commit'
+  }
 }
 ```
 
@@ -1518,7 +1598,7 @@ is transformed to
 </tr>
 </table>
 
-If you read the stages' function signatures from top to bottom, you get a good impression of what an asynchronous parser does.
+If you read the stages' field types from top to bottom, you get a good impression of what an asynchronous parser does.
 Internally, an asynchronous shargs parser really differs only in one major way from a synchronous parser:
 Instead of using function composition, it uses [Promise.prototype.then][then] to chain parser stages.
 
