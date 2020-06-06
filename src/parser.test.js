@@ -1103,6 +1103,34 @@ test('parserSync works with incomplete array options', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('parser works with incomplete array options', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A', 'B']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['-a', '1']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with array positional arguments', () => {
   const stages = {}
 
