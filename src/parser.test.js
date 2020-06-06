@@ -787,6 +787,34 @@ test('parser works with duplicate primitive options by taking the first option',
   expect(res).toStrictEqual(exp)
 })
 
+test('parserSync works with incomplete primitive options', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['-a']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with primitive positional arguments', () => {
   const stages = {}
 
