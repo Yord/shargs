@@ -815,6 +815,34 @@ test('parserSync works with incomplete primitive options', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('parser works with incomplete primitive options', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['-a']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with primitive positional arguments', () => {
   const stages = {}
 
