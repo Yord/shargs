@@ -186,6 +186,31 @@ test('assignOptsAndPosArgs works for two primitive options with the same arg', (
   expect(res).toStrictEqual(exp)
 })
 
+test('assignOptsAndPosArgs works for incomplete primitive options', () => {
+  const foo = {key: 'foo', types: ['foo'], args: ['-f']}
+
+  const opt = {
+    opts: [
+      foo
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['-f']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {values: ['-f']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('assignOptsAndPosArgs works for array options', () => {
   const foo = {key: 'foo', types: ['foo', 'bar'], args: ['-f']}
 
