@@ -265,7 +265,7 @@ test('assignOptsAndPosArgs works for duplicate array options', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works for variadic options 1/3', () => {
+test('assignOptsAndPosArgs works for variadic options 1/4', () => {
   const foo = {key: 'foo', args: ['-f']}
 
   const opt = {
@@ -290,7 +290,7 @@ test('assignOptsAndPosArgs works for variadic options 1/3', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works for variadic options 2/3', () => {
+test('assignOptsAndPosArgs works for variadic options 2/4', () => {
   const foo = {key: 'foo', args: ['-f']}
 
   const opt = {
@@ -316,7 +316,7 @@ test('assignOptsAndPosArgs works for variadic options 2/3', () => {
   expect(res).toStrictEqual(exp)
 })
 
-test('assignOptsAndPosArgs works for variadic options 3/3', () => {
+test('assignOptsAndPosArgs works for variadic options 3/4', () => {
   const foo = {key: 'foo', args: ['-f']}
 
   const opt = {
@@ -337,6 +337,31 @@ test('assignOptsAndPosArgs works for variadic options 3/3', () => {
       {...foo, types: ['string', 'string'], values: ['baz', 'bat']},
       {values: ['--']},
       {values: ['bam']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('assignOptsAndPosArgs works for variadic options 4/4', () => {
+  const foo = {key: 'foo', args: ['-f']}
+
+  const opt = {
+    opts: [
+      foo
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['-f']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...foo, types: [], values: []}
     ]
   }
 
