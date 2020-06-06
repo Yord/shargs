@@ -787,6 +787,62 @@ test('parser works with duplicate primitive options by taking the first option',
   expect(res).toStrictEqual(exp)
 })
 
+test('parserSync works with incomplete primitive options', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['-a']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with incomplete primitive options', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['-a']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with primitive positional arguments', () => {
   const stages = {}
 
@@ -1013,6 +1069,62 @@ test('parser works with duplicate array options by taking the first one', async 
     args: {
       _: [],
       arc: ['1', '2']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with incomplete array options', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A', 'B']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['-a', '1']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with incomplete array options', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A', 'B']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['-a', '1']
     }
   }
 
