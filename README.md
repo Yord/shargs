@@ -193,6 +193,7 @@ and [writing programs with shargs](#writing-programs-with-shargs) sections have 
 
 +   [shargs-example-async-deepthought][shargs-example-async-deepthought]
 +   [shargs-example-sync-deepthought][shargs-example-sync-deepthought]
++   [shargs-example-repl][shargs-example-repl]
 
 ## Documentation
 
@@ -6837,6 +6838,7 @@ Logo created by brgfx (<a href="https://www.freepik.com/free-photos-vectors/educ
 [ramda]: https://ramdajs.com/docs/#mergeDeepLeft
 [shargs]: https://github.com/Yord/shargs
 [shargs-example-async-deepthought]: https://github.com/Yord/shargs-example-async-deepthought
+[shargs-example-repl]: https://github.com/Yord/shargs-example-repl
 [shargs-example-sync-deepthought]: https://github.com/Yord/shargs-example-sync-deepthought
 [shargs-opts]: https://github.com/Yord/shargs-opts
 [shargs-parser]: https://github.com/Yord/shargs-parser
