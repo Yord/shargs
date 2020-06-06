@@ -1075,6 +1075,34 @@ test('parser works with duplicate array options by taking the first one', async 
   expect(res).toStrictEqual(exp)
 })
 
+test('parserSync works with incomplete array options', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A', 'B']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: ['-a', '1']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with array positional arguments', () => {
   const stages = {}
 
