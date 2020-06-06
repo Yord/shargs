@@ -290,6 +290,32 @@ test('assignOptsAndPosArgs works for duplicate array options', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('assignOptsAndPosArgs works for incomplete array options', () => {
+  const foo = {key: 'foo', types: ['foo', 'bar'], args: ['-f']}
+
+  const opt = {
+    opts: [
+      foo
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['-f', 'baz']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {values: ['-f']},
+      {values: ['baz']}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('assignOptsAndPosArgs works for variadic options 1/4', () => {
   const foo = {key: 'foo', args: ['-f']}
 
