@@ -1193,6 +1193,64 @@ test('parser works with variadic options', async () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('parserSync works with empty variadic options', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: []
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with empty variadic options', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a']}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      arc
+    ]
+  }
+
+  const argv = ['-a']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      arc: []
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync does not work with duplicate variadic options without --', () => {
   const stages = {}
 

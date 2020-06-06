@@ -49,6 +49,13 @@ const toArgs = ({errs = [], opts = []} = {errs: [], opts: []}) => {
           }
           break
         }
+        case isEmptyArray(opt): {
+          args[0] = {
+            ...args[0],
+            ...(isUndefined(args[0][opt.key]) ? {[opt.key]: opt.values} : {})
+          }
+          break
+        }
         case isSubcommand(opt): {
           const {errs: errs3, args: args2} = toArgs({opts: opt.values})
   
@@ -89,6 +96,10 @@ function isPrimitive ({key, types, opts, values}) {
 
 function isArray ({key, types, opts, values}) {
   return isString(key) && arrLen(types, _ => _ > 1) && isUndefined(opts) && arrLen(values, _ => _ === types.length)
+}
+
+function isEmptyArray ({key, types, opts, values}) {
+  return isString(key) && arrLen(types, _ => _ === 0) && isUndefined(opts) && arrLen(values, _ => _ === types.length)
 }
 
 function isSubcommand ({key, types, opts, values}) {
