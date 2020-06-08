@@ -189,11 +189,15 @@ and [writing programs with shargs](#writing-programs-with-shargs) sections have 
 
 </details>
 
+### Tutorials
+
++   [Beginners: Implementing a `git`-like interface.][shargs-tutorial-git]
+
 ### More Examples
 
-+   [shargs-example-async-deepthought][shargs-example-async-deepthought]
-+   [shargs-example-sync-deepthought][shargs-example-sync-deepthought]
-+   [shargs-example-repl][shargs-example-repl]
++   [An asynchronous version of deepThought.][shargs-example-async-deepthought]
++   [A synchronous version of deepThought.][shargs-example-sync-deepthought]
++   [A REPL (Real Eval Print Loop) build with shargs.][shargs-example-repl]
 
 ## Documentation
 
@@ -6884,6 +6888,7 @@ Logo created by brgfx (<a href="https://www.freepik.com/free-photos-vectors/educ
 [shargs-example-sync-deepthought]: https://github.com/Yord/shargs-example-sync-deepthought
 [shargs-opts]: https://github.com/Yord/shargs-opts
 [shargs-parser]: https://github.com/Yord/shargs-parser
+[shargs-tutorial-git]: https://github.com/Yord/shargs-tutorial-git
 [shargs-usage]: https://github.com/Yord/shargs-usage
 [shield-license]: https://img.shields.io/npm/l/shargs?color=yellow&labelColor=313A42
 [shield-node]: https://img.shields.io/node/v/shargs?color=red&labelColor=313A42
