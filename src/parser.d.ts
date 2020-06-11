@@ -59,4 +59,4 @@ const parserSync: <A, B>(stages?: Stages<A, B>, substages?: Substages) =>
 const parser: <A, B>(stages?: Stages<A, B> | AsyncStages<A, B>, substages?: Substages) =>
                     (opt?: Opt) =>
                     (any?: A) =>
-                    {errs: Err[], any: B}
+                    Promise<{errs: Err[], any: B}>
