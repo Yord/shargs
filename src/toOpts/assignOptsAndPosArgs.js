@@ -30,14 +30,11 @@ const assignOptsAndPosArgs = opt => ({errs, argv}) => {
         const values = argv.slice(at, at + length)
 
         if (values.length === length) {
-          const opts3 =  opts2.map(opt => ({...opt, values}))
+          const opts3 = opts2.map(opt => ({...opt, values}))
           opts = mergeOptsUsingStack(opts, opts3, optStack)
         } else {
-          opts = [
-            ...opts,
-            {values: [arg]},
-            ...values.map(value => ({values: [value]}))
-          ]
+          const opts3 = [{values: [arg]}, ...values.map(value => ({values: [value]}))]
+          opts = mergeOptsUsingStack(opts, opts3, optStack)
         }
 
         at = at + length
