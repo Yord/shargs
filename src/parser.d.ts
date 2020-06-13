@@ -51,6 +51,8 @@ export interface Substages {
   [key]: Array<(obj?: {errs?: Err[], opts?: Opt[]}) => {errs: Err[], opts: Opt[]}> | Substages
 }
 
+const parserF: any
+
 const parserSync: <A, B>(stages?: Stages<A, B>, substages?: Substages) =>
                         (opt?: Opt) =>
                         (any?: A) =>
