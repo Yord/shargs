@@ -178,6 +178,26 @@ test('verifyCommand fails for opts with invalid key', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('verifyCommand fails for opts with invalid key due to whitespaces', () => {
+  const foo = {key: 'foo bar', args: ['-a'], types: []}
+
+  const opt = {
+    key: 'foo',
+    opts: [
+      foo
+    ]
+  }
+
+  const res = verifyCommand(opt)
+
+  const exp = {
+    errs: [OptionExpected({opt: foo}), InvalidKey({opt: foo})],
+    opt: {...opt, opts: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('verifyCommand fails for opts with invalid args', () => {
   const foo = {key: 'arc', args: null, types: []}
 
