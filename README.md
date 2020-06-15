@@ -5955,7 +5955,9 @@ The following table contains all error codes currently in use and where they are
 </tr>
 <tr name="InvalidKey">
 <td><code><a href="#InvalidKey">InvalidKey</a></code></td>
-<td>The "key" field has an invalid value: "key" must be a string and cannot be "_" or "--".</td>
+<td>
+The "key" field has an invalid value: "key" must be a string, cannot be "_" or "--", and must not include whitespaces.
+</td>
 <td>
 <code><a href="#toOpts-stage">toOpts</code>
 </td>

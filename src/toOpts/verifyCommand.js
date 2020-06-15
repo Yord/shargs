@@ -109,7 +109,7 @@ function invalidArgs ({args}) {
 }
 
 function invalidKey ({key}) {
-  return typeof key !== 'string' || key === '_' || key === '--'
+  return typeof key !== 'string' || key === '_' || key === '--' || key.includes(' ')
 }
 
 function invalidOpts ({opts}) {
