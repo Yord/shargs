@@ -2505,8 +2505,7 @@ are also contained in <code><a href="#only">only</a></code>.
 <br />
 
 If values are not found in [`only`](#only),
-a [`ValueRestrictionsViolated`](#ValueRestrictionsViolated) error is reported for each value
-and the [`values`](#values) field is removed from the option.
+a [`ValueRestrictionsViolated`](#ValueRestrictionsViolated) error is reported for each value.
 
 <br />
 
@@ -2534,9 +2533,7 @@ Result:
       info: {...}
     }
   ],
-  opts: [
-    number('answer', ['--answer'], {only: ['42']})
-  ]
+  opts
 }
 ```
 
