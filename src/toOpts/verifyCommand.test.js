@@ -57,6 +57,21 @@ test('verifyCommand fails for programs with wrong key syntax', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('verifyCommand fails for programs that have a whitespace in their key', () => {
+  const opt = {
+    key: 'foo bar',
+    opts: []
+  }
+
+  const res = verifyCommand(opt)
+
+  const exp = {
+    errs: [CommandExpected({opt}), InvalidKey({opt})]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('verifyCommand fails for programs without opts', () => {
   const opt = {
     key: 'foo'
@@ -145,6 +160,26 @@ test('verifyCommand works for programs with options', () => {
 
 test('verifyCommand fails for opts with invalid key', () => {
   const foo = {key: null, args: ['-a'], types: []}
+
+  const opt = {
+    key: 'foo',
+    opts: [
+      foo
+    ]
+  }
+
+  const res = verifyCommand(opt)
+
+  const exp = {
+    errs: [OptionExpected({opt: foo}), InvalidKey({opt: foo})],
+    opt: {...opt, opts: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('verifyCommand fails for opts with invalid key due to whitespaces', () => {
+  const foo = {key: 'foo bar', args: ['-a'], types: []}
 
   const opt = {
     key: 'foo',

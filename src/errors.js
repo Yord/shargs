@@ -12,7 +12,7 @@ const InvalidArgs = ({opt}) => ({
 
 const InvalidKey = ({opt}) => ({
   code: 'InvalidKey',
-  msg:  'The "key" field has an invalid value: "key" must be a string and cannot be "_" or "--".',
+  msg:  'The "key" field has an invalid value: "key" must be a string, cannot be "_" or "--", and must not include whitespaces.',
   info: {opt}
 })
 
