@@ -1967,6 +1967,41 @@ test('parser works with subcommands', async () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('parserSync works with subcommands and positional arguments', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', types: ['A']}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: [],
+        arc: '1'
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with subcommands of subcommands', () => {
   const stages = {
     opts: [
