@@ -105,7 +105,7 @@ function verifySubcommand (opt) {
 }
 
 function invalidArgs ({args}) {
-  return !Array.isArray(args) || args.length === 0
+  return !Array.isArray(args) || args.length === 0 || args.some(arg => arg.includes(' '))
 }
 
 function invalidKey ({key}) {
