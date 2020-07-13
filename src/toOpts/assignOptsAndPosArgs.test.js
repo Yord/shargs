@@ -806,6 +806,40 @@ test('assignOptsAndPosArgs works for subcommand of subcommand options with posit
   expect(res).toStrictEqual(exp)
 })
 
+test('assignOptsAndPosArgs works for subcommand of subcommand options with primitive options', () => {
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [arc]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    Bar
+  ]}
+
+  const opt = {
+    key: 'yay',
+    opts: [
+      Arc
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['Arc', 'Bar', '-a', '1']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...Arc, values: [
+        {...Bar, values: [
+          {...arc, values: ['1']}
+        ]}
+      ]}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('assignOptsAndPosArgs takes the innermost subcommand if it has conflicting options', () => {
   const art = {key: 'art', types: [], args: ['-a']}
   const bar = {key: 'bar', args: ['bar'], opts: [
