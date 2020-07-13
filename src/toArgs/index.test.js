@@ -525,11 +525,13 @@ test('toArgs works for nested subcommands', () => {
   const arc = {key: 'arc', args: ['-a'], types: ['A'], values: ['1']}
   const bar = {key: 'bar', args: ['-b'], types: ['B']}
   const cat = {key: 'cat', args: ['-c'], types: ['C']}
+  const dot = {key: 'dot', types: ['D']}
   const Bar = {key: 'Bar', args: ['Bar'], opts: [bar]}
   const Arc = {key: 'Arc', args: ['Arc'], opts: [arc], values: [
     {...bar, values: ['2']},
     {...Bar, values: [
-      {...cat, values: ['3']}
+      {...cat, values: ['3']},
+      {...dot, values: ['4']}
     ]}
   ]}
 
@@ -559,7 +561,8 @@ test('toArgs works for nested subcommands', () => {
         Arc: {
           Bar: {
             _: [],
-            cat: '3'
+            cat: '3',
+            dot: '4'
           }
         }
       }
