@@ -555,6 +555,39 @@ test('assignOptsAndPosArgs works for subcommand options with rest values', () =>
   expect(res).toStrictEqual(exp)
 })
 
+test('assignOptsAndPosArgs works for subcommand of subcommand options with rest values', () => {
+  const Cat = {key: 'Cat', args: ['Cat'], opts: []}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [Cat]}
+  const Art = {key: 'Art', args: ['Art'], opts: [Bar]}
+
+  const opt = {
+    opts: [
+      Art
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['Art', 'Bar', 'Cat', '1']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...Art, values: [
+        {...Bar, values: [
+          {...Cat, values: [
+            {values: ['1']}
+          ]}
+        ]}
+      ]}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('assignOptsAndPosArgs works for subcommand options with rest values that are incomplete args', () => {
   const art = {key: 'art', args: ['-a'], types: ['A']}
   const Bar = {key: 'Bar', args: ['Bar'], opts: [art]}
@@ -732,6 +765,74 @@ test('assignOptsAndPosArgs works for subcommand options 6', () => {
           {...bat, values: []}
         ]},
         {...bar, values: []}
+      ]}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('assignOptsAndPosArgs works for subcommand of subcommand options with positional arguments', () => {
+  const arc = {key: 'arc', types: ['A']}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [arc]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    Bar
+  ]}
+
+  const opt = {
+    key: 'yay',
+    opts: [
+      Arc
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['Arc', 'Bar', '1']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...Arc, values: [
+        {...Bar, values: [
+          {...arc, values: ['1']}
+        ]}
+      ]}
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('assignOptsAndPosArgs works for subcommand of subcommand options with primitive options', () => {
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Bar = {key: 'Bar', args: ['Bar'], opts: [arc]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    Bar
+  ]}
+
+  const opt = {
+    key: 'yay',
+    opts: [
+      Arc
+    ]
+  }
+
+  const errs = []
+
+  const argv = ['Arc', 'Bar', '-a', '1']
+
+  const res = assignOptsAndPosArgs(opt)({errs, argv})
+
+  const exp = {
+    errs: [],
+    opts: [
+      {...Arc, values: [
+        {...Bar, values: [
+          {...arc, values: ['1']}
+        ]}
       ]}
     ]
   }

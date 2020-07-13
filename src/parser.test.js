@@ -1967,6 +1967,346 @@ test('parser works with subcommands', async () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('parserSync works with subcommands and positional arguments', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', types: ['A']}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: [],
+        arc: '1'
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with subcommands and positional arguments', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', types: ['A']}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    arc
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: [],
+        arc: '1'
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with subcommands of subcommands and positional arguments', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', types: ['A']}
+  const Bat = {key: 'Bat', args: ['Bat'], opts: [
+    arc
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    Bat
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', 'Bat', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: [],
+        Bat: {
+          _: [],
+          arc: '1'
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with subcommands of subcommands and positional arguments', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', types: ['A']}
+  const Bat = {key: 'Bat', args: ['Bat'], opts: [
+    arc
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    Bat
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', 'Bat', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: [],
+        Bat: {
+          _: [],
+          arc: '1'
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with subcommands of subcommands of subcommands and positional arguments', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', types: ['A']}
+  const Cat = {key: 'Cat', args: ['Cat'], opts: [
+    arc
+  ]}
+  const Bat = {key: 'Bat', args: ['Bat'], opts: [
+    Cat
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    Bat
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', 'Bat', 'Cat', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: [],
+        Bat: {
+          _: [],
+          Cat: {
+            _: [],
+            arc: '1'
+          }
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with subcommands of subcommands of subcommands and positional arguments', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', types: ['A']}
+  const Cat = {key: 'Cat', args: ['Cat'], opts: [
+    arc
+  ]}
+  const Bat = {key: 'Bat', args: ['Bat'], opts: [
+    Cat
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    Bat
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', 'Bat', 'Cat', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: [],
+        Bat: {
+          _: [],
+          Cat: {
+            _: [],
+            arc: '1'
+          }
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with subcommands of subcommands of subcommands and options', () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Cat = {key: 'Cat', args: ['Cat'], opts: [
+    arc
+  ]}
+  const Bat = {key: 'Bat', args: ['Bat'], opts: [
+    Cat
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    Bat
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', 'Bat', 'Cat', '-a', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: [],
+        Bat: {
+          _: [],
+          Cat: {
+            _: [],
+            arc: '1'
+          }
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with subcommands of subcommands of subcommands and options', async () => {
+  const stages = {}
+
+  const substages = {}
+
+  const arc = {key: 'arc', args: ['-a'], types: ['A']}
+  const Cat = {key: 'Cat', args: ['Cat'], opts: [
+    arc
+  ]}
+  const Bat = {key: 'Bat', args: ['Bat'], opts: [
+    Cat
+  ]}
+  const Arc = {key: 'Arc', args: ['Arc'], opts: [
+    Bat
+  ]}
+
+  const opt = {
+    key: 'Foo',
+    opts: [
+      Arc
+    ]
+  }
+
+  const argv = ['Arc', 'Bat', 'Cat', '-a', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [],
+    args: {
+      _: [],
+      Arc: {
+        _: [],
+        Bat: {
+          _: [],
+          Cat: {
+            _: [],
+            arc: '1'
+          }
+        }
+      }
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with subcommands of subcommands', () => {
   const stages = {
     opts: [

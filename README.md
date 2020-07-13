@@ -15,10 +15,10 @@
 ## Installation
 
 <pre>
-npm install --save <a href="https://github.com/Yord/shargs">shargs</a>        # opt-in to <a href="#the-parsersync-function">synchronous</a> and <a href="#async-parsers">asynchronous</a> parsing
-npm install --save <a href="https://github.com/Yord/shargs-opts">shargs-opts</a>   # opt-in to type functions for <a href="#command-line-options">command-line options</a>
-npm install --save <a href="https://github.com/Yord/shargs-parser">shargs-parser</a> # opt-in to a standard library of <a href="#command-line-parsers">parser functions</a>
-npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</a>  # opt-in to a standard library of <a href="#automatic-usage-documentation-generation">usage functions</a>
+npm install --save <a href="https://github.com/Yord/shargs">shargs</a>        # <a href="#the-parsersync-function">synchronous</a> and <a href="#async-parsers">asynchronous</a> parsing
+npm install --save <a href="https://github.com/Yord/shargs-opts">shargs-opts</a>   # type functions for <a href="#command-line-options">command-line options</a>
+npm install --save <a href="https://github.com/Yord/shargs-parser">shargs-parser</a> # a standard library of <a href="#command-line-parsers">parser functions</a>
+npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</a>  # a standard library of <a href="#automatic-usage-documentation-generation">usage functions</a>
 </pre>
 
 ## Features
