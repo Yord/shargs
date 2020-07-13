@@ -180,7 +180,7 @@ function findPosArg (optStack, arg) {
     if (posArgIndex > -1) {
       posArgs   = opt.opts.slice(posArgIndex, posArgIndex + 1)
       optStack2 = [
-        ...optStack.slice(0, i - 2),
+        ...optStack.slice(0, i),
         {...opt, opts: [
           ...opt.opts.slice(0, posArgIndex),
           ...opt.opts.slice(posArgIndex + 1)
