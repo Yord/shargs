@@ -2,7 +2,7 @@
 <img width="800" src="shargs.png" />
 </p>
 
-🦈 shargs (**sh**ell **args**) is a highly customizable command-line arguments parser and usage documentation generator.
+🦈 shargs (**sh**ell **args**) is a library for building command-line argument parsers.
 
 [![node version][shield-node]][node]
 [![npm version][shield-npm]][npm-package]
