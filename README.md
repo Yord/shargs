@@ -12,23 +12,14 @@
 [![macos unit tests status][shield-unit-tests-macos]][actions]
 [![windows unit tests status][shield-unit-tests-windows]][actions]
 
-## Installation
-
-<pre>
-npm install --save <a href="https://github.com/Yord/shargs">shargs</a>        # <a href="#the-parsersync-function">synchronous</a> and <a href="#async-parsers">asynchronous</a> parsing
-npm install --save <a href="https://github.com/Yord/shargs-opts">shargs-opts</a>   # type functions for <a href="#command-line-options">command-line options</a>
-npm install --save <a href="https://github.com/Yord/shargs-parser">shargs-parser</a> # a standard library of <a href="#command-line-parsers">parser functions</a>
-npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</a>  # a standard library of <a href="#automatic-usage-documentation-generation">usage functions</a>
-</pre>
-
 ## Features
 
-+   [Highly customizable](#command-line-parsers) command-line arguments [parser](#the-parsersync-function)
-    and [usage documentation generator](#automatic-usage-documentation-generation).
++   Build [highly customizable](#command-line-parsers) command-line argument [parsers](#the-parsersync-function)
+    and [usage documentation generators](#automatic-usage-documentation-generation).
 +   35+ opt-in features, e.g. ([multiple](#multiple-subcommands)) [subcommands](#subcommand),
     [spelling mistake detection](#suggestOpts), [default values](#setDefaultValues),
     and ([best guess](#bestGuessCast)) [casting](#cast).
-+   [Synchronous](#the-parsersync-function) and Promise-based [asynchronous](#async-parsers) mode
++   [Synchronous](#the-parsersync-function) and Promise-based [asynchronous](#async-parsers) modes
     with async/await support.
 +   [Automatic usage documentation generation](#automatic-usage-documentation-generation) with fine-grained control over 
     [layouts](#automatic-usage-documentation-generation) and [styles](#style).
@@ -36,6 +27,16 @@ npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</
     and [custom usage layouts](#custom-usage-functions).
 +   [Extensively documented](#documentation) and very well tested (750+ unit and integration tests).
 +   [Modular library layout](#installation) with zero runtime dependencies.
+
+## Installation
+
+<pre>
+npm install --save <a href="https://github.com/Yord/shargs">shargs</a>
+npm install --save <a href="https://github.com/Yord/shargs-opts">shargs-opts</a>   # optional: DSL for <a href="#command-line-options">command-line options</a>
+npm install --save <a href="https://github.com/Yord/shargs-parser">shargs-parser</a> # optional: collection of <a href="#command-line-parsers">parser functions</a>
+npm install --save <a href="https://github.com/Yord/shargs-usage">shargs-usage</a>  # optional: collection of <a href="#automatic-usage-documentation-generation">usage functions</a>
+npm install --save <a href="https://github.com/Yord/shargs-repl">shargs-repl</a>   # optional: <a href="#building-repls-with-shargs">build REPLs</a> powered by shargs
+</pre>
 
 ## Getting Started
 
