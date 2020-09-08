@@ -194,7 +194,7 @@ and [writing programs with shargs](#writing-programs-with-shargs) sections have 
 
 +   [Beginners: Implementing a `git`-like interface.][shargs-tutorial-git]
 
-### More Examples
+### Examples
 
 +   [An asynchronous version of deepThought.][shargs-example-async-deepthought]
 +   [A synchronous version of deepThought.][shargs-example-sync-deepthought]
@@ -206,7 +206,7 @@ and [writing programs with shargs](#writing-programs-with-shargs) sections have 
 This documentation encompasses the following shargs modules:
 
 1.  [`shargs-opts`][shargs-opts] is documented in [Command-line Options](#command-line-options).
-2.  [`shargs`][shargs] is documented in [The `parser` Function](#the-parserSync-function).
+2.  [`shargs`][shargs] is documented in [The `parserSync` Function](#the-parserSync-function).
 3.  [`shargs-parser`][shargs-parser] is documented in [Command-line Parsers](#command-line-parsers).
 4.  [`shargs-usage`][shargs-usage] is documented in [Automatic Usage Documentation Generation](#automatic-usage-documentation-generation).
 
@@ -895,8 +895,8 @@ and <code><a href="#key">key</a></code>.
 <details>
 <summary>
 <b>This field should only be set by parser stages and never manually.</b>
-<code>values</code> holds arguments provided by the user.
-If default values are needed, see <code><a href="#defaultValues">defaultValues</a></code>.
+<code>values</code> are assigned by the parser.
+You may want to use <code><a href="#defaultValues">defaultValues</a></code>.
 </summary>
 
 <br />
@@ -942,8 +942,9 @@ option into a complementary option prefixed with a given string
 
 The complementary option has the same <code><a href="#key">key</a></code> as the original option,
 but <code><a href="#reverse">reverses</a></code> its value.
-If <code>complement</code> is used, either the <code><a href="#reverseBools">reverseBools</a></code>
-or <code><a href="#reverseFlags">reverseFlags</a></code>, or both parser stages must be used.
+If <code>complement</code> is used,
+you most probably want to also use the <code><a href="#reverseBools">reverseBools</a></code>
+or <code><a href="#reverseFlags">reverseFlags</a></code> parser stage.
 
 <br />
 
@@ -987,11 +988,9 @@ Example:
 const {command, stringPos} = require('shargs-opts')
 
 const opts = [stringPos('question')]
-
-const args = ['deepThought', 'D']
-
 const deepThought = command('deepThought', opts)
 
+const args = ['deepThought', 'D']
 posArgToOpt(args)(deepThought)
 ```
 
@@ -1013,7 +1012,7 @@ subcommand(opts)('deepThought', args)
 The `parserSync` function is [`shargs`][shargs]' core abstraction.
 It may be used without [`shargs-opts`][shargs-opts] and [`shargs-parser`][shargs-parser],
 e.g. with manually written option objects and parser stages, or with other option DSL or parser stage libraries.
-We have already seen some of the things, `parserSync` does, this section fills the gaps:
+We have already seen some of the things `parserSync` does, but this section fills the gaps:
 
 ```js
 const {parserSync} = require('shargs')
@@ -1044,7 +1043,7 @@ const parser = parserSync(stages, substages)
 #### `stages`
 
 Shargs has seven different processing steps that are applied in a predefined order
-and transform argument values (`process.argv`) to command-line options (`opts`) and finally to arguments (`args`):
+and transform argument values (`process.argv`) via command-line options (`opts`) to arguments (`args`):
 
 <table>
 <tr>
@@ -1297,18 +1296,19 @@ could be transformed to
 </table>
 
 The [`toOps`](#toOpts-stages) and [`toArgs`](#toArgs-stages) stages
-define the core behavior of [`parserSync`](#the-parserSync-function) and should not have to be changed in most use cases.
+define the core behavior of [`parserSync`](#the-parserSync-function) (and [`parser`](#async-parsers))
+and shargs defines sensible defaults that should not have to be changed in most use cases.
 However, if you do have a use case that needs adjustments to those stages, you may carefully swap them out.
 The [`argv`](#argv-stages), [`opts`](#opts-stages), and [`args`](#args-stages) steps
-are the actual developer-facing API for defining a parser's behavior using parser stages.
+are most commonly used to fine-tune a parser's behavior.
 
 If you read the field types from top to bottom, you get a good impression of what `parserSync` does.
 
 #### `substages`
 
 `substages` define custom `opts` stages for subcommands.
-That means, while some command-line arguments are parsed using the `opts` defined in `stages`,
-others (e.g. the ones that belong to the `ask` command) are parsed using the `opts` defined under the `ask` [`key`](#key).
+That means, while some subcommands are parsed using the `opts` defined in `stages`,
+those whose key matches a key in the `substages` object are parsed using the `opts` defined under that [`key`](#key).
 
 Keys may be deeply nested to account for [`subcommand`](#subcommand)s of [`subcommand`](#subcommand)s:
 E.g. if `ask` had a subcommand with the `question` [`key`](#key), `{ask: {question: [...stages.opts, restrictToOnly]}}` would assign custom `opts` to `question`.
