@@ -162,7 +162,7 @@ if (args.help) console.log(help)
 The command-line option DSL, the parser DSL, and the usage documentation DSL combined
 give you a very flexible way to write command-line programs.
 
-Find out more in the [writing programs with shargs](#writing-programs-with-shargs) section.
+Find out more in the [building command-line parsers with shargs](#building-command-line-parsers-with-shargs) section.
 
 </details>
 
@@ -186,7 +186,7 @@ Ask the Ultimate Question.
 </summary>
 
 The [automatic usage documentation generation](#automatic-usage-documentation-generation)
-and [writing programs with shargs](#writing-programs-with-shargs) sections have more.
+and [building command-line parsers with shargs](#building-command-line-parsers-with-shargs) sections have more.
 
 </details>
 
@@ -1319,24 +1319,23 @@ E.g. `{ask: {_: [...stages.opts, restrictToOnly]}}` and `{_: {_: [...stages.opts
 
 #### Async Parsers
 
-The `parserSync` function has an asynchronous alternative called `parser`.
+The [`parserSync`](#the-parsersync-function) function has an asynchronous alternative called `parser`.
 It is used exactly like `parserSync`, but also works with stages returning
 [JavaScript Promises](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 and returns a Promise itself:
 
 ```js
-const {parser} = require('shargs')
-
 // stages, substages, deepThought, argv are taken from the Getting Started section
 
+const {parser} = require('shargs')
+
 const asyncParser = parser(stages, substages)
-
 const parse = asyncParser(deepThought)
-
 const {errs, args} = await parse(argv)
 ```
 
-`parser`'s [`stages`](#stages) and [`substages`](#substages) parameters also take parser stages that return Promises:
+ In addition to `parserSync`'s parameters,
+ `parser`'s [`stages`](#stages) and [`substages`](#substages) parameters also take parser stages that return Promises:
 
 <table>
 <tr>
@@ -1605,12 +1604,12 @@ Instead of using function composition, it uses [Promise.prototype.then][then] to
 
 ### Command-line Parsers
 
-You do not have to write parser stages by yourself.
-The [`shargs-parser`][shargs-parser] library offers a large collection of common parser stages, you can choose from.
+You do not have to write all parser stages yourself.
+The [`shargs-parser`][shargs-parser] library offers a large collection of common parser stages, you can use.
 
 The parser stages presented here are split into *checks* and *stages*.
 While *checks* only report errors, *stages* also transform their `argv`, `opts`, or `args`.
-Usually, *checks* are used before *stages*.
+Usually, it makes sense to apply *checks* before *stages*.
 
 #### `argv` Checks
 
@@ -5411,14 +5410,9 @@ plus <code><a href="#padEnd">padEnd</a></code> and <code><a href="#padStart">pad
 +   [Custom usage functions](#custom-usage-functions)
 +   [Custom layout functions](#custom-layout-functions)
 
-### Writing Programs with Shargs
+### Building Command-line Parsers with Shargs
 
-Two programs written with [`shargs`][shargs] may look completely different.
-Since shargs does its best to keep out of the way, it has very little influence on a program's code layout.
-It is safe to say that the only reliable similarity between shargs programs
-is parsing `process.argv` with a parser at some point.
-
-Before we go into writing a program, let us revisit some code snippets from earlier that we will reuse:
+This section reuses code snippets from earlier sections:
 
 <table>
 <tr>
@@ -5549,8 +5543,12 @@ const style = {
 </tr>
 </table>
 
-Just imagine these snippets were located in their own modules and imported for the program.
-Then, a sample program written with shargs could be:
+<details>
+<summary>
+Imagine these snippets were located in their own modules and were imported earlier.
+Then, a sample command-line program written with shargs could be:
+
+<p>
 
 ```js
 const argv = process.argv.slice(2)
@@ -5571,6 +5569,10 @@ console.log(`The answer is: ${args.answer}`)
 process.exit(0)
 ```
 
+</p>
+
+</summary>
+
 First, we skip the first two values of `process.argv`.
 They are `node` and the file name and can be ignored.
 
@@ -5581,7 +5583,9 @@ Based on those two results, we build our program.
 If the `args.help` field is set, we print a `help` text generated from `docs` by applying `deepThought` and `style`.
 Then, we `exit` with exit code `0`.
 
-E.g. if we run the program with `node ./deepThought --help`, the following text is printed:
+</details>
+
+If we run the program with `node ./deepThought --help`, the following text is printed:
 
 ```bash
 deepThought [-a|--answer] [-h|--help]                                           
@@ -5600,7 +5604,6 @@ Life, the Universe, and Everything.
 ```
 
 If the `errs` array has errors, we print all errors and `exit` with exit code `1`.
-
 E.g. if we execute `node ./deepThought --answer 5`, without specifying the required `ask` subcommand,
 the following text appears:
 
@@ -5609,7 +5612,6 @@ Required option is missing: An option that is marked as required has not been pr
 ```
 
 Otherwise, we print the `args.answer`.
-
 E.g. if we run it with `node ./deepThought ask "What is the meaning of Life, the Universe, and Everything?"`,
 it prints:
 
