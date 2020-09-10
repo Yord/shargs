@@ -5621,18 +5621,17 @@ The answer is: 42
 
 ## More In-depth Documentation
 
-While you may want to read the whole [documentation](#documentation) section when getting started,
-this section is for topics that do not occur often and need to be consulted on a case by case basis.
-You may still want to read this section to get the most out of shargs,
-but feel free to skip it, start using shargs, and come back later.
+Feel free to skip this section if you are new to Shargs.
+It introduces more advanced topics:
 
-### Advanced Command-line Parsers
++   [Multiple Subcommands](#multiple-subcommands)
++   [Custom Checks and Stages](#custom-checks-and-stages)
++   [Custom Layout Functions](#custom-layout-functions)
++   [Custom Usage Functions](#custom-usage-functions)
++   [Building REPLs with Shargs](#building-repls-with-shargs)
++   [Error Codes](#error-codes)
 
-Some features of [`parserSync`](#the-parsersync-function) and [`parser`](#async-parsers) are not immediately apparent
-or are used only in very few parsers.
-Such features are documented, here.
-
-#### Multiple Subcommands
+### Multiple Subcommands
 
 Shargs supports specifying multiple [`subcommand`](#subcommand)s.
 E.g. you could use both, the `ask` and `design` [`subcommand`](#subcommand)s in the same command
@@ -5705,14 +5704,11 @@ This demonstration implementation of [`fromArgs`](#fromArgs-stages) is very simp
 and lacks some features like e.g. subcommands of subcommands.
 Please improve it before using it in your production programs.
 
-### Advanced Command-line Parser Stages
+### Building REPLs with Shargs
 
-Although we have talked about [`parser`](#the-parserSync-function) in quite some detail
-in the [parser function](#the-parserSync-function) section
-and about parser stages in [command-line parsers](#command-line-parsers),
-some topics are left to be discussed, here.
+[`Shargs-repl`][shargs-repl] lets you build REPLs with actions defined by shargs [`commands`](#command).
 
-#### Custom Checks and Stages
+### Custom Checks and Stages
 
 Shargs makes writing and using custom checks and stages very simple.
 The only thing you have to do is to follow the correct function signatures for your check or stage,
@@ -5787,12 +5783,7 @@ function flagsAsBools ({errs = [], args = {}} = {}) {
 
 If you write a custom `args` stage, have a look at [`traverseArgs`](#traverseArgs)!
 
-### Advanced Usage Generation
-
-We have talked about [automatic usage documentation generation](#automatic-usage-documentation-generation) before.
-But some topics do not come up every day and are discussed, here.
-
-#### Custom Layout Functions
+### Custom Layout Functions
 
 Using your own [layout function](#layout-function) is straightforward:
 Your function only has to have the correct signature and it is ready to be used as a [layout function](#layout-function):
@@ -5825,7 +5816,7 @@ This is of course a very simplified example that makes many assumptions that are
 and should not be made in real projects.
 Your own function would most probably need much more validations and handling of edge cases.
 
-#### Custom Usage Functions
+### Custom Usage Functions
 
 Writing and using custom [usage functions](#usage-function) in shargs is very simple:
 You only have to write a function with the correct signature and it can be used as a [usage function](#usage-function).
@@ -6892,6 +6883,7 @@ Logo created by brgfx (<a href="https://www.freepik.com/free-photos-vectors/educ
 [shargs-example-sync-sql]: https://github.com/Yord/shargs-example-sync-sql
 [shargs-opts]: https://github.com/Yord/shargs-opts
 [shargs-parser]: https://github.com/Yord/shargs-parser
+[shargs-repl]: https://github.com/Yord/shargs-repl
 [shargs-tutorial-git]: https://github.com/Yord/shargs-tutorial-git
 [shargs-usage]: https://github.com/Yord/shargs-usage
 [shield-license]: https://img.shields.io/npm/l/shargs?color=yellow&labelColor=313A42
