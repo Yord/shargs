@@ -4,6 +4,7 @@ const {toArgs:   TO_ARGS}   = require('./toArgs')
 const {toArgv:   TO_ARGV}   = require('./toArgv')
 const {toOpts:   TO_OPTS}   = require('./toOpts')
 const {Sync}                = require('./Sync')
+const {verifyCommand}       = require('./verifyCommand')
 
 module.exports = {
   parserF,
@@ -23,15 +24,27 @@ function parserF (Mode) {
       fromArgs = FROM_ARGS
     } = stages
   
-    return opt => Mode.then(
-      toArgv,
-      ...argv,
-      toOpts(opt),
-      recurseOpts(Mode)(opts, substages),
-      toArgs,
-      transformArgs(Mode)(args),
-      fromArgs
-    )
+    return opt => {
+      const {errs: errs2, opt: opt2} = verifyCommand(opt)
+
+      const defaultCommand = {
+        key: 'default',
+        opts: []
+      }
+
+      const opt3 = opt2 || defaultCommand
+
+      return Mode.then(
+        toArgv,
+        ({errs = [], argv = []} = {errs: [], argv: []}) => ({errs: [...errs2, ...errs], argv}),
+        ...argv,
+        toOpts(opt3),
+        recurseOpts(Mode)(opts, substages),
+        toArgs,
+        transformArgs(Mode)(args),
+        fromArgs
+      )
+    }
   }
 }
 

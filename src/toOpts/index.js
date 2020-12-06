@@ -1,22 +1,12 @@
 const {addRemainingOptsAndPosArgs} = require('./addRemainingOptsAndPosArgs')
 const {assignOptsAndPosArgs}       = require('./assignOptsAndPosArgs')
-const {verifyCommand}              = require('./verifyCommand')
 const {pipe}                       = require('../pipe')
 
-const toOpts = (opt = {}) => {
-  const {errs: errs2, opt: opt2} = verifyCommand(opt)
-
-  const defaultCommand = {
-    key: 'default',
-    opts: []
-  }
-
-  const opt3 = opt2 || defaultCommand
-
+const toOpts = (opt = {key: '', opts: []}) => {
   return ({errs = [], argv = []} = {errs: [], argv: []}) => pipe(
-    assignOptsAndPosArgs(opt3),
-    addRemainingOptsAndPosArgs(opt3)
-  )({errs: [...errs, ...errs2], argv})
+    assignOptsAndPosArgs(opt),
+    addRemainingOptsAndPosArgs(opt)
+  )({errs, argv})
 }
 
 module.exports = {

@@ -10,7 +10,7 @@ const {
   PosArgExpected,
   SubcommandExpected,
   UnknownCommandLineOptionType
-} = require('../errors')
+} = require('./errors')
 
 test('verifyCommand works for empty programs', () => {
   const opt = {
@@ -30,6 +30,7 @@ test('verifyCommand works for empty programs', () => {
 
 test('verifyCommand fails for programs without key', () => {
   const opt = {
+    key: undefined,
     opts: []
   }
 
@@ -74,7 +75,8 @@ test('verifyCommand fails for programs that have a whitespace in their key', () 
 
 test('verifyCommand fails for programs without opts', () => {
   const opt = {
-    key: 'foo'
+    key: 'foo',
+    opts: undefined
   }
 
   const res = verifyCommand(opt)
@@ -92,6 +94,7 @@ test('verifyCommand fails for programs with wrong opts syntax', () => {
     opts: 'bar'
   }
 
+  // @ts-ignore
   const res = verifyCommand(opt)
 
   const exp = {
