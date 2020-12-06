@@ -209,6 +209,31 @@ test('parserSync works with undefined opt', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('parser works with undefined opt', async () => {
+  const err = CommandExpected({opt: undefined})
+
+  const stages = {}
+
+  const substages = {}
+
+  const opt = undefined
+
+  const argv = ['-a', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [
+      err
+    ],
+    args: {
+      _: ['-a', '1']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('parserSync works with empty opts', () => {
   const stages = {}
 
