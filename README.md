@@ -1007,6 +1007,19 @@ subcommand(opts)('deepThought', args)
 </tr>
 </table>
 
+#### Verify Commands
+
+Shargs provides a function for verifying your command has the correct structure:
+
+```js
+const {verifyCommand} = require('shargs')
+
+const {errs, opt} = verifyCommand(deepThought)
+```
+
+In the example, it would return a list of `errs` if `deepThought` was invalid.
+If the command is valid, the `errs` list is empty.
+
 ### The `parserSync` Function
 
 The `parserSync` function is [`shargs`][shargs]' core abstraction.
@@ -5872,7 +5885,7 @@ The following table contains all error codes currently in use and where they are
 <td><code><a href="#CommandExpected">CommandExpected</a></code></td>
 <td>Expected a command with a string "key" field and an "opts" array.</td>
 <td>
-<code><a href="#toOpts-stages">toOpts</code>
+<code><a href="#verify-commands">verifyCommand</a></code>
 </td>
 </tr>
 <tr name="ContradictionDetected">
@@ -5928,7 +5941,7 @@ The following table contains all error codes currently in use and where they are
 <td><code><a href="#InvalidArgs">InvalidArgs</a></code></td>
 <td>The "args" field has an invalid value: "args" must be a non-empty array of strings.</td>
 <td>
-<code><a href="#toOpts-stages">toOpts</code>
+<code><a href="#verify-commands">verifyCommand</a></code>
 </td>
 </tr>
 <tr name="InvalidArity">
@@ -5951,28 +5964,28 @@ The following table contains all error codes currently in use and where they are
 The "key" field has an invalid value: "key" must be a string, cannot be "_" or "--", and must not include whitespaces.
 </td>
 <td>
-<code><a href="#toOpts-stage">toOpts</code>
+<code><a href="#verify-commands">verifyCommand</a></code>
 </td>
 </tr>
 <tr name="InvalidNestedCommand">
 <td><code><a href="#InvalidNestedCommand">InvalidNestedCommand</a></code></td>
 <td>Commands cannot be nested inside commands. Did you forget an "args" field for your subcommand?</td>
 <td>
-<code><a href="#toOpts-stage">toOpts</code>
+<code><a href="#verify-commands">verifyCommand</a></code>
 </td>
 </tr>
 <tr name="InvalidOptionsListInCombine">
 <td><code><a href="#InvalidOptionsListInCombine">InvalidOptionsListInCombine</a></code></td>
 <td>Options list in combine was undefined, null or empty.</td>
 <td>
-<code><a href="#toOpts-stage">toOpts</code>
+<code><a href="#verify-commands">verifyCommand</a></code>
 </td>
 </tr>
 <tr name="InvalidOpts">
 <td><code><a href="#InvalidOpts">InvalidOpts</a></code></td>
 <td>The "opts" field has an invalid value: "opts" must be an array of command-line options and positional arguments.</td>
 <td>
-<code><a href="#toOpts-stages">toOpts</code>
+<code><a href="#verify-commands">verifyCommand</a></code>
 </td>
 </tr>
 <tr name="InvalidRequiredPositionalArgument">
@@ -5989,7 +6002,7 @@ The required field must either be undefined, true or false.
 <td><code><a href="#InvalidTypes">InvalidTypes</a></code></td>
 <td>Each argument must have a types key that must be null or an array.</td>
 <td>
-<code><a href="#toOpts-stages">toOpts</a></code>
+<code><a href="#verify-commands">verifyCommand</a></code><br />
 <code><a href="#verifyValuesArity">verifyValuesArity</a></code>
 </td>
 </tr>
@@ -6011,14 +6024,14 @@ The required field must either be undefined, true or false.
 <td><code><a href="#OptionExpected">OptionExpected</a></code></td>
 <td>A command-line option was expected, but something else was received.</td>
 <td>
-<code><a href="#toOpts-stages">toOpts</code>
+<code><a href="#verify-commands">verifyCommand</a></code>
 </td>
 </tr>
 <tr name="PosArgExpected">
 <td><code><a href="#PosArgExpected">PosArgExpected</a></code></td>
 <td>A positional argument was expected, but something else was received.</td>
 <td>
-<code><a href="#toOpts-stages">toOpts</code>
+<code><a href="#verify-commands">verifyCommand</a></code>
 </td>
 </tr>
 <tr name="RequiredOptionMissing">
@@ -6032,7 +6045,7 @@ The required field must either be undefined, true or false.
 <td><code><a href="#SubcommandExpected">SubcommandExpected</a></code></td>
 <td>A subcommand was expected, but something else was received.</td>
 <td>
-<code><a href="#toOpts-stages">toOpts</code>
+<code><a href="#verify-commands">verifyCommand</a></code>
 </td>
 </tr>
 <tr name="SubcommandRequired">
@@ -6053,7 +6066,7 @@ The required field must either be undefined, true or false.
 <td><code><a href="#UnknownCommandLineOptionType">UnknownCommandLineOptionType</a></code></td>
 <td>The command-line option or positional argument given is of an unknown type.</td>
 <td>
-<code><a href="#toOpts-stages">toOpts</code>
+<code><a href="#verify-commands">verifyCommand</a></code>
 </td>
 </tr>
 <tr name="ValueRestrictionsViolated">
@@ -6108,7 +6121,7 @@ Commands take objects, flags take counts, and other options take arrays of the c
 The opts rules are of a wrong type, please provide a predicate with the following signature: (options) => boolean.
 </td>
 <td>
-<code><a href="#verifyOpts">verifyOpts</code>
+<code><a href="#verify-commands">verifyCommand</a></code>
 </td>
 </tr>
 </table>
