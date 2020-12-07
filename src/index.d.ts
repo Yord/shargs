@@ -1,5 +1,4 @@
 export {fromArgs}                    from './fromArgs'
-export {lexer, lexerF, lexerSync}    from './lexer'
 export {parser, parserF, parserSync} from './parser'
 export {toArgs}                      from './toArgs'
 export {toArgv}                      from './toArgv'
