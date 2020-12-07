@@ -37,7 +37,8 @@ test('verifyCommand fails for programs without key', () => {
   const res = verifyCommand(opt)
 
   const exp = {
-    errs: [CommandExpected({opt})]
+    errs: [CommandExpected({opt})],
+    opt
   }
 
   expect(res).toStrictEqual(exp)
@@ -82,7 +83,8 @@ test('verifyCommand fails for programs without opts', () => {
   const res = verifyCommand(opt)
 
   const exp = {
-    errs: [CommandExpected({opt})]
+    errs: [CommandExpected({opt})],
+    opt
   }
 
   expect(res).toStrictEqual(exp)

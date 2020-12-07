@@ -11,7 +11,7 @@ const {
   UnknownCommandLineOptionType
 } = require('./errors')
 
-function verifyCommand (opt) {
+const verifyCommand = opt => {
   const err = CommandExpected({opt})
 
   if (isCommand(opt)) {
@@ -33,7 +33,7 @@ function verifyCommand (opt) {
       return {errs: [], opt}
     }
   } else {
-    return {errs: [err]}
+    return {errs: [err], opt}
   }
 }
 
