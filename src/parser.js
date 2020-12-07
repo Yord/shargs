@@ -7,7 +7,6 @@ const {Sync}                = require('./Sync')
 const {verifyCommand}       = require('./verifyCommand')
 
 module.exports = {
-  parserF,
   parser:     parserF(Async),
   parserSync: parserF(Sync)
 }
