@@ -6,7 +6,7 @@ const CommandExpected = ({opt}) => ({
 
 const InvalidArgs = ({opt}) => ({
   code: 'InvalidArgs',
-  msg:  'The "args" field has an invalid value: "args" must be a non-empty array of strings.',
+  msg:  'The "args" field has an invalid value: "args" must be a non-empty array of strings with no whitespaces.',
   info: {opt}
 })
 

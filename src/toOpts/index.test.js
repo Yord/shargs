@@ -1,5 +1,4 @@
 const {toOpts} = require('..')
-const {CommandExpected} = require('../errors')
 
 test('toOpts works for empty command and empty argv', () => {
   const opt = {
@@ -564,8 +563,6 @@ test('toOpts works for subcommands with variadic positional arguments', () => {
 })
 
 test('toOpts works with undefined opt', () => {
-  const err = CommandExpected({opt: {}})
-
   const errs = []
 
   const argv = []
@@ -573,9 +570,7 @@ test('toOpts works with undefined opt', () => {
   const res = toOpts()({errs, argv})
 
   const exp = {
-    errs: [
-      err
-    ],
+    errs: [],
     opts: []
   }
 

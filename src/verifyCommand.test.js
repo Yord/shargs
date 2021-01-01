@@ -10,7 +10,7 @@ const {
   PosArgExpected,
   SubcommandExpected,
   UnknownCommandLineOptionType
-} = require('../errors')
+} = require('./errors')
 
 test('verifyCommand works for empty programs', () => {
   const opt = {
@@ -30,13 +30,15 @@ test('verifyCommand works for empty programs', () => {
 
 test('verifyCommand fails for programs without key', () => {
   const opt = {
+    key: undefined,
     opts: []
   }
 
   const res = verifyCommand(opt)
 
   const exp = {
-    errs: [CommandExpected({opt})]
+    errs: [CommandExpected({opt})],
+    opt
   }
 
   expect(res).toStrictEqual(exp)
@@ -74,13 +76,15 @@ test('verifyCommand fails for programs that have a whitespace in their key', () 
 
 test('verifyCommand fails for programs without opts', () => {
   const opt = {
-    key: 'foo'
+    key: 'foo',
+    opts: undefined
   }
 
   const res = verifyCommand(opt)
 
   const exp = {
-    errs: [CommandExpected({opt})]
+    errs: [CommandExpected({opt})],
+    opt
   }
 
   expect(res).toStrictEqual(exp)
@@ -92,6 +96,7 @@ test('verifyCommand fails for programs with wrong opts syntax', () => {
     opts: 'bar'
   }
 
+  // @ts-ignore
   const res = verifyCommand(opt)
 
   const exp = {
@@ -200,6 +205,26 @@ test('verifyCommand fails for opts with invalid key due to whitespaces', () => {
 
 test('verifyCommand fails for opts with invalid args', () => {
   const foo = {key: 'arc', args: null, types: []}
+
+  const opt = {
+    key: 'foo',
+    opts: [
+      foo
+    ]
+  }
+
+  const res = verifyCommand(opt)
+
+  const exp = {
+    errs: [OptionExpected({opt: foo}), InvalidArgs({opt: foo})],
+    opt: {...opt, opts: []}
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('verifyCommand fails for opts with invalid args due to whitespaces', () => {
+  const foo = {key: 'arc', args: ['foo bar'], types: []}
 
   const opt = {
     key: 'foo',

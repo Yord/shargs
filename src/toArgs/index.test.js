@@ -237,6 +237,32 @@ test('toArgs works for empty array options', () => {
   expect(res).toStrictEqual(exp)
 })
 
+test('toArgs works for duplicate empty array options', () => {
+  const arc1 = {key: 'arc', args: ['-a'], types: [], values: []}
+  const arc2 = {key: 'arc', args: ['-a'], types: [], values: []}
+
+  const errs = []
+
+  const opts = [
+    arc1,
+    arc2
+  ]
+
+  const res = toArgs({errs, opts})
+
+  const exp = {
+    errs: [],
+    args: [
+      {
+        _: [],
+        arc: []
+      }
+    ]
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
 test('toArgs works for primitive options', () => {
   const arc = {key: 'arc', args: ['-a'], types: ['A'], values: ['1']}
 

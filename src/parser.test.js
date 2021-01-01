@@ -1,4 +1,5 @@
 const {parser, parserSync} = require('.')
+const {CommandExpected}    = require('./errors')
 
 test('parser works with async stages 1', async () => {
   const stages = {
@@ -177,6 +178,56 @@ test('parser works with undefined substages', async () => {
     args: {
       _: [],
       arc: '1'
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parserSync works with undefined opt', () => {
+  const err = CommandExpected({opt: undefined})
+
+  const stages = {}
+
+  const substages = {}
+
+  const opt = undefined
+
+  const argv = ['-a', '1']
+
+  const res = parserSync(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [
+      err
+    ],
+    args: {
+      _: ['-a', '1']
+    }
+  }
+
+  expect(res).toStrictEqual(exp)
+})
+
+test('parser works with undefined opt', async () => {
+  const err = CommandExpected({opt: undefined})
+
+  const stages = {}
+
+  const substages = {}
+
+  const opt = undefined
+
+  const argv = ['-a', '1']
+
+  const res = await parser(stages, substages)(opt)(argv)
+
+  const exp = {
+    errs: [
+      err
+    ],
+    args: {
+      _: ['-a', '1']
     }
   }
 

@@ -9,9 +9,9 @@ const {
   PosArgExpected,
   SubcommandExpected,
   UnknownCommandLineOptionType
-} = require('../errors')
+} = require('./errors')
 
-function verifyCommand (opt) {
+const verifyCommand = opt => {
   const err = CommandExpected({opt})
 
   if (isCommand(opt)) {
@@ -33,7 +33,7 @@ function verifyCommand (opt) {
       return {errs: [], opt}
     }
   } else {
-    return {errs: [err]}
+    return {errs: [err], opt}
   }
 }
 
@@ -105,7 +105,7 @@ function verifySubcommand (opt) {
 }
 
 function invalidArgs ({args}) {
-  return !Array.isArray(args) || args.length === 0
+  return !Array.isArray(args) || args.length === 0 || args.some(arg => arg.includes(' '))
 }
 
 function invalidKey ({key}) {
@@ -120,10 +120,10 @@ function invalidTypes ({types}) {
   return !Array.isArray(types) && typeof types !== 'undefined'
 }
 
-function isCommand ({key, opts, args, types}) {
+function isCommand (opt = {}) {
   return (
-    [key, opts].every(isDefined) &&
-    [args, types].every(isUndefined)
+    [opt.key, opt.opts].every(isDefined) &&
+    [opt.args, opt.types].every(isUndefined)
   )
 }
 
