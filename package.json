@@ -21,16 +21,14 @@
     "type": "git",
     "url": "https://github.com/Yord/shargs.git"
   },
-  "scripts": {
-    "test": "jest --ci --coverage --collectCoverageFrom 'src/**/*.js' --logHeapUsage --passWithNoTests"
-  },
   "engines": {
     "node": ">=8.3.0"
   },
   "private": false,
-  "devDependencies": {
-    "@types/jest": "25.2.1",
-    "fast-check": "1.23.0",
-    "jest": "25.1.0"
+  "dependencies": {
+    "shargs-core": "0.26.0",
+    "shargs-opts": "0.5.0",
+    "shargs-parser": "0.6.1",
+    "shargs-usage": "0.6.0"
   }
 }
