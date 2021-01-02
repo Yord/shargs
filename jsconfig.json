@@ -4,5 +4,5 @@
     "module": "commonjs",
     "target": "es6"
   },
-  "include": ["src/**/*"]
+  "include": ["index.js", "index.d.ts", "usage/usage.d.ts", "usage/usage.js", "parser/parser.d.ts", "parser/parser.js", "core/core.js", "core/core.d.ts", "opts/opts.d.ts", "opts/opts.js"]
 }
