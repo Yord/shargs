@@ -28,7 +28,7 @@
   "dependencies": {
     "shargs-core": "0.26.1",
     "shargs-opts": "0.5.0",
-    "shargs-parser": "0.6.1",
+    "shargs-parser": "0.6.2",
     "shargs-usage": "0.6.0"
   }
 }
