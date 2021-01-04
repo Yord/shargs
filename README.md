@@ -114,7 +114,7 @@ By using the `shargs-core` and `shargs-parser` modules, we have build the follow
 Note that you did not tell `parser` how exactly to do those things.
 Everything is nice and declarative, and the details are hidden away in the parser stages.
 
-The [parser function](#the-parserSync-function)
+The [parserSync function](#the-parserSync-function)
 and [command-line parsers](#command-line-parsers) sections have all the details.
 
 </details>
@@ -693,7 +693,7 @@ are mutually exclusive.
 They are used by the <code><a href="#setDefaultValues">setDefaultValues</a></code> parser stage
 that sets the <code>values</code> field if no <code><a href="#values">values</a></code> are supplied.
 The <code>defaultValues</code>' type depends on the command-line option type:
-<a href="#subcommand-pos-args">Subcommands</a> takes the same array of options as <code><a href="#opts">opts</a></code>.
+<a href="#subcommand-option">Subcommands</a> takes the same array of options as <code><a href="#opts">opts</a></code>.
 <a href="#flag-option">Flag options</a>' values have to be a number.
 All other options take an array of values,
 that must have the same length as their <code><a href="#types">types</a></code> field.
@@ -833,7 +833,7 @@ and <code><a href="#key">key</a></code>.
 <td><code><a href="#command-line-options">option</a>[]</code></td>
 <td>
 <code>opts</code> defines the command-line options of <code><a href="#command">command</a></code>s
-and <code><a href="#program">program</a></code>s.
+and <code><a href="#subcommand">subcommand</a></code>s.
 </td>
 </tr>
 <tr name="required">
@@ -1035,6 +1035,7 @@ const {errs, opt} = verifyCommand(deepThought)
 
 In the example, it would return a list of `errs` if `deepThought` was invalid.
 If the command is valid, the `errs` list is empty.
+`verifyCommand` is used internally by `parserSync` and `parser`, but may be used independently.
 
 ### The `parserSync` Function
 
@@ -1079,9 +1080,9 @@ and transform argument values (`process.argv`) via command-line options (`opts`)
 <th>Field</th>
 <th>Type</th>
 </tr>
-<tr name="toArgv-stages">
+<tr name="toArgv-field">
 <td align="right">1</td>
-<td><code><a href="#toArgv-stages">toArgv</a></code></td>
+<td><code><a href="#toArgv-field">toArgv</a></code></td>
 <td>
 <details>
 <summary>
@@ -1105,9 +1106,9 @@ could be transformed to
 </details>
 </td>
 </tr>
-<tr name="argv-stages">
+<tr name="argv-field">
 <td align="right">2</td>
-<td><code><a href="#argv-stages">argv</a></code></td>
+<td><code><a href="#argv-field">argv</a></code></td>
 <td>
 <details>
 <summary>
@@ -1131,9 +1132,9 @@ could be transformed to
 </details>
 </td>
 </tr>
-<tr name="toOpts-stages">
+<tr name="toOpts-field">
 <td align="right">3</td>
-<td><code><a href="#toOpts-stages">toOpts</a></code></td>
+<td><code><a href="#toOpts-field">toOpts</a></code></td>
 <td>
 <details>
 <summary>
@@ -1165,9 +1166,9 @@ could be transformed to
 </details>
 </td>
 </tr>
-<tr name="opts-stages">
+<tr name="opts-field">
 <td align="right">4</td>
-<td><code><a href="#opts-stages">opts</a></code></td>
+<td><code><a href="#opts-field">opts</a></code></td>
 <td>
 <details>
 <summary>
@@ -1207,9 +1208,9 @@ could be transformed to
 </details>
 </td>
 </tr>
-<tr name="toArgs-stages">
+<tr name="toArgs-field">
 <td align="right">5</td>
-<td><code><a href="#toArgs-stages">toArgs</a></code></td>
+<td><code><a href="#toArgs-field">toArgs</a></code></td>
 <td>
 <details>
 <summary>
@@ -1246,9 +1247,9 @@ could be transformed to
 </details>
 </td>
 </tr>
-<tr name="args-stages">
+<tr name="args-field">
 <td align="right">6</td>
-<td><code><a href="#args-stages">args</a></code></td>
+<td><code><a href="#args-field">args</a></code></td>
 <td>
 <details>
 <summary>
@@ -1282,9 +1283,9 @@ could be transformed to
 </details>
 </td>
 </tr>
-<tr name="fromArgs-stages">
+<tr name="fromArgs-field">
 <td align="right">7</td>
-<td><code><a href="#fromArgs-stages">fromArgs</a></code></td>
+<td><code><a href="#fromArgs-field">fromArgs</a></code></td>
 <td>
 <details>
 <summary>
@@ -1323,10 +1324,10 @@ could be transformed to
 </tr>
 </table>
 
-The [`argv`](#argv-stages), [`opts`](#opts-stages), and [`args`](#args-stages) stages
+The [`argv`](#argv-field), [`opts`](#opts-field), and [`args`](#args-field) stages
 are the user-facing API to declare a parser's behavior.
 
-The [`toOps`](#toOpts-stages) and [`toArgs`](#toArgs-stages) stages
+The [`toOps`](#toOpts-field) and [`toArgs`](#toArgs-field) stages
 define the core behavior of [`parserSync`](#the-parserSync-function) (and [`parser`](#async-parsers))
 and shargs defines sensible defaults that should not have to be changed in most use cases.
 However, if you do have a use case that needs adjustments to those stages, you may carefully swap them out.
@@ -1372,9 +1373,9 @@ const {errs, args} = await parse(argv)
 <th>Field</th>
 <th>Type</th>
 </tr>
-<tr name="toArgv-stages">
+<tr name="toArgv-field-async">
 <td align="right">1</td>
-<td><code><a href="#toArgv-stages">toArgv</a></code></td>
+<td><code><a href="#toArgv-field-async">toArgv</a></code></td>
 <td>
 <details>
 <summary>
@@ -1399,9 +1400,9 @@ could be transformed to
 </details>
 </td>
 </tr>
-<tr name="argv-stages">
+<tr name="argv-field-async">
 <td align="right">2</td>
-<td><code><a href="#argv-stages">argv</a></code></td>
+<td><code><a href="#argv-field-async">argv</a></code></td>
 <td>
 <details>
 <summary>
@@ -1426,9 +1427,9 @@ could be transformed to
 </details>
 </td>
 </tr>
-<tr name="toOpts-stages">
+<tr name="toOpts-field-async">
 <td align="right">3</td>
-<td><code><a href="#toOpts-stages">toOpts</a></code></td>
+<td><code><a href="#toOpts-field-async">toOpts</a></code></td>
 <td>
 <details>
 <summary>
@@ -1461,9 +1462,9 @@ could be transformed to
 </details>
 </td>
 </tr>
-<tr name="opts-stages">
+<tr name="opts-field-async">
 <td align="right">4</td>
-<td><code><a href="#opts-stages">opts</a></code></td>
+<td><code><a href="#opts-field-async">opts</a></code></td>
 <td>
 <details>
 <summary>
@@ -1504,9 +1505,9 @@ could be transformed to
 </details>
 </td>
 </tr>
-<tr name="toArgs-stages">
+<tr name="toArgs-field-async">
 <td align="right">5</td>
-<td><code><a href="#toArgs-stages">toArgs</a></code></td>
+<td><code><a href="#toArgs-field-async">toArgs</a></code></td>
 <td>
 <details>
 <summary>
@@ -1544,9 +1545,9 @@ could be transformed to
 </details>
 </td>
 </tr>
-<tr name="args-stages">
+<tr name="args-field-async">
 <td align="right">6</td>
-<td><code><a href="#args-stages">args</a></code></td>
+<td><code><a href="#args-field-async">args</a></code></td>
 <td>
 <details>
 <summary>
@@ -1581,9 +1582,9 @@ could be transformed to
 </details>
 </td>
 </tr>
-<tr name="fromArgs-stages">
+<tr name="fromArgs-field-async">
 <td align="right">7</td>
-<td><code><a href="#fromArgs-stages">fromArgs</a></code></td>
+<td><code><a href="#fromArgs-field-async">fromArgs</a></code></td>
 <td>
 <details>
 <summary>
@@ -2027,7 +2028,8 @@ if an option whose <code><a href="#required">required</a></code> field is <code>
 
 <br />
 
-If [`values`](#values) is not an array, it reports a [`RequiredOptionFormat`](#RequiredOptionFormat) error.
+If [`values`](#values) is not an array,
+it reports a [`WrongFormatForRequiredOption`](#WrongFormatForRequiredOption) error.
 
 <br />
 
@@ -3513,7 +3515,7 @@ Deep Thought was created to come up with the Answer to The
 Ultimate Question of Life, the Universe, and Everything.    
 ```
 
-[`deepThought`](#command-line-options), `docs`, and [`style`](#style)
+`deepThought`, `docs`, and [`style`](#style)
 are the moving parts of [automatic usage documentation generation](#automatic-usage-documentation-generation)
 and are defined independently.
 We have already talked about [command-line options](#command-line-options) before
@@ -4127,9 +4129,9 @@ The implementation of `synopses` uses two usage combinators:
 
 [`usage`](#usage) is used to combine two usage functions:
 A [`synopsis`](#synopsis) of all `opts`, but subcommands, and the usage function returned by [`usageMap`](#usageMap). 
-[`usageMap`](#usageMap) iterates over all [`subcommands`](#subcommands)s
-and recursively calls `synopses` on each [`subcommands`](#subcommands)'s [`opts`](#opts).
-The recursion stops, if `opt`'s `opts` has no more [`subcommands`](#subcommands)s,
+[`usageMap`](#usageMap) iterates over all [`subcommand`](#subcommand)s
+and recursively calls `synopses` on each [`subcommand`](#subcommand)'s [`opts`](#opts).
+The recursion stops, if `opt`'s `opts` has no more [`subcommand`](#subcommand)s,
 since usage functions with empty `opts` return an empty string.
 
 Combinators are a powerful feature, as they let you build more complex things from smaller parts.
@@ -4277,8 +4279,8 @@ The example uses three different decorators:
 Each of these decorators modifies the `opts` array in some way,
 before passing it on to their wrapped [usage function](#usage-functions).
 The first two focus on filtering `opts`:
-[`noSubcommands`](#noSubcommands) removes all [`subcommands`](#subcommands)s,
-while [`onlySubcommands`](#onlySubcommands) keeps only [`subcommands`](#subcommands)s.
+[`noSubcommands`](#noSubcommands) removes all [`subcommand`](#subcommand)s,
+while [`onlySubcommands`](#onlySubcommands) keeps only [`subcommand`](#subcommand)s.
 [`onlyFirstArg`](#onlyFirstArg) goes one step further and modifies each option in `opts`,
 removing all but the first argument in their [`args`](#args) fields.
 
@@ -4342,7 +4344,7 @@ Result:
 <details>
 <summary>
 <code>noSubcommands</code> modifies its <code>opt</code>
-by removing all <code><a href="#subcommands">subcommands</a></code>s from its <code><a href="#opts">opts</a></code>.
+by removing all <code><a href="#subcommand">subcommand</a></code>s from its <code><a href="#opts">opts</a></code>.
 </summary>
 
 <br />
@@ -4388,7 +4390,7 @@ Result:
 <details>
 <summary>
 <code>onlySubcommands</code> modifies its <code>opt</code>
-by keeping only <code><a href="#subcommands">subcommands</a></code>s in its <code><a href="#opts">opts</a></code>.
+by keeping only <code><a href="#subcommand">subcommand</a></code>s in its <code><a href="#opts">opts</a></code>.
 </summary>
 
 <br />
@@ -4687,7 +4689,7 @@ This section reuses code snippets from earlier sections:
 <td>
 <details>
 <summary>
-<code>askOpts</code> from the <a href="#type-functions">Type functions</a> section.
+<code>askOpts</code> from the <a href="#type-functions">type functions</a> section.
 </summary>
 
 <br />
@@ -4709,7 +4711,7 @@ const askOpts = [
 <td>
 <details>
 <summary>
-<code>deepThought</code> from the <a href="#command-line-options">Command-line options</a> section.
+<code>deepThought</code> from the <a href="#command-line-options">command-line options</a> section.
 </summary>
 
 <br />
@@ -4979,12 +4981,12 @@ console.log(argv)
 ```
 
 Note that the subcommand order is not preserved.
-This is due to the default behavior of [`fromArgs`](#fromArgs-stages),
+This is due to the default behavior of [`fromArgs`](#fromArgs-field),
 that keeps only the first mention of a subcommand and merges all subcommands into an (unordered) object.
 
-The input to [`fromArgs`](#fromArgs-stages) is still ordered and has duplicates,
+The input to [`fromArgs`](#fromArgs-field) is still ordered and has duplicates,
 so if your program needs the [subcommand](#subcommand) order or duplicates,
-just write a custom [`fromArgs`](#fromArgs-stages) stage:
+just write a custom [`fromArgs`](#fromArgs-field) stage:
 
 ```js
 const merge = (obj1, obj2) => ({
@@ -5001,7 +5003,7 @@ const fromArgs = ({errs, args}) => ({
 })
 ```
 
-This demonstration implementation of [`fromArgs`](#fromArgs-stages) is very simple
+This demonstration implementation of [`fromArgs`](#fromArgs-field) is very simple
 and lacks some features like e.g. subcommands of subcommands.
 Please improve it before using it in your production programs.
 
@@ -5015,7 +5017,7 @@ Please improve it before using it in your production programs.
 
 Shargs makes writing and using custom checks and stages very simple.
 The only thing you have to do is to follow the correct function signatures for your check or stage,
-as given in the [`stages`](#stages) and [`mode`](#mode) sections.
+as given in the [`stages`](#stages) and [`substages`](#substages) sections.
 The following code snippets showcase very simple examples with the correct signatures.
 
 Regardless of whether you implement a check or a stage, the most important thing to remember is:
@@ -5892,7 +5894,7 @@ Your own function would most probably need much more validations and handling of
 
 ### Custom Usage Functions
 
-Writing and using custom [usage functions](#usage-function) in shargs is very simple:
+Writing and using custom [usage functions](#usage-functions) in shargs is very simple:
 You only have to write a function with the correct signature and it can be used as a [usage function](#usage-function).
 It must take an [`opt`](#command-line-options) object and a [`style` object](#style) and return a `string`.
 
@@ -5919,7 +5921,7 @@ const optsTable = usageMap(
 ### Error Codes
 
 [`shargs-core`][shargs-core] and [`shargs-parser`][shargs-parser] report errors if a
-[command-line option](#command-line-options)'s syntax is invalid, or if [`checks`](#checks) fail.
+[command-line option](#command-line-options)'s syntax is invalid, or if `checks` fail.
 The following table contains all error codes currently in use and where they are thrown:
 
 <table>
@@ -6244,7 +6246,7 @@ const preferConfig = {
 
 Of course these example merges are simple cases, because the objects are *flat*.
 
-In case of [`command`](#command)s, the `args` object would have (deeply) nested objects.
+In case of [`subcommand`](#subcommand)s, the `args` object would have (deeply) nested objects.
 Such cases are common and there are specialized libraries for merging deeply nested objects,
 like [ramda][ramda] or [lodash][lodash]:
 
@@ -6879,7 +6881,7 @@ A tiny parser, mostly without an options schema, with a strong focus on optimist
 <td>
 Pick and choose your <a href="#command-line-parsers">parser checks and stages</a>,
 write and use <a href="#custom-checks-and-stages">custom checks and stages</a>,
-and optionally define <a href="#parsers">command-specific parsers</a>.
+and optionally define <a href="#substages">command-specific parsers</a>.
 </td>
 <td>
 You can
