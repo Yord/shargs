@@ -26,9 +26,9 @@
   },
   "private": false,
   "dependencies": {
-    "shargs-core": "0.26.1",
-    "shargs-opts": "0.5.0",
-    "shargs-parser": "0.6.2",
-    "shargs-usage": "0.6.0"
+    "shargs-core": "1.0.0",
+    "shargs-opts": "1.0.0",
+    "shargs-parser": "1.0.0",
+    "shargs-usage": "1.0.0"
   }
 }
