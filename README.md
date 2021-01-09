@@ -211,6 +211,7 @@ and [building command-line parsers with shargs](#building-command-line-parsers-w
 
 +   [An asynchronous version of deepThought.][shargs-example-async-deepthought]
 +   [A synchronous version of deepThought.][shargs-example-sync-deepthought]
++   [deepThought with three layers of configuration: A config file, environment variables, and command-line arguments.][shargs-example-sync-deepthought-config-env-argv]
 +   [A command-line arguments SQL parser.][shargs-example-sync-sql]
 +   [A REPL (Real Eval Print Loop) build with `shargs-repl`.][shargs-example-repl]
 
@@ -6957,6 +6958,7 @@ Logo created by brgfx (<a href="https://www.freepik.com/free-photos-vectors/educ
 [shargs-example-async-deepthought]: https://github.com/Yord/shargs-example-async-deepthought
 [shargs-example-repl]: https://github.com/Yord/shargs-example-repl
 [shargs-example-sync-deepthought]: https://github.com/Yord/shargs-example-sync-deepthought
+[shargs-example-sync-deepthought-config-env-argv]: https://github.com/Yord/shargs-example-sync-deepthought-config-env-argv
 [shargs-example-sync-sql]: https://github.com/Yord/shargs-example-sync-sql
 [shargs-opts]: https://github.com/Yord/shargs-opts
 [shargs-parser]: https://github.com/Yord/shargs-parser
