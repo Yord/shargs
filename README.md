@@ -4000,7 +4000,7 @@ Example:
 
 ```bash
 deepThought (-a|--answer) [-h|--help]   
-deepThought ask [-h] (<questions>...)   
+deepThought (ask) [-h] (<questions>...)   
 ```
 
 Code:
@@ -4857,7 +4857,7 @@ If we run the program with `node ./deepThought --help`, the following text is pr
 
 ```bash
 deepThought [-a|--answer] [-h|--help]                                           
-deepThought ask [--format] [--no-html] [-h|--help] (<question>)                 
+deepThought (ask) [--format] [--no-html] [-h|--help] (<question>)                 
                                                                                 
 -a, --answer=<number>    The answer. [default: 42]                              
 -h, --help               Print this help message and exit.                      
@@ -5124,7 +5124,7 @@ const {br, defs, layout, table, text} = require('shargs/usage')
 
 const askDocs = layout([
   table([
-    ['deepThought ask', '[--format] [--no-html] [-h|--help] (<question>)']
+    ['deepThought (ask)', '[--format] [--no-html] [-h|--help] (<question>)']
   ]),
   br,
   defs([
@@ -5157,7 +5157,7 @@ const string = askDocs(style)
 If we `console.log(string)`, the following text is printed to the console:
 
 ```bash
-deepThought ask [--format] [--no-html] [-h|--help] (<question>)                 
+deepThought (ask) [--format] [--no-html] [-h|--help] (<question>)                 
                                                                                 
 --format=<json|xml> [default: json]                                             
     Respond either with json or xml.                                            
