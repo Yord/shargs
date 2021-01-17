@@ -29,6 +29,6 @@
     "shargs-core": "1.0.0",
     "shargs-opts": "1.0.0",
     "shargs-parser": "1.0.0",
-    "shargs-usage": "1.0.0"
+    "shargs-usage": "1.0.1"
   }
 }
