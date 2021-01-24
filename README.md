@@ -219,7 +219,7 @@ and [building command-line parsers with shargs](#building-command-line-parsers-w
 
 This documentation encompasses the following shargs modules:
 
-1.  [`shargs-opts`][shargs-opts] is documented in [command-line pptions](#command-line-options).
+1.  [`shargs-opts`][shargs-opts] is documented in [command-line options](#command-line-options).
 2.  [`shargs-core`][shargs-core] is documented in [the `parserSync` function](#the-parserSync-function).
 3.  [`shargs-parser`][shargs-parser] is documented in [command-line parsers](#command-line-parsers).
 4.  [`shargs-usage`][shargs-usage] is documented in [automatic usage documentation generation](#automatic-usage-documentation-generation).
