@@ -747,6 +747,25 @@ If <code>descArg</code> is an empty string, no argument value description is dis
 </details>
 </td>
 </tr>
+<tr name="descDefault">
+<td><code><a href="#descDefault">descDefault</a></code></td>
+<td><code>string</code></td>
+<td>
+<details>
+<summary>
+<code>descDefault</code> overrides the default shield (e.g. <code>[default: 42]</code>) displayed in several usage commands.
+</summary>
+
+<br />
+
+It is used by the <code><a href="#optsList">optsList</a></code>, <code><a href="#optsLists">optsLists</a></code>,
+<code><a href="#optsDef">optsDef</a></code>, and <code><a href="#optsDefs">optsDefs</a></code> usage functions
+and their <code>*With</code> versions.
+If <code>descDefault</code> is an empty string, the default shield is hidden.
+
+</details>
+</td>
+</tr>
 <tr name="implies">
 <td><code><a href="#implies">implies</a></code></td>
 <td><code><a href="#key">key</a>[]</code></td>

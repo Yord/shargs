@@ -1,6 +1,6 @@
 {
   "name": "shargs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A highly configurable and extensible command-line arguments parser",
   "keywords": [
     "shargs",
@@ -29,6 +29,6 @@
     "shargs-core": "1.0.0",
     "shargs-opts": "1.0.0",
     "shargs-parser": "1.1.0",
-    "shargs-usage": "1.0.1"
+    "shargs-usage": "1.0.2"
   }
 }
